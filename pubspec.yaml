@@ -5,7 +5,7 @@ version: 1.0.0
 # pub.dev에 올리지 않고 개인적으로 사용
 publish_to: 'none'
 
-# repository: https://github.com/my_org/my_repo
+repository: https://github.com/woodkill/woody_lints.git
 
 environment:
   sdk: ^3.10.4
