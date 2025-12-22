@@ -40,6 +40,12 @@ dev_dependencies:
 flutter pub get
 ```
 
+혹은 업그레이드
+
+```
+flutter pub upgrade woody_lints
+```
+
 3. 프로젝트 루트 폴더에 있는 analysis_options.yaml 파일을 열고 다음과 같이 한 줄을 추가합니다.
 
 ```
