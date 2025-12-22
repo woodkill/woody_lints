@@ -20,7 +20,7 @@ Flutter 프로젝트의 코드 품질 향상, 성능 최적화, 그리고 유지
 - 안정성(Bug Prevention): 런타임 에러와 논리적 오류를 컴파일 단계에서 포착.
 - 가독성(Readability): 누구나 쉽게 읽을 수 있는 명확한 코드 지향.
 
-## 상용법
+## 사용법
 
 1. 새로운 Flutter 프로젝트의 pubspec.yaml 파일에 이 저장소를 추가.
 
@@ -30,7 +30,7 @@ dev_dependencies:
     sdk: flutter
   woody_lints:
     git:
-      url: https://github.com/사용자이름/woody_lints.git # 여기에 실제 저장소 주소를 입력하세요
+      url: https://github.com/woodkill/woody_lints.git
       ref: main
 ```
 
