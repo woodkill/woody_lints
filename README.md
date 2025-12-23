@@ -71,3 +71,11 @@ include: package:woody_lints/analysis_options.yaml
     - unawaited_futures: 처리되지 않은 Future 감지
     - avoid_print: 실 서비스 앱에서 불필요한 로그 노출 방지
     - control_flow_in_finally: finally 블록 내 제어문 사용 금지
+
+# 포맷터
+
+`Format Document` 시 `,` (마지막 콤마) 지워지지 않게
+```
+formatter:
+	trailing_commas: preserve
+```
