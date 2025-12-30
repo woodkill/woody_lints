@@ -52,6 +52,13 @@ flutter pub upgrade woody_lints
 include: package:woody_lints/analysis_options.yaml
 ```
 
+4. 설치 확인 방법
+
+`pubspec.lock` 파일 확인
+- 프로젝트 루트에 있는 `pubspec.lock` 파일 오픈.
+- `woody_lints`를 검색.
+- 검색 결과가 있다면 설치가 완료! : 패키지 폴더가 따로 생기는 게 아니라 pub-cache라는 시스템 폴더에 저장되기 때문에 보이지 않는 것뿐.
+
 ## 포함된 규칙 목록
 
 - 성능 최적화
@@ -72,10 +79,5 @@ include: package:woody_lints/analysis_options.yaml
     - avoid_print: 실 서비스 앱에서 불필요한 로그 노출 방지
     - control_flow_in_finally: finally 블록 내 제어문 사용 금지
 
-## 포맷터
-
-`Format Document` 시 `,` (마지막 콤마) 지워지지 않게
-```
-formatter:
-	trailing_commas: preserve
-```
+- 포맷터
+	- formatter: trailing_commas: 자동 포맷시 마지막 콤마 지워지지 않게
