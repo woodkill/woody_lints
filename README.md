@@ -22,8 +22,16 @@ Flutter 프로젝트의 코드 품질 향상, 성능 최적화, 그리고 유지
 
 ## 사용법
 
-1. 새로운 Flutter 프로젝트의 pubspec.yaml 파일에 이 저장소를 추가.
+1. 새로운 Flutter 프로젝트의 pubspec.yaml 파일에서 `dev_dependencies:` 아래에 이 저장소를 추가
 
+```
+  woody_lints:
+    git:
+      url: https://github.com/woodkill/woody_lints.git
+      ref: main
+
+```
+아래와 같이 되면 됨...
 ```
 dev_dependencies:
   flutter_test:
@@ -34,21 +42,21 @@ dev_dependencies:
       ref: main
 ```
 
-2. 터미널에서 패키지를 가져옵니다
+2. 터미널에서 패키지를 가져옴(`pubspec.yaml` 저장하면서 자동으로 될 수 있음)
 
 ```
 flutter pub get
 ```
 
 혹은 업그레이드
-
 ```
 flutter pub upgrade woody_lints
 ```
 
-3. 프로젝트 루트 폴더에 있는 analysis_options.yaml 파일을 열고 다음과 같이 한 줄을 추가합니다.
+3. 프로젝트 루트 폴더에 있는 analysis_options.yaml 파일을 열고 아래와 같이 대체
 
 ```
+# include: package:flutter_lints/flutter.yaml
 include: package:woody_lints/analysis_options.yaml
 ```
 
