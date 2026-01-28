@@ -1,6 +1,6 @@
 name: woody_lints
 description: Woody's custom lint rules for Flutter projects.
-version: 1.2.2
+version: 1.2.3
 
 # pub.dev에 올리지 않고 개인적으로 사용
 publish_to: 'none'

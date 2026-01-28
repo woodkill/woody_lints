@@ -80,6 +80,7 @@ include: package:woody_lints/analysis_options.yaml
     - prefer_final_locals: 데이터의 불변성 보장
     - require_trailing_commas: 자동 코드 정렬 최적화
     - prefer_single_quotes: 홑따옴표('') 사용 통일
+    - slash_for_doc_comments: 문서 주석 슬래시 사용 통일
 
 - 버그 방지 및 안전성
     - use_build_context_synchronously: 비동기 작업 시 잘못된 Context 참조 방지 (매우 중요)
