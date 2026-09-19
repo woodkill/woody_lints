@@ -90,3 +90,6 @@ include: package:woody_lints/analysis_options.yaml
 
 - 포맷터
 	- formatter: trailing_commas: 자동 포맷시 마지막 콤마 지워지지 않게
+
+- analyzer plugin
+    - riverpod_lint: Riverpod 사용 규칙 검사 (최상위 `plugins:` 방식, Dart 3.10+). plugin 은 첫 분석 때 pub.dev 에서 받아지며, 이 섹션이 바뀐 뒤에는 IDE 의 Dart Analysis Server 를 재시작해야 반영된다. 터미널에서는 `dart analyze` 로 확인한다 — Flutter 3.47.5 의 `flutter analyze` 는 plugin 진단을 표시하지 않았다(3.41.9 는 표시, 2026-09-20 실측).
