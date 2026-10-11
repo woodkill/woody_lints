@@ -83,14 +83,14 @@ Plans:
   4. 배포 파일에서 규칙 하나를 지운 변경과 `example/` 의 include 줄을 지운 변경을 각각 실제로 만들어, 검증이 실패함을 확인한 기록이 있다
   5. push 와 PR 마다 GitHub Actions 가 같은 명령을 실행하고 job 에 시간 제한이 걸려 있으며, GitHub 에서 실제로 성공한 실행이 한 번 이상 있다
 
-**Plans**: 1/4 plans executed
+**Plans**: 2/4 plans executed
 
 Plans:
 **Wave 1**
 - [x] 02-01-PLAN.md — `example/` 연습용 프로젝트와 `tool/verify.dart` 의 정답지 비교 경로(tracer)를 만들고, 규칙 12개 + 기반 세트 1개 + `riverpod_lint` 3건의 정답지 16줄을 생성해 커밋한다; 루트 옵션 파일 `example/**` 제외와 `.gitignore` 의 `!example/pubspec.lock` · `build/` (VERIFY-01; D-01 ~ D-05, D-11, D-14)
 
 **Wave 2** *(blocked on Wave 1 completion)*
-- [ ] 02-02-PLAN.md — `tool/verify.dart` 를 단계 4개(`lib/` 에 `.dart` 없음 / 배포 파일의 규칙 이름 / `example/` 옵션 파일 / 정답지 비교)로 넓히고, SDK 확인(D-12) · 버전 3줄(D-07) · 안내형 화면(D-13) · `--update` 의 CI 거부(D-14)를 완성한다 (VERIFY-01, VERIFY-02, VERIFY-03, VERIFY-07)
+- [x] 02-02-PLAN.md — `tool/verify.dart` 를 단계 4개(`lib/` 에 `.dart` 없음 / 배포 파일의 규칙 이름 / `example/` 옵션 파일 / 정답지 비교)로 넓히고, SDK 확인(D-12) · 버전 3줄(D-07) · 안내형 화면(D-13) · `--update` 의 CI 거부(D-14)를 완성한다 (VERIFY-01, VERIFY-02, VERIFY-03, VERIFY-07)
 
 **Wave 3** *(blocked on Wave 2 completion)*
 - [ ] 02-03-PLAN.md — 지워 보기 9건(규칙 삭제, include 삭제, `errors:` 블록 · exclude 2종 삭제, deprecated 규칙 추가, `lib/` 의 `.dart`, CI 의 `--update`, SDK 불일치)을 실제로 만들어 실패를 확인하고 되돌린 뒤 `example/README.md` 에 기록하고, CHANGELOG 2.0.0 항목에 `### 그 밖의 변경` 을 더한다 (VERIFY-08; D-03)
@@ -235,7 +235,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Baseline and Toolchain | 4/4 | Complete    | 2026-10-11 |
-| 2. Verification Harness | 1/4 | In Progress | - |
+| 2. Verification Harness | 2/4 | In Progress | - |
 | 3. Preset Split | 0/TBD | Not started | - |
 | 4. Rule Reselection | 0/TBD | Not started | - |
 | 5. Documentation | 0/TBD | Not started | - |

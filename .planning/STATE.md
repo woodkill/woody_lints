@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 02
 current_phase_name: Verification Harness
 status: executing
-stopped_at: Completed 02-01-PLAN.md
-last_updated: "2026-10-11T16:18:35.763Z"
+stopped_at: Completed 02-02-PLAN.md
+last_updated: "2026-10-11T16:43:05.651Z"
 last_activity: 2026-10-12
 last_activity_desc: Phase 02 execution started
-state_head: 74fafb285b3826fc26536974dce4598ab376e8bf
+state_head: 19ae5ec6b10ff5798b4ab2f5e6e55ac7e5a8bc61
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 8
-  completed_plans: 5
+  completed_plans: 6
   percent: 17
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-11)
 ## Current Position
 
 Phase: 02 (Verification Harness) — EXECUTING
-Plan: 2 of 4
+Plan: 3 of 4
 Status: Ready to execute
 Last activity: 2026-10-12 — Phase 02 execution started
 
@@ -63,6 +63,7 @@ Progress: [██░░░░░░░░] 17%
 | Phase 01 P03 | 4 min | 3 tasks | 4 files |
 | Phase 01 P04 | 3 min | 2 tasks | 3 files |
 | Phase 02 P01 | 8 min | 2 tasks | 14 files |
+| Phase 02 P02 | 15 min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -95,6 +96,12 @@ Recent decisions affecting current work:
 - [Phase 02]: 검증 명령의 전용 상태 폴더는 `.dart_tool/woody_verify/example/` 이고 그 `.plugin_manager` 아래 폴더는 정확히 하나였다. 스크립트는 이 폴더를 지우지 않는다 — 지우는 것은 plugin 준비 실패 뒤의 복구 수단이다
 - [Phase 02]: 루트 `fvm dart pub get` 은 `example/` 도 함께 풀지만 `example/pubspec.lock` 을 바꾸지 않았다. lock 은 `example/` 에서 `fvm dart pub get` 으로 만들어 커밋했고 스크립트는 `--enforce-lockfile` 로 받는다. `example/` 에서 `flutter pub get` 은 돌리지 않는다
 - [Phase 02]: `tool/verify.dart` 의 plugin 준비 실패 분기와 도구 사망 분기는 plan 02-01 에서 실제로 일으켜 보지 않았다 (`02-01-SUMMARY.md` coverage D9). 정답지와 다름 / 정답지 없음 / 형식 오류 70 / lock 어긋남 69 / 인자 오류 64 는 실행으로 확인했다
+- [Phase 02]: 검증 명령 `tool/verify.dart` 는 준비(SDK 확인 → CI 의 `--update` 거부 → 저장소 루트 pub get → `example/` pub get) 뒤 단계 4개(`lib/` 에 `.dart` 없음 / 배포 파일의 규칙 이름 / `example/` 옵션 파일 / 정답지 비교)를 모두 돌리고 화면을 한 번에 stdout 으로 찍는다. 첫 줄은 늘 `SDK` 줄이고 진행 표시와 준비 단계의 안내는 stderr 다. 종료 코드는 0 / 1 / 64 / 69 / 70 / 78 (78 = 실행 중인 SDK 가 `.fvmrc` 와 다름)
+- [Phase 02]: 스크립트의 `dart pub get` 은 늘 `--no-example` 로 돌린다 — 기본값이면 저장소 루트의 pub get 이 `example/` 도 함께 풀어 어긋난 `example/pubspec.lock` 을 다시 쓰고, 그 뒤의 `--enforce-lockfile` 이 통과해 lock 어긋남(종료 코드 69)을 놓친다 (Dart 3.13.4, 2026-10-12 실측)
+- [Phase 02]: `--update` 는 바뀌는 줄을 화면에 내보낸 뒤 정답지를 쓰고, 정답지 첫 줄을 `# 실측: Flutter X / Dart Y, riverpod_lint Z, 날짜` 형식으로 다시 쓴다. plugin 준비 실패와 도구 사망에서는 `--update` 여도 정답지를 건드리지 않는다
+- [Phase 02]: `tool/verify.dart` 의 plugin 준비 실패 분기와 도구 사망 분기를 plan 02-02 에서 실제로 일으켜 확인했다 — 전용 상태 폴더의 plugin.aot 을 0바이트로 자른 실행(머리말이 stderr 셋째 줄, dart analyze exit 0)과 상태 폴더를 읽기 전용 빈 폴더로 바꾼 실행(exit 255, stdout 에 JSON 없음). 네트워크가 끊긴 경우의 plugin 실패와 상태 폴더를 통째로 지우는 복구는 해 보지 않았다
+- [Phase 02]: D-12 의 SDK 판별은 실행 파일에서 다섯 단계 위의 `flutter.version.json` 이 1순위, `FLUTTER_ROOT` 가 2순위이고, 2순위는 그 SDK 의 `dartSdkVersion` 이 실행 중인 Dart 와 같을 때만 받아들인다. `.fvmrc` 불일치의 78 은 실행으로 확인했고 `FLUTTER_ROOT` 경로와 'Flutter SDK 의 dart 가 아니다' 경로는 실행해 보지 못했다 (plan 02-04 의 CI 에서 본다)
+- [Phase 02]: 화면의 plugin 버전은 전용 상태 폴더의 plugin 폴더가 정확히 하나일 때만 읽고 그 밖은 `?` 와 이유를 찍는다. 폴더 0개는 서버가 plugin 준비 전에 죽었을 때도 나온다 (2026-10-12 실측). 지금은 첫 fixture 의 값을 찍는다 — Phase 3 가 fixture 를 더하면 fixture 별로 찍을지 정한다
 
 ### Pending Todos
 
@@ -119,6 +126,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-11T16:18:35.746Z
-Stopped at: Completed 02-01-PLAN.md
+Last session: 2026-10-11T16:43:05.633Z
+Stopped at: Completed 02-02-PLAN.md
 Resume file: None
