@@ -1,4 +1,4 @@
-# 실측: Dart 3.13.4, 2026-10-12
+# 실측: Flutter 3.47.5 / Dart 3.13.4, riverpod_lint 3.1.9, 2026-10-12
 # 형식: 상대경로:줄  강도  규칙이름 (문자열 정렬). 갱신: fvm dart run tool/verify.dart --update
 exit 2
 lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables

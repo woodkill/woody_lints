@@ -74,6 +74,12 @@ const measuredPrefix = '# 실측:';
 /// 단계 줄에서 결과 단어(통과 / 실패)가 오는 열.
 const resultColumn = 40;
 
+/// 버전 줄에서 값이 시작하는 열 (라벨 `기반 세트` 의 폭 9칸 + 공백 2칸).
+const versionColumn = 11;
+
+/// 배포 파일이 최상위 `plugins:` 에 선언한 analyzer plugin 의 패키지 이름.
+const pluginPackage = 'riverpod_lint';
+
 /// 정답지 파일 (`#` 머리 주석 + `exit N` 한 줄 + 진단 줄들).
 class Expected {
   /// 파일을 읽어 머리 주석, 종료 코드, 진단 줄로 나눈다.
@@ -135,13 +141,36 @@ class AnalyzeOutcome {
   bool get hasPluginHeader => stderrText.contains(pluginFailureHeader);
 }
 
-/// 검사 단계 하나의 결과. `main` 이 모아 요약하고 종료 코드를 정한다.
+/// 전용 상태 폴더에서 읽은 plugin(`riverpod_lint`) 버전.
+///
+/// 읽었으면 [version] 이, 못 읽었으면 그 이유 [reason] 이 있다.
+class PluginVersion {
+  /// 읽은 버전.
+  PluginVersion.resolved(String this.version) : reason = null;
+
+  /// 읽지 못했다. [reason] 은 화면에 그대로 찍는 한 줄이다.
+  PluginVersion.unknown(String this.reason) : version = null;
+
+  /// 풀린 버전 (예: `3.1.9`). 못 읽었으면 null.
+  final String? version;
+
+  /// 못 읽은 이유. 읽었으면 null.
+  final String? reason;
+
+  /// 화면과 정답지 머리 주석에 쓰는 값. 못 읽었으면 `?` 다.
+  String get text => version ?? '?';
+}
+
+/// 검사 단계 하나의 결과. `main` 이 모아 화면에 찍고 종료 코드를 정한다.
 class StepResult {
-  /// [detailLines] 는 실패했을 때 화면에 그대로 찍을 줄이다.
+  /// [detailLines] 는 단계 줄들 아래에 그대로 찍을 줄이다.
   StepResult({
     required this.label,
     required this.passed,
     this.detailLines = const [],
+    this.plugin,
+    this.pluginFailed = false,
+    this.applyUpdate,
   });
 
   /// 단계 이름 (예: `example/ 정답지 비교`).
@@ -150,8 +179,17 @@ class StepResult {
   /// 통과했는지.
   final bool passed;
 
-  /// 실패 시 화면에 그대로 찍을 줄 (빠진 경고, 남는 경고, 안내).
+  /// 화면에 그대로 찍을 줄 — 실패의 내용과 다음에 할 일, `--update` 가 바꾸는 줄.
   final List<String> detailLines;
+
+  /// 이 단계의 분석 뒤에 읽은 plugin 버전. 정답지 비교 단계만 채운다.
+  final PluginVersion? plugin;
+
+  /// 이 단계의 분석에서 plugin 준비 실패의 머리말을 봤는지.
+  final bool pluginFailed;
+
+  /// `--update` 의 정답지 쓰기. `main` 이 [detailLines] 를 화면에 내보낸 뒤에 부른다.
+  final void Function()? applyUpdate;
 }
 
 /// 정답지와 실제 결과의 차이.
@@ -307,7 +345,13 @@ String relativize(String path, String repoRoot) =>
 /// 늘 `--no-example` 을 붙인다. 기본값대로 두면 저장소 루트의 `pub get` 이 `example/` 도
 /// 함께 풀어 어긋난 `example/pubspec.lock` 을 조용히 다시 쓰고, 그 뒤의
 /// `--enforce-lockfile` 이 통과해 버린다 (Dart 3.13.4, 2026-10-12 실측).
-Future<void> runPubGet(String dir, {required bool enforceLockfile}) async {
+///
+/// [shownAs] 는 실패 안내에 [dir] 대신 적을 이름이다 (화면에 절대 경로를 남기지 않는다).
+Future<void> runPubGet(
+  String dir, {
+  required bool enforceLockfile,
+  String? shownAs,
+}) async {
   final result = await Process.run(Platform.resolvedExecutable, [
     'pub',
     'get',
@@ -323,9 +367,70 @@ Future<void> runPubGet(String dir, {required bool enforceLockfile}) async {
       '`cd $name && fvm dart pub get` 으로 lock 을 다시 받고 커밋하세요.',
     );
   }
-  stderr.writeln('pub get 실패 ($dir): exit ${result.exitCode}');
+  stderr.writeln('pub get 실패 (${shownAs ?? dir}): exit ${result.exitCode}');
   stderr.writeln('${result.stderr}'.trimRight());
   await quit(69);
+}
+
+/// `pubspec.lock` 형식의 [lockFile] 에서 [package] 의 풀린 버전을 읽는다. 없으면 null.
+///
+/// `example/pubspec.lock` 의 `flutter_lints` / `lints` 와, 상태 폴더의
+/// `.plugin_manager/<hash>/pubspec.lock` 의 `riverpod_lint` 를 같은 파서로 읽는다.
+String? readLockVersion(File lockFile, String package) {
+  if (!lockFile.existsSync()) return null;
+  final lines = lockFile.readAsLinesSync();
+  final start = lines.indexOf('  $package:');
+  if (start < 0) return null;
+  for (final line in lines.skip(start + 1)) {
+    if (!line.startsWith('    ')) break;
+    final match = RegExp(r'^\s+version: "(.+)"$').firstMatch(line);
+    if (match != null) return match.group(1);
+  }
+  return null;
+}
+
+/// 상태 폴더 [stateDir] 의 `.plugin_manager` 아래 폴더들 (Analysis Server 가 plugin 을 받아 둔 곳).
+List<Directory> pluginFolders(String stateDir) {
+  final manager = Directory('$stateDir/.plugin_manager');
+  if (!manager.existsSync()) return const [];
+  return manager.listSync().whereType<Directory>().toList();
+}
+
+/// 전용 상태 폴더 [stateDir] 에서 실제로 풀린 plugin 버전을 읽는다 (D-07).
+///
+/// 분석이 끝난 뒤에 부른다 — 처음 실행에서는 분석 전에 폴더가 없다. plugin 폴더가
+/// 정확히 하나일 때만 읽는다. 폴더 이름은 분석 대상 경로의 해시라 어느 것이 자기
+/// 폴더인지 고를 방법이 없다 (spike 008). [shownAs] 는 안내에 적을 상태 폴더 경로다.
+PluginVersion readPluginVersion(String stateDir, {required String shownAs}) {
+  final folders = pluginFolders(stateDir);
+  if (folders.isEmpty) {
+    // 서버가 plugin 준비에 이르기 전에 죽었을 때도 이 모양이다 (2026-10-12 실측).
+    return PluginVersion.unknown(
+      '이 상태 폴더에 plugin 이 준비되지 않았다 — 상태 폴더 환경변수가 듣지 않았을 수 있다',
+    );
+  }
+  if (folders.length > 1) {
+    return PluginVersion.unknown(
+      '저장소 경로가 바뀐 적 있다 — 상태 폴더 `$shownAs` 를 지우고 다시 실행',
+    );
+  }
+  final version = readLockVersion(
+    File('${folders.single.path}/pubspec.lock'),
+    pluginPackage,
+  );
+  return version == null
+      ? PluginVersion.unknown('plugin 을 받지 못했다')
+      : PluginVersion.resolved(version);
+}
+
+/// 다른 도구가 낸 [text] 안의 저장소 절대 경로를 `<repo>` 로 가린다 (CI 로그에 runner 경로를 남기지 않는다).
+String scrubPaths(String text, String repoRoot) {
+  var scrubbed = text;
+  final roots = {repoRoot, Directory(repoRoot).resolveSymbolicLinksSync()};
+  for (final root in roots) {
+    scrubbed = scrubbed.replaceAll(root, '<repo>');
+  }
+  return scrubbed;
 }
 
 /// [fixtureDir] 에서 `dart --suppress-analytics analyze --format=json` 을 돌린다.
@@ -362,9 +467,9 @@ Difference findDifference(
   final expectedLines = expected?.lines ?? const <String>[];
   final String? exitNote;
   if (expected == null) {
-    exitNote = 'exit 기대 없음 (정답지 없음), 실제 $actualExit';
+    exitNote = '종료 코드: 정답지 없음, 실제 $actualExit';
   } else if (expected.exitCode != actualExit) {
-    exitNote = 'exit 기대 ${expected.exitCode}, 실제 $actualExit';
+    exitNote = '종료 코드: 정답지 ${expected.exitCode}, 실제 $actualExit';
   } else {
     exitNote = null;
   }
@@ -381,19 +486,22 @@ String formatDate(DateTime date) {
   return '${date.year}-${pad(date.month)}-${pad(date.day)}';
 }
 
+/// 정답지 머리의 `# 실측:` 줄을 만든다 — 어떤 SDK · plugin 버전으로 언제 잰 결과인지.
+String formatMeasuredLine(SdkInfo sdk, PluginVersion plugin, DateTime date) =>
+    '$measuredPrefix Flutter ${sdk.flutter} / Dart ${sdk.dart}, '
+    '$pluginPackage ${plugin.text}, ${formatDate(date)}';
+
 /// 정답지 [file] 을 실제 결과로 다시 쓴다.
 ///
-/// `# 실측:` 줄만 새로 쓰고 나머지 `#` 줄은 그대로 둔다. 정답지가 없었으면
-/// ([previous] 가 null) 형식 설명 줄도 함께 넣는다.
+/// `# 실측:` 줄만 [measured] 로 새로 쓰고 나머지 `#` 줄은 그대로 둔다. 정답지가
+/// 없었으면 ([previous] 가 null) 형식 설명 줄도 함께 넣는다.
 void writeExpected(
   File file,
   Expected? previous,
   List<String> actual,
   int actualExit,
+  String measured,
 ) {
-  final dartVersion = Platform.version.split(' ').first;
-  final measured =
-      '$measuredPrefix Dart $dartVersion, ${formatDate(DateTime.now())}';
   final header = <String>[];
   if (previous == null) {
     header
@@ -601,37 +709,50 @@ StepResult checkFixtureOptions(String fixtureDir) {
   );
 }
 
-/// fixture 하나를 분석해 정답지와 견준다. [update] 이면 바뀐 줄을 보여 준 뒤 정답지를 다시 쓴다.
+/// [4/4] fixture 하나를 분석해 정답지와 견준다 (VERIFY-01).
 ///
 /// 판정 순서는 바꾸지 않는다: plugin 준비 실패 → 도구가 죽음 → 정답지 비교.
-/// 앞의 두 실패에서는 [update] 여도 정답지를 건드리지 않는다.
+/// [update] 이면 바뀌는 줄을 `detailLines` 에 담고 정답지 쓰기를 `applyUpdate` 로
+/// 돌려준다 — 쓰는 것은 `main` 이 그 줄을 화면에 내보낸 뒤다. 앞의 두 실패에서는
+/// [update] 여도 정답지를 건드리지 않는다. [sdk] 는 정답지 머리 주석에 적는다.
 Future<StepResult> compareFixture({
   required String repoRoot,
   required String fixture,
   required bool update,
+  required SdkInfo sdk,
 }) async {
   final label = '$fixture/ 정답지 비교';
   final fixtureDir = '$repoRoot/$fixture';
   final stateDir = '$repoRoot/.dart_tool/woody_verify/$fixture';
+  final shownStateDir = relativize(stateDir, repoRoot);
   Directory(stateDir).createSync(recursive: true);
 
+  // 기다리는 동안의 진행 표시. 화면(stdout)에는 섞지 않는다.
+  stderr.writeln('$fixture/ 분석 중…');
   final outcome = await analyzeFixture(
     fixtureDir: fixtureDir,
     stateDir: stateDir,
   );
+  // 버전은 분석이 끝난 뒤에 읽는다 (처음 실행에서는 분석 전에 plugin 폴더가 없다).
+  final plugin = readPluginVersion(stateDir, shownAs: shownStateDir);
 
   // 1) plugin 준비 실패 — 종료 코드로는 알 수 없고 stderr 의 머리말로만 드러난다.
   if (outcome.hasPluginHeader) {
     return StepResult(
       label: label,
       passed: false,
+      plugin: plugin,
+      pluginFailed: true,
       detailLines: [
-        'plugin 준비 실패 — riverpod_lint 진단 없이 끝났다. '
-            '(dart analyze exit ${outcome.exitCode})',
-        ...outcome.stderrText.split('\n').map((l) => '  $l'),
+        'plugin 준비 실패 — $pluginPackage 진단 없이 끝났다 '
+            '(dart analyze exit ${outcome.exitCode}). stderr:',
+        ...scrubPaths(
+          outcome.stderrText,
+          repoRoot,
+        ).split('\n').map((l) => '  $l'),
         '',
         '네트워크를 확인하세요.',
-        '전용 상태 폴더 `$stateDir` 를 지우고 다시 실행하세요 (약 15초).',
+        '전용 상태 폴더 `$shownStateDir` 를 지우고 다시 실행하세요 (약 15초).',
       ],
     );
   }
@@ -639,14 +760,20 @@ Future<StepResult> compareFixture({
   // 2) 도구가 죽음 — 정답지와 "다르다" 가 아니라 결과 자체가 없다.
   final actual = outcome.lines;
   if (actual == null || !analyzeExitCodes.contains(outcome.exitCode)) {
-    final stderrHead = outcome.stderrText.split('\n').take(2).join(' / ');
+    final stderrHead = scrubPaths(
+      outcome.stderrText,
+      repoRoot,
+    ).split('\n').take(2).join(' / ');
     return StepResult(
       label: label,
       passed: false,
+      plugin: plugin,
       detailLines: [
         '도구가 죽었다 — dart analyze 가 exit ${outcome.exitCode} 로 끝났다'
             '${actual == null ? ' (stdout 에 JSON 없음)' : ''}.',
         '  stderr: ${stderrHead.isEmpty ? '(비어 있음)' : stderrHead}',
+        '',
+        '다시 실행해 보세요. 되풀이되면 위의 stderr 를 확인하세요.',
       ],
     );
   }
@@ -657,48 +784,60 @@ Future<StepResult> compareFixture({
       ? Expected.read(expectedFile)
       : null;
   final difference = findDifference(expected, actual, outcome.exitCode);
+  final exitNote = difference.exitNote;
 
   if (update) {
-    // 조용히 덮어쓰지 않는다 — 무엇이 바뀌는지 먼저 보여 준다.
-    stdout.writeln('정답지 갱신: $fixture/$expectedFileName');
-    if (difference.isEmpty) {
-      stdout.writeln('정답지와 같다 — 바뀐 줄 없음');
-    } else {
-      for (final line in difference.missing) {
-        stdout.writeln('- $line');
-      }
-      for (final line in difference.unexpected) {
-        stdout.writeln('+ $line');
-      }
-      final exitNote = difference.exitNote;
-      if (exitNote != null) stdout.writeln(exitNote);
-    }
-    stdout.writeln('');
-    writeExpected(expectedFile, expected, actual, outcome.exitCode);
-    return StepResult(label: label, passed: true);
+    // 조용히 덮어쓰지 않는다 — 무엇이 바뀌는지 보여 주고, 그 뒤에 쓴다.
+    final measured = formatMeasuredLine(sdk, plugin, DateTime.now());
+    return StepResult(
+      label: label,
+      passed: true,
+      plugin: plugin,
+      detailLines: [
+        '정답지 갱신: $fixture/$expectedFileName',
+        if (difference.isEmpty)
+          '정답지와 같다 — 바뀐 줄 없음'
+        else ...[
+          ?exitNote,
+          ...difference.missing.map((l) => '- $l'),
+          ...difference.unexpected.map((l) => '+ $l'),
+        ],
+        '머리 주석: $measured',
+      ],
+      applyUpdate: () => writeExpected(
+        expectedFile,
+        expected,
+        actual,
+        outcome.exitCode,
+        measured,
+      ),
+    );
   }
 
   if (expected == null) {
     return StepResult(
       label: label,
       passed: false,
+      plugin: plugin,
       detailLines: ['정답지가 없다. 처음이면 `$updateCommand` 로 만든다.'],
     );
   }
-  if (difference.isEmpty) return StepResult(label: label, passed: true);
+  if (difference.isEmpty) {
+    return StepResult(label: label, passed: true, plugin: plugin);
+  }
 
-  final exitNote = difference.exitNote;
   return StepResult(
     label: label,
     passed: false,
+    plugin: plugin,
     detailLines: [
+      if (exitNote != null) ...[exitNote, ''],
       '정답지에는 있는데 나오지 않은 경고 (${difference.missing.length})',
       ...difference.missing.map((l) => '  $l'),
       '',
       '정답지에 없는데 나온 경고 (${difference.unexpected.length})',
       ...difference.unexpected.map((l) => '  $l'),
       '',
-      if (exitNote != null) ...[exitNote, ''],
       '일부러 바꾼 것이면 정답지를 갱신하세요:',
       '  $updateCommand',
     ],
@@ -728,7 +867,41 @@ String formatStepLine(int index, int total, StepResult result) {
   return '$head$dots ${result.passed ? '통과' : '실패'}';
 }
 
-/// 인자를 읽고, 준비(SDK 확인 · pub get)를 한 뒤, 단계를 모두 돌리고 요약한다.
+/// 화면 맨 위의 버전 세 줄(SDK / 기반 세트 / plugin)을 만든다 (D-07).
+///
+/// 정답지가 깨졌을 때 원인이 저장소 변경인지 새 버전인지 화면에서 바로 보이게 한다.
+/// [pluginFailed] 이면 plugin 줄에 덧말을 붙인다 — 그 실행에서 읽힌 버전은 앞선
+/// 실행이 남긴 값일 수 있다.
+List<String> formatVersionLines({
+  required SdkInfo sdk,
+  required String? flutterLints,
+  required String? lints,
+  required PluginVersion plugin,
+  required bool pluginFailed,
+}) {
+  String formatRow(String label, String value) =>
+      '$label${' ' * (versionColumn - measureWidth(label))}$value';
+  final reason = plugin.reason;
+  return [
+    formatRow('SDK', 'Flutter ${sdk.flutter} / Dart ${sdk.dart}'),
+    formatRow(
+      '기반 세트',
+      'flutter_lints ${flutterLints ?? '?'} / lints ${lints ?? '?'}',
+    ),
+    formatRow(
+      'plugin',
+      '$pluginPackage ${plugin.text}'
+          '${reason == null ? '' : ' ($reason)'}'
+          '${pluginFailed ? ' (이번 실행에서는 plugin 이 뜨지 않았다)' : ''}',
+    ),
+  ];
+}
+
+/// 인자를 읽고, 준비(SDK 확인 · pub get)를 한 뒤, 단계를 모두 돌리고 화면을 한 번에 찍는다.
+///
+/// 화면(버전 3줄 · 단계 줄 · 실패의 내용 · 요약)은 전부 stdout 이고 첫 줄은 늘 `SDK`
+/// 줄이다 — plugin 버전은 분석이 끝나야 읽히므로 단계를 모두 돌린 뒤에 찍는다.
+/// 사용법 오류, 준비 단계의 안내, 진행 표시는 stderr 다.
 Future<void> main(List<String> args) async {
   final unknown = args.where((a) => a != '--update').toList();
   if (unknown.isNotEmpty) {
@@ -743,7 +916,7 @@ Future<void> main(List<String> args) async {
 
   try {
     // 준비 1 — 실행 중인 SDK 가 .fvmrc 와 다르면 검증을 시작하지 않는다 (D-12).
-    await ensurePinnedSdk(repoRoot);
+    final sdk = await ensurePinnedSdk(repoRoot);
 
     // 준비 2 — 정답지 갱신은 로컬에서 사람이 diff 를 보고 커밋한다 (D-14).
     final env = Platform.environment;
@@ -754,11 +927,15 @@ Future<void> main(List<String> args) async {
 
     // 준비 3 — 저장소 루트의 패키지. 규칙 검사의 복사본이 `flutter_lints` 를 include 하므로
     // 루트의 package_config 가 있어야 한다 (없으면 include 가 풀리지 않아 규칙을 못 본다).
-    await runPubGet(repoRoot, enforceLockfile: false);
+    await runPubGet(repoRoot, enforceLockfile: false, shownAs: '저장소 루트');
 
     // 준비 4 — fixture 의 패키지는 커밋된 lock 그대로 받는다.
     for (final fixture in fixtures) {
-      await runPubGet('$repoRoot/$fixture', enforceLockfile: true);
+      await runPubGet(
+        '$repoRoot/$fixture',
+        enforceLockfile: true,
+        shownAs: '$fixture/',
+      );
     }
 
     // 단계는 하나가 실패해도 나머지를 모두 돌린다. fixture 는 순서대로 분석한다
@@ -772,6 +949,7 @@ Future<void> main(List<String> args) async {
           repoRoot: repoRoot,
           fixture: fixture,
           update: update,
+          sdk: sdk,
         ),
       ],
     ];
@@ -780,16 +958,36 @@ Future<void> main(List<String> args) async {
       results.add(await step());
     }
 
-    // 모두 돌린 뒤에 찍는다.
+    // 화면 — 버전 3줄, 단계 줄, 단계별 내용, 요약 순으로 한 번에 찍는다.
+    // 기반 세트는 fixture 의 lock 에서, plugin 은 첫 fixture 의 상태 폴더에서 읽은 값이다
+    // (fixture 가 늘어 값이 갈릴 수 있게 되면 fixture 별로 찍는다 — Phase 3).
+    final baseLock = File('$repoRoot/${fixtures.first}/pubspec.lock');
+    final plugin =
+        results.map((r) => r.plugin).nonNulls.firstOrNull ??
+        PluginVersion.unknown('정답지 비교를 돌리지 못했다');
+    formatVersionLines(
+      sdk: sdk,
+      flutterLints: readLockVersion(baseLock, 'flutter_lints'),
+      lints: readLockVersion(baseLock, 'lints'),
+      plugin: plugin,
+      pluginFailed: results.any((r) => r.pluginFailed),
+    ).forEach(stdout.writeln);
+    stdout.writeln('');
     for (var i = 0; i < results.length; i++) {
       stdout.writeln(formatStepLine(i + 1, results.length, results[i]));
     }
-
-    final failed = results.where((r) => !r.passed).toList();
-    for (final result in failed) {
+    for (final result in results.where((r) => r.detailLines.isNotEmpty)) {
       stdout.writeln('');
       result.detailLines.forEach(stdout.writeln);
     }
+
+    // `--update` 의 쓰기는 바뀌는 줄을 화면에 내보낸 뒤에 한다 (D-14).
+    await stdout.flush();
+    for (final result in results) {
+      result.applyUpdate?.call();
+    }
+
+    final failed = results.where((r) => !r.passed).toList();
     stdout.writeln('');
     if (failed.isEmpty) {
       stdout.writeln('점검 통과 (${results.length}개 중 ${results.length}개)');
@@ -801,7 +999,9 @@ Future<void> main(List<String> args) async {
     stderr.writeln('파일 모양이 예상과 다르다: ${e.message}');
     exitCode = 70;
   } on FileSystemException catch (e) {
-    stderr.writeln('파일 작업 실패: ${e.message} (${e.path ?? ''})');
+    stderr.writeln(
+      '파일 작업 실패: ${e.message} (${relativize(e.path ?? '', repoRoot)})',
+    );
     exitCode = 70;
   } on ProcessException catch (e) {
     stderr.writeln('프로세스를 띄우지 못했다: $e');
