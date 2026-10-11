@@ -1,6 +1,6 @@
 # `example/` 연습용 프로젝트와 정답지
 
-검증 명령이 분석할 `example/` 프로젝트의 모양, 거기에 넣을 위반 코드, 정답지에 적힐 줄, 패키지를 받는 방법이다.
+검증 명령이 분석할 `example/` 프로젝트의 모양, 거기에 넣을 위반 코드, 정답지에 적힐 줄, 패키지를 받는 방법, 그리고 `example/` 이 저장소 루트의 분석에 섞이지 않게 하는 방법이다.
 
 모든 수치는 Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9, 2026-10-11 실측이다.
 
@@ -9,7 +9,8 @@
 MANIFEST.md 의 `verify-harness-tool-behavior` 에서 이 영역에 걸리는 것.
 
 - 정답지 한 줄은 `상대경로:줄  강도  규칙이름`, 맨 위에 `exit N` (D-04)
-- `lib/`, `pubspec.yaml`, 루트 `analysis_options.yaml` 은 바꾸지 않는다
+- `lib/`, `pubspec.yaml` 은 바꾸지 않는다. 루트 `analysis_options.yaml` 은 기존 exclude 항목(`lib/analysis_options.yaml`)을 그대로 둔다
+- 루트 `analysis_options.yaml` 의 exclude 에 `example/**` 한 줄을 더한다 (기존 `lib/analysis_options.yaml` 제외는 그대로 둔다 — 02-CONTEXT.md 가 계획에 맡긴 항목). 더하지 않으면 루트 분석에 example 의 진단이 섞인다: 패키지를 받기 전에는 error 6건으로 exit 3, 받은 뒤에는 plugin 준비까지 일어나 exit 2. 이 제외는 `example/` 안에서의 분석을 건드리지 않는다 (007)
 - `riverpod_lint` 진단의 강도는 JSON 의 `severity` 로 읽는다. `type` 은 강도와 상관없이 전부 `STATIC_WARNING` 이고 `code` 에는 접두사가 없다 (003)
 - 정답지에 넣을 plugin 진단은 코드 생성 없이 뜨는 5개 중에서 고른다. warning 하나(`missing_provider_scope`)와 info 하나(`avoid_public_notifier_properties`)를 넣으면 맨 위 줄이 `exit 2` 가 된다 (003)
 - `example/` 의 패키지는 `dart pub get` 으로 받는다 (`--enforce-lockfile` 가능). `flutter pub get` 은 옵션 파일 맨 위에 `build/**` 제외를 써넣는다 (004)
@@ -23,6 +24,7 @@ MANIFEST.md 의 `verify-harness-tool-behavior` 에서 이 영역에 걸리는 �
 ```yaml
 # sources/001-analyze-invocation-form/fixture/pubspec.yaml
 name: spike_invocation_fixture
+description: spike 001 — dart analyze 실행 형태별 plugin 진단 확인용 연습 프로젝트
 publish_to: 'none'
 version: 0.0.0
 
@@ -40,7 +42,7 @@ dev_dependencies:
     path: ../../../..
 ```
 
-`example/` 에서는 `path:` 가 저장소 루트를 가리키도록 바꾼다 (spike 의 `../../../..` 은 `.planning/spikes/NNN/fixture/` 기준이다).
+`example/` 에서는 `path:` 가 저장소 루트를 가리키도록 `path: ..` 로 바꾼다 (spike 의 `../../../..` 은 `.planning/spikes/NNN/fixture/` 기준이다). spike 007 이 이 연습용 프로젝트를 `example/` 자리에 복사하고 그 한 줄만 바꿔 돌렸고, 아래 2번의 진단 4건이 그대로 나왔다.
 
 ```yaml
 # example/analysis_options.yaml — 이 한 줄이 전부다
@@ -159,6 +161,8 @@ if (result.exitCode != 0) {
 }
 ```
 
+- 위의 Dart 조각은 spike 가 돌린 그대로라 `--enforce-lockfile` 이 없다. 이 플래그의 동작은 004 가 명령줄로 쟀다. 검증 명령이 붙일지는 계획에서 정한다.
+- `example/pubspec.lock` 을 커밋하려면 루트 `.gitignore` 의 `pubspec.lock` 패턴에 `example/` 예외 한 줄이 필요하다 (D-05 의 결정이고 spike 가 잰 것은 아니다).
 - `--enforce-lockfile` 은 "`pubspec.lock` 에 적힌 버전 그대로"를 강제한다. `example/pubspec.lock` 을 커밋하기로 했으므로(D-05) 검증 명령과 CI 가 쓸 수 있다. lock 과 `pubspec.yaml` 이 어긋나면 **종료 코드 65** 로 실패하고 lock 은 바뀌지 않는다 ("Unable to satisfy `pubspec.yaml` using `pubspec.lock`.").
 - 결과는 `flutter pub get` 과 같다: `.dart_tool/package_config.json` 의 패키지 35개가 같고 `pubspec.lock` 은 글자 하나 다르지 않았다. `flutter pub get` 만 `.dart_tool/version` 을 하나 더 만든다.
 
@@ -193,8 +197,42 @@ plugins:
       # … 끌 규칙을 이어 적는다
 ```
 
+### 8. `example/` 이 저장소 루트의 분석에 섞이지 않게 한다
+
+spike 의 연습용 프로젝트는 모두 `.planning/` 아래(점으로 시작하는 폴더)에 있어 루트 분석에 들어간 적이 없다. 실제 `example/` 은 점으로 시작하지 않으므로, **`example/` 을 만드는 같은 변경에서** 루트 `analysis_options.yaml` 의 exclude 에 한 줄을 더한다.
+
+```yaml
+# 루트 analysis_options.yaml — 기존 항목은 그대로 두고 한 줄을 더한다
+analyzer:
+  exclude:
+    - lib/analysis_options.yaml
+    - 'example/**'
+```
+
+저장소 루트에서 인자 없이 `dart analyze` 를 돌렸을 때 (커밋 전 린터가 이렇게 돈다):
+
+| `example/` | 루트 제외 | exit | 진단 | plugin 준비 | 시간 |
+|---|---|---|---|---|---|
+| 없음 (지금의 저장소) | — | 0 | 0건 | 없음 | 0.5초 |
+| 있음, `pub get` 전 | 없음 | **3** | **9건 (error 6)** | 없음 | 0.5초 |
+| 있음, `pub get` 후 | 없음 | **2** | **4건 (plugin 2 포함)** | **있음** | 15초 |
+| 있음, `pub get` 전 | `example/**` | 0 | 0건 | 없음 | 0.5초 |
+| 있음, `pub get` 후 | `example/**` | 0 | 0건 | 없음 | 0.5초 |
+| 있음, `pub get` 후 | `example` | 0 | 0건 | 없음 | 0.5초 |
+
+제외하지 않으면 `pub get` 전후로 모양이 완전히 다르다.
+
+- **전:** example 의 파일이 루트 패키지의 일부로 분석된다. 루트 패키지에는 `flutter` 가 없어 import 가 풀리지 않으므로 `uri_does_not_exist`, `extends_non_class` 같은 error 6건이 난다. 저장소를 새로 받은 직후의 상태다.
+- **후:** `example/` 이 별도 context root 가 된다. 그 옵션 파일이 루트 옵션 파일로 읽혀 plugin 까지 준비되고(15초, 네트워크 필요) 2번의 진단 4건이 나온다.
+
+**이 제외는 `example/` 안에서의 분석을 건드리지 않는다.** `example/` 을 작업 디렉터리로 두고 인자 없이 돌리면(검증 명령이 하는 실행) 루트 제외가 없든, `example/**` 이든, `example` 과 `example/**` 둘 다이든 exit 2 에 기대한 4건이 나왔다. 분석 대상의 루트가 `example/` 이면 상위 폴더의 옵션 파일은 읽히지 않는다.
+
+제외가 있으면 루트 분석은 0.5초면 끝난다. plugin 준비는 `example/` 안에서의 분석 한 번에만 든다.
+
 ## What to Avoid
 
+- **루트 제외 없이 `example/` 을 추가하는 것.** 커밋 전 린터(루트에서 `dart analyze`)가 저장소를 새로 받은 직후에는 exit 3, `example/` 의 패키지를 받은 뒤에는 exit 2 가 되고 15초와 네트워크가 든다.
+- **"spike 의 연습용 프로젝트는 루트 분석에 섞이지 않았으니 `example/` 도 그럴 것"이라는 가정.** 섞이지 않은 것은 `.planning/` 이 점으로 시작하기 때문이다.
 - **`example/` 에서 `flutter pub get` 을 돌리는 것.** 옵션 파일을 고친다. 분석 결과는 같지만 CI 에서 작업 트리가 바뀌고 로컬에는 커밋하지 않은 변경이 생긴다. 끄는 옵션은 Flutter 도구 소스에 없다.
 - **`riverpod_syntax_error` 를 정답지에 넣는 것.** `riverpod_annotation` 의존성과 가짜 `typedef` 가 필요하고, 정답지의 종료 코드가 3 이 되어 "warning 이 사라졌다"를 종료 코드로 구별하지 못한다.
 - **"코드 생성 없이 뜨는 후보는 6개"로 세는 것.** 5개다. `protected_notifier_properties` 는 `@riverpod` 가 붙은 class 안에서만 보고한다 (`if (enclosingClass.riverpod == null) return;`). 손으로 쓴 `Notifier` 에서 같은 위반을 한 대조 파일(`r04a_…_plain.dart`)에서는 진단이 나오지 않았다.
@@ -212,11 +250,16 @@ plugins:
 - `flutter pub get` 의 동작 (`AnalysisOptionsMigration`, Flutter 3.47.5): `flutter` 에 의존하는 프로젝트이고 `analysis_options.yaml` 이 있으면 `build/**` 와 **존재하는 플랫폼 폴더**(`android/**`, `ios/**`, `web/**`, `windows/**`, `macos/**`, `linux/**`)가 `analyzer.exclude` 에 있는지 보고, 없으면 덧붙인다. 볼 때 `include:` 를 따라간다 (상대 경로와 `package:` URI 모두). 한 번만 고치고 그 뒤로는 그대로다.
 - 사용 프로젝트에도 같은 일이 생긴다. 플랫폼 폴더가 있는 실제 앱에서 `flutter pub get` 을 돌리면 그 프로젝트의 옵션 파일에 제외 줄이 덧붙는다. 이 패키지의 문제는 아니다. include 한 파일이 이미 제외하고 있으면 덧붙지 않는다.
 - **Phase 4 로 넘긴 것:** 프리셋에 `build/**` (그리고 플랫폼 폴더) 제외를 넣을지. 넣으면 사용 프로젝트의 `flutter pub get` 이 옵션 파일을 고치지 않는다.
-- 확인하지 않은 것: 표의 아래 6개가 생성 코드 없이도 뜨는지 (`example/` 에 넣지 않을 규칙이다). `protected_notifier_properties` 는 손으로 쓴 `Notifier` 에서 뜨지 않는 것까지만 확인했다.
+- 하위 폴더가 별도 context root 가 되는 조건 (`analyzer` 14.5.0 의 `lib/src/dart/analysis/context_locator.dart`): 그 폴더의 package config(`.dart_tool/package_config.json`)가 상위 root 의 것과 다를 때다. 그래서 `example/` 에서 `pub get` 을 하기 전과 후에 루트 분석의 결과가 달라진다. 폴더 이름이 점으로 시작하거나 상위 root 의 exclude 에 걸리면 그 폴더로 들어가지 않는다.
+- 루트 제외는 `example/**` 한 줄로 충분했다. 소스를 읽고는 "`example/**` 는 폴더 `example` 자체에는 맞지 않아 nested root 가 생길 수 있다"는 의문이 남았지만 실행에서는 제외됐다. `example` 만 적어도, 둘 다 적어도 결과가 같았다.
+- 루트 제외가 없고 `pub get` 전일 때 example 의 파일에서 `avoid_print`, `prefer_single_quotes` 도 나왔다. `example/analysis_options.yaml` 이 루트 context 의 하위 옵션 파일로 읽히고 그 안의 `include: package:woody_lints/…` 가 루트 패키지 자신으로 풀린다는 뜻이다. 이때 `plugins_in_inner_options` 는 나오지 않았다 (`plugins:` 가 하위 옵션 파일에 직접 적힌 것이 아니라 include 로 들어왔다).
+- 저장소 루트에서 `dart analyze example` 처럼 폴더를 인자로 준 형태는 루트 제외와 상관없이 4건이 나왔다. 채택한 형태가 아니다 (→ analyze-run-and-verdict.md).
+- 8번의 표는 저장소의 모양을 작업 폴더에 복사한 replica 에서 쟀다 (`sources/007-root-analysis-with-example/probe.dart`). 두 번 돌려 두 번 모두 같았다.
+- 확인하지 않은 것: 표의 아래 6개가 생성 코드 없이도 뜨는지 (`example/` 에 넣지 않을 규칙이다). `protected_notifier_properties` 는 손으로 쓴 `Notifier` 에서 뜨지 않는 것까지만 확인했다. 루트를 IDE 로 열었을 때 example 의 진단이 보이지 않게 되는지 (조사 문서의 예상이고 명령줄로는 잴 수 없다). 루트 제외를 GitHub Linux runner 에서 돌린 것 (context root 를 정하는 코드는 운영체제와 무관하다). `example/` 말고 연습용 프로젝트가 더 생겼을 때 (Phase 3 의 대조군 fixture — 폴더마다 제외 줄이 필요할 것이다).
 
 ## Origin
 
-Synthesized from spikes: 003, 004 (위반 코드와 기대 진단 파일은 001, 006 에서 가져왔다)
-Source files available in: sources/003-riverpod-lint-severity-matrix/, sources/004-fixture-pub-get/, sources/001-analyze-invocation-form/fixture/, sources/006-github-runner-cold-plugin/expected_001.txt, sources/006-github-runner-cold-plugin/expected_003.txt
-원본 로그와 JSON: `.planning/spikes/003-riverpod-lint-severity-matrix/results/`, `.planning/spikes/004-fixture-pub-get/results/`
+Synthesized from spikes: 003, 004, 007 (위반 코드와 기대 진단 파일은 001, 006 에서 가져왔다)
+Source files available in: sources/003-riverpod-lint-severity-matrix/, sources/004-fixture-pub-get/, sources/007-root-analysis-with-example/, sources/001-analyze-invocation-form/fixture/, sources/006-github-runner-cold-plugin/expected_001.txt, sources/006-github-runner-cold-plugin/expected_003.txt
+원본 로그와 JSON: `.planning/spikes/003-riverpod-lint-severity-matrix/results/`, `.planning/spikes/004-fixture-pub-get/results/`, `.planning/spikes/007-root-analysis-with-example/results/`
 생성 코드(`*.g.dart`)는 사본에 넣지 않았다. 원본은 `.planning/spikes/003-riverpod-lint-severity-matrix/fixture/lib/gen/` 에 있다.

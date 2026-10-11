@@ -13,6 +13,7 @@ MANIFEST.md 의 `verify-harness-tool-behavior` 에서 이 영역에 걸리는 �
 - 검증에는 네트워크가 필요하다 (002)
 - `example/` 의 패키지는 `dart pub get` 으로 받는다 (004)
 - `dart analyze` 는 사용 통계 전송을 끈 채 실행한다 (001)
+- 검증 명령은 `example/` 을 분석할 때 `ANALYZER_STATE_LOCATION_OVERRIDE` 로 저장소 안의 전용 상태 폴더를 준다 (008)
 
 ## How to Build It
 
@@ -52,6 +53,7 @@ spike 의 원본은 `sources/006-github-runner-cold-plugin/spike-006-cold-plugin
 - **Flutter 버전 숫자를 workflow 에 적지 않는다.** `flutter-version-file: .fvmrc` 하나로 로컬과 같은 Flutter 3.47.5 / Dart 3.13.4 가 설치됐다.
 - **`timeout-minutes` 는 10** 이면 넉넉하다 (정상 약 2분). pub 서버에 닿지 못해도 plugin 준비는 약 30초 뒤 실패로 끝나므로, 멈춰 있는 경우만 막으면 된다.
 - **`~/.dartServer` 는 캐시하지 않는다.** 캐시 없이도 43초이고, 캐시하면 plugin 준비 실패가 가려질 수 있다 (PITFALLS.md Pitfall 12).
+- 검증 명령이 쓰는 전용 상태 폴더(→ analyze-run-and-verdict.md 2번)도 같은 이유로 캐시하지 않는다. runner 는 매번 저장소를 새로 받으므로 그 폴더는 비어 있고 첫 분석은 늘 처음 실행이다. 빈 폴더를 `ANALYZER_STATE_LOCATION_OVERRIDE` 로 준 cold 실행은 runner 에서 30번 돌려 30번 모두 통과했다 (27.0~52.6초, spike 006 의 C1~C3. 그때의 폴더는 저장소 밖 `RUNNER_TEMP` 아래였다).
 - 검증 명령은 `--suppress-analytics` 를 항상 붙인다. runner 에서는 없어도 되지만 로컬과 같은 방식으로 돌도록 맞춘다.
 
 ### 2. job 하나의 시간
@@ -64,7 +66,7 @@ spike 의 원본은 `sources/006-github-runner-cold-plugin/spike-006-cold-plugin
 | `dart analyze` 첫 실행 | 약 43초 (27~53초) |
 | 합계 | **약 2분** |
 
-같은 프로젝트를 한 번 더 분석하면 약 8초(5.5~10.6초)가 더 든다. 규칙 검사(→ rule-status-check.md)가 저장소 루트를 분석하는 시간은 runner 에서 재지 않았다.
+같은 프로젝트를 한 번 더 분석하면 약 8초(5.5~10.6초)가 더 든다. 규칙 검사(→ rule-status-check.md)는 로컬에서 0.5초다 (spike 007). runner 에서는 재지 않았다.
 
 ### 3. runner 의 환경
 
@@ -121,10 +123,10 @@ gh run view <run id> --log
 - action 버전: `actions/checkout` v7.0.1 (2026-07-20), `subosito/flutter-action` v2.23.0 (2026-03-25). 둘 다 major tag(`v7`, `v2`)가 있다. `flutter-action` 의 `cache` 기본값은 `false` 다.
 - push 로 도는 workflow 는 올라간 브랜치의 workflow 파일을 쓴다. 기본 브랜치에 파일이 없어도 돈다.
 - 작업 브랜치(`gsd/v2.0-package-rework`)는 이미 원격에 올라가 있다 (D-08, D-09). `.planning/` 이 공개된다는 뜻이므로 결과 파일에는 로컬 절대 경로를 남기지 않는다.
-- 확인하지 않은 것: macOS / Windows runner (CI 는 Linux 만 쓴다), SDK 캐시(`cache: true`)를 켰을 때의 시간 (약 66초를 줄여 주지만 넣을지는 계획 때 정한다), GitHub 나 pub.dev 에 장애가 있을 때의 모습 (spike 002 의 로컬 재현으로 갈음).
+- 확인하지 않은 것: macOS / Windows runner (CI 는 Linux 만 쓴다), SDK 캐시(`cache: true`)를 켰을 때의 시간 (약 66초를 줄여 주지만 넣을지는 계획 때 정한다), GitHub 나 pub.dev 에 장애가 있을 때의 모습 (spike 002 의 로컬 재현으로 갈음), spike 007(루트의 `example/**` 제외, 규칙 검사의 실행 형태)과 008(상태 폴더를 함께 쓸 때, 깨진 뒤의 회복)의 실험을 runner 에서 한 것.
 
 ## Origin
 
-Synthesized from spikes: 006
+Synthesized from spikes: 006 (전용 상태 폴더와 규칙 검사 시간에 관한 두 줄은 007, 008 의 결과를 덧붙인 것이다)
 Source files available in: sources/006-github-runner-cold-plugin/
 원본 결과: `.planning/spikes/006-github-runner-cold-plugin/results/run-38136362920.json`, `run-38136362920-attempt2.json`

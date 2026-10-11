@@ -2,7 +2,7 @@
 
 spike 세션에서 굳어진 도구 선택과 방식이다. 새 spike 는 질문이 다른 방식을 요구하지 않는 한 이를 따른다. 두 개 이상의 spike 에서 반복된 것만 적었다.
 
-spike 가 확인한 사실 자체는 `.claude/skills/spike-findings-woody-lints/` 에 묶여 있다 (2026-10-11 wrap-up, spike 001~006).
+spike 가 확인한 사실 자체는 `.claude/skills/spike-findings-woody-lints/` 에 묶여 있다 (2026-10-11 wrap-up 두 번, spike 001~008).
 
 ## Stack
 
@@ -28,12 +28,13 @@ spike 가 확인한 사실 자체는 `.claude/skills/spike-findings-woody-lints/
 
 ## Patterns
 
-- **`dart analyze` 는 패키지 루트를 작업 디렉터리로 두고 인자 없이 실행한다.** 하위 폴더를 인자로 주면 plugin 진단을 잃는다 (001).
+- **`dart analyze` 는 패키지 루트를 작업 디렉터리로 두고 인자 없이 실행한다.** 하위 폴더를 인자로 주면 plugin 진단을 잃는다 (001). 폴더를 인자로 주는 것은 plugin 진단이 필요 없는 규칙 검사뿐이다 — 저장소 루트에서 `dart analyze build/woody_rule_check` (007).
 - **사용 통계 전송을 끄고 실행한다** — `dart --suppress-analytics analyze …` 또는 `DASH__SUPPRESS_ANALYTICS=true`. 끄지 않으면 가끔 종료 코드 255 로 죽는다 (001). GitHub runner 에서는 `dart` 가 스스로 끄지만(006) 로컬과 같은 방식으로 돌도록 항상 붙인다.
 - **`~/.dartServer` 를 건드리지 않는다.** 스크립트의 첫 인자로 상태 폴더를 받아 `ANALYZER_STATE_LOCATION_OVERRIDE` 로 넘긴다. 빈 폴더를 주면 cold 실행이 된다. 기본 자리를 쓰는 것은 runner 에서 "평범한 CI job 이 겪는 그대로"를 볼 때뿐이고, 그 모드는 GitHub Actions 밖에서 실행을 거부한다 (006). 실행을 겹쳐 띄울 때는 그것이 실험 대상이 아닌 한 실행마다 폴더를 따로 준다 — 빈 폴더를 함께 쓰면 드물게 깨진다 (008).
 - 진단은 정답지 형식 `상대경로:줄  강도  규칙이름` 으로 정규화하고 정렬해 견준다 (D-04). 강도는 JSON 의 `severity` 를 소문자로 쓴다.
 - 연습용 프로젝트의 파일을 바꿔 쓰는 스크립트는 끝날 때 반드시 되돌린다 (Dart 는 `finally`, bash 는 `trap`). 저장소 안에 임시 폴더를 만들면 같은 자리에서 지운다.
 - 종료 코드, stdout(JSON), stderr 를 따로 기록한다. 하나만 보고 판정하지 않는다 (002).
+- plugin 준비 실패의 머리말(`An error occurred while executing an analyzer plugin:`)은 stderr 에서 `contains` 로 찾는다. 첫 줄이 아닐 수 있다 (008).
 - stdout 에서 `{` 로 시작하는 마지막 줄을 JSON 으로 읽는다. 읽지 못하면 "진단 0건"이 아니라 "JSON 없음"으로 따로 기록한다 (002, 003, 005, 006).
 - 스크립트는 시작할 때 준비 상태(인자, SDK 경로, 연습용 프로젝트의 `.dart_tool/package_config.json`)를 확인하고, 빠진 것이 있으면 할 일을 알려 주고 끝낸다. 스크립트 자신의 종료 코드는 sysexits 관례를 따른다: 64 사용법, 65 형식 오류, 66 입력 없음, 69 하위 명령 실패, 70 프로세스를 띄우지 못함, 73 폴더를 만들지 못함, 74 파일 작업 실패 (002~008).
 - "plugin 을 준비했는가"는 실행마다 빈 상태 폴더를 주고 `.plugin_manager` 아래 폴더 수로 본다 (005, 007).
@@ -41,6 +42,7 @@ spike 가 확인한 사실 자체는 `.claude/skills/spike-findings-woody-lints/
 - 오래 걸리는 실험은 부(part)나 경우 id 로 나눠 인자로 골라 돌릴 수 있게 하고, 결과 JSON 은 덮어쓰지 않고 합쳐 쓴다 (002, 008).
 - 결과 파일에서는 로컬 절대 경로를 `<repo>`, `<scratch>`, `~/` 로 가린다. 작업 브랜치가 공개 저장소에 올라가기 때문이다 (D-08).
 - 실측한 사실에는 버전과 날짜를 함께 적는다.
+- 도구의 소스를 읽어 세운 추정은 실행으로 확인하고, 읽은 소스의 버전을 적는다 (001, 005, 007, 008). 읽는 대상은 SDK tag 3.13.4 의 소스와 pub cache 의 `analyzer` 14.5.0 이다. 읽은 것과 실행 결과가 어긋나면 실행 결과를 따른다 — `rules.json` 과 실제 규칙 상태(005), "`example/**` 가 폴더 자체에는 맞지 않을 수 있다"는 의문(007)이 그랬다.
 - 연습용 프로젝트의 패키지는 `dart pub get` 으로 받는다. `flutter pub get` 은 옵션 파일을 고친다 (004).
 
 ## Tools & Libraries
@@ -60,6 +62,7 @@ spike 가 확인한 사실 자체는 `.claude/skills/spike-findings-woody-lints/
 쓰지 않는 것:
 
 - `flutter analyze` — Flutter 3.47.5 에서 plugin 진단을 내지 않는다 (PROJECT.md).
-- `dart analyze <하위 폴더>` — plugin 진단을 잃는다 (001).
+- `dart analyze <하위 폴더>` — plugin 진단을 잃는다 (001). 규칙 검사의 복사본 폴더만 예외다 (007).
+- plugin 버전을 기본 자리(`~/.dartServer`)에서 읽는 것 — 다른 프로젝트의 폴더가 섞여 있고 자기 폴더를 고를 방법이 없다 (008).
 - 연습용 프로젝트에서의 `flutter pub get` — 옵션 파일을 고친다 (004).
 - SDK tag 의 `rules.json` 을 규칙 상태의 근거로 삼는 것 — 실제 동작과 어긋난 항목이 있었다 (005).
