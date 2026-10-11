@@ -60,7 +60,7 @@ Plans:
 - [x] 01-03-PLAN.md — 저장소 SDK 를 3.47.5 로, 지원 하한을 `sdk: ^3.13.0` / `2.0.0-dev` 로 올리고 CHANGELOG 2.0.0 항목을 만든다 (BASE-01, BASE-02)
 
 **Wave 4** *(gap closure — UAT G-01-1, blocked on Wave 3 completion)*
-- [ ] 01-04-PLAN.md — `VERSIONING.md` 판정 순서 1번의 둘째 조건을 변경 종류 기준("이미 켜져 있던 규칙의 심각도가 warning 이상으로 올라가나")으로 좁히고 1.3.0 사례가 두 조건을 모두 답하게 고친다; D-02 · D-09 ① 문구 수정을 CONTEXT 에 주석으로 기록한다 (G-01-1; BASE-03)
+- [ ] 01-04-PLAN.md — `VERSIONING.md` 판정 순서 1번을 기준표의 major 다섯 행을 모두 묻는 변경 종류 문구로 고치고(둘째 조건을 "이미 켜져 있던 규칙의 심각도가 warning 이상으로 올라가나" 로 좁힘 + `flutter_lints` / `riverpod_lint` 다음 major 상향 추가) 1.3.0 사례가 세 조건을 모두 답하게 한다; D-02 · D-09 ① 문구 수정(소유자 결정 2건)을 CONTEXT 에 주석으로 기록한다 (G-01-1; BASE-03)
 
 **Decision points** (이 phase 안에서 소유자가 정한다):
 - **D4** — `v1.3.0` tag 를 원격에 push 하는 것은 원격에 남는 작업이다. tag 는 로컬에서 만들어 두고, push 는 실행 시점에 소유자의 명시적 확인을 받은 뒤에 한다. 조사 권고는 commit `90a2736` 에 annotated tag 이며, push 한 tag 는 옮기지 않는다.
