@@ -1,3 +1,15 @@
+## 2.0.0 - 미출시
+
+지원 SDK: Dart 3.13 이상 (이전: Dart 3.10.4 이상)
+
+### 올리기 전에
+
+- Dart 3.13 미만(Flutter 3.47 미만)을 쓰는 프로젝트는 `ref: v1.3.0` 에 머문다.
+
+### 새로 생기는 경고
+
+(Phase 4 실측 후 채움)
+
 ## 1.3.0
 
 - riverpod_lint 를 최상위 `plugins:` (analysis_server_plugin) 방식으로 전환.
