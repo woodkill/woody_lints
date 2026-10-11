@@ -20,9 +20,12 @@ Phase 2 (Verification Harness) 의 나머지를 계획하기 전에, 검증 명�
 spike 에서 나와 실제 구현이 지켜야 하는 것 (근거는 각 spike 의 README).
 
 - `dart analyze` 는 `example/` 을 작업 디렉터리로 두고 **인자 없이**, **사용 통계 전송을 끈 채**(`--suppress-analytics`) 실행한다 (001)
+- plugin 준비 실패는 종료 코드가 아니라 **stderr 의 머리말**(`An error occurred while executing an analyzer plugin:`)과 정답지의 빠진 줄로 알아챈다. 종료 코드 0 / 2 는 plugin 이 죽어도 나온다 (002)
+- 검증에는 네트워크가 필요하다. plugin 이 이미 준비되어 있어도 pub 서버에 닿지 못하면 plugin 진단 없이 끝난다 (002)
 
 ## Spikes
 
 | # | Idea | Name | Type | Validates | Verdict | Tags |
 |---|------|------|------|-----------|---------|------|
 | 001 | verify-harness-tool-behavior | analyze-invocation-form | standard | 패키지 루트에서 인자 없이 `dart analyze` 를 돌리면 plugin 진단이 cold·warm 모두 빠짐없이 나온다 | ✓ VALIDATED (조건: 사용 통계 전송을 끈다) | dart-analyze, analyzer-plugin, exit-code, analytics, flaky |
+| 002 | verify-harness-tool-behavior | plugin-setup-failure-exit | standard | plugin 준비가 실패하고 다른 진단이 있을 때 `dart analyze` 의 종료 코드·stdout·stderr 가 확정된다 | ✓ VALIDATED | dart-analyze, analyzer-plugin, exit-code, stderr, offline |

@@ -1,0 +1,10 @@
+name: broken_plugin
+description: spike 002 — 패키지 해석은 되지만 컴파일이 실패하는 analyzer plugin (일부러 문법을 틀렸다)
+publish_to: 'none'
+version: 0.0.1
+
+environment:
+  sdk: ^3.13.0
+
+dependencies:
+  analysis_server_plugin: ^0.3.0
