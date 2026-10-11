@@ -1,14 +1,24 @@
-// woody_lints 검증 명령 — example/ 을 `dart analyze` 로 분석한 결과를 커밋된 정답지와 비교한다.
+// woody_lints 검증 명령 — 배포 설정이 기대한 대로 적용되는지를 단계 4개로 확인한다.
+//
+//   [1/4] lib/ 에 .dart 파일이 없는지
+//   [2/4] 배포 파일(lib/analysis_options.yaml)에 deprecated / removed / 없는 규칙이 없는지
+//   [3/4] example/analysis_options.yaml 이 include 한 줄인지
+//   [4/4] example/ 을 `dart analyze` 로 분석한 결과가 커밋된 정답지와 같은지
 //
 // 실행: fvm dart run tool/verify.dart [--update]
 //   --update  정답지(example/expected_diagnostics.txt)를 실제 결과로 다시 쓴다.
 //             바뀐 줄을 먼저 화면에 보여 준다. CI 에서는 동작하지 않는다.
 //
-// lib/ 는 읽기만 한다. .dart_tool/woody_verify/ 를 만들고 지우지 않는다 —
-// Analysis Server 가 plugin 을 받아 컴파일해 두는 전용 상태 폴더라, 지우면 다음 실행이
-// 처음부터 다시 준비한다 (약 15초). 지우는 것은 plugin 준비 실패 뒤의 복구 수단이다.
+// 단계에 앞서 준비를 한다: 실행 중인 SDK 가 .fvmrc 와 같은지 확인하고, 저장소 루트와
+// example/ 의 패키지를 받는다. 준비가 실패하면 검증을 시작하지 않는다.
+//
+// lib/ 는 읽기만 한다. 규칙 검사 동안 build/woody_rule_check/ 를 만들었다가 지운다.
+// .dart_tool/woody_verify/ 를 만들고 지우지 않는다 — Analysis Server 가 plugin 을 받아
+// 컴파일해 두는 전용 상태 폴더라, 지우면 다음 실행이 처음부터 다시 준비한다 (약 15초).
+// 지우는 것은 plugin 준비 실패 뒤의 복구 수단이다.
 //
 // 종료 코드: 0 모두 통과 / 1 단계 실패 / 64 사용법 오류 / 69 pub get 실패 / 70 예외로 끝남
+//            / 78 실행 중인 SDK 가 .fvmrc 와 다름
 import 'dart:convert';
 import 'dart:io';
 
@@ -23,11 +33,37 @@ const pluginFailureHeader =
 /// 지금은 `example` 하나다. fixture 마다 상태 폴더를 따로 주고 순서대로 분석한다.
 const fixtures = ['example'];
 
+/// 규칙이 적힌 배포 파일 (저장소 루트 기준). 읽기만 한다.
+const shippedOptionsPath = 'lib/analysis_options.yaml';
+
+/// 규칙 검사용 복사본을 두는 폴더 (저장소 루트 기준).
+///
+/// 저장소 안이어야 루트 `pubspec.yaml` 의 SDK 하한이 적용되어 deprecated / removed
+/// 규칙이 보고된다. 점으로 시작하는 폴더는 분석되지 않는다 (spike 005).
+const ruleCheckDir = 'build/woody_rule_check';
+
+/// 배포 파일에 있으면 안 되는 규칙 상태의 진단 코드 (deprecated / removed / 없는 규칙).
+const ruleProblemCodes = ['deprecated_lint', 'removed_lint', 'undefined_lint'];
+
+/// 복사본의 `include:` 가 풀리지 않았을 때의 진단 코드 — 루트 `pub get` 이 안 된 상태다.
+const includeNotFoundCode = 'include_file_not_found';
+
+/// fixture 의 옵션 파일에 있어야 하는 단 한 줄 (사용 프로젝트와 같은 모양).
+const fixtureIncludeLine = 'include: package:woody_lints/analysis_options.yaml';
+
+/// 이 스크립트를 올바른 SDK 로 실행하는 명령 (안내 문구에 쓴다).
+const runCommand = 'fvm dart run tool/verify.dart';
+
+/// `dart analyze` 가 진단의 강도에 따라 내는 종료 코드 (0 info 이하 / 2 warning / 3 error).
+///
+/// 이 밖의 값은 "도구가 죽었다" 로 본다 (spike 001, 002).
+const analyzeExitCodes = [0, 2, 3];
+
 /// 정답지 파일 이름 (fixture 폴더 바로 아래에 둔다).
 const expectedFileName = 'expected_diagnostics.txt';
 
 /// 정답지를 다시 만드는 명령 (안내 문구에 쓴다).
-const updateCommand = 'fvm dart run tool/verify.dart --update';
+const updateCommand = '$runCommand --update';
 
 /// 처음 만드는 정답지에 넣는 형식 설명 줄.
 const formatHeaderLine = '# 형식: 상대경로:줄  강도  규칙이름 (문자열 정렬). 갱신: $updateCommand';
@@ -189,14 +225,93 @@ Future<Never> quit(int code) async {
   exit(code);
 }
 
+/// 실행 중인 SDK 의 버전 (Flutter / Dart).
+class SdkInfo {
+  /// [flutter] 는 `frameworkVersion`, [dart] 는 `dartSdkVersion` 이다.
+  SdkInfo({required this.flutter, required this.dart});
+
+  /// Flutter 버전 (예: `3.47.5`).
+  final String flutter;
+
+  /// Dart 버전 (예: `3.13.4`).
+  final String dart;
+}
+
+/// 실행 중인 dart 가 속한 Flutter SDK 의 `bin/cache/flutter.version.json` 을 읽는다.
+///
+/// 1순위는 실행 파일에서 다섯 단계 위다 (`<root>/bin/cache/dart-sdk/bin/dart` → `<root>`).
+/// 2순위는 환경변수 `FLUTTER_ROOT` 다 — 설치본의 배치가 다른 경우(GitHub runner)의
+/// 대비이고, 그 SDK 의 `dartSdkVersion` 이 실행 중인 Dart 와 같을 때만 받아들인다
+/// (다른 SDK 를 가리키는 환경변수로 확인을 통과하지 않게). 못 찾으면 null 을 돌려준다.
+Map<String, dynamic>? readFlutterVersion() {
+  var dir = File(Platform.resolvedExecutable).parent;
+  for (var i = 0; i < 4; i++) {
+    dir = dir.parent;
+  }
+  final nearby = readVersionFile(dir.path);
+  if (nearby != null) return nearby;
+
+  final flutterRoot = Platform.environment['FLUTTER_ROOT'];
+  if (flutterRoot == null || flutterRoot.isEmpty) return null;
+  final fallback = readVersionFile(flutterRoot);
+  final runningDart = Platform.version.split(' ').first;
+  return fallback?['dartSdkVersion'] == runningDart ? fallback : null;
+}
+
+/// [flutterRoot] 아래의 `bin/cache/flutter.version.json` 을 읽는다. 없으면 null.
+Map<String, dynamic>? readVersionFile(String flutterRoot) {
+  final file = File('$flutterRoot/bin/cache/flutter.version.json');
+  if (!file.existsSync()) return null;
+  final decoded = jsonDecode(file.readAsStringSync());
+  return decoded is Map<String, dynamic> ? decoded : null;
+}
+
+/// 실행 중인 SDK 가 `.fvmrc` 와 같은지 확인하고 그 버전을 돌려준다 (D-12).
+///
+/// Flutter SDK 의 dart 가 아니거나 버전이 다르면 올바른 명령을 안내하고 exit 78 로
+/// 끝낸다 (검증을 시작하지 않는다). `.fvmrc` 의 모양이 틀리면 [FormatException] 이다.
+Future<SdkInfo> ensurePinnedSdk(String repoRoot) async {
+  final version = readFlutterVersion();
+  final running = version?['frameworkVersion'];
+  if (version == null || running is! String) {
+    stderr.writeln('Flutter SDK 의 dart 가 아니다.');
+    stderr.writeln('저장소 루트에서 `$runCommand` 로 실행하세요.');
+    await quit(78);
+  }
+  final pinned = jsonDecode(File('$repoRoot/.fvmrc').readAsStringSync());
+  final expected = pinned is Map<String, dynamic> ? pinned['flutter'] : null;
+  if (expected is! String) {
+    throw const FormatException('`.fvmrc` 에 `flutter` 값이 없다');
+  }
+  if (running != expected) {
+    stderr.writeln('실행 중인 SDK 는 Flutter $running 인데 .fvmrc 는 $expected 다.');
+    stderr.writeln('저장소 루트에서 `$runCommand` 로 실행하세요.');
+    await quit(78);
+  }
+  final dart = version['dartSdkVersion'];
+  return SdkInfo(
+    flutter: running,
+    dart: dart is String ? dart : Platform.version.split(' ').first,
+  );
+}
+
+/// [path] 가 [repoRoot] 아래면 저장소 기준 상대 경로로 바꾼다 (화면에 절대 경로를 남기지 않는다).
+String relativize(String path, String repoRoot) =>
+    path.startsWith('$repoRoot/') ? path.substring(repoRoot.length + 1) : path;
+
 /// [dir] 에서 `dart pub get` 을 돌린다.
 ///
 /// [enforceLockfile] 이면 `--enforce-lockfile` 을 붙여 커밋된 `pubspec.lock`
 /// 그대로 받는다. 실패하면 안내를 적고 exit 69 로 끝낸다 (검증을 시작하지 않는다).
+///
+/// 늘 `--no-example` 을 붙인다. 기본값대로 두면 저장소 루트의 `pub get` 이 `example/` 도
+/// 함께 풀어 어긋난 `example/pubspec.lock` 을 조용히 다시 쓰고, 그 뒤의
+/// `--enforce-lockfile` 이 통과해 버린다 (Dart 3.13.4, 2026-10-12 실측).
 Future<void> runPubGet(String dir, {required bool enforceLockfile}) async {
   final result = await Process.run(Platform.resolvedExecutable, [
     'pub',
     'get',
+    '--no-example',
     if (enforceLockfile) '--enforce-lockfile',
   ], workingDirectory: dir);
   if (result.exitCode == 0) return;
@@ -302,6 +417,190 @@ void writeExpected(
   );
 }
 
+/// [1/4] `lib/` 아래에 `.dart` 파일이 없는지 본다 (VERIFY-07).
+///
+/// 모든 깊이를 본다. `lib/` 가 없으면 통과다 — 배포 파일이 없는 상태는 규칙 검사가 잡는다.
+StepResult checkLibHasNoDart(String repoRoot) {
+  const label = 'lib/ 에 .dart 파일 없음';
+  final lib = Directory('$repoRoot/lib');
+  if (!lib.existsSync()) return StepResult(label: label, passed: true);
+  final found =
+      lib
+          .listSync(recursive: true)
+          .whereType<File>()
+          .map((f) => relativize(f.path, repoRoot))
+          .where((p) => p.endsWith('.dart'))
+          .toList()
+        ..sort();
+  if (found.isEmpty) return StepResult(label: label, passed: true);
+  return StepResult(
+    label: label,
+    passed: false,
+    detailLines: [
+      'lib/ 에 .dart 파일이 있다 (${found.length})',
+      ...found.map((p) => '  $p'),
+      '',
+      '`lib/` 에는 YAML 만 둔다 — 스크립트는 `tool/`, 연습용 코드는 `example/` 에 둔다.',
+    ],
+  );
+}
+
+/// 옵션 파일 내용에서 최상위 `plugins:` 섹션을 뺀다 (spike 007).
+///
+/// `plugins:` 줄과 그 바로 아래에 이어지는 들여쓴 줄만 지운다. 못 찾으면
+/// [FormatException] 을 던진다 — `plugins:` 를 담은 채 분석하면 plugin 을 준비한다
+/// (11초 + 네트워크).
+String stripPlugins(String options) {
+  final stripped = options.replaceAll(
+    RegExp(r'^plugins:\n(?:[ \t]+.*\n)+', multiLine: true),
+    '',
+  );
+  if (stripped == options) {
+    throw const FormatException('$shippedOptionsPath 에서 `plugins:` 섹션을 찾지 못했다');
+  }
+  return stripped;
+}
+
+/// 복사본의 진단 줄 [line] 이 가리키는 줄에서 규칙 이름을 읽는다. 못 읽으면 null.
+String? readRuleNameAt(String line, List<String> copyLines) {
+  final number = int.tryParse(
+    RegExp(r':(\d+)  ').firstMatch(line)?.group(1) ?? '',
+  );
+  if (number == null || number < 1 || number > copyLines.length) return null;
+  return RegExp(r'^\s*-\s*([A-Za-z0-9_]+)')
+      .firstMatch(copyLines[number - 1])
+      ?.group(1);
+}
+
+/// [2/4] 배포 파일에 deprecated / removed / 없는 규칙이 있는지 본다 (VERIFY-02).
+///
+/// analyzer 는 규칙의 상태를 `analysis_options.yaml` 이라는 이름의 파일에 직접 적힌
+/// 규칙에 대해서만 온전히 보고한다 (include 경유로는 없는 규칙만). 그래서 배포 파일을
+/// `plugins:` 없이 [ruleCheckDir] 에 그 이름으로 복사하고, 저장소 루트에서 그 폴더를
+/// 인자로 분석한다. 복사본은 어떤 경우에도 지운다. 배포 파일은 읽기만 한다.
+Future<StepResult> checkRuleNames(String repoRoot) async {
+  const label = '배포 파일의 규칙 이름';
+  final copy = stripPlugins(
+    File('$repoRoot/$shippedOptionsPath').readAsStringSync(),
+  );
+  final checkDir = Directory('$repoRoot/$ruleCheckDir');
+  try {
+    checkDir.createSync(recursive: true);
+    File('${checkDir.path}/analysis_options.yaml').writeAsStringSync(copy);
+    // plugin 을 준비하지 않으므로 상태 폴더는 주지 않는다. 폴더 인자는 이 검사에서만 쓴다.
+    final result = await Process.run(Platform.resolvedExecutable, [
+      '--suppress-analytics',
+      'analyze',
+      '--format=json',
+      ruleCheckDir,
+    ], workingDirectory: repoRoot);
+    final lines = normalizeDiagnostics(result.stdout as String, [
+      repoRoot,
+      Directory(repoRoot).resolveSymbolicLinksSync(),
+    ]);
+
+    if (lines == null || !analyzeExitCodes.contains(result.exitCode)) {
+      final stderrHead = (result.stderr as String)
+          .trim()
+          .split('\n')
+          .take(2)
+          .join(' / ');
+      return StepResult(
+        label: label,
+        passed: false,
+        detailLines: [
+          '도구가 죽었다 — 규칙 검사의 dart analyze 가 exit ${result.exitCode} 로 끝났다'
+              '${lines == null ? ' (stdout 에 JSON 없음)' : ''}.',
+          '  stderr: ${stderrHead.isEmpty ? '(비어 있음)' : stderrHead}',
+        ],
+      );
+    }
+
+    // include 가 풀리지 않으면 규칙을 보지 못한 것이다 — "문제 없음" 으로 넘기지 않는다.
+    final unresolved = lines
+        .where((l) => l.endsWith('  $includeNotFoundCode'))
+        .toList();
+    if (unresolved.isNotEmpty) {
+      return StepResult(
+        label: label,
+        passed: false,
+        detailLines: [
+          '루트 `pub get` 이 안 되어 규칙 검사를 하지 못했다 — 복사본의 include 가 풀리지 않았다.',
+          ...unresolved.map((l) => '  $l'),
+          '',
+          '저장소 루트에서 `fvm dart pub get` 을 돌린 뒤 다시 실행하세요.',
+        ],
+      );
+    }
+
+    final problems = lines
+        .where((l) => ruleProblemCodes.any((code) => l.endsWith('  $code')))
+        .toList();
+    if (problems.isEmpty) return StepResult(label: label, passed: true);
+
+    final copyLines = copy.split('\n');
+    return StepResult(
+      label: label,
+      passed: false,
+      detailLines: [
+        '배포 파일에 쓸 수 없는 규칙이 있다 (${problems.length})',
+        for (final line in problems)
+          switch (readRuleNameAt(line, copyLines)) {
+            final name? => '  $line  ($name)',
+            null => '  $line',
+          },
+        '',
+        '`$shippedOptionsPath` 에서 그 규칙을 지우거나 바꾼다 '
+            '(복사본의 줄 번호는 원본과 같다).',
+      ],
+    );
+  } finally {
+    if (checkDir.existsSync()) checkDir.deleteSync(recursive: true);
+    final parent = checkDir.parent;
+    if (parent.existsSync() && parent.listSync().isEmpty) parent.deleteSync();
+  }
+}
+
+/// [3/4] fixture 의 옵션 파일이 include 한 줄인지 본다.
+///
+/// 주석과 빈 줄을 뺀 나머지가 정확히 [fixtureIncludeLine] 한 줄이어야 한다.
+/// `flutter pub get` 이 써넣는 `build/**` 제외와 include 삭제를 잡는다 (spike 004).
+StepResult checkFixtureOptions(String fixtureDir) {
+  final name = fixtureDir.split('/').last;
+  final label = '$name/ 옵션 파일';
+  final optionsPath = '$name/analysis_options.yaml';
+  final file = File('$fixtureDir/analysis_options.yaml');
+  // 판정은 앞뒤 공백을 뗀 줄로 하고, 화면에는 들여쓰기를 살린 줄을 보여 준다.
+  final rest = file.existsSync()
+      ? file
+            .readAsLinesSync()
+            .map((l) => l.trimRight())
+            .where((l) => l.trim().isNotEmpty && !l.trim().startsWith('#'))
+            .toList()
+      : null;
+  if (rest != null &&
+      rest.length == 1 &&
+      rest.single.trim() == fixtureIncludeLine) {
+    return StepResult(label: label, passed: true);
+  }
+  return StepResult(
+    label: label,
+    passed: false,
+    detailLines: [
+      if (rest == null)
+        '`$optionsPath` 이 없다.'
+      else ...[
+        '`$optionsPath` 이 include 한 줄이 아니다 — 주석·빈 줄을 뺀 내용 (${rest.length}줄):',
+        if (rest.isEmpty) '  (없음)' else ...rest.map((l) => '  $l'),
+      ],
+      '',
+      '`$optionsPath` 을 include 한 줄로 되돌린다:',
+      '  $fixtureIncludeLine',
+      '`flutter pub get` 을 돌렸다면: git checkout -- $optionsPath',
+    ],
+  );
+}
+
 /// fixture 하나를 분석해 정답지와 견준다. [update] 이면 바뀐 줄을 보여 준 뒤 정답지를 다시 쓴다.
 ///
 /// 판정 순서는 바꾸지 않는다: plugin 준비 실패 → 도구가 죽음 → 정답지 비교.
@@ -339,7 +638,7 @@ Future<StepResult> compareFixture({
 
   // 2) 도구가 죽음 — 정답지와 "다르다" 가 아니라 결과 자체가 없다.
   final actual = outcome.lines;
-  if (actual == null || !const [0, 2, 3].contains(outcome.exitCode)) {
+  if (actual == null || !analyzeExitCodes.contains(outcome.exitCode)) {
     final stderrHead = outcome.stderrText.split('\n').take(2).join(' / ');
     return StepResult(
       label: label,
@@ -429,26 +728,35 @@ String formatStepLine(int index, int total, StepResult result) {
   return '$head$dots ${result.passed ? '통과' : '실패'}';
 }
 
-/// 인자를 읽고, 준비(pub get)를 한 뒤, 단계를 모두 돌리고 요약한다.
+/// 인자를 읽고, 준비(SDK 확인 · pub get)를 한 뒤, 단계를 모두 돌리고 요약한다.
 Future<void> main(List<String> args) async {
   final unknown = args.where((a) => a != '--update').toList();
   if (unknown.isNotEmpty) {
     stderr.writeln('모르는 인자: ${unknown.join(' ')}');
-    stderr.writeln('사용법: fvm dart run tool/verify.dart [--update]');
+    stderr.writeln('사용법: $runCommand [--update]');
     await quit(64);
   }
   final update = args.contains('--update');
-  final env = Platform.environment;
-  if (update && (env['CI'] == 'true' || env['GITHUB_ACTIONS'] == 'true')) {
-    stderr.writeln('CI 에서는 --update 를 쓰지 않는다 — 로컬에서 갱신해 커밋하세요.');
-    await quit(64);
-  }
 
   // tool/ 의 부모가 저장소 루트다. 어느 폴더에서 실행해도 같은 파일을 본다.
   final repoRoot = File.fromUri(Platform.script).parent.parent.path;
 
   try {
-    // 준비 — 커밋된 lock 그대로 받는다. 실패하면 검증을 시작하지 않는다.
+    // 준비 1 — 실행 중인 SDK 가 .fvmrc 와 다르면 검증을 시작하지 않는다 (D-12).
+    await ensurePinnedSdk(repoRoot);
+
+    // 준비 2 — 정답지 갱신은 로컬에서 사람이 diff 를 보고 커밋한다 (D-14).
+    final env = Platform.environment;
+    if (update && (env['CI'] == 'true' || env['GITHUB_ACTIONS'] == 'true')) {
+      stderr.writeln('CI 에서는 --update 를 쓰지 않는다 — 로컬에서 갱신해 커밋하세요.');
+      await quit(64);
+    }
+
+    // 준비 3 — 저장소 루트의 패키지. 규칙 검사의 복사본이 `flutter_lints` 를 include 하므로
+    // 루트의 package_config 가 있어야 한다 (없으면 include 가 풀리지 않아 규칙을 못 본다).
+    await runPubGet(repoRoot, enforceLockfile: false);
+
+    // 준비 4 — fixture 의 패키지는 커밋된 lock 그대로 받는다.
     for (final fixture in fixtures) {
       await runPubGet('$repoRoot/$fixture', enforceLockfile: true);
     }
@@ -456,18 +764,25 @@ Future<void> main(List<String> args) async {
     // 단계는 하나가 실패해도 나머지를 모두 돌린다. fixture 는 순서대로 분석한다
     // (빈 상태 폴더에 처음 실행 둘을 동시에 띄우면 드물게 깨진다 — spike 008).
     final steps = <Future<StepResult> Function()>[
-      for (final fixture in fixtures)
+      () async => checkLibHasNoDart(repoRoot),
+      () => checkRuleNames(repoRoot),
+      for (final fixture in fixtures) ...[
+        () async => checkFixtureOptions('$repoRoot/$fixture'),
         () => compareFixture(
           repoRoot: repoRoot,
           fixture: fixture,
           update: update,
         ),
+      ],
     ];
     final results = <StepResult>[];
-    for (var i = 0; i < steps.length; i++) {
-      final result = await steps[i]();
-      results.add(result);
-      stdout.writeln(formatStepLine(i + 1, steps.length, result));
+    for (final step in steps) {
+      results.add(await step());
+    }
+
+    // 모두 돌린 뒤에 찍는다.
+    for (var i = 0; i < results.length; i++) {
+      stdout.writeln(formatStepLine(i + 1, results.length, results[i]));
     }
 
     final failed = results.where((r) => !r.passed).toList();
