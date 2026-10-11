@@ -36,3 +36,4 @@ spike 에서 나와 실제 구현이 지켜야 하는 것 (근거는 각 spike �
 | 003 | verify-harness-tool-behavior | riverpod-lint-severity-matrix | standard | `riverpod_lint` 규칙 15개의 강도·`code` 표기·종료 코드가 표로 확정된다 | ✓ VALIDATED | riverpod_lint, severity, exit-code, json |
 | 004 | verify-harness-tool-behavior | fixture-pub-get | standard | `flutter pub get` / `dart pub get` 이 `analysis_options.yaml` 을 바꾸는지와 `dart pub get` 이 Flutter 프로젝트에서 되는지가 확정된다 | ✓ VALIDATED | pub-get, flutter-tool, analysis-options, lockfile |
 | 005 | verify-harness-tool-behavior | initial-file-rule-status | standard | `unnecessary_await_in_return` 이 Dart 3.13.4 에서 deprecated 로 보고되는지가 확정된다 | ✓ VALIDATED | linter-rules, deprecated-lint, removed-lint, sdk-constraint |
+| 006 | verify-harness-tool-behavior | github-runner-cold-plugin | standard | 캐시 없는 GitHub Linux runner 에서 plugin 진단이 로컬과 똑같이 나오고 첫 실행 시간이 측정된다 | PENDING (첫 push 확인 대기) | github-actions, ci, cold-start, analyzer-plugin, timing |
