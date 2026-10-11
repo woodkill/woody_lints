@@ -660,6 +660,8 @@ SC4 와 SC5 는 문서의 존재와 구조까지만 본다. 내용 판정(소유
 - 154행 — "`CHANGELOG.md` 에는 `1.3.0` 과 `1.0.0` 항목만 있다". milestone 브랜치에는 `2.0.0` 항목이 생겼다
 - 40행 — "이 Flutter 에 번들된 Dart SDK 의 정확한 버전은 저장소에서 확인되지 않음". 지금 고정 SDK 의 Dart 는 3.13.4 로 확인되었다
 
+같은 옛 값이 `.planning/codebase/` 의 일곱 문서에도 있다 (metadata 커밋 뒤 2026-10-11 에 `grep -c '3\.41\.2\|3\.10\.4' .planning/codebase/*.md` 로 셌다, 합계 25줄: `STACK.md` 6, `CONVENTIONS.md` 5, `STRUCTURE.md` 5, `ARCHITECTURE.md` 3, `CONCERNS.md` 2, `INTEGRATIONS.md` 2, `TESTING.md` 2). `.claude/CLAUDE.md` 의 해당 절들은 이 문서들에서 만들어진 것이라(`source:codebase/STACK.md` 등의 표시가 있다) 둘은 함께 움직인다. 실행 workflow 에는 plan 뒤에 이 codebase 문서를 갱신하는 단계가 있지만 **이번에는 하지 않았다** — `.claude/CLAUDE.md` 와 같은 결정(손으로 고칠지, `/gsd-map-codebase` 로 다시 만들지)에 묶여 있고 그 결정은 소유자의 것이다. `.claude/CLAUDE.md` 만 손으로 고치면 다음 재생성 때 이 문서들의 옛 값으로 되돌아갈 수 있다.
+
 ### (b) 메인 체크아웃의 `fvm use 3.47.5 --skip-pub-get` — 필요 없다
 
 `IS_MAIN=yes` 였다. `fvm use 3.47.5` 를 메인 체크아웃 루트에서 직접 실행했으므로 `.fvm/versions/3.47.5` 링크가 이미 그 자리에 있고, success criterion 2 (`fvm flutter --version` 이 저장소 루트에서 3.47.5) 도 그 자리에서 확인했다. 추가 명령은 없다.
