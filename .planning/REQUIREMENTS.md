@@ -13,8 +13,8 @@
 
 - [ ] **BASE-01**: 저장소가 고정하는 SDK 가 Flutter 3.47.5 / Dart 3.13.4 다 (`.fvmrc`, `.vscode/settings.json`)
 - [ ] **BASE-02**: `pubspec.yaml` 의 SDK 하한이 `^3.13.0` 이어서, 지원하지 않는 SDK 를 쓰는 프로젝트는 `pub get` 단계에서 버전 불일치로 명확히 실패한다
-- [ ] **BASE-03**: 어떤 변경이 major / minor / patch 인지 정한 버전 정책이 문서로 남아 있다
-- [ ] **BASE-04**: CHANGELOG 항목의 형식이 정해져 있다 (추가·삭제 규칙, 지원 SDK, 새로 생기는 진단)
+- [x] **BASE-03**: 어떤 변경이 major / minor / patch 인지 정한 버전 정책이 문서로 남아 있다
+- [x] **BASE-04**: CHANGELOG 항목의 형식이 정해져 있다 (추가·삭제 규칙, 지원 SDK, 새로 생기는 진단)
 
 ### 검증 (VERIFY)
 
@@ -111,8 +111,8 @@
 |-------------|-------|--------|
 | BASE-01 | Phase 1 | Pending |
 | BASE-02 | Phase 1 | Pending |
-| BASE-03 | Phase 1 | Pending |
-| BASE-04 | Phase 1 | Pending |
+| BASE-03 | Phase 1 | Complete |
+| BASE-04 | Phase 1 | Complete |
 | VERIFY-01 | Phase 2 | Pending |
 | VERIFY-02 | Phase 2 | Pending |
 | VERIFY-03 | Phase 2 | Pending |
