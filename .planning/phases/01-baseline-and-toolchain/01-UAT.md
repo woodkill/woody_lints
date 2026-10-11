@@ -3,7 +3,7 @@ status: diagnosed
 phase: 01-baseline-and-toolchain
 source: [01-VERIFICATION.md]
 started: 2026-10-11T05:26:27Z
-updated: "2026-10-11T06:25:47Z"
+updated: "2026-10-11T07:02:48Z"
 ---
 
 ## Current Test
@@ -82,5 +82,6 @@ blocked: 0
     - "52행과 54행의 major 범위를 25행과 같은 기준으로 맞춘다 (WR-04)"
     - "'자동 검사' 가 어느 명령을 뜻하는지 적는다 (WR-02, 같은 뿌리)"
     - "소유자 결정 (2026-10-11, UAT 뒤 질문): 진단 기록의 방향 (나) '변경 종류 기준으로 좁힘' 을 택했다 — 1번 둘째 조건을 '이미 켜져 있던 규칙의 심각도가 warning 이상으로 올라가나' 로 좁힌다. 새 규칙을 켜는 것은 warning 등급이어도 minor 이고 1.3.0 사례는 minor 그대로다. 다듬는 결정은 D-09 ① 과 D-02 셋째 문장의 문구이고, D-04 · D-05 · D-09 3. 은 그대로 둔다"
-    - "범위 밖: 리뷰 WR-03 (판정 순서와 기준표가 다른 세 경우)은 별개 결함이라 이 gap 에서 고치지 않는다"
+    - "소유자 결정 (2026-10-11, 계획 검토 뒤 질문): 1번 둘째 조건을 좁히면 기준표의 major 행 가운데 `flutter_lints` 다음 major 상향(6 → 7)과 `riverpod_lint` 다음 major 상향(3 → 4)이 판정 순서로는 minor 로 읽히게 된다. 이 두 경우도 1번 질문에 넣어 1번이 기준표의 major 다섯 행을 모두 묻게 한다. 등급 정책(D-05 기준표)은 그대로다"
+    - "범위 밖: 리뷰 WR-03 의 나머지 경우(README / CHANGELOG 만 고친 변경, 새 프리셋 파일 추가)는 이 gap 에서 고치지 않는다. WR-03 가운데 major 행 누락만 위 결정으로 함께 고친다"
   debug_session: .planning/debug/versioning-decision-order-1-3-0-mismatch.md
