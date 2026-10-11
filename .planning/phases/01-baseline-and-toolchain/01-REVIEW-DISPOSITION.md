@@ -5,11 +5,11 @@ titles: json
 findings:
   - id: WR-01
     severity: warning
-    disposition: open
+    disposition: fixed
     title: "1.3.0 사례가 판정 순서 1번의 둘째 조건을 건너뛴다 — 끝까지 적용하면 major 다"
   - id: WR-02
     severity: warning
-    disposition: open
+    disposition: fixed
     title: "\"자동 검사가 막힐 수 있나\" 의 뜻이 정해져 있지 않아 minor 와 major 의 경계가 무너진다"
   - id: WR-03
     severity: warning
@@ -17,7 +17,7 @@ findings:
     title: "판정 순서와 기준표가 같은 변경에 다른 등급을 낸다 (세 가지 경우)"
   - id: WR-04
     severity: warning
-    disposition: open
+    disposition: fixed
     title: "52행 \"major 는 … 고쳐야 하는 변경에만 쓴다\" 가 25행, 40-42행, 54행과 모순된다"
   - id: WR-05
     severity: warning
@@ -43,7 +43,7 @@ findings:
     severity: info
     disposition: open
     title: "준비 중 버전에 `-dev` 를 붙이는 규칙이 2.0.0 사례의 하위 불릿에만 있다"
-open: 10
+open: 7
 total: 10
 recorded: 2026-10-11T05:17:19.936Z
 ---
@@ -52,10 +52,10 @@ recorded: 2026-10-11T05:17:19.936Z
 
 | Finding | Severity | Disposition | Source |
 |---------|----------|-------------|--------|
-| WR-01 | warning | open | - |
-| WR-02 | warning | open | - |
-| WR-03 | warning | open | - |
-| WR-04 | warning | open | - |
+| WR-01 | warning | fixed | 01-04-PLAN.md (UAT G-01-1) |
+| WR-02 | warning | fixed | 01-04-PLAN.md (UAT G-01-1) |
+| WR-03 | warning | open | 01-04-PLAN.md (UAT G-01-1) 가 major 행 누락(기준표 40·41행)만 닫음. README/CHANGELOG 만 고침(47행)과 새 프리셋 추가(45행)는 남음 |
+| WR-04 | warning | fixed | 01-04-PLAN.md (UAT G-01-1) |
 | WR-05 | warning | open | - |
 | WR-06 | warning | open | - |
 | IN-01 | info | open | - |
