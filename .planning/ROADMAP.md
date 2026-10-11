@@ -26,7 +26,7 @@
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Baseline and Toolchain** - 1.3.0 기준점(`v1.3.0` tag)과 지원 SDK 정렬, 버전 정책과 CHANGELOG 형식 확정
+- [x] **Phase 1: Baseline and Toolchain** - 1.3.0 기준점(`v1.3.0` tag)과 지원 SDK 정렬, 버전 정책과 CHANGELOG 형식 확정 (completed 2026-10-11)
 - [ ] **Phase 2: Verification Harness** - `lib/` 를 바꾸기 전에 1.3.0 동작을 기대 진단으로 고정하는 `example/` 검증과 CI
 - [ ] **Phase 3: Preset Split** - 기본 / Riverpod / codegen 조각과 `recommended.yaml` 묶음, 옛 URI 별칭 (기대 진단 불변)
 - [ ] **Phase 4: Rule Reselection** - `flutter_starter_kit` 실측을 근거로 규칙을 하나씩 결정하고 근거를 기록
@@ -47,7 +47,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. 소유자가 버전 정책 문서를 읽고 어떤 변경이 major / minor / patch 인지 판정할 수 있으며, 그 정책에 따라 다음 릴리스의 버전 번호가 정해져 있다
   5. CHANGELOG 항목의 형식(추가·삭제 규칙, 지원 SDK, 새로 생기는 진단)이 문서로 정해져 있어, Phase 4 의 실측 결과를 그 형식에 그대로 옮겨 적을 수 있다
 
-**Plans**: 4/4 plans executed
+**Plans**: 4/4 plans complete
 
 Plans:
 **Wave 1**
@@ -221,7 +221,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Baseline and Toolchain | 4/4 | In Progress | - |
+| 1. Baseline and Toolchain | 4/4 | Complete    | 2026-10-11 |
 | 2. Verification Harness | 0/TBD | Not started | - |
 | 3. Preset Split | 0/TBD | Not started | - |
 | 4. Rule Reselection | 0/TBD | Not started | - |

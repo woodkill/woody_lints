@@ -2,20 +2,20 @@
 gsd_state_version: "1.0"
 milestone: v2.0
 milestone_name: Package Rework
-current_phase: 01
-current_phase_name: Baseline and Toolchain
-status: verifying
-stopped_at: Completed 01-04-PLAN.md
-last_updated: "2026-10-11T08:26:09.863Z"
+current_phase: 2
+current_phase_name: Verification Harness
+status: planning
+stopped_at: Phase 1 complete, ready to plan Phase 2
+last_updated: "2026-10-11T09:38:50.233Z"
 last_activity: 2026-10-11
-last_activity_desc: Phase 01 execution started
-state_head: e7a0457f22318a28512240a1c7c4d7fc95a6b93d
+last_activity_desc: Phase 1 complete, transitioned to Phase 2
+state_head: 99146533a16da0d49158a5f79897d08e0607e74b
 progress:
   total_phases: 6
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 4
   completed_plans: 4
-  percent: 0
+  percent: 17
 ---
 
 # Project State
@@ -25,21 +25,21 @@ progress:
 See: .planning/PROJECT.md (updated 2026-10-11)
 
 **Core value:** 사용 프로젝트가 `include` 한 줄로 받는 규칙이 문서에 적힌 그대로 적용되고, 각 규칙이 왜 켜져 있는지 근거가 남아 있다.
-**Current focus:** Phase 01 — Baseline and Toolchain
+**Current focus:** Phase 2 — Verification Harness
 
 ## Current Position
 
-Phase: 01 (Baseline and Toolchain) — EXECUTING
-Plan: 4 of 4
-Status: Phase complete — ready for verification
-Last activity: 2026-10-11 — Phase 01 execution started
+Phase: 2 — Verification Harness
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-10-11 — Phase 1 complete, transitioned to Phase 2
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [██░░░░░░░░] 17%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0
+- Total plans completed: 4
 - Average duration: - min
 - Total execution time: 0.0 hours
 
@@ -47,7 +47,7 @@ Progress: [░░░░░░░░░░] 0%
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| - | - | - | - |
+| 1 | 4 | - | - |
 
 **Recent Trend:**
 - Last 5 plans: -
@@ -87,6 +87,8 @@ Recent decisions affecting current work:
 - [Phase 01]: 판정 순서 1번 문장은 `01-CONTEXT.md` 70행의 "최종 문구" 와 글자 그대로 같은 조건 문구를 쓰는 고정 문자열이다. 바꾸려면 두 파일과 plan 01-04 의 검증 명령을 함께 바꾼다
 - [Phase 01]: 리뷰 WR-03 은 open 이다 — major 행 누락(기준표 40·41행)만 01-04 가 닫았다. README/CHANGELOG 만 고침(47행)과 새 프리셋 추가(45행)는 D-05 를 건드리는 소유자 결정이 필요하다. WR-01 · WR-02 · WR-04 는 fixed
 - [Phase 01]: `VERSIONING.md` 의 "자동 검사" 는 등급 기준이 아니라 받는 쪽이 겪는 일의 설명이다 — `dart analyze` 는 `--fatal-warnings` 기본 켜짐 / `--fatal-infos` 기본 꺼짐 (Dart 3.13.4), `flutter analyze` 는 둘 다 기본 켜짐 (Flutter 3.47.5), 2026-10-11 확인
+- [Phase 01]: UAT 12개 완료 (2026-10-11). 처리 기록표의 WR-03 메모가 리뷰 도구 재실행으로 비워진 것은 소유자가 받아들였다 — `01-VERIFICATION.md` 의 `overrides` 에 기록. 같은 메모는 `01-04-SUMMARY.md`, `01-REVIEW.md` 의 WR-03 본문에 남아 있다
+- [Phase 01]: `VERSIONING.md` 30행에 "plugin 이나 기반 세트의 하한을 올릴 때는 새 버전이 요구하는 Dart 버전을 본다" 는 전제 한 문장을 더하는 일은 나중으로 미뤘다 — ROADMAP 의 Backlog `Phase 999.1`
 
 ### Pending Todos
 
@@ -97,6 +99,8 @@ None yet.
 - [Phase 2] Spike 선행: plugin 실패 시 종료 코드, `riverpod_lint` 15개 규칙의 심각도, GitHub cold runner 동작이 확인되지 않았다
 - [Phase 3] Spike 선행: 이 저장소 구조에서의 include 경유 plugin 로드와 3단 include 가 확인되지 않았다. 실패하면 URI 결정을 소유자와 다시 본다
 - [Phase 4] D13: 규칙별 채택은 소유자 검토 지점이다. 실측 표 없이는 결정하지 않는다
+- [Phase 1] 리뷰 지적 13건이 열려 있다 (`01-REVIEW-DISPOSITION.md`, 합계 16). 그중 WR-03 의 남은 두 경우 — README/CHANGELOG 만 고친 변경, 새 프리셋 파일 추가 — 는 `VERSIONING.md` 의 판정 순서와 기준표가 다른 등급을 내며 D-05 를 건드리는 소유자 결정이 필요하다. 2.0.0 의 등급(major)에는 영향이 없다
+- [Phase 3] `riverpod_lint` 하한을 `^3.1.9` 로 올릴 때(PRESET-05): 3.1.9 는 Dart 3.13 이상을 요구한다. 지금은 `sdk: ^3.13.0` 이라 문제없지만 `VERSIONING.md` 에 이 전제가 적혀 있지 않다 (Backlog `Phase 999.1`)
 - [Phase 6] `main` 병합은 `ref: main` 사용 프로젝트 5개에 새 버전을 배포하는 일이다. tag 와 병합의 순서를 계획 때 정한다
 
 ## Deferred Items
@@ -109,6 +113,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-11T08:23:32.796Z
-Stopped at: Completed 01-04-PLAN.md
+Last session: 2026-10-11T09:39:46.000Z
+Stopped at: Phase 1 complete, ready to plan Phase 2
 Resume file: None

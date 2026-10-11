@@ -22,6 +22,9 @@
 - ✓ 코드 생성 산출물(`**/*.freezed.dart`, `**/*.g.dart`) 분석 제외와 `invalid_annotation_target` 무시 — existing
 - ✓ 최상위 `plugins:` 로 `riverpod_lint ^3.1.3` analyzer plugin 로드 — existing
 - ✓ pub.dev 미게시, Git 의존성으로 배포 — existing
+- ✓ 저장소 고정 SDK(`.fvmrc`, `.vscode/settings.json`)가 지원 대상 SDK(Flutter 3.47.5 / Dart 3.13.4)와 일치한다 — Phase 1
+- ✓ 1.3.0 기준점 `v1.3.0` annotated tag 가 원격에 있어, 사용 프로젝트가 `ref: v1.3.0` 에 머물 수 있다 — Phase 1
+- ✓ 버전 정책과 CHANGELOG 항목 형식이 `VERSIONING.md` 에 정해져 있다 — Phase 1
 
 ### Active
 
@@ -30,7 +33,6 @@
 - [ ] 규칙 세트 재선정: 후보 규칙을 조사하고 `flutter_starter_kit` 실측 근거(규칙별 경고 수)로 하나씩 켤지 결정한다
 - [ ] 기반 세트와 중복되는 선언 6개, 주석 처리된 설정 3개 각각에 대해 유지/삭제를 결정하고 사유를 남긴다
 - [ ] `README.md`, `CHANGELOG.md`, `lib/analysis_options.yaml` 머리 주석이 실제 설정과 일치한다
-- [ ] 저장소 고정 SDK(`.fvmrc`)가 지원 대상 SDK 와 일치한다
 - [ ] `example/` 프로젝트로 배포 파일을 이 저장소 안에서 검증할 수 있다
 - [ ] GitHub Actions 가 push 와 PR 마다 그 검증을 자동 실행한다
 - [ ] git tag 로 릴리스하고, 사용 프로젝트가 `ref: vX.Y.Z` 로 버전을 고정할 수 있다
@@ -106,6 +108,9 @@
 | 기본 규칙 조각 파일의 이름은 `base.yaml` 이다 | 파일 이름이 곧 공개 URI 다. 공식 `lints` 패키지의 `core.yaml` 과 이름이 겹치지 않는다 | — Pending |
 | `lib/` 와 `pubspec.yaml` 을 고치는 작업은 milestone 브랜치에 쌓고 릴리스 때만 `main` 에 합친다 (`git.branching_strategy: milestone`) | 사용 프로젝트가 전부 `ref: main` 이라, `main` 에 push 된 중간 상태가 `pub upgrade` 때 그대로 배포된다 | — Pending |
 | 검증 판정은 기대 진단 비교(golden comparison)를 주 수단으로 한다 | lint 는 info 라 종료 코드만으로는 규칙이 켜져 있음을 증명하지 못한다 (조사 결과) | — Pending |
+| 1.3.0 기준점은 commit `90a2736` 의 annotated tag `v1.3.0` 이다. 한 번 올린 tag 는 옮기거나 지우지 않는다 | 사용 프로젝트의 `pubspec.lock` 이 받은 커밋 번호를 적어 두므로, tag 를 옮기면 기록과 어긋난다. 잘못이 발견되면 새 이름(v1.3.1 등)을 쓴다 | ✓ Phase 1 — origin 에 올림 (2026-10-11) |
+| 다음 릴리스는 2.0.0 이다. 준비하는 동안 milestone 브랜치의 `pubspec.yaml` 은 `2.0.0-dev` 로 둔다 | 이번 릴리스의 가장 큰 등급이 지원 SDK 하한 상향(`^3.10.4` → `^3.13.0`, major)이다 | — Pending |
+| 버전 등급의 기준은 "받는 쪽이 겪는 일" 이고 기준 문서는 루트 `VERSIONING.md` 다. 규칙을 새로 켜는 것은 그 규칙이 warning 등급이어도 minor 다 | 받는 쪽은 정확한 tag 하나에 고정하므로 버전 번호는 사람에게 보내는 신호다. 새로 켜는 규칙은 CHANGELOG 의 "새로 생기는 경고" 표에서 미리 볼 수 있다 | — Pending |
 | GSD 의 자동 tag(`git.create_tag`)를 끄고, 마일스톤 번호를 패키지 버전에 맞춰 `v2.0` 으로 둔다 | 이 저장소의 `v` tag 는 사용 프로젝트가 `ref:` 로 가리키는 패키지 릴리스다. 뜻이 다른 `v1.0` tag 가 최신 내용에 붙으면 옛 버전으로 오해한다 | — Pending |
 
 ## Evolution
@@ -126,4 +131,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-11 after roadmap approval*
+*Last updated: 2026-10-11 after Phase 1*
