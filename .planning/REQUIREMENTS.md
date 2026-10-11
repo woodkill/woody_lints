@@ -36,6 +36,7 @@
 - [ ] **PRESET-05**: `riverpod_lint` plugin 의 버전 하한이 `^3.1.9` 다
 - [ ] **PRESET-06**: 저장소 루트 분석이 배포 파일을 분석 대상에서 제외하지 않고도 경고 없이 통과한다
 - [ ] **PRESET-07**: 사용 프로젝트에서 규칙 하나를 끄는 방법과 plugin 진단 하나를 끄는 방법이 README 에 적힌 대로 동작함이 fixture 로 확인되어 있다
+- [ ] **PRESET-08**: 사용 프로젝트는 묶음의 정식 이름 `package:woody_lints/recommended.yaml` 한 줄로 기본 + Riverpod + codegen 구성을 받을 수 있고, 옛 URI 로 받는 구성과 같다
 
 ### 규칙 (RULES)
 
@@ -75,7 +76,7 @@
 
 ### 프리셋
 
-- **PRESET-08**: `public_member_api_docs` 를 켜는 선택형 문서화 프리셋(`docs.yaml`)
+- **PRESET-09**: `public_member_api_docs` 를 켜는 선택형 문서화 프리셋(`docs.yaml`)
 
 ### 규칙
 
@@ -108,12 +109,55 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
+| BASE-01 | Phase 1 | Pending |
+| BASE-02 | Phase 1 | Pending |
+| BASE-03 | Phase 1 | Pending |
+| BASE-04 | Phase 1 | Pending |
+| VERIFY-01 | Phase 2 | Pending |
+| VERIFY-02 | Phase 2 | Pending |
+| VERIFY-03 | Phase 2 | Pending |
+| VERIFY-04 | Phase 2 | Pending |
+| VERIFY-05 | Phase 3 | Pending |
+| VERIFY-06 | Phase 5 | Pending |
+| VERIFY-07 | Phase 2 | Pending |
+| VERIFY-08 | Phase 2 | Pending |
+| PRESET-01 | Phase 3 | Pending |
+| PRESET-02 | Phase 3 | Pending |
+| PRESET-03 | Phase 3 | Pending |
+| PRESET-04 | Phase 3 | Pending |
+| PRESET-05 | Phase 3 | Pending |
+| PRESET-06 | Phase 3 | Pending |
+| PRESET-07 | Phase 3 | Pending |
+| PRESET-08 | Phase 3 | Pending |
+| RULES-01 | Phase 4 | Pending |
+| RULES-02 | Phase 4 | Pending |
+| RULES-03 | Phase 4 | Pending |
+| RULES-04 | Phase 4 | Pending |
+| RULES-05 | Phase 4 | Pending |
+| RULES-06 | Phase 4 | Pending |
+| RULES-07 | Phase 4 | Pending |
+| RULES-08 | Phase 4 | Pending |
+| DOCS-01 | Phase 5 | Pending |
+| DOCS-02 | Phase 5 | Pending |
+| DOCS-03 | Phase 5 | Pending |
+| DOCS-04 | Phase 5 | Pending |
+| DOCS-05 | Phase 5 | Pending |
+| DOCS-06 | Phase 5 | Pending |
+| DOCS-07 | Phase 5 | Pending |
+| DOCS-08 | Phase 5 | Pending |
+| DOCS-09 | Phase 5 | Pending |
+| DOCS-10 | Phase 5 | Pending |
+| DOCS-11 | Phase 4 | Pending |
+| REL-01 | Phase 1 | Pending |
+| REL-02 | Phase 6 | Pending |
+| REL-03 | Phase 6 | Pending |
+| REL-04 | Phase 6 | Pending |
 
 **Coverage:**
-- v1 requirements: 42 total
-- Mapped to phases: 0
-- Unmapped: 42 ⚠️
+- v1 requirements: 43 total
+- Mapped to phases: 43
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-10-11*
-*Last updated: 2026-10-11 after initial definition*
+*Last updated: 2026-10-11 after bundle naming decision (PRESET-08 추가)*

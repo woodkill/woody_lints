@@ -106,6 +106,7 @@
 | 기본 규칙 조각 파일의 이름은 `base.yaml` 이다 | 파일 이름이 곧 공개 URI 다. 공식 `lints` 패키지의 `core.yaml` 과 이름이 겹치지 않는다 | — Pending |
 | `lib/` 와 `pubspec.yaml` 을 고치는 작업은 milestone 브랜치에 쌓고 릴리스 때만 `main` 에 합친다 (`git.branching_strategy: milestone`) | 사용 프로젝트가 전부 `ref: main` 이라, `main` 에 push 된 중간 상태가 `pub upgrade` 때 그대로 배포된다 | — Pending |
 | 검증 판정은 기대 진단 비교(golden comparison)를 주 수단으로 한다 | lint 는 info 라 종료 코드만으로는 규칙이 켜져 있음을 증명하지 못한다 (조사 결과) | — Pending |
+| GSD 의 자동 tag(`git.create_tag`)를 끄고, 마일스톤 번호를 패키지 버전에 맞춰 `v2.0` 으로 둔다 | 이 저장소의 `v` tag 는 사용 프로젝트가 `ref:` 로 가리키는 패키지 릴리스다. 뜻이 다른 `v1.0` tag 가 최신 내용에 붙으면 옛 버전으로 오해한다 | — Pending |
 
 ## Evolution
 
@@ -125,4 +126,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-11 after bundle naming decision*
+*Last updated: 2026-10-11 after roadmap approval*
