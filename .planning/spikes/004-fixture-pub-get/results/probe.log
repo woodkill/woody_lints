@@ -1,0 +1,58 @@
+SDK: Dart SDK version: 3.13.4 (stable) (Tue Sep 15 01:01:15 2026 -0700) on "macos_arm64"
+
+## A. dart pub get (Flutter SDK 의 bin/dart)
+  exit 0
+  analysis_options.yaml: 그대로
+  생긴 파일: ./.dart_tool ./.dart_tool/package_config.json ./.dart_tool/package_graph.json ./pubspec.lock 
+
+## B. flutter pub get
+  exit 0
+  출력: Upgrading analysis_options.yaml to exclude build and platform directories.
+  analysis_options.yaml: 바뀜 ↓
+    --- <repo>/.planning/spikes/004-fixture-pub-get/template/analysis_options.yaml	2026-10-11 20:14:27
+    +++ <work>/s004/b-flutter-pub-get/analysis_options.yaml	2026-10-11 20:14:55
+    @@ -1 +1,4 @@
+    +analyzer:
+    +  exclude:
+    +    - build/**
+     include: package:woody_lints/analysis_options.yaml
+  생긴 파일: ./.dart_tool ./.dart_tool/package_config.json ./.dart_tool/package_graph.json ./.dart_tool/version ./pubspec.lock 
+
+## B2. flutter pub get 을 한 번 더
+  exit 0
+  첫 실행 뒤와 같음 (더 바꾸지 않음)
+
+## C. build/** 를 미리 적어 둔 뒤 flutter pub get
+  exit 0
+  analysis_options.yaml: 그대로
+
+## D. android/ 폴더가 있는 프로젝트에서 flutter pub get
+  exit 0
+  analysis_options.yaml: 바뀜 ↓
+    --- <repo>/.planning/spikes/004-fixture-pub-get/template/analysis_options.yaml	2026-10-11 20:14:27
+    +++ <work>/s004/d-with-platform-dir/analysis_options.yaml	2026-10-11 20:14:58
+    @@ -1 +1,5 @@
+    +analyzer:
+    +  exclude:
+    +    - build/**
+    +    - android/**
+     include: package:woody_lints/analysis_options.yaml
+
+## E. FLUTTER_ROOT 없이 dart-sdk 의 dart 를 직접 불러 pub get
+  exit 0
+  출력: 2 packages have newer versions incompatible with dependency constraints.
+  출력: Try `dart pub outdated` for more information.
+  analysis_options.yaml: 그대로
+
+## F. dart pub get 과 flutter pub get 의 결과 비교 (A 대 B)
+  package_config.json 패키지 수: 35 대 35 - 같음
+  pubspec.lock: 같음
+
+## G. 받은 lock 그대로 강제하는 dart pub get --enforce-lockfile (A 에서)
+  exit 0
+  pubspec.lock: 그대로
+  analysis_options.yaml: 그대로
+
+## H. include 한 파일이 build/** 를 이미 제외하고 있을 때 flutter pub get
+  exit 0
+  analysis_options.yaml: 그대로
