@@ -6,6 +6,10 @@
 
 - Dart 3.13 미만(Flutter 3.47 미만)을 쓰는 프로젝트는 `ref: v1.3.0` 에 머문다.
 
+### 그 밖의 변경
+
+- 저장소 안에 검증용 `example/` 프로젝트, 검증 명령 `tool/verify.dart`, GitHub Actions workflow 를 추가. 사용하는 프로젝트에는 영향 없음.
+
 ### 새로 생기는 경고
 
 (Phase 4 실측 후 채움)
