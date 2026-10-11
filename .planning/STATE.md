@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 02
 current_phase_name: Verification Harness
 status: executing
-stopped_at: Completed 02-02-PLAN.md
-last_updated: "2026-10-11T16:43:05.651Z"
+stopped_at: Completed 02-03-PLAN.md
+last_updated: "2026-10-11T16:57:12.223Z"
 last_activity: 2026-10-12
 last_activity_desc: Phase 02 execution started
-state_head: 19ae5ec6b10ff5798b4ab2f5e6e55ac7e5a8bc61
+state_head: 2a9725e18cb1dd14d1e325f5533a0b80b99c0828
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 8
-  completed_plans: 6
+  completed_plans: 7
   percent: 17
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-11)
 ## Current Position
 
 Phase: 02 (Verification Harness) — EXECUTING
-Plan: 3 of 4
+Plan: 4 of 4
 Status: Ready to execute
 Last activity: 2026-10-12 — Phase 02 execution started
 
@@ -64,6 +64,7 @@ Progress: [██░░░░░░░░] 17%
 | Phase 01 P04 | 3 min | 2 tasks | 3 files |
 | Phase 02 P01 | 8 min | 2 tasks | 14 files |
 | Phase 02 P02 | 15 min | 2 tasks | 2 files |
+| Phase 02 P03 | 7 min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -102,6 +103,10 @@ Recent decisions affecting current work:
 - [Phase 02]: `tool/verify.dart` 의 plugin 준비 실패 분기와 도구 사망 분기를 plan 02-02 에서 실제로 일으켜 확인했다 — 전용 상태 폴더의 plugin.aot 을 0바이트로 자른 실행(머리말이 stderr 셋째 줄, dart analyze exit 0)과 상태 폴더를 읽기 전용 빈 폴더로 바꾼 실행(exit 255, stdout 에 JSON 없음). 네트워크가 끊긴 경우의 plugin 실패와 상태 폴더를 통째로 지우는 복구는 해 보지 않았다
 - [Phase 02]: D-12 의 SDK 판별은 실행 파일에서 다섯 단계 위의 `flutter.version.json` 이 1순위, `FLUTTER_ROOT` 가 2순위이고, 2순위는 그 SDK 의 `dartSdkVersion` 이 실행 중인 Dart 와 같을 때만 받아들인다. `.fvmrc` 불일치의 78 은 실행으로 확인했고 `FLUTTER_ROOT` 경로와 'Flutter SDK 의 dart 가 아니다' 경로는 실행해 보지 못했다 (plan 02-04 의 CI 에서 본다)
 - [Phase 02]: 화면의 plugin 버전은 전용 상태 폴더의 plugin 폴더가 정확히 하나일 때만 읽고 그 밖은 `?` 와 이유를 찍는다. 폴더 0개는 서버가 plugin 준비 전에 죽었을 때도 나온다 (2026-10-12 실측). 지금은 첫 fixture 의 값을 찍는다 — Phase 3 가 fixture 를 더하면 fixture 별로 찍을지 정한다
+- [Phase 02]: 지워 보기 9건(M1 ~ M9)을 실제 저장소에서 하나씩 만들어 돌렸고 아홉 건 모두 계획이 예상한 단계와 종료 코드로 실패했다 — 규칙 삭제 · errors 블록 삭제 · exclude 2종 삭제는 단계 4, include 삭제는 단계 3 과 4, deprecated 규칙은 단계 2, lib 의 .dart 는 단계 1, CI 의 --update 는 64, SDK 불일치는 78 (Flutter 3.47.5 / Dart 3.13.4, riverpod_lint 3.1.9, 2026-10-12). 기록은 example/README.md 의 "검증이 실제로 잡아내는지 확인한 기록" 절이고 변경은 모두 커밋하지 않고 되돌렸다
+- [Phase 02]: example/ 의 include 줄을 지운 변경은 dart analyze 의 종료 코드가 정답지와 같은 2 다 — 경고 16줄이 사라지는 대신 invalid_annotation_target warning 이 되살아난다. 같은 상태에서 dart analyze 를 따로 돌려 exit 2 를 확인했다. 종료 코드만으로는 잡지 못하고 단계 3(옵션 파일)과 단계 4(정답지 줄 비교)가 잡는다
+- [Phase 02]: 화면의 plugin 줄은 전용 상태 폴더에 남아 있는 값을 읽는다 — include 줄을 지운 실행에서 riverpod_lint 진단이 하나도 없었는데도 riverpod_lint 3.1.9 가 찍혔다. 그 줄은 plugin 이 그 실행에서 돌았다는 표시가 아니고, plugin 이 빠졌는지는 정답지의 riverpod_lint 줄이 빠지는지로 본다
+- [Phase 02]: example/README.md 와 CHANGELOG 2.0.0 항목의 "그 밖의 변경" 은 GitHub Actions workflow 를 이미 있는 것으로 적는다. workflow 파일은 plan 02-04 가 만든다 — 02-04 가 실행 명령이나 SDK 를 맞추는 방법을 다르게 정하면 README 의 그 문장을 함께 고친다
 
 ### Pending Todos
 
@@ -126,6 +131,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-11T16:43:05.633Z
-Stopped at: Completed 02-02-PLAN.md
+Last session: 2026-10-11T16:57:12.204Z
+Stopped at: Completed 02-03-PLAN.md
 Resume file: None
