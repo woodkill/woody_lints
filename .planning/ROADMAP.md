@@ -47,7 +47,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. 소유자가 버전 정책 문서를 읽고 어떤 변경이 major / minor / patch 인지 판정할 수 있으며, 그 정책에 따라 다음 릴리스의 버전 번호가 정해져 있다
   5. CHANGELOG 항목의 형식(추가·삭제 규칙, 지원 SDK, 새로 생기는 진단)이 문서로 정해져 있어, Phase 4 의 실측 결과를 그 형식에 그대로 옮겨 적을 수 있다
 
-**Plans**: 3/3 plans executed
+**Plans**: 3/4 plans executed
 
 Plans:
 **Wave 1**
@@ -58,6 +58,9 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 - [x] 01-03-PLAN.md — 저장소 SDK 를 3.47.5 로, 지원 하한을 `sdk: ^3.13.0` / `2.0.0-dev` 로 올리고 CHANGELOG 2.0.0 항목을 만든다 (BASE-01, BASE-02)
+
+**Wave 4** *(gap closure — UAT G-01-1, blocked on Wave 3 completion)*
+- [ ] 01-04-PLAN.md — `VERSIONING.md` 판정 순서 1번의 둘째 조건을 변경 종류 기준("이미 켜져 있던 규칙의 심각도가 warning 이상으로 올라가나")으로 좁히고 1.3.0 사례가 두 조건을 모두 답하게 고친다; D-02 · D-09 ① 문구 수정을 CONTEXT 에 주석으로 기록한다 (G-01-1; BASE-03)
 
 **Decision points** (이 phase 안에서 소유자가 정한다):
 - **D4** — `v1.3.0` tag 를 원격에 push 하는 것은 원격에 남는 작업이다. tag 는 로컬에서 만들어 두고, push 는 실행 시점에 소유자의 명시적 확인을 받은 뒤에 한다. 조사 권고는 commit `90a2736` 에 annotated tag 이며, push 한 tag 는 옮기지 않는다.
@@ -218,7 +221,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Baseline and Toolchain | 3/3 | In Progress | - |
+| 1. Baseline and Toolchain | 3/4 | In Progress | - |
 | 2. Verification Harness | 0/TBD | Not started | - |
 | 3. Preset Split | 0/TBD | Not started | - |
 | 4. Rule Reselection | 0/TBD | Not started | - |
