@@ -1,18 +1,14 @@
 ---
-status: testing
+status: complete
 phase: 01-baseline-and-toolchain
 source: [01-VERIFICATION.md]
 started: 2026-10-11T05:26:27Z
-updated: "2026-10-11T09:00:15Z"
+updated: 2026-10-11T09:29:40.926Z
 ---
 
 ## Current Test
 
-number: 8
-name: VERSIONING.md 를 다시 읽고 판정 순서의 네 질문(25-28행)에 네 가지 변경을 직접 대 본다. (1) 1.3.0 — 그때까지 꺼져 있던 riverpod_lint 규칙을 처음 켰다. 1번 질문의 세 조건을 모두 따진다 (2) 2.0.0 — 지원하는 Dart 최저 버전을 올렸다 (3) 맨 앞자리가 바뀌는 큰 업그레이드 — 기준표의 flutter_lints 6 → 7 줄과 riverpod_lint 3 → 4 줄 (4) 맨 앞자리가 같은 작은 업그레이드 — 기준표의 riverpod_lint ^3.1.3 → ^3.1.9 줄
-expected: |
-  (1) 1번의 세 조건이 모두 아니오 → 2번 예 → minor. 새로 켜진 규칙 가운데 warning 등급이 있었다는 사실이 적혀 있고, 그것이 왜 1번이 아니라 2번인지 문서만 읽고 납득된다 (2) 1번의 첫째 조건이 예 → major (3) 1번의 둘째 조건이 예 → major (4) 1번 아니오 → 2번 예 → minor. 네 답이 실제 사례 절(63-70행)과 기준표(40-50행)에 적힌 등급과 같다. 검증자가 계산으로 확인한 것 — 두 사례와 기준표 여덟 줄은 문서에 적힌 등급과 같은 답이 나온다. 검증자가 찾은 참고 사항 — (4)의 예시 riverpod_lint 3.1.9 는 그 자체가 Dart 3.13 이상을 요구한다 (3.1.3 은 3.10 이상). 2.0.0 은 Dart 최저 버전을 3.13 으로 함께 올리므로 (4)의 답은 아니오 가 맞다. 다만 문서에는 올리려는 버전이 더 높은 Dart 를 요구하는지 보라는 말이 없다. 이대로 받아들일지 한 문장을 더할지 소유자가 정한다
-awaiting: user response
+[testing complete]
 
 ## Tests
 
@@ -56,34 +52,34 @@ result: pass
 ### 8. VERSIONING.md 를 다시 읽고 판정 순서의 네 질문(25-28행)에 네 가지 변경을 직접 대 본다. (1) 1.3.0 — 그때까지 꺼져 있던 riverpod_lint 규칙을 처음 켰다. 1번 질문의 세 조건을 모두 따진다 (2) 2.0.0 — 지원하는 Dart 최저 버전을 올렸다 (3) 맨 앞자리가 바뀌는 큰 업그레이드 — 기준표의 flutter_lints 6 → 7 줄과 riverpod_lint 3 → 4 줄 (4) 맨 앞자리가 같은 작은 업그레이드 — 기준표의 riverpod_lint ^3.1.3 → ^3.1.9 줄
 
 expected: (1) 1번의 세 조건이 모두 아니오 → 2번 예 → minor. 새로 켜진 규칙 가운데 warning 등급이 있었다는 사실이 적혀 있고, 그것이 왜 1번이 아니라 2번인지 문서만 읽고 납득된다 (2) 1번의 첫째 조건이 예 → major (3) 1번의 둘째 조건이 예 → major (4) 1번 아니오 → 2번 예 → minor. 네 답이 실제 사례 절(63-70행)과 기준표(40-50행)에 적힌 등급과 같다. 검증자가 계산으로 확인한 것 — 두 사례와 기준표 여덟 줄은 문서에 적힌 등급과 같은 답이 나온다. 검증자가 찾은 참고 사항 — (4)의 예시 riverpod_lint 3.1.9 는 그 자체가 Dart 3.13 이상을 요구한다 (3.1.3 은 3.10 이상). 2.0.0 은 Dart 최저 버전을 3.13 으로 함께 올리므로 (4)의 답은 아니오 가 맞다. 다만 문서에는 올리려는 버전이 더 높은 Dart 를 요구하는지 보라는 말이 없다. 이대로 받아들일지 한 문장을 더할지 소유자가 정한다
-result: [pending]
+result: pass
 
 ### 9. 리뷰 지적 처리 기록표(01-REVIEW-DISPOSITION.md)의 WR-03 줄에 실행자가 적었던 메모가 지금은 그 표에 없다는 점을 받아들일지 정한다. 메모 내용은 major 행 누락만 닫았고 README/CHANGELOG 만 고침과 새 프리셋 추가는 남았다 는 것이다. 실행이 끝난 뒤 코드 리뷰 도구가 표를 다시 만들면서 그 칸을 비웠다
 
 expected: 둘 중 하나를 고른다. (가) 받아들인다 — 같은 내용이 01-04-SUMMARY.md 243-250행, 새 리뷰 보고서 01-REVIEW.md 의 WR-03 본문, 이 파일(01-UAT.md) Gaps 절 G-01-1 의 마지막 "범위 밖" 줄에 남아 있으므로 표에는 없어도 된다. 이 경우 이 보고서 본문의 overrides 문안을 frontmatter 에 적는다 (나) 표에 다시 적는다 — 다만 열림(open) 상태인 줄의 메모는 리뷰 도구를 다시 돌리면 또 지워진다
-result: [pending]
+result: pass
 
 ### 10. prohibition (01-04) — 이번 수정에서 받는 쪽에 전달되는 파일을 건드리지 않았는지 확인한다. 대상은 lib/, README.md, 루트 analysis_options.yaml, pubspec.yaml, .fvmrc, .vscode/, CHANGELOG.md, .gitignore 이고, 버전을 올리지 않았는지와 GitHub 에 아무것도 올리지 않았는지도 본다
 
 expected: unverified-prohibition — human review recommended. 검증자 판단(비권위): 위반 없음. 23d2674 뒤로 .planning/ 밖에서 바뀐 파일은 VERSIONING.md 하나다. pubspec.yaml 의 version 은 2.0.0-dev 그대로다. GitHub 에는 main (90a2736) 과 이름표 v1.3.0 만 있고, 내 컴퓨터의 main 은 01-04 실행 전(10:28)에 마지막으로 바뀌었다. 작업 브랜치에는 올릴 곳(upstream)이 설정되어 있지 않다
-result: [pending]
+result: pass
 
 ### 11. prohibition (01-04) — 확정된 결정 셋(D-04 심각도 상향은 major, D-05 기준표 11줄, D-09 3. 의 1.3.0 = minor · 2.0.0 = major)을 바꾸지 않았는지, 리뷰 지적 WR-03 을 닫지 않고 열어 두었는지 확인한다
 
 expected: unverified-prohibition — human review recommended. 검증자 판단(비권위): 위반 없음. VERSIONING.md 의 기준표 13줄은 23d2674 와 같고 01-CONTEXT.md 의 D-05 표와도 같다. 실제 사례의 머리 줄은 minor (2번에서 멈춤) 과 major (1번에서 멈춤) 그대로다. 판정 순서 2 ~ 4번 문장은 바뀌지 않았다. 처리 기록표의 WR-03 은 open 이다
-result: [pending]
+result: pass
 
 ### 12. prohibition (01-04) — 결정 기록(01-CONTEXT.md)의 기존 줄을 지우거나 고치지 않고 주석 줄만 덧붙였는지 확인한다
 
 expected: unverified-prohibition — human review recommended. 검증자 판단(비권위): 위반 없음. 23d2674 와 비교하면 추가 2줄, 삭제 0줄이다. 덧붙은 두 줄은 38행(D-02 아래)과 70행(D-09 ① 아래)이고 D-02 와 D-09 ① 의 원문은 글자 그대로 남아 있다
-result: [pending]
+result: pass
 
 ## Summary
 
 total: 12
-passed: 6
+passed: 11
 issues: 1
-pending: 5
+pending: 0
 skipped: 0
 blocked: 0
 
@@ -91,7 +87,9 @@ blocked: 0
 
 - gap_id: G-01-1
   truth: "VERSIONING.md 의 판정 순서(25-28행)를 1.3.0 사례와 2.0.0 사례에 문자 그대로 대입하면 '실제 사례' 절이 적은 등급과 같은 답이 나온다 (1.3.0 은 1번의 두 조건을 모두 따진다)"
-  status: failed
+  status: resolved
+  resolved_by: 01-04-PLAN.md
+  resolved_at: 2026-10-11
   reason: "User reported: 권고대로 할께 — 직전에 제시한 권고는 (나) 문서를 고친다 였다. 1.3.0 사례가 1번의 둘째 조건(자동 검사가 막힐 수 있나)을 따지지 않아, 문서가 적은 답(minor)과 문자 그대로 대입한 답(major)이 갈린다"
   severity: major
   test: 1
@@ -114,3 +112,9 @@ blocked: 0
     - "소유자 결정 (2026-10-11, 계획 검토 뒤 질문): 1번 둘째 조건을 좁히면 기준표의 major 행 가운데 `flutter_lints` 다음 major 상향(6 → 7)과 `riverpod_lint` 다음 major 상향(3 → 4)이 판정 순서로는 minor 로 읽히게 된다. 이 두 경우도 1번 질문에 넣어 1번이 기준표의 major 다섯 행을 모두 묻게 한다. 등급 정책(D-05 기준표)은 그대로다"
     - "범위 밖: 리뷰 WR-03 의 나머지 경우(README / CHANGELOG 만 고친 변경, 새 프리셋 파일 추가)는 이 gap 에서 고치지 않는다. WR-03 가운데 major 행 누락만 위 결정으로 함께 고친다"
   debug_session: .planning/debug/versioning-decision-order-1-3-0-mismatch.md
+
+## Deferred Follow-Ups
+
+- test: 8
+  idea: "pass, 문장은 나중에 — (기록자 풀이) 8번은 통과이고, VERSIONING.md 30행에 전제 한 문장을 더하는 일만 나중으로 미룬다. 더할 내용: plugin 이나 기반 세트의 하한을 올릴 때는 새 하한 버전이 요구하는 Dart 버전을 보고, 그것이 이 패키지의 SDK 하한보다 높으면 판정 순서 1번의 첫째 조건(SDK 를 고쳐야 하나)이 예 다. 근거: riverpod_lint 3.1.9 는 Dart 3.13 이상, 3.1.3 은 3.10 이상을 요구한다 (01-VERIFICATION.md 의 coincidental_reliance_items)"
+  deferred_at: 2026-10-11
