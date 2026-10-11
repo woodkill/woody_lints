@@ -83,7 +83,7 @@ Plans:
   4. 배포 파일에서 규칙 하나를 지운 변경과 `example/` 의 include 줄을 지운 변경을 각각 실제로 만들어, 검증이 실패함을 확인한 기록이 있다
   5. push 와 PR 마다 GitHub Actions 가 같은 명령을 실행하고 job 에 시간 제한이 걸려 있으며, GitHub 에서 실제로 성공한 실행이 한 번 이상 있다
 
-**Plans**: 3/4 plans executed
+**Plans**: 4/4 plans executed
 
 Plans:
 **Wave 1**
@@ -96,7 +96,7 @@ Plans:
 - [x] 02-03-PLAN.md — 지워 보기 9건(규칙 삭제, include 삭제, `errors:` 블록 · exclude 2종 삭제, deprecated 규칙 추가, `lib/` 의 `.dart`, CI 의 `--update`, SDK 불일치)을 실제로 만들어 실패를 확인하고 되돌린 뒤 `example/README.md` 에 기록하고, CHANGELOG 2.0.0 항목에 `### 그 밖의 변경` 을 더한다 (VERIFY-08; D-03)
 
 **Wave 4** *(blocked on Wave 3 completion)*
-- [ ] 02-04-PLAN.md — `.github/workflows/verify.yml`(push · PR · 수동 실행, 읽기 권한, timeout 10)을 만들고 작업 브랜치를 origin 에 올려 GitHub Actions 의 성공한 실행을 확인한다 (VERIFY-04; D-06, D-08 ~ D-10)
+- [x] 02-04-PLAN.md — `.github/workflows/verify.yml`(push · PR · 수동 실행, 읽기 권한, timeout 10)을 만들고 작업 브랜치를 origin 에 올려 GitHub Actions 의 성공한 실행을 확인한다 (VERIFY-04; D-06, D-08 ~ D-10)
 
 **Spike first** (이 phase 의 나머지를 계획하기 전에 실행으로 확인한다):
 - plugin 준비가 실패했는데 다른 진단이 있을 때 `dart analyze` 의 종료 코드. 기대 진단 판정 로직이 여기에 달려 있다.
@@ -235,7 +235,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Baseline and Toolchain | 4/4 | Complete    | 2026-10-11 |
-| 2. Verification Harness | 3/4 | In Progress | - |
+| 2. Verification Harness | 4/4 | In Progress | - |
 | 3. Preset Split | 0/TBD | Not started | - |
 | 4. Rule Reselection | 0/TBD | Not started | - |
 | 5. Documentation | 0/TBD | Not started | - |

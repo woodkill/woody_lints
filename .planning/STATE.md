@@ -4,17 +4,17 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 02
 current_phase_name: Verification Harness
-status: executing
-stopped_at: Completed 02-03-PLAN.md
-last_updated: "2026-10-11T16:57:12.223Z"
+status: verifying
+stopped_at: Completed 02-04-PLAN.md
+last_updated: "2026-10-11T17:10:38.489Z"
 last_activity: 2026-10-12
 last_activity_desc: Phase 02 execution started
-state_head: 2a9725e18cb1dd14d1e325f5533a0b80b99c0828
+state_head: 1f06c558bcf9d5cf8ef644fba8cd9a006497e83f
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 8
-  completed_plans: 7
+  completed_plans: 8
   percent: 17
 ---
 
@@ -31,7 +31,7 @@ See: .planning/PROJECT.md (updated 2026-10-11)
 
 Phase: 02 (Verification Harness) — EXECUTING
 Plan: 4 of 4
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-10-12 — Phase 02 execution started
 
 Progress: [██░░░░░░░░] 17%
@@ -65,6 +65,7 @@ Progress: [██░░░░░░░░] 17%
 | Phase 02 P01 | 8 min | 2 tasks | 14 files |
 | Phase 02 P02 | 15 min | 2 tasks | 2 files |
 | Phase 02 P03 | 7 min | 2 tasks | 2 files |
+| Phase 02 P04 | 7 min | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -107,6 +108,12 @@ Recent decisions affecting current work:
 - [Phase 02]: example/ 의 include 줄을 지운 변경은 dart analyze 의 종료 코드가 정답지와 같은 2 다 — 경고 16줄이 사라지는 대신 invalid_annotation_target warning 이 되살아난다. 같은 상태에서 dart analyze 를 따로 돌려 exit 2 를 확인했다. 종료 코드만으로는 잡지 못하고 단계 3(옵션 파일)과 단계 4(정답지 줄 비교)가 잡는다
 - [Phase 02]: 화면의 plugin 줄은 전용 상태 폴더에 남아 있는 값을 읽는다 — include 줄을 지운 실행에서 riverpod_lint 진단이 하나도 없었는데도 riverpod_lint 3.1.9 가 찍혔다. 그 줄은 plugin 이 그 실행에서 돌았다는 표시가 아니고, plugin 이 빠졌는지는 정답지의 riverpod_lint 줄이 빠지는지로 본다
 - [Phase 02]: example/README.md 와 CHANGELOG 2.0.0 항목의 "그 밖의 변경" 은 GitHub Actions workflow 를 이미 있는 것으로 적는다. workflow 파일은 plan 02-04 가 만든다 — 02-04 가 실행 명령이나 SDK 를 맞추는 방법을 다르게 정하면 README 의 그 문장을 함께 고친다
+- [Phase 02]: CI workflow 는 .github/workflows/verify.yml 이고 02-RESEARCH.md 권고 9 의 구성 그대로다 — 트리거 셋(push · pull_request · workflow_dispatch, 필터 없음), 권한은 contents: read 뿐, concurrency 로 겹치는 실행 취소, timeout-minutes 10, step 은 checkout → flutter-action(.fvmrc) → 검증 명령 하나. 캐시 · 예약 실행 · Flutter 버전 숫자 · tag 필터 · 별도 pub get step 은 없다. action 은 major tag (actions/checkout@v7 최신 v7.0.1, subosito/flutter-action@v2 최신 v2.23.0, 2026-10-12 조회)
+- [Phase 02]: 작업 브랜치 gsd/v2.0-package-rework 를 origin 에 한 번 올렸다 (2026-10-11T17:04Z, 1ed61cd → 1f06c55, fast-forward 23커밋, 명령은 브랜치 이름 하나만 준 git push 한 줄). main 은 90a2736, tag 는 v1.3.0 하나 그대로이고 PR 은 없다. plan 02-04 의 마무리 커밋(SUMMARY · STATE · ROADMAP)은 origin 에 없다 — Phase 3 부터의 push 는 다시 소유자에게 묻는다 (D-09)
+- [Phase 02]: GitHub runner 에서의 첫 전체 실행이 한 번에 성공했다 — run 38158088016 (verify, push, ubuntu-24.04 이미지), job 1분 54초 (Flutter 설치 60초, 검증 명령 47초 중 example/ 분석 약 44초). 화면은 로컬과 같았다: Flutter 3.47.5 / Dart 3.13.4, flutter_lints 6.0.0 / lints 6.1.0, riverpod_lint 3.1.9, 단계 4개 통과. timeout 10분은 넉넉하다
+- [Phase 02]: runner 는 FLUTTER_ROOT 환경변수를 설치한 SDK 의 자리로 넘겨준다. 그래서 D-12 의 SDK 확인이 1순위 경로(실행 파일에서 다섯 단계 위)로 통과했는지 2순위(FLUTTER_ROOT)로 통과했는지는 CI 로그로 가를 수 없다 — 둘 다 같은 SDK 를 가리킨다. Flutter SDK 가 아닌 dart 로 실행했을 때의 안내 경로는 여전히 실행해 보지 못했다
+- [Phase 02]: workflow 의 pull_request 트리거와 수동 실행 버튼은 선언만 했고 일으켜 보지 않았다 (PR 은 열지 않고, 버튼은 workflow 파일이 main 에 들어간 뒤에야 보인다). push 에 필터가 없으므로 tag 를 올려도 이 workflow 가 돈다 — Phase 6 (REL-03) 이 tag 전용 검사를 더할 때 함께 본다
+- [Phase 02]: run 38158088016 에 예고가 붙었다 — ubuntu-latest 라벨이 2026-10-19 부터 Ubuntu 26 으로 옮겨 간다. spike 006 과 이 실행은 ubuntu-24.04 에서 쟀다. 그 뒤 CI 가 처음 실패하면 저장소 변경보다 runner 이미지 변경을 먼저 의심한다
 
 ### Pending Todos
 
@@ -131,6 +138,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-11T16:57:12.204Z
-Stopped at: Completed 02-03-PLAN.md
+Last session: 2026-10-11T17:10:38.470Z
+Stopped at: Completed 02-04-PLAN.md
 Resume file: None
