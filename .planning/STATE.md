@@ -4,17 +4,17 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 1
 current_phase_name: Baseline and Toolchain
-status: executing
-stopped_at: Completed 01-02-PLAN.md
-last_updated: "2026-10-11T04:48:14.997Z"
+status: verifying
+stopped_at: Completed 01-03-PLAN.md
+last_updated: "2026-10-11T05:00:13.428Z"
 last_activity: 2026-10-11
 last_activity_desc: Phase 1 execution started
-state_head: 712e42cbd7dc59c1a65deafb131b250c10a04061
+state_head: 968a5bb048005dac69ed65268615d174b54a02bb
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 3
-  completed_plans: 2
+  completed_plans: 3
   percent: 0
 ---
 
@@ -31,7 +31,7 @@ See: .planning/PROJECT.md (updated 2026-10-11)
 
 Phase: 1 (Baseline and Toolchain) — EXECUTING
 Plan: 3 of 3
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-10-11 — Phase 1 execution started
 
 Progress: [░░░░░░░░░░] 0%
@@ -60,6 +60,7 @@ Progress: [░░░░░░░░░░] 0%
 |------|----------|-------|-------|
 | Phase 01 P01 | 7 min | 3 tasks | 0 files |
 | Phase 01 P02 | 6 min | 2 tasks | 1 files |
+| Phase 01 P03 | 4 min | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -78,6 +79,9 @@ Recent decisions affecting current work:
 - [Phase 01]: Phase 1 에서 origin 에 올린 것은 tag v1.3.0 하나다. 브랜치 gsd/v2.0-package-rework 와 .planning/ 은 원격에 없다
 - [Phase 01]: 버전 정책과 CHANGELOG 항목 형식의 기준 문서는 저장소 루트 `VERSIONING.md` 다. 다음 릴리스는 2.0.0 이다 — 이번 릴리스의 가장 큰 등급이 SDK 하한 상향(major)이다
 - [Phase 01]: `VERSIONING.md` 의 절 제목 넷(`## 판정 순서` / `## 기준표` / `## 실제 사례` / `## CHANGELOG 항목 형식`)과 CHANGELOG 형식 문자열은 검증 명령과 뒤 phase 가 읽는 고정 문자열이다. 바꾸려면 검증 명령도 함께 바꾼다
+- [Phase 01]: 저장소 고정 SDK 는 Flutter 3.47.5 / Dart 3.13.4 다 (`.fvmrc`, `.vscode/settings.json`). 이후 검증과 실측은 `fvm dart …` 로 이 SDK 위에서 돈다
+- [Phase 01]: milestone 브랜치의 `pubspec.yaml` 은 `sdk: ^3.13.0` / `version: 2.0.0-dev` 다. 릴리스 때 `-dev` 를 뗀다 (Phase 6). `main` 과 origin 은 1.3.0 그대로이고 이 변경은 어디에도 push 하지 않았다
+- [Phase 01]: `CHANGELOG.md` 의 `## 2.0.0 - 미출시` 항목이 만들어졌다. 이후 phase 는 자기 변경을 이 항목에 적고, `### 새로 생기는 경고` 의 자리 표시 `(Phase 4 실측 후 채움)` 은 Phase 4 가 실측 표로 바꾼다
 
 ### Pending Todos
 
@@ -100,6 +104,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-11T04:48:04.278Z
-Stopped at: Completed 01-02-PLAN.md
+Last session: 2026-10-11T05:00:13.416Z
+Stopped at: Completed 01-03-PLAN.md
 Resume file: None
