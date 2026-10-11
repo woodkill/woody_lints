@@ -1,0 +1,4 @@
+# 실측: Dart 3.13.4, 2026-10-12
+# 형식: 상대경로:줄  강도  규칙이름 (문자열 정렬). 갱신: fvm dart run tool/verify.dart --update
+exit 2
+lib/main.dart:5  warning  missing_provider_scope

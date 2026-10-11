@@ -1,0 +1,17 @@
+name: woody_lints_example
+description: woody_lints 검증용 연습 프로젝트 — 일부러 규칙을 어긴 코드로 기대 진단을 고정한다.
+publish_to: 'none'
+version: 0.0.0
+
+environment:
+  sdk: ^3.13.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^3.0.0
+
+dev_dependencies:
+  # 저장소 루트의 woody_lints 를 그대로 받는다 (사용 프로젝트의 git 의존성 자리).
+  woody_lints:
+    path: ..

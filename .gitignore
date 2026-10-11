@@ -5,8 +5,14 @@
 # Avoid committing pubspec.lock for library packages; see
 # https://dart.dev/guides/libraries/private-files#pubspeclock.
 pubspec.lock
+# example/ 은 검증용 앱이라 lock 을 커밋한다 — 로컬과 CI 가 같은 패키지 버전으로 판정한다.
+!example/pubspec.lock
 
 .DS_Store
 
 # FVM Version Cache
 .fvm/
+
+# tool/verify.dart 의 규칙 검사가 복사본을 두는 자리 (build/woody_rule_check/).
+# 검사가 끝나면 지우지만, 남더라도 커밋되지 않게 한다.
+build/
