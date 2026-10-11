@@ -29,6 +29,8 @@ spike 에서 나와 실제 구현이 지켜야 하는 것 (근거는 각 spike �
 - CI 는 `actions/checkout@v7` + `subosito/flutter-action@v2` (`flutter-version-file: .fvmrc`) 로 SDK 를 맞추고, `~/.dartServer` 는 캐시하지 않는다. 정상 job 은 약 2분, 첫 분석은 약 43초다 (006)
 - 루트 `analysis_options.yaml` 의 exclude 에 `example/**` 한 줄을 더한다 (기존 `lib/analysis_options.yaml` 제외는 그대로 둔다 — 02-CONTEXT.md 가 계획에 맡긴 항목). 더하지 않으면 루트 분석에 example 의 진단이 섞인다: 패키지를 받기 전에는 error 6건으로 exit 3, 받은 뒤에는 plugin 준비까지 일어나 exit 2. 이 제외는 `example/` 안에서의 분석을 건드리지 않는다 (007)
 - 규칙 검사는 저장소 루트에서 **복사본 폴더를 인자로** 준다 (`dart analyze build/woody_rule_check`). 그 폴더의 진단만 나오고 plugin 을 준비하지 않으며 `example/` 의 상태에 기대지 않는다. 005 의 "루트에서 인자 없이"를 대신한다 (007)
+- 검증 명령은 `example/` 을 분석할 때 `ANALYZER_STATE_LOCATION_OVERRIDE` 로 **저장소 안의 전용 상태 폴더**를 준다. 실제 `riverpod_lint` 버전(D-07)은 그 폴더의 `.plugin_manager/*/pubspec.lock` 에서 읽는다. `dart:io` / `dart:convert` 에는 md5 가 없고, 기본 자리(`~/.dartServer`)에서는 폴더 내용으로도 파일 시각으로도 자기 폴더를 고를 수 없다 (008)
+- stderr 의 머리말은 첫 줄이 아닐 수 있으므로 `contains` 로 찾는다. plugin 실패를 알릴 때 "전용 상태 폴더를 지우고 다시 실행"을 안내한다 — 컴파일된 plugin 파일이 깨진 채 남으면 지울 때까지 계속 실패한다 (008)
 
 ## Spikes
 
@@ -41,4 +43,4 @@ spike 에서 나와 실제 구현이 지켜야 하는 것 (근거는 각 spike �
 | 005 | verify-harness-tool-behavior | initial-file-rule-status | standard | `unnecessary_await_in_return` 이 Dart 3.13.4 에서 deprecated 로 보고되는지가 확정된다 | ✓ VALIDATED | linter-rules, deprecated-lint, removed-lint, sdk-constraint |
 | 006 | verify-harness-tool-behavior | github-runner-cold-plugin | standard | 캐시 없는 GitHub Linux runner 에서 plugin 진단이 로컬과 똑같이 나오고 첫 실행 시간이 측정된다 | ✓ VALIDATED | github-actions, ci, cold-start, analyzer-plugin, timing |
 | 007 | verify-harness-tool-behavior | root-analysis-with-example | standard | 저장소 루트에 `example/` 이 있을 때 루트에서 인자 없이 돌린 `dart analyze` 에 example 의 진단과 plugin 준비가 섞이는지, 루트의 `example/**` 제외가 이를 막는지가 확정된다 | ✓ VALIDATED | dart-analyze, context-root, exclude, example, rule-check |
-| 008 | verify-harness-tool-behavior | state-folder-placement | standard | md5 없이 실제 `riverpod_lint` 버전을 읽는 방법과, 같은 프로젝트를 두 Analysis Server 가 동시에 분석할 때 plugin 준비가 깨지는지가 확정된다 | PENDING | analyzer-plugin, state-folder, concurrency, md5, plugin-version |
+| 008 | verify-harness-tool-behavior | state-folder-placement | standard | md5 없이 실제 `riverpod_lint` 버전을 읽는 방법과, 같은 프로젝트를 두 Analysis Server 가 동시에 분석할 때 plugin 준비가 깨지는지가 확정된다 | ✓ VALIDATED | analyzer-plugin, state-folder, concurrency, md5, plugin-version |

@@ -1,0 +1,1778 @@
+{
+  "dart": "3.13.4",
+  "os": "macos",
+  "placement": [
+    {
+      "place": "프로젝트 밖",
+      "cold": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 14711,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "warm": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3579,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "warm2": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3568,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "pluginFolders": 1,
+      "versions": [
+        "3.1.9"
+      ]
+    },
+    {
+      "place": "프로젝트 안의 점 폴더 (.dart_tool/woody_verify_state)",
+      "cold": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 14957,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "warm": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3615,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "warm2": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3669,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "pluginFolders": 1,
+      "versions": [
+        "3.1.9"
+      ]
+    },
+    {
+      "place": "프로젝트 안의 평범한 폴더 (verify_state)",
+      "cold": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 15251,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "warm": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3851,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "warm2": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3662,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "pluginFolders": 1,
+      "versions": [
+        "3.1.9"
+      ]
+    }
+  ],
+  "hash": [
+    {
+      "case": "평범한 경로",
+      "cwd": "<work>/fx",
+      "resolved": "<work>/fx",
+      "outcome": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 15589,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "folderNames": [
+        "bbefe70ca7ea1c6e6f9f0074a9612630"
+      ],
+      "md5": {
+        "givenUtf8": "bbefe70ca7ea1c6e6f9f0074a9612630",
+        "givenLow8": "bbefe70ca7ea1c6e6f9f0074a9612630",
+        "resolvedUtf8": "bbefe70ca7ea1c6e6f9f0074a9612630",
+        "resolvedLow8": "bbefe70ca7ea1c6e6f9f0074a9612630"
+      },
+      "matches": [
+        "준 경로의 md5(UTF-8)"
+      ]
+    },
+    {
+      "case": "심볼릭 링크를 거친 경로 (작업 디렉터리를 링크로 줌)",
+      "cwd": "<work>/fx-link",
+      "resolved": "<work>/fx",
+      "outcome": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 15317,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "folderNames": [
+        "bbefe70ca7ea1c6e6f9f0074a9612630"
+      ],
+      "md5": {
+        "givenUtf8": "6844e1fd580a80f80581442ecb08ff4d",
+        "givenLow8": "6844e1fd580a80f80581442ecb08ff4d",
+        "resolvedUtf8": "bbefe70ca7ea1c6e6f9f0074a9612630",
+        "resolvedLow8": "bbefe70ca7ea1c6e6f9f0074a9612630"
+      },
+      "matches": [
+        "링크를 푼 경로의 md5(UTF-8)"
+      ]
+    },
+    {
+      "case": "한글이 든 경로",
+      "cwd": "<work>/한글 폴더/fx",
+      "resolved": "<work>/한글 폴더/fx",
+      "outcome": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 15289,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "folderNames": [
+        "41c5375ba9f6a0757ea808e1342e9962"
+      ],
+      "md5": {
+        "givenUtf8": "611b63536c11fd5dcc1d120edc30cca4",
+        "givenLow8": "41c5375ba9f6a0757ea808e1342e9962",
+        "resolvedUtf8": "611b63536c11fd5dcc1d120edc30cca4",
+        "resolvedLow8": "41c5375ba9f6a0757ea808e1342e9962"
+      },
+      "matches": [
+        "준 경로의 md5(code unit 아래 8비트)"
+      ]
+    }
+  ],
+  "inside": {
+    "files": [
+      ".dart_tool/package_config.json",
+      ".dart_tool/package_graph.json",
+      "bin/depfile.txt",
+      "bin/plugin.aot",
+      "bin/plugin.dart",
+      "pubspec.lock",
+      "pubspec.yaml"
+    ],
+    "fixturePathMentions": {
+      "pubspec.yaml": 0,
+      "pubspec.lock": 0,
+      ".dart_tool/package_config.json": 0,
+      "bin/plugin.dart": 0,
+      "bin/depfile.txt": 0
+    },
+    "warm": {
+      "ok": true,
+      "exitCode": 2,
+      "elapsedMs": 3747,
+      "jsonOk": true,
+      "lines": [
+        "lib/main.dart:10  warning  missing_provider_scope",
+        "lib/main.dart:9  info  avoid_print",
+        "lib/main.dart:9  info  prefer_single_quotes",
+        "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+      ],
+      "stderrHead": ""
+    },
+    "modifiedByWarmRun": []
+  },
+  "contention": [
+    {
+      "label": "처음 실행 둘을 동시에 #1",
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16945,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16932,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "label": "처음 실행 둘을 동시에 #2",
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16811,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16813,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "label": "처음 실행 둘을 동시에 #3",
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16821,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16811,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "label": "처음 실행 둘을 동시에 #4",
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16730,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16720,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "label": "처음 실행 둘을 동시에 #5",
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16216,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": false,
+        "exitCode": 0,
+        "elapsedMs": 13489,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes"
+        ],
+        "stderrHead": "File truncated before or at offset 0x0. / Loading dynamic library failed: dlopen(<work>/state/pair-cold-5/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot, 0x0001): tried: '<work>/state/pair-cold-5/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' (), '/System/Volumes/Preboot/Cryptexes/OS<work>/state/pair-cold-5/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' (no such file), '<work>/state/pair-cold-5/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' ()"
+      }
+    },
+    {
+      "label": "처음 실행, 둘째를 3초 늦게",
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16087,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 13852,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "label": "처음 실행, 둘째를 8초 늦게",
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 15720,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 13706,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "label": "처음 실행, 둘째를 12초 늦게",
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 15624,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 4244,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "label": "준비된 상태에서 둘을 동시에 #1",
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3923,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3915,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "label": "준비된 상태에서 둘을 동시에 #2",
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3958,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3956,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "label": "준비된 상태에서 둘을 동시에 #3",
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3959,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3961,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "label": "준비된 상태에서 둘을 동시에 #4",
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3941,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3913,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "label": "준비된 상태에서 둘을 동시에 #5",
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3998,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3993,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "label": "준비된 상태에서 둘을 동시에 #6",
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3950,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3971,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "label": "준비된 상태에서 둘을 동시에 #7",
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3949,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3979,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "label": "준비된 상태에서 둘을 동시에 #8",
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3950,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3938,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "label": "대조군: 상태 폴더를 따로 주고 처음 실행 둘을 동시에 #1",
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16992,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17331,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "label": "대조군: 상태 폴더를 따로 주고 처음 실행 둘을 동시에 #2",
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16978,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16966,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    }
+  ],
+  "race": [
+    {
+      "n": 1,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16908,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16901,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 2,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16797,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16789,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 3,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16914,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16918,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 4,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17390,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17390,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 5,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17230,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17227,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 6,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17202,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17230,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 7,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17368,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17368,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 8,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17548,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17210,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 9,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17475,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17465,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 10,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17226,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17238,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 11,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17393,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17405,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 12,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17444,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17451,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 13,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17376,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17375,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 14,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17214,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17212,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 15,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17137,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 17135,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    }
+  ],
+  "window": [
+    {
+      "n": 1,
+      "offsetMs": 8500,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 15789,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 13809,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 2,
+      "offsetMs": 8500,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 15659,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 13621,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 3,
+      "offsetMs": 9000,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 15769,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 13669,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 4,
+      "offsetMs": 9000,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 15775,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 13591,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 5,
+      "offsetMs": 9500,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 15975,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 6617,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 6,
+      "offsetMs": 9500,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 15870,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 6612,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 7,
+      "offsetMs": 10000,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 15882,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 6644,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 8,
+      "offsetMs": 10000,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16099,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 6686,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 9,
+      "offsetMs": 10500,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 15888,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 6751,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 10,
+      "offsetMs": 10500,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 15928,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 6658,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 11,
+      "offsetMs": 11000,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 15714,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 6775,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 12,
+      "offsetMs": 11000,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 15672,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 6763,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 13,
+      "offsetMs": 11500,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 15589,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 4650,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    },
+    {
+      "n": 14,
+      "offsetMs": 11500,
+      "first": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 16161,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      "second": {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 5760,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    }
+  ],
+  "corrupt": {
+    "prepared": {
+      "ok": true,
+      "exitCode": 2,
+      "elapsedMs": 15430,
+      "jsonOk": true,
+      "lines": [
+        "lib/main.dart:10  warning  missing_provider_scope",
+        "lib/main.dart:9  info  avoid_print",
+        "lib/main.dart:9  info  prefer_single_quotes",
+        "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+      ],
+      "stderrHead": ""
+    },
+    "truncated": {
+      "ok": false,
+      "exitCode": 0,
+      "elapsedMs": 798,
+      "jsonOk": true,
+      "lines": [
+        "lib/main.dart:9  info  avoid_print",
+        "lib/main.dart:9  info  prefer_single_quotes"
+      ],
+      "stderrHead": "File truncated before or at offset 0x0. / Loading dynamic library failed: dlopen(<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot, 0x0001): tried: '<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' (), '/System/Volumes/Preboot/Cryptexes/OS<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' (no such file), '<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' ()",
+      "hasPluginHeader": true,
+      "stderr": "File truncated before or at offset 0x0.\nLoading dynamic library failed: dlopen(<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot, 0x0001): tried: '<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' (), '/System/Volumes/Preboot/Cryptexes/OS<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' (no such file), '<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' ()\nAn error occurred while executing an analyzer plugin: IsolateSpawnException: Unable to spawn isolate: The uri(file://<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot) provided to `Isolate.spawnUri()` does not contain a valid AOT snapshot.\n\nAn error occurred while executing an analyzer plugin: Unrecorded error while starting the plugin.\n#0      PluginSession.start (package:analysis_server/src/plugin/plugin_isolate.dart:499)\n<asynchronous suspension>\n#1      PluginIsolate.start (package:analysis_server/src/plugin/plugin_isolate.dart:229)\n<asynchronous suspension>\n#2      PluginManager.addPluginToContextRoot (package:analysis_server/src/plugin/plugin_manager.dart:215)\n<asynchronous suspension>"
+    },
+    "truncatedAgain": {
+      "ok": false,
+      "exitCode": 0,
+      "elapsedMs": 796,
+      "jsonOk": true,
+      "lines": [
+        "lib/main.dart:9  info  avoid_print",
+        "lib/main.dart:9  info  prefer_single_quotes"
+      ],
+      "stderrHead": "File truncated before or at offset 0x0. / Loading dynamic library failed: dlopen(<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot, 0x0001): tried: '<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' (), '/System/Volumes/Preboot/Cryptexes/OS<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' (no such file), '<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' ()",
+      "hasPluginHeader": true,
+      "stderr": "File truncated before or at offset 0x0.\nLoading dynamic library failed: dlopen(<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot, 0x0001): tried: '<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' (), '/System/Volumes/Preboot/Cryptexes/OS<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' (no such file), '<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' ()\nAn error occurred while executing an analyzer plugin: IsolateSpawnException: Unable to spawn isolate: The uri(file://<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot) provided to `Isolate.spawnUri()` does not contain a valid AOT snapshot.\n\nAn error occurred while executing an analyzer plugin: Unrecorded error while starting the plugin.\n#0      PluginSession.start (package:analysis_server/src/plugin/plugin_isolate.dart:499)\n<asynchronous suspension>\n#1      PluginIsolate.start (package:analysis_server/src/plugin/plugin_isolate.dart:229)\n<asynchronous suspension>\n#2      PluginManager.addPluginToContextRoot (package:analysis_server/src/plugin/plugin_manager.dart:215)\n<asynchronous suspension>"
+    },
+    "afterDeletingSnapshot": {
+      "ok": true,
+      "exitCode": 2,
+      "elapsedMs": 12817,
+      "jsonOk": true,
+      "lines": [
+        "lib/main.dart:10  warning  missing_provider_scope",
+        "lib/main.dart:9  info  avoid_print",
+        "lib/main.dart:9  info  prefer_single_quotes",
+        "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+      ],
+      "stderrHead": ""
+    }
+  },
+  "server": {
+    "initialized": true,
+    "serverPreparedPlugin": true,
+    "serverSentPluginDiagnostic": true,
+    "cliWhileServerRunning": [
+      {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3700,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3625,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      },
+      {
+        "ok": true,
+        "exitCode": 2,
+        "elapsedMs": 3582,
+        "jsonOk": true,
+        "lines": [
+          "lib/main.dart:10  warning  missing_provider_scope",
+          "lib/main.dart:9  info  avoid_print",
+          "lib/main.dart:9  info  prefer_single_quotes",
+          "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+        ],
+        "stderrHead": ""
+      }
+    ],
+    "cliForcedRecompile": {
+      "ok": true,
+      "exitCode": 2,
+      "elapsedMs": 12950,
+      "jsonOk": true,
+      "lines": [
+        "lib/main.dart:10  warning  missing_provider_scope",
+        "lib/main.dart:9  info  avoid_print",
+        "lib/main.dart:9  info  prefer_single_quotes",
+        "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+      ],
+      "stderrHead": ""
+    },
+    "snapshotRewritten": true,
+    "cliAfterRecompile": {
+      "ok": true,
+      "exitCode": 2,
+      "elapsedMs": 3633,
+      "jsonOk": true,
+      "lines": [
+        "lib/main.dart:10  warning  missing_provider_scope",
+        "lib/main.dart:9  info  avoid_print",
+        "lib/main.dart:9  info  prefer_single_quotes",
+        "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+      ],
+      "stderrHead": ""
+    },
+    "serverAliveAfter": true,
+    "serverAnsweredShutdown": true
+  }
+}
