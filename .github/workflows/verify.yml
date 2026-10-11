@@ -1,0 +1,35 @@
+# 검증 명령(tool/verify.dart)을 GitHub 의 Linux runner 에서 돌린다. 판정 로직은 스크립트에 있다.
+name: verify
+
+on:
+  # 필터 없음 = 모든 브랜치 (D-10). tag 트리거는 Phase 6 (REL-03).
+  push:
+  pull_request:
+  # 수동 실행 버튼 — workflow 파일이 main 에 들어간 뒤에 보인다 (D-06).
+  workflow_dispatch:
+
+# 저장소를 읽기만 한다.
+permissions:
+  contents: read
+
+# 같은 브랜치에 새로 올리면 앞선 실행은 취소한다.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    # 정상 약 2분 (spike 006). 멈춰 있는 경우만 막는다.
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      # .fvmrc 를 읽어 로컬과 같은 Flutter 를 설치한다. Flutter 버전 숫자를 여기 적지 않는다.
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version-file: .fvmrc
+
+      - name: 검증
+        run: dart run tool/verify.dart
