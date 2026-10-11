@@ -18,14 +18,14 @@
 
 ### 검증 (VERIFY)
 
-- [x] **VERIFY-01**: 저장소 안의 `example/` 프로젝트가 배포 설정을 include 하고, 기대한 진단(이 패키지가 추가한 규칙, 기반 세트 규칙, `riverpod_lint` 진단)이 실제로 보고되는지를 커밋된 기대 진단 파일과 비교해 판정한다
-- [x] **VERIFY-02**: 규칙이 적힌 배포 파일에 deprecated / removed / 존재하지 않는 규칙이 있으면 검증이 실패한다
-- [x] **VERIFY-03**: 소유자는 로컬에서 명령 하나로 전체 검증을 실행할 수 있다
-- [x] **VERIFY-04**: GitHub Actions 가 push 와 PR 마다 로컬과 같은 검증을 실행하며, 시간 제한이 걸려 있다
+- [ ] **VERIFY-01**: 저장소 안의 `example/` 프로젝트가 배포 설정을 include 하고, 기대한 진단(이 패키지가 추가한 규칙, 기반 세트 규칙, `riverpod_lint` 진단)이 실제로 보고되는지를 커밋된 기대 진단 파일과 비교해 판정한다
+- [ ] **VERIFY-02**: 규칙이 적힌 배포 파일에 deprecated / removed / 존재하지 않는 규칙이 있으면 검증이 실패한다
+- [ ] **VERIFY-03**: 소유자는 로컬에서 명령 하나로 전체 검증을 실행할 수 있다
+- [ ] **VERIFY-04**: GitHub Actions 가 push 와 PR 마다 로컬과 같은 검증을 실행하며, 시간 제한이 걸려 있다
 - [ ] **VERIFY-05**: `base.yaml` 만 include 한 대조군 fixture 에서 Riverpod / codegen 설정이 적용되지 않음을 확인한다
 - [ ] **VERIFY-06**: README 의 규칙 목록이 실제 YAML 과 다르면 검증이 실패한다
-- [x] **VERIFY-07**: `lib/` 에 `.dart` 파일이 있으면 검증이 실패한다
-- [x] **VERIFY-08**: 검증이 실제로 문제를 잡아냄이 확인되어 있다 — 규칙 하나를 지운 변경과 include 줄을 지운 변경이 각각 검증에서 실패한다
+- [ ] **VERIFY-07**: `lib/` 에 `.dart` 파일이 있으면 검증이 실패한다
+- [ ] **VERIFY-08**: 검증이 실제로 문제를 잡아냄이 확인되어 있다 — 규칙 하나를 지운 변경과 include 줄을 지운 변경이 각각 검증에서 실패한다
 
 ### 프리셋 (PRESET)
 
@@ -113,14 +113,14 @@
 | BASE-02 | Phase 1 | Complete |
 | BASE-03 | Phase 1 | Complete |
 | BASE-04 | Phase 1 | Complete |
-| VERIFY-01 | Phase 2 | Complete |
-| VERIFY-02 | Phase 2 | Complete |
-| VERIFY-03 | Phase 2 | Complete |
-| VERIFY-04 | Phase 2 | Complete |
+| VERIFY-01 | Phase 2 | Gaps Found |
+| VERIFY-02 | Phase 2 | Gaps Found |
+| VERIFY-03 | Phase 2 | Gaps Found |
+| VERIFY-04 | Phase 2 | Gaps Found |
 | VERIFY-05 | Phase 3 | Pending |
 | VERIFY-06 | Phase 5 | Pending |
-| VERIFY-07 | Phase 2 | Complete |
-| VERIFY-08 | Phase 2 | Complete |
+| VERIFY-07 | Phase 2 | Gaps Found |
+| VERIFY-08 | Phase 2 | Gaps Found |
 | PRESET-01 | Phase 3 | Pending |
 | PRESET-02 | Phase 3 | Pending |
 | PRESET-03 | Phase 3 | Pending |
