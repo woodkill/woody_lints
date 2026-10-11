@@ -36,6 +36,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 ## Phase Details
 
 ### Phase 1: Baseline and Toolchain
+
 **Goal**: 사용 프로젝트가 머물 수 있는 1.3.0 기준점이 원격에 있고, 이후의 모든 검증과 실측이 지원 대상 SDK(Flutter 3.47.5 / Dart 3.13.4) 위에서 돌며, 실측 결과를 받아 적을 버전 정책과 CHANGELOG 형식이 정해져 있다
 **Depends on**: Nothing (first phase)
 **Requirements**: BASE-01, BASE-02, BASE-03, BASE-04, REL-01
@@ -45,7 +46,18 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. milestone 브랜치의 `pubspec.yaml` 이 `sdk: ^3.13.0` 을 선언하고, Dart 3.13 미만 SDK 에서 이 패키지를 의존성으로 둔 프로젝트의 `pub get` 이 SDK 버전 불일치 오류로 끝난다. 같은 시점에 `origin/main` 의 `lib/` 와 `pubspec.yaml` 은 `v1.3.0` 과 차이가 없다
   4. 소유자가 버전 정책 문서를 읽고 어떤 변경이 major / minor / patch 인지 판정할 수 있으며, 그 정책에 따라 다음 릴리스의 버전 번호가 정해져 있다
   5. CHANGELOG 항목의 형식(추가·삭제 규칙, 지원 SDK, 새로 생기는 진단)이 문서로 정해져 있어, Phase 4 의 실측 결과를 그 형식에 그대로 옮겨 적을 수 있다
-**Plans**: TBD
+
+**Plans**: 3 plans
+
+Plans:
+**Wave 1**
+- [ ] 01-01-PLAN.md — `v1.3.0` annotated tag 를 만들고, 소유자 확인을 받은 뒤 원격에 올린다 (REL-01)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+- [ ] 01-02-PLAN.md — `VERSIONING.md` 에 버전 정책과 CHANGELOG 항목 형식을 적는다 (BASE-03, BASE-04)
+
+**Wave 3** *(blocked on Wave 2 completion)*
+- [ ] 01-03-PLAN.md — 저장소 SDK 를 3.47.5 로, 지원 하한을 `sdk: ^3.13.0` / `2.0.0-dev` 로 올리고 CHANGELOG 2.0.0 항목을 만든다 (BASE-01, BASE-02)
 
 **Decision points** (이 phase 안에서 소유자가 정한다):
 - **D4** — `v1.3.0` tag 를 원격에 push 하는 것은 원격에 남는 작업이다. tag 는 로컬에서 만들어 두고, push 는 실행 시점에 소유자의 명시적 확인을 받은 뒤에 한다. 조사 권고는 commit `90a2736` 에 annotated tag 이며, push 한 tag 는 옮기지 않는다.
@@ -57,6 +69,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - Flutter 프로젝트가 아닌 저장소 루트에서 `fvm use` 가 `--force` 를 요구하는지는 확인된 적이 없다.
 
 ### Phase 2: Verification Harness
+
 **Goal**: `lib/` 를 바꾸기 전에 1.3.0 의 동작이 기대 진단(golden)으로 고정되어 있고, 소유자와 CI 가 같은 명령 하나로 "배포 설정이 기대한 대로 적용되는가"를 판정할 수 있다
 **Depends on**: Phase 1
 **Requirements**: VERIFY-01, VERIFY-02, VERIFY-03, VERIFY-04, VERIFY-07, VERIFY-08
@@ -66,6 +79,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. `lib/` 에 `.dart` 파일을 하나 두면 같은 명령이 실패한다
   4. 배포 파일에서 규칙 하나를 지운 변경과 `example/` 의 include 줄을 지운 변경을 각각 실제로 만들어, 검증이 실패함을 확인한 기록이 있다
   5. push 와 PR 마다 GitHub Actions 가 같은 명령을 실행하고 job 에 시간 제한이 걸려 있으며, GitHub 에서 실제로 성공한 실행이 한 번 이상 있다
+
 **Plans**: TBD
 
 **Spike first** (이 phase 의 나머지를 계획하기 전에 실행으로 확인한다):
@@ -88,6 +102,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - GitHub 에서 CI 실행을 보려면 milestone 브랜치를 원격에 push 해야 한다. 실행 시점에 소유자 확인을 받는다.
 
 ### Phase 3: Preset Split
+
 **Goal**: 사용 프로젝트가 기본 / Riverpod / codegen 조각을 골라 include 하거나 `recommended.yaml` 묶음 한 줄로 전부 받을 수 있고, 옛 URI 한 줄을 쓰는 프로젝트는 분리 전과 똑같은 구성을 받는다
 **Depends on**: Phase 2
 **Requirements**: PRESET-01, PRESET-02, PRESET-03, PRESET-04, PRESET-05, PRESET-06, PRESET-07, PRESET-08, VERIFY-05
@@ -97,6 +112,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. `riverpod.yaml` 을 include 한 구성에서 `riverpod_lint` 진단이 보고되고 plugin 버전 하한이 `^3.1.9` 이며, `codegen.yaml` 을 include 한 구성에서 생성 파일(`*.g.dart`, `*.freezed.dart`)의 진단이 보고되지 않는다
   4. 저장소 루트의 `analysis_options.yaml` 에서 배포 파일 exclude 를 걷어낸 상태로 루트 분석이 경고 없이 통과한다 (`plugins_in_inner_options` 포함)
   5. 재정의 fixture 에서 규칙 하나를 끄는 설정과 plugin 진단 하나를 끄는 설정이 각각 그 진단만 사라지게 한다
+
 **Plans**: TBD
 
 **Spike first** (이 phase 의 나머지를 계획하기 전에 실행으로 확인한다):
@@ -118,6 +134,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - pub workspace 멤버 패키지에서의 plugin 로드, plugin 내부 `riverpod` 버전과 사용 프로젝트 `riverpod` major 가 다를 때의 동작을 조사할지는 이 phase 에서 정한다 (README 호환 범위에 쓰인다).
 
 ### Phase 4: Rule Reselection
+
 **Goal**: 배포 파일의 규칙 하나하나가 `flutter_starter_kit` 실측을 본 소유자의 결정으로 켜져 있고, 켠 이유와 켜지 않은 이유가 기록으로 남아 있다
 **Depends on**: Phase 3
 **Requirements**: RULES-01, RULES-02, RULES-03, RULES-04, RULES-05, RULES-06, RULES-07, RULES-08, DOCS-11
@@ -127,6 +144,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. 후보 규칙마다 소유자의 채택 / 미채택 결정이 기록되어 있고, 배포 파일에서 켜진 규칙이 채택 목록과 일치한다
   4. 배포 파일에 기반 세트와 중복되는 선언과 주석 처리된 설정(`require_trailing_commas`, `public_member_api_docs`, `formatter: trailing_commas`)이 없고, 남은 규칙의 사유 주석이 사실과 일치한다
   5. 켠 규칙마다 이유와 실측 건수를 적은 근거 문서와, 채택하지 않은 규칙과 그 사유의 목록이 저장소에 있다
+
 **Plans**: TBD
 
 **Spike first** (실측을 돌리기 전에 실행으로 확인한다):
@@ -148,6 +166,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - DOCS-11(근거 문서)은 결정과 수치가 나오는 이 phase 에 둔다. 미채택 목록(RULES-08)과 한 쌍이다.
 
 ### Phase 5: Documentation
+
 **Goal**: 소유자가 몇 달 뒤 README 만 보고 설치, 프리셋 선택, 규칙 재정의, 버전 올리기를 그대로 따라 할 수 있고, README / CHANGELOG / YAML 주석이 실제 설정과 일치하며 그 일치가 검증으로 지켜진다
 **Depends on**: Phase 4
 **Requirements**: DOCS-01, DOCS-02, DOCS-03, DOCS-04, DOCS-05, DOCS-06, DOCS-07, DOCS-08, DOCS-09, DOCS-10, VERIFY-06
@@ -157,6 +176,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. README 의 규칙·설정 설명이 실제 YAML 과 일치하고(현재의 불일치 2건 해소), 규칙 목록을 YAML 과 다르게 고치면 검증 명령이 실패한다
   4. CHANGELOG 최상단에 새 릴리스 항목이 Phase 1 에서 정한 형식으로 있고(추가·삭제 규칙, 지원 SDK 변경, 규칙별 실측 건수와 `dart fix` 가능 여부), 1.0.0 과 1.3.0 사이 항목이 git 이력으로 확인되는 범위에서 채워져 있다
   5. 배포 YAML 의 머리 주석이 실제 구성(조각 파일, 묶음, 옛 이름 별칭)을 설명하고, README 와 YAML 에 템플릿 보일러플레이트가 남아 있지 않다
+
 **Plans**: TBD
 
 **Decision points** (이 phase 안에서 소유자가 정한다):
@@ -170,6 +190,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - README 의 `ref: vX.Y.Z` 예시는 Phase 6 에서 만들 tag 를 가리킨다. 버전 번호는 Phase 1 에서 정한 값을 쓴다.
 
 ### Phase 6: Release
+
 **Goal**: 새 버전이 annotated tag 로 원격에 있어 사용 프로젝트가 `ref: vX.Y.Z` 로 버전을 고정할 수 있고, 그 tag 를 git 의존성으로 받은 프로젝트에서 규칙과 plugin 이 실제로 적용됨이 확인되어 있다
 **Depends on**: Phase 5
 **Requirements**: REL-02, REL-03, REL-04
@@ -177,6 +198,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. tag 이름, `pubspec.yaml` 의 version, CHANGELOG 최상단 버전이 서로 다르면 실패하는 검사가 CI 의 tag 트리거에 걸려 있고, 일부러 어긋나게 만든 입력에서 실제로 실패함이 확인되어 있다
   2. `git ls-remote --tags origin` 에 새 버전의 annotated tag 가 보이고, 그 tag 의 `pubspec.yaml` version 과 CHANGELOG 최상단 버전이 tag 이름과 같다
   3. 빈 프로젝트가 새 tag 를 git 의존성(`ref: vX.Y.Z`)으로 받아 `dart analyze` 를 돌리면 기본 규칙 진단과 `riverpod_lint` plugin 진단이 둘 다 보고된다
+
 **Plans**: TBD
 
 **Decision points** (이 phase 안에서 소유자가 정한다):
@@ -196,7 +218,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Baseline and Toolchain | 0/TBD | Not started | - |
+| 1. Baseline and Toolchain | 0/3 | Not started | - |
 | 2. Verification Harness | 0/TBD | Not started | - |
 | 3. Preset Split | 0/TBD | Not started | - |
 | 4. Rule Reselection | 0/TBD | Not started | - |

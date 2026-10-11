@@ -317,7 +317,7 @@ woody_lints/
 | Secrets/env vars | 없음 — `.env`, API 키 없음 `[VERIFIED: local git ls-files]` | 없음 |
 | Build artifacts | `.fvm/flutter_sdk → /Users/woody/fvm/versions/3.41.2`, `.fvm/version` = `3.38.9`(옛 FVM 3 흔적), `.fvm/release` = `3.41.2`, `.dart_tool/version` = `3.41.2`, `pubspec.lock` `sdks: dart: ">=3.10.4 <4.0.0"` `[VERIFIED: local]`. 전부 gitignore 대상 | `fvm use 3.47.5` 가 `.fvm/*` 를 3.47.5 로 다시 쓴다 (실측). `pubspec.lock` 은 `fvm use` 끝의 `flutter pub get` 이, `sdk` 하한 커밋 뒤 다시 `dart pub get` 하면 `>=3.13.0 <4.0.0` 으로 바뀐다 (실측). `.dart_tool/version` 은 `flutter pub get` 만 쓴다 — `dart pub get` 은 만들지 않음 (실측). 커밋 대상이 아니므로 작업 없음 |
 
-**문서 쪽 옛 값 (추적 파일):** `.claude/CLAUDE.md` 가 `3.41.2` 를 9곳, `^3.10.4` 를 5곳에 적고 있다 `[VERIFIED: local grep]` (40, 74, 75, 79, 100, 101, 209, 210, 238행 / 39, 83, 166, 262, 314행). 이 파일은 `/gsd-map-codebase` 가 생성한 저장소 설명이라 이 phase 뒤에 사실과 어긋난다. § Open Questions 1 참조.
+**문서 쪽 옛 값 (추적 파일):** `.claude/CLAUDE.md` 가 `3.41.2` 를 9곳, caret 붙은 `^3.10.4` 를 4곳, caret 없는 평문 `3.10.4` 를 1곳에 적고 있다 `[VERIFIED: local grep]` (40, 74, 75, 79, 100, 101, 209, 210, 238행 / 39, 166, 262, 314행 / 83행). 이 파일은 `/gsd-map-codebase` 가 생성한 저장소 설명이라 이 phase 뒤에 사실과 어긋난다. § Open Questions 1 참조.
 
 ## 조사 결과 — 계획이 답해야 할 8가지
 
@@ -647,7 +647,7 @@ Conventional Commits (prefix 영어, 제목 한국어, 기존 `feat: … (1.3.0)
 | `.fvm/` (gitignore) | 3.41.2 심링크, `version` 3.38.9 | `fvm use` 가 전부 3.47.5 로 다시 쓴다 | `[VERIFIED: local]` |
 | `dart pub get` at root on 3.47.5 | — | 현재 `^3.10.4` 로도, `^3.13.0` 으로도 성공 (`flutter_lints 6.0.0`, `lints 6.1.0`, 오프라인 캐시) | `[VERIFIED: local]` |
 | `lib/analysis_options.yaml`, `README.md`, `CHANGELOG.md` 의 "Flutter 3.47.5 / 3.41.9 실측" 주석 | 서술문 | **변경 없음** — 저장소 고정 버전이 아니라 관찰 기록이다. CONCERNS.md 의 "FVM 고정 버전과 문서상 검증 버전의 불일치" 는 `.fvmrc` 가 3.47.5 가 되는 순간 해소된다 | `[VERIFIED: local grep]` |
-| `.claude/CLAUDE.md` | `3.41.2` 9곳, `^3.10.4` 5곳 | 이 phase 뒤 **사실과 어긋난다.** § Open Questions 1 | `[VERIFIED: local grep]` |
+| `.claude/CLAUDE.md` | `3.41.2` 9곳, `^3.10.4` 4곳 + 평문 `3.10.4` 1곳(83행) | 이 phase 뒤 **사실과 어긋난다.** § Open Questions 1 | `[VERIFIED: local grep]` |
 | CI | 없음 (Phase 2) | 해당 없음. Phase 2 의 `subosito/flutter-action` 이 `.fvmrc` 를 읽을 예정이라 이 phase 의 `.fvmrc` 값이 그대로 CI SDK 가 된다 | STACK.md |
 
 ## VERSIONING.md 작성 재료
@@ -801,16 +801,19 @@ environment:
 | A3 | `flutter_starter_kit` 외 사용 프로젝트 4개의 `pubspec.lock` 도 `resolved-ref: 90a2736` 이다 | Runtime State Inventory | 낮음 — 다른 커밋이어도 `v1.3.0` 의 뜻(1.3.0 내용의 커밋)은 바뀌지 않는다. 그 프로젝트가 `ref: v1.3.0` 으로 옮기면 받는 내용은 같다 |
 | A4 | `tag_pattern` + `^2.0.0` 방식에서 pre-release `2.0.0-dev` 가 범위에 들지 않는다 | 조사 6 | 없음 — 이번 마일스톤은 `ref:` 방식이다. 기록용 |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **`.claude/CLAUDE.md` 의 `3.41.2` / `^3.10.4` 서술을 이 phase 에서 고칠까?**
    - What we know: 14줄이 이 phase 뒤 사실과 어긋난다 `[VERIFIED: local grep]`. CONTEXT 는 README 만 "건드리지 않는다" 고 했고 CLAUDE.md 는 언급이 없다. 이 파일은 `/gsd-map-codebase` 산출물이다.
    - What's unclear: 소유자가 이 파일을 손으로 유지하길 원하는지, 다음 map-codebase 때 재생성되길 원하는지.
    - Recommendation: 커밋 1 또는 별도 `docs:` 커밋으로 해당 줄의 버전 숫자만 고친다 (작업 5분). 혹은 Phase 5 문서 단계로 미루되 CONCERNS 에 적어 둔다. planner 가 택한다 — 어느 쪽도 success criteria 에 영향 없다.
+   - RESOLVED: 이 phase 에서는 고치지 않는다. 소유자 후속 작업으로 기록한다 — 01-01-PLAN.md / 01-03-PLAN.md 의 "알려진 후속 작업" 절, 01-03 Task 3 4단계(실행 시점 줄 번호 재계수 → SUMMARY). 손으로 고칠지 `/gsd-map-codebase` 로 재생성할지는 소유자가 정한다. 개수 정정: caret 붙은 `^3.10.4` 는 4줄(39, 166, 262, 314행)이고 83행은 caret 없는 평문 `3.10.4` 다 (합계 14줄은 그대로).
 2. **BASE-02 증거의 임시 사용 프로젝트를 어디서 만들까?**
    - What we know: 스크래치 디렉터리에서 `path: /Users/woody/dv/woody/woody_lints` 로 가리키면 되고, pub 은 대상에 쓰지 않는다.
    - Recommendation: `/private/tmp/claude-501/…/scratchpad/` 아래 새 디렉터리. 저장소 안에 두면 루트 `dart analyze` 범위에 들어가고 커밋 위험이 있다.
+   - RESOLVED: 저장소 밖에 `mktemp -d` 로 만든다 — 01-03-PLAN.md Task 2 D 단계(`path:` 의존)와 Task 3 2단계(`git:` + `ref: v1.3.0`). 계획 세션의 scratchpad 경로에는 의존하지 않는다.
 3. **`VERSIONING.md` 의 실제 절 제목** — SC4 의 grep 문구는 plan 이 제목을 정한 뒤 맞춘다.
+   - RESOLVED: `## 판정 순서`, `## 기준표`, `## 실제 사례`, `## CHANGELOG 항목 형식` 네 절 제목으로 고정했다 (01-02-PLAN.md must_haves 와 Task 1 · Task 2). SC4 는 01-03-PLAN.md Task 3 3단계가 이 네 제목으로 바꿔 돌린다.
 
 ## Environment Availability
 
