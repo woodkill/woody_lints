@@ -27,6 +27,8 @@ spike 에서 나와 실제 구현이 지켜야 하는 것 (근거는 각 spike �
 - `example/` 의 패키지는 `dart pub get` 으로 받는다 (`--enforce-lockfile` 가능). `flutter pub get` 은 옵션 파일 맨 위에 `build/**` 제외를 써넣는다 (004)
 - deprecated / removed 규칙 검사에 쓰는 배포 파일 복사본은 **저장소 안**에 둔다. `deprecated_lint` / `removed_lint` 는 그 파일이 속한 패키지의 pubspec SDK 하한이 해당 버전 이상일 때만 보고되고, pubspec 이 없는 임시 폴더에서는 보고되지 않는다 (005)
 - CI 는 `actions/checkout@v7` + `subosito/flutter-action@v2` (`flutter-version-file: .fvmrc`) 로 SDK 를 맞추고, `~/.dartServer` 는 캐시하지 않는다. 정상 job 은 약 2분, 첫 분석은 약 43초다 (006)
+- 루트 `analysis_options.yaml` 의 exclude 에 `example/**` 한 줄을 더한다 (기존 `lib/analysis_options.yaml` 제외는 그대로 둔다 — 02-CONTEXT.md 가 계획에 맡긴 항목). 더하지 않으면 루트 분석에 example 의 진단이 섞인다: 패키지를 받기 전에는 error 6건으로 exit 3, 받은 뒤에는 plugin 준비까지 일어나 exit 2. 이 제외는 `example/` 안에서의 분석을 건드리지 않는다 (007)
+- 규칙 검사는 저장소 루트에서 **복사본 폴더를 인자로** 준다 (`dart analyze build/woody_rule_check`). 그 폴더의 진단만 나오고 plugin 을 준비하지 않으며 `example/` 의 상태에 기대지 않는다. 005 의 "루트에서 인자 없이"를 대신한다 (007)
 
 ## Spikes
 
@@ -38,3 +40,5 @@ spike 에서 나와 실제 구현이 지켜야 하는 것 (근거는 각 spike �
 | 004 | verify-harness-tool-behavior | fixture-pub-get | standard | `flutter pub get` / `dart pub get` 이 `analysis_options.yaml` 을 바꾸는지와 `dart pub get` 이 Flutter 프로젝트에서 되는지가 확정된다 | ✓ VALIDATED | pub-get, flutter-tool, analysis-options, lockfile |
 | 005 | verify-harness-tool-behavior | initial-file-rule-status | standard | `unnecessary_await_in_return` 이 Dart 3.13.4 에서 deprecated 로 보고되는지가 확정된다 | ✓ VALIDATED | linter-rules, deprecated-lint, removed-lint, sdk-constraint |
 | 006 | verify-harness-tool-behavior | github-runner-cold-plugin | standard | 캐시 없는 GitHub Linux runner 에서 plugin 진단이 로컬과 똑같이 나오고 첫 실행 시간이 측정된다 | ✓ VALIDATED | github-actions, ci, cold-start, analyzer-plugin, timing |
+| 007 | verify-harness-tool-behavior | root-analysis-with-example | standard | 저장소 루트에 `example/` 이 있을 때 루트에서 인자 없이 돌린 `dart analyze` 에 example 의 진단과 plugin 준비가 섞이는지, 루트의 `example/**` 제외가 이를 막는지가 확정된다 | ✓ VALIDATED | dart-analyze, context-root, exclude, example, rule-check |
+| 008 | verify-harness-tool-behavior | state-folder-placement | standard | md5 없이 실제 `riverpod_lint` 버전을 읽는 방법과, 같은 프로젝트를 두 Analysis Server 가 동시에 분석할 때 plugin 준비가 깨지는지가 확정된다 | PENDING | analyzer-plugin, state-folder, concurrency, md5, plugin-version |

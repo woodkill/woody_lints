@@ -1,0 +1,268 @@
+{
+  "dart": "3.13.4",
+  "os": "macos",
+  "runs": [
+    {
+      "id": "A0",
+      "title": "example 없음 (지금의 저장소)",
+      "exitCode": 0,
+      "elapsedMs": 497,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "lines": [],
+      "stderr": ""
+    },
+    {
+      "id": "A1",
+      "title": "example 있음, pub get 전, 루트 제외 없음",
+      "exitCode": 3,
+      "elapsedMs": 493,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "lines": [
+        "example/lib/main.dart:1  error  uri_does_not_exist",
+        "example/lib/main.dart:10  error  creation_with_non_type",
+        "example/lib/main.dart:10  error  undefined_function",
+        "example/lib/main.dart:10  error  undefined_function",
+        "example/lib/main.dart:9  info  avoid_print",
+        "example/lib/main.dart:9  info  prefer_single_quotes",
+        "example/lib/src/counter.dart:1  error  uri_does_not_exist",
+        "example/lib/src/counter.dart:11  warning  override_on_non_overriding_member",
+        "example/lib/src/counter.dart:7  error  extends_non_class"
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "A4",
+      "title": "example 있음, pub get 전, 루트에 'example/**' 제외",
+      "exitCode": 0,
+      "elapsedMs": 478,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "lines": [],
+      "stderr": ""
+    },
+    {
+      "id": "A2",
+      "title": "example 있음, pub get 후, 루트 제외 없음",
+      "exitCode": 2,
+      "elapsedMs": 15203,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "lines": [
+        "example/lib/main.dart:10  warning  missing_provider_scope",
+        "example/lib/main.dart:9  info  avoid_print",
+        "example/lib/main.dart:9  info  prefer_single_quotes",
+        "example/lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "A3",
+      "title": "example 있음, pub get 후, 루트에 'example/**' 제외",
+      "exitCode": 0,
+      "elapsedMs": 467,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "lines": [],
+      "stderr": ""
+    },
+    {
+      "id": "A5",
+      "title": "example 있음, pub get 후, 루트에 'example' 제외",
+      "exitCode": 0,
+      "elapsedMs": 474,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "lines": [],
+      "stderr": ""
+    },
+    {
+      "id": "A6",
+      "title": "example 있음, pub get 후, 루트에 'example' 과 'example/**' 제외",
+      "exitCode": 0,
+      "elapsedMs": 498,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "lines": [],
+      "stderr": ""
+    },
+    {
+      "id": "E2",
+      "title": "루트 제외 없음",
+      "exitCode": 2,
+      "elapsedMs": 15150,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "lines": [
+        "example/lib/main.dart:10  warning  missing_provider_scope",
+        "example/lib/main.dart:9  info  avoid_print",
+        "example/lib/main.dart:9  info  prefer_single_quotes",
+        "example/lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "E3",
+      "title": "루트에 'example/**' 제외",
+      "exitCode": 2,
+      "elapsedMs": 15162,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "lines": [
+        "example/lib/main.dart:10  warning  missing_provider_scope",
+        "example/lib/main.dart:9  info  avoid_print",
+        "example/lib/main.dart:9  info  prefer_single_quotes",
+        "example/lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "E6",
+      "title": "루트에 'example' 과 'example/**' 제외",
+      "exitCode": 2,
+      "elapsedMs": 15205,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "lines": [
+        "example/lib/main.dart:10  warning  missing_provider_scope",
+        "example/lib/main.dart:9  info  avoid_print",
+        "example/lib/main.dart:9  info  prefer_single_quotes",
+        "example/lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "H2",
+      "title": "루트 제외 없음",
+      "exitCode": 2,
+      "elapsedMs": 15235,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "lines": [
+        "example/lib/main.dart:10  warning  missing_provider_scope",
+        "example/lib/main.dart:9  info  avoid_print",
+        "example/lib/main.dart:9  info  prefer_single_quotes",
+        "example/lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "H3",
+      "title": "루트에 'example/**' 제외",
+      "exitCode": 2,
+      "elapsedMs": 15352,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "lines": [
+        "example/lib/main.dart:10  warning  missing_provider_scope",
+        "example/lib/main.dart:9  info  avoid_print",
+        "example/lib/main.dart:9  info  prefer_single_quotes",
+        "example/lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "R2a",
+      "title": "루트 제외 없음, 루트에서 인자 없이",
+      "exitCode": 2,
+      "elapsedMs": 15133,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "lines": [
+        "build/woody_rule_check/analysis_options.yaml:41  warning  deprecated_lint",
+        "build/woody_rule_check/analysis_options.yaml:42  warning  deprecated_lint",
+        "build/woody_rule_check/analysis_options.yaml:43  warning  removed_lint",
+        "build/woody_rule_check/analysis_options.yaml:44  warning  undefined_lint",
+        "example/lib/main.dart:10  warning  missing_provider_scope",
+        "example/lib/main.dart:9  info  avoid_print",
+        "example/lib/main.dart:9  info  prefer_single_quotes",
+        "example/lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "R2b",
+      "title": "루트 제외 없음, 루트에서 그 폴더를 인자로",
+      "exitCode": 2,
+      "elapsedMs": 479,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "lines": [
+        "build/woody_rule_check/analysis_options.yaml:41  warning  deprecated_lint",
+        "build/woody_rule_check/analysis_options.yaml:42  warning  deprecated_lint",
+        "build/woody_rule_check/analysis_options.yaml:43  warning  removed_lint",
+        "build/woody_rule_check/analysis_options.yaml:44  warning  undefined_lint"
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "R3a",
+      "title": "루트에 'example/**' 제외, 루트에서 인자 없이",
+      "exitCode": 2,
+      "elapsedMs": 485,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "lines": [
+        "build/woody_rule_check/analysis_options.yaml:41  warning  deprecated_lint",
+        "build/woody_rule_check/analysis_options.yaml:42  warning  deprecated_lint",
+        "build/woody_rule_check/analysis_options.yaml:43  warning  removed_lint",
+        "build/woody_rule_check/analysis_options.yaml:44  warning  undefined_lint"
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "R3b",
+      "title": "루트에 'example/**' 제외, 루트에서 그 폴더를 인자로",
+      "exitCode": 2,
+      "elapsedMs": 494,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "lines": [
+        "build/woody_rule_check/analysis_options.yaml:41  warning  deprecated_lint",
+        "build/woody_rule_check/analysis_options.yaml:42  warning  deprecated_lint",
+        "build/woody_rule_check/analysis_options.yaml:43  warning  removed_lint",
+        "build/woody_rule_check/analysis_options.yaml:44  warning  undefined_lint"
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "P2b",
+      "title": "루트 제외 없음, 루트에서 그 폴더를 인자로",
+      "exitCode": 0,
+      "elapsedMs": 505,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "lines": [],
+      "stderr": ""
+    },
+    {
+      "id": "P3a",
+      "title": "루트에 'example/**' 제외, 루트에서 인자 없이",
+      "exitCode": 0,
+      "elapsedMs": 507,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "lines": [],
+      "stderr": ""
+    }
+  ]
+}
