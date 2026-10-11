@@ -11,10 +11,10 @@ requires:
   - phase: spikes-001-008
     provides: "`dart analyze` 실행 형태, plugin 준비 실패 판정, 전용 상태 폴더, `dart pub get --enforce-lockfile`, 루트 `example/**` 제외 (`.claude/skills/spike-findings-woody-lints/`)"
 provides:
-  - "`example/` — 사용 프로젝트와 같은 모양의 연습용 Flutter 패키지 (옵션 파일은 `include: package:woody_lints/analysis_options.yaml` 한 줄, dev 의존성 `woody_lints: path: ..`, 커밋된 `pubspec.lock`)"
+  - "`example/` — 사용 프로젝트와 같은 모양의 연습용 Flutter 패키지 (옵션 파일은 옛 URI — `package:woody_lints` 의 `analysis_options.yaml` — 를 include 하는 한 줄, dev 의존성 `woody_lints: path: ..`, 커밋된 `pubspec.lock`)"
   - "`example/expected_diagnostics.txt` — 정답지 `exit 2` + 16줄 (배포 파일의 규칙 12개 + 기반 세트만의 `prefer_is_empty` + `riverpod_lint` 3건, 규칙마다 정확히 한 줄)"
   - "`tool/verify.dart` — `fvm dart run tool/verify.dart [--update]`. 클래스 `Expected` · `AnalyzeOutcome` · `StepResult` · `Difference`, 함수 `normalizeDiagnostics` · `runPubGet` · `analyzeFixture` · `compareFixture` · `findDifference` · `writeExpected` · `formatStepLine` · `main`. 종료 코드 0 / 1 / 64 / 69 / 70"
-  - "루트 `analysis_options.yaml` 의 `include: package:flutter_lints/flutter.yaml` 과 `'example/**'` 제외, `.gitignore` 의 `!example/pubspec.lock` · `build/`"
+  - "루트 `analysis_options.yaml` 의 `flutter_lints` 기반 세트(`flutter.yaml`) include 와 `'example/**'` 제외, `.gitignore` 의 `example/pubspec.lock` 예외 줄(`!` 부정 패턴) · `build/`"
   - "런타임 폴더 `.dart_tool/woody_verify/example/` (fixture 전용 Analysis Server 상태 폴더, gitignore 대상, 스크립트가 지우지 않는다)"
 affects: [02-02, 02-03, 02-04, phase-3-presets, phase-4-rules, phase-5-docs]
 
@@ -71,7 +71,7 @@ requirements-completed: [VERIFY-01]
 # Coverage metadata (#1602)
 coverage:
   - id: D1
-    description: "저장소 루트에서 `fvm dart run tool/verify.dart` 를 실행하면 `example/` 의 `dart analyze` 결과가 커밋된 정답지와 비교되어, 같으면 `[1/1] example/ 정답지 비교 … 통과` / `점검 통과 (1개 중 1개)` 와 종료 코드 0 으로 끝난다"
+    description: "저장소 루트에서 검증 명령(`tool/verify.dart` 를 `fvm dart run` 으로)을 실행하면 `example/` 의 `dart analyze` 결과가 커밋된 정답지와 비교되어, 같으면 `[1/1] example/ 정답지 비교 … 통과` / `점검 통과 (1개 중 1개)` 와 종료 코드 0 으로 끝난다"
     requirement: "VERIFY-01"
     verification:
       - kind: integration
@@ -93,7 +93,7 @@ coverage:
         status: pass
     human_judgment: false
   - id: D3
-    description: "`invalid_annotation_target` 샘플(`should_not_appear.dart`)과 생성 파일 샘플(`generated/sample.g.dart`, `sample.freezed.dart`)이 `example/` 에 있지만 정답지에 그 진단이 없다. (배포 파일의 해당 줄을 지우면 나타나는지 — 헛통과가 아님 — 는 plan 02-03 이 확인한다)"
+    description: "`invalid_annotation_target` 샘플(`should_not_appear.dart`)과 생성 파일 샘플(`example/lib/generated/sample.g.dart`, `sample.freezed.dart`)이 `example/` 에 있지만 정답지에 그 진단이 없다. (배포 파일의 해당 줄을 지우면 나타나는지 — 헛통과가 아님 — 는 plan 02-03 이 확인한다)"
     requirement: "VERIFY-01"
     verification:
       - kind: integration
@@ -101,7 +101,7 @@ coverage:
         status: pass
     human_judgment: false
   - id: D4
-    description: "`example/pubspec.lock` 이 커밋되어 있고(`!example/pubspec.lock`), 루트 `pubspec.lock` 과 `build/` 는 그대로 무시된다"
+    description: "`example/pubspec.lock` 이 커밋되어 있고(`.gitignore` 의 `!` 부정 패턴 예외 줄), 루트 `pubspec.lock` 과 `build/` 는 그대로 무시된다"
     requirement: "VERIFY-01"
     verification:
       - kind: other
@@ -109,7 +109,7 @@ coverage:
         status: pass
     human_judgment: false
   - id: D5
-    description: "`example/analysis_options.yaml` 은 `include: package:woody_lints/analysis_options.yaml` 한 줄이다 (`pub get` 2회와 분석 여러 번 뒤에도 그대로)"
+    description: "`example/analysis_options.yaml` 은 옛 URI 를 include 하는 한 줄이다 — 아래 ref 의 문자열 그대로 (`pub get` 2회와 분석 여러 번 뒤에도 그대로)"
     requirement: "VERIFY-01"
     verification:
       - kind: other
@@ -182,7 +182,7 @@ status: complete
 
 두 커밋 모두 삭제된 파일이 없다. `.dart_tool/`, `example/.dart_tool/`, 루트 `pubspec.lock` 은 스테이징되지 않았다.
 
-**Plan metadata:** 이 SUMMARY 와 STATE / ROADMAP 을 담는 `docs(02-01)` 커밋 (이 파일을 쓴 직후에 만든다 — SHA 는 실행자의 완료 보고에 있다)
+**Plan metadata:** `f7c0e49` (docs: 이 SUMMARY 와 STATE / ROADMAP). 그 뒤 SUMMARY 의 문구만 다듬은 `docs(02-01)` 커밋이 하나 더 있다 — 백틱 안의 설정 줄·명령을 `gsd-tools verify-summary` 가 파일 경로로 읽어 "없는 파일" 5건으로 보고해서(오탐), 뜻은 그대로 두고 표기만 바꿨다
 
 ## Task 1 의 실측 기록
 
@@ -397,7 +397,7 @@ To update `pubspec.lock` run `dart pub get` without
 - `tool/verify.dart` (495줄) — 검증 명령. `dart:convert` · `dart:io` 만 쓴다
 - `example/pubspec.yaml` — 연습용 Flutter 패키지 (`flutter_riverpod ^3.0.0`, dev `woody_lints: path: ..`)
 - `example/pubspec.lock` — `fvm dart pub get` 이 만든 lock (커밋, 35개 패키지)
-- `example/analysis_options.yaml` — `include: package:woody_lints/analysis_options.yaml` 한 줄
+- `example/analysis_options.yaml` — 옛 URI(`package:woody_lints` 의 `analysis_options.yaml`)를 include 하는 한 줄
 - `example/expected_diagnostics.txt` — 정답지 (`exit 2` + 16줄)
 - `example/lib/main.dart` — `missing_provider_scope` (warning)
 - `example/lib/added_rules.dart` — 이 패키지가 실제로 추가하는 규칙 6개
@@ -405,8 +405,8 @@ To update `pubspec.lock` run `dart pub get` without
 - `example/lib/riverpod_rules.dart` — `avoid_public_notifier_properties` (info), `provider_parameters` (warning)
 - `example/lib/should_not_appear.dart` — 함수에 붙인 `@immutable` (`invalid_annotation_target`, 억제돼야 함)
 - `example/lib/generated/sample.g.dart`, `sample.freezed.dart` — `print("g")` / `print("f")` (exclude 돼야 함)
-- `analysis_options.yaml` (루트) — `include: package:flutter_lints/flutter.yaml` 과 `'example/**'` 제외를 더했다. 기존 `lib/analysis_options.yaml` 제외와 그 주석은 그대로다
-- `.gitignore` — `!example/pubspec.lock` 과 `build/` (각각 한국어 이유 주석). 기존 영어 주석은 그대로다
+- `analysis_options.yaml` (루트) — `flutter_lints` 기반 세트(`flutter.yaml`) include 와 `'example/**'` 제외를 더했다. 기존 `lib/analysis_options.yaml` 제외와 그 주석은 그대로다
+- `.gitignore` — `example/pubspec.lock` 예외 줄(`!` 부정 패턴)과 `build/` (각각 한국어 이유 주석). 기존 영어 주석은 그대로다
 
 ## Decisions Made
 
