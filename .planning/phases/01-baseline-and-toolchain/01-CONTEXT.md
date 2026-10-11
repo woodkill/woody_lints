@@ -35,6 +35,7 @@
 
 - **D-01:** 판단 축은 "이 버전을 받는 쪽이 겪는 일"이다. semver 범위가 기계적으로 평가되지 않으므로(사용 프로젝트는 정확한 tag 하나에 고정한다) 버전 번호는 사람에게 보내는 신호다.
 - **D-02:** 규칙 추가는 **minor** 다. 조건으로, CHANGELOG 의 해당 버전에 "새로 생기는 경고" 칸을 반드시 둔다. major 는 받는 쪽이 설정 파일이나 SDK 를 고쳐야 하는 변경에만 쓴다. (Dart 공식 `lints` / `flutter_lints` 는 규칙 추가를 major 로 내지만, 그쪽은 caret 범위로 자동 유입되는 구조라 사정이 다르다고 보았다.)
+  - **수정 (2026-10-11, UAT G-01-1):** 셋째 문장의 문구를 "major 는 받는 쪽이 설정 파일이나 SDK 를 고쳐야 하는 변경, `flutter_lints` 나 `riverpod_lint` 를 다음 major 로 올리는 변경, 이미 켜져 있던 규칙의 심각도가 warning 이상으로 올라가는 변경에 쓴다" 로 다듬었다 — 아래 D-09 ① 의 최종 문구와 같은 범위(D-05 표의 major 다섯 행)다. 정책은 그대로다: 규칙 추가는 그 규칙이 처음부터 warning 등급이어도 minor 다. 위 원문은 기록으로 남긴다. 근거는 `.planning/debug/versioning-decision-order-1-3-0-mismatch.md` 의 방향 (나) 와 `01-UAT.md` 의 G-01-1 (소유자 결정 2건, 2026-10-11) 이다.
 - **D-03:** 규칙 제거도 **minor** 다. "규칙을 넣든 빼든 규칙 목록이 바뀌면 minor" 로 통일한다. patch 는 규칙 목록이 그대로인 변경에만 쓴다. `unnecessary_ignore` 채택 여부(Phase 4)와 무관하게 성립한다.
   - 조사 문서 두 편의 안을 모두 대체한다. `research/ARCHITECTURE.md` 는 "규칙 제거 = PATCH", `research/PITFALLS.md` 는 "PATCH, 단 `unnecessary_ignore` 채택 시 MINOR" 였다. 통일안은 조사 결과가 아니라 논의 중 Claude 가 제안한 것이고, 그 점을 밝힌 뒤 소유자가 골랐다.
 - **D-04:** 규칙의 심각도를 info 에서 warning 이상으로 올리는 변경은 **major** 다. 받는 프로젝트의 `dart analyze` 가 통과에서 실패로 바뀔 수 있다. (`research/ARCHITECTURE.md` 의 "심각도 상향 = MINOR" 를 대체한다.) 이번 릴리스에는 해당 변경이 없다.
@@ -66,6 +67,7 @@
 - **D-09:** VERSIONING.md 는 세 부분으로 쓴다.
   1. **판정 순서** — 위에서부터 물어 내려가다 처음 "예"가 나오는 곳에서 멈춘다.
      - ① 받는 쪽이 설정 파일이나 SDK 를 고쳐야 하나, 자동 검사가 막힐 수 있나 → major
+       - **수정 (2026-10-11, UAT G-01-1):** ① 의 문구를 두 번 다듬었다. (1) UAT 뒤: 둘째 조건 "자동 검사가 막힐 수 있나" 를 "이미 켜져 있던 규칙의 심각도가 warning 이상으로 올라가나" 로 좁혔다 — D-05 표의 "규칙 심각도를 warning 이상으로 올림" 행과 같은 변경 종류 기준이다. 규칙을 새로 켜는 것은 처음부터 warning 이상이어도 ② 다. (2) 계획 검토 뒤: 좁히면 D-05 표의 major 행 가운데 `flutter_lints` 6 → 7 과 `riverpod_lint` 3 → 4 가 ① 에 걸리지 않게 되므로 이 두 경우를 ① 에 넣어 ① 이 표의 major 다섯 행을 모두 묻게 했다. 최종 문구: "받는 쪽이 설정 파일이나 SDK 를 고쳐야 하나, `flutter_lints` 나 `riverpod_lint` 를 다음 major 로 올리나 (6 → 7, 3 → 4 처럼 맨 앞자리가 바뀜), 이미 켜져 있던 규칙의 심각도가 warning 이상으로 올라가나 → major". 같은 major 안의 하한 상향(`^3.1.3` → `^3.1.9`)은 그대로 ② 다. 1.3.0 = minor, 2.0.0 = major (아래 3.) 와 D-04 · D-05 는 그대로다. 위 원문은 기록으로 남긴다.
      - ② 규칙 목록이나 exclude / errors 설정, plugin 버전이 바뀌었나 → minor
      - ③ `lib/` 나 `pubspec.yaml` 이 바뀌긴 했나 → patch
      - ④ 아니면 → 버전을 올리지 않는다
