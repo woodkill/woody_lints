@@ -365,3 +365,7 @@ Do not make direct repo edits outside a GSD workflow unless the user explicitly 
 > Profile not yet configured. Run `/gsd-profile-user` to generate your developer profile.
 > This section is managed by `generate-claude-profile` -- do not edit manually.
 <!-- GSD:profile-end -->
+
+## Spike Findings
+
+- **woody_lints 의 spike 실측 결과** (구현 방식, 제약, 함정) → `Skill("spike-findings-woody-lints")` — 검증 명령(`tool/verify.dart`), `example/` 과 정답지, 규칙 상태 검사, CI workflow 를 만들거나 고치기 전에 읽는다

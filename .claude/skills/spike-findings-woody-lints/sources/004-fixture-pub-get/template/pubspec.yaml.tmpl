@@ -1,0 +1,17 @@
+name: spike_pub_get_fixture
+description: spike 004 — pub get 이 analysis_options.yaml 을 건드리는지 확인용 연습 프로젝트
+publish_to: 'none'
+version: 0.0.0
+
+environment:
+  sdk: ^3.13.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^3.0.0
+
+dev_dependencies:
+  # probe.sh 가 저장소 루트의 절대 경로로 바꿔 넣는다.
+  woody_lints:
+    path: __WOODY_LINTS_ROOT__
