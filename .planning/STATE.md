@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 1
 current_phase_name: Baseline and Toolchain
 status: executing
-stopped_at: Phase 1 context gathered
-last_updated: "2026-10-11T04:15:25.827Z"
+stopped_at: Completed 01-01-PLAN.md
+last_updated: "2026-10-11T04:31:24.426Z"
 last_activity: 2026-10-11
-last_activity_desc: Roadmap 작성 (6 phases, v1 요구사항 43/43 매핑)
-state_head: 6394704835e0dc2fd2c667c9865156d3e1f7a35c
+last_activity_desc: Phase 1 execution started
+state_head: 3d1d462a613356bcc95f581dc16da6403648af27
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 3
-  completed_plans: 0
+  completed_plans: 1
   percent: 0
 ---
 
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-10-11)
 
 ## Current Position
 
-Phase: 1 (Baseline and Toolchain) — READY TO EXECUTE
-Plan: Not started
+Phase: 1 (Baseline and Toolchain) — EXECUTING
+Plan: 2 of 3
 Status: Ready to execute
-Last activity: 2026-10-11 — Roadmap 작성 (6 phases, v1 요구사항 43/43 매핑)
+Last activity: 2026-10-11 — Phase 1 execution started
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -54,6 +54,11 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: -
 
 *Updated after each plan completion*
+**Per-Plan Metrics:**
+
+| Plan | Duration | Tasks | Files |
+|------|----------|-------|-------|
+| Phase 01 P01 | 7 min | 3 tasks | 0 files |
 
 ## Accumulated Context
 
@@ -68,6 +73,8 @@ Recent decisions affecting current work:
 - [Pre-roadmap]: 검증 판정은 기대 진단 비교(golden comparison)가 주 수단이다
 - [Roadmap]: 구조 변경(Phase 3)과 내용 변경(Phase 4)을 섞지 않고, 하네스(Phase 2)를 둘보다 먼저 세운다
 - [Roadmap]: GSD 자동 tag(`git.create_tag`)를 끄고 마일스톤 번호를 `v2.0` 으로 맞췄다. `v` tag 는 패키지 릴리스에만 쓴다
+- [Phase 01]: v1.3.0 annotated tag 를 90a2736 에 붙여 origin 에 올렸다 (소유자 응답 push, 2026-10-11T04:25:38Z). 이 tag 는 옮기거나 지우지 않는다 — 잘못이 발견되면 새 이름(v1.3.1 등)을 쓴다
+- [Phase 01]: Phase 1 에서 origin 에 올린 것은 tag v1.3.0 하나다. 브랜치 gsd/v2.0-package-rework 와 .planning/ 은 원격에 없다
 
 ### Pending Todos
 
@@ -75,7 +82,6 @@ None yet.
 
 ### Blockers/Concerns
 
-- [Phase 1] D4: `v1.3.0` tag 의 원격 push 는 실행 시점에 소유자의 명시적 확인이 필요하다
 - [Phase 1] D8: 버전 정책 세부와 다음 버전 번호가 정해지지 않았다 (조사 권고 2.0.0)
 - [Phase 2] Spike 선행: plugin 실패 시 종료 코드, `riverpod_lint` 15개 규칙의 심각도, GitHub cold runner 동작이 확인되지 않았다
 - [Phase 3] Spike 선행: 이 저장소 구조에서의 include 경유 plugin 로드와 3단 include 가 확인되지 않았다. 실패하면 URI 결정을 소유자와 다시 본다
@@ -92,6 +98,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-11T02:29:22.563Z
-Stopped at: Phase 1 context gathered
-Resume file: .planning/phases/01-baseline-and-toolchain/01-CONTEXT.md
+Last session: 2026-10-11T04:31:06.349Z
+Stopped at: Completed 01-01-PLAN.md
+Resume file: None
