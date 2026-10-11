@@ -1,7 +1,7 @@
 ---
 phase: 01-baseline-and-toolchain
 verified: 2026-10-11T08:53:57Z
-status: human_needed
+status: passed
 score: 24/26 must-haves verified
 covered_files:
   - .fvmrc
@@ -21,6 +21,11 @@ covered_files:
 covered_digest: "v3:sha256:45721ff6b04942031b1ffe78522daffa5a3b1c4e8df47bd7e67f3de67b7f2398"
 behavior_unverified: 0
 overrides_applied: 0
+overrides:
+  - must_have: "`01-REVIEW-DISPOSITION.md` 에서 WR-01 · WR-02 · WR-04 는 fixed, WR-03 은 open 이다 — WR-03 행의 Source 칸에 부분 해소 메모가 있고, SUMMARY 에도 같은 메모를 남긴다"
+    reason: "코드 리뷰 게이트가 처리 기록표를 다시 만들 때 open 행의 Source 칸을 비운다. 같은 메모가 01-04-SUMMARY.md 243-250행, 01-UAT.md Gaps 절 G-01-1 의 '범위 밖' 줄, 01-REVIEW.md 의 WR-03 본문에 남아 있다 (소유자가 UAT 9번에서 (가) 받아들인다 를 골랐다)"
+    accepted_by: "Woody Moon"
+    accepted_at: "2026-10-11T09:23:33Z"
 re_verification:
   previous_status: human_needed
   previous_score: 15/17
