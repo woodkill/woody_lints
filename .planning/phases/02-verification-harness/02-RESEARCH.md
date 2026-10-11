@@ -931,19 +931,24 @@ analyzer:
 | A4 | 정답지를 실제 저장소 `example/` 에서 만들었을 때 복사본과 같은 16줄이 나온다 (경로만 다르다) | 권고 2 | 샘플을 글자 그대로 쓰면 줄 번호가 같다. 실행 단계의 첫 `--update` 가 기준이 되므로 다르면 그 출력으로 확정한다 |
 | A5 | `on.pull_request` 에 필터가 없으면 모든 base 브랜치의 PR 에서 돈다 | 권고 9 | 문서가 직접 말하지 않았다 (필터 예시로만). PR 은 Phase 6 전에는 열지 않는다 (D-10) |
 
-## Open Questions
+## Open Questions (RESOLVED)
+
+세 항목 모두 계획 단계(2026-10-11, `02-01-PLAN.md` ~ `02-04-PLAN.md`)에서 권고대로 결정되었다. 각 항목의 `RESOLVED:` 줄이 결정과 그 자리다.
 
 1. **`riverpod_lint` 3건 vs 2건**
    - What we know: 셋 다 한 줄씩 뜨고 2건으로도 D-02·`exit 2` 를 만족한다.
    - What's unclear: plugin 새 버전이 `provider_parameters` 의 동작을 바꿀 가능성 (줄이 많을수록 저장소 변경 없이 깨진다는 D-02 의 우려).
    - Recommendation: 3건으로 시작. 깨지면 그 줄을 지우는 것이 곧 "plugin 변경의 기록" 이다.
+   - **RESOLVED:** 3건 (`missing_provider_scope` warning, `provider_parameters` warning, `avoid_public_notifier_properties` info) — plan **02-01** Task 2 (`example/lib/main.dart` · `example/lib/riverpod_rules.dart`, 정답지 16줄 중 3줄). 이유: Phase 3 PRESET-07 이 plugin 진단 하나를 끈 뒤에도 warning 과 info 가 둘 다 남는다.
 2. **루트 옵션 파일에 `include: package:flutter_lints/flutter.yaml` 을 넣을지**
    - What we know: 넣으면 스크립트의 `print` 가 잡히고 0.6초 (M6). 안 넣으면 규칙 0개 (M6b).
    - What's unclear: 없음 — 취향의 문제. Phase 3 PRESET-06 이 루트 파일을 다시 손본다.
    - Recommendation: 넣는다. 스크립트는 `stdout.writeln` 을 쓴다.
+   - **RESOLVED:** 넣는다 — plan **02-01** Task 1 action 2 (루트 `analysis_options.yaml` 을 § Code Examples 7 의 전문으로; 스크립트는 `stdout.writeln` / `stderr.writeln` 만 쓴다). 이유: 넣지 않으면 `tool/verify.dart` 에 lint 규칙이 하나도 적용되지 않는다.
 3. **action 을 SHA 로 고정할지**
    - What we know: 오늘의 SHA 두 개를 확보했다. spike 와 조사 문서는 major tag 를 썼다.
    - Recommendation: major tag 유지 (개인 저장소, 읽기 권한만). 계획이 달리 정해도 비용은 없다.
+   - **RESOLVED:** major tag 유지 (`actions/checkout@v7`, `subosito/flutter-action@v2`; 구현 시점에 릴리스 페이지에서 major 를 다시 확인한다) — plan **02-04** Task 1 action 1. 오늘의 SHA 는 § Standard Stack 에 남아 있어 나중에 고정으로 바꿀 수 있다.
 
 ## Environment Availability
 
