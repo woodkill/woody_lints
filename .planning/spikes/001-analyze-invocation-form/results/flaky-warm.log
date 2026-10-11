@@ -1,0 +1,82 @@
+#1 기본: exit=255 진단=-1
+#1 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#1 플래그 --suppress-analytics: exit=2 진단=4
+#2 기본: exit=2 진단=4
+#2 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#2 플래그 --suppress-analytics: exit=2 진단=4
+#3 기본: exit=2 진단=4
+#3 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#3 플래그 --suppress-analytics: exit=2 진단=4
+#4 기본: exit=2 진단=4
+#4 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#4 플래그 --suppress-analytics: exit=2 진단=4
+#5 기본: exit=2 진단=4
+#5 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#5 플래그 --suppress-analytics: exit=2 진단=4
+#6 기본: exit=2 진단=4
+#6 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#6 플래그 --suppress-analytics: exit=2 진단=4
+#7 기본: exit=2 진단=4
+#7 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#7 플래그 --suppress-analytics: exit=2 진단=4
+#8 기본: exit=2 진단=4
+#8 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#8 플래그 --suppress-analytics: exit=2 진단=4
+#9 기본: exit=2 진단=4
+#9 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#9 플래그 --suppress-analytics: exit=2 진단=4
+#10 기본: exit=2 진단=4
+#10 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#10 플래그 --suppress-analytics: exit=2 진단=4
+#11 기본: exit=2 진단=4
+#11 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#11 플래그 --suppress-analytics: exit=2 진단=4
+#12 기본: exit=2 진단=4
+#12 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#12 플래그 --suppress-analytics: exit=2 진단=4
+#13 기본: exit=2 진단=4
+#13 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#13 플래그 --suppress-analytics: exit=2 진단=4
+#14 기본: exit=2 진단=4
+#14 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#14 플래그 --suppress-analytics: exit=2 진단=4
+#15 기본: exit=2 진단=4
+#15 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#15 플래그 --suppress-analytics: exit=2 진단=4
+#16 기본: exit=2 진단=4
+#16 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#16 플래그 --suppress-analytics: exit=2 진단=4
+#17 기본: exit=2 진단=4
+#17 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#17 플래그 --suppress-analytics: exit=2 진단=4
+#18 기본: exit=2 진단=4
+#18 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#18 플래그 --suppress-analytics: exit=2 진단=4
+#19 기본: exit=2 진단=4
+#19 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#19 플래그 --suppress-analytics: exit=2 진단=4
+#20 기본: exit=2 진단=4
+#20 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#20 플래그 --suppress-analytics: exit=2 진단=4
+#21 기본: exit=2 진단=4
+#21 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#21 플래그 --suppress-analytics: exit=2 진단=4
+#22 기본: exit=2 진단=4
+#22 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#22 플래그 --suppress-analytics: exit=2 진단=4
+#23 기본: exit=2 진단=4
+#23 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#23 플래그 --suppress-analytics: exit=2 진단=4
+#24 기본: exit=2 진단=4
+#24 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#24 플래그 --suppress-analytics: exit=2 진단=4
+#25 기본: exit=2 진단=4
+#25 환경변수 DASH__SUPPRESS_ANALYTICS=true: exit=2 진단=4
+#25 플래그 --suppress-analytics: exit=2 진단=4
+
+| 방식 | 실행 | 진단 4건 모두 | 종료 코드별 횟수 | 죽었을 때 stderr 첫 줄 |
+|---|---|---|---|---|
+| 기본 | 25 | 24 | exit 2 × 24, exit 255 × 1 | Unhandled exception: / SocketException: Connection attempt cancelled, host: www.google-analytics.com, port: 443 |
+| 환경변수 DASH__SUPPRESS_ANALYTICS=true | 25 | 25 | exit 2 × 25 | - |
+| 플래그 --suppress-analytics | 25 | 25 | exit 2 × 25 | - |
+exit=0

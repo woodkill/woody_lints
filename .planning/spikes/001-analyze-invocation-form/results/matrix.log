@@ -1,0 +1,37 @@
+Dart 3.13.4, 상태 폴더 <scratch>/s001/matrix
+
+| 실행 형태 | 상태 | exit | 시간 | 진단 수 | plugin 진단 | stderr | 비고 |
+|---|---|---|---|---|---|---|---|
+| A. fixture 에서 인자 없음 | cold #1 | 2 | 17.8s | 4 | 2/2 | - |  |
+| A. fixture 에서 인자 없음 | warm #1 | 2 | 6.4s | 4 | 2/2 | - |  |
+| A. fixture 에서 인자 없음 | cold #2 | 2 | 18.4s | 4 | 2/2 | - |  |
+| A. fixture 에서 인자 없음 | warm #2 | 2 | 5.7s | 4 | 2/2 | - |  |
+| A. fixture 에서 인자 없음 | cold #3 | 2 | 18.2s | 4 | 2/2 | - |  |
+| A. fixture 에서 인자 없음 | warm #3 | 2 | 5.4s | 4 | 2/2 | - |  |
+| A. fixture 에서 인자 없음 | cold #4 | 255 | 17.6s | 0 | 0/2 | 27줄 | stdout 에 JSON 줄이 없다 |
+| A. fixture 에서 인자 없음 | warm #4 | 255 | 5.6s | 0 | 0/2 | 27줄 | stdout 에 JSON 줄이 없다 |
+| A. fixture 에서 인자 없음 | cold #5 | 255 | 19.1s | 0 | 0/2 | 27줄 | stdout 에 JSON 줄이 없다 |
+| A. fixture 에서 인자 없음 | warm #5 | 2 | 6.9s | 4 | 2/2 | - |  |
+| B. fixture 에서 `.` | cold #1 | 2 | 18.3s | 4 | 2/2 | - |  |
+| B. fixture 에서 `.` | warm #1 | 2 | 5.5s | 4 | 2/2 | - |  |
+| C. fixture 에서 `lib` | cold #1 | 0 | 4.5s | 2 | 0/2 | - |  |
+| C. fixture 에서 `lib` | warm #1 | 0 | 2.3s | 2 | 0/2 | - |  |
+| D. fixture 에서 `lib/src` | cold #1 | 0 | 4.4s | 0 | 0/2 | - |  |
+| D. fixture 에서 `lib/src` | warm #1 | 0 | 3.5s | 0 | 0/2 | - |  |
+| E. fixture 에서 `lib/main.dart` | cold #1 | 2 | 17.2s | 3 | 1/2 | - |  |
+| E. fixture 에서 `lib/main.dart` | warm #1 | 2 | 5.0s | 3 | 1/2 | - |  |
+| F. fixture 에서 파일 2개 | cold #1 | 2 | 18.0s | 4 | 2/2 | - |  |
+| F. fixture 에서 파일 2개 | warm #1 | 2 | 5.6s | 4 | 2/2 | - |  |
+| G. fixture 에서 절대 경로(자기 자신) | cold #1 | 2 | 18.2s | 4 | 2/2 | - |  |
+| G. fixture 에서 절대 경로(자기 자신) | warm #1 | 2 | 5.6s | 4 | 2/2 | - |  |
+| H. 저장소 루트에서 상대 경로 | cold #1 | 255 | 18.1s | 0 | 0/2 | 27줄 | stdout 에 JSON 줄이 없다 |
+| H. 저장소 루트에서 상대 경로 | warm #1 | 2 | 5.9s | 4 | 2/2 | - |  |
+| I. 저장소 루트에서 절대 경로 | cold #1 | 2 | 18.4s | 4 | 2/2 | - |  |
+| I. 저장소 루트에서 절대 경로 | warm #1 | 2 | 5.7s | 4 | 2/2 | - |  |
+| J. 저장소 루트에서 `<fixture>/lib` | cold #1 | 0 | 4.4s | 2 | 0/2 | - |  |
+| J. 저장소 루트에서 `<fixture>/lib` | warm #1 | 0 | 2.3s | 2 | 0/2 | - |  |
+| K. fixture 의 부모에서 `fixture` | cold #1 | 2 | 18.1s | 4 | 2/2 | - |  |
+| K. fixture 의 부모에서 `fixture` | warm #1 | 2 | 6.2s | 4 | 2/2 | - |  |
+
+원본 결과: <repo>/.planning/spikes/001-analyze-invocation-form/results/matrix.json
+exit=0
