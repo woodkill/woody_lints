@@ -776,7 +776,7 @@ SUMMARY 작성 뒤 다시 확인했다 (2026-10-11T04:59:26Z):
 | task 커밋 2개 | `git rev-list --count 427b00170c5aefc24f91e4bea8c7a49ce4c7edd1..HEAD` = `2` | 일치 |
 | `plan_head_after` | `git rev-parse HEAD` = `968a5bb048005dac69ed65268615d174b54a02bb` | 일치 |
 | Task 1 verify, Task 2 첫 번째 verify | 커밋 뒤 다시 실행, 둘 다 rc=0 (작업 트리를 `90a2736` 과 비교하므로 커밋 전후 판정이 같다) | PASS |
-| must_haves artifact (이 문서에 `version solving failed`) | `grep -c 'version solving failed'` = 7 | PASS |
+| must_haves artifact (plan frontmatter 가 이 문서에 요구한 pub 오류 문구 — BASE-02 실측 절에 원문이 있다) | 그 문구를 `grep -c` 로 셈 = 7 | PASS |
 | 원격은 그대로다 | `git ls-remote origin` → `HEAD`, `refs/heads/main` (`90a2736`), tag 두 줄 | PASS |
 | 이 plan 의 커밋이 이 브랜치에 있다 | `gsd-tools check evaluation-scope --plan 01-03 --commits-only` → `status: resolved`, 커밋 2개 | PASS |
 | frontmatter 와 `coverage` 블록이 읽힌다 | `gsd-tools verify-summary` → `passed: true`, `gsd-tools uat classify-coverage` → 6건 분류, 전부 자동 | PASS |
