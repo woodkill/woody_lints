@@ -2,19 +2,19 @@
 gsd_state_version: "1.0"
 milestone: v2.0
 milestone_name: Package Rework
-current_phase: 2
+current_phase: 02
 current_phase_name: Verification Harness
 status: executing
-stopped_at: Phase 2 context gathered
-last_updated: "2026-10-11T15:14:39.200Z"
-last_activity: 2026-10-11
-last_activity_desc: Phase 1 complete, transitioned to Phase 2
-state_head: 26243661d6587744a03484b69b007d32daba675f
+stopped_at: Completed 02-01-PLAN.md
+last_updated: "2026-10-11T16:18:35.763Z"
+last_activity: 2026-10-12
+last_activity_desc: Phase 02 execution started
+state_head: 74fafb285b3826fc26536974dce4598ab376e8bf
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 8
-  completed_plans: 4
+  completed_plans: 5
   percent: 17
 ---
 
@@ -25,14 +25,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-10-11)
 
 **Core value:** 사용 프로젝트가 `include` 한 줄로 받는 규칙이 문서에 적힌 그대로 적용되고, 각 규칙이 왜 켜져 있는지 근거가 남아 있다.
-**Current focus:** Phase 2 — Verification Harness
+**Current focus:** Phase 02 — Verification Harness
 
 ## Current Position
 
-Phase: 2 (Verification Harness) — READY TO EXECUTE
-Plan: Not started
+Phase: 02 (Verification Harness) — EXECUTING
+Plan: 2 of 4
 Status: Ready to execute
-Last activity: 2026-10-11 — Phase 1 complete, transitioned to Phase 2
+Last activity: 2026-10-12 — Phase 02 execution started
 
 Progress: [██░░░░░░░░] 17%
 
@@ -62,6 +62,7 @@ Progress: [██░░░░░░░░] 17%
 | Phase 01 P02 | 6 min | 2 tasks | 1 files |
 | Phase 01 P03 | 4 min | 3 tasks | 4 files |
 | Phase 01 P04 | 3 min | 2 tasks | 3 files |
+| Phase 02 P01 | 8 min | 2 tasks | 14 files |
 
 ## Accumulated Context
 
@@ -89,6 +90,11 @@ Recent decisions affecting current work:
 - [Phase 01]: `VERSIONING.md` 의 "자동 검사" 는 등급 기준이 아니라 받는 쪽이 겪는 일의 설명이다 — `dart analyze` 는 `--fatal-warnings` 기본 켜짐 / `--fatal-infos` 기본 꺼짐 (Dart 3.13.4), `flutter analyze` 는 둘 다 기본 켜짐 (Flutter 3.47.5), 2026-10-11 확인
 - [Phase 01]: UAT 12개 완료 (2026-10-11). 처리 기록표의 WR-03 메모가 리뷰 도구 재실행으로 비워진 것은 소유자가 받아들였다 — `01-VERIFICATION.md` 의 `overrides` 에 기록. 같은 메모는 `01-04-SUMMARY.md`, `01-REVIEW.md` 의 WR-03 본문에 남아 있다
 - [Phase 01]: `VERSIONING.md` 30행에 "plugin 이나 기반 세트의 하한을 올릴 때는 새 버전이 요구하는 Dart 버전을 본다" 는 전제 한 문장을 더하는 일은 나중으로 미뤘다 — ROADMAP 의 Backlog `Phase 999.1`
+- [Phase 02]: 검증 명령 `tool/verify.dart` 의 종료 코드는 0 모두 통과 / 1 단계 실패 / 64 사용법 오류(모르는 인자, CI 에서 `--update`) / 69 `pub get` 실패 / 70 예외로 끝남 이다. 78(SDK 불일치)은 plan 02-02 가 더한다
+- [Phase 02]: 정답지 `example/expected_diagnostics.txt` 는 `exit 2` + 16줄이고, 실제 저장소에서 `--update` 로 만든 결과가 `02-RESEARCH.md` 권고 2 의 복사본 실측과 한 줄도 다르지 않았다 (Dart 3.13.4, `riverpod_lint` 3.1.9, 2026-10-12). 줄 번호가 샘플 파일의 모양에 묶여 있으므로 샘플을 고치면 `--update` 로 갱신하고 diff 를 검토한다
+- [Phase 02]: 검증 명령의 전용 상태 폴더는 `.dart_tool/woody_verify/example/` 이고 그 `.plugin_manager` 아래 폴더는 정확히 하나였다. 스크립트는 이 폴더를 지우지 않는다 — 지우는 것은 plugin 준비 실패 뒤의 복구 수단이다
+- [Phase 02]: 루트 `fvm dart pub get` 은 `example/` 도 함께 풀지만 `example/pubspec.lock` 을 바꾸지 않았다. lock 은 `example/` 에서 `fvm dart pub get` 으로 만들어 커밋했고 스크립트는 `--enforce-lockfile` 로 받는다. `example/` 에서 `flutter pub get` 은 돌리지 않는다
+- [Phase 02]: `tool/verify.dart` 의 plugin 준비 실패 분기와 도구 사망 분기는 plan 02-01 에서 실제로 일으켜 보지 않았다 (`02-01-SUMMARY.md` coverage D9). 정답지와 다름 / 정답지 없음 / 형식 오류 70 / lock 어긋남 69 / 인자 오류 64 는 실행으로 확인했다
 
 ### Pending Todos
 
@@ -113,6 +119,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-11T10:48:07.254Z
-Stopped at: Phase 2 context gathered
-Resume file: .planning/phases/02-verification-harness/02-CONTEXT.md
+Last session: 2026-10-11T16:18:35.746Z
+Stopped at: Completed 02-01-PLAN.md
+Resume file: None
