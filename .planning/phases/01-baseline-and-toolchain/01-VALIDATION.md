@@ -3,9 +3,9 @@ phase: "1"
 slug: "baseline-and-toolchain"
 # status lifecycle: draft (seeded by plan-phase) → validated (set by validate-phase §6)
 # audit-milestone §5.5 distinguishes NOT-VALIDATED (draft) from PARTIAL (validated + nyquist_compliant: false) (#2117)
-status: draft
-nyquist_compliant: false
-wave_0_complete: false
+status: validated
+nyquist_compliant: true
+wave_0_complete: true
 created: "2026-10-11"
 ---
 
@@ -46,17 +46,17 @@ Task ID / Plan / Wave / Threat Ref 는 2026-10-11 확정된 계획(`01-01-PLAN.m
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 01-01-T1 | 01-01 | 1 | REL-01 | T-01-01, T-01-03 | 로컬 tag 가 annotated 이고 `90a2736` = `origin/main` 을 가리킨다 (push 전 4중 점검) | smoke (shell, `git fetch` 읽기 전용) | `git fetch origin --quiet && test "$(git cat-file -t v1.3.0)" = tag && test "$(git rev-parse 'v1.3.0^{commit}')" = 90a2736b8d998c84467faf562a0fec720b797eaf && test "$(git rev-parse 'v1.3.0^{commit}')" = "$(git rev-parse origin/main)"` | ✅ | ⬜ pending |
-| 01-01-T1 | 01-01 | 1 | REL-01 | — | N/A | smoke (shell) | `PS=$(git show v1.3.0:pubspec.yaml) && printf '%s\n' "$PS" \| grep -qx 'version: 1.3.0'` | ✅ | ⬜ pending |
-| 01-01-T3 | 01-01 | 1 | REL-01 | T-01-01, T-01-02 | 원격 tag 가 `90a2736` 을 가리키고 push 한 것은 tag 하나뿐이다 (브랜치는 `main` 하나) | smoke (shell, 읽기 전용 네트워크) | `TAGS=$(git ls-remote --tags origin) && printf '%s\n' "$TAGS" \| grep -qF "$(printf '90a2736b8d998c84467faf562a0fec720b797eaf\trefs/tags/v1.3.0^{}')" && HEADS=$(git ls-remote --heads origin) && test "$(printf '%s\n' "$HEADS" \| wc -l \| tr -d ' ')" = 1` | ✅ | ⬜ pending |
-| 01-03-T1 | 01-03 | 3 | BASE-01 | T-01-07 | `fvm use` 가 `.fvmrc` 와 `.vscode/settings.json` 두 파일만 바꾼다 (커밋 파일 목록이 정확히 둘) | smoke (shell) | `grep -q '"flutter": "3.47.5"' .fvmrc && grep -q '"dart.flutterSdkPath": ".fvm/versions/3.47.5"' .vscode/settings.json && fvm flutter --version 2>/dev/null \| grep -q '^Flutter 3.47.5 ' && fvm dart --version 2>&1 \| grep -q 'version: 3.13.4 '` (+ 작업 트리 `git diff --numstat 90a2736 -- .fvmrc .vscode/settings.json` 두 줄 `1 1`, `.gitignore` 등 다른 추적 파일 불변 — 01-03-PLAN.md Task 1; 커밋 파일 목록 2 는 acceptance "커밋 뒤") | ✅ | ⬜ pending |
-| 01-03-T2 | 01-03 | 3 | BASE-02 | — | N/A | smoke (shell) | `grep -qxF '  sdk: ^3.13.0' pubspec.yaml && grep -qxF 'version: 2.0.0-dev' pubspec.yaml` (+ 작업 트리 `git diff --numstat 90a2736 -- pubspec.yaml` `2 2`, 루트 `fvm dart pub get` rc=0 — 01-03-PLAN.md Task 2 첫 automated; 커밋 파일 목록 2 는 acceptance "커밋 뒤") | ✅ | ⬜ pending |
-| 01-03-T3 | 01-03 | 3 | BASE-02 | T-01-06 | `sdk` 하한 상향이 `main` 에 들어가지 않는다 | smoke (shell, 읽기 전용 네트워크) | `git fetch origin --quiet && test "$(git rev-parse origin/main)" = 90a2736b8d998c84467faf562a0fec720b797eaf && git diff --quiet v1.3.0 origin/main -- lib pubspec.yaml` | ✅ | ⬜ pending |
-| 01-03-T2 | 01-03 | 3 | BASE-02 | T-01-08 | 임시 프로젝트는 저장소 밖(`mktemp -d`)에 두고, probe 전후의 `git status --short -- . ':(exclude).planning'` 이 같다 | integration (shell, 저장소 밖 임시 사용 프로젝트, `path:` 의존) | 임시 프로젝트에서 `/Users/woody/fvm/versions/3.41.9/bin/dart pub get` (없으면 3.41.4 → 3.41.2) 이 rc=1 이고 출력에 `requires SDK version ^3.13.0, version solving failed` 가 있다; `/Users/woody/fvm/versions/3.47.5/bin/dart pub get` 은 rc=0 이고 lock 에 `version: "2.0.0-dev"` — 01-03-PLAN.md Task 2 둘째 automated | ✅ (task 안에서 생성) | ⬜ pending |
-| 01-03-T3 | 01-03 | 3 | BASE-02, REL-01 | T-01-09 | 옛 SDK 프로젝트가 GitHub 의 `ref: v1.3.0` 으로 1.3.0 을 받는다 — CHANGELOG "올리기 전에" 의 실증 | integration (shell, 저장소 밖 임시 사용 프로젝트, `git:` + `ref: v1.3.0`, 읽기 전용 네트워크) | 옛 SDK `dart pub get` rc=0, lock 에 `resolved-ref: "90a2736b8d998c84467faf562a0fec720b797eaf"` 와 `version: "1.3.0"` — 01-03-PLAN.md Task 3 automated | ✅ (task 안에서 생성) | ⬜ pending |
-| 01-02-T1 | 01-02 | 2 | BASE-03 | T-01-04 | 기준표가 D-05 의 11행과 글자 단위로 같다 (행 누락·변형 없음) | 구조 검사 (shell) + manual (`<human-check>` → end-of-phase UAT) | `test -f VERSIONING.md && head -1 VERSIONING.md \| grep -qx '# 버전 정책 (Versioning)' && grep -qx '## 판정 순서' VERSIONING.md && grep -qx '## 기준표' VERSIONING.md && grep -qx '## 실제 사례' VERSIONING.md` + 기준표 절 등급 행 `wc -l` = 11 + 11행 `grep -F` 글자 대조 + D-10 풀이 셋 — 01-02-PLAN.md Task 1 | ✅ | ⬜ pending |
-| 01-02-T2 | 01-02 | 2 | BASE-04 | — | N/A | 구조 검사 (shell) | `grep -qx '## CHANGELOG 항목 형식' VERSIONING.md && grep -qF '## X.Y.Z - YYYY-MM-DD' VERSIONING.md && grep -qF '### 새로 생기는 경고' VERSIONING.md && grep -qF '실측: flutter_starter_kit (Dart 파일 N개), Flutter X.Y.Z, YYYY-MM-DD' VERSIONING.md` (+ 4열 헤더, 2.1.0 예시 — 01-02-PLAN.md Task 2) | ✅ | ⬜ pending |
-| 01-03-T2 | 01-03 | 3 | BASE-04 | — | N/A | smoke (shell) | `head -1 CHANGELOG.md \| grep -qxF '## 2.0.0 - 미출시' && grep -qxF '지원 SDK: Dart 3.13 이상 (이전: Dart 3.10.4 이상)' CHANGELOG.md && grep -qxF '### 새로 생기는 경고' CHANGELOG.md` (+ 마지막 11행 = `git show 90a2736:CHANGELOG.md` — 01-03-PLAN.md Task 2 첫 automated) | ✅ | ⬜ pending |
+| 01-01-T1 | 01-01 | 1 | REL-01 | T-01-01, T-01-03 | 로컬 tag 가 annotated 이고 `90a2736` = `origin/main` 을 가리킨다 (push 전 4중 점검) | smoke (shell, `git fetch` 읽기 전용) | `git fetch origin --quiet && test "$(git cat-file -t v1.3.0)" = tag && test "$(git rev-parse 'v1.3.0^{commit}')" = 90a2736b8d998c84467faf562a0fec720b797eaf && test "$(git rev-parse 'v1.3.0^{commit}')" = "$(git rev-parse origin/main)"` | ✅ | ✅ green |
+| 01-01-T1 | 01-01 | 1 | REL-01 | — | N/A | smoke (shell) | `PS=$(git show v1.3.0:pubspec.yaml) && printf '%s\n' "$PS" \| grep -qx 'version: 1.3.0'` | ✅ | ✅ green |
+| 01-01-T3 | 01-01 | 1 | REL-01 | T-01-01, T-01-02 | 원격 tag 가 `90a2736` 을 가리키고 push 한 것은 tag 하나뿐이다 (브랜치는 `main` 하나) | smoke (shell, 읽기 전용 네트워크) | `TAGS=$(git ls-remote --tags origin) && printf '%s\n' "$TAGS" \| grep -qF "$(printf '90a2736b8d998c84467faf562a0fec720b797eaf\trefs/tags/v1.3.0^{}')" && HEADS=$(git ls-remote --heads origin) && test "$(printf '%s\n' "$HEADS" \| wc -l \| tr -d ' ')" = 1` | ✅ | ✅ green |
+| 01-03-T1 | 01-03 | 3 | BASE-01 | T-01-07 | `fvm use` 가 `.fvmrc` 와 `.vscode/settings.json` 두 파일만 바꾼다 (커밋 파일 목록이 정확히 둘) | smoke (shell) | `grep -q '"flutter": "3.47.5"' .fvmrc && grep -q '"dart.flutterSdkPath": ".fvm/versions/3.47.5"' .vscode/settings.json && fvm flutter --version 2>/dev/null \| grep -q '^Flutter 3.47.5 ' && fvm dart --version 2>&1 \| grep -q 'version: 3.13.4 '` (+ 작업 트리 `git diff --numstat 90a2736 -- .fvmrc .vscode/settings.json` 두 줄 `1 1`, `.gitignore` 등 다른 추적 파일 불변 — 01-03-PLAN.md Task 1; 커밋 파일 목록 2 는 acceptance "커밋 뒤") | ✅ | ✅ green |
+| 01-03-T2 | 01-03 | 3 | BASE-02 | — | N/A | smoke (shell) | `grep -qxF '  sdk: ^3.13.0' pubspec.yaml && grep -qxF 'version: 2.0.0-dev' pubspec.yaml` (+ 작업 트리 `git diff --numstat 90a2736 -- pubspec.yaml` `2 2`, 루트 `fvm dart pub get` rc=0 — 01-03-PLAN.md Task 2 첫 automated; 커밋 파일 목록 2 는 acceptance "커밋 뒤") | ✅ | ✅ green |
+| 01-03-T3 | 01-03 | 3 | BASE-02 | T-01-06 | `sdk` 하한 상향이 `main` 에 들어가지 않는다 | smoke (shell, 읽기 전용 네트워크) | `git fetch origin --quiet && test "$(git rev-parse origin/main)" = 90a2736b8d998c84467faf562a0fec720b797eaf && git diff --quiet v1.3.0 origin/main -- lib pubspec.yaml` | ✅ | ✅ green |
+| 01-03-T2 | 01-03 | 3 | BASE-02 | T-01-08 | 임시 프로젝트는 저장소 밖(`mktemp -d`)에 두고, probe 전후의 `git status --short -- . ':(exclude).planning'` 이 같다 | integration (shell, 저장소 밖 임시 사용 프로젝트, `path:` 의존) | 임시 프로젝트에서 `/Users/woody/fvm/versions/3.41.9/bin/dart pub get` (없으면 3.41.4 → 3.41.2) 이 rc=1 이고 출력에 `requires SDK version ^3.13.0, version solving failed` 가 있다; `/Users/woody/fvm/versions/3.47.5/bin/dart pub get` 은 rc=0 이고 lock 에 `version: "2.0.0-dev"` — 01-03-PLAN.md Task 2 둘째 automated | ✅ (task 안에서 생성) | ✅ green |
+| 01-03-T3 | 01-03 | 3 | BASE-02, REL-01 | T-01-09 | 옛 SDK 프로젝트가 GitHub 의 `ref: v1.3.0` 으로 1.3.0 을 받는다 — CHANGELOG "올리기 전에" 의 실증 | integration (shell, 저장소 밖 임시 사용 프로젝트, `git:` + `ref: v1.3.0`, 읽기 전용 네트워크) | 옛 SDK `dart pub get` rc=0, lock 에 `resolved-ref: "90a2736b8d998c84467faf562a0fec720b797eaf"` 와 `version: "1.3.0"` — 01-03-PLAN.md Task 3 automated | ✅ (task 안에서 생성) | ✅ green |
+| 01-02-T1 | 01-02 | 2 | BASE-03 | T-01-04 | 기준표가 D-05 의 11행과 글자 단위로 같다 (행 누락·변형 없음) | 구조 검사 (shell) + manual (`<human-check>` → end-of-phase UAT) | `test -f VERSIONING.md && head -1 VERSIONING.md \| grep -qx '# 버전 정책 (Versioning)' && grep -qx '## 판정 순서' VERSIONING.md && grep -qx '## 기준표' VERSIONING.md && grep -qx '## 실제 사례' VERSIONING.md` + 기준표 절 등급 행 `wc -l` = 11 + 11행 `grep -F` 글자 대조 + D-10 풀이 셋 — 01-02-PLAN.md Task 1 | ✅ | ✅ green |
+| 01-02-T2 | 01-02 | 2 | BASE-04 | — | N/A | 구조 검사 (shell) | `grep -qx '## CHANGELOG 항목 형식' VERSIONING.md && grep -qF '## X.Y.Z - YYYY-MM-DD' VERSIONING.md && grep -qF '### 새로 생기는 경고' VERSIONING.md && grep -qF '실측: flutter_starter_kit (Dart 파일 N개), Flutter X.Y.Z, YYYY-MM-DD' VERSIONING.md` (+ 4열 헤더, 2.1.0 예시 — 01-02-PLAN.md Task 2) | ✅ | ✅ green |
+| 01-03-T2 | 01-03 | 3 | BASE-04 | — | N/A | smoke (shell) | `head -1 CHANGELOG.md \| grep -qxF '## 2.0.0 - 미출시' && grep -qxF '지원 SDK: Dart 3.13 이상 (이전: Dart 3.10.4 이상)' CHANGELOG.md && grep -qxF '### 새로 생기는 경고' CHANGELOG.md` (+ 마지막 11행 = `git show 90a2736:CHANGELOG.md` — 01-03-PLAN.md Task 2 첫 automated) | ✅ | ✅ green |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -81,11 +81,19 @@ Existing infrastructure covers all phase requirements.
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 30s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 covers all MISSING references
+- [x] No watch-mode flags
+- [x] Feedback latency < 30s
+- [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** validated 2026-10-11 — 자동 명령 10개를 phase 실행 뒤 다시 돌려 모두 통과했고, 임시 프로젝트 실측 2건은 `01-03-SUMMARY.md` 의 출력 원문으로 확인했다. 사람 확인 2건 중 REL-01 (push 전 소유자 확인)은 2026-10-11 에 수행되었고, BASE-03 (소유자의 `VERSIONING.md` 읽기 판정)은 phase 끝 UAT 에 남아 있다
+
+## Validation Audit 2026-10-11
+
+| Metric | Count |
+|---|---|
+| Gaps found | 0 |
+| Resolved | 0 |
+| Escalated | 0 |
