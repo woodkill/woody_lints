@@ -1,0 +1,517 @@
+{
+  "date": "2026-10-12T13:59:12.914955Z",
+  "dart": "3.13.4",
+  "partA": {
+    "exitCodes": {
+      "p311old": 2,
+      "p313old": 2,
+      "p313new": 0,
+      "p311new": 3
+    },
+    "byFile": {
+      "p311old": {
+        "strict_inference.dart": [
+          "inference_failure_on_collection_literal"
+        ],
+        "async_return_with_no_await.dart": [
+          "async_return_with_no_await"
+        ],
+        "control_avoid_print.dart": [
+          "avoid_print"
+        ],
+        "no_dynamic_casts.dart": [
+          "no_dynamic_casts"
+        ],
+        "no_raw_types.dart": [
+          "no_raw_types"
+        ]
+      },
+      "p313old": {
+        "strict_inference.dart": [
+          "inference_failure_on_collection_literal"
+        ],
+        "async_return_with_no_await.dart": [
+          "async_return_with_no_await"
+        ],
+        "control_avoid_print.dart": [
+          "avoid_print"
+        ],
+        "empty_container_bodies.dart": [
+          "empty_container_bodies",
+          "use_primary_constructors"
+        ],
+        "no_dynamic_casts.dart": [
+          "no_dynamic_casts"
+        ],
+        "no_raw_types.dart": [
+          "empty_container_bodies",
+          "no_raw_types",
+          "use_primary_constructors"
+        ],
+        "unnecessary_const_in_enum_constructor.dart": [
+          "unnecessary_const_in_enum_constructor",
+          "unnecessary_type_name_in_constructor",
+          "use_primary_constructors"
+        ],
+        "unnecessary_type_name_in_constructor.dart": [
+          "unnecessary_type_name_in_constructor",
+          "unnecessary_type_name_in_constructor"
+        ],
+        "use_primary_constructors.dart": [
+          "unnecessary_type_name_in_constructor",
+          "use_primary_constructors"
+        ]
+      },
+      "p313new": {
+        "initialize_in_field_declaration.dart": [
+          "initialize_in_field_declaration"
+        ],
+        "unnecessary_const_in_enum_constructor_primary.dart": [
+          "unnecessary_const_in_enum_constructor"
+        ],
+        "unnecessary_primary_constructor_body.dart": [
+          "unnecessary_primary_constructor_body"
+        ],
+        "use_declaring_parameters.dart": [
+          "initialize_in_field_declaration",
+          "use_declaring_parameters"
+        ]
+      },
+      "p311new": {
+        "initialize_in_field_declaration.dart": [
+          "experiment_not_enabled",
+          "experiment_not_enabled"
+        ],
+        "unnecessary_const_in_enum_constructor_primary.dart": [
+          "experiment_not_enabled"
+        ],
+        "unnecessary_primary_constructor_body.dart": [
+          "experiment_not_enabled",
+          "experiment_not_enabled",
+          "unnecessary_primary_constructor_body"
+        ],
+        "use_declaring_parameters.dart": [
+          "experiment_not_enabled",
+          "experiment_not_enabled"
+        ]
+      }
+    }
+  },
+  "observed": {
+    "async_return_with_no_await": {
+      "guess": "open",
+      "at311": true,
+      "at313": true,
+      "matchesGuess": true
+    },
+    "empty_container_bodies": {
+      "guess": "gate",
+      "at311": false,
+      "at313": true,
+      "matchesGuess": true
+    },
+    "initialize_in_field_declaration": {
+      "guess": "gate",
+      "at311": false,
+      "at313": true,
+      "matchesGuess": true
+    },
+    "unnecessary_const_in_enum_constructor": {
+      "guess": "gate",
+      "at311": false,
+      "at313": true,
+      "matchesGuess": true
+    },
+    "unnecessary_primary_constructor_body": {
+      "guess": "syntax",
+      "at311": true,
+      "at313": true,
+      "matchesGuess": false
+    },
+    "unnecessary_type_name_in_constructor": {
+      "guess": "gate",
+      "at311": false,
+      "at313": true,
+      "matchesGuess": true
+    },
+    "use_declaring_parameters": {
+      "guess": "gate",
+      "at311": false,
+      "at313": true,
+      "matchesGuess": true
+    },
+    "use_primary_constructors": {
+      "guess": "gate",
+      "at311": false,
+      "at313": true,
+      "matchesGuess": true
+    },
+    "no_raw_types": {
+      "guess": "open",
+      "at311": true,
+      "at313": true,
+      "matchesGuess": true
+    },
+    "no_dynamic_casts": {
+      "guess": "open",
+      "at311": true,
+      "at313": true,
+      "matchesGuess": true
+    },
+    "strict-inference": {
+      "guess": "open",
+      "at311": true,
+      "at313": true,
+      "matchesGuess": true
+    }
+  },
+  "consumerFacts": {
+    "dartFiles": 469,
+    "sdk": "^3.11.1"
+  },
+  "shots": [
+    {
+      "id": "B0",
+      "exitCode": 2,
+      "elapsedMs": 20646,
+      "jsonOk": true,
+      "pluginHeader": false,
+      "pluginFolders": 1,
+      "pluginVersion": "3.1.9",
+      "woodySource": "repo",
+      "lines": {
+        "all": 16,
+        "marker": 16,
+        "project": 0
+      },
+      "countByAreaCode": {
+        "marker": {
+          "missing_provider_scope": 1,
+          "provider_parameters": 1,
+          "prefer_const_constructors": 1,
+          "prefer_const_literals_to_create_immutables": 1,
+          "always_declare_return_types": 1,
+          "prefer_final_locals": 1,
+          "prefer_single_quotes": 1,
+          "unawaited_futures": 1,
+          "sized_box_for_whitespace": 1,
+          "sort_child_properties_last": 1,
+          "use_build_context_synchronously": 1,
+          "avoid_print": 1,
+          "control_flow_in_finally": 1,
+          "slash_for_doc_comments": 1,
+          "prefer_is_empty": 1,
+          "avoid_public_notifier_properties": 1
+        }
+      },
+      "projectDigest": "cbf29ce484222325",
+      "markerLines": [
+        "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+        "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+        "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+        "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+        "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+        "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/woody_probe_marker/main.dart:5  warning  missing_provider_scope",
+        "lib/woody_probe_marker/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/woody_probe_marker/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ]
+    },
+    {
+      "id": "B1",
+      "exitCode": 2,
+      "elapsedMs": 20491,
+      "jsonOk": true,
+      "pluginHeader": false,
+      "pluginFolders": 1,
+      "pluginVersion": "3.1.9",
+      "woodySource": "repo",
+      "lines": {
+        "all": 156,
+        "marker": 20,
+        "project": 136
+      },
+      "countByAreaCode": {
+        "marker": {
+          "missing_provider_scope": 1,
+          "inference_failure_on_collection_literal": 1,
+          "provider_parameters": 1,
+          "prefer_const_constructors": 1,
+          "prefer_const_literals_to_create_immutables": 1,
+          "always_declare_return_types": 1,
+          "prefer_final_locals": 1,
+          "prefer_single_quotes": 1,
+          "unawaited_futures": 1,
+          "sized_box_for_whitespace": 1,
+          "sort_child_properties_last": 1,
+          "use_build_context_synchronously": 1,
+          "avoid_print": 1,
+          "control_flow_in_finally": 1,
+          "slash_for_doc_comments": 1,
+          "prefer_is_empty": 1,
+          "async_return_with_no_await": 1,
+          "no_dynamic_casts": 1,
+          "no_raw_types": 1,
+          "avoid_public_notifier_properties": 1
+        },
+        "test": {
+          "inference_failure_on_function_invocation": 106,
+          "async_return_with_no_await": 14
+        },
+        "lib": {
+          "async_return_with_no_await": 16
+        }
+      },
+      "projectDigest": "8cd48dbe474d233d",
+      "markerLines": [
+        "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+        "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+        "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+        "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+        "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+        "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/woody_probe_marker/main.dart:5  warning  missing_provider_scope",
+        "lib/woody_probe_marker/new_rules/async_return_with_no_await.dart:3  info  async_return_with_no_await",
+        "lib/woody_probe_marker/new_rules/no_dynamic_casts.dart:3  info  no_dynamic_casts",
+        "lib/woody_probe_marker/new_rules/no_raw_types.dart:5  info  no_raw_types",
+        "lib/woody_probe_marker/new_rules/strict_inference.dart:3  warning  inference_failure_on_collection_literal",
+        "lib/woody_probe_marker/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/woody_probe_marker/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ]
+    },
+    {
+      "id": "B2",
+      "exitCode": 2,
+      "elapsedMs": 20455,
+      "jsonOk": true,
+      "pluginHeader": false,
+      "pluginFolders": 1,
+      "pluginVersion": "3.1.9",
+      "woodySource": "repo",
+      "lines": {
+        "all": 2067,
+        "marker": 38,
+        "project": 2029
+      },
+      "countByAreaCode": {
+        "marker": {
+          "missing_provider_scope": 1,
+          "inference_failure_on_collection_literal": 1,
+          "provider_parameters": 1,
+          "prefer_const_constructors": 1,
+          "prefer_const_literals_to_create_immutables": 1,
+          "always_declare_return_types": 1,
+          "prefer_final_locals": 1,
+          "prefer_single_quotes": 1,
+          "unawaited_futures": 1,
+          "sized_box_for_whitespace": 1,
+          "sort_child_properties_last": 1,
+          "use_build_context_synchronously": 1,
+          "avoid_print": 1,
+          "control_flow_in_finally": 1,
+          "slash_for_doc_comments": 1,
+          "prefer_is_empty": 1,
+          "async_return_with_no_await": 1,
+          "use_primary_constructors": 5,
+          "empty_container_bodies": 2,
+          "no_dynamic_casts": 1,
+          "no_raw_types": 1,
+          "unnecessary_const_in_enum_constructor": 2,
+          "unnecessary_type_name_in_constructor": 4,
+          "initialize_in_field_declaration": 2,
+          "unnecessary_primary_constructor_body": 1,
+          "use_declaring_parameters": 1,
+          "prefer_initializing_formals": 1,
+          "avoid_public_notifier_properties": 1
+        },
+        "test": {
+          "inference_failure_on_function_invocation": 106,
+          "use_primary_constructors": 707,
+          "empty_container_bodies": 615,
+          "unnecessary_type_name_in_constructor": 59,
+          "prefer_initializing_formals": 3,
+          "async_return_with_no_await": 14
+        },
+        "bin": {
+          "use_primary_constructors": 3,
+          "unnecessary_type_name_in_constructor": 2
+        },
+        "lib": {
+          "unnecessary_type_name_in_constructor": 220,
+          "use_primary_constructors": 258,
+          "unnecessary_const_in_enum_constructor": 2,
+          "prefer_initializing_formals": 24,
+          "async_return_with_no_await": 16
+        }
+      },
+      "projectDigest": "f485f3856f60bb88",
+      "markerLines": [
+        "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+        "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+        "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+        "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+        "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+        "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/woody_probe_marker/main.dart:5  warning  missing_provider_scope",
+        "lib/woody_probe_marker/new_rules/async_return_with_no_await.dart:3  info  async_return_with_no_await",
+        "lib/woody_probe_marker/new_rules/empty_container_bodies.dart:2  info  empty_container_bodies",
+        "lib/woody_probe_marker/new_rules/empty_container_bodies.dart:2  info  use_primary_constructors",
+        "lib/woody_probe_marker/new_rules/no_dynamic_casts.dart:3  info  no_dynamic_casts",
+        "lib/woody_probe_marker/new_rules/no_raw_types.dart:2  info  empty_container_bodies",
+        "lib/woody_probe_marker/new_rules/no_raw_types.dart:2  info  use_primary_constructors",
+        "lib/woody_probe_marker/new_rules/no_raw_types.dart:5  info  no_raw_types",
+        "lib/woody_probe_marker/new_rules/strict_inference.dart:3  warning  inference_failure_on_collection_literal",
+        "lib/woody_probe_marker/new_rules/unnecessary_const_in_enum_constructor.dart:9  info  unnecessary_const_in_enum_constructor",
+        "lib/woody_probe_marker/new_rules/unnecessary_const_in_enum_constructor.dart:9  info  unnecessary_type_name_in_constructor",
+        "lib/woody_probe_marker/new_rules/unnecessary_const_in_enum_constructor.dart:9  info  use_primary_constructors",
+        "lib/woody_probe_marker/new_rules/unnecessary_type_name_in_constructor.dart:4  info  unnecessary_type_name_in_constructor",
+        "lib/woody_probe_marker/new_rules/unnecessary_type_name_in_constructor.dart:7  info  unnecessary_type_name_in_constructor",
+        "lib/woody_probe_marker/new_rules/use_primary_constructors.dart:4  info  unnecessary_type_name_in_constructor",
+        "lib/woody_probe_marker/new_rules/use_primary_constructors.dart:4  info  use_primary_constructors",
+        "lib/woody_probe_marker/new_rules_313/initialize_in_field_declaration.dart:3  info  initialize_in_field_declaration",
+        "lib/woody_probe_marker/new_rules_313/unnecessary_const_in_enum_constructor_primary.dart:2  info  unnecessary_const_in_enum_constructor",
+        "lib/woody_probe_marker/new_rules_313/unnecessary_primary_constructor_body.dart:3  info  unnecessary_primary_constructor_body",
+        "lib/woody_probe_marker/new_rules_313/use_declaring_parameters.dart:2  info  use_declaring_parameters",
+        "lib/woody_probe_marker/new_rules_313/use_declaring_parameters.dart:6  info  initialize_in_field_declaration",
+        "lib/woody_probe_marker/new_rules_313/use_declaring_parameters.dart:6  info  prefer_initializing_formals",
+        "lib/woody_probe_marker/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/woody_probe_marker/riverpod_rules.dart:4  info  use_primary_constructors",
+        "lib/woody_probe_marker/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ]
+    }
+  ],
+  "perRule": {
+    "async_return_with_no_await": {
+      "B1marker": 1,
+      "B1project": 30,
+      "B2marker": 1,
+      "B2project": 30
+    },
+    "empty_container_bodies": {
+      "B1marker": 0,
+      "B1project": 0,
+      "B2marker": 2,
+      "B2project": 615
+    },
+    "initialize_in_field_declaration": {
+      "B1marker": 0,
+      "B1project": 0,
+      "B2marker": 2,
+      "B2project": 0
+    },
+    "unnecessary_const_in_enum_constructor": {
+      "B1marker": 0,
+      "B1project": 0,
+      "B2marker": 2,
+      "B2project": 2
+    },
+    "unnecessary_primary_constructor_body": {
+      "B1marker": 0,
+      "B1project": 0,
+      "B2marker": 1,
+      "B2project": 0
+    },
+    "unnecessary_type_name_in_constructor": {
+      "B1marker": 0,
+      "B1project": 0,
+      "B2marker": 4,
+      "B2project": 281
+    },
+    "use_declaring_parameters": {
+      "B1marker": 0,
+      "B1project": 0,
+      "B2marker": 1,
+      "B2project": 0
+    },
+    "use_primary_constructors": {
+      "B1marker": 0,
+      "B1project": 0,
+      "B2marker": 5,
+      "B2project": 968
+    },
+    "no_raw_types": {
+      "B1marker": 1,
+      "B1project": 0,
+      "B2marker": 1,
+      "B2project": 0
+    },
+    "no_dynamic_casts": {
+      "B1marker": 1,
+      "B1project": 0,
+      "B2marker": 1,
+      "B2project": 0
+    },
+    "strict-inference": {
+      "B1marker": 1,
+      "B1project": 106,
+      "B2marker": 1,
+      "B2project": 106
+    }
+  },
+  "b2ProjectByArea": {
+    "inference_failure_on_function_invocation": {
+      "test": 106
+    },
+    "use_primary_constructors": {
+      "bin": 3,
+      "lib": 258,
+      "test": 707
+    },
+    "unnecessary_type_name_in_constructor": {
+      "bin": 2,
+      "lib": 220,
+      "test": 59
+    },
+    "unnecessary_const_in_enum_constructor": {
+      "lib": 2
+    },
+    "async_return_with_no_await": {
+      "lib": 16,
+      "test": 14
+    },
+    "empty_container_bodies": {
+      "test": 615
+    }
+  },
+  "strictCodes": {
+    "inference_failure_on_collection_literal": 2,
+    "inference_failure_on_function_invocation": 212
+  },
+  "otherRulesProject": {
+    "B0": {},
+    "B1": {},
+    "B2": {
+      "prefer_initializing_formals": 27
+    }
+  },
+  "checks": {
+    "K1 대조: avoid_print 가 두 하한의 연습용 패키지에서 걸린다": true,
+    "K2 대조: 3.13 패키지에서 empty_container_bodies 표식이 걸린다 (표식이 유효하다)": true,
+    "K3 복사본의 woody_lints 가 모든 회차에서 작업 중인 저장소를 가리킨다": true,
+    "K4 B0 의 표식 줄이 example 정답지 16줄과 같다": true,
+    "K5 모든 회차에서 plugin 이 준비됐다 (폴더 1, 실패 머리말 없음)": true,
+    "K6 B1 에서 막는 조건이 없는 규칙의 표식이 걸린다 (async_return_with_no_await)": true,
+    "K7 저장소가 그대로다 (git status · .dart_tool · package_config · pubspec.lock)": true
+  }
+}
