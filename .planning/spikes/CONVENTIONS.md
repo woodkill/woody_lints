@@ -12,6 +12,7 @@ spike 가 확인한 사실 자체는 `.claude/skills/spike-findings-woody-lints/
 - **저장소의 모양을 복사해 실험하는 일은 `009-preset-plugin-via-include/replica.dart` 를 import 해 쓴다** (009~016). 복사본 만들기(`Replica`), 배포 파일을 조각으로 자르기(`Shipped`), 정답지 읽기와 조합별 예상 셈하기(`Expected`), 분석 한 번(`Replica.analyze`), 확인 모으기(`Checks`)가 들어 있다. 스크립트는 `import '../009-preset-plugin-via-include/replica.dart';` 한 줄로 받는다. `Shipped` 는 저장소의 `lib/analysis_options.yaml` 이 한 파일 구조일 때 그것을 잘라 조각을 만든다 — Phase 3 이 저장소를 나눈 뒤의 spike 는 이 조각을 나눈 파일을 읽게 고쳐 쓰거나 나누기 전의 커밋을 꺼낸 자리에서 돌린다 (스크립트를 읽은 것이고 돌려 보지는 않았다).
 - SDK 는 저장소 고정 버전이다 (Flutter 3.47.5 / Dart 3.13.4). 저장소 안에서는 `fvm dart …`, 저장소 밖 작업 폴더에서는 `<저장소>/.fvm/flutter_sdk/bin/dart` 를 직접 부른다 (`fvm` 이 `.fvmrc` 를 찾지 못하므로).
 - **다른 SDK 로 견줄 때는 같은 스크립트를 SDK 마다 한 번씩 돌린다** (016). 저장소 밖을 작업 디렉터리로 두고 `<SDK>/bin/cache/dart-sdk/bin/dart <스크립트의 절대 경로> <작업 폴더>` 로 띄운다 — 저장소 루트에서 `dart run` 을 하면 그 SDK 가 루트의 패키지를 다시 풀어 `.dart_tool/` 과 lock 을 바꿀 수 있다. 실행 뒤 루트 `.dart_tool/package_config.json` 의 `generatorVersion` 과 `git status` 로 저장소가 그대로인지 본다. 결과 파일 이름에 Dart 버전을 넣는다 (`results/probe-<버전>.json`).
+- **GitHub runner 에서만 잴 수 있는 것은 작업 브랜치를 올리고 임시 workflow 로 돌린다** (006, 017, 018). 차례는 준비 커밋(`docs(spike-NNN): PENDING — …` — 스크립트와 `.github/workflows/spike-NNN-….yml`) → 소유자 확인 → `git push origin <작업 브랜치>` → 결과 기록 → `ci: spike NNN 임시 workflow 제거` 다. 스크립트는 로그에 `SPIKENNN_RESULT {…}` 한 줄을 찍고, `017-runner-six-fixtures/collect.py <run id> <출력 파일>` 이 job 별 시간과 그 줄을 모은다. 임시 workflow 의 사본은 spike 폴더에 남긴다 (`.github/` 밖이라 돌지 않는다).
 
 ## Structure
 
@@ -29,6 +30,7 @@ spike 가 확인한 사실 자체는 `.claude/skills/spike-findings-woody-lints/
 - 저장소의 파일을 바꿔 봐야 하는 실험은 작업 폴더에 복사본을 만들어 한다 (004 의 `template/`, 007 의 replica, 008 의 `fx`, 009~014 의 `Replica`). 연습용 프로젝트가 새로 필요하지 않으면 spike 001 의 것을 복사하고 의존성 경로만 바꾼다 (006, 007, 008).
 - 저장소에 `example/` 이 생긴 뒤의 spike 는 연습용 프로젝트를 따로 두지 않는다. 저장소 `example/` 의 샘플과 `pubspec.lock` 을 복사본 안에 복사하고 의존성 경로만 깊이에 맞춘다 (`Replica.addFixture`, 009~016). spike 에만 필요한 샘플은 스크립트 안에 문자열로 두고 실행할 때 쓴다 (012, 015, 016). 사용 프로젝트가 패키지를 **받는 방식**이 질문이면 연습용 프로젝트를 replica 밖(`<작업 폴더>/consumer-*`)에 두고 replica 를 로컬 git 저장소로 만든다 (015).
 - 실행을 두 번 이상 남길 때는 앞의 것을 `results/<이름>-run1.*` 로 옮겨 둔다. 원본 로그는 고치지 않는다 (014, 015, 016).
+- **실제 사용 프로젝트를 재는 spike 는 원본의 경로를 인자로 받고, 분석에 필요한 것(`pubspec.yaml` · `pubspec.lock` · 옵션 파일 · `lib` · `test` · `bin` · `assets`)만 `<작업 폴더>/consumer` 로 복사한다** (019). 스크립트에 원본의 경로를 적지 않는다. 원본은 읽기만 한다 (PROJECT.md 의 Safety).
 
 ## Patterns
 
@@ -57,6 +59,11 @@ spike 가 확인한 사실 자체는 `.claude/skills/spike-findings-woody-lints/
 - **생성 파일 제외를 볼 때는 한 줄에 규칙 위반과 plugin 위반을 함께 둔 샘플을 쓴다** — `lib/generated/riverpod_violation.g.dart` 의 `ref.watch(generatedFamily(["g1"]))` 한 줄이 `prefer_single_quotes` 와 `provider_parameters` 를 함께 낸다. 제외를 적은 자리를 바꿔 가며 두 진단이 각각 나오는지를 본다 (012, 015, 016).
 - 상류(dart-lang/sdk)의 이슈를 근거로 적을 때는 `gh issue view <번호> --repo dart-lang/sdk` 로 상태 · 라벨 · 댓글을 직접 읽고 읽은 날짜를 적는다. 요약 도구가 옮긴 인용은 그대로 쓰지 않는다 (016).
 - 빈 상태 폴더는 plugin 뿐 아니라 분석 캐시도 비운다. plugin 을 쓰지 않는 프로젝트도 빈 상태 폴더에서는 약 3초, 채워진 상태 폴더에서는 약 0.7초다 (014). 시간을 견줄 때는 상태 폴더가 비었는지를 함께 적는다.
+- **runner 의 job 하나는 새 가상 머신 하나다.** "처음 받는 경우" 가 질문이면 방식마다 job 을 따로 두고 표본은 matrix 로 늘린다 (006 의 표본 다섯, 017 의 방식 둘 × 표본 셋). 한 job 안에서 이어 돌리면 뒤의 것은 pub cache 가 채워진 상태다.
+- runner 이미지를 견줄 때는 `/etc/os-release`, glibc(`ldd --version`), `ImageVersion` 을 함께 남겨 이미지가 실제로 달랐음을 대조로 둔다 (018). `ubuntu-latest` 가 실제로 무엇이었는지는 로그의 `Image:` · `Version:` 줄에 있다.
+- **비공개 저장소의 프로젝트를 잰 결과에는 그 프로젝트의 경로 · 진단 메시지 · 코드 조각을 남기지 않는다** — 건수, 규칙 이름, 줄 목록의 해시만 남긴다 (019. `flutter_starter_kit` 은 비공개다). 줄 단위 기록은 `<작업 폴더>/private/` 에 쓰고, 화면 기록(`results/*.log`)은 스크립트가 적어도 되는 줄만 골라 쓴다 (stdout 을 그대로 저장하지 않는다). 커밋 전 점검에 `grep -rn -E '(lib|test)/[a-z_/]+\.dart' <spike 폴더>/results | grep -v woody_probe_marker` 를 더한다.
+- **0줄은 그것만으로 "깨끗하다" 가 아니다.** 같은 실행에 일부러 넣은 위반(표식 파일 — 이 저장소 `example/lib` 의 샘플을 복사본의 `lib/woody_probe_marker/` 에 넣는다)을 두어 규칙이 켜졌는지를 가른다. 019 에서 `public_member_api_docs` 가 0줄이었고, 처음 세운 추정(`publish_to: 'none'` 탓)은 문서 주석 없는 표식 둘이 2줄을 내면서 틀린 것으로 드러났다 — 그 프로젝트의 `lib/` 가 실제로 전부 문서화되어 있었다. "같다" 를 볼 때도 0줄 = 0줄 이 되지 않게, 줄이 많이 나오는 규칙(`always_specify_types`)을 양쪽에 더 켠 짝을 둔다.
+- 사용 프로젝트의 `woody_lints` 를 작업 중인 파일로 돌릴 때는 복사본에 `pubspec_overrides.yaml` (`dependency_overrides:` 아래 `woody_lints:` 의 `path:`)을 두고 `dart pub get` 을 한다. `pubspec.yaml` 은 고치지 않는다. 받은 자리는 `.dart_tool/package_config.json` 의 `rootUri` 로 확인한다 (019).
 
 ## Tools & Libraries
 
@@ -74,6 +81,8 @@ spike 가 확인한 사실 자체는 `.claude/skills/spike-findings-woody-lints/
 | `analysis_server_plugin` / `analyzer` (plugin 쪽에서 풀린 값, 2026-10-12) | 0.3.24 / 14.5.0 | 009~016 — 012 가 이 버전의 소스를 읽었다. 베타 SDK 에서도 같은 값으로 풀렸다 (016) |
 | `git` (macOS) | 2.56.0 | 015 — 전역 설정을 끄고(`GIT_CONFIG_GLOBAL=/dev/null`) 커밋의 이름 · 시각을 환경변수로 고정한다 |
 | Flutter 베타 / Dart (견줌용, fvm 캐시에만 설치) | 3.49.0-0.2.pre / 3.14.0-211.1.beta | 016 — `.fvmrc` 는 3.47.5 그대로다 |
+| GitHub runner 이미지 | `ubuntu-24.04` 20261004.327.1 / `ubuntu-26.04` 20260927.149.1 | 017, 018 — 둘 다 코어 4개 · 약 16GB. `ubuntu-latest` 는 2026-10-12 에 24.04 였다 |
+| `gh` | 2.102.0 | 017, 018 — job 로그는 `gh api --allow-escape-sequences …/jobs/<id>/logs` 로 읽는다 (그 인자가 없으면 내주지 않는다) |
 
 쓰지 않는 것:
 
@@ -88,3 +97,6 @@ spike 가 확인한 사실 자체는 `.claude/skills/spike-findings-woody-lints/
 - 저장소 루트에서 다른 SDK 의 `dart run` — 그 SDK 가 루트의 패키지를 다시 푼다 (016).
 - `fvm install --setup` 만 한 SDK 로 Flutter 프로젝트의 `dart pub get` — `sky_engine` 을 찾지 못해 실패한다. `flutter precache --universal` 로 공통 구성물을 먼저 받는다 (016).
 - 고정 SDK 에서 잰 "루트 분석이 plugin 을 준비하지 않는다" · "프리셋의 제외가 규칙 진단에 통한다" 를 SDK 와 무관한 사실로 적는 것 — 베타(Dart 3.14.0-211.1.beta)에서는 둘 다 달랐다 (016).
+- 한 job 안에서 방식을 이어 돌려 "처음 실행" 을 견주는 것 — 뒤의 방식은 pub cache 가 채워진 상태다 (017).
+- 0줄을 근거로 "이 규칙은 이 프로젝트에 적용되지 않는다" 나 "이 프로젝트는 깨끗하다" 를 적는 것 — 일부러 넣은 위반 없이 세운 추정이 틀렸다 (019).
+- 사용 프로젝트 원본에서 `dart analyze` 나 `pub get` 을 돌리는 것, 비공개 프로젝트의 진단 줄을 `results/` 에 그대로 쓰는 것 (019).
