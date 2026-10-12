@@ -952,18 +952,23 @@ git diff --quiet 19ae5ec -- example/expected_diagnostics.txt  # 종료 0 = 정�
 | A5 | 지워 보기 M18 (묶음에서 `riverpod.yaml` 제거) · M19 (`overrides` 의 `version` 제거) 의 결과가 010 · 012 의 모양 그대로다 | CHANGELOG · README 절 | 예측이다. C3 에서 실행해 기록한다 — 다르면 기록이 그 값이 된다 |
 | A6 | `pubspec.yaml` 의 `name:` 을 fixture 마다 다르게 적어도 분석 · `pub get` 에 영향이 없다 | 권고 1 | scratch 에서 다섯 모두 `pub get` 과 분석이 예상대로였다 (`[VERIFIED: scratch]`). 다른 이름으로 돌린 spike 는 없다 |
 
-## Open Questions
+## Open Questions (RESOLVED)
+
+계획(2026-10-12, `03-01` ~ `03-04-PLAN.md`)이 셋 모두 권고대로 정했다.
 
 1. **루트 옵션 파일이 `package:woody_lints/base.yaml` 을 include 할지**
    - What we know: 지금 `tool/verify.dart` 는 두 include 모두 0건이고 plugin 을 준비하지 않는다 (011; scratch).
    - What's unclear: Phase 4 의 규칙 변경이 `tool/` 에 새 진단을 낼 때 그 수정이 어느 phase 의 일인지.
    - Recommendation: 이 phase 는 `flutter_lints` 그대로 (§ 권고 7). Phase 5 (DOCS-10 — 루트 파일 주석 정리) 에서 다시 본다.
+   - **Resolution:** 권고대로 — 03-02 Task 2 가 루트 파일을 권고 7 의 전문(`include: package:flutter_lints/flutter.yaml` 그대로)으로 쓴다. `base.yaml` include 는 Phase 5 의 DOCS-10 에서 다시 본다.
 2. **동시 실행(`Future.wait`)을 넣을지**
    - What we know: runner 에서 약 1분 30초 절약, 여섯 번 모두 통과 (017). 로컬 23초.
    - What's unclear: 드물게 깨지는지 (표본 여섯). 화면 순서를 따로 맞춰야 한다.
    - Recommendation: 넣지 않는다. CI 가 6분을 넘기면 그때 (Deferred).
+   - **Resolution:** 권고대로 넣지 않는다 — 03-03 Task 1 이 fixture 를 차례로 돌린다. 03-04 Task 3 이 runner 의 job 시간을 재어 6분을 넘기면 `timeout-minutes` 를 15 로 올리는 것까지만 하고, 동시 실행은 Deferred 로 남긴다.
 3. **`example/README.md` 의 지워 보기 기록 M18 · M19 를 어느 커밋에서 돌릴지**
    - Recommendation: C3 의 마지막 task (정답지 넷이 있어야 "실패" 가 보인다). 변경은 커밋하지 않고 되돌린다 (Phase 2 의 방식).
+   - **Resolution:** 권고대로 — 03-03 Task 3 (정답지 넷을 쓴 Task 2 뒤) 이 M18 · M19 를 돌려 README 에 적고 `git checkout` 으로 되돌린다. 한 가지 덧붙임: `recommended` 를 같은 실행의 `example` 결과와 견주는 설계(Pitfall 12)에서는 M18 에서 `recommended` 가 **통과**한다 (둘이 똑같이 깨진다) — 깨짐은 `example` 과 `overrides` 가 잡는다. 03-03 의 A-03-2 에 적었고 README 의 읽는 법에 그 까닭을 적게 했다. A5 의 예측("함께 실패") 은 이 점에서 바뀐다.
 
 ## Environment Availability
 
