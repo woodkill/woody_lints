@@ -1,8 +1,8 @@
 # woody_lints 검증용 연습 프로젝트
 
-이 폴더는 **일부러 규칙을 어긴 연습용 프로젝트**다. `woody_lints` 를 쓰는 프로젝트와 같은 모양으로 만들었다 — Flutter 패키지이고, `woody_lints` 를 `path: ..` 로 받으며, `analysis_options.yaml` 은 `include: package:woody_lints/analysis_options.yaml` 한 줄이다.
+이 폴더는 **일부러 규칙을 어긴 연습용 프로젝트**다. `woody_lints` 를 쓰는 프로젝트와 같은 모양으로 만들었다 — Flutter 패키지이고, `woody_lints` 를 `path: ..` 로 받으며, `analysis_options.yaml` 은 `include: package:woody_lints/analysis_options.yaml` 한 줄이다. 저장소 루트의 `fixtures/` 아래 다섯 폴더가 이 폴더의 샘플을 복사해 다른 조합을 받는다 (아래 "연습용 프로젝트 여섯").
 
-저장소의 검증 명령 `tool/verify.dart` 가 이 폴더를 `dart analyze` 로 분석하고, 나온 경고를 커밋해 둔 정답지 `expected_diagnostics.txt` 와 한 줄씩 비교한다. 같으면 통과이고 한 줄이라도 다르면 실패다. 같은 줄이 여러 건 나오면 건수까지 견준다. 배포 파일(`lib/base.yaml` 등 `lib/` 의 조각 · 묶음 · 별칭)을 고쳤을 때 "받는 프로젝트에서 무엇이 달라지는가" 가 이 비교에서 드러난다.
+저장소의 검증 명령 `tool/verify.dart` 가 이 폴더를 `dart analyze` 로 분석하고, 나온 경고를 커밋해 둔 정답지 `expected_diagnostics.txt` 와 한 줄씩 비교한다. 연습용 프로젝트 여섯 가운데 이 폴더(옛 주소)의 정답지만 분리 전의 1.3.0 과 같은 것이고, 나머지는 아래 표에 있다. 같으면 통과이고 한 줄이라도 다르면 실패다. 같은 줄이 여러 건 나오면 건수까지 견준다. 배포 파일(`lib/base.yaml` 등 `lib/` 의 조각 · 묶음 · 별칭)을 고쳤을 때 "받는 프로젝트에서 무엇이 달라지는가" 가 이 비교에서 드러난다.
 
 이 폴더는 검증용이지 사용 예가 아니다. 설치와 사용법은 저장소 루트의 `README.md` 를 본다.
 
@@ -14,20 +14,21 @@
 fvm dart run tool/verify.dart
 ```
 
-- plugin 이 이미 준비된 상태에서 약 5초 걸린다 (2026-10-12 실측). 처음 실행은 `riverpod_lint` plugin 을 받아 컴파일하느라 더 걸린다 (사전 실측 약 15초).
+- plugin 이 준비된 상태에서 연습용 프로젝트 여섯 모두 약 22초 걸린다 (2026-10-12 실측, 20 ~ 23초). 처음 실행은 plugin 을 쓰는 넷이 각각 `riverpod_lint` 를 받아 컴파일하느라 약 69초 걸린다 (전용 상태 폴더를 비운 실행, 2026-10-12 실측).
 - 네트워크가 필요하다. pub 서버에 닿지 못하면 plugin 이 준비되지 않아 `riverpod_lint` 경고 없이 끝난다 (사전 실측).
 - CI 에서는 FVM 없이 `dart run tool/verify.dart` 로 돌린다. SDK 는 `.fvmrc` 의 버전으로 맞춘다.
 
-배포 파일이나 이 폴더의 샘플을 일부러 바꿔 경고가 달라졌으면 정답지를 갱신한다.
+배포 파일이나 연습용 프로젝트의 샘플을 일부러 바꿔 경고가 달라졌으면 정답지를 갱신한다.
 
 ```sh
 fvm dart run tool/verify.dart --update
 ```
 
+- 정답지 **다섯을 한 번에** 다시 쓴다 — 연습용 프로젝트마다 바뀐 줄을 보여 주고, 바뀐 것만 쓰고, 끝에 `정답지를 썼다 (N개):` 와 쓴 파일 목록을 찍는다. 단계 줄의 결과는 `바뀐 줄 없음` / `갱신` 이다. 바뀐 것이 없으면 `바뀐 정답지가 없다 — 쓰지 않았다` 를 찍고 아무것도 쓰지 않는다 (머리 주석의 날짜도 그대로). 이름을 줘서 하나만 갱신하는 인자는 없다 (D-05). `recommended` 는 정답지가 없어 쓰지 않는다 — 같은 실행의 `example` 결과와 견주는 단계라 갱신 모드에서도 `통과` / `실패` 다.
 - 정답지를 쓰기 전에 바뀌는 줄을 화면에 보여 준다 (`- ` 는 사라지는 줄, `+ ` 는 새로 생기는 줄).
 - 갱신된 정답지의 `git diff` 가 "이 변경으로 생기거나 사라진 경고" 의 기록이다. 커밋 전에 읽어 본다.
 - CI 에서는 `--update` 가 거부된다 (종료 코드 64). 정답지는 로컬에서 갱신해 커밋한다.
-- 같은 실행에서 다른 단계가 실패했으면 정답지를 쓰지 않고 `다른 단계가 실패해 정답지를 쓰지 않았다` 를 찍는다 (종료 코드 1). 실패를 고친 뒤 다시 돌린다. plugin 준비 실패와 도구 사망에서는 전과 같이 쓰지 않는다 — 그때는 이 문구 대신 `[4/4]` 의 실패 내용이 찍힌다. 썼을 때는 `정답지를 썼다: example/expected_diagnostics.txt` 가 찍힌다. 2026-10-12 에 더한 안전장치다 (아래 M12, M15 ~ M17).
+- 같은 실행에서 다른 단계가 실패했으면 정답지를 쓰지 않고 `다른 단계가 실패해 정답지를 쓰지 않았다` 를 찍는다 (종료 코드 1). 실패를 고친 뒤 다시 돌린다. plugin 준비 실패와 도구 사망에서는 전과 같이 쓰지 않는다 — 그때는 그 연습용 프로젝트 단계의 실패 내용이 찍힌다. 썼을 때는 `정답지를 썼다 (N개):` 와 목록이 찍힌다. 2026-10-12 에 더한 안전장치다 (아래 M12, M15 ~ M17).
 
 이 폴더의 패키지를 손으로 받을 일이 있으면 `dart pub get` 을 쓴다. `flutter pub get` 은 쓰지 않는다 — `analysis_options.yaml` 에 `build/**` 제외를 써넣어 "include 한 줄" 이 아니게 만든다. 돌렸다면 `git checkout -- example/analysis_options.yaml` 로 되돌린다.
 
@@ -45,6 +46,34 @@ fvm dart run tool/verify.dart --update
 | `expected_diagnostics.txt` | 정답지 (`exit 2` + 16줄) | - |
 | `pubspec.yaml` | 저장소 루트의 `woody_lints` 를 `path: ..` 로 받는다 | - |
 | `pubspec.lock` | 커밋한다. 로컬과 CI 가 같은 패키지 버전으로 판정하게 하려는 것이다. `riverpod_lint` plugin 의 버전은 이 파일이 묶지 못한다 (Analysis Server 가 따로 받는다) | - |
+
+## 연습용 프로젝트 여섯
+
+검증 명령은 이 폴더와 `fixtures/` 아래 다섯 폴더를 차례로 분석한다. 같은 샘플을 서로 다른 옵션 파일로 받아, 조합마다 어떤 경고가 나오고 나오지 않는지를 정답지로 고정한다. "나오지 않는다" 는 줄 수만 세지 않고, 받지 않은 설정이 적용되지 않았을 때 **남는 줄**로 증명한다.
+
+| # | 폴더 | include | plugin | 정답지 | 줄 수 | 증명하는 것 |
+|---|------|---------|--------|--------|-------|-------------|
+| 1 | `example/` | 옛 주소 한 줄 (`analysis_options.yaml`) | 씀 | `expected_diagnostics.txt` (`exit 2`) | 16 | 분리 전후로 정답지가 같다. 별칭이 plugin 을 잃지 않는다 |
+| 2 | `fixtures/recommended/` | `recommended.yaml` | 씀 | 없음 (같은 실행의 `example` 결과와 견줌) | 16 | 옛 주소와 같은 진단 |
+| 3 | `fixtures/base_only/` | `base.yaml` 만 | 안 씀 | `expected_diagnostics.txt` (`exit 2`) | 18 | 기본 규칙은 나오고 `riverpod_lint` 진단은 안 나온다. 생성 파일의 규칙 진단과 `invalid_annotation_target` 은 나온다 |
+| 4 | `fixtures/overrides/` | 묶음 + 끄는 설정 | 씀 | `expected_diagnostics.txt` (`exit 2`) | 18 | 끈 진단만 사라진다 — 프로젝트 전체 · 파일 · 한 줄 × 규칙 · plugin. 접두사 없는 주석은 끄지 못한다 |
+| 5 | `fixtures/base_riverpod/` | `base.yaml` + `riverpod.yaml` | 씀 | `expected_diagnostics.txt` (`exit 2`) | 21 | Riverpod 조각만 받아도 plugin 이 돈다. codegen 설정은 딸려 오지 않는다 |
+| 6 | `fixtures/base_codegen/` | `base.yaml` + `codegen.yaml` | 안 씀 | `expected_diagnostics.txt` (`exit 0`) | 13 | codegen 조각만 받아도 생성 파일이 빠진다 (Dart 3.13.4 의 규칙 진단 기준). plugin 은 딸려 오지 않는다 |
+
+화면과 검증 명령의 순서는 1 → 2 → 3 → 5 → 6 → 4 다 (`[4/9]` ~ `[9/9]`). 2 는 1 의 결과를 받아 견주므로 반드시 1 뒤에 돈다.
+
+네 경우 — Riverpod 을 받나 × codegen 을 받나 — 가 모두 채워진다.
+
+| | codegen 받음 | codegen 안 받음 |
+|---|---|---|
+| **Riverpod 받음** | 1 (옛 주소) · 2 (묶음) | 5 (기본 + Riverpod) |
+| **Riverpod 안 받음** | 6 (기본 + codegen) | 3 (기본만) |
+
+- 폴더마다 `pubspec.yaml` 은 저장소 루트를 `path: ../..` 로 받고, `lib/` 는 이 폴더 `lib/` 의 글자 그대로 복사본이다 (줄 번호가 같아야 정답지를 견줄 수 있다). `overrides` 만 끄는 방법의 샘플 `lib/suppress/` 5파일을 더 둔다. `pubspec.lock` 은 이 폴더의 것에서 `path` 줄만 `"../.."` 로 바꾼 복사본이고 커밋한다. 이 폴더의 샘플을 고치면 다섯 복사본도 함께 고친다.
+- 상태 폴더는 `.dart_tool/woody_verify/<폴더>/` 로 연습용 프로젝트마다 따로다 — 합치면 plugin 폴더가 여럿이 되어 화면의 `plugin` 줄이 버전을 읽지 못한다. plugin 을 쓰지 않는 둘(3 · 6)은 plugin 폴더가 0개인 것이 정상이고, 정답지 머리 주석에 `riverpod_lint 해당 없음` 이 적힌다.
+- 생성 파일 제외(`codegen.yaml` 의 `analyzer.exclude`)는 이 SDK(Dart 3.13.4)에서 규칙 진단에만 통하고 plugin 진단에는 통하지 않는다 (2026-10-12, spike 012). 그래서 생성 파일 샘플(`lib/generated/`)에는 plugin 위반을 두지 않는다. 다음 SDK 에서는 규칙 진단에도 통하지 않을 수 있다 (spike 016).
+- `overrides` 의 `plugins:` 에 적은 `version:` 은 `lib/riverpod.yaml` 의 선언과 같아야 한다 — 다르면 `[3/9]` 가 실패한다. `version` 없이 `diagnostics:` 만 적으면 끄기가 경고 없이 무시된다 (아래 M19).
+- `fixtures/` 에서도 `flutter pub get` 을 돌리지 않는다 (옵션 파일에 `build/**` 제외를 써넣어 `[3/9]` 가 실패한다). 저장소 루트의 분석은 `example/**` 와 `fixtures/**` 를 뺀다.
 
 ## 정답지 형식
 
@@ -71,14 +100,14 @@ lib/added_rules.dart:18  info  always_declare_return_types
 
 | 종료 코드 | 뜻 |
 |-----------|----|
-| 0 | 단계 4개 모두 통과 (`--update` 로 갱신한 실행 포함) |
+| 0 | 단계 9개 모두 통과 (`--update` 로 갱신한 실행 포함) |
 | 1 | 단계 중 하나라도 실패 (plugin 준비 실패, 도구 사망 포함) |
 | 64 | 사용법 오류 (모르는 인자, CI 에서 `--update`) |
 | 69 | 하위 명령 실패 (`pub get`) — 검증을 시작하지 않음 |
 | 70 | 스크립트가 예외로 끝남 (파일 형식 · 파일 작업 · 프로세스 실행 실패) |
 | 78 | 실행 중인 SDK 가 `.fvmrc` 와 다름 — 검증을 시작하지 않음 |
 
-단계는 네 개다: `[1/4]` `lib/` 에 `.dart` 파일 없음, `[2/4]` 배포 파일의 규칙 이름, `[3/4]` `example/` 옵션 파일, `[4/4]` `example/` 정답지 비교. 하나가 실패해도 나머지를 모두 돌린다. `[2/4]` 는 배포 파일을 `plugins:` 없이 복사한 폴더를 `dart analyze` 로 분석해, 종료 코드가 0 이 아니거나 진단이 하나라도 있으면 실패한다 — deprecated / removed / 없는 규칙뿐 아니라 겹친 규칙 · 모르는 키 · 없는 진단 코드 같은 옵션 경고도 실패다. 깨진 YAML 은 종료 코드 3 에 진단 0건으로 나오므로 같은 폴더를 형식 인자 없이 한 번 더 돌려 `parse_error` 줄을 보여 준다. 배포 파일의 최상위 `linter:` 블록에서 `- 규칙이름` 줄을 하나도 세지 못해도 실패한다 — 규칙을 다른 파일로 옮길 때 경로를 잘못 잡은 것이 통과로 보이지 않게 (2026-10-12, 아래 M13 ~ M17).
+단계는 아홉 개다: `[1/9]` `lib/` 에 `.dart` 파일 없음, `[2/9]` 배포 파일(조각 셋)의 규칙 이름, `[3/9]` 연습용 프로젝트 여섯의 옵션 파일 (주석 · 빈 줄을 뺀 내용을 통째로 견준다 — `overrides` 의 `version:` 은 `lib/riverpod.yaml` 의 선언과 같아야 한다), `[4/9]` ~ `[9/9]` 연습용 프로젝트마다 정답지 비교 (위 표의 순서. `recommended` 는 같은 실행의 `example` 결과와). 하나가 실패해도 나머지를 모두 돌린다. `[2/9]` 는 배포 파일을 `plugins:` 없이 복사한 폴더를 `dart analyze` 로 분석해, 종료 코드가 0 이 아니거나 진단이 하나라도 있으면 실패한다 — deprecated / removed / 없는 규칙뿐 아니라 겹친 규칙 · 모르는 키 · 없는 진단 코드 같은 옵션 경고도 실패다. 깨진 YAML 은 종료 코드 3 에 진단 0건으로 나오므로 같은 폴더를 형식 인자 없이 한 번 더 돌려 `parse_error` 줄을 보여 준다. 배포 파일의 최상위 `linter:` 블록에서 `- 규칙이름` 줄을 하나도 세지 못해도 실패한다 — 규칙을 다른 파일로 옮길 때 경로를 잘못 잡은 것이 통과로 보이지 않게 (2026-10-12, 아래 M13 ~ M17).
 
 ## 검증이 실제로 잡아내는지 확인한 기록
 
@@ -181,4 +210,24 @@ lib/added_rules.dart:18  info  always_declare_return_types
 
 변경은 모두 커밋하지 않고 되돌렸다 (`git status` 와, 정답지 · `lib/` 를 `19ae5ec` · `90a2736` 과 견준 `git diff` 로 확인). `--update` 를 돌린 실행 뒤에는 정답지를 바로 되돌렸고, 끝에 검증 명령이 다시 종료 코드 0 인 것을 봤다.
 
-항목의 `VERIFY-NN` 은 `.planning/REQUIREMENTS.md` 의 요구사항 번호, `D-NN` 은 `.planning/phases/02-verification-harness/02-CONTEXT.md` 의 결정 번호다.
+### 추가 실측 — 새 연습용 프로젝트가 헛통과가 아닌지 (03-03)
+
+실측 (03-03): Flutter 3.47.5 / Dart 3.13.4, riverpod_lint 3.1.9, 2026-10-12
+
+실행한 명령: `fvm dart run tool/verify.dart` (연습용 프로젝트 여섯 · 단계 9개). 변경은 한 번에 하나만 만들고 바로 `git checkout` 으로 되돌렸다.
+
+| # | 변경 | 실패한 단계 | 정답지와의 차이 | 종료 코드 | 항목 |
+|---|------|-------------|-----------------|-----------|------|
+| M18 | `lib/recommended.yaml` 에서 `- package:woody_lints/riverpod.yaml` 줄을 지움 (묶음이 Riverpod 조각을 잃음) | `[4/9] example` 만. `[5/9] recommended`, `[7/9] base_riverpod`, `[9/9] overrides` 는 통과 | `[4/9]`: `종료 코드: 정답지 2, 실제 0`<br>`- lib/main.dart:5  warning  missing_provider_scope`<br>`- lib/riverpod_rules.dart:17  warning  provider_parameters`<br>`- lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties` | 1 | PRESET-08 · D-03 — 묶음이 Riverpod 조각을 잃으면 옛 주소 fixture 가 잡는다 |
+| M19 | `fixtures/overrides/analysis_options.yaml` 에서 `version: ^3.1.3` 줄을 지움 (`diagnostics:` 만 남김) | `[3/9]` 와 `[9/9] overrides` | `[3/9]`: `` `fixtures/overrides/analysis_options.yaml` 이 정해진 내용이 아니다 `` (주석·빈 줄을 뺀 내용 8줄, 정해진 내용 9줄)<br>`[9/9]`: `+ lib/main.dart:5  warning  missing_provider_scope` | 1 | PRESET-07 · D-04 — version 없는 plugin 끄기는 조용히 무시된다 (spike 012) |
+
+`- ` 와 `+ ` 의 뜻은 위 표와 같다. 화면의 요약은 M18 이 `점검 실패 (9개 중 1개)`, M19 가 `점검 실패 (9개 중 2개)` 였다. 걸린 시간은 M18 이 17초, M19 가 23초, 되돌린 뒤의 보통 실행이 22초였다 (M19 는 `overrides` 의 plugin 선언이 바뀌었다 돌아오지만, 되돌린 뒤의 실행이 평소의 재실행 20 ~ 23초 안이었다).
+
+- **M18 에서 `recommended` 는 통과한다.** 자기 정답지 없이 같은 실행의 `example` 결과와 견주므로, 둘이 똑같이 plugin 3줄을 잃으면 "같다" 가 성립한다. 깨짐을 잡는 것은 `example` 의 정답지다. `recommended` 의 역할은 "묶음 = 옛 주소" 이지 "plugin 이 돈다" 가 아니다.
+- **M18 에서 `overrides` 도 통과했다 — 계획의 예상(함께 실패)과 다르다.** `overrides` 는 끄는 설정을 위해 자기 옵션 파일의 `plugins:` 에 `riverpod_lint` 를 `version` 과 함께 다시 적으므로, 묶음이 Riverpod 조각을 잃어도 그 프로젝트의 선언으로 plugin 이 돈다 (spike 012 의 "적은 값이 그 프로젝트의 plugin 버전 선언이 된다" 와 맞는 결과다. 까닭을 따로 갈라 재지는 않았다). 그래서 묶음의 Riverpod 조각은 `example` 하나가 지킨다.
+- **M19 는 `[3/9]` 와 `[9/9]` 가 함께 잡는다.** 옵션 파일의 내용이 정해진 것과 다르고, `version` 없는 끄기가 경고 없이 무시되어 `missing_provider_scope` 가 되살아난다. `[3/9]` 는 `version:` 의 값도 본다 — 값을 `^3.1.9` 로만 바꾼 실행(커밋하지 않고 되돌림)에서는 진단이 같아 `[9/9]` 는 통과했고 `[3/9]` 만 실패했다 (`점검 실패 (9개 중 1개)`).
+- **`[3/9]` 는 옵션 파일을 통째로 견준다.** `overrides` 의 `prefer_final_locals: false` 를 `true` 로 바꾼 실행에서 `[3/9]` (그 파일을 들어) 와 `[9/9]` (`+ lib/added_rules.dart:24  info  prefer_final_locals`) 가 실패했다 (종료 코드 1, `점검 실패 (9개 중 2개)`).
+
+변경은 모두 커밋하지 않고 되돌렸다 (M18 · M19 는 `git checkout` 과 `git status` 로, `overrides` 의 옵션 파일을 커밋하기 전에 돌린 두 실행은 복사해 둔 파일로 되돌리고 `cmp` 로 확인). 끝에 검증 명령이 다시 종료 코드 0, `점검 통과 (9개 중 9개)` 인 것을 봤다.
+
+항목의 `VERIFY-NN` · `PRESET-NN` 은 `.planning/REQUIREMENTS.md` 의 요구사항 번호, `D-NN` 은 `.planning/phases/02-verification-harness/02-CONTEXT.md` 의 결정 번호다. 03-NN 소절의 `D-NN` 은 `.planning/phases/03-preset-split/03-CONTEXT.md` 의 결정 번호다.
