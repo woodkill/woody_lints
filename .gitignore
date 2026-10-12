@@ -7,6 +7,8 @@
 pubspec.lock
 # example/ 은 검증용 앱이라 lock 을 커밋한다 — 로컬과 CI 가 같은 패키지 버전으로 판정한다.
 !example/pubspec.lock
+# fixtures/ 의 연습용 프로젝트도 example/ 과 같은 이유로 lock 을 커밋한다.
+!fixtures/*/pubspec.lock
 
 .DS_Store
 

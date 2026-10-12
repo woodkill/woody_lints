@@ -1,17 +1,20 @@
-// woody_lints 검증 명령 — 배포 설정이 기대한 대로 적용되는지를 단계 4개로 확인한다.
+// woody_lints 검증 명령 — 배포 설정이 기대한 대로 적용되는지를 단계 N 개로 확인한다
+// (N = 3 + 연습용 프로젝트 수. 연습용 프로젝트는 아래 `fixtures` 표가 정한다).
 //
-//   [1/4] lib/ 에 .dart 파일이 없는지
-//   [2/4] 조각 파일 셋(lib/base.yaml · codegen.yaml · riverpod.yaml)의 복사본을 분석해 진단이 하나도 없는지 (deprecated / removed / 없는 규칙, 겹친 규칙 · 모르는 키 같은 옵션 경고, 깨진 YAML)
-//   [3/4] example/analysis_options.yaml 이 include 한 줄인지
-//   [4/4] example/ 을 `dart analyze` 로 분석한 결과가 커밋된 정답지와 같은지
+//   [1/N] lib/ 에 .dart 파일이 없는지
+//   [2/N] 조각 파일 셋(lib/base.yaml · codegen.yaml · riverpod.yaml)의 복사본을 분석해 진단이 하나도 없는지 (deprecated / removed / 없는 규칙, 겹친 규칙 · 모르는 키 같은 옵션 경고, 깨진 YAML)
+//   [3/N] 연습용 프로젝트 전부의 analysis_options.yaml 이 정해진 내용인지 (주석 · 빈 줄을 뺀 내용을 통째로 견준다)
+//   [4/N] ~ [N/N] 연습용 프로젝트마다 `dart analyze` 로 분석한 결과가 정답지와 같은지
+//         (`fixtures` 표의 순서. recommended 는 자기 정답지 없이 같은 실행의 example 결과와 견준다)
 //
 // 실행: fvm dart run tool/verify.dart [--update]
-//   --update  정답지(example/expected_diagnostics.txt)를 실제 결과로 다시 쓴다.
-//             바뀐 줄을 먼저 화면에 보여 준다. CI 에서는 동작하지 않는다.
-//             같은 실행에서 다른 단계가 실패했으면 쓰지 않는다 (종료 코드 1).
+//   --update  정답지 전부를 한 번에 실제 결과로 다시 쓴다 — 바뀐 것만 쓰고, 연습용 프로젝트마다
+//             바뀐 줄을 먼저 화면에 보여 준 뒤 끝에 쓴 정답지의 목록을 찍는다.
+//             CI 에서는 동작하지 않는다. 같은 실행에서 한 단계라도 실패했으면 어느 정답지도
+//             쓰지 않는다 (종료 코드 1).
 //
 // 단계에 앞서 준비를 한다: 실행 중인 SDK 가 .fvmrc 와 같은지 확인하고, 저장소 루트와
-// example/ 의 패키지를 받는다. 준비가 실패하면 검증을 시작하지 않는다.
+// 연습용 프로젝트 전부의 패키지를 받는다. 준비가 실패하면 검증을 시작하지 않는다.
 //
 // lib/ 는 읽기만 한다. 규칙 검사 동안 build/woody_rule_check/ 를 만들었다가 지운다.
 // .dart_tool/woody_verify/ 를 만들고 지우지 않는다 — Analysis Server 가 plugin 을 받아
@@ -29,10 +32,36 @@ import 'dart:io';
 const pluginFailureHeader =
     'An error occurred while executing an analyzer plugin:';
 
-/// 정답지와 견줄 연습용 프로젝트 폴더들 (저장소 루트 기준).
+/// 연습용 프로젝트(fixture) 표 — 단계 수 · 옵션 파일 · 정답지 · 상태 폴더 · 화면 라벨을 모두 정한다.
 ///
-/// 지금은 `example` 하나다. fixture 마다 상태 폴더를 따로 주고 순서대로 분석한다.
-const fixtures = ['example'];
+/// 순서가 곧 화면 순서이고, `recommended` 는 반드시 `example` 뒤여야 한다 — 자기 정답지가
+/// 없어 같은 실행의 `example` 결과를 받아 견준다. fixture 마다 상태 폴더를 따로 주고
+/// 차례로 분석한다 (상태 폴더를 합치면 plugin 폴더가 여럿이 되어 버전을 읽지 못한다 — spike 014).
+const fixtures = <Fixture>[
+  Fixture(
+    path: 'example',
+    label: 'example (옛 주소)',
+    optionsLines: ['include: package:woody_lints/analysis_options.yaml'],
+    usesPlugin: true,
+    expectedPath: expectedFileName,
+  ),
+  Fixture(
+    path: 'fixtures/recommended',
+    label: 'recommended (묶음)',
+    optionsLines: ['include: package:woody_lints/recommended.yaml'],
+    usesPlugin: true,
+  ),
+  Fixture(
+    path: 'fixtures/base_only',
+    label: 'base_only (기본만)',
+    optionsLines: ['include: package:woody_lints/base.yaml'],
+    usesPlugin: false,
+    expectedPath: expectedFileName,
+  ),
+];
+
+/// [3/N] 단계의 화면 이름.
+const fixtureOptionsLabel = '연습용 프로젝트 옵션 파일';
 
 /// 규칙 검사의 대상 — 규칙이 적힐 수 있는 조각 셋 (저장소 루트 기준). 읽기만 한다.
 ///
@@ -85,9 +114,6 @@ const parseErrorCode = 'parse_error';
 /// 복사본의 `include:` 가 풀리지 않았을 때의 진단 코드 — 루트 `pub get` 이 안 된 상태다.
 const includeNotFoundCode = 'include_file_not_found';
 
-/// fixture 의 옵션 파일에 있어야 하는 단 한 줄 (사용 프로젝트와 같은 모양).
-const fixtureIncludeLine = 'include: package:woody_lints/analysis_options.yaml';
-
 /// 이 스크립트를 올바른 SDK 로 실행하는 명령 (안내 문구에 쓴다).
 const runCommand = 'fvm dart run tool/verify.dart';
 
@@ -117,6 +143,36 @@ const versionColumn = 11;
 /// 배포 파일이 최상위 `plugins:` 에 선언한 analyzer plugin 의 패키지 이름.
 const pluginPackage = 'riverpod_lint';
 
+/// 연습용 프로젝트 하나 — [fixtures] 표의 한 행.
+///
+/// [path] 하나가 pub get 대상, `[3/N]` 의 옵션 파일, 정답지 자리, 상태 폴더를 정한다.
+class Fixture {
+  /// [expectedPath] 가 null 이면 자기 정답지 없이 `example` 의 같은 실행 결과와 견준다.
+  const Fixture({
+    required this.path,
+    required this.label,
+    required this.optionsLines,
+    required this.usesPlugin,
+    this.expectedPath,
+  });
+
+  /// 저장소 기준 폴더. 상태 폴더는 `.dart_tool/woody_verify/<path>/` 이고, pub get ·
+  /// 옵션 파일 · 정답지의 자리다.
+  final String path;
+
+  /// 화면의 단계 이름 (예: `base_only (기본만)`).
+  final String label;
+
+  /// `[3/N]` 이 견주는, 주석 · 빈 줄을 뺀 옵션 파일의 줄 — 앞뒤 공백을 `trim()` 해 견준다.
+  final List<String> optionsLines;
+
+  /// plugin 을 쓰는지. false 면 화면의 `plugin` 줄과 정답지 머리 주석에 `해당 없음` 이다.
+  final bool usesPlugin;
+
+  /// 정답지 (fixture 폴더 기준). null 이면 자기 정답지가 없다.
+  final String? expectedPath;
+}
+
 /// 정답지 파일 (`#` 머리 주석 + `exit N` 한 줄 + 진단 줄들).
 class Expected {
   /// 파일을 읽어 머리 주석, 종료 코드, 진단 줄로 나눈다.
@@ -142,6 +198,18 @@ class Expected {
       throw FormatException('첫 줄이 `exit N` 이 아니다: ${file.path}');
     }
     return Expected._(headerLines, code, body.skip(1).toList()..sort());
+  }
+
+  /// 같은 실행의 다른 fixture 결과([outcome])를 기대값으로 삼는다 (머리 주석 없음).
+  ///
+  /// `recommended` 처럼 자기 정답지 없이 `example` 의 결과와 견줄 때 쓴다.
+  /// [outcome] 의 `lines` 가 null 이면(도구가 죽음) [StateError] 다 — 부르는 쪽이 먼저 거른다.
+  factory Expected.fromOutcome(AnalyzeOutcome outcome) {
+    final lines = outcome.lines;
+    if (lines == null) {
+      throw StateError('견줄 결과에 진단 줄이 없다 (도구가 죽은 결과)');
+    }
+    return Expected._(const [], outcome.exitCode, [...lines]..sort());
   }
 
   Expected._(this.headerLines, this.exitCode, this.lines);
@@ -180,22 +248,34 @@ class AnalyzeOutcome {
 
 /// 전용 상태 폴더에서 읽은 plugin(`riverpod_lint`) 버전.
 ///
-/// 읽었으면 [version] 이, 못 읽었으면 그 이유 [reason] 이 있다.
+/// 읽었으면 [version] 이, 못 읽었으면 그 이유 [reason] 이 있다. plugin 을 쓰지 않는
+/// fixture 는 [applicable] 이 false 다.
 class PluginVersion {
   /// 읽은 버전.
-  PluginVersion.resolved(String this.version) : reason = null;
+  PluginVersion.resolved(String this.version)
+    : reason = null,
+      applicable = true;
 
   /// 읽지 못했다. [reason] 은 화면에 그대로 찍는 한 줄이다.
-  PluginVersion.unknown(String this.reason) : version = null;
+  PluginVersion.unknown(String this.reason) : version = null, applicable = true;
 
-  /// 풀린 버전 (예: `3.1.9`). 못 읽었으면 null.
+  /// plugin 을 쓰지 않는 fixture — plugin 폴더 0개가 정상이라 읽지 않는다 (spike 009, 014).
+  PluginVersion.notApplicable()
+    : version = null,
+      reason = null,
+      applicable = false;
+
+  /// 풀린 버전 (예: `3.1.9`). 못 읽었거나 해당 없으면 null.
   final String? version;
 
-  /// 못 읽은 이유. 읽었으면 null.
+  /// 못 읽은 이유. 읽었거나 해당 없으면 null.
   final String? reason;
 
-  /// 화면과 정답지 머리 주석에 쓰는 값. 못 읽었으면 `?` 다.
-  String get text => version ?? '?';
+  /// 이 fixture 가 plugin 을 쓰는지. false 면 버전을 읽지 않았다.
+  final bool applicable;
+
+  /// 화면과 정답지 머리 주석에 쓰는 값. 해당 없으면 `해당 없음`, 못 읽었으면 `?` 다.
+  String get text => !applicable ? '해당 없음' : (version ?? '?');
 }
 
 /// 검사 단계 하나의 결과. `main` 이 모아 화면에 찍고 종료 코드를 정한다.
@@ -209,9 +289,11 @@ class StepResult {
     this.pluginFailed = false,
     this.applyUpdate,
     this.updateTarget,
+    this.outcome,
+    this.resultWord,
   });
 
-  /// 단계 이름 (예: `example/ 정답지 비교`).
+  /// 단계 이름 (예: `base_only (기본만)`).
   final String label;
 
   /// 통과했는지.
@@ -233,8 +315,14 @@ class StepResult {
 
   /// `--update` 가 쓰는 정답지의 저장소 기준 상대 경로.
   ///
-  /// 정답지 비교 단계의 update 가지만 채운다 (화면의 "썼다" 줄에 쓴다).
+  /// 정답지 비교 단계의 update 가지만 채운다 (화면의 "썼다" 목록에 쓴다).
   final String? updateTarget;
+
+  /// 정답지 비교 단계의 분석 결과 — `recommended` 가 같은 실행의 `example` 것을 받는다.
+  final AnalyzeOutcome? outcome;
+
+  /// 갱신 모드의 단계 줄 결과 단어 (`바뀐 줄 없음` / `갱신`). null 이면 `통과` / `실패`.
+  final String? resultWord;
 }
 
 /// 정답지와 실제 결과의 차이.
@@ -912,73 +1000,95 @@ Future<StepResult> checkRuleNames(String repoRoot) async {
   }
 }
 
-/// [3/4] fixture 의 옵션 파일이 include 한 줄인지 본다.
+/// [3/N] 연습용 프로젝트 전부([fixtures])의 옵션 파일이 정해진 내용인지 한 단계로 본다.
 ///
-/// 주석과 빈 줄을 뺀 나머지가 정확히 [fixtureIncludeLine] 한 줄이어야 한다.
-/// `flutter pub get` 이 써넣는 `build/**` 제외와 include 삭제를 잡는다 (spike 004).
-StepResult checkFixtureOptions(String fixtureDir) {
-  final name = fixtureDir.split('/').last;
-  final label = '$name/ 옵션 파일';
-  final optionsPath = '$name/analysis_options.yaml';
-  final file = File('$fixtureDir/analysis_options.yaml');
-  // 판정은 앞뒤 공백을 뗀 줄로 하고, 화면에는 들여쓰기를 살린 줄을 보여 준다.
-  final rest = file.existsSync()
-      ? file
-            .readAsLinesSync()
-            .map((l) => l.trimRight())
-            .where((l) => l.trim().isNotEmpty && !l.trim().startsWith('#'))
-            .toList()
-      : null;
-  if (rest != null &&
-      rest.length == 1 &&
-      rest.single.trim() == fixtureIncludeLine) {
-    return StepResult(label: label, passed: true);
-  }
-  return StepResult(
-    label: label,
-    passed: false,
-    detailLines: [
+/// 파일마다 주석과 빈 줄을 뺀 나머지를 `trim()` 한 줄 목록이 [Fixture.optionsLines] 와
+/// 통째로 같아야 한다. `flutter pub get` 이 써넣는 `build/**` 제외, include 삭제,
+/// 끄는 설정의 어긋남을 잡는다 (spike 004). 틀린 파일만 파일별로 적는다.
+StepResult checkFixtureOptions(String repoRoot, List<Fixture> fixtures) {
+  final details = <String>[];
+  for (final fixture in fixtures) {
+    final optionsPath = '${fixture.path}/analysis_options.yaml';
+    final file = File('$repoRoot/$optionsPath');
+    final expected = fixture.optionsLines;
+    // 판정은 앞뒤 공백을 뗀 줄로 하고, 화면에는 들여쓰기를 살린 줄을 보여 준다.
+    final rest = file.existsSync()
+        ? file
+              .readAsLinesSync()
+              .map((l) => l.trimRight())
+              .where((l) => l.trim().isNotEmpty && !l.trim().startsWith('#'))
+              .toList()
+        : null;
+    if (rest != null &&
+        sameLines(rest.map((l) => l.trim()).toList(), expected)) {
+      continue;
+    }
+    if (details.isNotEmpty) details.add('');
+    details.addAll([
       if (rest == null)
         '`$optionsPath` 이 없다.'
       else ...[
-        '`$optionsPath` 이 include 한 줄이 아니다 — 주석·빈 줄을 뺀 내용 (${rest.length}줄):',
+        '`$optionsPath` 이 정해진 내용이 아니다 — 주석·빈 줄을 뺀 내용 (${rest.length}줄):',
         if (rest.isEmpty) '  (없음)' else ...rest.map((l) => '  $l'),
       ],
+      '  정해진 내용:',
+      ...expected.map((l) => '    $l'),
       '',
-      '`$optionsPath` 을 include 한 줄로 되돌린다:',
-      '  $fixtureIncludeLine',
       '`flutter pub get` 을 돌렸다면: git checkout -- $optionsPath',
-    ],
+    ]);
+  }
+  return StepResult(
+    label: fixtureOptionsLabel,
+    passed: details.isEmpty,
+    detailLines: details,
   );
 }
 
-/// [4/4] fixture 하나를 분석해 정답지와 견준다 (VERIFY-01).
+/// 두 줄 목록이 순서와 내용까지 같은지 본다.
+bool sameLines(List<String> a, List<String> b) {
+  if (a.length != b.length) return false;
+  for (var i = 0; i < a.length; i++) {
+    if (a[i] != b[i]) return false;
+  }
+  return true;
+}
+
+/// [4/N] ~ [N/N] 연습용 프로젝트 하나([fixture])를 분석해 정답지와 견준다 (VERIFY-01).
 ///
 /// 판정 순서는 바꾸지 않는다: plugin 준비 실패 → 도구가 죽음 → 정답지 비교.
+/// 정답지 비교는 둘로 갈린다 — [Fixture.expectedPath] 가 없으면(`recommended`) 같은 실행의
+/// `example` 결과([reference])와 견주고 갱신 모드에서도 쓸 것이 없다. 있으면 그 정답지와 견준다.
+///
 /// [update] 이면 바뀌는 줄을 `detailLines` 에 담고 정답지 쓰기를 `applyUpdate` 로
-/// 돌려준다 — 쓰는 것은 `main` 이 그 줄을 화면에 내보낸 뒤다. 앞의 두 실패에서는
-/// [update] 여도 정답지를 건드리지 않는다. 다른 단계가 실패한 실행에서는 `main` 이
-/// 쓰기 직전에 막는다. [sdk] 는 정답지 머리 주석에 적는다.
+/// 돌려준다 — 쓰는 것은 `main` 이 그 줄을 화면에 내보낸 뒤다. 바뀐 것이 없으면 쓰지 않는다
+/// (머리 주석의 날짜도 다시 쓰지 않는다). 앞의 두 실패에서는 [update] 여도 정답지를 건드리지
+/// 않는다. 다른 단계가 실패한 실행에서는 `main` 이 쓰기 직전에 막는다. [sdk] 는 정답지
+/// 머리 주석에 적는다.
 Future<StepResult> compareFixture({
   required String repoRoot,
-  required String fixture,
+  required Fixture fixture,
   required bool update,
   required SdkInfo sdk,
+  AnalyzeOutcome? reference,
 }) async {
-  final label = '$fixture/ 정답지 비교';
-  final fixtureDir = '$repoRoot/$fixture';
-  final stateDir = '$repoRoot/.dart_tool/woody_verify/$fixture';
+  final label = fixture.label;
+  final fixtureDir = '$repoRoot/${fixture.path}';
+  // fixture 경로를 그대로 붙인다 — `fixtures/base_only` 면 하위 폴더까지 만든다 (권고 2).
+  final stateDir = '$repoRoot/.dart_tool/woody_verify/${fixture.path}';
   final shownStateDir = relativize(stateDir, repoRoot);
   Directory(stateDir).createSync(recursive: true);
 
   // 기다리는 동안의 진행 표시. 화면(stdout)에는 섞지 않는다.
-  stderr.writeln('$fixture/ 분석 중…');
+  stderr.writeln('${fixture.path}/ 분석 중…');
   final outcome = await analyzeFixture(
     fixtureDir: fixtureDir,
     stateDir: stateDir,
   );
   // 버전은 분석이 끝난 뒤에 읽는다 (처음 실행에서는 분석 전에 plugin 폴더가 없다).
-  final plugin = readPluginVersion(stateDir, shownAs: shownStateDir);
+  // plugin 을 쓰지 않는 fixture 는 plugin 폴더 0개가 정상이라 읽지 않는다.
+  final plugin = fixture.usesPlugin
+      ? readPluginVersion(stateDir, shownAs: shownStateDir)
+      : PluginVersion.notApplicable();
 
   // 1) plugin 준비 실패 — 종료 코드로는 알 수 없고 stderr 의 머리말로만 드러난다.
   if (outcome.hasPluginHeader) {
@@ -987,8 +1097,9 @@ Future<StepResult> compareFixture({
       passed: false,
       plugin: plugin,
       pluginFailed: true,
+      outcome: outcome,
       detailLines: [
-        'plugin 준비 실패 — $pluginPackage 진단 없이 끝났다 '
+        '${fixture.path}/ — plugin 준비 실패 — $pluginPackage 진단 없이 끝났다 '
             '(dart analyze exit ${outcome.exitCode}). stderr:',
         ...scrubPaths(
           outcome.stderrText,
@@ -1012,8 +1123,9 @@ Future<StepResult> compareFixture({
       label: label,
       passed: false,
       plugin: plugin,
+      outcome: outcome,
       detailLines: [
-        '도구가 죽었다 — dart analyze 가 exit ${outcome.exitCode} 로 끝났다'
+        '${fixture.path}/ — 도구가 죽었다 — dart analyze 가 exit ${outcome.exitCode} 로 끝났다'
             '${actual == null ? ' (stdout 에 JSON 없음)' : ''}.',
         '  stderr: ${stderrHead.isEmpty ? '(비어 있음)' : stderrHead}',
         '',
@@ -1022,8 +1134,56 @@ Future<StepResult> compareFixture({
     );
   }
 
-  // 3) 정답지 비교.
-  final expectedFile = File('$fixtureDir/$expectedFileName');
+  // 3a) 자기 정답지가 없다 — 같은 실행의 example 결과와 견준다 (D-03, Pitfall 12).
+  // 파일과 견주지 않으므로 갱신 모드에서도 쓸 것이 없다.
+  final expectedPath = fixture.expectedPath;
+  if (expectedPath == null) {
+    if (reference == null || reference.lines == null) {
+      return StepResult(
+        label: label,
+        passed: false,
+        plugin: plugin,
+        outcome: outcome,
+        detailLines: [
+          '${fixture.path}/ — 견줄 결과가 없다 — example 의 분석이 끝나지 않았거나 죽었다.',
+        ],
+      );
+    }
+    final difference = findDifference(
+      Expected.fromOutcome(reference),
+      actual,
+      outcome.exitCode,
+    );
+    if (difference.isEmpty) {
+      return StepResult(
+        label: label,
+        passed: true,
+        plugin: plugin,
+        outcome: outcome,
+      );
+    }
+    final exitNote = difference.exitNote;
+    return StepResult(
+      label: label,
+      passed: false,
+      plugin: plugin,
+      outcome: outcome,
+      detailLines: [
+        '${fixture.path}/ — 같은 실행의 example 결과와 다르다.',
+        if (exitNote != null) ...[exitNote.replaceFirst('정답지', 'example'), ''],
+        'example 에는 있는데 여기서 나오지 않은 경고 (${difference.missing.length})',
+        ...difference.missing.map((l) => '  $l'),
+        '',
+        'example 에 없는데 여기서 나온 경고 (${difference.unexpected.length})',
+        ...difference.unexpected.map((l) => '  $l'),
+        '',
+        '묶음(lib/recommended.yaml)과 별칭(lib/analysis_options.yaml)이 같은 것을 받는지 확인하세요.',
+      ],
+    );
+  }
+
+  // 3b) 자기 정답지와 견준다.
+  final expectedFile = File('$fixtureDir/$expectedPath');
   final expected = expectedFile.existsSync()
       ? Expected.read(expectedFile)
       : null;
@@ -1033,22 +1193,30 @@ Future<StepResult> compareFixture({
   if (update) {
     // 조용히 덮어쓰지 않는다 — 무엇이 바뀌는지 보여 주고, 그 뒤에 쓴다.
     // 이 가지는 늘 통과다 — 실패로 세면 `--update` 가 자기가 쓰려는 차이에 막힌다.
+    if (expected != null && difference.isEmpty) {
+      // 바뀐 것이 없으면 쓰지 않는다 — 머리 주석의 날짜만 바뀌는 커밋을 만들지 않는다.
+      return StepResult(
+        label: label,
+        passed: true,
+        plugin: plugin,
+        outcome: outcome,
+        resultWord: '바뀐 줄 없음',
+      );
+    }
     final measured = formatMeasuredLine(sdk, plugin, DateTime.now());
-    final target = '$fixture/$expectedFileName';
+    final target = '${fixture.path}/$expectedPath';
     return StepResult(
       label: label,
       passed: true,
       plugin: plugin,
+      outcome: outcome,
       updateTarget: target,
+      resultWord: '갱신',
       detailLines: [
         '정답지 갱신 대상: $target',
-        if (difference.isEmpty)
-          '정답지와 같다 — 바뀐 줄 없음'
-        else ...[
-          ?exitNote,
-          ...difference.missing.map((l) => '- $l'),
-          ...difference.unexpected.map((l) => '+ $l'),
-        ],
+        ?exitNote,
+        ...difference.missing.map((l) => '- $l'),
+        ...difference.unexpected.map((l) => '+ $l'),
         '머리 주석: $measured',
       ],
       applyUpdate: () => writeExpected(
@@ -1066,18 +1234,26 @@ Future<StepResult> compareFixture({
       label: label,
       passed: false,
       plugin: plugin,
-      detailLines: ['정답지가 없다. 처음이면 `$updateCommand` 로 만든다.'],
+      outcome: outcome,
+      detailLines: ['${fixture.path}/ — 정답지가 없다. 처음이면 `$updateCommand` 로 만든다.'],
     );
   }
   if (difference.isEmpty) {
-    return StepResult(label: label, passed: true, plugin: plugin);
+    return StepResult(
+      label: label,
+      passed: true,
+      plugin: plugin,
+      outcome: outcome,
+    );
   }
 
   return StepResult(
     label: label,
     passed: false,
     plugin: plugin,
+    outcome: outcome,
     detailLines: [
+      '${fixture.path}/$expectedPath 와 다르다.',
       if (exitNote != null) ...[exitNote, ''],
       '정답지에는 있는데 나오지 않은 경고 (${difference.missing.length})',
       ...difference.missing.map((l) => '  $l'),
@@ -1107,11 +1283,13 @@ int measureWidth(String text) {
 }
 
 /// 단계 줄 `[n/N] <label> ..... 통과|실패` 를 만든다. 결과 단어가 같은 열에 오도록 점으로 채운다.
+///
+/// 갱신 모드의 정답지 단계는 [StepResult.resultWord] (`바뀐 줄 없음` / `갱신`) 를 찍는다.
 String formatStepLine(int index, int total, StepResult result) {
   final head = '[$index/$total] ${result.label} ';
   final room = resultColumn - measureWidth(head);
   final dots = '.' * (room < 3 ? 3 : room);
-  return '$head$dots ${result.passed ? '통과' : '실패'}';
+  return '$head$dots ${result.resultWord ?? (result.passed ? '통과' : '실패')}';
 }
 
 /// 화면 맨 위의 버전 세 줄(SDK / 기반 세트 / plugin)을 만든다 (D-07).
@@ -1142,6 +1320,29 @@ List<String> formatVersionLines({
           '${pluginFailed ? ' (이번 실행에서는 plugin 이 뜨지 않았다)' : ''}',
     ),
   ];
+}
+
+/// 정답지 비교 단계들이 읽은 plugin 버전을 화면의 `plugin` 줄 하나로 요약한다 (권고 4).
+///
+/// plugin 을 쓰는 fixture 의 값만 본다 — 쓰지 않는 fixture 의 `해당 없음` 은 섞지 않는다.
+/// 하나도 없으면 "돌리지 못했다", 하나라도 못 읽었으면 그 첫 이유, 서로 다른 값이 둘 이상이면
+/// "fixture 마다 다름" 이고, 아니면 그 값이다. 같은 실행에서 값이 갈릴 길은 없지만 막아 둔다.
+PluginVersion summarizePluginVersion(List<StepResult> results) {
+  final applicable = results
+      .map((r) => r.plugin)
+      .nonNulls
+      .where((p) => p.applicable)
+      .toList();
+  if (applicable.isEmpty) {
+    return PluginVersion.unknown('정답지 비교를 돌리지 못했다');
+  }
+  final unknown = applicable.where((p) => p.version == null).firstOrNull;
+  if (unknown != null) return unknown;
+  final versions = applicable.map((p) => p.version!).toSet();
+  if (versions.length > 1) {
+    return PluginVersion.unknown('fixture 마다 다름: ${versions.join(', ')}');
+  }
+  return PluginVersion.resolved(versions.single);
 }
 
 /// 인자를 읽고, 준비(SDK 확인 · pub get)를 한 뒤, 단계를 모두 돌리고 화면을 한 번에 찍는다.
@@ -1179,39 +1380,38 @@ Future<void> main(List<String> args) async {
     // 준비 4 — fixture 의 패키지는 커밋된 lock 그대로 받는다.
     for (final fixture in fixtures) {
       await runPubGet(
-        '$repoRoot/$fixture',
+        '$repoRoot/${fixture.path}',
         enforceLockfile: true,
-        shownAs: '$fixture/',
+        shownAs: '${fixture.path}/',
       );
     }
 
-    // 단계는 하나가 실패해도 나머지를 모두 돌린다. fixture 는 순서대로 분석한다
+    // 단계는 하나가 실패해도 나머지를 모두 돌린다. fixture 는 표의 순서대로 차례로 분석한다
     // (빈 상태 폴더에 처음 실행 둘을 동시에 띄우면 드물게 깨진다 — spike 008).
-    final steps = <Future<StepResult> Function()>[
-      () async => checkLibHasNoDart(repoRoot),
-      () => checkRuleNames(repoRoot),
-      for (final fixture in fixtures) ...[
-        () async => checkFixtureOptions('$repoRoot/$fixture'),
-        () => compareFixture(
-          repoRoot: repoRoot,
-          fixture: fixture,
-          update: update,
-          sdk: sdk,
-        ),
-      ],
+    // recommended 는 같은 실행의 example 결과를 받아 견주므로 example 뒤에 돈다.
+    final results = <StepResult>[
+      checkLibHasNoDart(repoRoot),
+      await checkRuleNames(repoRoot),
+      checkFixtureOptions(repoRoot, fixtures),
     ];
-    final results = <StepResult>[];
-    for (final step in steps) {
-      results.add(await step());
+    AnalyzeOutcome? exampleOutcome;
+    for (final fixture in fixtures) {
+      final result = await compareFixture(
+        repoRoot: repoRoot,
+        fixture: fixture,
+        update: update,
+        sdk: sdk,
+        reference: fixture.expectedPath == null ? exampleOutcome : null,
+      );
+      if (fixture.path == 'example') exampleOutcome = result.outcome;
+      results.add(result);
     }
 
     // 화면 — 버전 3줄, 단계 줄, 단계별 내용, 요약 순으로 한 번에 찍는다.
-    // 기반 세트는 fixture 의 lock 에서, plugin 은 첫 fixture 의 상태 폴더에서 읽은 값이다
-    // (fixture 가 늘어 값이 갈릴 수 있게 되면 fixture 별로 찍는다 — Phase 3).
-    final baseLock = File('$repoRoot/${fixtures.first}/pubspec.lock');
-    final plugin =
-        results.map((r) => r.plugin).nonNulls.firstOrNull ??
-        PluginVersion.unknown('정답지 비교를 돌리지 못했다');
+    // 기반 세트는 첫 fixture 의 lock 에서, plugin 은 plugin 을 쓰는 fixture 들의 상태 폴더에서
+    // 읽은 값을 하나로 요약한 것이다 (summarizePluginVersion).
+    final baseLock = File('$repoRoot/${fixtures.first.path}/pubspec.lock');
+    final plugin = summarizePluginVersion(results);
     formatVersionLines(
       sdk: sdk,
       flutterLints: readLockVersion(baseLock, 'flutter_lints'),
@@ -1233,14 +1433,19 @@ Future<void> main(List<String> args) async {
     await stdout.flush();
     final failed = results.where((r) => !r.passed).toList();
     final updaters = results.where((r) => r.applyUpdate != null).toList();
-    if (updaters.isNotEmpty) {
+    if (update) {
       stdout.writeln('');
-      if (failed.isNotEmpty) {
+      if (updaters.isEmpty) {
+        stdout.writeln('바뀐 정답지가 없다 — 쓰지 않았다');
+      } else if (failed.isNotEmpty) {
         stdout.writeln('다른 단계가 실패해 정답지를 쓰지 않았다 — 실패를 먼저 고친 뒤 다시 실행하세요.');
       } else {
         for (final result in updaters) {
           result.applyUpdate!();
-          stdout.writeln('정답지를 썼다: ${result.updateTarget}');
+        }
+        stdout.writeln('정답지를 썼다 (${updaters.length}개):');
+        for (final result in updaters) {
+          stdout.writeln('  ${result.updateTarget}');
         }
       }
     }

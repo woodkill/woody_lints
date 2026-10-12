@@ -1,0 +1,17 @@
+name: woody_lints_fixture_base_only
+description: woody_lints 검증용 연습 프로젝트 — base.yaml 만 받아 기본 규칙 진단은 나오고 riverpod_lint 진단과 codegen 설정은 적용되지 않는 대조군.
+publish_to: 'none'
+version: 0.0.0
+
+environment:
+  sdk: ^3.13.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^3.0.0
+
+dev_dependencies:
+  # 저장소 루트의 woody_lints 를 그대로 받는다 (사용 프로젝트의 git 의존성 자리).
+  woody_lints:
+    path: ../..
