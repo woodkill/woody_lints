@@ -259,11 +259,11 @@ spike 는 여섯 칸을 **같은** 규칙(`prefer_single_quotes`)과 **같은** 
 - 판정에 넣은 확인 15건이 모두 성립했다. 소스를 읽어 세운 추정과 실제가 다른 칸은 29칸 중 3칸이었다 (`type=lint`, `type=warning`, 묶음이 주는 생성 파일 제외 — 셋 다 plugin 쪽).
 - 처음 실행은 15 ~ 20초다 (실행마다 빈 상태 폴더).
 - 015 와 016 이 다시 잰 것은 6번의 생성 파일 제외뿐이다. 끄는 방법 여섯 칸 — 주석의 접두사, `version`, `type=lint` (1 ~ 5번) — 은 git 의존성으로도 베타로도 재지 않았다.
-- 019 는 실제 사용 프로젝트에서 생성 파일 제외만 다시 봤다. 끄는 방법 여섯 칸은 실제 프로젝트에서 재지 않았고, 그 프로젝트가 직접 적어 둔 `// ignore` 주석이 가리는 줄의 수도 세지 않았다.
+- 019 는 실제 사용 프로젝트에서 생성 파일 제외만 다시 봤다. 끄는 방법 여섯 칸은 실제 프로젝트에서 재지 않았고, 그 프로젝트가 직접 적어 둔 `// ignore` 주석이 가리는 줄의 수도 세지 않았다. 주석이 가리는 줄은 그 뒤 023 이 셌다 (→ rule-evaluation-table.md 7번). 이 문서에 걸리는 것 둘: 손으로 쓴 파일 다섯 개가 `ignore_for_file: type=lint` 를 달아 lint 26줄을 가리고 있었고(그 파일들의 plugin 진단도 가려져 있을 것이다 — 5번의 표를 옮긴 추론), `unnecessary_ignore` 는 켜져 있지 않은 규칙을 가리키는 주석도 필요 없다고 보고했다 (줄 단위 · 파일 단위 모두 `code` 는 `unnecessary_ignore`). plugin 진단의 무시 주석은 그 프로젝트에 없어 `unnecessary_ignore` 와의 관계는 보지 않았다.
 - 확인하지 않은 것: `**/*.freezed.dart` 를 plugin 위반 샘플로 (같은 코드가 처리한다. 베타에서 `example/` 의 `sample.freezed.dart` 에 규칙 진단 2줄이 나온 것은 016 이 봤다), `type=lint` 머리를 단 **실제** 산출물에 위반을 넣었을 때 그 머리가 막는지 (019 의 0줄은 까닭을 가르지 않았다), `freezed` · `json_serializable` · `riverpod_generator` 의 다른 버전이 내는 머리, 실제 프로젝트의 생성 파일을 베타에서, 규칙을 더 켠 상태에서 실제 프로젝트의 제외를 뺀 경우, `riverpod_lint` 의 다른 14개 진단 (주석과 제외를 처리하는 코드는 진단 이름과 무관하다), 규칙과 plugin 진단을 한 옵션 파일에서 함께 끄는 것, Dart 3.14 정식 버전, git 의존성으로 받은 경우를 베타에서.
 
 ## Origin
 
-Synthesized from spikes: 012 (한 파일 구조에서 plugin 선언을 다시 적어 끄는 것은 003 이 먼저 봤다. 생성 파일 제외는 015 가 git 의존성으로, 016 이 베타로, 019 가 실제 사용 프로젝트의 생성 파일로 다시 쟀다)
+Synthesized from spikes: 012 (한 파일 구조에서 plugin 선언을 다시 적어 끄는 것은 003 이 먼저 봤다. 생성 파일 제외는 015 가 git 의존성으로, 016 이 베타로, 019 가 실제 사용 프로젝트의 생성 파일로 다시 쟀다. 실제 사용 프로젝트의 무시 주석 한 줄은 023 에서 왔다)
 Source files available in: sources/012-plugin-suppression-matrix/, sources/015-git-dependency-preset-load/, sources/016-next-sdk-forward-compat/, sources/019-real-consumer-split-invariance/
 원본 로그와 JSON: `.planning/spikes/012-plugin-suppression-matrix/results/`, `.planning/spikes/015-git-dependency-preset-load/results/`, `.planning/spikes/016-next-sdk-forward-compat/results/`, `.planning/spikes/019-real-consumer-split-invariance/results/`

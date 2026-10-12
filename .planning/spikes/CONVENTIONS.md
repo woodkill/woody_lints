@@ -96,7 +96,6 @@ spike 가 확인한 사실 자체는 `.claude/skills/spike-findings-woody-lints/
 - `dart analyze <하위 폴더>` — plugin 진단을 잃는다 (001). 규칙 검사의 복사본 폴더만 예외다 (007).
 - plugin 버전을 기본 자리(`~/.dartServer`)에서 읽는 것 — 다른 프로젝트의 폴더가 섞여 있고 자기 폴더를 고를 방법이 없다 (008).
 - 연습용 프로젝트에서의 `flutter pub get` — 옵션 파일을 고친다 (004).
-- SDK tag 의 `rules.json` 을 규칙 상태의 근거로 삼는 것 — 실제 동작과 어긋난 항목이 있었다 (005).
 - `--format=json` / `--format=machine` 의 출력만으로 옵션 파일이 멀쩡하다고 보는 것 — 깨진 YAML 은 둘 다 아무것도 찍지 않고 종료 코드만 3 이다 (013).
 - JSON 의 `type` 으로 `// ignore_for_file: type=…` 의 효과를 미루어 보는 것 — plugin 진단은 JSON 에 `STATIC_WARNING` 으로 나오지만 `type=lint` 가 끈다 (012).
 - `~/.pub-cache` 의 git 폴더에 실험용 패키지를 받는 것 — git 의존성을 잴 때는 `PUB_CACHE` 를 작업 폴더 안으로 준다 (015).
@@ -106,7 +105,7 @@ spike 가 확인한 사실 자체는 `.claude/skills/spike-findings-woody-lints/
 - 한 job 안에서 방식을 이어 돌려 "처음 실행" 을 견주는 것 — 뒤의 방식은 pub cache 가 채워진 상태다 (017).
 - 0줄을 근거로 "이 규칙은 이 프로젝트에 적용되지 않는다" 나 "이 프로젝트는 깨끗하다" 를 적는 것 — 일부러 넣은 위반 없이 세운 추정이 틀렸다 (019).
 - 사용 프로젝트 원본에서 `dart analyze` 나 `pub get` 을 돌리는 것, 비공개 프로젝트의 진단 줄을 `results/` 에 그대로 쓰는 것 (019).
-- SDK 의 `pkg/linter/tool/machine/rules.json` 을 규칙 상태 · 상류 세트 · fix 여부의 근거로 삼는 것 — 상류가 "unsupported and deprecated" 라고 적었고 tag 3.13.4 의 그 파일은 상태 하나가 틀렸으며 `sets` 가 모두 비어 있다. 상태는 tag 의 `pkg/linter/messages.yaml` 과 실제 분석, 상류 세트는 pub cache 의 YAML 에서 읽는다 (020, 022).
+- SDK 의 `pkg/linter/tool/machine/rules.json` 을 규칙 상태 · 상류 세트 · fix 여부의 근거로 삼는 것 — 상류가 "unsupported and deprecated" 라고 적었고 tag 3.13.4 의 그 파일은 상태 하나가 틀렸으며 `sets` 가 모두 비어 있다. 상태는 tag 의 `pkg/linter/messages.yaml` 과 실제 분석, 상류 세트는 pub cache 의 YAML 에서 읽는다 (005 가 어긋난 규칙 하나를 먼저 찾았고, 020 · 022 가 이름 전부로 넓혔다).
 - 비호환 쌍을 한 옵션 파일에 모두 켜고 `incompatible_lint` 를 세는 것 — 규칙 한 줄에 하나만 붙어 일부가 가려진다. 쌍마다 둘만 켠다 (020).
 - 규칙을 모두 켠 한 번의 `dart fix --dry-run` 이나 `--dry-run --code=` 의 수를 "고칠 수 있는 진단 수" 로 쓰는 것 — 앞의 것은 규칙끼리 섞이고 뒤의 것은 수정 수다. 소스를 되돌리고 `--apply --code=` 한 뒤 다시 분석한다 (022).
 - 메시지를 남기지 않는 결과에서 진단이 가리킨 무시 주석을 다시 읽을 때 주석 뒤의 설명 글까지 옮기는 것 — 코드 이름만 뽑는다 (023).

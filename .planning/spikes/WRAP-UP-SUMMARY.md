@@ -1,17 +1,18 @@
 # Spike Wrap-Up Summary
 
-**Date:** 2026-10-12 (wrap-up 다섯 번 — 2026-10-11 에 001 ~ 006 과 007 ~ 008, 2026-10-12 에 009 ~ 014, 015 ~ 016, 017 ~ 019)
-**Spikes processed:** 19 (이번 3개, 앞선 wrap-up 16개)
-**Feature areas:** `dart analyze` 실행과 결과 판정, `example/` 프로젝트와 정답지, deprecated / removed / 없는 규칙 검사, GitHub Actions CI, 프리셋 나누기 (조각 · 묶음 · 별칭), 나눈 뒤의 연습용 프로젝트 여섯, 진단 끄기와 생성 파일 제외, git 의존성으로 받기와 버전 올리기, 다음 SDK (Dart 3.14 베타) 와 SDK 올리기, 실제 사용 프로젝트의 복사본에서 재기
+**Date:** 2026-10-12 (wrap-up 여섯 번 — 2026-10-11 에 001 ~ 006 과 007 ~ 008, 2026-10-12 에 009 ~ 014, 015 ~ 016, 017 ~ 019, 020 ~ 023)
+**Spikes processed:** 23 (이번 4개, 앞선 wrap-up 19개)
+**Feature areas:** `dart analyze` 실행과 결과 판정, `example/` 프로젝트와 정답지, deprecated / removed / 없는 규칙 검사, GitHub Actions CI, 프리셋 나누기 (조각 · 묶음 · 별칭), 나눈 뒤의 연습용 프로젝트 여섯, 진단 끄기와 생성 파일 제외, git 의존성으로 받기와 버전 올리기, 다음 SDK (Dart 3.14 베타) 와 SDK 올리기, 실제 사용 프로젝트의 복사본에서 재기, Phase 4 의 평가표 — 열마다 값을 얻는 법
 **Skill output:** `./.claude/skills/spike-findings-woody-lints/`
 
-idea key 는 셋이다.
+idea key 는 넷이다.
 
 - `verify-harness-tool-behavior` (001 ~ 008, 018) — 001 ~ 006 은 ROADMAP.md Phase 2 의 "Spike first" 6가지이고, 007 과 008 은 그 6개가 재지 않고 남긴 두 가지다. 018 은 Phase 2 가 끝난 뒤에 붙은 예고(`ubuntu-latest` 가 2026-10-19 부터 Ubuntu 26.04 로 옮겨 간다)를 미리 잰 것이다 (소유자 선택 2026-10-12). 9개 모두 VALIDATED 이고 02-CONTEXT.md D-15 의 멈춤 조건에 해당한 것은 없다.
 - `preset-split-include-behavior` (009 ~ 015, 017, 019) — 009 ~ 012 는 ROADMAP.md Phase 3 의 "Spike first" 이고, 013 과 014 는 앞선 spike 끼리 맞물리는 자리다. 015 는 Phase 6 의 smoke test 가 처음 볼 예정이던 것(git 의존성으로 받았을 때의 모양)을 구조를 짓기 전에 당겨 잰 것이다 (소유자 선택 2026-10-12). 017 은 006 × 014 가 맞물리는 자리(연습용 프로젝트 여섯의 runner 시간), 019 는 앞선 spike 가 한 번도 닿지 않은 대상(실제 사용 프로젝트)이다 (둘 다 소유자 선택 2026-10-12). 여덟이 VALIDATED, 012 가 PARTIAL 이다. 멈춤 조건(009 ~ 011 중 하나라도 실패, 015 와 019 의 "나누기 전후가 다르다" 도 같은 급)에 해당한 것은 없다. 012 와 017 은 결과가 어느 쪽이든 기록하고 계속하는 항목이었다 (03-CONTEXT.md D-07).
 - `next-sdk-forward-compat` (016) — 조사 문서가 "이번 마일스톤에서 확인하지 않아도 되는 항목" 으로 둔 다음 SDK 의 동작을, 베타가 공개되어 실행으로 잴 수 있게 되자 미리 잰 것이다 (소유자 선택 2026-10-12). PARTIAL 이다 — 구조를 바꿔야 한다는 결과(멈춤 조건)는 나오지 않았고, 생성 파일 제외 하나가 달라졌다.
+- `rule-reselection-measurement` (020 ~ 023) — 021 ~ 023 은 ROADMAP.md Phase 4 의 "Spike first" 가운데 019 가 재지 않은 셋과 셋째 항목의 나머지이고, 020 은 로드맵 문구(`rules.json` 을 기준으로)와 005 가 부딪치는 자리다. Phase 4 의 논의보다 먼저 돌렸다 (소유자 선택 2026-10-12). 넷 모두 VALIDATED 이고, spike 가 스스로 건 멈춤 조건(복사본의 `pub get` 이나 분석이 저장소를 바꾸면 멈춘다)에 해당한 것은 없다.
 
-실측 조건: Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9, macOS arm64 와 GitHub Linux runner (006, 017, 018). 009 ~ 014 는 저장소의 모양을 작업 폴더에 복사한 replica 에서 `path:` 의존성으로 쟀다. 015 는 그 replica 를 로컬 git 저장소로 만들어 git 의존성으로 받았고(GitHub 에는 올리지 않았다), 016 은 같은 스크립트를 고정 SDK 와 베타(Flutter 3.49.0-0.2.pre / Dart 3.14.0-211.1.beta)로 각각 돌렸다. 017 과 018 은 작업 브랜치를 한 번 올려(소유자 확인 뒤) 임시 workflow 로 쟀다 — 이미지 `ubuntu-24.04` 20261004.327.1 과 `ubuntu-26.04` 20260927.149.1, 둘 다 코어 4개. 019 는 `flutter_starter_kit` 의 복사본을 로컬에서 쟀고 원본은 읽기만 했다.
+실측 조건: Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9, macOS arm64 와 GitHub Linux runner (006, 017, 018). 009 ~ 014 는 저장소의 모양을 작업 폴더에 복사한 replica 에서 `path:` 의존성으로 쟀다. 015 는 그 replica 를 로컬 git 저장소로 만들어 git 의존성으로 받았고(GitHub 에는 올리지 않았다), 016 은 같은 스크립트를 고정 SDK 와 베타(Flutter 3.49.0-0.2.pre / Dart 3.14.0-211.1.beta)로 각각 돌렸다. 017 과 018 은 작업 브랜치를 한 번 올려(소유자 확인 뒤) 임시 workflow 로 쟀다 — 이미지 `ubuntu-24.04` 20261004.327.1 과 `ubuntu-26.04` 20260927.149.1, 둘 다 코어 4개. 019 는 `flutter_starter_kit` 의 복사본을 로컬에서 쟀고 원본은 읽기만 했다. 020 ~ 023 도 로컬이다 — 020 은 저장소 밖의 규칙만 적은 패키지와 SDK tag 3.13.4 의 상류 파일을, 021 ~ 023 은 `flutter_starter_kit` 의 복사본(Dart 파일 469개)에 프리셋을 나눈 뒤의 작업 중인 저장소를 `path:` 로 물려 쟀다.
 
 ## Processed Spikes
 
@@ -36,8 +37,68 @@ idea key 는 셋이다.
 | 017 | runner-six-fixtures | standard | ✓ VALIDATED | GitHub Actions CI (여섯일 때의 시간), 나눈 뒤의 연습용 프로젝트 여섯 (runner 의 값), `dart analyze` 실행과 결과 판정 (시간 표) |
 | 018 | runner-next-image | standard | ✓ VALIDATED | GitHub Actions CI (다음 runner 이미지) |
 | 019 | real-consumer-split-invariance | standard | ✓ VALIDATED | 실제 사용 프로젝트의 복사본에서 재기, 그리고 프리셋 나누기 · 진단 끄기와 생성 파일 제외 · git 의존성으로 받기와 버전 올리기 (실제 프로젝트에서 다시 본 한두 줄) |
+| 020 | rule-state-vs-rules-json | standard | ✓ VALIDATED (`rules.json` 을 그대로 옮기면 안 된다 — 열마다 출처를 바꾼다) | Phase 4 의 평가표, deprecated / removed / 없는 규칙 검사 (`rules.json` 과 7번) |
+| 021 | new-rules-language-gate | standard | ✓ VALIDATED (새 규칙 6개는 언어 버전 3.11 에서 돌지 않는다) | Phase 4 의 평가표, 실제 사용 프로젝트의 복사본에서 재기 (나눈 뒤의 방법 — `consumer.dart`) |
+| 022 | dart-fix-dry-run-count | standard | ✓ VALIDATED (규칙 하나씩 apply 해 사라진 줄로 센다) | Phase 4 의 평가표, 실제 사용 프로젝트의 복사본에서 재기 (`repo_guard.dart`, `useSdk`), `dart analyze` 실행과 결과 판정 (dart fix 와 plugin 한 줄) |
+| 023 | existing-ignore-comments | standard | ✓ VALIDATED (기준선 0줄 안에 `type=lint` 파일 다섯이 lint 26줄을 가린다) | Phase 4 의 평가표, 실제 사용 프로젝트의 복사본에서 재기 (기준선), 진단 끄기와 생성 파일 제외 (한 줄) |
 
-## 이번 wrap-up 에서 달라진 것 (017 ~ 019)
+## 이번 wrap-up 에서 달라진 것 (020 ~ 023)
+
+설계도 하나를 새로 만들었다 — `rule-evaluation-table.md` (020 ~ 023). 넷이 다룬 일(Phase 4 의 평가표의 열마다 어느 출처의 어느 숫자를 적는가)이 기존 열 편 어디에도 자리가 없었다. 실측의 틀이 바뀐 자리 — `path:` 가 저장소 자체, 받은 자리가 다르면 회차를 버림, 저장소 지문, `useSdk` — 는 `real-consumer-measurement.md` 를 제자리에서 고쳤다. `rule-status-check.md` (`rules.json` 의 서술, 7번, deprecated 목록), `suppression-and-exclude.md` · `analyze-run-and-verdict.md` (한두 줄)도 고쳤다.
+
+| 무엇 | 앞선 결론 | 지금의 결론 |
+|---|---|---|
+| 규칙 메타데이터의 출처 | "SDK tag 고정 `rules.json` 을 기준으로" (ROADMAP.md Phase 4 Notes). `rules.json` 은 상태 하나가 틀렸다 (005) | 열마다 출처를 바꾼다 — 분석 · `messages.yaml` · `lints` YAML · `rules.json` 의 `incompatible`. 상류가 `rules.json` 을 "믿지 말라" 고 적었다 (020) |
+| 비호환 쌍 | "한쪽씩 나눠 돌린다" (로드맵, 잰 적 없음) | 쌍마다 둘만 켠다. 전부 켜면 둘이 가려진다 (020) |
+| `path:` 가 가리킬 자리 | 계획이 정한다, 저장소 자체는 재지 않았다 (019) | 저장소 자체. 저장소는 그대로였다 (021, 022) |
+| 기준선 | 0줄, 후보의 값은 그 규칙의 줄 수 그대로 (019) | 무시 주석이 있는 채의 0줄 (023). 하한을 올린 복사본은 기준선을 다시 잰다 (021) |
+| 새 규칙과 언어 버전 3.11 | 재지 않았다 | 6개는 돌지 않는다 — 값을 둘 적는다 (021) |
+| `dart fix` 건수 | 재지 않았다 (로드맵은 `--dry-run` 으로) | apply 해 사라진 줄 (022) |
+| 사용 프로젝트의 `// ignore` | 경위를 보지 않았다 (019) | `cast_nullable_to_non_nullable` 56건은 생성 파일의 freezed 주석. 후보 가운데 가려지는 것은 `lines_longer_than_80_chars` 260 · `discarded_futures` 2 (023) |
+
+**gather 직후에 네 README 의 수치를 원본 JSON 으로 다시 셌다.** 거의 모두 맞았고, 고친 것은 둘이다.
+
+| 무엇 | 앞서 적은 것 | 고친 것 | 고친 곳 |
+|---|---|---|---|
+| 021 의 `pub get` 횟수 | "`dart pub get --no-example` 을 세 번(물릴 때, B2 의 하한을 바꾼 뒤)" / MANIFEST "세 번의 `pub get` 과 분석 뒤에도" | 두 번 — 스크립트가 복사본에서 `pub get` 을 부르는 자리는 `pointToRepo` 와 B2 앞의 `pubGet` 둘이다 (1부의 연습용 패키지 넷은 복사본이 아니다) | README (고친 날짜를 남겼다) · MANIFEST · 사본 |
+| 021 의 하한 범위 | MANIFEST "하한을 3.12 이상으로 올리는 것만으로 … 27줄이 생긴다" | "복사본의 하한을 `^3.13.0` 으로 올리는 것만으로 … (하한 3.12 에서도 생길 것이다 — CHANGELOG 와 규칙 소스를 읽은 추정이고, 3.12 하한은 재지 않았다)" — 021 이 잰 하한은 `^3.13.0` 하나다. README 는 출처를 밝혀 적어 그대로 두었다 | MANIFEST · skill 의 사본 셋 |
+
+README 를 두고 skill 에서만 좁혀 적은 것.
+
+- **020 의 "core 35, recommended 58, flutter 10, 합 102개"** — `no_wildcard_variable_uses` 가 core 와 recommended 에 모두 적혀 있어 합집합이 102개다 (pub cache 의 `lints` 6.1.0 YAML 로 확인).
+- **022 의 표에서 "진단" 칸은 표식 줄을 포함한다** (`prefer_double_quotes` 20,353 = 프로젝트 20,345 + 표식 8). 프로젝트의 줄만 보면 019 · 021 · 023 의 값과 같다.
+- **022 의 K3 · K4 ("2부의 모든 분석에서" 정답지 16줄 · plugin 준비)는 그룹 분석 넷만 본다.** apply 뒤의 분석 아홉은 받은 자리만 확인했다 (`ensureRepoSource`). apply 뒤 증감에 plugin 의 코드가 없어 표식의 plugin 3줄은 그대로였다 (간접 확인).
+- **022 의 `sort_pub_dependencies` 는 apply 하지 않았다.** 스크립트가 apply 목록에 넣으려 했지만 `take(maxApply + 1)` 에 밀렸다. "고쳐지지 않는다" 의 근거는 단독 dry 0 과 `fix_internal.dart` 의 등록 없음이다.
+- **022 의 "단독 dry 가 0 이면 apply 할 것이 없다" 는 dry-run 의 결과를 옮긴 추론이다** — 단독 dry 0 인 규칙은 apply 하지 않았다.
+- **022 의 "36개를 apply 하면 20분 남짓"** 은 규칙 하나 약 30초로 셈하면 약 18분이다 (추정).
+- **`flutter_starter_kit` 의 Dart 파일이 019 는 468개, 021 은 469개다** (같은 날, 세는 범위 같음). 그 사이 프로젝트가 바뀌었는지는 확인하지 않았다. 022 · 023 의 README 의 469 는 021 의 값을 옮긴 것이다 — 023 의 스크립트에는 Dart 파일을 세는 코드가 없다.
+
+커밋 전에 skill 폴더만 읽은 별도 에이전트에게 Phase 4 구현자의 질문 11개를 던지고 흠을 찾게 했다 (약 16분). 어긋남 6 · 근거보다 넓음 6 · 잰 것과 추론의 혼재 7 · SDK · 날짜 · 프로젝트 누락 6 · 판정과 기록의 혼동 7 · 용어 5 · 남은 옛 결론 5 · 헷갈리는 서술 5 · 끊긴 참조 1 이 나왔다. 사본 · 스크립트 · 결과 JSON 으로 하나씩 확인했고 확인한 것은 모두 맞았다. 고친 것 가운데 계획에 걸리는 것.
+
+- **"6개 … `flutter_starter_kit` 에서 표식까지 0줄" 은 넷만 맞다.** 복사본의 지금 하한 회차(`B1`)에 넣은 표식은 3.11 문법으로 쓸 수 있는 넷이고, `initialize_in_field_declaration` · `use_declaring_parameters` 의 표식은 3.13 문법이라 `B2` 에서야 넣었다 (그 둘이 3.11 에서 돌지 않는 것은 연습용 패키지에서 봤다). "3.13 미만" 도 잰 것은 3.11 이다.
+- **"그 회차를 버린다" 는 스크립트 전체가 멈추는 것으로 구현되어 있다** (`ensureRepoSource` 가 던지고 결과 파일을 쓰지 않는다). "저장소를 바꾸면 그 자리에서 멈춘다" 도 지문을 처음과 끝에서만 견주는 것이다.
+- **021 의 "후보 규칙마다 표식을 판정에 넣었다" 는 틀렸다.** 021 의 판정은 대조 셋뿐이고 규칙별 표식 수는 기록이다. 후보마다 판정한 것은 023 이다.
+- **`dart fix` 가 저장소를 바꾸지 않는다는 근거는 `repo_guard.dart` 의 두 번(`--dry-run` 하나, `--apply --code=use_primary_constructors` 하나)이다.** 022 의 본 실행의 dart fix (2부만 74번 — 그룹 dry 4 · 단독 dry 61 · apply 9)는 지문 확인이 깨져 이것으로 다시 본 것이다.
+- **`sort_pub_dependencies` 와 "`hasFix` 인데 고치지 않는 다섯" 의 근거는 단독 dry 0 이다.** apply 는 하지 않았다.
+- **"묶음" 이 두 뜻으로 쓰였다** — 이 skill 의 `recommended.yaml` 과 022 의 G1 ~ G4. 새 문서에서는 G1 ~ G4 를 "그룹" 으로 바꿨다 (README 는 그대로 "묶음 dry").
+- **023 의 주석 출처 표에서 `implicit_dynamic_type` 1줄이 빠졌고, "원본을 읽어 센 것" 은 복사본을 센 `countIgnores` 였다.**
+- **G4 는 "언어 버전 3.13 에서만 도는 7개" 가 아니라 막는 조건이 있는 6개 + `unnecessary_primary_constructor_body` 다.**
+- **real-consumer-measurement.md 의 "`git diff 90a2736 HEAD -- lib/` 가 비어 있다 — 2026-10-12 의 wrap-up 에서 확인" 은 다섯째 wrap-up 의 일이다.** 그 뒤 Phase 3 이 `lib/` 를 나눴다.
+
+이 점검으로 **MANIFEST.md 의 요구 사항에 치환 열둘을 더 걸었다** (gather 때의 두 줄과 합쳐 바뀐 줄은 열둘이다 — 한 줄에 두 번 걸린 자리가 있다) (판정은 바뀌지 않는다. skill 의 사본에도 같은 치환을 스크립트로 걸었다): 020 의 "저장소 하한의 pubspec 옆" → "저장소와 같은 하한을 적은 pubspec 옆 (020 은 저장소 밖에 따로 만들었다)", `sets` 에 tag 를 붙임, 비호환 쌍의 "가려진다" → "실행 하나에서 보이지 않았다 (한 줄에 하나만 알린다는 것은 해석)", 021 의 "3.13 미만 · 표식까지 0줄" → 위의 범위, `repo_guard` 의 두 번, 022 의 수치에 `flutter_starter_kit` 복사본과 "단독 dry → 사라진 줄" 을 붙임, "`hasFix` 인데 고치지 않는다" → "단독 dry 가 0", `sort_pub_dependencies` 의 근거를 "돌린 것 / 읽은 것" 으로 가름, 023 의 둘에 프로젝트와 "작업 브랜치의 프리셋" 을 붙임, 019 의 "프로젝트 자신의 코드는 지금 0줄" 에 "무시 주석이 있는 채 — 그 뒤 023" 을 붙임.
+
+그대로 둔 것: 022 README 의 "분석 13번 · dart fix 75번" (dart fix 는 2부만 74번이고 1부가 따로 있다 — skill 에는 옮기지 않았다), rule-status-check.md 의 005 때 문장 "규칙 후보에서 제외한 판정이 맞다", 네 README 의 원문 표기.
+
+계획이 알아야 할 것.
+
+- **Phase 4 의 "Spike first" 넷이 모두 실행으로 확인됐다** (첫째 021, 둘째의 나머지 023, 셋째의 나머지 021, 넷째 022). 실측을 막는 것은 없다.
+- **로드맵 문구와 부딪치는 곳이 둘이다.** "규칙 메타데이터는 SDK tag 고정 `rules.json` 을 기준으로 삼는다" 는 `state` · 상류 세트 열에서 성립하지 않는다 (020). Notes 가 고정한 `fixStatus` 열을 `rules.json` 에서 채우면 "등록이 있다" 는 뜻이 되고, 022 는 그 대신 apply 로 센 건수를 쓰라고 했다. 열을 그대로 둘지 뜻을 적어 둘지는 Phase 4 의 논의가 정한다. 심각도 열의 출처는 네 spike 가 정하지 않았다. 이 wrap-up 은 로드맵을 고치지 않았다.
+- **새 규칙 6개는 채택하면 사용 프로젝트가 하한을 올리는 날 한꺼번에 줄이 생긴다** (`flutter_starter_kit` 에서 `use_primary_constructors` 968, `empty_container_bodies` 615, `unnecessary_type_name_in_constructor` 281 — 하한 `^3.13.0` 의 복사본). 지금 하한의 값은 0 (돌지 않음) 이다.
+- **apply 가 코드를 깨뜨리는 규칙이 셋이다** (`diagnostic_describe_all_properties` error 148, `always_specify_types` · `specify_nonobvious_local_variable_types` 의 `ambiguous_import`). `prefer_double_quotes` · `unnecessary_final` 은 `base.yaml` 의 규칙과 비호환이라 프리셋의 규칙을 끄지 않고는 쓸 수 없다.
+- **회차 기록에 기반 세트의 버전이 빠져 있다.** 021 ~ 023 의 결과 파일에는 SDK 와 plugin 버전은 있고 `lints` · `flutter_lints` 의 버전은 없다 (020 만 적었다). 성공 기준 2 는 셋을 함께 요구한다.
+- **소유자에게 물을 것 둘.** 비공개 조건(건수와 규칙 이름만 — 수와 설정값까지 남겨도 되는지)은 여전히 spike 가 스스로 건 조건이다. `type=lint` 를 단 손으로 쓴 파일 다섯이 무엇이고 왜 그렇게 했는지는 경로를 남기지 않는 조건 때문에 spike 가 기록하지 않았다 — 그 파일들은 어떤 lint 후보에도 보이지 않는다.
+
+## 앞선 wrap-up 에서 달라진 것 (017 ~ 019)
 
 설계도 하나를 새로 만들었다 — `real-consumer-measurement.md` (019). 019 가 Phase 4 에 넘긴 방법(복사본, `pubspec_overrides.yaml`, 일부러 넣은 위반, 비공개 프로젝트의 기록)이 기존 아홉 편 어디에도 자리가 없었다. 017 과 018 은 `ci-workflow.md` 와 `fixtures-after-split.md` 에 들어갔고, 나머지 일곱 편은 "재지 않았다" 로 남아 있던 줄을 잰 값으로 고쳤다. 앞선 결론을 뒤집은 것은 없다 — 추정이 잰 값으로 바뀌었고, 빈칸이 채워졌다.
 
@@ -166,7 +227,7 @@ Phase 2 (001 ~ 008).
 2. **`riverpod_lint` 규칙은 "전부 warning"이 아니다 (003).** info 3 / warning 11 / error 1 이다. `registerWarningRule` 은 강도가 아니라 "기본으로 켠다"는 뜻이다.
 3. **코드 생성 없이 뜨는 규칙 후보는 6개가 아니라 5개다 (003).** `protected_notifier_properties` 는 `@riverpod` 가 붙은 class 에서만 보고한다.
 4. **deprecated / removed 보고는 pubspec 의 SDK 하한에 달려 있다 (005).** 배포 파일 복사본을 저장소 밖 임시 폴더에 두면 "없는 규칙"만 잡히고 나머지를 놓친다. 복사본은 저장소 안에 둔다.
-5. **SDK tag 의 `rules.json` 은 실제 동작과 어긋날 수 있다 (005).** `unnecessary_await_in_return` 은 `rules.json` 에 stable 로 적혀 있지만 Dart 3.13.0 부터 deprecated 다.
+5. **SDK tag 의 `rules.json` 은 실제 동작과 어긋날 수 있다 (005).** `unnecessary_await_in_return` 은 `rules.json` 에 stable 로 적혀 있지만 Dart 3.13.0 부터 deprecated 다. (그 뒤 020 이 이름 전부로 넓혔다 → 29)
 6. **이미 준비된 plugin 도 네트워크가 없으면 쓰지 못한다 (002).** Analysis Server 는 뜰 때마다 `dart pub upgrade` 를 돌린다. 검증에는 네트워크가 필요하다.
 7. **`dart:io` / `dart:convert` 만으로는 기본 자리(`~/.dartServer`)에서 자기 plugin 폴더를 고를 수 없다 (008).** 폴더 이름은 md5 인데 md5 가 없고, 폴더 안에 프로젝트 경로가 없고, 재실행은 어느 파일의 시각도 바꾸지 않는다. 전용 상태 폴더를 주면 plugin 폴더가 하나만 생긴다.
 8. **컴파일된 plugin 파일이 잘린 채 남으면 서버는 스스로 회복하지 않는다 (008).** `plugin.aot` 이나 상태 폴더를 지울 때까지 계속 실패한다 (exit 0, plugin 진단 없음). 이때 머리말은 stderr 의 셋째 줄에 온다.
@@ -195,10 +256,21 @@ Phase 3 (009 ~ 014).
 runner 와 실제 사용 프로젝트 (017 ~ 019).
 
 24. **0줄은 그 규칙을 어기는 표식 없이는 해석할 수 없다 (019).** `public_member_api_docs` 를 켰는데 0줄이 나오자 "`publish_to: 'none'` 인 앱이라 적용되지 않는다" 는 추정을 세웠고, 문서 주석 없는 선언 둘을 넣자 2줄이 잡혀 추정이 틀린 것으로 드러났다. 기본 표식(`example/lib` 의 샘플)은 그 규칙을 어기지 않아 가르지 못했다. Phase 4 의 회차마다 후보 규칙을 어기는 표식이 있어야 한다.
-25. **`flutter_starter_kit` 의 기준선은 0줄이다 (019, 2026-10-12).** 1.3.0 의 규칙 12개 · 기반 세트 · `riverpod_lint` 에 걸리는 줄이 없다. "기준선 대비 차이" 가 그 규칙의 줄 수 그대로가 된다.
+25. **`flutter_starter_kit` 의 기준선은 0줄이다 (019, 2026-10-12).** 1.3.0 의 규칙 12개 · 기반 세트 · `riverpod_lint` 에 걸리는 줄이 없다. "기준선 대비 차이" 가 그 규칙의 줄 수 그대로가 된다. (그 뒤 조건이 붙었다 — 무시 주석이 있는 채의 0줄이고, 하한을 올린 복사본은 기준선을 다시 잰다 → 32, 33)
 26. **한꺼번에 띄운 이득은 runner 에서 3분의 1 이 아니라 절반이다 (017).** 코어 4개에서 분석 146 ~ 191초가 69 ~ 95초가 된다. 차례로 돌려도 시간 제한의 절반 안이라 넣어야 할 까닭은 없다.
 27. **`flutter_starter_kit` 에서 `json_serializable` 의 산출물로 본 `*.g.dart` 5개에는 진단을 막는 머리 주석이 없었다 (019).** 지금은 0줄이지만 규칙이 늘면 여기서 줄이 날 수 있다. 사용 프로젝트의 옵션 파일에 제외를 직접 적으라는 안내의 이유가 된다.
-28. **019 의 스크립트는 나눈 뒤의 저장소에서 그대로 돌지 않을 것이다.** Phase 4 는 Phase 3 뒤에 오므로, 옮겨 쓸 것은 `Consumer` (복사 · `pubspec_overrides.yaml` · 받은 자리 확인)와 `Diag` · `digest` 다. 스크립트를 읽은 것이고 돌려 보지는 않았다.
+28. **019 의 스크립트는 나눈 뒤의 저장소에서 그대로 돌지 않을 것이다.** Phase 4 는 Phase 3 뒤에 오므로, 옮겨 쓸 것은 `Consumer` (복사 · `pubspec_overrides.yaml` · 받은 자리 확인)와 `Diag` · `digest` 다. 스크립트를 읽은 것이고 돌려 보지는 않았다. (그 뒤 021 의 `consumer.dart` 가 그렇게 옮겨 나눈 뒤의 저장소에서 돌았다)
+
+Phase 4 의 실측 방법 (020 ~ 023).
+
+29. **평가표의 `state` · 상류 세트 열을 `rules.json` 에서 옮기면 안 된다 (020).** 상류가 같은 폴더의 README 에 "unsupported and deprecated, should not be relied on" 이라고 적었다. tag 3.13.4 의 그 파일은 deprecated 하나를 stable 로 적었고, 켜지는 규칙 둘(`migrate_design_widgets`, `erase_dart_type_extension_types`)을 빠뜨렸고, `sets` 가 262개 모두 비어 있다. deprecated / removed / 없는 이름은 저장소 하한의 패키지를 분석해서, stable / experimental / testing 은 tag 의 `messages.yaml` 에서 읽는다.
+30. **비호환 쌍을 한 옵션 파일에 모두 켜면 일부가 가려진다 (020).** 규칙 한 줄에 `incompatible_lint` 가 하나만 붙어, 선언된 12쌍 가운데 `unnecessary_final` 이 낀 둘이 보이지 않았다. 쌍마다 둘만 켜면 12쌍 모두 보고된다.
+31. **Dart 3.13 의 새 규칙 6개는 언어 버전 3.11 의 라이브러리에서 돌지 않는다 (021 — 3.12 는 재지 않았다).** 연습용 패키지에서 6개 모두, `flutter_starter_kit` (`^3.11.1`) 의 복사본에서 표식을 둔 넷이 그 규칙을 어기는 표식까지 0줄이고, 하한만 `^3.13.0` 으로 올린 복사본에서는 수백 줄이다. 지금 하한의 0 은 "돌지 않은 0" 이라 평가표에 값을 둘 적는다.
+32. **하한을 올리는 것만으로 기반 세트의 규칙이 줄을 낸다 (021).** 복사본의 하한을 `^3.13.0` 으로 올리자 `prefer_initializing_formals` 가 27줄을 냈다 (Dart 3.12 의 private named parameters — CHANGELOG 와 규칙 소스로 읽은 것, 3.12 하한은 재지 않았다). 하한을 올린 복사본의 기준선은 다시 잰다.
+33. **기준선 0줄은 무시 주석이 있는 채의 값이다 (023).** 손으로 쓴 파일 다섯 개가 `ignore_for_file: type=lint` 를 달아 lint 26줄(이 패키지의 `prefer_final_locals` 4줄 포함)을 가린다. 그 파일들은 어떤 lint 후보에도 보이지 않는다.
+34. **"`dart fix` 로 고칠 수 있는 건수" 는 dry-run 의 수도 `hasFix` 도 아니다 (022).** 단독 dry 의 수는 수정 수라 사라지는 줄과 두 방향으로 다르고(16 → 32줄, 155 → 123줄), 그룹 dry (022 README 의 "묶음 dry") 는 규칙끼리 섞이고, `hasFix` 인데 dart fix 가 고치지 않는 규칙이 다섯이다. 그 규칙만 apply 한 뒤 다시 분석해 사라진 줄로 센다. apply 가 error 를 남기는 규칙이 셋이다.
+35. **로드맵이 센 "`cast_nullable_to_non_nullable` 56건" 은 생성 파일 안의 freezed 주석이다 (023).** 생성 파일은 분석에서 빠지므로 아무것도 가리지 않는다. 그 규칙의 실제 줄은 5줄이다. 후보 가운데 주석이 가리는 것은 `lines_longer_than_80_chars` 260줄 · `discarded_futures` 2줄이다.
+36. **`unnecessary_ignore` 는 켜져 있지 않은 규칙을 가리키는 주석도 보고한다 (023).** 값이 다른 후보의 채택에 묶인다 — 지금의 프리셋 기준 38줄, 세 후보를 함께 켜면 12줄.
 
 ### 예상대로 확인된 것
 
@@ -227,6 +299,11 @@ runner 와 실제 사용 프로젝트 (017 ~ 019).
 23. 실제 사용 프로젝트의 복사본에서 지금 받는 그대로(git, 1.3.0) · 한 파일 구조 · 나눈 구조의 옛 주소 · 묶음 주소가 줄 단위로 같다 (019). 프로젝트의 줄이 9,374줄 나오는 조건(`always_specify_types`)에서도 나누기 전후가 같다.
 24. 사용 프로젝트가 `dev_dependencies` 에 `riverpod_lint` 를 따로 적어 두어도 `dart analyze` 의 진단에 영향이 없었다 (019 — 프로젝트 하나, 그 줄의 제약이 프리셋과 같은 `^3.1.3` 인 경우). plugin 은 그 프로젝트의 lock(3.1.3)과 무관하게 3.1.9 로 풀렸다.
 25. 사용 프로젝트가 맵 문법으로 더 켠 규칙은 3단 include 위에 그대로 얹힌다 (019).
+26. `messages.yaml` 의 deprecated 6 · removed 14 는 실제 분석과 하나도 다르지 않다. deprecated / removed 는 pubspec 의 하한을 따른다 — 하한 `^3.11.1` 에서는 3.13 에 deprecated 된 셋이 보이지 않는다 (020, 005 와 같다).
+27. 복사본의 `pubspec_overrides.yaml` 이 작업 중인 저장소 자체를 가리켜도 저장소는 그대로다 — `pub get` · 분석 · `dart fix --dry-run` · `--apply` 를 한 단계씩 견줬다 (021, 022 의 `repo_guard.dart`). replica 를 따로 만들 필요가 없다.
+28. `no_raw_types` · `no_dynamic_casts` · `async_return_with_no_await` · `strict-inference` 는 언어 버전 3.11 에서도 돈다. `flutter_starter_kit` 에서 `no_raw_types` · `no_dynamic_casts` 는 표식이 걸린 진짜 0 이다 (021).
+29. 하한을 `^3.13.0` 으로 올려도 기본 표식 16줄(이 패키지의 지금 규칙과 plugin 진단)은 한 줄도 달라지지 않았다 (021).
+30. `dart fix` 는 plugin 을 준비하지 않아 `riverpod_lint` 진단을 고치지 않는다 (022).
 
 ### 확정된 값
 
@@ -275,6 +352,18 @@ runner 와 실제 사용 프로젝트 (017 ~ 019).
 | 베타의 루트 분석 (한 파일 구조 · 나눈 구조의 replica — `tool/` 없음) | exit 0, 0줄, plugin 폴더 1, 10초 (고정 SDK 는 plugin 폴더 0, 0.5초) | 016 |
 | 베타의 `probe.dart` 에서 기준과 다른 칸 | 26칸 중 10칸 — 생성 파일 제외 8칸(규칙 쪽만 담은 5칸, 규칙 · plugin 을 함께 담은 3칸), 루트 분석 2칸 | 016 |
 | 견줌용 SDK | Flutter 3.49.0-0.2.pre / Dart 3.14.0-211.1.beta (fvm 캐시에만 설치, `.fvmrc` 는 3.47.5 그대로) | 016 |
+| SDK tag 3.13.4 의 규칙 메타데이터 | `rules.json` 262개 (stable 232 · removed 14 · experimental 11 · deprecated 5, `sets` 전부 빔, `fixStatus` hasFix 165 · noFix 67 · needsFix 26 · needsEvaluation 4) / `messages.yaml` 275개 (stable 229 · removed 14 · internal 12 · experimental 12 · deprecated 6 · testing 2) | 020 |
+| 규칙 이름 전부를 분석했을 때 (Dart 3.13.4) | 하한 `^3.13.0`: `removed_lint` 14 · `undefined_lint` 12 · `deprecated_lint` 6 · `incompatible_lint` 10, 0.47초 / 하한 `^3.11.1`: `deprecated_lint` 3 (나머지 같음) | 020 |
+| 상류 세트 (`lints` 6.1.0 · `flutter_lints` 6.0.0) | 직접 적힌 규칙 core 35 · recommended 58 · flutter 10, 합집합 102 (`no_wildcard_variable_uses` 가 core · recommended 에 겹친다) | 020 |
+| 선언된 비호환 쌍 | 12 (전부 켜면 10 이 보이고, 쌍마다 둘만 켜면 12 모두) | 020 |
+| 새 규칙의 하한별 값 (`flutter_starter_kit`, 하한 `^3.13.0` 의 복사본) | `use_primary_constructors` 968 · `empty_container_bodies` 615 · `unnecessary_type_name_in_constructor` 281 · `unnecessary_const_in_enum_constructor` 2 — 지금 하한(`^3.11.1`)에서는 넷 다 0 (돌지 않음). `async_return_with_no_await` 30 · `strict-inference` 106 은 두 하한에서 같다 | 021 |
+| 하한을 `^3.13.0` 으로 올리면 생기는 기반 세트의 줄 | `prefer_initializing_formals` 27 (`lib` 24 · `test` 3) | 021 |
+| `dart fix` 의 시간 (복사본) | 그룹 dry 15 ~ 29초, 단독 dry 5.9 ~ 17.2초 (중앙값 6.9초), apply 한 번 7.5 ~ 17.7초, 규칙 하나의 apply 회 약 30초 | 022 |
+| `hasFix` 인데 dart fix 가 고치지 않는 규칙 (진단이 있는 것) | `always_put_control_body_on_new_line` 398, `async_return_with_no_await` 30, `discarded_futures` 11, `prefer_foreach` 3, `unreachable_from_main` 2 | 022 |
+| 사용 프로젝트의 무시 주석 | 손으로 쓴 파일 67줄 · 49개, 생성 파일 121줄 · 57개. 기준선 안에서 가린 줄: `type=lint` 파일 다섯의 lint 26 + 줄 단위 주석의 analyzer 경고 28 | 023 |
+| 주석이 가린 후보의 줄 | `lines_longer_than_80_chars` 260 (107 → 367), `discarded_futures` 2 (11 → 13), `cast_nullable_to_non_nullable` 0 (5) | 023 |
+| `unnecessary_ignore` (`flutter_starter_kit`) | 지금의 프리셋 기준 38, 세 후보를 함께 켜면 12 | 023 |
+| `flutter_starter_kit` (2026-10-12, 021 ~ 023) | Dart 파일 469개, SDK 제약 `^3.11.1`. 분석 한 번 약 20 ~ 26초 (빈 상태 폴더) | 021 ~ 023 |
 
 ### 다음 phase 로 넘긴 것
 
@@ -285,9 +374,10 @@ runner 와 실제 사용 프로젝트 (017 ~ 019).
 - **Phase 6:** smoke test 가 처음 보는 것은 받아 오는 길(GitHub 주소, 실제 tag, 인증) 하나로 줄었다. 받은 뒤의 include 와 plugin 로드는 015 가 쟀다. `main` 병합은 `ref: main` 프로젝트에 곧바로 닿지 않고, 각 프로젝트가 `pub upgrade` 를 하거나 lock 없이 받을 때 닿는다 (015).
 - **SDK 를 올릴 때 (Phase 6 이후):** `.fvmrc` 를 Dart 3.14 계열로 올리기 전에 016 의 두 스크립트를 그 SDK 로 돌린다. 저장소가 나뉜 뒤에는 스크립트가 그대로 돌지 않을 것이다 (위의 "계획이 알아야 할 것").
 - **Phase 3 에 더해진 것 (017 · 018 · 019):** 검증 명령은 차례로 돌리는 지금의 구조 그대로 여섯으로 늘린다. `timeout-minutes` 는 10 그대로, `runs-on` 은 `ubuntu-latest` 그대로다. 여섯으로 늘린 실제 `tool/verify.dart` 를 runner 에서 보는 일(03-CONTEXT.md D-09)은 남아 있다. 연습용 프로젝트 여섯의 구성을 바꿀 까닭은 실제 사용 프로젝트에서도 나오지 않았다.
-- **Phase 4 에 더해진 것 (019):** 실측의 방법 — 복사본에 `pubspec_overrides.yaml`, 받은 자리를 `package_config.json` 으로 확인, 회차마다 그 규칙을 어기는 표식 파일, `lib` / `test` 를 나눠 세기, 결과에는 건수와 규칙 이름만. 기준선 0줄. `public_member_api_docs` 는 이 프로젝트에서 0줄이다. "Spike first" 의 첫째 · 넷째 항목과 `// ignore` 주석의 경위는 남아 있다.
+- **Phase 4 에 더해진 것 (019):** 실측의 방법 — 복사본에 `pubspec_overrides.yaml`, 받은 자리를 `package_config.json` 으로 확인, 회차마다 그 규칙을 어기는 표식 파일, `lib` / `test` 를 나눠 세기, 결과에는 건수와 규칙 이름만. 기준선 0줄. `public_member_api_docs` 는 이 프로젝트에서 0줄이다. "Spike first" 의 첫째 · 넷째 항목과 `// ignore` 주석의 경위는 남아 있다 (그 뒤 021 ~ 023 이 쟀다 — 아래 020 ~ 023 의 줄).
 - **Phase 5 에 더해진 것 (019):** "`dev_dependencies` 의 `riverpod_lint` 는 진단에 필요 없다" 가 실측으로 받쳐진다. 생성 파일 제외 안내의 이유를 "적지 않으면 진단이 쏟아진다" 로 적지 않는다 — `flutter_starter_kit` 에서는 제외가 어디에도 없어도 0줄이었다.
 - **runner 이미지가 옮겨 간 뒤 (2026-10-19 ~):** CI 가 실패하면 로그의 `Image:` · `Version:` 줄을 018 의 값과 견준다.
+- **Phase 4 에 더해진 것 (020 ~ 023):** 평가표의 열마다의 출처 — `state` 는 분석과 `messages.yaml`, 상류 세트는 `lints` YAML, 비호환은 쌍마다 둘만, 실측 건수는 주석을 둔 채로(가린 줄은 따로), 새 규칙 6개는 두 값, `dart fix` 건수는 apply 해 사라진 줄과 새 error. 실측의 틀은 021 의 `consumer.dart` (`path:` 가 저장소 자체, 받은 자리가 다르면 회차를 버림, 저장소 지문). 로드맵의 `rules.json` 문구와 `fixStatus` 열의 뜻, 심각도 열의 출처, 회차 기록의 기반 세트 버전, 비공개 조건의 범위, `type=lint` 를 단 손으로 쓴 파일 다섯은 논의에서 정한다.
 
 ### 확인하지 않은 것
 
@@ -347,8 +437,17 @@ runner 와 실제 사용 프로젝트 (017 ~ 019).
 - 26.04 이미지의 뒤 버전, arm64 · macOS · Windows runner, SDK 캐시(`cache: true`)를 켠 경우, Flutter 설치가 26.04 에서 빨랐던 까닭 (017, 018)
 - **다음 SDK 에서의 실제 프로젝트** — `flutter_starter_kit` 의 `pub get` 이 베타에서 풀리지 않았다 (019)
 - 학습용 프로젝트 넷(`webtoon`, `toonflix`, `pomodoro`, `state`), 나눈 구조를 git 으로 받은 실제 프로젝트, 받아 오는 길 (019 의 git 실행은 평소의 pub cache 를 썼다)
-- Dart 3.13 의 새 규칙이 language version 3.11 프로젝트에서 보고되는지, `dart fix --dry-run` 으로 고쳐지는 건수, 사용 프로젝트가 직접 적은 `// ignore` 주석이 가리는 줄의 수 (ROADMAP.md Phase 4 의 "Spike first" — 019 는 셋째 항목만 답했다)
+- (그 뒤 확인됨) Dart 3.13 의 새 규칙이 language version 3.11 프로젝트에서 보고되는지, `dart fix --dry-run` 으로 고쳐지는 건수, 사용 프로젝트가 직접 적은 `// ignore` 주석이 가리는 줄의 수 (ROADMAP.md Phase 4 의 "Spike first" — 019 는 셋째 항목만 답했고, 그 뒤 021 · 022 · 023 이 쟀다)
 - 실제 프로젝트의 생성 파일 0줄의 까닭 (`type=lint` 머리가 막은 것인지 걸릴 코드가 없는 것인지), 규칙을 더 켠 상태에서 생성 파일의 제외를 뺀 경우, 세 생성기의 버전과 다른 버전이 내는 머리 (019)
-- 상태 폴더를 이어 썼을 때의 실제 프로젝트 분석 시간, 생성 파일 제외가 분석 시간을 줄이는지, `path:` 가 작업 중인 저장소 자체를 가리킬 때, 나눈 뒤의 저장소에서 019 의 스크립트를 돌린 것, IDE 에서의 모습 (019)
+- 상태 폴더를 이어 썼을 때의 실제 프로젝트 분석 시간, 생성 파일 제외가 분석 시간을 줄이는지, `path:` 가 작업 중인 저장소 자체를 가리킬 때 (그 뒤 021 이 쟀다), 나눈 뒤의 저장소에서 019 의 스크립트를 돌린 것, IDE 에서의 모습 (019)
+
+Phase 4 의 실측 방법 (020 ~ 023).
+
+- 심각도 열의 출처, stable / experimental 이 갈린 넷의 "진짜" 상태, `sinceDartSdk` 의 정확성, `messages.yaml` 의 `internal` 규칙이 왜 하나는 켜지고 나머지는 없는 이름인지 (020)
+- 선언 밖의 비호환 쌍이 없다는 완전한 확인 — 전부 켠 실행 하나로 봤고 그 실행은 한 줄에 하나만 보인다 (020). 기반 세트(include)의 규칙과 후보의 충돌이 규칙 검사에 보이는지
+- 3.12 하한(private named parameters 만 켜지고 primary constructor 는 꺼진 자리), `prefer_initializing_formals` 27줄의 자리 하나하나, 하한을 올린 복사본에서 이 패키지의 지금 규칙 12개가 표식 밖에서 달라지는지 (021)
+- 아홉 규칙 밖의 apply (`sort_pub_dependencies` 포함), 진단도 그룹 dry 도 0 인 58개 규칙의 0 의 뜻 (규칙마다의 표식이 없다), dart fix 를 두 번 돌렸을 때 흔들리는지, IDE 의 빠른 수정 (022)
+- `type=lint` 를 단 손으로 쓴 파일 다섯이 무엇이고 왜 그랬는지, 그 파일들의 plugin 진단, plugin 진단의 무시 주석과 `unnecessary_ignore`, 생성 파일을 분석에 넣었을 때 (023)
+- 학습용 프로젝트 넷, 다음 SDK, GitHub runner 에서의 같은 실행 (020 ~ 023)
 
 위의 Phase 2 목록은 spike 가 재지 않은 것이다. 그 뒤 Phase 2 의 구현과 검증(`02-VERIFICATION.md`)이 실제 저장소에서 확인한 것은 여기에 옮기지 않았다.

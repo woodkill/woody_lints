@@ -24,6 +24,11 @@ MANIFEST.md 의 `next-sdk-forward-compat` 에서 이 영역에 걸리는 것 (�
 
 - 지금 규칙 12개는 베타에서 deprecated / removed 가 아니다 (pubspec 의 SDK 하한을 `^3.14.0` · `^3.99.0` 으로 올려도 0건) (016)
 
+MANIFEST.md 의 `rule-reselection-measurement` 에서 이 영역에 걸리는 것 (Phase 4 의 후보 거르기 — 7번).
+
+- 평가표의 `state` 열을 SDK tag 의 `rules.json` 에서 옮기지 않는다 — 상류가 같은 폴더의 README 에 "unsupported and deprecated, should not be relied on" 이라고 적었고, tag 3.13.4 의 그 파일은 `unnecessary_await_in_return` 을 stable 로 적었으며 `migrate_design_widgets` 를 빠뜨렸다. deprecated / removed / 없는 이름은 후보를 적은 옵션 파일을 저장소와 같은 하한(`^3.13.0`)을 적은 pubspec 옆에서 분석해 정하고 (020 은 저장소 밖에 그런 패키지를 따로 만들었다), stable / experimental / testing 은 tag 의 `pkg/linter/messages.yaml` 에서 읽는다. 출처끼리 갈리는 넷(`unnecessary_ignore`, `unnecessary_underscores`, `use_primary_constructors`, `migrate_design_widgets`)은 출처마다 적는다 (020)
+- 비호환 쌍은 쌍마다 둘만 켜서 확인한다. 한 옵션 파일에 모두 켠 실행에서는 규칙 한 줄에 `incompatible_lint` 가 하나만 붙었고 일부 쌍(`unnecessary_final` × `prefer_final_locals` 등)이 보이지 않았다 (Dart 3.13.4, 실행 하나 — analyzer 가 한 줄에 하나만 알린다는 것은 그 결과로 세운 해석이다). `rules.json` 이 선언한 12쌍은 따로 켜면 모두 보고된다 (020)
+
 위 `verify-harness-tool-behavior` 목록의 "`lib/` 는 바꾸지 않는다 · 루트의 제외를 그대로 둔다" 는 Phase 2 의 범위였다. 이 검사가 `lib/` 를 **읽기만 한다**는 점은 나눈 뒤에도 같다.
 
 ## How to Build It
@@ -167,7 +172,11 @@ trap cleanup EXIT
 
 후보 규칙을 옵션 파일에 적고 고정 SDK 로 분석해 한 번 거른다. 규칙만 담은 순수 Dart 패키지를 만드는 함수가 `sources/005-initial-file-rule-status/probe.sh` 의 `make_rules_package` 에 있다 (`pubspec.yaml` 에 `sdk: ^3.13.0` 을 적는 것이 핵심이다).
 
-이 검사가 가르는 것은 규칙의 **상태**(deprecated / removed / 없음)다. 후보 규칙이 실제 사용 프로젝트에서 몇 줄을 내는지는 다른 실측이고, 그 방법 — 복사본, `pubspec_overrides.yaml`, 일부러 넣은 위반 — 은 real-consumer-measurement.md 에 있다 (019). 거기서 켜 본 두 규칙의 값 (2026-10-12 의 `flutter_starter_kit`, Dart 3.13.4): `always_specify_types` 는 9,374줄, 프리셋에 주석 처리되어 있는 `public_member_api_docs` 는 0줄이다 (그 규칙을 어기는 표식 둘은 2줄로 잡혔다 — `publish_to: 'none'` 인 앱 프로젝트에서도 켜진다).
+020 이 이 방식으로 SDK tag 3.13.4 의 규칙 이름 275개를 한꺼번에 걸렀다 (저장소 밖 작업 폴더에 하한을 적은 pubspec 과 함께 — pubspec 만 있으면 저장소 안에 둘 필요가 없다. 0.5초). 평가표의 `state` 열을 채우는 법, 하한 `^3.11.1` 에서는 3.13 에 deprecated 된 셋이 보이지 않는 것, 비호환 쌍(`incompatible_lint`)은 쌍마다 둘만 켜서 봐야 하는 것은 rule-evaluation-table.md 2번 · 5번에 있다.
+
+- **Phase 4 가 서로 비호환인 두 규칙을 한 조각에 함께 적으면 이 검사가 잡을 것이다** — `incompatible_lint` 는 warning 이고(020), 통과 조건은 "진단 0건" 이다 (3번). 020 이 규칙만 적은 패키지에서 잰 강도를 옮긴 추론이고, 규칙 검사의 복사본으로는 재지 않았다. 기반 세트(include 로 받는다)의 규칙과의 충돌, 다른 조각에 나뉘어 적힌 쌍이 이 검사에서 보이는지는 모른다.
+
+이 검사가 가르는 것은 규칙의 **상태**(deprecated / removed / 없음)다. 후보 규칙이 실제 사용 프로젝트에서 몇 줄을 내는지는 다른 실측이고, 그 방법 — 복사본, `pubspec_overrides.yaml`, 일부러 넣은 위반 — 은 real-consumer-measurement.md 에 있다 (019). 거기서 켜 본 두 규칙의 값 (2026-10-12 의 `flutter_starter_kit`, Dart 3.13.4): `always_specify_types` 는 9,374줄, 프리셋에 주석 처리되어 있는 `public_member_api_docs` 는 0줄이다 (그 규칙을 어기는 표식 둘은 2줄로 잡혔다 — `publish_to: 'none'` 인 앱 프로젝트에서도 켜진다. 무시 주석이 있는 채의 값이다 — 023).
 
 ## What to Avoid
 
@@ -179,7 +188,7 @@ trap cleanup EXIT
 - **"규칙 0개" 확인을 모든 대상에 거는 것.** 규칙이 없는 `codegen.yaml` 이 헛실패한다. 반대로 이 확인을 없애면 `linter:` 의 오타를 잡을 수단이 없다.
 - **루트에서 인자 없이 분석하고 복사본의 진단만 골라내는 것** (005 가 골랐던 방식). 루트 옵션 파일에 `example/**` 제외가 없으면 `example/` 의 진단이 섞이고 plugin 까지 준비해 15초와 네트워크가 든다. 제외가 있으면 결과는 같지만 그 제외에 기대게 된다.
 - **include 로 받은 파일을 그대로 검사하는 것.** 문제 규칙 4개를 `shared.yaml` 에 적고 include 하면 `undefined_lint` 하나만 나온다 (`included_file_warning` 으로 include 줄에 보고된다). deprecated 와 removed 는 보고되지 않는다.
-- **SDK tag 의 `rules.json` 을 규칙 상태의 근거로 삼는 것.** tag 3.13.4 의 `rules.json` 은 `unnecessary_await_in_return` 을 `stable` 로 적었지만 같은 tag 의 규칙 소스는 `state: .deprecated(since: .new(3, 13, 0))` 이고, 실제 동작은 규칙 소스를 따른다.
+- **SDK tag 의 `rules.json` 을 규칙 상태의 근거로 삼는 것.** tag 3.13.4 의 `rules.json` 은 `unnecessary_await_in_return` 을 `stable` 로 적었지만 같은 tag 의 규칙 소스는 `state: .deprecated(since: .new(3, 13, 0))` 이고, 실제 동작은 deprecated 다 (005). 020 이 이름 전부로 넓혀 봤다 — 상류가 같은 폴더의 README 에 "unsupported and deprecated, should not be relied on" 이라고 적었고, 그 파일은 켜지는 규칙 둘(`migrate_design_widgets`, `erase_dart_type_extension_types`)을 빠뜨렸으며 `sets` 가 전부 비어 있다. 같은 tag 의 `pkg/linter/messages.yaml` 의 deprecated 6 · removed 14 는 실제와 하나도 다르지 않았다 (→ rule-evaluation-table.md 2번 · 3번).
 - **`plugins:` 를 담은 채 루트에서 인자 없이 분석하는 것.** Dart 3.13.4 에서는 `plugins_in_inner_options` 가 섞여 나온다 (005). 베타에서는 이 경고가 나오지 않고 대신 안쪽 옵션 파일의 `plugins:` 가 쓰여 plugin 을 준비한다 (016 이 `lib/analysis_options.yaml` 로 잰 것이고, 규칙 검사의 복사본으로 잰 것은 아니다).
 - **폴더 이름을 점으로 시작하게 짓는 것** (`.woody_rule_check/` 등). 분석되지 않는다.
 - **error 강도의 옵션 파일 진단을 JSON 에서 찾는 것.** `dart analyze` 는 옵션 파일의 error 진단만 JSON 에서 빠뜨린다. 세 코드와 위 표의 warning 들은 해당하지 않는다. 깨진 YAML 의 `parse_error` (error) 가 JSON 에 나오지 않은 것이 이와 맞는다.
@@ -200,7 +209,7 @@ trap cleanup EXIT
 
 - 그래서 이 검사의 민감도는 루트 `pubspec.yaml` 의 SDK 하한을 따른다. 하한이 `^3.13.0` 인 동안에는 3.14 에서 deprecated 될 규칙을 3.14 SDK 로 돌려도 잡지 못한다. 하한을 올리는 릴리스에서 새로 잡히는 규칙이 생길 수 있다. 지금 규칙 12개에 대해서는 016 이 미리 봤다 — 베타에서 하한을 `^3.14.0` 과 `^3.99.0` 으로 올려도 0건이다 (5번). Phase 4 가 더하는 규칙은 그때 다시 본다.
 - `unnecessary_await_in_return` 은 Dart 3.13.0 부터 deprecated 다. 규칙 후보에서 제외한 판정이 맞다.
-- Dart 3.13.4 의 deprecated 규칙은 6개다: `avoid_null_checks_in_equality_operators`, `avoid_private_typedef_functions`, `one_member_abstracts`, `prefer_final_parameters`, `use_if_null_to_convert_nulls_to_bools`, `unnecessary_await_in_return`.
+- Dart 3.13.4 의 deprecated 규칙은 6개다: `avoid_null_checks_in_equality_operators`, `avoid_private_typedef_functions`, `one_member_abstracts`, `prefer_final_parameters`, `use_if_null_to_convert_nulls_to_bools`, `unnecessary_await_in_return`. 020 이 이름 전부를 분석해 같은 6개를 얻었고 removed 는 14개다. 하한 `^3.11.1` 에서는 3.13 에 deprecated 된 셋(`avoid_private_typedef_functions`, `one_member_abstracts`, `unnecessary_await_in_return`)이 보고되지 않는다.
 - **폴더를 인자로 준 분석은 그 폴더가 분석의 루트가 된다.** 복사본이 `plugins:` 를 직접 담든 include 로 닿든 plugin 을 준비한다 (`riverpod.yaml` 그대로, `recommended.yaml`, 별칭 — 셋 다 plugin 폴더 1, 10초). 저장소 루트에서 인자 없이 돌릴 때는 하위 옵션 파일의 `plugins:` 를 쓰지 않는다 (011) — 두 실행의 다른 점이다. 이것은 Dart 3.13.4 의 차이다. 베타에서는 루트에서 인자 없이 돌려도 `lib/analysis_options.yaml` 이 닿는 `plugins:` 를 써서 plugin 을 준비한다 (016 → next-sdk-forward-compat.md 4번). 복사본 폴더를 인자로 준 규칙 검사는 베타에서도 plugin 을 준비하지 않았다.
 - 이것은 analyze-run-and-verdict.md 의 "하위 폴더를 인자로 주면 plugin 을 준비조차 하지 않는다" (001) 와 부딪치는 말이 아니다. 001 이 인자로 준 폴더(`lib`, `lib/src`)에는 옵션 파일이 없었고 옵션 파일은 그 위의 패키지 루트에 있었다. 여기서 인자로 준 폴더에는 `analysis_options.yaml` 이 **직접** 들어 있다. 두 실험에서 달랐던 조건을 적은 것이고, 그 조건 하나만 바꿔 원인을 가른 실험은 아니다.
 - "규칙 0개" 확인(`countDeclaredRules`)은 글자를 센다. 최상위 `linter:` 블록 안의 `- 이름` 줄 수이고 analyzer 가 실제로 읽은 규칙 수가 아니다. 맵 문법(`이름: true`)으로만 적은 목록은 0 으로 센다 (`02-VERIFICATION.md` 가 적어 둔 가정이고 일으켜 보지 않았다). 배포 파일은 목록 문법이다.
@@ -224,6 +233,6 @@ trap cleanup EXIT
 
 ## Origin
 
-Synthesized from spikes: 005, 007, 013 (다음 SDK 에서의 상태는 016 의 3부를 덧붙인 것이다. runner 의 두 이미지에서 통과했다는 한 줄은 018, 실제 사용 프로젝트에서 켜 본 두 규칙의 값은 019 에서 왔다)
-Source files available in: sources/005-initial-file-rule-status/, sources/007-root-analysis-with-example/, sources/013-rule-check-after-split/, sources/016-next-sdk-forward-compat/
+Synthesized from spikes: 005, 007, 013 (다음 SDK 에서의 상태는 016 의 3부를 덧붙인 것이다. runner 의 두 이미지에서 통과했다는 한 줄은 018, 실제 사용 프로젝트에서 켜 본 두 규칙의 값은 019, 이름 전부의 상태와 `rules.json` · `messages.yaml` 의 견줌은 020 에서 왔다)
+Source files available in: sources/005-initial-file-rule-status/, sources/007-root-analysis-with-example/, sources/013-rule-check-after-split/, sources/016-next-sdk-forward-compat/, sources/020-rule-state-vs-rules-json/
 원본 로그: `.planning/spikes/005-initial-file-rule-status/results/probe.log`, `.planning/spikes/007-root-analysis-with-example/results/probe.log`, `.planning/spikes/013-rule-check-after-split/results/probe.log`, `.planning/spikes/016-next-sdk-forward-compat/results/probe-<Dart 버전>.log`

@@ -125,7 +125,7 @@ fvm dart .planning/spikes/021-new-rules-language-gate/probe.dart <작업 폴더>
 
 ### 3. 복사본이 작업 중인 저장소 자체를 가리켜도 저장소는 그대로다
 
-`pubspec_overrides.yaml` 의 `path:` 에 저장소 루트의 절대 경로를 적고 `dart pub get --no-example` 을 세 번(물릴 때, B2 의 하한을 바꾼 뒤) 했다. 받은 자리(`package_config.json` 의 `rootUri`, 링크를 푼 경로)는 세 회차 모두 저장소였다 (K3). 스크립트 전후로 저장소의 `git status`, `.dart_tool/` 의 맨 위 이름, 루트 `package_config.json` · `pubspec.lock` 의 해시가 같았다 (K7). 019 가 "저장소 자체를 가리킨 실행은 재지 않았다" 로 남긴 자리다 — replica 를 따로 만들 필요가 없다.
+`pubspec_overrides.yaml` 의 `path:` 에 저장소 루트의 절대 경로를 적고 `dart pub get --no-example` 을 두 번(물릴 때, B2 의 하한을 바꾼 뒤) 했다 (2026-10-12 wrap-up 에서 고침 — 처음에는 "세 번" 으로 적었다. 스크립트가 복사본에서 `pub get` 을 부르는 자리는 이 둘이다). 받은 자리(`package_config.json` 의 `rootUri`, 링크를 푼 경로)는 세 회차 모두 저장소였다 (K3). 스크립트 전후로 저장소의 `git status`, `.dart_tool/` 의 맨 위 이름, 루트 `package_config.json` · `pubspec.lock` 의 해시가 같았다 (K7). 019 가 "저장소 자체를 가리킨 실행은 재지 않았다" 로 남긴 자리다 — replica 를 따로 만들 필요가 없다.
 
 ### 4. 하한을 올리는 것만으로 기반 세트의 규칙이 줄을 낸다
 
