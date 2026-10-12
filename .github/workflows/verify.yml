@@ -22,7 +22,7 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    # 정상 약 2분 (spike 006). 멈춰 있는 경우만 막는다.
+    # 정상 약 4분 7초 (연습용 프로젝트 여섯, 2026-10-12 실측 run 38247615476). 멈춰 있는 경우만 막는다.
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
