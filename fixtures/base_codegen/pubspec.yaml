@@ -1,0 +1,17 @@
+name: woody_lints_fixture_base_codegen
+description: woody_lints 검증용 연습 프로젝트 — base.yaml 과 codegen.yaml 만 받아 codegen 조각만 따로 받아도 생성 파일이 빠지고 plugin 은 딸려 오지 않는지 본다.
+publish_to: 'none'
+version: 0.0.0
+
+environment:
+  sdk: ^3.13.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^3.0.0
+
+dev_dependencies:
+  # 저장소 루트의 woody_lints 를 그대로 받는다 (사용 프로젝트의 git 의존성 자리).
+  woody_lints:
+    path: ../..

@@ -58,7 +58,54 @@ const fixtures = <Fixture>[
     usesPlugin: false,
     expectedPath: expectedFileName,
   ),
+  Fixture(
+    path: 'fixtures/base_riverpod',
+    label: 'base_riverpod',
+    optionsLines: [
+      'include:',
+      '- package:woody_lints/base.yaml',
+      '- package:woody_lints/riverpod.yaml',
+    ],
+    usesPlugin: true,
+    expectedPath: expectedFileName,
+  ),
+  Fixture(
+    path: 'fixtures/base_codegen',
+    label: 'base_codegen',
+    optionsLines: [
+      'include:',
+      '- package:woody_lints/base.yaml',
+      '- package:woody_lints/codegen.yaml',
+    ],
+    usesPlugin: false,
+    expectedPath: expectedFileName,
+  ),
+  Fixture(
+    path: 'fixtures/overrides',
+    label: 'overrides (끄는 설정)',
+    optionsLines: [
+      'include: package:woody_lints/recommended.yaml',
+      'linter:',
+      'rules:',
+      'prefer_final_locals: false',
+      'plugins:',
+      'riverpod_lint:',
+      'version: $pluginConstraintToken',
+      'diagnostics:',
+      'missing_provider_scope: false',
+    ],
+    usesPlugin: true,
+    expectedPath: expectedFileName,
+  ),
 ];
+
+/// [Fixture.optionsLines] 에서 조각의 plugin 선언이 들어갈 자리.
+///
+/// `[3/N]` 이 `lib/riverpod.yaml` 에서 읽은 값([readShippedPluginConstraint])으로 바꿔 견준다.
+/// 끄는 설정용 프로젝트는 `plugins:` 에 `version` 을 다시 적어야 끄기가 듣는데, 그 값이 그
+/// 프로젝트의 plugin 선언을 통째로 대신한다 (spike 012) — 조각과 어긋나면 그 프로젝트만 다른
+/// 버전 범위를 받게 되므로 같아야 한다.
+const pluginConstraintToken = '{riverpod_lint}';
 
 /// [3/N] 단계의 화면 이름.
 const fixtureOptionsLabel = '연습용 프로젝트 옵션 파일';
@@ -1005,12 +1052,20 @@ Future<StepResult> checkRuleNames(String repoRoot) async {
 /// 파일마다 주석과 빈 줄을 뺀 나머지를 `trim()` 한 줄 목록이 [Fixture.optionsLines] 와
 /// 통째로 같아야 한다. `flutter pub get` 이 써넣는 `build/**` 제외, include 삭제,
 /// 끄는 설정의 어긋남을 잡는다 (spike 004). 틀린 파일만 파일별로 적는다.
+///
+/// 견주기 전에 [pluginConstraintToken] 을 `lib/riverpod.yaml` 의 선언으로 바꾼다 —
+/// 끄는 설정용 프로젝트의 `version:` 이 조각과 다르면 이 단계가 실패한다.
 StepResult checkFixtureOptions(String repoRoot, List<Fixture> fixtures) {
+  // 조각의 plugin 선언 — optionsLines 의 [pluginConstraintToken] 자리에 넣어 견준다.
+  final shippedConstraint = readShippedPluginConstraint(repoRoot);
   final details = <String>[];
   for (final fixture in fixtures) {
     final optionsPath = '${fixture.path}/analysis_options.yaml';
     final file = File('$repoRoot/$optionsPath');
-    final expected = fixture.optionsLines;
+    final expected = [
+      for (final line in fixture.optionsLines)
+        line.replaceAll(pluginConstraintToken, shippedConstraint),
+    ];
     // 판정은 앞뒤 공백을 뗀 줄로 하고, 화면에는 들여쓰기를 살린 줄을 보여 준다.
     final rest = file.existsSync()
         ? file
@@ -1042,6 +1097,24 @@ StepResult checkFixtureOptions(String repoRoot, List<Fixture> fixtures) {
     passed: details.isEmpty,
     detailLines: details,
   );
+}
+
+/// `lib/riverpod.yaml` 의 `riverpod_lint:` 선언(예: `^3.1.3`)을 읽는다.
+///
+/// 들여쓴 `riverpod_lint: <값>` 줄의 첫 값이다. 없으면 [FormatException] — 조각의 모양이
+/// 바뀐 것이라 `[3/N]` 이 견줄 기준이 없다 (main 이 종료 코드 70 으로 끝낸다).
+String readShippedPluginConstraint(String repoRoot) {
+  final text = File('$repoRoot/lib/riverpod.yaml').readAsStringSync();
+  final match = RegExp(
+    r'^\s+riverpod_lint:\s*(\S+)\s*$',
+    multiLine: true,
+  ).firstMatch(text);
+  if (match == null) {
+    throw const FormatException(
+      'lib/riverpod.yaml 에서 riverpod_lint 선언을 찾지 못했다',
+    );
+  }
+  return match.group(1)!;
 }
 
 /// 두 줄 목록이 순서와 내용까지 같은지 본다.

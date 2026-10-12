@@ -1,0 +1,17 @@
+name: woody_lints_fixture_overrides
+description: woody_lints 검증용 연습 프로젝트 — recommended.yaml 묶음에 규칙 하나와 plugin 진단 하나를 끄는 설정을 더해 끈 진단만 사라지는지 본다 (프로젝트 전체 · 파일 · 한 줄).
+publish_to: 'none'
+version: 0.0.0
+
+environment:
+  sdk: ^3.13.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^3.0.0
+
+dev_dependencies:
+  # 저장소 루트의 woody_lints 를 그대로 받는다 (사용 프로젝트의 git 의존성 자리).
+  woody_lints:
+    path: ../..
