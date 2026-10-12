@@ -62,6 +62,25 @@ spike 에서 나와 실제 구현이 지켜야 하는 것 (근거는 각 spike �
 - 깨진 YAML 은 exit 3 인데 JSON 의 진단이 0건이고 stderr 도 비어 있다. 원인(`parse_error`)은 형식 인자 없이 돌린 출력에만 찍힌다. `linter:` 키의 오타는 아무 신호도 남기지 않는다 (013)
 - 연습용 프로젝트는 폴더마다 따로 두고 상태 폴더도 프로젝트마다 따로 준다 (지금 검증 명령의 방식 그대로). 여섯이 로컬에서 처음 66초, 재실행 20 ~ 21초다. 상태 폴더를 하나로 합치면 plugin 폴더가 넷이 되어 버전을 읽지 못한다. plugin 준비는 경로가 다르면 나눠 쓰지 못한다 (014)
 - 시간이 문제가 되면 상태 폴더를 따로 둔 채 동시에 띄우는 것을 먼저 본다 — 로컬에서 여섯이 23초이고 결과가 같았다. GitHub runner 에서의 여섯은 재지 않았다 (추정 약 4분 20 ~ 30초) (014)
+- `path:` 의존성으로 잰 009 ~ 012 의 결과는 git 의존성(패키지가 pub cache 의 `git/<저장소 이름>-<커밋 해시>/` 에 놓인다)에서도 줄 단위로 같다 — 3단 include 의 plugin 로드, 옛 주소 · 묶음 주소의 정답지 일치, 조합별 진단, 생성 파일 제외의 모양. 연습용 프로젝트를 git 의존성으로 따로 두지 않는다. 받아 오는 길(GitHub 주소, 실제 tag)은 Phase 6 의 smoke test 가 본다 (015)
+- 버전 올리기 안내는 받는 방식에 따라 다르게 적는다. tag 로 고정한 프로젝트는 `ref:` 를 고치고 `pub get`, `ref: main` 을 따르는 프로젝트는 `pub upgrade woody_lints` 다 — `ref: main` 의 `pub get` 은 lock 의 커밋에 머문다. `ref:` 만 고치고 `--enforce-lockfile` 을 돌리면 종료 코드 65 다 (015)
+
+### next-sdk-forward-compat
+
+Phase 3 이 지을 구조(조각 셋 · 묶음 · 옛 주소의 별칭)와 지금의 한 파일 구조(1.3.0)가 **다음 SDK** 에서도 같은 동작을 하는지, 정식 버전이 나오기 전에 베타로 미리 잰다. 조사 문서(`research/SUMMARY.md` § Gaps to Address)는 "include 된 파일의 `plugins:` 가 다음 SDK 에서도 허용되는가" 와 "Dart 3.14 의 `analyzer.exclude` 기준 디렉터리 변경" 을 이번 마일스톤에서 확인하지 않아도 되는 항목으로 두었다. 2026-10-01 에 Flutter 베타 `3.49.0-0.2.pre` 가 공개되어 실행으로 잴 수 있게 되었고, 소유자가 2026-10-12 에 재기로 골랐다. 결과는 기록이다 — 베타의 동작은 정식 버전에서 달라질 수 있고 이 패키지가 고칠 수 있는 것이 아니다. 구조를 바꿔야 한다는 결과가 나오면 멈추고 소유자에게 돌아간다.
+
+**Requirements:**
+
+소유자가 확정한 것 (2026-10-12, `/gsd-spike` 의 후보 선택).
+
+- 베타 SDK 는 fvm 캐시(`~/fvm/versions`)에만 설치한다. `.fvmrc`, `.vscode/settings.json`, 저장소의 파일은 바꾸지 않는다
+- GitHub 에는 아무것도 올리지 않는다
+
+spike 가 스스로 건 조건.
+
+- 같은 스크립트를 저장소 고정 SDK (Dart 3.13.4) 와 베타에서 각각 돌려 견준다. 고정 SDK 의 실행이 기준이다
+- 베타의 `dart` 는 저장소 밖을 작업 디렉터리로 두고 스크립트의 절대 경로를 주어 띄운다 — 저장소 루트에서 `dart run` 을 하면 베타가 루트의 패키지를 다시 풀 수 있다
+- 스크립트는 Dart 이고 `dart:io`, `dart:convert` 만 쓴다. 진단은 정답지 형식 `상대경로:줄  강도  규칙이름` 으로 견준다
 
 ## Spikes
 
@@ -81,3 +100,5 @@ spike 에서 나와 실제 구현이 지켜야 하는 것 (근거는 각 spike �
 | 012 | preset-split-include-behavior | plugin-suppression-matrix | standard | 규칙과 plugin 진단을 프로젝트 전체 / 파일 하나 / 한 줄에서 끄는 여섯 칸과 `analyzer.exclude` 가 각각 끈 것만 사라지게 하는지가 확정된다 | ⚠ PARTIAL (여섯 칸은 성립. 묶음이 주는 생성 파일 제외는 plugin 진단에 통하지 않는다) | analyzer-plugin, ignore, exclude, override |
 | 013 | preset-split-include-behavior | rule-check-after-split | standard | 규칙이 `base.yaml` 로 옮겨 간 뒤의 규칙 검사에서 문제 규칙 셋과 깨진 입력 셋이 어떤 종료 코드와 진단으로 드러나는지가 확정된다 | ✓ VALIDATED | linter-rules, deprecated-lint, rule-check, broken-yaml |
 | 014 | preset-split-include-behavior | multi-fixture-plugin-cost | standard | plugin 을 쓰는 연습용 프로젝트 넷을 차례로 돌릴 때의 시간과, 폴더마다 따로 두는 방식 대 작업 폴더 하나를 돌려 쓰는 방식의 차이가 재어진다 | ✓ VALIDATED | analyzer-plugin, timing, state-folder, fixture-layout |
+| 015 | preset-split-include-behavior | git-dependency-preset-load | standard | 나눈 구조를 `path:` 가 아니라 git 의존성으로 받아도(패키지가 pub cache 에 놓여도) plugin 이 로드되고 옛 주소 · 묶음 주소가 지금 정답지와 같으며, 생성 파일 제외의 모양이 `path:` 때와 같다 | ✓ VALIDATED | git-dependency, pub-cache, include, analyzer-plugin, lockfile |
+| 016 | next-sdk-forward-compat | next-sdk-forward-compat | standard | Flutter 베타 3.49.0-0.2.pre 에서 include 로 받는 `plugins:` 가 로드되는지, `codegen.yaml` 의 제외가 규칙 진단에 여전히 통하는지, 지금 규칙 12개 중 새로 deprecated 된 것이 있는지가 확정된다 | PENDING | beta-sdk, forward-compat, include, analyzer-plugin, exclude, deprecated-lint |
