@@ -27,7 +27,7 @@ fvm dart run tool/verify.dart --update
 - 정답지를 쓰기 전에 바뀌는 줄을 화면에 보여 준다 (`- ` 는 사라지는 줄, `+ ` 는 새로 생기는 줄).
 - 갱신된 정답지의 `git diff` 가 "이 변경으로 생기거나 사라진 경고" 의 기록이다. 커밋 전에 읽어 본다.
 - CI 에서는 `--update` 가 거부된다 (종료 코드 64). 정답지는 로컬에서 갱신해 커밋한다.
-- 같은 실행에서 다른 단계(`[1/4]` ~ `[3/4]`)가 실패했으면 정답지를 쓰지 않고 `다른 단계가 실패해 정답지를 쓰지 않았다` 를 찍는다 (종료 코드 1). 실패를 고친 뒤 다시 돌린다. plugin 준비 실패와 도구 사망에서는 전과 같이 쓰지 않는다 — 그때는 이 문구 대신 `[4/4]` 의 실패 내용이 찍힌다. 썼을 때는 `정답지를 썼다: example/expected_diagnostics.txt` 가 찍힌다. 2026-10-12 에 더한 안전장치다 (아래 M12).
+- 같은 실행에서 다른 단계가 실패했으면 정답지를 쓰지 않고 `다른 단계가 실패해 정답지를 쓰지 않았다` 를 찍는다 (종료 코드 1). 실패를 고친 뒤 다시 돌린다. plugin 준비 실패와 도구 사망에서는 전과 같이 쓰지 않는다 — 그때는 이 문구 대신 `[4/4]` 의 실패 내용이 찍힌다. 썼을 때는 `정답지를 썼다: example/expected_diagnostics.txt` 가 찍힌다. 2026-10-12 에 더한 안전장치다 (아래 M12, M15 ~ M17).
 
 이 폴더의 패키지를 손으로 받을 일이 있으면 `dart pub get` 을 쓴다. `flutter pub get` 은 쓰지 않는다 — `analysis_options.yaml` 에 `build/**` 제외를 써넣어 "include 한 줄" 이 아니게 만든다. 돌렸다면 `git checkout -- example/analysis_options.yaml` 로 되돌린다.
 
@@ -78,7 +78,7 @@ lib/added_rules.dart:18  info  always_declare_return_types
 | 70 | 스크립트가 예외로 끝남 (파일 형식 · 파일 작업 · 프로세스 실행 실패) |
 | 78 | 실행 중인 SDK 가 `.fvmrc` 와 다름 — 검증을 시작하지 않음 |
 
-단계는 네 개다: `[1/4]` `lib/` 에 `.dart` 파일 없음, `[2/4]` 배포 파일의 규칙 이름, `[3/4]` `example/` 옵션 파일, `[4/4]` `example/` 정답지 비교. 하나가 실패해도 나머지를 모두 돌린다. `[2/4]` 는 배포 파일에서 규칙을 하나도 읽지 못하면(최상위 `linter:` 아래 `rules:` 목록이 비어 있거나 없으면) 실패한다 — 규칙을 다른 파일로 옮길 때 경로를 잘못 잡은 것이 통과로 보이지 않게 (2026-10-12, 아래 M13 · M14).
+단계는 네 개다: `[1/4]` `lib/` 에 `.dart` 파일 없음, `[2/4]` 배포 파일의 규칙 이름, `[3/4]` `example/` 옵션 파일, `[4/4]` `example/` 정답지 비교. 하나가 실패해도 나머지를 모두 돌린다. `[2/4]` 는 배포 파일을 `plugins:` 없이 복사한 폴더를 `dart analyze` 로 분석해, 종료 코드가 0 이 아니거나 진단이 하나라도 있으면 실패한다 — deprecated / removed / 없는 규칙뿐 아니라 겹친 규칙 · 모르는 키 · 없는 진단 코드 같은 옵션 경고도 실패다. 깨진 YAML 은 종료 코드 3 에 진단 0건으로 나오므로 같은 폴더를 형식 인자 없이 한 번 더 돌려 `parse_error` 줄을 보여 준다. 배포 파일의 최상위 `linter:` 블록에서 `- 규칙이름` 줄을 하나도 세지 못해도 실패한다 — 규칙을 다른 파일로 옮길 때 경로를 잘못 잡은 것이 통과로 보이지 않게 (2026-10-12, 아래 M13 ~ M17).
 
 ## 검증이 실제로 잡아내는지 확인한 기록
 
@@ -155,8 +155,30 @@ lib/added_rules.dart:18  info  always_declare_return_types
 - **M12 도 고치기 전에는 정답지를 덮어썼다.** 같은 변경에서 고치기 전의 `--update` 는 정답지를 `exit 2` + `lib/should_not_appear.dart:5  warning  invalid_annotation_target` 한 줄로 바꿔 썼다 (종료 코드 1, 쓴 파일은 되돌렸다). M13 은 고치기 전에 `[2/4] 통과` · `[4/4] 실패` 였다 — 규칙을 하나도 보지 못한 단계가 통과로 찍혔다.
 - **`--update` 의 정상 경로는 그대로다.** M10 의 상태(정답지에 같은 줄 2개, 단계 넷은 문제 없음)에서 `--update` 를 돌리면 `- lib/base_rules.dart:22  info  avoid_print` 를 보여 준 뒤 정답지를 16줄로 되돌려 쓰고 `정답지를 썼다: example/expected_diagnostics.txt` 를 찍는다 (종료 코드 0, 5초; 쓴 파일은 되돌렸다). `--update` 가 자기가 쓰려는 차이에 막히지는 않는다. `CI=true` 를 준 `--update` 는 여전히 종료 코드 64 다.
 - **M14 는 Phase 3 을 위한 확인이다.** 규칙을 `base.yaml` 같은 다른 파일로 옮길 때 `[2/4]` 의 대상 파일을 함께 옮기지 않으면, 규칙이 멀쩡히 적용되어 `[4/4]` 가 통과하더라도 `[2/4]` 가 바로 실패한다. 고치기 전의 스크립트는 이 모양에서 단계 넷이 모두 통과했다 (02-VERIFICATION.md 의 복사본 실측 — 이번에 고치기 전 스크립트로 다시 재지는 않았다).
-- **막지 않는 것도 있다.** plugin 버전을 읽지 못해 화면의 `plugin` 줄이 `?` 인 실행에서 단계 넷이 모두 통과하면 `--update` 는 지금도 정답지를 쓰고 머리 주석에 `riverpod_lint ?` 를 적는다 (02-REVIEW.md WR-01 의 둘째 경우 — 이번에 다시 재지 않았다). `[2/4]` 는 규칙 수가 0 인지만 본다. deprecated / removed / 없는 규칙 밖의 경고(겹쳐 적은 규칙 등)는 여전히 이 단계에서 실패로 치지 않는다.
+- **막지 않는 것도 있다.** plugin 버전을 읽지 못해 화면의 `plugin` 줄이 `?` 인 실행에서 단계 넷이 모두 통과하면 `--update` 는 지금도 정답지를 쓰고 머리 주석에 `riverpod_lint ?` 를 적는다 (02-REVIEW.md WR-01 의 둘째 경우 — 이번에 다시 재지 않았다). `[2/4]` 가 세 코드 밖의 옵션 경고와 깨진 YAML 을 실패로 치지 않던 것은 2026-10-12 에 고쳤다 (아래 M15 ~ M17).
 
 변경은 모두 커밋하지 않고 되돌렸다 (`git status` 와, 정답지 · `lib/` 를 이 실측 전의 커밋과 견준 `git diff` 로 확인). `--update` 를 돌린 두 실행 뒤에는 정답지를 바로 되돌렸고, 끝에 검증 명령이 다시 종료 코드 0 인 것을 봤다.
+
+### 추가 실측 — 망가진 배포 파일의 `--update` (03-01)
+
+실측 (03-01): Flutter 3.47.5 / Dart 3.13.4, riverpod_lint 3.1.9, 2026-10-12
+
+실행한 명령: 입력마다 `fvm dart run tool/verify.dart --update` 와 `fvm dart run tool/verify.dart` 를 한 번씩. 세 입력은 `lib/analysis_options.yaml` 에만 넣었고, 변경은 한 번에 하나만 만들고 바로 되돌렸다.
+
+| # | 변경 | 실패한 단계 | 정답지와의 차이 | 종료 코드 | 항목 |
+|---|------|-------------|-----------------|-----------|------|
+| M15 | `lib/analysis_options.yaml` 46행 `- '**/*.freezed.dart'` 의 끝 따옴표를 뗌 (닫지 않은 따옴표로 깨진 YAML) | `--update` 에서 `[2/4]` (갱신 모드의 `[4/4]` 는 통과로 찍힌다). 보통 실행에서 `[2/4]` 과 `[4/4]` | `[2/4]` 가 낸 줄: `error - analysis_options.yaml:47:8 - While parsing a block collection, expected '-'. - parse_error`<br>정답지를 쓰지 않았다 (파일의 git hash 가 실행 전과 같다) | 1 | CONTEXT '가장 먼저 할 일' — 망가진 배포 파일의 --update (02-UAT.md 9번, WR-03 의 다른 절반) |
+| M16 | `lib/analysis_options.yaml` 21행 `rules:` 를 `ruels:` 로 바꿈 | `--update` 에서 `[2/4]` (갱신 모드의 `[4/4]` 는 통과로 찍힌다). 보통 실행에서 `[2/4]` 과 `[4/4]` | `[2/4]` 가 낸 줄: `build/woody_rule_check/analysis_options.yaml:21  warning  unsupported_option`<br>정답지를 쓰지 않았다 (파일의 git hash 가 실행 전과 같다) | 1 | CONTEXT '가장 먼저 할 일' — 망가진 배포 파일의 --update (02-UAT.md 9번, WR-03 의 다른 절반) |
+| M17 | `lib/analysis_options.yaml` 40행 뒤에 `- avoid_print # dup-probe` (겹친 규칙), 44행 뒤에 `no_such_code_zz9: ignore` (없는 진단 코드) 를 더함 | `--update` 에서 `[2/4]` (갱신 모드의 `[4/4]` 는 통과로 찍힌다). 보통 실행에서 `[2/4]` 과 `[4/4]` | `[2/4]` 가 낸 줄:<br>`build/woody_rule_check/analysis_options.yaml:41  warning  duplicate_rule  (avoid_print)`<br>`build/woody_rule_check/analysis_options.yaml:46  warning  unrecognized_error_code`<br>정답지를 쓰지 않았다 (파일의 git hash 가 실행 전과 같다) | 1 | CONTEXT '가장 먼저 할 일' — 망가진 배포 파일의 --update (02-UAT.md 9번, WR-03 의 다른 절반) |
+
+세 입력 모두 `--update` 의 화면에 `다른 단계가 실패해 정답지를 쓰지 않았다 — 실패를 먼저 고친 뒤 다시 실행하세요.` 와 `점검 실패 (4개 중 1개)` 가 찍혔고, 보통 실행은 `점검 실패 (4개 중 2개)` 였다. 되돌린 뒤의 보통 실행은 종료 코드 0, `점검 통과 (4개 중 4개)` 다.
+
+- **고치기 전에는 세 입력 모두 `--update` 가 정답지를 썼다.** 고치기 직전의 스크립트로 같은 세 변경을 이 저장소에서 만들어 돌렸더니 셋 다 종료 코드 0, `[2/4] 통과`, `[4/4] 통과`, `정답지를 썼다: example/expected_diagnostics.txt`, `점검 통과 (4개 중 4개)` 였다. 쓴 정답지는 이랬다 (쓴 파일은 되돌렸다) — M15 는 `exit 3` + `lib/should_not_appear.dart:5  warning  invalid_annotation_target` 1줄 (include 가 깨져 규칙 16줄이 전부 사라졌다), M16 은 이 패키지가 추가하는 규칙 6줄이 빠지고 `analysis_options.yaml:1  warning  included_file_warning` 1줄이 더해진 것, M17 은 16줄 그대로에 `analysis_options.yaml:1  warning  included_file_warning` 2줄이 더해진 것. 보통 실행은 고치기 전에도 셋 다 종료 코드 1 이었지만 `[4/4]` 만 실패했다 (`점검 실패 (4개 중 1개)`).
+- **잡는 것은 `[2/4]` 의 새 통과 조건(exit 0 이고 진단 0건) 이다.** 갱신 모드의 `[4/4]` 는 자기가 쓰려는 차이에 막히지 않도록 늘 통과로 찍힌다. 그래서 망가진 배포 파일은 `[2/4]` 가 실패로 잡아야 "다른 단계가 실패하면 쓰지 않는다" 는 안전장치(M12)가 돈다. 고치기 전의 `[2/4]` 는 deprecated / removed / 없는 규칙의 세 코드만 골랐다 — 세 입력의 진단은 그 밖의 코드이거나(M16 · M17) 아예 JSON 에 나오지 않았다(M15).
+- **깨진 YAML 은 JSON 에 진단이 없다.** M15 의 규칙 검사 복사본은 종료 코드 3 인데 `--format=json` 출력의 진단이 0건이다. 그래서 같은 폴더를 형식 인자 없이 한 번 더 돌린 출력에서 `parse_error` 줄을 골라 보여 준다 (spike 013). 그 줄은 따옴표를 뗀 46행이 아니라 파서가 막힌 47행을 가리킨다.
+- **세 코드 밖의 진단에도 규칙 이름을 붙인다.** M17 의 `duplicate_rule` 줄 끝의 `(avoid_print)` 는 진단이 가리키는 복사본의 줄에서 읽은 것이다. `unrecognized_error_code` 줄은 규칙 줄이 아니라 그대로 보인다.
+- M13 의 문구는 03-01 에서 `` `lib/analysis_options.yaml` 의 최상위 `linter:` 블록 안에서 `- 규칙이름` 줄을 하나도 세지 못했다. `` 로 바뀌었다 — 코드는 `rules:` 키를 보지 않는다. M13 행은 그날 실제로 찍힌 문구 그대로 둔다.
+
+변경은 모두 커밋하지 않고 되돌렸다 (`git status` 와, 정답지 · `lib/` 를 `19ae5ec` · `90a2736` 과 견준 `git diff` 로 확인). `--update` 를 돌린 실행 뒤에는 정답지를 바로 되돌렸고, 끝에 검증 명령이 다시 종료 코드 0 인 것을 봤다.
 
 항목의 `VERIFY-NN` 은 `.planning/REQUIREMENTS.md` 의 요구사항 번호, `D-NN` 은 `.planning/phases/02-verification-harness/02-CONTEXT.md` 의 결정 번호다.
