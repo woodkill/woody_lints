@@ -2,18 +2,18 @@
 gsd_state_version: "1.0"
 milestone: v2.0
 milestone_name: Package Rework
-current_phase: 3
+current_phase: 03
 current_phase_name: Preset Split
-status: planning
-stopped_at: Phase 3 context gathered
-last_updated: "2026-10-12T03:31:57.934Z"
+status: executing
+stopped_at: Phase 3 planned (plan 4개, checker 통과)
+last_updated: "2026-10-12T11:05:18.100Z"
 last_activity: 2026-10-12
-last_activity_desc: Phase 2 complete, transitioned to Phase 3
-state_head: 06c360c710f8d0615cb361f8e0beac8ffd5d6871
+last_activity_desc: Phase 3 계획 완료 (plan 4개 · wave 4개, 계획 검사 2차 통과)
+state_head: 8f8fc33258ec9506a85e8af6e954501fcc062842
 progress:
   total_phases: 6
   completed_phases: 2
-  total_plans: 9
+  total_plans: 13
   completed_plans: 9
   percent: 33
 ---
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-10-12)
 
 ## Current Position
 
-Phase: 3 — Preset Split
+Phase: 03 (Preset Split) — READY TO EXECUTE
 Plan: Not started
-Status: Ready to plan
-Last activity: 2026-10-12 — Phase 2 complete, transitioned to Phase 3
+Status: Ready to execute
+Last activity: 2026-10-12 — Phase 3 계획 완료 (plan 4개 · wave 4개, 계획 검사 2차 통과)
 
 Progress: [███░░░░░░░] 33%
 
@@ -131,7 +131,7 @@ None yet.
 
 ### Blockers/Concerns
 
-- [Phase 3] Spike 선행: 이 저장소 구조에서의 include 경유 plugin 로드와 3단 include 가 확인되지 않았다. 실패하면 URI 결정을 소유자와 다시 본다
+- [Phase 3] Spike 선행 — 해소 (2026-10-12): include 경유 plugin 로드(009), 3단 include(010), 나눈 뒤 루트 분석의 `plugins_in_inner_options` 소멸(011)이 모두 VALIDATED 라 멈춤 조건은 발동하지 않았다. 넷째 항목(012)은 PARTIAL — 묶음이 주는 생성 파일 제외는 plugin 진단에 통하지 않아, 성공 기준 3 은 "Dart 3.13.4 의 규칙 진단" 으로 범위를 적어 검증한다 (`03-RESEARCH.md`)
 - [Phase 4] D13: 규칙별 채택은 소유자 검토 지점이다. 실측 표 없이는 결정하지 않는다
 - [Phase 1] 리뷰 지적 13건이 열려 있다 (`01-REVIEW-DISPOSITION.md`, 합계 16). 그중 WR-03 의 남은 두 경우 — README/CHANGELOG 만 고친 변경, 새 프리셋 파일 추가 — 는 `VERSIONING.md` 의 판정 순서와 기준표가 다른 등급을 내며 D-05 를 건드리는 소유자 결정이 필요하다. 2.0.0 의 등급(major)에는 영향이 없다
 - [Phase 3] `riverpod_lint` 하한을 `^3.1.9` 로 올릴 때(PRESET-05): 3.1.9 는 Dart 3.13 이상을 요구한다. 지금은 `sdk: ^3.13.0` 이라 문제없지만 `VERSIONING.md` 에 이 전제가 적혀 있지 않다 (Backlog `Phase 999.1`)
@@ -151,5 +151,5 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-10-12T03:31:57.897Z
-Stopped at: Phase 3 context gathered
-Resume file: .planning/phases/03-preset-split/03-CONTEXT.md
+Stopped at: Phase 3 planned (plan 4개, checker 통과)
+Resume file: .planning/phases/03-preset-split/03-01-PLAN.md
