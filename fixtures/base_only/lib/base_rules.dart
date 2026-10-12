@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-// 배포 파일에 적혀 있지만 기반 세트(flutter_lints / lints)도 켜는 규칙 6개와,
-// 기반 세트만 켜는 규칙 1개를 규칙마다 한 건씩 어긴다.
+// 기반 세트(flutter_lints / lints)가 켜는 규칙 7개를 규칙마다 한 건씩 어긴다.
+// 2.0.0 전까지는 그중 6개가 배포 파일에도 겹쳐 적혀 있었다 (RULES-01 로 지움).
 
 /// `sized_box_for_whitespace` — 여백용 Container (width 와 height 둘 다 준다.
 /// width 하나만 주면 이 규칙이 걸리지 않는다).

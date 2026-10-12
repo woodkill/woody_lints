@@ -1,10 +1,11 @@
 // woody_lints 검증 명령 — 배포 설정이 기대한 대로 적용되는지를 단계 N 개로 확인한다
-// (N = 3 + 연습용 프로젝트 수. 연습용 프로젝트는 아래 `fixtures` 표가 정한다).
+// (N = 4 + 연습용 프로젝트 수. 연습용 프로젝트는 아래 `fixtures` 표가 정한다).
 //
 //   [1/N] lib/ 에 .dart 파일이 없는지
 //   [2/N] 조각 파일 셋(lib/base.yaml · codegen.yaml · riverpod.yaml)의 복사본을 분석해 진단이 하나도 없는지 (deprecated / removed / 없는 규칙, 겹친 규칙 · 모르는 키 같은 옵션 경고, 깨진 YAML)
-//   [3/N] 연습용 프로젝트 전부의 analysis_options.yaml 이 정해진 내용인지 (주석 · 빈 줄을 뺀 내용을 통째로 견준다)
-//   [4/N] ~ [N/N] 연습용 프로젝트마다 `dart analyze` 로 분석한 결과가 정답지와 같은지
+//   [3/N] 배포 파일의 구성 — 묶음 · 별칭은 include 만 담는지, lib/base.yaml 의 규칙이 기반 세트와 겹치지 않는지, RULES.md 의 켠 규칙 표와 같은지
+//   [4/N] 연습용 프로젝트 전부의 analysis_options.yaml 이 정해진 내용인지 (주석 · 빈 줄을 뺀 내용을 통째로 견준다)
+//   [5/N] ~ [N/N] 연습용 프로젝트마다 `dart analyze` 로 분석한 결과가 정답지와 같은지
 //         (`fixtures` 표의 순서. recommended 는 자기 정답지 없이 같은 실행의 example 결과와 견준다)
 //
 // 실행: fvm dart run tool/verify.dart [--update]
@@ -101,14 +102,37 @@ const fixtures = <Fixture>[
 
 /// [Fixture.optionsLines] 에서 조각의 plugin 선언이 들어갈 자리.
 ///
-/// `[3/N]` 이 `lib/riverpod.yaml` 에서 읽은 값([readShippedPluginConstraint])으로 바꿔 견준다.
+/// `[4/N]` 이 `lib/riverpod.yaml` 에서 읽은 값([readShippedPluginConstraint])으로 바꿔 견준다.
 /// 끄는 설정용 프로젝트는 `plugins:` 에 `version` 을 다시 적어야 끄기가 듣는데, 그 값이 그
 /// 프로젝트의 plugin 선언을 통째로 대신한다 (spike 012) — 조각과 어긋나면 그 프로젝트만 다른
 /// 버전 범위를 받게 되므로 같아야 한다.
 const pluginConstraintToken = '{riverpod_lint}';
 
-/// [3/N] 단계의 화면 이름.
+/// [4/N] 단계의 화면 이름.
 const fixtureOptionsLabel = '연습용 프로젝트 옵션 파일';
+
+/// [3/N] 단계의 화면 이름.
+const shippedCompositionLabel = '배포 파일의 구성';
+
+/// 규칙을 담으면 안 되는 배포 파일 — include 줄만 (03-REVIEW.md WR-01).
+///
+/// 저장소 루트 기준 경로 → 주석 · 빈 줄을 뺀 뒤 `trim()` 한 줄의 정해진 목록이다.
+/// 규칙은 `lib/base.yaml` 에만 적는다. 묶음이나 별칭에 적힌 규칙은 `[2/N]` 의 규칙 검사
+/// 대상([ruleCheckTargets])이 아니라서 다른 단계가 잡지 못한다.
+const includeOnlyFiles = <String, List<String>>{
+  'lib/analysis_options.yaml': [
+    'include: package:woody_lints/recommended.yaml',
+  ],
+  'lib/recommended.yaml': [
+    'include:',
+    '- package:woody_lints/base.yaml',
+    '- package:woody_lints/riverpod.yaml',
+    '- package:woody_lints/codegen.yaml',
+  ],
+};
+
+/// 규칙 근거 문서 (저장소 루트 기준). `[3/N]` 이 켠 규칙 표를 `lib/base.yaml` 과 견준다.
+const rulesMdFile = 'RULES.md';
 
 /// 규칙 검사의 대상 — 규칙이 적힐 수 있는 조각 셋 (저장소 루트 기준). 읽기만 한다.
 ///
@@ -192,7 +216,7 @@ const pluginPackage = 'riverpod_lint';
 
 /// 연습용 프로젝트 하나 — [fixtures] 표의 한 행.
 ///
-/// [path] 하나가 pub get 대상, `[3/N]` 의 옵션 파일, 정답지 자리, 상태 폴더를 정한다.
+/// [path] 하나가 pub get 대상, `[4/N]` 의 옵션 파일, 정답지 자리, 상태 폴더를 정한다.
 class Fixture {
   /// [expectedPath] 가 null 이면 자기 정답지 없이 `example` 의 같은 실행 결과와 견준다.
   const Fixture({
@@ -210,7 +234,7 @@ class Fixture {
   /// 화면의 단계 이름 (예: `base_only (기본만)`).
   final String label;
 
-  /// `[3/N]` 이 견주는, 주석 · 빈 줄을 뺀 옵션 파일의 줄 — 앞뒤 공백을 `trim()` 해 견준다.
+  /// `[4/N]` 이 견주는, 주석 · 빈 줄을 뺀 옵션 파일의 줄 — 앞뒤 공백을 `trim()` 해 견준다.
   final List<String> optionsLines;
 
   /// plugin 을 쓰는지. false 면 화면의 `plugin` 줄과 정답지 머리 주석에 `해당 없음` 이다.
@@ -842,24 +866,63 @@ String? readRuleNameAt(String line, List<String> copyLines) {
 
 /// 옵션 파일 본문([options])의 최상위 `linter:` 블록에 적힌 규칙의 수를 센다.
 ///
+/// [declaredRuleNames] 의 길이다. 블록이 없으면 0 이다.
+int countDeclaredRules(String options) => declaredRuleNames(options).length;
+
+/// 옵션 파일 본문([options])의 최상위 `linter:` 블록에 적힌 규칙 이름을 적힌 순서대로 돌려준다.
+///
 /// 블록은 `linter:` 로 시작하는 줄부터 그 다음의 들여쓰기 없는 줄 앞까지다. 그 안에서
-/// `- 규칙이름` 꼴 줄만 센다 — 주석 처리된 줄(`# - …`)과 블록 밖의 목록 항목
-/// (`analyzer.exclude` 의 glob)은 세지 않는다. 블록이 없으면 0 이다.
-int countDeclaredRules(String options) {
-  final rulePattern = RegExp(r'^\s*-\s*[A-Za-z0-9_]+');
+/// `- 규칙이름` 꼴 줄만 읽는다 — 주석 처리된 줄(`# - …`)과 블록 밖의 목록 항목
+/// (`analyzer.exclude` 의 glob)은 읽지 않는다. 블록이 없으면 빈 목록이다.
+/// 같은 이름이 두 번 적혀 있으면 두 번 들어간다 (`[3/N]` 이 중복을 잡는다).
+List<String> declaredRuleNames(String options) {
+  final rulePattern = RegExp(r'^\s*-\s*([A-Za-z0-9_]+)');
   var inLinter = false;
-  var count = 0;
+  final names = <String>[];
   for (final line in options.split('\n')) {
     if (RegExp(r'^linter:').hasMatch(line)) {
       inLinter = true;
     } else if (RegExp(r'^\S').hasMatch(line)) {
       // 들여쓰기 없는 줄(다른 최상위 키나 주석)이 블록을 닫는다.
       inLinter = false;
-    } else if (inLinter && rulePattern.hasMatch(line)) {
-      count++;
+    } else if (inLinter) {
+      final match = rulePattern.firstMatch(line);
+      if (match != null) names.add(match.group(1)!);
     }
   }
-  return count;
+  return names;
+}
+
+/// 옵션 파일 본문([options])의 최상위 `analyzer:` → `language:` 아래 `<이름>: true|false` 를 읽는다.
+///
+/// `RULES.md` 의 켠 analyzer 옵션 표(`woody:enabled-options`)와 견줄 값이다. 블록이 없으면
+/// 빈 맵이다. 들여쓰기로 블록을 가른다 — `analyzer:` 는 들여쓰기 없는 줄, `language:` 는
+/// 그 아래 한 단계, 옵션은 `language:` 보다 깊은 줄이다.
+Map<String, bool> enabledLanguageOptions(String options) {
+  final result = <String, bool>{};
+  var inAnalyzer = false;
+  int? languageIndent;
+  for (final line in options.split('\n')) {
+    final trimmed = line.trim();
+    if (trimmed.isEmpty || trimmed.startsWith('#')) continue;
+    final indent = line.length - line.trimLeft().length;
+    if (indent == 0) {
+      inAnalyzer = RegExp(r'^analyzer:\s*(#.*)?$').hasMatch(line);
+      languageIndent = null;
+      continue;
+    }
+    if (!inAnalyzer) continue;
+    if (languageIndent != null && indent > languageIndent) {
+      final match = RegExp(r'^([A-Za-z0-9_-]+):\s*(true|false)\s*(#.*)?$')
+          .firstMatch(trimmed);
+      if (match != null) result[match.group(1)!] = match.group(2) == 'true';
+      continue;
+    }
+    languageIndent = RegExp(r'^language:\s*(#.*)?$').hasMatch(trimmed)
+        ? indent
+        : null;
+  }
+  return result;
 }
 
 /// 규칙 검사 복사본 폴더([ruleCheckDir])를 형식 인자 없이 한 번 더 분석해
@@ -1047,7 +1110,7 @@ Future<StepResult> checkRuleNames(String repoRoot) async {
   }
 }
 
-/// [3/N] 연습용 프로젝트 전부([fixtures])의 옵션 파일이 정해진 내용인지 한 단계로 본다.
+/// [4/N] 연습용 프로젝트 전부([fixtures])의 옵션 파일이 정해진 내용인지 한 단계로 본다.
 ///
 /// 파일마다 주석과 빈 줄을 뺀 나머지를 `trim()` 한 줄 목록이 [Fixture.optionsLines] 와
 /// 통째로 같아야 한다. `flutter pub get` 이 써넣는 `build/**` 제외, include 삭제,
@@ -1067,13 +1130,7 @@ StepResult checkFixtureOptions(String repoRoot, List<Fixture> fixtures) {
         line.replaceAll(pluginConstraintToken, shippedConstraint),
     ];
     // 판정은 앞뒤 공백을 뗀 줄로 하고, 화면에는 들여쓰기를 살린 줄을 보여 준다.
-    final rest = file.existsSync()
-        ? file
-              .readAsLinesSync()
-              .map((l) => l.trimRight())
-              .where((l) => l.trim().isNotEmpty && !l.trim().startsWith('#'))
-              .toList()
-        : null;
+    final rest = significantLines(file);
     if (rest != null &&
         sameLines(rest.map((l) => l.trim()).toList(), expected)) {
       continue;
@@ -1102,7 +1159,7 @@ StepResult checkFixtureOptions(String repoRoot, List<Fixture> fixtures) {
 /// `lib/riverpod.yaml` 의 `riverpod_lint:` 선언(예: `^3.1.3`)을 읽는다.
 ///
 /// 들여쓴 `riverpod_lint: <값>` 줄의 첫 값이다. 없으면 [FormatException] — 조각의 모양이
-/// 바뀐 것이라 `[3/N]` 이 견줄 기준이 없다 (main 이 종료 코드 70 으로 끝낸다).
+/// 바뀐 것이라 `[4/N]` 이 견줄 기준이 없다 (main 이 종료 코드 70 으로 끝낸다).
 String readShippedPluginConstraint(String repoRoot) {
   final text = File('$repoRoot/lib/riverpod.yaml').readAsStringSync();
   final match = RegExp(
@@ -1126,7 +1183,226 @@ bool sameLines(List<String> a, List<String> b) {
   return true;
 }
 
-/// [4/N] ~ [N/N] 연습용 프로젝트 하나([fixture])를 분석해 정답지와 견준다 (VERIFY-01).
+/// [file] 에서 주석과 빈 줄을 뺀 줄을 돌려준다 (뒤 공백만 뗀다 — 들여쓰기는 살린다).
+///
+/// 판정은 이 줄들을 `trim()` 해 견주고, 화면에는 들여쓰기를 살린 줄을 보여 준다.
+/// 파일이 없으면 null 이다. `[3/N]` 의 include-만 확인과 `[4/N]` 이 함께 쓴다.
+List<String>? significantLines(File file) {
+  if (!file.existsSync()) return null;
+  return file
+      .readAsLinesSync()
+      .map((l) => l.trimRight())
+      .where((l) => l.trim().isNotEmpty && !l.trim().startsWith('#'))
+      .toList();
+}
+
+/// 저장소 루트가 받은 기반 세트(`lints` · `flutter_lints`)가 켜는 규칙을 읽는다.
+///
+/// 돌려주는 맵은 소문자로 바꾼 규칙 이름 → `<패키지 폴더 이름> <파일 이름>`
+/// (예: `flutter_lints-6.0.0 flutter.yaml`) 이다. 상류 YAML 은 `prefer_iterable_whereType`
+/// 처럼 대문자가 섞인 이름을 쓰므로 소문자로 맞춰 견준다 (spike 020).
+/// 한 규칙이 여러 파일에 있으면 먼저 읽은 파일(core → recommended → flutter)을 적는다.
+///
+/// `.dart_tool/package_config.json` 의 `rootUri` 를 그 파일 기준으로 푼다 — `file:` 절대
+/// URI 면 그대로, 상대 경로면 `.dart_tool/` 기준이다. 저장소 루트의 `pub get` (준비 3) 뒤에
+/// 부른다. 패키지가 없으면 [FormatException] (main 이 종료 코드 70 으로 끝낸다).
+///
+/// measure_rules.dart 의 `readUpstreamSets` 와 같다 — 두 파일은 서로 import 하지 않는다.
+Map<String, String> readUpstreamRules(String repoRoot) {
+  final configFile = File('$repoRoot/.dart_tool/package_config.json');
+  final config =
+      jsonDecode(configFile.readAsStringSync()) as Map<String, dynamic>;
+  final packages = (config['packages'] as List).cast<Map<String, dynamic>>();
+  Directory rootOf(String package) {
+    final entry = packages.firstWhere(
+      (p) => p['name'] == package,
+      orElse: () => throw FormatException(
+        '.dart_tool/package_config.json 에 $package 가 없다 — 저장소 루트에서 pub get',
+      ),
+    );
+    var rootUri = entry['rootUri'] as String;
+    if (!rootUri.endsWith('/')) rootUri = '$rootUri/';
+    return Directory.fromUri(configFile.absolute.uri.resolve(rootUri));
+  }
+
+  final rules = <String, String>{};
+  void readSet(String package, String fileName) {
+    final root = rootOf(package);
+    final folder = root.uri.pathSegments.where((s) => s.isNotEmpty).last;
+    final file = File.fromUri(root.uri.resolve('lib/$fileName'));
+    for (final line in file.readAsLinesSync()) {
+      final name = RegExp(r'^    - (\w+)').firstMatch(line)?.group(1);
+      if (name == null) continue;
+      rules.putIfAbsent(name.toLowerCase(), () => '$folder $fileName');
+    }
+  }
+
+  readSet('lints', 'core.yaml');
+  readSet('lints', 'recommended.yaml');
+  readSet('flutter_lints', 'flutter.yaml');
+  return rules;
+}
+
+/// [rulesMd] 의 `<!-- woody:<name>:start -->` 와 `<!-- woody:<name>:end -->` 사이 표에서
+/// 첫 칸의 이름을 읽은 결과.
+class RulesMdBlock {
+  /// [names] 는 읽은 이름, [malformed] 는 첫 칸에 이름이 둘 이상인 줄이다.
+  RulesMdBlock(this.names, this.malformed);
+
+  /// 표의 행 순서대로 읽은 이름 (backtick 을 뗀 것).
+  final List<String> names;
+
+  /// 첫 칸에 backtick 이름이 둘 이상이라 읽지 못한 줄 (원문 그대로).
+  final List<String> malformed;
+}
+
+/// [rulesMd] 의 마커 구역 [name] (`enabled-rules` 등) 에서 표 첫 칸의 이름을 읽는다.
+///
+/// 마커 사이의 줄 가운데 `|` 로 시작하는 줄의 첫 칸(두 번째 `|` 앞)에서 backtick 하나로
+/// 감싼 `[a-z0-9_-]+` 를 읽는다. 첫 칸에 backtick 쌍이 없는 줄(헤더 · 구분선 · 평문)은
+/// 건너뛰고, 둘 이상이면 그 줄을 [RulesMdBlock.malformed] 에 담는다 — 예외가 아니라
+/// 단계 실패로 알린다 (사람이 고칠 수 있는 문구로). 파일이나 마커가 없으면 null 이다.
+RulesMdBlock? readRulesMdBlock(File rulesMd, String name) {
+  if (!rulesMd.existsSync()) return null;
+  final lines = rulesMd.readAsLinesSync();
+  final start = lines.indexOf('<!-- woody:$name:start -->');
+  final end = lines.indexOf('<!-- woody:$name:end -->');
+  if (start < 0 || end < 0 || end < start) return null;
+  final names = <String>[];
+  final malformed = <String>[];
+  final namePattern = RegExp(r'`([a-z0-9_-]+)`');
+  for (final line in lines.sublist(start + 1, end)) {
+    final trimmed = line.trim();
+    if (!trimmed.startsWith('|')) continue;
+    final cellEnd = trimmed.indexOf('|', 1);
+    final cell = cellEnd < 0
+        ? trimmed.substring(1)
+        : trimmed.substring(1, cellEnd);
+    final found = namePattern.allMatches(cell).map((m) => m.group(1)!).toList();
+    if (found.isEmpty) continue;
+    if (found.length > 1) {
+      malformed.add(trimmed);
+    } else {
+      names.add(found.single);
+    }
+  }
+  return RulesMdBlock(names, malformed);
+}
+
+/// [3/N] 배포 파일의 구성 — 저장소 안의 파일끼리 어긋나지 않는지 한 단계로 본다 (D-11, D-12).
+///
+/// 확인 셋을 모두 돌리고 실패를 모아 한 [StepResult] 로 돌려준다. analyzer 는 돌리지 않는다.
+///
+/// - (a) 묶음 · 별칭([includeOnlyFiles])은 include 줄만 담는다 (03-REVIEW.md WR-01).
+/// - (b) `lib/base.yaml` 의 규칙이 기반 세트([readUpstreamRules])와 겹치지 않는다 — 겹친
+///   규칙은 정답지가 잡지 못한다 (기반 세트가 여전히 켜므로 진단이 그대로다).
+/// - (c) `RULES.md` 의 켠 규칙 표 == `lib/base.yaml` 의 규칙 목록 (둘 다 정렬해 견준다 —
+///   같은 이름이 두 번 적혀도 잡는다), 켠 analyzer 옵션 표 == `analyzer: language:` 의
+///   `true` 키 (RULES-06).
+StepResult checkShippedComposition(String repoRoot) {
+  final details = <String>[];
+  void addBlock(List<String> lines) {
+    if (details.isNotEmpty) details.add('');
+    details.addAll(lines);
+  }
+
+  // (a) 묶음 · 별칭은 include 만.
+  for (final entry in includeOnlyFiles.entries) {
+    final path = entry.key;
+    final expected = entry.value;
+    final rest = significantLines(File('$repoRoot/$path'));
+    if (rest != null &&
+        sameLines(rest.map((l) => l.trim()).toList(), expected)) {
+      continue;
+    }
+    addBlock([
+      if (rest == null)
+        '`$path` 이 없다.'
+      else ...[
+        '`$path` 는 include 만 담아야 한다 — 주석 · 빈 줄을 뺀 내용 (${rest.length}줄):',
+        if (rest.isEmpty) '  (없음)' else ...rest.map((l) => '  $l'),
+      ],
+      '  정해진 내용:',
+      ...expected.map((l) => '    $l'),
+      '',
+      '규칙은 `lib/base.yaml` 에만 적는다 (03-REVIEW.md WR-01).',
+    ]);
+  }
+
+  // (b) 기반 세트와의 겹침.
+  final baseText = File('$repoRoot/$rulesFile').readAsStringSync();
+  final declared = declaredRuleNames(baseText);
+  final upstream = readUpstreamRules(repoRoot);
+  final overlapping = [
+    for (final rule in declared)
+      if (upstream.containsKey(rule.toLowerCase())) rule,
+  ]..sort();
+  if (overlapping.isNotEmpty) {
+    addBlock([
+      '`$rulesFile` 의 규칙이 기반 세트와 겹친다 (${overlapping.length}) — 기반 세트가 이미 켜므로 지운다.',
+      ...overlapping.map((r) => '  $r  (${upstream[r.toLowerCase()]})'),
+    ]);
+  }
+
+  // (c) RULES.md 와의 일치 — 켠 규칙, 켠 analyzer 옵션.
+  final rulesMd = File('$repoRoot/$rulesMdFile');
+  void compareBlock({
+    required String block,
+    required List<String> shipped,
+    required String mismatchLine,
+  }) {
+    final listed = readRulesMdBlock(rulesMd, block);
+    if (listed == null) {
+      addBlock([
+        '`$rulesMdFile` 의 `woody:$block` 구역이 없다 — 04-CONTEXT.md D-08',
+        '',
+        '`<!-- woody:$block:start -->` 와 `<!-- woody:$block:end -->` 사이에 표를 둔다.',
+      ]);
+      return;
+    }
+    if (listed.malformed.isNotEmpty) {
+      addBlock([
+        '`$rulesMdFile` 의 `woody:$block` 표에 첫 칸의 이름이 둘 이상인 행이 있다 (${listed.malformed.length}):',
+        ...listed.malformed.map((l) => '  $l'),
+        '',
+        '행마다 첫 칸에 backtick 으로 감싼 이름 하나만 적는다.',
+      ]);
+    }
+    final a = [...shipped]..sort();
+    final b = [...listed.names]..sort();
+    if (sameLines(a, b)) return;
+    addBlock([
+      mismatchLine,
+      ...subtractLines(a, b).map((r) => '  + $r  (base.yaml 에만)'),
+      ...subtractLines(b, a).map((r) => '  - $r  ($rulesMdFile 에만)'),
+      '',
+      '`$rulesMdFile` 의 표와 `$rulesFile` 을 같은 커밋에서 고친다.',
+    ]);
+  }
+
+  compareBlock(
+    block: 'enabled-rules',
+    shipped: declared,
+    mismatchLine: '`$rulesMdFile` 의 켠 규칙 표와 `$rulesFile` 의 규칙 목록이 다르다.',
+  );
+  compareBlock(
+    block: 'enabled-options',
+    shipped: [
+      for (final entry in enabledLanguageOptions(baseText).entries)
+        if (entry.value) entry.key,
+    ],
+    mismatchLine:
+        '`$rulesMdFile` 의 켠 analyzer 옵션 표와 `$rulesFile` 의 `analyzer: language:` 가 다르다.',
+  );
+
+  return StepResult(
+    label: shippedCompositionLabel,
+    passed: details.isEmpty,
+    detailLines: details,
+  );
+}
+
+/// [5/N] ~ [N/N] 연습용 프로젝트 하나([fixture])를 분석해 정답지와 견준다 (VERIFY-01).
 ///
 /// 판정 순서는 바꾸지 않는다: plugin 준비 실패 → 도구가 죽음 → 정답지 비교.
 /// 정답지 비교는 둘로 갈린다 — [Fixture.expectedPath] 가 없으면(`recommended`) 같은 실행의
@@ -1465,6 +1741,7 @@ Future<void> main(List<String> args) async {
     final results = <StepResult>[
       checkLibHasNoDart(repoRoot),
       await checkRuleNames(repoRoot),
+      checkShippedComposition(repoRoot),
       checkFixtureOptions(repoRoot, fixtures),
     ];
     AnalyzeOutcome? exampleOutcome;
