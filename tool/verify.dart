@@ -201,10 +201,10 @@ class Difference {
     required this.exitNote,
   });
 
-  /// 정답지에는 있는데 나오지 않은 줄.
+  /// 정답지에는 있는데 나오지 않은 줄. 같은 줄이 여러 건이면 건수 차이만큼 들어 있다.
   final List<String> missing;
 
-  /// 정답지에 없는데 나온 줄.
+  /// 정답지에 없는데 나온 줄. 같은 줄이 여러 건이면 건수 차이만큼 들어 있다.
   final List<String> unexpected;
 
   /// 종료 코드가 어긋났을 때의 한 줄. 같으면 null.
@@ -458,7 +458,32 @@ Future<AnalyzeOutcome> analyzeFixture({
   );
 }
 
+/// [from] 에서 [remove] 의 줄을 건수만큼 뺀 나머지를 돌려준다.
+///
+/// 같은 줄이 여러 번 있을 수 있다 — 정답지 한 줄에는 열(column)이 없어서 한 줄에 같은
+/// 규칙이 두 번 걸리면 똑같은 줄 둘이 된다. [remove] 에 n 번 있는 줄은 [from] 에서
+/// 정확히 n 번만 빼고, [from] 의 순서를 지킨다.
+List<String> subtractLines(List<String> from, List<String> remove) {
+  final remaining = <String, int>{};
+  for (final line in remove) {
+    remaining[line] = (remaining[line] ?? 0) + 1;
+  }
+  final rest = <String>[];
+  for (final line in from) {
+    final left = remaining[line] ?? 0;
+    if (left > 0) {
+      remaining[line] = left - 1;
+    } else {
+      rest.add(line);
+    }
+  }
+  return rest;
+}
+
 /// 정답지([expected])와 실제 결과를 견준다. 정답지가 없으면(null) 전부 "남는 줄" 이다.
+///
+/// 줄의 있고 없음이 아니라 건수를 견준다 — 같은 줄이 정답지에 두 번, 실제에 한 번이면
+/// 한 줄이 "나오지 않은 줄" 이다 ([subtractLines]).
 Difference findDifference(
   Expected? expected,
   List<String> actual,
@@ -474,8 +499,8 @@ Difference findDifference(
     exitNote = null;
   }
   return Difference(
-    missing: expectedLines.where((l) => !actual.contains(l)).toList(),
-    unexpected: actual.where((l) => !expectedLines.contains(l)).toList(),
+    missing: subtractLines(expectedLines, actual),
+    unexpected: subtractLines(actual, expectedLines),
     exitNote: exitNote,
   );
 }
