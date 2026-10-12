@@ -52,6 +52,10 @@ created: "2026-10-12"
 | T-02-11 | Denial of Service | runner 시간 소모 (멈춘 plugin 준비, 겹치는 실행) | low | mitigate | `timeout-minutes: 10` (24행), `cancel-in-progress: true` (18행). 실제 job 은 1분 54초 (run 38158088016) | closed |
 | T-02-12 | Information Disclosure | 브랜치 push 로 `.planning/`, `.claude/CLAUDE.md`, 새 기록 파일이 공개됨 | medium | accept | 수용 (아래 AR-02-03). 확인: 올라간 범위 `1ed61cd..1f06c55` 의 추가 줄에서 토큰 · 개인 키 패턴 0건, 이메일 주소 0건, 의심 파일 이름(`.env`, 키 파일) 없음. **계획의 Component 문구에 열거되지 않은 폴더가 함께 올라갔다** — `.claude/skills/spike-findings-woody-lints/` 58개 파일 (아래 감사 메모) | closed |
 | T-02-13 | Tampering | 잘못된 push (`--force`, `main`, tag, 다른 브랜치, 인자 없는 `git push`) | high | mitigate | 실행된 publishing 명령은 `git push origin gsd/v2.0-package-rework` 한 줄, 한 번 (`1ed61cd..1f06c55`, fast-forward). 확인 (직접 조회, 2026-10-12): `git ls-remote --heads origin` 이 두 줄 — 작업 브랜치 `1f06c55…`, `main` `90a2736…`; `git ls-remote --tags origin` 은 `v1.3.0` 뿐; `gh pr list --state all` 0건; 02-04-T2 의 `<automated>` rc=0 | closed |
+| T-02-14 | Tampering | 임시 변경(정답지 중복 줄 · `example/lib/dup_probe.dart` · 비운 `example/analysis_options.yaml` · `lintr:` · `lib/_probe_rules.yaml`)이 남아 커밋됨 | high | mitigate | 변경 하나마다 그 경로만 되돌리고 확인. 확인 (HEAD `08637d8`): `git diff --quiet 90a2736 -- lib` 통과, `git diff --quiet 19ae5ec -- example/expected_diagnostics.txt` 통과, `example/analysis_options.yaml` 은 include 한 줄, probe 파일 셋(`example/lib/dup_probe.dart` · `lib/_probe_rules.yaml` · `build/woody_rule_check`) 없음, `git status --short --untracked-files=all -- lib example tool .github build` 비어 있음. 커밋된 범위 `2b9d334..08637d8` 에서 `lib` · `example/lib` · 정답지 · `example/analysis_options.yaml` 의 변경 줄 0. 02-05 의 `<automated>` 셋 rc=0 (감사 재실행). 감사 때 M14 를 다시 일으킨 뒤에도 같은 확인을 통과했다 | closed |
+| T-02-15 | Tampering | `--update` 가 다른 단계가 실패한 실행의 결과를 정답지로 씀 (WR-01 case 1) | medium | mitigate | `main` 이 실패한 단계가 하나라도 있으면 `applyUpdate` 를 부르지 않고 `다른 단계가 실패해 정답지를 쓰지 않았다 …` 를 찍는다 (`tool/verify.dart` 1067-1075행, HEAD `08637d8` 기준). 확인: 02-05-T2 의 `<automated>` 가 빈 옵션 파일 + `--update` 실행 앞뒤의 `git hash-object example/expected_diagnostics.txt` 불변과 그 문구, `CI=true` 의 64 를 단언하고 감사 재실행에서 rc=0. **범위 밖으로 남은 것:** plugin 버전이 `?` 로 읽힌 실행의 `--update` (WR-01 case 2) 는 이 장치가 막지 않는다 — 등록된 위협의 범위가 아니고 소유자가 열어 두기로 한 항목이다 (`02-05-PLAN.md` prohibitions) | closed |
+| T-02-16 | Information Disclosure | `example/README.md` 기록과 `02-CONTEXT.md` 덧붙임에 로컬 절대 경로 · 토큰 | medium | mitigate | 화면 출력은 상대 경로다. 확인 (HEAD `08637d8`): 02-05 가 네 파일(`example/README.md`, `.github/workflows/verify.yml`, `tool/verify.dart`, `02-CONTEXT.md`)에 더한 130줄에서 홈 폴더 경로 · 토큰 접두사(`gho_` · `ghp_` · `github_pat_`) · 개인 키 머리말 · 세션 주소 · 이메일 0건. `example/README.md` 전체에서도 홈 폴더 경로 · `gho_` 0건. 이 실행은 push 하지 않았으므로 새로 공개된 것은 없다 (origin 의 브랜치 tip `1f06c55` 그대로) | closed |
+| T-02-17 | Tampering | workflow 수정이 주석을 넘어 트리거 · 권한을 바꿈 | medium | mitigate | `git diff 1f06c55..HEAD -- .github/workflows/verify.yml` 의 변경 줄은 주석 4줄뿐이다 (지움 1, 더함 3; 주석 아닌 변경 줄 0). PyYAML 로 읽은 내용이 `1f06c55` 와 같다. `permissions:` 는 `contents: read` 한 줄(14-15행), `timeout-minutes: 10` (26행) 그대로이고 `write` · `secrets.` · `pull_request_target` 문자열이 없다. 02-04-T1 · 02-05-T3 의 `<automated>` rc=0 (감사 재실행) | closed |
 | T-02-SC | Tampering | npm/pip/cargo/pub installs | low | accept | 수용 (아래 AR-02-04). 확인: `git diff --quiet 968a5bb -- pubspec.yaml` 통과 (저장소 `pubspec.yaml` 에 새 의존성 없음) | closed |
 
 *Status: open · closed · open — below high threshold (non-blocking)*
@@ -78,6 +82,7 @@ created: "2026-10-12"
 | Audit Date | Threats Total | Closed | Open | Run By |
 |------------|---------------|--------|------|--------|
 | 2026-10-12 | 14 | 14 | 0 | orchestrator (`/gsd-execute-phase 2` 의 검증 단계, L1 — 명령 재실행과 파일 대조) |
+| 2026-10-12 (02-05 실행 뒤) | 18 | 18 | 0 | orchestrator (`/gsd-execute-phase 2 --gaps-only` 의 검증 단계, L1 — 명령 재실행과 파일 대조) |
 
 2026-10-12 감사 메모:
 
@@ -89,6 +94,14 @@ created: "2026-10-12"
 - 02-04 가 적은 관찰 또 하나: workflow 의 `push:` 에 필터가 없어 tag 를 올려도 이 workflow 가 돈다 (주석은 "tag 트리거는 Phase 6" 이라고 적혀 있다). 권한이 읽기뿐이라 보안상 영향은 없고, 주석 문구는 Phase 6 (REL-03) 에서 정리할 일이다.
 - GitHub 가 run 에 붙인 예고: `ubuntu-latest` 가 2026-10-19 부터 Ubuntu 26 으로 옮겨 간다. 보안 항목은 아니지만 그 뒤 CI 가 처음 실패하면 runner 이미지 변경부터 본다.
 
+2026-10-12 감사 메모 (gap 닫기 plan 02-05 실행 뒤, HEAD `08637d8`):
+
+- 02-05 의 threat model 이 T-02-14 ~ T-02-17 을 더했다 (계획 단계 작성, ASVS level 1). 넷 모두 명령 재실행으로 닫힘을 확인했고 열린 위협이 0 이라 감사 에이전트는 쓰지 않았다. 합계 18 (T-02-01 ~ T-02-17 + T-02-SC). T-02-SC 는 02-05 에도 있으나 한 번만 센다 — `pubspec.yaml` 은 `968a5bb`, `example/pubspec.yaml` · `example/pubspec.lock` 은 `2b9d334` 와 같다.
+- `02-05-SUMMARY.md` 에 `## Threat Flags` 절이 없다 (파일에 "threat" 문자열 자체가 없다).
+- 이 실행은 원격에 아무것도 쓰지 않았다. `git push` 0회이고 origin 의 브랜치 tip 은 `1f06c55` 그대로다. 02-05 의 커밋 4개와 검증 단계의 커밋은 로컬에만 있다.
+- 지난 감사 메모의 "주석 문구는 Phase 6 (REL-03) 에서 정리할 일" 은 02-05 가 앞당겨 정리했다 (T-02-17 — 주석만, 동작 불변). tag push 에서도 workflow 가 도는 동작은 그대로다 (소유자 결정 2026-10-12, `02-CONTEXT.md` D-10 덧붙임).
+- T-02-01 ~ T-02-13 은 이번에 하나씩 다시 확인하지 않았다. 그 확인에 쓰인 `<automated>` 여덟 개는 검증 표 감사에서 다시 돌렸고 결과는 `02-VALIDATION.md` 의 "02-05 세 행의 감사" 에 있다. 위 표에서 그 행들이 적은 `tool/verify.dart` 줄 번호(T-02-01 · T-02-03 · T-02-05 · T-02-08)는 02-05 가 그 파일을 고치기 전의 번호라 지금 파일과 어긋난다 — 그 행들의 확인 시점은 HEAD `c2d2a50` 이다.
+
 ---
 
 ## Sign-Off
@@ -98,7 +111,7 @@ created: "2026-10-12"
 - [x] `threats_open: 0` confirmed
 - [x] `status: verified` set in frontmatter
 
-**Approval:** verified 2026-10-12 (위협 14 / 닫힘 14 / 열림 0)
+**Approval:** verified 2026-10-12 (위협 14 / 닫힘 14 / 열림 0); 02-05 실행 뒤 재감사 2026-10-12 (위협 18 / 닫힘 18 / 열림 0)
 
 ## Security Audit 2026-10-11
 
@@ -106,4 +119,12 @@ created: "2026-10-12"
 |---|---|
 | Threats found | 14 |
 | Closed | 14 |
+| Open | 0 |
+
+## Security Audit 2026-10-12
+
+| Metric | Count |
+|---|---|
+| Threats found | 18 |
+| Closed | 18 |
 | Open | 0 |
