@@ -4,12 +4,12 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 03
 current_phase_name: Preset Split
-status: verifying
+status: Verification human_needed — UAT 2건 대기 (/gsd-verify-work 03)
 stopped_at: Completed 03-04-PLAN.md
-last_updated: "2026-10-12T12:25:13.791Z"
+last_updated: "2026-10-12T13:20:43.017Z"
 last_activity: 2026-10-12
-last_activity_desc: Phase 03 execution started
-state_head: 79f27e57b59d738e8cf58d64d4d2263835b418a5
+last_activity_desc: "Phase 03 실행 · 검증 완료 (15/15 must-have, human_needed: 사람 확인 2건)"
+state_head: 83e8f5587911994ba804ad8c2165f74b77d6ff1a
 progress:
   total_phases: 6
   completed_phases: 2
@@ -31,8 +31,8 @@ See: .planning/PROJECT.md (updated 2026-10-12)
 
 Phase: 03 (Preset Split) — EXECUTING
 Plan: 4 of 4
-Status: Phase complete — ready for verification
-Last activity: 2026-10-12 — Phase 03 execution started
+Status: Verification human_needed — UAT 2건 대기 (/gsd-verify-work 03)
+Last activity: 2026-10-12 — Phase 03 실행 · 검증 완료 (15/15 must-have, human_needed: 사람 확인 2건)
 
 Progress: [███░░░░░░░] 33%
 
