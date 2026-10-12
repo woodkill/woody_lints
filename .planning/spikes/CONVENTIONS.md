@@ -12,6 +12,8 @@ spike 가 확인한 사실 자체는 `.claude/skills/spike-findings-woody-lints/
 - **저장소의 모양을 복사해 실험하는 일은 `009-preset-plugin-via-include/replica.dart` 를 import 해 쓴다** (009~017, 019). 복사본 만들기(`Replica`), 배포 파일을 조각으로 자르기(`Shipped`), 정답지 읽기와 조합별 예상 셈하기(`Expected`), 분석 한 번(`Replica.analyze`), 확인 모으기(`Checks`)가 들어 있다. 스크립트는 `import '../009-preset-plugin-via-include/replica.dart';` 한 줄로 받는다. `Shipped` 는 저장소의 `lib/analysis_options.yaml` 이 한 파일 구조일 때 그것을 잘라 조각을 만든다 — Phase 3 이 저장소를 나눈 뒤의 spike 는 이 조각을 나눈 파일을 읽게 고쳐 쓰거나 나누기 전의 커밋을 꺼낸 자리에서 돌린다 (스크립트를 읽은 것이고 돌려 보지는 않았다).
 - SDK 는 저장소 고정 버전이다 (Flutter 3.47.5 / Dart 3.13.4). 저장소 안에서는 `fvm dart …`, 저장소 밖 작업 폴더에서는 `<저장소>/.fvm/flutter_sdk/bin/dart` 를 직접 부른다 (`fvm` 이 `.fvmrc` 를 찾지 못하므로).
 - **다른 SDK 로 견줄 때는 같은 스크립트를 SDK 마다 한 번씩 돌린다** (016). 저장소 밖을 작업 디렉터리로 두고 `<SDK>/bin/cache/dart-sdk/bin/dart <스크립트의 절대 경로> <작업 폴더>` 로 띄운다 — 저장소 루트에서 `dart run` 을 하면 그 SDK 가 루트의 패키지를 다시 풀어 `.dart_tool/` 과 lock 을 바꿀 수 있다. 실행 뒤 루트 `.dart_tool/package_config.json` 의 `generatorVersion` 과 `git status` 로 저장소가 그대로인지 본다. 결과 파일 이름에 Dart 버전을 넣는다 (`results/probe-<버전>.json`).
+- **사용 프로젝트의 복사본을 재는 spike 는 `021-new-rules-language-gate/consumer.dart` 를 import 해 쓴다** (021, 022, 023). 복사(`Consumer.copy`), 작업 중인 저장소에 물리기(`pointToRepo` — `pubspec_overrides.yaml` 의 `path:` 가 저장소 자체를 가리킨다. replica 를 만들지 않는다), 받은 자리 확인과 회차 버리기(`ensureRepoSource`), SDK 하한 바꾸기(`useSdk` — `pub get` 까지 한다), 소스 되돌리기(`refreshSources`), 분석 한 번(`analyze` → `Shot`), 저장소 지문(`Repo.fingerprint`)이 들어 있다. 019 의 `Consumer` 와 이름만 같은 다른 클래스다.
+- **규칙의 상태나 언어 버전을 볼 때는 저장소 밖에 `sdk:` 하한을 적은 순수 Dart 패키지를 만든다** (020, 021, 022 의 1부). deprecated / removed 는 pubspec 의 하한을 따르므로(005) 하한을 적은 pubspec 만 있으면 저장소 안에 둘 필요가 없다. 하한만 다른 두 벌(`^3.11.1` · `^3.13.0`)을 같은 내용으로 만들어 견준다.
 - **GitHub runner 에서만 잴 수 있는 것은 작업 브랜치를 올리고 임시 workflow 로 돌린다** (006, 017, 018). 차례는 준비 커밋(`docs(spike-NNN): PENDING — …` — 스크립트와 `.github/workflows/spike-NNN-….yml`) → 소유자 확인 → `git push origin <작업 브랜치>` → 결과 기록 → `ci: spike NNN 임시 workflow 제거` 다. 스크립트는 로그에 `SPIKENNN_RESULT {…}` 한 줄을 찍고, `017-runner-six-fixtures/collect.py <run id> <출력 파일>` 이 job 별 시간과 그 줄을 모은다. 임시 workflow 의 사본은 spike 폴더에 남긴다 (`.github/` 밖이라 돌지 않는다).
 
 ## Structure
@@ -63,7 +65,10 @@ spike 가 확인한 사실 자체는 `.claude/skills/spike-findings-woody-lints/
 - runner 이미지를 견줄 때는 `/etc/os-release`, glibc(`ldd --version`), `ImageVersion` 을 함께 남겨 이미지가 실제로 달랐음을 대조로 둔다 (018). `ubuntu-latest` 가 실제로 무엇이었는지는 로그의 `Image:` · `Version:` 줄에 있다.
 - **비공개 저장소의 프로젝트를 잰 결과에는 그 프로젝트의 경로 · 진단 메시지 · 코드 조각을 남기지 않는다** — 건수, 규칙 이름, 줄 목록의 해시만 남긴다 (019. `flutter_starter_kit` 은 비공개다). 줄 단위 기록은 `<작업 폴더>/private/` 에 쓰고, 화면 기록(`results/*.log`)은 스크립트가 적어도 되는 줄만 골라 쓴다 (stdout 을 그대로 저장하지 않는다). 커밋 전 점검에 `grep -rn -o -E '(lib|test|bin|assets)/[A-Za-z0-9_./-]+\.(dart|json|arb|yaml)' <spike 폴더>/results | grep -v woody_probe_marker` 를 더한다 (처음 적은 패턴 `(lib|test)/[a-z_/]+\.dart` 는 `bin/`, 숫자 · 대문자가 든 이름, `*.g.dart` 를 잡지 못했다 — 2026-10-12 의 wrap-up 에서 넓혔고 019 의 결과는 넓힌 패턴으로도 0줄이었다).
 - **0줄은 그것만으로 "깨끗하다" 가 아니다.** 같은 실행에 일부러 넣은 위반(표식 파일 — 이 저장소 `example/lib` 의 샘플을 복사본의 `lib/woody_probe_marker/` 에 넣는다)을 두어 규칙이 켜졌는지를 가른다. 019 에서 `public_member_api_docs` 가 0줄이었고, 처음 세운 추정(`publish_to: 'none'` 탓)은 문서 주석 없는 표식 둘이 2줄을 내면서 틀린 것으로 드러났다 — 그 프로젝트의 `lib/` 가 실제로 전부 문서화되어 있었다. "같다" 를 볼 때도 0줄 = 0줄 이 되지 않게, 줄이 많이 나오는 규칙(`always_specify_types`)을 양쪽에 더 켠 짝을 둔다.
-- 사용 프로젝트의 `woody_lints` 를 작업 중인 파일로 돌릴 때는 복사본에 `pubspec_overrides.yaml` (`dependency_overrides:` 아래 `woody_lints:` 의 `path:`)을 두고 `dart pub get` 을 한다. `pubspec.yaml` 은 고치지 않는다. 받은 자리는 `.dart_tool/package_config.json` 의 `rootUri` 로 확인한다 (019).
+- 사용 프로젝트의 `woody_lints` 를 작업 중인 파일로 돌릴 때는 복사본에 `pubspec_overrides.yaml` (`dependency_overrides:` 아래 `woody_lints:` 의 `path:`)을 두고 `dart pub get` 을 한다. `pubspec.yaml` 은 고치지 않는다. 받은 자리는 `.dart_tool/package_config.json` 의 `rootUri` 로 확인한다 (019). 프리셋을 나눈 뒤에는 `path:` 가 작업 중인 저장소 자체를 가리키고, 받은 자리가 저장소가 아니면 그 회차를 버린다 (021 ~ 023).
+- **저장소의 지문을 실행 전후로 견주는 스크립트가 도는 동안에는 저장소 안에 파일을 만들지 않는다** (022). 022 의 실행 중에 다음 spike 의 스크립트를 저장소 안에 만들어 `git status` 가 바뀌었고, "저장소가 그대로다" 확인이 깨졌다. 원인을 가르려고 단계마다 지문을 견주는 짧은 대조(`022-dart-fix-dry-run-count/repo_guard.dart`)를 따로 돌려야 했다. 기다리는 동안 쓰는 다음 스크립트는 scratchpad 에 쓰고 실행이 끝난 뒤 옮긴다. 지문은 `git status --porcelain`, `.dart_tool/` 의 맨 위 이름, 루트 `package_config.json` · `pubspec.lock` 의 해시다 (021 ~ 023).
+- **복사본의 SDK 하한을 바꿀 때는 `pubspec.yaml` 을 고친 뒤 `pub get` 까지 한다** (021, 022). `pubspec.yaml` 만 되돌리면 `package_config.json` 의 `languageVersion` 이 앞의 값으로 남아 다음 분석이 다른 언어 버전으로 돈다 (021 의 끝에서 그랬다).
+- **켜는 규칙마다 그 규칙을 어기는 표식을 둔다** (021, 023 — 019 의 방식을 규칙 단위로 넓혔다). 막는 조건이 있는 규칙은 표식까지 0줄이 나온다 (021 의 언어 버전). 무시 주석의 효과를 볼 때는 같은 위반을 가린 표식 하나를 더 둔다 (023).
 
 ## Tools & Libraries
 
@@ -83,6 +88,7 @@ spike 가 확인한 사실 자체는 `.claude/skills/spike-findings-woody-lints/
 | Flutter 베타 / Dart (견줌용, fvm 캐시에만 설치) | 3.49.0-0.2.pre / 3.14.0-211.1.beta | 016 — `.fvmrc` 는 3.47.5 그대로다 |
 | GitHub runner 이미지 | `ubuntu-24.04` 20261004.327.1 / `ubuntu-26.04` 20260927.149.1 | 017, 018 — 둘 다 코어 4개 · 약 16GB. `ubuntu-latest` 는 2026-10-12 에 24.04 였다 |
 | `gh` | 2.102.0 | 017, 018 — job 로그는 `gh api --allow-escape-sequences …/jobs/<id>/logs` 로 읽는다 (그 인자가 없으면 내주지 않는다) |
+| SDK 소스 (tag 3.13.4, raw.githubusercontent.com) | `pkg/linter/messages.yaml`, `pkg/linter/lib/src/rules/*.dart`, `pkg/analysis_server/lib/src/services/correction/fix_internal.dart`, `CHANGELOG.md` | 020 ~ 022 — 규칙 상태, 언어 기능의 막는 조건(`Feature.primary_constructors`), 일괄 수정 여부(`nonBulk` / `bulkFixable`) |
 
 쓰지 않는 것:
 
@@ -100,3 +106,7 @@ spike 가 확인한 사실 자체는 `.claude/skills/spike-findings-woody-lints/
 - 한 job 안에서 방식을 이어 돌려 "처음 실행" 을 견주는 것 — 뒤의 방식은 pub cache 가 채워진 상태다 (017).
 - 0줄을 근거로 "이 규칙은 이 프로젝트에 적용되지 않는다" 나 "이 프로젝트는 깨끗하다" 를 적는 것 — 일부러 넣은 위반 없이 세운 추정이 틀렸다 (019).
 - 사용 프로젝트 원본에서 `dart analyze` 나 `pub get` 을 돌리는 것, 비공개 프로젝트의 진단 줄을 `results/` 에 그대로 쓰는 것 (019).
+- SDK 의 `pkg/linter/tool/machine/rules.json` 을 규칙 상태 · 상류 세트 · fix 여부의 근거로 삼는 것 — 상류가 "unsupported and deprecated" 라고 적었고 tag 3.13.4 의 그 파일은 상태 하나가 틀렸으며 `sets` 가 모두 비어 있다. 상태는 tag 의 `pkg/linter/messages.yaml` 과 실제 분석, 상류 세트는 pub cache 의 YAML 에서 읽는다 (020, 022).
+- 비호환 쌍을 한 옵션 파일에 모두 켜고 `incompatible_lint` 를 세는 것 — 규칙 한 줄에 하나만 붙어 일부가 가려진다. 쌍마다 둘만 켠다 (020).
+- 규칙을 모두 켠 한 번의 `dart fix --dry-run` 이나 `--dry-run --code=` 의 수를 "고칠 수 있는 진단 수" 로 쓰는 것 — 앞의 것은 규칙끼리 섞이고 뒤의 것은 수정 수다. 소스를 되돌리고 `--apply --code=` 한 뒤 다시 분석한다 (022).
+- 메시지를 남기지 않는 결과에서 진단이 가리킨 무시 주석을 다시 읽을 때 주석 뒤의 설명 글까지 옮기는 것 — 코드 이름만 뽑는다 (023).
