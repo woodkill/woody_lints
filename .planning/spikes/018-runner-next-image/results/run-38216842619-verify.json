@@ -1,0 +1,37 @@
+{
+  "runId": 38216842619,
+  "workflow": "verify",
+  "event": "push",
+  "headSha": "0d20c10",
+  "conclusion": "success",
+  "createdAt": "2026-10-12T07:16:40Z",
+  "jobs": [
+    {
+      "name": "verify",
+      "conclusion": "success",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "jobSeconds": 88,
+      "stepSeconds": {
+        "Set up job": 1,
+        "Run actions/checkout@v7": 2,
+        "Run subosito/flutter-action@v2": 46,
+        "검증": 36,
+        "Post Run subosito/flutter-action@v2": 0,
+        "Post Run actions/checkout@v7": 0,
+        "Complete job": 0
+      },
+      "runnerImage": "ubuntu-24.04 20261004.327.1",
+      "osRelease": null,
+      "glibc": null,
+      "verifyScreen": [
+        "SDK        Flutter 3.47.5 / Dart 3.13.4",
+        "기반 세트  flutter_lints 6.0.0 / lints 6.1.0",
+        "plugin     riverpod_lint 3.1.9"
+      ],
+      "verifyVerdict": "점검 통과 (4개 중 4개)",
+      "result": null
+    }
+  ]
+}
