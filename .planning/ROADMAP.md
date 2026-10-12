@@ -220,6 +220,7 @@ Plans:
 - 도구 동작은 fixture 로 뒷받침되는 것만 단정형으로 쓴다. `riverpod_lint` 심각도가 Phase 2 에서 확정되기 전에는 "프리셋을 include 하면 종료 코드 2" 같은 문장을 쓰지 않는다.
 - 빠지기 쉬운 내용: exclude 는 사용 프로젝트에서 되돌릴 수 없다, plugin 진단 재정의에는 `version` 이 필수다, `dev_dependencies` 의 `riverpod_lint` 제거, plugin 변경 뒤 Analysis Server 재시작, 버전 올리기는 `pub upgrade` 가 아니라 `ref:` 수정과 `pub get` 이다 (현재 README 는 `pub upgrade` 를 안내한다), tag 를 고정해도 plugin 버전은 바뀔 수 있다, `ref: main` 프로젝트가 받는 영향.
 - README 를 쓰기 전에 확인할 것: `analyzer.errors` 로 `invalid_annotation_target` 을 되살릴 때의 기본 심각도.
+- README 는 생성 파일 제외의 범위를 밝힌다 — `codegen.yaml` 이 주는 제외는 Dart 3.13.x 의 규칙 진단에만 통하고 `riverpod_lint` (plugin) 진단에는 통하지 않는다. plugin 진단까지 막으려면 사용 프로젝트의 옵션 파일에 직접 적으라고 안내한다 (spike 012 · 016, Phase 3 UAT 1번 — 2026-10-12 소유자 확인).
 - README 의 `ref: vX.Y.Z` 예시는 Phase 6 에서 만들 tag 를 가리킨다. 버전 번호는 Phase 1 에서 정한 값을 쓴다.
 
 ### Phase 6: Release
