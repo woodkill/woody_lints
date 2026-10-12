@@ -109,7 +109,7 @@ status: complete
 - 후보 133 상수: FEATURES.md B-1 ~ B-6 의 125 (절마다 29 · 8 · 42 · 9 · 4 · 33) + `use_primary_constructors` + 지금 켠 6 + `strict-inference`. 시작할 때 이름 133 · 중복 없음 · G1 113 · G2 4 · G3 2 · G4 7 · current 6 · option 1 · v2 12 를 단언한다.
 - `state` 단계: tag 3.13.4 `messages.yaml` 을 받아(실패 시 spike 020 결과로 대신) 상태를 읽고, 하한 `^3.13.0` 패키지 분석으로 deprecated / removed / 없는 이름을 가르고, 비호환 쌍 10개를 쌍마다 둘만 켜 확인하고, 저장소 루트의 `lints` · `flutter_lints` YAML 로 상류 세트를 적는다. 한 번에 약 6초.
 - 복사본 단계 여섯과 `validate` — 회차마다 날짜 · Dart · Flutter · 기반 세트(저장소 · 복사본) · plugin · 언어 버전 · SDK 제약 · Dart 파일 수 · 옵션 · `woodySource` · `expectedCovered` · `valid` 를 적는다.
-- 결과 JSON 에는 경로 · 메시지가 없다 (`"message"` 0번, `/Users/` · `/private/` · `/var/folders` 0줄). 줄 전문 · `dart fix` 화면 원문 · pub get 실패 원문은 `<work>/private/` 에만.
+- 결과 JSON 에는 경로 · 메시지가 없다 (`"message"` 0번, 홈 · 시스템 임시 폴더의 절대 경로 꼴 0줄). 줄 전문 · `dart fix` 화면 원문 · pub get 실패 원문은 `<work>/private/` 에만.
 
 ## Smoke 실행 결과 (example/ 을 사용 프로젝트로, Flutter 3.47.5 / Dart 3.13.4, riverpod_lint 3.1.9, 2026-10-13)
 

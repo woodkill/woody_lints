@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 04
 current_phase_name: Rule Reselection
 status: executing
-stopped_at: Completed 04-01-PLAN.md
-last_updated: "2026-10-12T23:22:48.161Z"
+stopped_at: Completed 04-02-PLAN.md
+last_updated: "2026-10-12T23:58:00.157Z"
 last_activity: 2026-10-13
 last_activity_desc: Phase 04 execution started
-state_head: 33f8781fe17e841b6daf2acb52a0e0d4319af39b
+state_head: ca79db752aa561a4538c00bc5a4920003e1ff9b3
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 23
-  completed_plans: 14
+  completed_plans: 15
   percent: 50
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-12)
 ## Current Position
 
 Phase: 04 (Rule Reselection) — EXECUTING
-Plan: 2 of 10
+Plan: 3 of 10
 Status: Ready to execute
 Last activity: 2026-10-13 — Phase 04 execution started
 
@@ -74,6 +74,7 @@ Progress: [█████░░░░░] 50%
 | Phase 03 P03 | 17 min | 3 tasks | 64 files |
 | Phase 03 P04 | 18 min | 3 tasks | 4 files |
 | Phase 04 P01 | 15min | 2 tasks | 11 files |
+| Phase 04 P02 | 27min | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -146,6 +147,8 @@ Recent decisions affecting current work:
 - [Phase 03]: UAT 4건 완료 (2026-10-12) — 통과 4, 문제 0. 1번은 소유자 결정이다 — 성공 기준 3 후반 "생성 파일의 진단이 보고되지 않는다" 를 Dart 3.13.x 의 규칙 진단에 대한 말로 읽고, README 가 그 범위와 직접 적는 방법을 밝히도록 ROADMAP 의 Phase 5 Notes 에 적었다 (`1ba1b31`). 2번 판단형 금지 사항은 plan 기준 16건이다 (검증 보고서의 "17건" 은 수 착오) — 근거 명령 16개를 다시 돌려 모두 통과했다. 3 · 4번은 SUMMARY coverage 의 사람 판단 항목(CHANGELOG 2.0.0, `example/README.md`)을 UAT 에 더한 것이다. `03-VERIFICATION.md` 는 `passed`
 - [Phase 04]: 검증 명령 [3/10] (c) 의 기호는 RULES.md 를 정답지, lib/base.yaml 을 실제 결과로 놓는다 — + 는 base.yaml 에만, - 는 RULES.md 에만 있는 이름 (04-01)
 - [Phase 04]: readRulesMdBlock 은 이름과 형식 오류 행을 함께 돌려주는 RulesMdBlock 을 돌려준다 — 첫 칸 이름이 둘인 행을 예외가 아닌 단계 실패로 알리기 위해 (04-01)
+- [Phase 04]: 실측 도구 tool/measure_rules.dart 의 결과 JSON(schema 1)은 회차마다 options(켠 규칙 이름 · 언어 옵션 · sdk)와 projectBySeverity 를 담는다 — fix 단계가 다른 실행에서 before 회차의 옵션을 되살리고 새 error 를 센다. 경로 · 메시지는 없다 (04-02)
+- [Phase 04]: 실측 도구의 회차는 네트워크가 끊기면 plugin 준비 실패로 valid: false 가 되고 종료 코드 1 이다 (04-02 smoke 의 G1-strip, 2026-10-13 실측). 같은 run id 로 그 단계만 다시 돌리면 같은 id 의 회차를 바꿔 쓴다 (04-02)
 
 ### Pending Todos
 
@@ -171,6 +174,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-12T23:22:48.130Z
-Stopped at: Completed 04-01-PLAN.md
+Last session: 2026-10-12T23:58:00.124Z
+Stopped at: Completed 04-02-PLAN.md
 Resume file: None
