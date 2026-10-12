@@ -1,0 +1,125 @@
+Dart 3.13.4 on macos
+정답지 exit 2 + 16줄
+
+# 1부. 묶음과 별칭이 `package:` 주소로 부른다 (조사가 권한 모양)
+lib/analysis_options.yaml:
+include: package:woody_lints/recommended.yaml
+lib/recommended.yaml:
+include:
+  - package:woody_lints/base.yaml
+  - package:woody_lints/riverpod.yaml
+  - package:woody_lints/codegen.yaml
+## A-alias — 옛 주소 한 줄 (3단: 별칭 → 묶음 → 조각)
+   exit 2, 15.0s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+     lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables
+     lib/added_rules.dart:18  info  always_declare_return_types
+     lib/added_rules.dart:24  info  prefer_final_locals
+     lib/added_rules.dart:29  info  prefer_single_quotes
+     lib/added_rules.dart:33  info  unawaited_futures
+     lib/added_rules.dart:7  info  prefer_const_constructors
+     lib/base_rules.dart:12  info  sort_child_properties_last
+     lib/base_rules.dart:17  info  use_build_context_synchronously
+     lib/base_rules.dart:22  info  avoid_print
+     lib/base_rules.dart:30  info  control_flow_in_finally
+     lib/base_rules.dart:34  info  slash_for_doc_comments
+     lib/base_rules.dart:38  info  prefer_is_empty
+     lib/base_rules.dart:8  info  sized_box_for_whitespace
+     lib/main.dart:5  warning  missing_provider_scope
+     lib/riverpod_rules.dart:17  warning  provider_parameters
+     lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties
+   ✓ A-alias 이 저장소의 정답지와 같다 — 16줄, exit 2
+   ✓ A-alias 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+   ✓ A-alias 의 plugin 선언이 ^3.1.3 로 전해졌다 — 실제 ^3.1.3
+## A-bundle — 묶음 주소 한 줄 (2단: 묶음 → 조각)
+   exit 2, 15.1s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ A-bundle 이 저장소의 정답지와 같다 — 16줄, exit 2
+   ✓ A-bundle 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+   ✓ A-bundle 의 plugin 선언이 ^3.1.3 로 전해졌다 — 실제 ^3.1.3
+## A-alias-warm — A-alias 를 같은 상태 폴더로 한 번 더 (재실행)
+   exit 2, 3.5s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ 옛 주소의 재실행에서도 같은 진단이 나온다 — 16줄, exit 2
+
+# 2부. 묶음과 별칭이 상대 경로로 부른다
+lib/analysis_options.yaml:
+include: recommended.yaml
+lib/recommended.yaml:
+include:
+  - base.yaml
+  - riverpod.yaml
+  - codegen.yaml
+## R-alias — 옛 주소 한 줄, 상대 경로 3단
+   exit 2, 14.9s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ R-alias 이 저장소의 정답지와 같다 — 16줄, exit 2
+   ✓ R-alias 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+## R-bundle — 묶음 주소 한 줄, 상대 경로 2단
+   exit 2, 15.0s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ R-bundle 이 저장소의 정답지와 같다 — 16줄, exit 2
+   ✓ R-bundle 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+
+# 2부-2. 섞어 쓰기 — 별칭은 상대 경로, 묶음은 `package:` 주소
+## M-alias — 옛 주소 한 줄, 별칭만 상대 경로
+   exit 2, 14.9s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ M-alias 이 저장소의 정답지와 같다 — 16줄, exit 2
+   ✓ M-alias 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+
+# 3부. 깊이 — 별칭 앞에 징검다리 파일을 셋 더 둔다 (6단)
+## D-six — hop1 → hop2 → hop3 → 별칭 → 묶음 → 조각
+   exit 2, 15.1s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ D-six 이 저장소의 정답지와 같다 — 16줄, exit 2
+   ✓ D-six 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+
+# 4부. 같은 파일에 두 길로 닿는다 — 옛 주소와 조각을 함께 include
+## P-twice — 옛 주소 + riverpod.yaml + base.yaml 을 목록으로
+   exit 2, 15.1s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ P-twice 이 저장소의 정답지와 같다 — 16줄, exit 2
+   ✓ P-twice 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+
+# 5부. plugin 하한을 올린다 (PRESET-05) — riverpod.yaml 의 선언만 ^3.1.9 로
+## B-bump — 옛 주소 한 줄, riverpod_lint: ^3.1.9
+   exit 2, 15.8s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.9)
+   ✓ B-bump 이 저장소의 정답지와 같다 — 16줄, exit 2
+   ✓ B-bump 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.9)
+   ✓ B-bump 의 plugin 선언이 ^3.1.9 로 전해졌다 — 실제 ^3.1.9
+
+# 6부. 대조 — 묶음에서 riverpod.yaml 을 뺀다 (별칭이 묶음을 그대로 따르는지)
+## N-no-riverpod — 옛 주소 한 줄, 묶음이 base + codegen 만 부름
+   exit 0, 3.4s, 진단 13건 (plugin 0), plugin 폴더 0개
+   ✓ 묶음에서 riverpod.yaml 을 빼면 옛 주소에서 riverpod_lint 3줄이 사라진다 — 13줄, exit 0
+   ✓ 그때는 plugin 을 준비하지 않는다 — 폴더 0개
+
+# 7부. 대조 — 별칭이 없는 파일을 부른다 (조용히 통과하지 않는지)
+## N-missing — 옛 주소 한 줄, 별칭이 없는 파일을 include
+   exit 2, 3.6s, 진단 2건 (plugin 0), plugin 폴더 0개
+     analysis_options.yaml:1  warning  include_file_not_found
+     lib/should_not_appear.dart:5  warning  invalid_annotation_target
+       analysis_options.yaml:1  warning  include_file_not_found — The URI 'package:woody_lints/no_such_bundle.yaml' included in '<replica>/lib/analysis_options.yaml' can't be found when analyzing '<replica>/example'.
+       lib/should_not_appear.dart:5  warning  invalid_annotation_target — The annotation 'immutable' can only be used on classes, extension types, or mixins.
+   ✓ 별칭의 include 가 깨지면 연습용 프로젝트의 옵션 파일에 진단이 붙는다 — exit 2, 2줄, plugin 폴더 0개
+
+# 판정
+✓ A-alias 이 저장소의 정답지와 같다 — 16줄, exit 2
+✓ A-alias 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+✓ A-alias 의 plugin 선언이 ^3.1.3 로 전해졌다 — 실제 ^3.1.3
+✓ A-bundle 이 저장소의 정답지와 같다 — 16줄, exit 2
+✓ A-bundle 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+✓ A-bundle 의 plugin 선언이 ^3.1.3 로 전해졌다 — 실제 ^3.1.3
+✓ 옛 주소의 재실행에서도 같은 진단이 나온다 — 16줄, exit 2
+✓ R-alias 이 저장소의 정답지와 같다 — 16줄, exit 2
+✓ R-alias 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+✓ R-bundle 이 저장소의 정답지와 같다 — 16줄, exit 2
+✓ R-bundle 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+✓ M-alias 이 저장소의 정답지와 같다 — 16줄, exit 2
+✓ M-alias 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+✓ D-six 이 저장소의 정답지와 같다 — 16줄, exit 2
+✓ D-six 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+✓ P-twice 이 저장소의 정답지와 같다 — 16줄, exit 2
+✓ P-twice 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+✓ B-bump 이 저장소의 정답지와 같다 — 16줄, exit 2
+✓ B-bump 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.9)
+✓ B-bump 의 plugin 선언이 ^3.1.9 로 전해졌다 — 실제 ^3.1.9
+✓ 묶음에서 riverpod.yaml 을 빼면 옛 주소에서 riverpod_lint 3줄이 사라진다 — 13줄, exit 0
+✓ 그때는 plugin 을 준비하지 않는다 — 폴더 0개
+✓ 별칭의 include 가 깨지면 연습용 프로젝트의 옵션 파일에 진단이 붙는다 — exit 2, 2줄, plugin 폴더 0개
+모두 성립 (23건)
+
+원본 결과: <repo>/.planning/spikes/010-alias-three-level-include/results/probe.json

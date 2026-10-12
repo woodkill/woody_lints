@@ -528,7 +528,7 @@ class Replica {
       exitCode: result.exitCode,
       elapsed: watch.elapsed,
       lines: [for (final d in diagnostics ?? const <(String, String)>[]) d.$1],
-      messages: [for (final d in diagnostics ?? const <(String, String)>[]) d.$2],
+      messages: [for (final d in diagnostics ?? const <(String, String)>[]) scrub(d.$2)],
       jsonOk: diagnostics != null,
       stderrText: scrub((result.stderr as String).trim()),
       pluginFolders: folders.length,
