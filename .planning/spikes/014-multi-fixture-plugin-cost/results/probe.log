@@ -1,0 +1,244 @@
+Dart 3.13.4 on macos, 프로세서 10개
+
+# 준비. 연습용 프로젝트 여섯의 pub get (pub cache 는 채워진 상태)
+   example (옛 주소): 0.2초
+   recommended: 0.2초
+   base_only: 0.2초
+   overrides: 0.2초
+   base_riverpod: 0.2초
+   base_codegen: 0.2초
+   합계 1.3초
+
+# A. 폴더마다 따로, 상태 폴더도 따로 — 처음 실행
+## A-cold-example — example (옛 주소)
+   exit 2, 15.1s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ A-cold example (옛 주소) 의 진단이 예상과 같다 — 16줄, exit 2
+## A-cold-recommended — recommended
+   exit 2, 15.2s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ A-cold recommended 의 진단이 예상과 같다 — 16줄, exit 2
+## A-cold-base_only — base_only (plugin 없음)
+   exit 2, 3.2s, 진단 18건 (plugin 0), plugin 폴더 0개
+   ✓ A-cold base_only 의 진단이 예상과 같다 — 18줄, exit 2
+## A-cold-overrides — overrides
+   exit 2, 15.3s, 진단 15건 (plugin 2), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ A-cold overrides 의 진단이 예상과 같다 — 15줄, exit 2
+## A-cold-base_riverpod — base_riverpod
+   exit 2, 13.9s, 진단 21건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ A-cold base_riverpod 의 진단이 예상과 같다 — 21줄, exit 2
+## A-cold-base_codegen — base_codegen (plugin 없음)
+   exit 0, 3.3s, 진단 13건 (plugin 0), plugin 폴더 0개
+   ✓ A-cold base_codegen 의 진단이 예상과 같다 — 13줄, exit 0
+   A-cold 합계 65.9초
+
+# A. 같은 상태 폴더로 재실행
+## A-warm-example — example (옛 주소)
+   exit 2, 3.5s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ A-warm example (옛 주소) 의 진단이 예상과 같다 — 16줄, exit 2
+## A-warm-recommended — recommended
+   exit 2, 3.5s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ A-warm recommended 의 진단이 예상과 같다 — 16줄, exit 2
+## A-warm-base_only — base_only (plugin 없음)
+   exit 2, 3.2s, 진단 18건 (plugin 0), plugin 폴더 0개
+   ✓ A-warm base_only 의 진단이 예상과 같다 — 18줄, exit 2
+## A-warm-overrides — overrides
+   exit 2, 3.6s, 진단 15건 (plugin 2), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ A-warm overrides 의 진단이 예상과 같다 — 15줄, exit 2
+## A-warm-base_riverpod — base_riverpod
+   exit 2, 3.5s, 진단 21건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ A-warm base_riverpod 의 진단이 예상과 같다 — 21줄, exit 2
+## A-warm-base_codegen — base_codegen (plugin 없음)
+   exit 0, 3.6s, 진단 13건 (plugin 0), plugin 폴더 0개
+   ✓ A-warm base_codegen 의 진단이 예상과 같다 — 13줄, exit 0
+   A-warm 합계 20.9초
+
+# A'. 폴더마다 따로, 상태 폴더는 하나를 함께 — 처음 실행
+## S-cold-example — example (옛 주소)
+   exit 2, 15.9s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ S-cold example (옛 주소) 의 진단이 예상과 같다 — 16줄, exit 2
+## S-cold-recommended — recommended
+   exit 2, 13.2s, 진단 16건 (plugin 3), plugin 폴더 2개
+   ✓ S-cold recommended 의 진단이 예상과 같다 — 16줄, exit 2
+## S-cold-base_only — base_only (plugin 없음)
+   exit 2, 0.7s, 진단 18건 (plugin 0), plugin 폴더 2개
+   ✓ S-cold base_only 의 진단이 예상과 같다 — 18줄, exit 2
+## S-cold-overrides — overrides
+   exit 2, 13.1s, 진단 15건 (plugin 2), plugin 폴더 3개
+   ✓ S-cold overrides 의 진단이 예상과 같다 — 15줄, exit 2
+## S-cold-base_riverpod — base_riverpod
+   exit 2, 13.1s, 진단 21건 (plugin 3), plugin 폴더 4개
+   ✓ S-cold base_riverpod 의 진단이 예상과 같다 — 21줄, exit 2
+## S-cold-base_codegen — base_codegen (plugin 없음)
+   exit 0, 0.7s, 진단 13건 (plugin 0), plugin 폴더 4개
+   ✓ S-cold base_codegen 의 진단이 예상과 같다 — 13줄, exit 0
+   S-cold 합계 56.7초
+   함께 쓴 상태 폴더의 plugin 폴더 4개
+
+# A'. 재실행
+## S-warm-example — example (옛 주소)
+   exit 2, 3.4s, 진단 16건 (plugin 3), plugin 폴더 4개
+   ✓ S-warm example (옛 주소) 의 진단이 예상과 같다 — 16줄, exit 2
+## S-warm-recommended — recommended
+   exit 2, 3.5s, 진단 16건 (plugin 3), plugin 폴더 4개
+   ✓ S-warm recommended 의 진단이 예상과 같다 — 16줄, exit 2
+## S-warm-base_only — base_only (plugin 없음)
+   exit 2, 0.7s, 진단 18건 (plugin 0), plugin 폴더 4개
+   ✓ S-warm base_only 의 진단이 예상과 같다 — 18줄, exit 2
+## S-warm-overrides — overrides
+   exit 2, 3.4s, 진단 15건 (plugin 2), plugin 폴더 4개
+   ✓ S-warm overrides 의 진단이 예상과 같다 — 15줄, exit 2
+## S-warm-base_riverpod — base_riverpod
+   exit 2, 3.5s, 진단 21건 (plugin 3), plugin 폴더 4개
+   ✓ S-warm base_riverpod 의 진단이 예상과 같다 — 21줄, exit 2
+## S-warm-base_codegen — base_codegen (plugin 없음)
+   exit 0, 0.6s, 진단 13건 (plugin 0), plugin 폴더 4개
+   ✓ S-warm base_codegen 의 진단이 예상과 같다 — 13줄, exit 0
+   S-warm 합계 15.1초
+   ✓ A' 상태 폴더를 함께 쓰면 plugin 폴더가 plugin 을 쓰는 프로젝트 수만큼 생긴다 — 실제 4개
+
+# P. A 를 동시에 — plugin 을 쓰는 넷, 처음 실행 (상태 폴더는 따로)
+## P4-cold-base_riverpod — base_riverpod
+   exit 2, 18.8s, 진단 21건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+## P4-cold-example — example (옛 주소)
+   exit 2, 21.5s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+## P4-cold-overrides — overrides
+   exit 2, 21.6s, 진단 15건 (plugin 2), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+## P4-cold-recommended — recommended
+   exit 2, 21.6s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ P4-cold example (옛 주소) 의 진단이 예상과 같다 — 16줄, exit 2
+   ✓ P4-cold recommended 의 진단이 예상과 같다 — 16줄, exit 2
+   ✓ P4-cold overrides 의 진단이 예상과 같다 — 15줄, exit 2
+   ✓ P4-cold base_riverpod 의 진단이 예상과 같다 — 21줄, exit 2
+   P4-cold 벽시계 21.6초 (하나씩의 합 83.5초)
+
+# P. 여섯을 모두 동시에, 처음 실행
+## P6-cold-base_only — base_only
+   exit 2, 5.5s, 진단 18건 (plugin 0), plugin 폴더 0개
+## P6-cold-base_codegen — base_codegen
+   exit 0, 5.5s, 진단 13건 (plugin 0), plugin 폴더 0개
+## P6-cold-example — example (옛 주소)
+   exit 2, 23.0s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+## P6-cold-base_riverpod — base_riverpod
+   exit 2, 23.0s, 진단 21건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+## P6-cold-overrides — overrides
+   exit 2, 23.0s, 진단 15건 (plugin 2), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+## P6-cold-recommended — recommended
+   exit 2, 23.1s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ P6-cold example (옛 주소) 의 진단이 예상과 같다 — 16줄, exit 2
+   ✓ P6-cold recommended 의 진단이 예상과 같다 — 16줄, exit 2
+   ✓ P6-cold base_only 의 진단이 예상과 같다 — 18줄, exit 2
+   ✓ P6-cold overrides 의 진단이 예상과 같다 — 15줄, exit 2
+   ✓ P6-cold base_riverpod 의 진단이 예상과 같다 — 21줄, exit 2
+   ✓ P6-cold base_codegen 의 진단이 예상과 같다 — 13줄, exit 0
+   P6-cold 벽시계 23.1초 (하나씩의 합 103.1초)
+
+# B. 작업 폴더 하나에서 옵션 파일만 바꿔 가며 (상태 폴더 하나) — 처음 실행
+## B-cold-example — example (옛 주소)
+   exit 2, 16.5s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ B-cold example (옛 주소) 의 진단이 예상과 같다 — 16줄, exit 2
+## B-cold-recommended — recommended
+   exit 2, 3.4s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ B-cold recommended 의 진단이 예상과 같다 — 16줄, exit 2
+## B-cold-base_only — base_only (plugin 없음)
+   exit 2, 0.7s, 진단 18건 (plugin 0), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ B-cold base_only 의 진단이 예상과 같다 — 18줄, exit 2
+## B-cold-overrides — overrides
+   exit 2, 3.5s, 진단 15건 (plugin 2), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ B-cold overrides 의 진단이 예상과 같다 — 15줄, exit 2
+## B-cold-base_riverpod — base_riverpod
+   exit 2, 3.5s, 진단 21건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ B-cold base_riverpod 의 진단이 예상과 같다 — 21줄, exit 2
+## B-cold-base_codegen — base_codegen (plugin 없음)
+   exit 0, 0.7s, 진단 13건 (plugin 0), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ B-cold base_codegen 의 진단이 예상과 같다 — 13줄, exit 0
+   B-cold 합계 28.4초
+   상태 폴더의 plugin 폴더 1개
+
+# B. 재실행
+## B-warm-example — example (옛 주소)
+   exit 2, 3.4s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ B-warm example (옛 주소) 의 진단이 예상과 같다 — 16줄, exit 2
+## B-warm-recommended — recommended
+   exit 2, 3.9s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ B-warm recommended 의 진단이 예상과 같다 — 16줄, exit 2
+## B-warm-base_only — base_only (plugin 없음)
+   exit 2, 0.6s, 진단 18건 (plugin 0), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ B-warm base_only 의 진단이 예상과 같다 — 18줄, exit 2
+## B-warm-overrides — overrides
+   exit 2, 3.6s, 진단 15건 (plugin 2), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ B-warm overrides 의 진단이 예상과 같다 — 15줄, exit 2
+## B-warm-base_riverpod — base_riverpod
+   exit 2, 3.5s, 진단 21건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ B-warm base_riverpod 의 진단이 예상과 같다 — 21줄, exit 2
+## B-warm-base_codegen — base_codegen (plugin 없음)
+   exit 0, 0.7s, 진단 13건 (plugin 0), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ B-warm base_codegen 의 진단이 예상과 같다 — 13줄, exit 0
+   B-warm 합계 15.7초
+   ✓ B 작업 폴더 하나를 돌려 쓰면 plugin 폴더가 하나다 — 실제 1개
+
+# C. 샘플을 복사하지 않고 lib/ 를 example/lib 로 가는 링크로 둔다
+## C-linked — lib 가 심볼릭 링크
+   exit 2, 15.0s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+     lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables
+     lib/added_rules.dart:18  info  always_declare_return_types
+     lib/added_rules.dart:24  info  prefer_final_locals
+   정답지와 같다 — exit 2, 16줄, plugin 3줄
+
+# 시간 요약 (로컬, 초)
+pub get 여섯           1.3
+A  폴더 · 상태 따로    처음 65.9 / 재실행 20.9
+A' 상태 폴더 함께      처음 56.7 / 재실행 15.1
+P  동시에              plugin 넷 21.6 / 여섯 23.1 (벽시계, 처음)
+B  작업 폴더 하나      처음 28.4 / 재실행 15.7
+
+# 판정
+✓ A-cold example (옛 주소) 의 진단이 예상과 같다 — 16줄, exit 2
+✓ A-cold recommended 의 진단이 예상과 같다 — 16줄, exit 2
+✓ A-cold base_only 의 진단이 예상과 같다 — 18줄, exit 2
+✓ A-cold overrides 의 진단이 예상과 같다 — 15줄, exit 2
+✓ A-cold base_riverpod 의 진단이 예상과 같다 — 21줄, exit 2
+✓ A-cold base_codegen 의 진단이 예상과 같다 — 13줄, exit 0
+✓ A-warm example (옛 주소) 의 진단이 예상과 같다 — 16줄, exit 2
+✓ A-warm recommended 의 진단이 예상과 같다 — 16줄, exit 2
+✓ A-warm base_only 의 진단이 예상과 같다 — 18줄, exit 2
+✓ A-warm overrides 의 진단이 예상과 같다 — 15줄, exit 2
+✓ A-warm base_riverpod 의 진단이 예상과 같다 — 21줄, exit 2
+✓ A-warm base_codegen 의 진단이 예상과 같다 — 13줄, exit 0
+✓ S-cold example (옛 주소) 의 진단이 예상과 같다 — 16줄, exit 2
+✓ S-cold recommended 의 진단이 예상과 같다 — 16줄, exit 2
+✓ S-cold base_only 의 진단이 예상과 같다 — 18줄, exit 2
+✓ S-cold overrides 의 진단이 예상과 같다 — 15줄, exit 2
+✓ S-cold base_riverpod 의 진단이 예상과 같다 — 21줄, exit 2
+✓ S-cold base_codegen 의 진단이 예상과 같다 — 13줄, exit 0
+✓ S-warm example (옛 주소) 의 진단이 예상과 같다 — 16줄, exit 2
+✓ S-warm recommended 의 진단이 예상과 같다 — 16줄, exit 2
+✓ S-warm base_only 의 진단이 예상과 같다 — 18줄, exit 2
+✓ S-warm overrides 의 진단이 예상과 같다 — 15줄, exit 2
+✓ S-warm base_riverpod 의 진단이 예상과 같다 — 21줄, exit 2
+✓ S-warm base_codegen 의 진단이 예상과 같다 — 13줄, exit 0
+✓ A' 상태 폴더를 함께 쓰면 plugin 폴더가 plugin 을 쓰는 프로젝트 수만큼 생긴다 — 실제 4개
+✓ P4-cold example (옛 주소) 의 진단이 예상과 같다 — 16줄, exit 2
+✓ P4-cold recommended 의 진단이 예상과 같다 — 16줄, exit 2
+✓ P4-cold overrides 의 진단이 예상과 같다 — 15줄, exit 2
+✓ P4-cold base_riverpod 의 진단이 예상과 같다 — 21줄, exit 2
+✓ P6-cold example (옛 주소) 의 진단이 예상과 같다 — 16줄, exit 2
+✓ P6-cold recommended 의 진단이 예상과 같다 — 16줄, exit 2
+✓ P6-cold base_only 의 진단이 예상과 같다 — 18줄, exit 2
+✓ P6-cold overrides 의 진단이 예상과 같다 — 15줄, exit 2
+✓ P6-cold base_riverpod 의 진단이 예상과 같다 — 21줄, exit 2
+✓ P6-cold base_codegen 의 진단이 예상과 같다 — 13줄, exit 0
+✓ B-cold example (옛 주소) 의 진단이 예상과 같다 — 16줄, exit 2
+✓ B-cold recommended 의 진단이 예상과 같다 — 16줄, exit 2
+✓ B-cold base_only 의 진단이 예상과 같다 — 18줄, exit 2
+✓ B-cold overrides 의 진단이 예상과 같다 — 15줄, exit 2
+✓ B-cold base_riverpod 의 진단이 예상과 같다 — 21줄, exit 2
+✓ B-cold base_codegen 의 진단이 예상과 같다 — 13줄, exit 0
+✓ B-warm example (옛 주소) 의 진단이 예상과 같다 — 16줄, exit 2
+✓ B-warm recommended 의 진단이 예상과 같다 — 16줄, exit 2
+✓ B-warm base_only 의 진단이 예상과 같다 — 18줄, exit 2
+✓ B-warm overrides 의 진단이 예상과 같다 — 15줄, exit 2
+✓ B-warm base_riverpod 의 진단이 예상과 같다 — 21줄, exit 2
+✓ B-warm base_codegen 의 진단이 예상과 같다 — 13줄, exit 0
+✓ B 작업 폴더 하나를 돌려 쓰면 plugin 폴더가 하나다 — 실제 1개
+모두 성립 (48건)
+
+원본 결과: <repo>/.planning/spikes/014-multi-fixture-plugin-cost/results/probe.json

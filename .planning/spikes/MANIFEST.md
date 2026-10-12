@@ -48,6 +48,21 @@ Phase 3 (Preset Split) 의 나머지를 계획하기 전에, 한 파일(`lib/ana
 - 실측은 저장소 고정 SDK (Flutter 3.47.5 / Dart 3.13.4) 에서 하고, 스크립트는 Dart 이며 `dart:io`, `dart:convert` 만 쓴다. 진단은 정답지 형식 `상대경로:줄  강도  규칙이름` 으로 견준다
 - pub workspace 와 Riverpod major 차이는 재지 않는다 (D-08)
 
+spike 에서 나와 실제 구현이 지켜야 하는 것 (근거는 각 spike 의 README).
+
+- 묶음(`recommended.yaml`)은 조각 셋을 `package:woody_lints/…` 주소의 목록으로 부르고, 옛 주소 파일은 `include: package:woody_lints/recommended.yaml` 한 줄이다. 이 3단 구조에서 plugin 이 로드되고 옛 주소 · 묶음 주소 둘 다 지금의 정답지(`exit 2` + 16줄)와 한 줄도 다르지 않다. 상대 경로로 불러도 결과가 같으므로 선례대로 `package:` 를 쓴다 (009, 010, 011)
+- 연습용 프로젝트별 정답지의 모양: 기본만 `exit 2` · 18줄, 기본 + Riverpod `exit 2` · 21줄, 기본 + codegen `exit 0` · 13줄. "기본만" 이 `exit 0` 이 아닌 것은 `invalid_annotation_target` 이 warning 이라서다 (009)
+- `riverpod_lint` 선언을 `^3.1.9` 로 올리는 커밋에서 정답지는 바뀌지 않는다 — 2026-10-12 에 `^3.1.3` 과 `^3.1.9` 가 둘 다 3.1.9 로 풀리는 동안의 사실이다 (010)
+- 루트 `analysis_options.yaml` 의 `lib/analysis_options.yaml` 제외는 파일을 나누는 커밋과 **같은 커밋이거나 그 뒤**에 지운다. 한 파일 구조에서 먼저 지우면 `lib/analysis_options.yaml:58  warning  plugins_in_inner_options` 로 루트 분석이 exit 2 가 된다 (011)
+- 새 연습용 프로젝트는 한 폴더 아래에 모으고 루트에서 `'<폴더>/**'` 한 줄로 제외한다. 기존 `example/**` 줄은 그대로 둔다. 제외하지 않으면 루트 분석에 그 폴더들의 진단이 섞이고 plugin 까지 준비한다 (011)
+- 루트 옵션 파일은 묶음을 include 하지 않는다 — 분석마다 plugin 을 준비한다. `base.yaml` 은 include 해도 plugin 을 준비하지 않고 지금의 `tool/verify.dart` 에 새 진단이 0건이다 (011)
+- 끄는 설정용 연습 프로젝트는 끈 자리 옆에 끄지 않은 같은 위반을 둔다. plugin 진단은 주석에 `riverpod_lint/` 접두사를 붙이고, 프로젝트 전체에서 끌 때는 `version` 을 함께 적는다. `version` 을 뺀 설정은 경고 없이 무시되고, `analyzer.errors` 로는 plugin 진단을 끌 수 없다 (012)
+- **`codegen.yaml` 이 주는 생성 파일 제외는 규칙 진단에만 통하고 plugin 진단에는 통하지 않는다.** plugin 이 쓰는 `analyzer` 14.4.0 이상이 제외 패턴을 그것을 적은 파일의 폴더 기준으로 풀기 때문이고, 나누기 전(1.3.0)에도 같다. 사용 프로젝트가 자기 옵션 파일에 직접 적은 제외는 plugin 도 따른다. 성공 기준 3 의 "생성 파일의 진단이 보고되지 않는다" 는 규칙 진단에 대한 말로 읽는다 (012)
+- 규칙 검사는 `base.yaml` · `codegen.yaml` · (`plugins:` 를 뺀) `riverpod.yaml` 을 `build/woody_rule_check/<조각 이름>/analysis_options.yaml` 로 복사해 한 번에 돌린다. 통과 조건은 "exit 0 이고 복사본의 진단이 0건" 이다. "규칙 0개" 확인은 `base.yaml` 에만 건다. 묶음과 별칭은 대상에 넣지 않는다 — 폴더를 인자로 준 분석에서는 include 를 거쳐 plugin 까지 준비한다 (013)
+- 깨진 YAML 은 exit 3 인데 JSON 의 진단이 0건이고 stderr 도 비어 있다. 원인(`parse_error`)은 형식 인자 없이 돌린 출력에만 찍힌다. `linter:` 키의 오타는 아무 신호도 남기지 않는다 (013)
+- 연습용 프로젝트는 폴더마다 따로 두고 상태 폴더도 프로젝트마다 따로 준다 (지금 검증 명령의 방식 그대로). 여섯이 로컬에서 처음 66초, 재실행 20 ~ 21초다. 상태 폴더를 하나로 합치면 plugin 폴더가 넷이 되어 버전을 읽지 못한다. plugin 준비는 경로가 다르면 나눠 쓰지 못한다 (014)
+- 시간이 문제가 되면 상태 폴더를 따로 둔 채 동시에 띄우는 것을 먼저 본다 — 로컬에서 여섯이 23초이고 결과가 같았다. GitHub runner 에서의 여섯은 재지 않았다 (추정 약 4분 20 ~ 30초) (014)
+
 ## Spikes
 
 | # | Idea | Name | Type | Validates | Verdict | Tags |
@@ -65,4 +80,4 @@ Phase 3 (Preset Split) 의 나머지를 계획하기 전에, 한 파일(`lib/ana
 | 011 | preset-split-include-behavior | root-analysis-after-split | standard | 나눈 구조에서 루트의 `lib/analysis_options.yaml` 제외를 걷어내도 루트 분석이 `plugins_in_inner_options` 없이 0건이고 plugin 을 준비하지 않으며, 연습용 프로젝트 폴더가 여럿이어도 섞이지 않는다 | ✓ VALIDATED | dart-analyze, context-root, exclude, plugins-in-inner-options |
 | 012 | preset-split-include-behavior | plugin-suppression-matrix | standard | 규칙과 plugin 진단을 프로젝트 전체 / 파일 하나 / 한 줄에서 끄는 여섯 칸과 `analyzer.exclude` 가 각각 끈 것만 사라지게 하는지가 확정된다 | ⚠ PARTIAL (여섯 칸은 성립. 묶음이 주는 생성 파일 제외는 plugin 진단에 통하지 않는다) | analyzer-plugin, ignore, exclude, override |
 | 013 | preset-split-include-behavior | rule-check-after-split | standard | 규칙이 `base.yaml` 로 옮겨 간 뒤의 규칙 검사에서 문제 규칙 셋과 깨진 입력 셋이 어떤 종료 코드와 진단으로 드러나는지가 확정된다 | ✓ VALIDATED | linter-rules, deprecated-lint, rule-check, broken-yaml |
-| 014 | preset-split-include-behavior | multi-fixture-plugin-cost | standard | plugin 을 쓰는 연습용 프로젝트 넷을 차례로 돌릴 때의 시간과, 폴더마다 따로 두는 방식 대 작업 폴더 하나를 돌려 쓰는 방식의 차이가 재어진다 | PENDING | analyzer-plugin, timing, state-folder, fixture-layout |
+| 014 | preset-split-include-behavior | multi-fixture-plugin-cost | standard | plugin 을 쓰는 연습용 프로젝트 넷을 차례로 돌릴 때의 시간과, 폴더마다 따로 두는 방식 대 작업 폴더 하나를 돌려 쓰는 방식의 차이가 재어진다 | ✓ VALIDATED | analyzer-plugin, timing, state-folder, fixture-layout |
