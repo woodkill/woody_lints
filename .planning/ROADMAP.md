@@ -132,7 +132,7 @@ Plans:
   4. 저장소 루트의 `analysis_options.yaml` 에서 배포 파일 exclude 를 걷어낸 상태로 루트 분석이 경고 없이 통과한다 (`plugins_in_inner_options` 포함)
   5. 재정의 fixture 에서 규칙 하나를 끄는 설정과 plugin 진단 하나를 끄는 설정이 각각 그 진단만 사라지게 한다
 
-**Plans**: 3/4 plans executed
+**Plans**: 4/4 plans executed
 
 Plans:
 **Wave 1**
@@ -145,7 +145,7 @@ Plans:
 - [x] 03-03-PLAN.md — `tool/verify.dart` 를 fixture 표 · 단계 9개 · `--update` 일괄로 넓히고 `fixtures/{recommended,base_only,base_riverpod,base_codegen,overrides}/` 와 정답지 넷을 만들며, README 에 여섯 · 아홉과 M18 · M19 를 기록한다 (PRESET-01, PRESET-02, PRESET-03, PRESET-07, PRESET-08, VERIFY-05; D-03 ~ D-06; 권고 1 ~ 5 · 11)
 
 **Wave 4** *(blocked on Wave 3 completion — 소유자 확인(D-09 첫 push) 포함)*
-- [ ] 03-04-PLAN.md — `riverpod_lint` 하한을 `^3.1.9` 로 올려 정답지 다섯 불변을 단언하고, 소유자 확인 뒤 첫 push → GitHub `verify` 가 여섯으로 시간 제한 안에 통과하는 것을 보고 workflow 주석을 실측으로 고쳐 다시 올린다 (PRESET-05; D-01, D-09; 권고 9 의 C4 · 권고 10)
+- [x] 03-04-PLAN.md — `riverpod_lint` 하한을 `^3.1.9` 로 올려 정답지 다섯 불변을 단언하고, 소유자 확인 뒤 첫 push → GitHub `verify` 가 여섯으로 시간 제한 안에 통과하는 것을 보고 workflow 주석을 실측으로 고쳐 다시 올린다 (PRESET-05; D-01, D-09; 권고 9 의 C4 · 권고 10)
 
 **Spike first** (이 phase 의 나머지를 계획하기 전에 실행으로 확인한다 — **2026-10-12 완료**: spike 009 ~ 012 가 네 항목에 답했고 013 ~ 019 가 맞물리는 자리를 쟀다. 멈춤 조건에 해당한 것 없음. `03-RESEARCH.md` 머리의 표 참조):
 - 조사가 scratch 패키지와 `path:` 의존성으로만 확인한 두 가지를 이 저장소의 실제 구조에서 재현한다. (a) 이름이 `analysis_options.yaml` 이 아닌 파일(`riverpod.yaml`)의 `plugins:` 가 include 경유로 로드된다. (b) 그 구조에서 루트 분석의 `plugins_in_inner_options` 가 사라진다.
@@ -256,7 +256,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Baseline and Toolchain | 4/4 | Complete    | 2026-10-11 |
 | 2. Verification Harness | 5/5 | Complete    | 2026-10-12 |
-| 3. Preset Split | 3/4 | In Progress | - |
+| 3. Preset Split | 4/4 | In Progress | - |
 | 4. Rule Reselection | 0/TBD | Not started | - |
 | 5. Documentation | 0/TBD | Not started | - |
 | 6. Release | 0/TBD | Not started | - |

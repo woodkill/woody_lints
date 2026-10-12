@@ -33,7 +33,7 @@
 - [x] **PRESET-02**: 사용 프로젝트는 `package:woody_lints/riverpod.yaml` 을 include 해서 `riverpod_lint` plugin 을 받을 수 있다
 - [x] **PRESET-03**: 사용 프로젝트는 `package:woody_lints/codegen.yaml` 을 include 해서 코드 생성 관련 설정(생성 파일 제외 등)을 받을 수 있다
 - [x] **PRESET-04**: 기존 `package:woody_lints/analysis_options.yaml` 한 줄만 쓰는 프로젝트는 프리셋 분리 전과 같은 구성(기본 + Riverpod + codegen)을 받는다
-- [ ] **PRESET-05**: `riverpod_lint` plugin 의 버전 하한이 `^3.1.9` 다
+- [x] **PRESET-05**: `riverpod_lint` plugin 의 버전 하한이 `^3.1.9` 다
 - [x] **PRESET-06**: 저장소 루트 분석이 배포 파일을 분석 대상에서 제외하지 않고도 경고 없이 통과한다
 - [x] **PRESET-07**: 사용 프로젝트에서 규칙 하나를 끄는 방법과 plugin 진단 하나를 끄는 방법이 README 에 적힌 대로 동작함이 fixture 로 확인되어 있다
 - [x] **PRESET-08**: 사용 프로젝트는 묶음의 정식 이름 `package:woody_lints/recommended.yaml` 한 줄로 기본 + Riverpod + codegen 구성을 받을 수 있고, 옛 URI 로 받는 구성과 같다
@@ -125,7 +125,7 @@
 | PRESET-02 | Phase 3 | Complete |
 | PRESET-03 | Phase 3 | Complete |
 | PRESET-04 | Phase 3 | Complete |
-| PRESET-05 | Phase 3 | Pending |
+| PRESET-05 | Phase 3 | Complete |
 | PRESET-06 | Phase 3 | Complete |
 | PRESET-07 | Phase 3 | Complete |
 | PRESET-08 | Phase 3 | Complete |

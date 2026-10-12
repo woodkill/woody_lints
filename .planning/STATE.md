@@ -4,17 +4,17 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 03
 current_phase_name: Preset Split
-status: executing
-stopped_at: Completed 03-03-PLAN.md
-last_updated: "2026-10-12T12:02:41.390Z"
+status: verifying
+stopped_at: Completed 03-04-PLAN.md
+last_updated: "2026-10-12T12:25:13.791Z"
 last_activity: 2026-10-12
 last_activity_desc: Phase 03 execution started
-state_head: 25e980e74671c1304dd9bf8333bf2bd68815bfdf
+state_head: 79f27e57b59d738e8cf58d64d4d2263835b418a5
 progress:
   total_phases: 6
   completed_phases: 2
   total_plans: 13
-  completed_plans: 12
+  completed_plans: 13
   percent: 33
 ---
 
@@ -31,7 +31,7 @@ See: .planning/PROJECT.md (updated 2026-10-12)
 
 Phase: 03 (Preset Split) — EXECUTING
 Plan: 4 of 4
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-10-12 — Phase 03 execution started
 
 Progress: [███░░░░░░░] 33%
@@ -71,6 +71,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 03 P01 | 5 min | 2 tasks | 2 files |
 | Phase 03 P02 | 4 min | 2 tasks | 9 files |
 | Phase 03 P03 | 17 min | 3 tasks | 64 files |
+| Phase 03 P04 | 18 min | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -137,6 +138,9 @@ Recent decisions affecting current work:
 - [Phase 03]: [3/9] 는 fixtures/overrides 의 version: 줄을 lib/riverpod.yaml 의 riverpod_lint 선언과 견준다 — 03-04 는 두 줄을 같은 커밋에서 함께 올려야 한다 (overrides 만 ^3.1.9 로 바꾼 실행에서 [3/9] 만 실패 확인)
 - [Phase 03]: M18 (묶음에서 riverpod.yaml 제거)에서 실패한 것은 [4/9] example 하나다 — recommended 는 example 과 같이 깨져 통과하고, overrides 는 자기 plugins: 선언으로 plugin 이 돌아 통과했다 (계획 예상과 다름). 묶음의 Riverpod 조각은 example 의 정답지가 지킨다. M19 (overrides 의 version 제거)는 [3/9] 와 [9/9] 가 잡는다
 - [Phase 03]: 연습용 프로젝트 여섯의 검증 시간은 로컬 처음 실행(상태 폴더 비움) 69초, 재실행 20 ~ 23초다. plugin 폴더는 example 1 · recommended 1 · base_only 0 · base_riverpod 1 · base_codegen 0 · overrides 1. 이 plan 의 커밋 셋(91bbeec, 9ed0fe5, 25e980e)은 push 하지 않았다
+- [Phase 03]: riverpod_lint 하한을 ^3.1.9 로 올렸다 (lib/riverpod.yaml 과 fixtures/overrides 의 version 을 같은 커밋 166d0be 에서). 정답지 다섯의 hash 가 올리기 전과 같고 --update 는 '바뀐 정답지가 없다' 였다 (Dart 3.13.4, 풀린 버전 3.1.9, 2026-10-12)
+- [Phase 03]: Phase 3 의 첫 push 는 소유자 응답 push 뒤 git push origin gsd/v2.0-package-rework 한 줄로 했다 (2026-10-12T12:12:44Z, 0d20c10..166d0be, 24커밋, fast-forward). 두 번째 push 는 D-09 대로 묻지 않고 했다 (12:18:00Z, 166d0be..79f27e5). main 은 90a2736, tag 는 v1.3.0 하나, PR 0건 그대로다. 03-04 의 마무리 커밋은 origin 에 없고 Phase 4 부터의 push 는 다시 소유자에게 묻는다
+- [Phase 03]: GitHub verify 가 연습용 프로젝트 여섯으로 두 번 성공했다 — run 38247615476 job 4분 7초 (검증 182초), run 38248171220 job 3분 33초 (검증 147초), ubuntu-24.04 20261004.327.1. 추정 약 4분 15초 (D-03) 를 대신한다. 360초 이하라 timeout-minutes 10 그대로 두고 workflow 25행 주석만 실측으로 고쳤다
 
 ### Pending Todos
 
@@ -163,6 +167,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-12T12:02:41.360Z
-Stopped at: Completed 03-03-PLAN.md
+Last session: 2026-10-12T12:25:13.765Z
+Stopped at: Completed 03-04-PLAN.md
 Resume file: None
