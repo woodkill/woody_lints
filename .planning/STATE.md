@@ -4,17 +4,17 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 02
 current_phase_name: Verification Harness
-status: Gap closure planned (02-05) — ready to execute (/gsd-execute-phase 2 --gaps-only)
-stopped_at: Completed 02-04-PLAN.md
-last_updated: "2026-10-11T22:13:03.356Z"
+status: executing
+stopped_at: Completed 02-05-PLAN.md
+last_updated: "2026-10-12T01:10:59.926Z"
 last_activity: 2026-10-12
-last_activity_desc: Phase 02 gap 수정 계획 02-05 작성 · 검토 통과 (gap 1건 + 소유자 승인 A · B · C)
-state_head: 4a37ad13a36fce98fa456b3932688ef7b06ff2f4
+last_activity_desc: Phase 02 execution started
+state_head: 008ea3f07b6e4b895023b2fbfb3d141c97ffd433
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 9
-  completed_plans: 8
+  completed_plans: 9
   percent: 17
 ---
 
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-10-11)
 
 ## Current Position
 
-Phase: 02 (Verification Harness) — READY TO EXECUTE
-Plan: 4 of 5
-Status: Gap closure planned (02-05) — ready to execute (/gsd-execute-phase 2 --gaps-only)
-Last activity: 2026-10-12 — Phase 02 gap 수정 계획 02-05 작성 · 검토 통과 (gap 1건 + 소유자 승인 A · B · C)
+Phase: 02 (Verification Harness) — EXECUTING
+Plan: 5 of 5
+Status: Ready to execute
+Last activity: 2026-10-12 — Phase 02 execution started
 
 Progress: [██░░░░░░░░] 17%
 
@@ -66,6 +66,7 @@ Progress: [██░░░░░░░░] 17%
 | Phase 02 P02 | 15 min | 2 tasks | 2 files |
 | Phase 02 P03 | 7 min | 2 tasks | 2 files |
 | Phase 02 P04 | 7 min | 2 tasks | 1 files |
+| Phase 02 P05 | 9 min | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -114,6 +115,11 @@ Recent decisions affecting current work:
 - [Phase 02]: runner 는 FLUTTER_ROOT 환경변수를 설치한 SDK 의 자리로 넘겨준다. 그래서 D-12 의 SDK 확인이 1순위 경로(실행 파일에서 다섯 단계 위)로 통과했는지 2순위(FLUTTER_ROOT)로 통과했는지는 CI 로그로 가를 수 없다 — 둘 다 같은 SDK 를 가리킨다. Flutter SDK 가 아닌 dart 로 실행했을 때의 안내 경로는 여전히 실행해 보지 못했다
 - [Phase 02]: workflow 의 pull_request 트리거와 수동 실행 버튼은 선언만 했고 일으켜 보지 않았다 (PR 은 열지 않고, 버튼은 workflow 파일이 main 에 들어간 뒤에야 보인다). push 에 필터가 없으므로 tag 를 올려도 이 workflow 가 돈다 — Phase 6 (REL-03) 이 tag 전용 검사를 더할 때 함께 본다
 - [Phase 02]: run 38158088016 에 예고가 붙었다 — ubuntu-latest 라벨이 2026-10-19 부터 Ubuntu 26 으로 옮겨 간다. spike 006 과 이 실행은 ubuntu-24.04 에서 쟀다. 그 뒤 CI 가 처음 실패하면 저장소 변경보다 runner 이미지 변경을 먼저 의심한다
+- [Phase 02]: 정답지 비교는 같은 줄의 건수까지 견준다 (subtractLines) — 한 줄에 같은 규칙이 두 번 걸리면 정답지에도 그 줄이 두 번 있어야 통과한다. 고치기 전에는 M10 · M11 이 종료 코드 0 으로 통과했고 고친 뒤 둘 다 종료 코드 1 이다 (02-VERIFICATION.md Gap 1, CR-01 닫음, 2026-10-12 실측)
+- [Phase 02]: [2/4] 는 배포 파일의 최상위 linter: 블록에서 규칙을 하나도 읽지 못하면 실패한다 (countDeclaredRules, 지금은 12개). 규칙을 include 뒤의 파일로 옮긴 모양(M14)에서 [4/4] 는 16줄 그대로 통과하고 [2/4] 만 실패했다 — Phase 3 은 규칙을 옮길 때 shippedOptionsPath 와 stripPlugins 단계를 함께 고쳐야 한다. 세 코드 밖 진단의 처리(WR-03 의 다른 절반)는 열어 둔다
+- [Phase 02]: 필터 없는 push: 가 tag push 에서도 도는 것은 그대로 둔다 (소유자 결정 2026-10-12, WR-07). workflow 주석과 02-CONTEXT.md D-10 덧붙임에 기록했고 설정은 1f06c55 와 같다. Phase 6 이 tags: 만 적으면 브랜치 push 에서 돌지 않게 된다
+- [Phase 02]: plan 02-05 의 세 커밋(37316e3, 40776b5, 008ea3f)은 push 하지 않았다 — origin/gsd/v2.0-package-rework 는 1f06c55 그대로다. 바뀐 스크립트는 로컬(Flutter 3.47.5 / Dart 3.13.4)에서만 돌려 봤고 GitHub runner 에서는 다음 push 때 처음 돈다
+- [Phase 02]: 정답지 갱신(--update)은 같은 실행에서 다른 단계가 실패하면 정답지를 쓰지 않고 그 사실을 화면에 찍는다 (종료 코드 1, WR-01 case 1). plugin 버전이 ? 인 실행의 갱신(case 2)은 막지 않는다 — 소유자 결정으로 열어 둔다. 쓴 뒤에는 '정답지를 썼다: 경로' 줄이 찍힌다
 
 ### Pending Todos
 
@@ -138,6 +144,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-11T17:10:38.470Z
-Stopped at: Completed 02-04-PLAN.md
+Last session: 2026-10-12T01:10:47.842Z
+Stopped at: Completed 02-05-PLAN.md
 Resume file: None
