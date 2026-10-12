@@ -1,7 +1,7 @@
 // woody_lints 검증 명령 — 배포 설정이 기대한 대로 적용되는지를 단계 4개로 확인한다.
 //
 //   [1/4] lib/ 에 .dart 파일이 없는지
-//   [2/4] 배포 파일(lib/analysis_options.yaml)에 deprecated / removed / 없는 규칙이 없는지
+//   [2/4] 배포 파일(lib/analysis_options.yaml)의 복사본을 분석해 진단이 하나도 없는지 (deprecated / removed / 없는 규칙, 겹친 규칙 · 모르는 키 같은 옵션 경고, 깨진 YAML)
 //   [3/4] example/analysis_options.yaml 이 include 한 줄인지
 //   [4/4] example/ 을 `dart analyze` 로 분석한 결과가 커밋된 정답지와 같은지
 //
@@ -43,8 +43,10 @@ const shippedOptionsPath = 'lib/analysis_options.yaml';
 /// 규칙이 보고된다. 점으로 시작하는 폴더는 분석되지 않는다 (spike 005).
 const ruleCheckDir = 'build/woody_rule_check';
 
-/// 배포 파일에 있으면 안 되는 규칙 상태의 진단 코드 (deprecated / removed / 없는 규칙).
-const ruleProblemCodes = ['deprecated_lint', 'removed_lint', 'undefined_lint'];
+/// 깨진 YAML 의 원인 줄에 붙는 진단 코드 (spike 013).
+///
+/// `--format=json` 출력에는 나오지 않고 형식 인자 없이 돌린 출력에만 찍힌다.
+const parseErrorCode = 'parse_error';
 
 /// 복사본의 `include:` 가 풀리지 않았을 때의 진단 코드 — 루트 `pub get` 이 안 된 상태다.
 const includeNotFoundCode = 'include_file_not_found';
@@ -636,10 +638,39 @@ int countDeclaredRules(String options) {
   return count;
 }
 
-/// [2/4] 배포 파일에 deprecated / removed / 없는 규칙이 있는지 본다 (VERIFY-02).
+/// 규칙 검사 복사본 폴더([ruleCheckDir])를 형식 인자 없이 한 번 더 분석해
+/// [parseErrorCode] 를 담은 줄만 돌려준다 (경로는 [scrubPaths] 로 가린다).
+///
+/// 왜 두 번 돌리는가: `--format=json` 출력에는 옵션 파일의 error 강도 진단이 나오지 않는다.
+/// 깨진 YAML 은 exit 3 인데 JSON 의 진단이 0건이고 stderr 도 비어 있어, 원인 줄
+/// (`… - parse_error`)은 형식 인자 없이 돌린 출력에서만 볼 수 있다 (spike 013).
+/// 규칙 검사는 plugin 을 준비하지 않으므로 상태 폴더 환경변수는 주지 않는다.
+/// 복사본이 아직 있을 때(즉 [checkRuleNames] 의 `try` 안에서) 불러야 한다.
+Future<List<String>> readParseErrorLines(String repoRoot) async {
+  final result = await Process.run(Platform.resolvedExecutable, [
+    '--suppress-analytics',
+    'analyze',
+    ruleCheckDir,
+  ], workingDirectory: repoRoot);
+  final text = '${result.stdout}\n${result.stderr}';
+  return [
+    for (final line in text.split('\n'))
+      if (line.contains(parseErrorCode)) scrubPaths(line.trim(), repoRoot),
+  ];
+}
+
+/// [2/4] 배포 파일의 복사본을 분석해 진단이 하나도 없는지 본다 (VERIFY-02).
 ///
 /// 규칙을 하나도 읽지 못하면([countDeclaredRules] 가 0) 실패다 — 검사가 본 것이 없는데
 /// "문제 없음" 으로 넘기지 않는다.
+///
+/// 통과는 복사본의 `dart analyze` 가 exit 0 이고 진단 0건일 때 하나다. 깨진 YAML 은
+/// exit 3 에 진단 0건으로 나오므로 형식 인자 없이 한 번 더 돌려 원인 줄을 보여 준다 (spike 013).
+///
+/// deprecated / removed / 없는 규칙의 세 코드만 고르지 않는다 — 복사본의 진단이 하나라도
+/// 있으면 실패다. 세 코드만 고르던 때는 `rules:` 키의 오타, 겹친 규칙, 없는 진단 코드,
+/// 깨진 YAML 이 이 단계를 통과해 `--update` 가 망가진 결과를 정답지로 썼다.
+/// 2026-10-12 에 고쳤다 (CONTEXT '가장 먼저 할 일').
 ///
 /// analyzer 는 규칙의 상태를 `analysis_options.yaml` 이라는 이름의 파일에 직접 적힌
 /// 규칙에 대해서만 온전히 보고한다 (include 경유로는 없는 규칙만). 그래서 배포 파일을
@@ -683,6 +714,27 @@ Future<StepResult> checkRuleNames(String repoRoot) async {
       );
     }
 
+    // 종료 코드는 0 이 아닌데 JSON 에 진단이 없다 — 옵션 파일 자체가 깨진 경우다.
+    // 원인 줄은 JSON 에 나오지 않으므로 형식 인자 없이 한 번 더 돌려 찾는다 (spike 013).
+    // 복사본을 지우는 finally 보다 먼저 불러야 한다.
+    if (result.exitCode != 0 && lines.isEmpty) {
+      final parseErrors = await readParseErrorLines(repoRoot);
+      return StepResult(
+        label: label,
+        passed: false,
+        detailLines: [
+          '규칙 검사의 dart analyze 가 exit ${result.exitCode} 로 끝났는데 JSON 에 진단이 없다 — '
+              '배포 파일의 YAML 이 깨졌을 수 있다 (닫지 않은 따옴표, 잘못된 들여쓰기 등).',
+          if (parseErrors.isEmpty)
+            '  (원인 줄을 찾지 못했다 — 같은 폴더를 형식 인자 없이 직접 분석해 보세요)'
+          else
+            ...parseErrors.map((l) => '  $l'),
+          '',
+          '`$shippedOptionsPath` 의 그 줄을 고친다 (복사본의 줄 번호는 원본과 같다).',
+        ],
+      );
+    }
+
     // include 가 풀리지 않으면 규칙을 보지 못한 것이다 — "문제 없음" 으로 넘기지 않는다.
     final unresolved = lines
         .where((l) => l.endsWith('  $includeNotFoundCode'))
@@ -707,8 +759,8 @@ Future<StepResult> checkRuleNames(String repoRoot) async {
         label: label,
         passed: false,
         detailLines: [
-          '`$shippedOptionsPath` 에서 규칙을 하나도 읽지 못했다 — '
-              '최상위 `linter:` 아래 `rules:` 목록이 비어 있거나 없다.',
+          '`$shippedOptionsPath` 의 최상위 `linter:` 블록 안에서 '
+              '`- 규칙이름` 줄을 하나도 세지 못했다.',
           '',
           '`linter:` / `rules:` 키와 들여쓰기를 확인하세요. '
               '규칙을 include 뒤의 다른 파일로 옮겼으면 이 단계의 대상 파일을 그 파일로 바꿉니다.',
@@ -716,27 +768,30 @@ Future<StepResult> checkRuleNames(String repoRoot) async {
       );
     }
 
-    final problems = lines
-        .where((l) => ruleProblemCodes.any((code) => l.endsWith('  $code')))
-        .toList();
-    if (problems.isEmpty) return StepResult(label: label, passed: true);
+    // 진단이 하나라도 있으면 실패다 — 세 코드 밖의 옵션 경고(겹친 규칙, 모르는 키,
+    // 없는 진단 코드 등)도 사용 프로젝트에 `included_file_warning` 으로 나타난다.
+    if (lines.isNotEmpty) {
+      final copyLines = copy.split('\n');
+      return StepResult(
+        label: label,
+        passed: false,
+        detailLines: [
+          '배포 파일에 쓸 수 없는 규칙이나 옵션 경고가 있다 (${lines.length})',
+          for (final line in lines)
+            switch (readRuleNameAt(line, copyLines)) {
+              final name? => '  $line  ($name)',
+              null => '  $line',
+            },
+          '',
+          '`$shippedOptionsPath` 에서 그 줄을 고친다 (복사본의 줄 번호는 원본과 같다).',
+          'deprecated / removed / 없는 규칙은 지우거나 바꾸고, 그 밖의 옵션 경고'
+              '(겹친 규칙, 모르는 키, 없는 진단 코드 등)는 그 줄을 고친다.',
+        ],
+      );
+    }
 
-    final copyLines = copy.split('\n');
-    return StepResult(
-      label: label,
-      passed: false,
-      detailLines: [
-        '배포 파일에 쓸 수 없는 규칙이 있다 (${problems.length})',
-        for (final line in problems)
-          switch (readRuleNameAt(line, copyLines)) {
-            final name? => '  $line  ($name)',
-            null => '  $line',
-          },
-        '',
-        '`$shippedOptionsPath` 에서 그 규칙을 지우거나 바꾼다 '
-            '(복사본의 줄 번호는 원본과 같다).',
-      ],
-    );
+    // 여기까지 왔으면 exit 0 이고 진단 0건이다.
+    return StepResult(label: label, passed: true);
   } finally {
     if (checkDir.existsSync()) checkDir.deleteSync(recursive: true);
     final parent = checkDir.parent;
