@@ -31,6 +31,7 @@ spike 에서 나와 실제 구현이 지켜야 하는 것 (근거는 각 spike �
 - 규칙 검사는 저장소 루트에서 **복사본 폴더를 인자로** 준다 (`dart analyze build/woody_rule_check`). 그 폴더의 진단만 나오고 plugin 을 준비하지 않으며 `example/` 의 상태에 기대지 않는다. 005 의 "루트에서 인자 없이"를 대신한다 (007)
 - 검증 명령은 `example/` 을 분석할 때 `ANALYZER_STATE_LOCATION_OVERRIDE` 로 **저장소 안의 전용 상태 폴더**를 준다. 실제 `riverpod_lint` 버전(D-07)은 그 폴더의 `.plugin_manager/*/pubspec.lock` 에서 읽는다. `dart:io` / `dart:convert` 에는 md5 가 없고, 기본 자리(`~/.dartServer`)에서는 폴더 내용으로도 파일 시각으로도 자기 폴더를 고를 수 없다 (008)
 - stderr 의 머리말은 첫 줄이 아닐 수 있으므로 `contains` 로 찾는다. plugin 실패를 알릴 때 "전용 상태 폴더를 지우고 다시 실행"을 안내한다 — 컴파일된 plugin 파일이 깨진 채 남으면 지울 때까지 계속 실패한다 (008)
+- workflow 의 `runs-on: ubuntu-latest` 는 그대로 둔다. `ubuntu-latest` 는 2026-10-19 ~ 11-19 에 Ubuntu 26.04 로 옮겨 가고(actions/runner-images#14748), 그 이미지(`ubuntu-26.04` — 26.04.1 LTS · glibc 2.43 · 버전 20260927.149.1)에서 지금의 검증 명령 세 번과 연습용 프로젝트 여섯의 점검 여섯 번이 `ubuntu-24.04` 와 같은 결과였다. 옮겨 간 뒤 CI 가 실패하면 로그의 `Image` · `Version` 줄을 이 값과 견준다 (018)
 
 ### preset-split-include-behavior
 
@@ -116,5 +117,5 @@ spike 에서 나와 실제 구현과 문서가 지켜야 하는 것 (근거는 s
 | 015 | preset-split-include-behavior | git-dependency-preset-load | standard | 나눈 구조를 `path:` 가 아니라 git 의존성으로 받아도(패키지가 pub cache 에 놓여도) plugin 이 로드되고 옛 주소 · 묶음 주소가 지금 정답지와 같으며, 생성 파일 제외의 모양이 `path:` 때와 같다 | ✓ VALIDATED | git-dependency, pub-cache, include, analyzer-plugin, lockfile |
 | 016 | next-sdk-forward-compat | next-sdk-forward-compat | standard | Flutter 베타 3.49.0-0.2.pre 에서 include 로 받는 `plugins:` 가 로드되는지, `codegen.yaml` 의 제외가 규칙 진단에 여전히 통하는지, 지금 규칙 12개 중 새로 deprecated 된 것이 있는지가 확정된다 | ⚠ PARTIAL (plugin 로드와 규칙 12개는 그대로. 이 패키지가 주는 생성 파일 제외는 베타에서 규칙 진단에도 통하지 않는다 — 상류에서 되돌리는 중) | beta-sdk, forward-compat, include, analyzer-plugin, exclude, deprecated-lint, plugins-in-inner-options |
 | 017 | preset-split-include-behavior | runner-six-fixtures | standard | 캐시 없는 GitHub Linux runner 에서 나눈 구조의 연습용 프로젝트 여섯을 차례로 · 한꺼번에 돌릴 때의 시간이 재어지고, 진단이 로컬과 같다 | ✓ VALIDATED | github-actions, ci, timing, fixture-layout, concurrency |
-| 018 | verify-harness-tool-behavior | runner-next-image | standard | 다음 runner 이미지(`ubuntu-26.04`)에서 지금의 검증 명령과 연습용 프로젝트 여섯이 `ubuntu-24.04` 와 같은 진단을 내고 plugin 준비가 실패하지 않는다 | PENDING | github-actions, ci, runner-image, ubuntu-26, forward-compat |
+| 018 | verify-harness-tool-behavior | runner-next-image | standard | 다음 runner 이미지(`ubuntu-26.04`)에서 지금의 검증 명령과 연습용 프로젝트 여섯이 `ubuntu-24.04` 와 같은 진단을 내고 plugin 준비가 실패하지 않는다 | ✓ VALIDATED | github-actions, ci, runner-image, ubuntu-26, forward-compat |
 | 019 | preset-split-include-behavior | real-consumer-split-invariance | standard | 실제 사용 프로젝트(`flutter_starter_kit`)의 복사본이 지금 받는 그대로 · 한 파일 구조 · 나눈 구조(옛 주소 · 묶음 주소)를 받을 때 진단이 줄 단위로 같다 | PENDING | real-consumer, include, analyzer-plugin, exclude, generated-files |
