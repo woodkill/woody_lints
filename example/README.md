@@ -37,7 +37,7 @@ fvm dart run tool/verify.dart --update
 | 파일 | 역할 | 정답지 줄 수 |
 |------|------|--------------|
 | `lib/added_rules.dart` | 이 패키지가 기반 세트 위에 추가하는 규칙 6개를 한 건씩 어긴다 | 6 |
-| `lib/base_rules.dart` | 기반 세트(`flutter_lints` / `lints`)와 겹치는 규칙 6개와, 기반 세트만 켜는 `prefer_is_empty` 를 어긴다 | 7 |
+| `lib/base_rules.dart` | 기반 세트(`flutter_lints` / `lints`)가 켜는 규칙 7개를 한 건씩 어긴다 — 그중 6개는 2.0.0 전까지 배포 파일에도 겹쳐 적혀 있었다 | 7 |
 | `lib/main.dart` | `riverpod_lint` 의 `missing_provider_scope` (warning) | 1 |
 | `lib/riverpod_rules.dart` | `riverpod_lint` 의 `avoid_public_notifier_properties` (info), `provider_parameters` (warning) | 2 |
 | `lib/should_not_appear.dart` | `invalid_annotation_target` 을 일으킨다. 배포 파일이 억제하므로 **나오면 안 된다** | 0 |
@@ -60,7 +60,7 @@ fvm dart run tool/verify.dart --update
 | 5 | `fixtures/base_riverpod/` | `base.yaml` + `riverpod.yaml` | 씀 | `expected_diagnostics.txt` (`exit 2`) | 21 | Riverpod 조각만 받아도 plugin 이 돈다. codegen 설정은 딸려 오지 않는다 |
 | 6 | `fixtures/base_codegen/` | `base.yaml` + `codegen.yaml` | 안 씀 | `expected_diagnostics.txt` (`exit 0`) | 13 | codegen 조각만 받아도 생성 파일이 빠진다 (Dart 3.13.4 의 규칙 진단 기준). plugin 은 딸려 오지 않는다 |
 
-화면과 검증 명령의 순서는 1 → 2 → 3 → 5 → 6 → 4 다 (`[4/9]` ~ `[9/9]`). 2 는 1 의 결과를 받아 견주므로 반드시 1 뒤에 돈다.
+화면과 검증 명령의 순서는 1 → 2 → 3 → 5 → 6 → 4 다 (`[5/10]` ~ `[10/10]`). 2 는 1 의 결과를 받아 견주므로 반드시 1 뒤에 돈다.
 
 네 경우 — Riverpod 을 받나 × codegen 을 받나 — 가 모두 채워진다.
 
@@ -72,8 +72,8 @@ fvm dart run tool/verify.dart --update
 - 폴더마다 `pubspec.yaml` 은 저장소 루트를 `path: ../..` 로 받고, `lib/` 는 이 폴더 `lib/` 의 글자 그대로 복사본이다 (줄 번호가 같아야 정답지를 견줄 수 있다). `overrides` 만 끄는 방법의 샘플 `lib/suppress/` 5파일을 더 둔다. `pubspec.lock` 은 이 폴더의 것에서 `path` 줄만 `"../.."` 로 바꾼 복사본이고 커밋한다. 이 폴더의 샘플을 고치면 다섯 복사본도 함께 고친다.
 - 상태 폴더는 `.dart_tool/woody_verify/<폴더>/` 로 연습용 프로젝트마다 따로다 — 합치면 plugin 폴더가 여럿이 되어 화면의 `plugin` 줄이 버전을 읽지 못한다. plugin 을 쓰지 않는 둘(3 · 6)은 plugin 폴더가 0개인 것이 정상이고, 정답지 머리 주석에 `riverpod_lint 해당 없음` 이 적힌다.
 - 생성 파일 제외(`codegen.yaml` 의 `analyzer.exclude`)는 이 SDK(Dart 3.13.4)에서 규칙 진단에만 통하고 plugin 진단에는 통하지 않는다 (2026-10-12, spike 012). 그래서 생성 파일 샘플(`lib/generated/`)에는 plugin 위반을 두지 않는다. 다음 SDK 에서는 규칙 진단에도 통하지 않을 수 있다 (spike 016).
-- `overrides` 의 `plugins:` 에 적은 `version:` 은 `lib/riverpod.yaml` 의 선언과 같아야 한다 — 다르면 `[3/9]` 가 실패한다. `version` 없이 `diagnostics:` 만 적으면 끄기가 경고 없이 무시된다 (아래 M19).
-- `fixtures/` 에서도 `flutter pub get` 을 돌리지 않는다 (옵션 파일에 `build/**` 제외를 써넣어 `[3/9]` 가 실패한다). 저장소 루트의 분석은 `example/**` 와 `fixtures/**` 를 뺀다.
+- `overrides` 의 `plugins:` 에 적은 `version:` 은 `lib/riverpod.yaml` 의 선언과 같아야 한다 — 다르면 `[4/10]` 가 실패한다. `version` 없이 `diagnostics:` 만 적으면 끄기가 경고 없이 무시된다 (아래 M19).
+- `fixtures/` 에서도 `flutter pub get` 을 돌리지 않는다 (옵션 파일에 `build/**` 제외를 써넣어 `[4/10]` 가 실패한다). 저장소 루트의 분석은 `example/**` 와 `fixtures/**` 를 뺀다.
 
 ## 정답지 형식
 
@@ -100,14 +100,14 @@ lib/added_rules.dart:18  info  always_declare_return_types
 
 | 종료 코드 | 뜻 |
 |-----------|----|
-| 0 | 단계 9개 모두 통과 (`--update` 로 갱신한 실행 포함) |
+| 0 | 단계 10개 모두 통과 (`--update` 로 갱신한 실행 포함) |
 | 1 | 단계 중 하나라도 실패 (plugin 준비 실패, 도구 사망 포함) |
 | 64 | 사용법 오류 (모르는 인자, CI 에서 `--update`) |
 | 69 | 하위 명령 실패 (`pub get`) — 검증을 시작하지 않음 |
 | 70 | 스크립트가 예외로 끝남 (파일 형식 · 파일 작업 · 프로세스 실행 실패) |
 | 78 | 실행 중인 SDK 가 `.fvmrc` 와 다름 — 검증을 시작하지 않음 |
 
-단계는 아홉 개다: `[1/9]` `lib/` 에 `.dart` 파일 없음, `[2/9]` 배포 파일(조각 셋)의 규칙 이름, `[3/9]` 연습용 프로젝트 여섯의 옵션 파일 (주석 · 빈 줄을 뺀 내용을 통째로 견준다 — `overrides` 의 `version:` 은 `lib/riverpod.yaml` 의 선언과 같아야 한다), `[4/9]` ~ `[9/9]` 연습용 프로젝트마다 정답지 비교 (위 표의 순서. `recommended` 는 같은 실행의 `example` 결과와). 하나가 실패해도 나머지를 모두 돌린다. `[2/9]` 는 배포 파일을 `plugins:` 없이 복사한 폴더를 `dart analyze` 로 분석해, 종료 코드가 0 이 아니거나 진단이 하나라도 있으면 실패한다 — deprecated / removed / 없는 규칙뿐 아니라 겹친 규칙 · 모르는 키 · 없는 진단 코드 같은 옵션 경고도 실패다. 깨진 YAML 은 종료 코드 3 에 진단 0건으로 나오므로 같은 폴더를 형식 인자 없이 한 번 더 돌려 `parse_error` 줄을 보여 준다. 배포 파일의 최상위 `linter:` 블록에서 `- 규칙이름` 줄을 하나도 세지 못해도 실패한다 — 규칙을 다른 파일로 옮길 때 경로를 잘못 잡은 것이 통과로 보이지 않게 (2026-10-12, 아래 M13 ~ M17).
+단계는 열 개다: `[1/10]` `lib/` 에 `.dart` 파일 없음, `[2/10]` 배포 파일(조각 셋)의 규칙 이름, `[3/10]` 배포 파일의 구성 (묶음 `recommended.yaml` 과 별칭 `analysis_options.yaml` 이 `include:` 만 담는지, `lib/base.yaml` 의 규칙이 기반 세트 — 저장소 루트가 받은 `lints` · `flutter_lints` 의 YAML — 와 겹치지 않는지, `RULES.md` 의 켠 규칙 표와 `lib/base.yaml` 의 규칙 목록이 같은지. analyzer 를 돌리지 않고 파일끼리 견준다), `[4/10]` 연습용 프로젝트 여섯의 옵션 파일 (주석 · 빈 줄을 뺀 내용을 통째로 견준다 — `overrides` 의 `version:` 은 `lib/riverpod.yaml` 의 선언과 같아야 한다), `[5/10]` ~ `[10/10]` 연습용 프로젝트마다 정답지 비교 (위 표의 순서. `recommended` 는 같은 실행의 `example` 결과와). 하나가 실패해도 나머지를 모두 돌린다. `[2/10]` 는 배포 파일을 `plugins:` 없이 복사한 폴더를 `dart analyze` 로 분석해, 종료 코드가 0 이 아니거나 진단이 하나라도 있으면 실패한다 — deprecated / removed / 없는 규칙뿐 아니라 겹친 규칙 · 모르는 키 · 없는 진단 코드 같은 옵션 경고도 실패다. 깨진 YAML 은 종료 코드 3 에 진단 0건으로 나오므로 같은 폴더를 형식 인자 없이 한 번 더 돌려 `parse_error` 줄을 보여 준다. 배포 파일의 최상위 `linter:` 블록에서 `- 규칙이름` 줄을 하나도 세지 못해도 실패한다 — 규칙을 다른 파일로 옮길 때 경로를 잘못 잡은 것이 통과로 보이지 않게 (2026-10-12, 아래 M13 ~ M17).
 
 ## 검증이 실제로 잡아내는지 확인한 기록
 
@@ -162,7 +162,7 @@ lib/added_rules.dart:18  info  always_declare_return_types
 
 변경은 모두 커밋하지 않고 되돌렸다 (`git status` 로 확인). 변경 하나를 돌린 직후 그 파일을 되돌렸고, 끝에 검증 명령이 다시 종료 코드 0 인 것을 봤다.
 
-이 기록이 재지 않은 것도 있다. 기반 세트가 이미 켜는 규칙(예: `avoid_print`)을 배포 파일에서 지웠을 때 정답지가 그대로인지는 보지 않았다 (Phase 4 의 중복 선언 정리 때 확인한다). 이 기록은 한 번의 확인이고, 늘 도는 대조군 fixture 는 Phase 3 (VERIFY-05) 에서 만든다.
+이 기록이 재지 않은 것도 있다. 기반 세트가 이미 켜는 규칙(예: `avoid_print`)을 배포 파일에서 지웠을 때 정답지가 그대로인지는 2026-10-13 에 확인했다 — 아래 "추가 실측 — 배포 파일의 구성 (04-01)" 의 확인 기록 (i). 이 기록은 한 번의 확인이고, 늘 도는 대조군 fixture 는 Phase 3 (VERIFY-05) 에서 만든다.
 
 ### 추가 실측 — 건수 비교 · `--update` 안전장치 · 규칙 0개 (gap 닫기 02-05)
 
@@ -230,4 +230,33 @@ lib/added_rules.dart:18  info  always_declare_return_types
 
 변경은 모두 커밋하지 않고 되돌렸다 (M18 · M19 는 `git checkout` 과 `git status` 로, `overrides` 의 옵션 파일을 커밋하기 전에 돌린 두 실행은 복사해 둔 파일로 되돌리고 `cmp` 로 확인). 끝에 검증 명령이 다시 종료 코드 0, `점검 통과 (9개 중 9개)` 인 것을 봤다.
 
-항목의 `VERIFY-NN` · `PRESET-NN` 은 `.planning/REQUIREMENTS.md` 의 요구사항 번호, `D-NN` 은 `.planning/phases/02-verification-harness/02-CONTEXT.md` 의 결정 번호다. 03-NN 소절의 `D-NN` 은 `.planning/phases/03-preset-split/03-CONTEXT.md` 의 결정 번호다.
+### 추가 실측 — 배포 파일의 구성 (04-01)
+
+실측 (04-01): Flutter 3.47.5 / Dart 3.13.4, riverpod_lint 3.1.9, 2026-10-13
+
+실행한 명령: `fvm dart run tool/verify.dart` (연습용 프로젝트 여섯 · 단계 10개). 변경은 한 번에 하나만 만들고, 돌린 직후 복사해 둔 파일(`lib/base.yaml` · `RULES.md`)이나 `git checkout` (`lib/recommended.yaml` · `lib/analysis_options.yaml`)으로 되돌렸다.
+
+| # | 변경 | 실패한 단계 | 정답지와의 차이 | 종료 코드 | 항목 |
+|---|------|-------------|-----------------|-----------|------|
+| M20 | `lib/base.yaml` 의 규칙 목록에 `- avoid_print # probe M20` 을 `- unawaited_futures` 줄 앞에 끼움 (기반 세트 `flutter.yaml` 이 켜는 규칙) | `[3/10]` 만. `[2/10]` 과 `[5/10]` ~ `[10/10]` 은 통과 | 차이 없음. `[3/10]` 이 낸 줄:<br>`` `lib/base.yaml` 의 규칙이 기반 세트와 겹친다 (1) — 기반 세트가 이미 켜므로 지운다. ``<br>`avoid_print  (flutter_lints-6.0.0 flutter.yaml)`<br>`+ avoid_print  (base.yaml 에만)` | 1 | RULES-01 · D-11 (1) — 기반 세트와의 겹침 |
+| M21 | `RULES.md` 의 켠 규칙 표에서 `prefer_single_quotes` 행을 지움 | `[3/10]` 만. `[5/10]` ~ `[10/10]` 은 통과 | 차이 없음. `[3/10]` 이 낸 줄:<br>`` `RULES.md` 의 켠 규칙 표와 `lib/base.yaml` 의 규칙 목록이 다르다. ``<br>`+ prefer_single_quotes  (base.yaml 에만)` | 1 | RULES-06 · D-11 (2) — 표에서 행이 빠짐 |
+| M22 | `lib/base.yaml` 에 `- avoid_slow_async_io # probe M22` 를 더하고 `RULES.md` 에는 더하지 않음 (그 규칙을 어기는 샘플 없음) | `[3/10]` 만. `[5/10]` ~ `[10/10]` 은 통과 (샘플에 걸리지 않았다) | 차이 없음. `[3/10]` 이 낸 줄:<br>`+ avoid_slow_async_io  (base.yaml 에만)` | 1 | RULES-06 · D-11 (2) — 배포 파일에만 더한 규칙 |
+| M23 | `lib/recommended.yaml` 끝에 `linter:` / `  rules:` / `    - unnecessary_await_in_return` 세 줄 (03-REVIEW.md WR-01 의 재현 입력) | `[3/10]` 만. `[2/10]` 과 `[5/10]` ~ `[10/10]` 은 통과 | 차이 없음. `[3/10]` 이 낸 줄:<br>`` `lib/recommended.yaml` 는 include 만 담아야 한다 — 주석 · 빈 줄을 뺀 내용 (7줄): `` 과 그 7줄, 정해진 4줄 | 1 | D-12 WR-01 — 묶음에 적힌 규칙 |
+| M24 | `lib/analysis_options.yaml` (별칭) 끝에 같은 세 줄 | `[3/10]` 만. `[2/10]` 과 `[5/10]` ~ `[10/10]` 은 통과 | 차이 없음. `[3/10]` 이 낸 줄:<br>`` `lib/analysis_options.yaml` 는 include 만 담아야 한다 — 주석 · 빈 줄을 뺀 내용 (4줄): `` 과 그 4줄, 정해진 1줄 | 1 | D-12 WR-01 — 별칭에 적힌 규칙 |
+
+`[3/10]` 의 `+ ` 는 `lib/base.yaml` 에만 있는 이름, `- ` 는 `RULES.md` 의 켠 규칙 표에만 있는 이름이다 — `RULES.md` 를 정답지, `lib/base.yaml` 을 실제 결과로 놓은 정답지 diff 와 같은 기호다. 다섯 모두 화면의 요약은 `점검 실패 (10개 중 1개)` 였고, 걸린 시간은 다섯 모두 19초, 되돌린 뒤의 보통 실행도 19초였다.
+
+읽는 법은 다음과 같다.
+
+- **M20 에서 정답지 단계는 통과한다.** `avoid_print` 는 기반 세트 `flutter_lints` 6.0.0 의 `flutter.yaml` 이 이미 켜므로, 배포 파일에 겹쳐 적어도 받는 프로젝트의 진단은 한 줄도 달라지지 않는다. `[2/10]` 도 통과한다 — 조각의 복사본은 기반 세트와 겹친 규칙을 경고하지 않는다. 겹침을 잡는 것은 `[3/10]` 의 (b) 하나다 (D-11 의 근거). 같은 이름이 `RULES.md` 의 표에 없어 (c) 의 `+ avoid_print` 도 함께 찍혔다.
+- **M21 의 기호는 `+` 다 — 계획의 예상(`- prefer_single_quotes`)과 다르다.** 표에서 행을 지우면 그 이름은 `lib/base.yaml` 에만 남으므로 M22 와 같은 쪽이다. `- ` 쪽은 따로 한 번 확인했다: `RULES.md` 의 켠 규칙 표에 `avoid_slow_async_io` 행을 더한 실행(커밋하지 않고 되돌림)에서 `- avoid_slow_async_io  (RULES.md 에만)` 이 찍혔다 (종료 코드 1, 19초). 같은 방식으로 첫 칸에 이름이 둘인 행은 `` `RULES.md` 의 `woody:enabled-rules` 표에 첫 칸의 이름이 둘 이상인 행이 있다 (1): `` 로, `woody:enabled-options` 의 시작 마커를 지운 파일은 `` `RULES.md` 의 `woody:enabled-options` 구역이 없다 — 04-CONTEXT.md D-08 `` 로 `[3/10]` 이 실패했다 (둘 다 종료 코드 1, 되돌림).
+- **M23 · M24 는 고치기 전에는 아홉 단계를 모두 통과했다.** 03-REVIEW.md WR-01 이 같은 세 줄을 `lib/recommended.yaml` 끝에 더한 복사본에서 "`[1/9]` ~ `[9/9]` 모두 통과, `점검 통과 (9개 중 9개)`, 종료 코드 0" 을 기록했다 (이번에 고치기 전의 스크립트로 다시 재지는 않았다). `[2/10]` 의 규칙 검사는 묶음과 별칭을 대상에 넣지 않으므로 (spike 013) 지금도 통과하고, `[3/10]` 의 (a) 가 "include 만" 을 잡는다.
+
+확인 기록 둘도 같은 자리에 둔다 (실패가 아니라 "바뀌지 않았다" 의 확인이다).
+
+- (i) 기반 세트와 겹치는 선언 6개와 주석 처리된 설정 3개를 `lib/base.yaml` 에서 지운 커밋에서 `fvm dart run tool/verify.dart --update` 가 `바뀐 정답지가 없다 — 쓰지 않았다` 를 찍었고 정답지 다섯의 내용이 그대로였다 (D-20, RULES-01 · RULES-02). 정답지 다섯은 `19ae5ec` · `91bbeec` · `9ed0fe5` 와 `git diff` 로 견줘 같았다.
+- (ii) 결정 묶음마다 `--update` 의 `+` 줄 수가 그 묶음의 샘플 수와 같았는지는 04-09 가 적는다.
+
+변경은 모두 커밋하지 않고 되돌렸다 (`git status` 와, `lib` · `RULES.md` 를 HEAD 와 견준 `git diff` 로 확인). 끝에 검증 명령이 다시 종료 코드 0, `점검 통과 (10개 중 10개)` 인 것을 봤다.
+
+항목의 `VERIFY-NN` · `PRESET-NN` · `RULES-NN` 은 `.planning/REQUIREMENTS.md` 의 요구사항 번호, `D-NN` 은 `.planning/phases/02-verification-harness/02-CONTEXT.md` 의 결정 번호다. 03-NN 소절의 `D-NN` 은 `.planning/phases/03-preset-split/03-CONTEXT.md` 의 결정 번호다. 04-NN 소절의 `D-NN` 은 `.planning/phases/04-rule-reselection/04-CONTEXT.md` 의 결정 번호다.
