@@ -476,7 +476,29 @@ const expectedStateCounts = {'stable': 129, 'testing': 2, 'experimental': 1};
 // `lib/woody_probe_marker/rule_probe/<규칙>.dart` 로 넣는다 (D-03). 04-03 이 약 60개를 더한다.
 
 /// 언어 버전 3.11 로 컴파일되는 표식 (G1 ~ G4 어디에나 넣을 수 있다).
-const ruleProbes = <String, String>{};
+/// 출발점은 spike 021 `probe.dart` 의 `oldSamples` 다 — 이 plan 은 smoke 가 쓰는 셋만 옮겼다.
+const ruleProbes = <String, String>{
+  'async_return_with_no_await': '''
+/// 표식 — async 함수가 Future 를 await 없이 돌려준다.
+Future<String> asyncReturnMarker(Future<String> value) async {
+  return value;
+}
+''',
+  'no_raw_types': '''
+/// 표식 — 타입 인자를 생략한 제네릭 타입.
+class BoxMarker<T> {}
+
+/// 타입 인자 없이 선언한 변수.
+BoxMarker rawBoxMarker = BoxMarker<int>();
+''',
+  'no_dynamic_casts': '''
+/// 표식 — dynamic 에서의 암묵적 cast.
+int dynamicCastMarker(dynamic x) {
+  final int y = x;
+  return y;
+}
+''',
+};
 
 /// 언어 버전 3.13 문법(primary constructor)으로만 쓸 수 있는 표식 — G4 실행(하한 `^3.13.0`)에만
 /// 넣는다. 지금 하한의 복사본에 넣으면 `experiment_not_enabled` error 가 난다 (Pitfall 6).
@@ -1028,6 +1050,9 @@ class Results {
   void _syncRows() {
     for (final c in candidates) {
       final row = (rows[c.name] as Map<String, dynamic>?) ?? emptyRow();
+      for (final e in emptyRow().entries) {
+        row.putIfAbsent(e.key, () => e.value);
+      }
       row['section'] = c.section;
       row['group'] = c.group;
       row['bundle'] = c.bundle;
@@ -1061,6 +1086,7 @@ class Results {
     'hasProbe': null,
     'countsUI': null,
     'runs': <Object>[],
+    'invalidRuns': <Object>[],
   };
 
   /// 보기 좋게 들여 쓴 JSON (끝에 줄바꿈).
@@ -2142,11 +2168,806 @@ class Context {
 
   /// 이 실행이 더하거나 바꾼 회차 id.
   final touchedRuns = <String>[];
+
+  /// 복사본을 이번 실행에서 준비했는지.
+  bool consumerReady = false;
 }
 
-/// 복사본 단계 — plan 04-02 Task 2 가 채운다.
+// 그룹 ------------------------------------------------------------------
+
+/// 실행 그룹 → 그 그룹이 주인인 lint 후보 (G1 113 · G2 4 · G3 2 · G4 7).
+final Map<String, List<String>> groups = {
+  for (final g in ['G1', 'G2', 'G3', 'G4'])
+    g: [
+      for (final c in candidates)
+        if (c.group == g) c.name,
+    ],
+};
+
+/// 그룹 실행 하나의 옵션 — 켤 규칙 · analyzer 언어 옵션 · 복사본의 SDK 하한.
+class GroupRun {
+  /// [sdk] 가 null 이면 원본의 하한 그대로다.
+  GroupRun(this.id, this.rules, this.language, this.sdk);
+
+  /// `G1` ~ `G4`.
+  final String id;
+
+  /// 원본 옵션 파일에 더 켜는 규칙.
+  final List<String> rules;
+
+  /// `analyzer: language:` 에 더하는 옵션.
+  final Map<String, bool> language;
+
+  /// 복사본의 SDK 하한 (null 이면 원본 그대로).
+  final String? sdk;
+
+  /// 같은 하한의 기준선 회차 (값 = 그룹 실행 − 기준선).
+  String get baselineId => sdk == null ? 'B0' : 'B0-313';
+
+  /// 회차 기록의 `options`.
+  Map<String, Object?> get optionsJson => {
+    'rules': rules,
+    'language': language,
+    'sdk': sdk,
+  };
+}
+
+/// 이번 범위([Options.rules])의 그룹 실행. G1 실행에는 G4 의 규칙도 함께 켜 지금 하한의 값을
+/// 잰다 (규칙이 돌지 않아 0 이어야 한다 — D-15 의 값 둘). `strict-inference` 는 G1 에서 켠다.
+List<GroupRun> groupRunsFor(Options opts) {
+  List<String> scoped(Iterable<String> names) => [
+    for (final n in names)
+      if (opts.inScope(n)) n,
+  ];
+  final g1 = scoped([...groups['G1']!, ...groups['G4']!]);
+  final language = opts.inScope(strictInference)
+      ? {strictInference: true}
+      : <String, bool>{};
+  return [
+    if (g1.isNotEmpty || language.isNotEmpty)
+      GroupRun('G1', g1, language, null),
+    for (final g in ['G2', 'G3'])
+      if (scoped(groups[g]!).isNotEmpty)
+        GroupRun(g, scoped(groups[g]!), {}, null),
+    if (scoped(groups['G4']!).isNotEmpty)
+      GroupRun('G4', scoped(groups['G4']!), {}, sdk313),
+  ];
+}
+
+/// 행의 값이 나오는 회차 — `current` 는 기준선 B0, `option` 은 G1, 그 밖은 자기 그룹.
+String primaryRunId(Candidate c) => switch (c.group) {
+  'current' => 'B0',
+  'option' => 'G1',
+  final g => g,
+};
+
+/// 결과 파일에 이미 있는 회차 id (파일이 없으면 빈 집합). 읽기만 한다.
+Set<String> existingRunIds(Options opts) {
+  final file = File('${opts.work}/results/${opts.runId}.json');
+  if (!file.existsSync()) return {};
+  final decoded = jsonDecode(file.readAsStringSync());
+  if (decoded is! Map<String, dynamic> || decoded['runs'] is! List) return {};
+  return {
+    for (final r in (decoded['runs'] as List).whereType<Map<String, dynamic>>())
+      '${r['id']}',
+  };
+}
+
+/// 단계가 기대는 앞 회차(기준선 · 그룹 실행)가 이번 실행에서 생기거나 결과 파일에 있는지
+/// 확인한다. 없으면 [UsageError] (종료 코드 64 — 아직 아무것도 만들지 않았다).
+void checkStageInputs(Options opts, Set<String> existing) {
+  final produced = <String>{...existing};
+  final missing = <String>{};
+  void need(Iterable<String> ids, String stage) {
+    for (final id in ids) {
+      if (!produced.contains(id)) missing.add('$stage ← $id');
+    }
+  }
+
+  final groupIds = groupRunsFor(opts).map((g) => g.id).toList();
+  final hasG4 = groupIds.contains('G4');
+  for (final stage in opts.stages) {
+    switch (stage) {
+      case 'baseline':
+        produced.addAll(['B0', 'B0-313']);
+      case 'groups':
+        need(['B0', if (hasG4) 'B0-313'], stage);
+        produced.addAll(groupIds);
+      case 'markers':
+        if (!opts.probeAll) need(groupIds, stage);
+      case 'ignore':
+        need(['B0', ...groupIds], stage);
+        produced.addAll(['B0-strip', for (final g in groupIds) '$g-strip']);
+      case 'fix':
+        need({
+          for (final c in candidates)
+            if (!c.isOption && opts.inScope(c.name)) primaryRunId(c),
+        }, stage);
+    }
+  }
+  if (missing.isNotEmpty) {
+    throw UsageError(
+      '먼저 돌려야 하는 회차가 결과(${opts.runId})에 없다 — ${missing.join(', ')}',
+    );
+  }
+}
+
+// 회차 유효성 --------------------------------------------------------------
+
+/// 회차가 유효한지 — RULES-05 의 조건을 코드로. 무효여도 멈추지 않고 그 회차와 그 회차를
+/// 참조하는 행에 표시만 한다. 그 시점의 `example/` 정답지 줄(`lib/` → `lib/woody_probe_marker/`)
+/// 이 표식 줄에 다 있어야 한다 — 결정을 반영해 정답지가 늘어도 그대로 쓰인다.
+Run validate(
+  Context ctx,
+  Shot shot,
+  Map<String, Object?> options, {
+  int ignoresStripped = 0,
+  Map<String, bool?>? markersReported,
+}) {
+  final c = ctx.consumer;
+  final expected = expectedLines(
+    '${ctx.repo.root}/example/expected_diagnostics.txt',
+  ).map((l) => l.replaceFirst('lib/', Diag.markerDir)).toSet();
+  final markerTexts = shot.marker.map((d) => d.text).toSet();
+  final covered = expected.every(markerTexts.contains);
+  final valid =
+      shot.woodySource == 'repo' &&
+      covered &&
+      shot.pluginFolders == 1 &&
+      !shot.pluginHeader &&
+      shot.jsonOk;
+  final now = DateTime.now();
+  final run = Run(
+    shot: shot,
+    conditions: {
+      'date': now.toIso8601String().substring(0, 10),
+      'at': now.toUtc().toIso8601String(),
+      'dart': dartVersion(),
+      'flutter': flutterVersion(),
+      'baseSet': {
+        'repo': baseSetVersions(ctx.repo.root),
+        'consumer': baseSetVersions(c.dir),
+      },
+      'languageVersion': c.languageVersion(),
+      'sdkConstraint': c.sdkConstraint,
+      'dartFiles': c.dartFiles(),
+    },
+    options: options,
+    expectedCovered: covered,
+    valid: valid,
+    ignoresStripped: ignoresStripped,
+    markersReported: markersReported,
+  );
+  ctx.results.addRun(run);
+  if (!ctx.touchedRuns.contains(shot.id)) ctx.touchedRuns.add(shot.id);
+  final why = [
+    if (shot.woodySource != 'repo') '받은 자리 ${shot.woodySource}',
+    if (!covered) '정답지 줄이 표식에 다 없다',
+    if (shot.pluginFolders != 1) 'plugin 폴더 ${shot.pluginFolders}개',
+    if (shot.pluginHeader) 'plugin 준비 실패 머리말',
+    if (!shot.jsonOk) 'JSON 없음 (exit ${shot.exitCode})',
+  ];
+  stdout.writeln(
+    '${shot.id}: ${(shot.elapsedMs / 1000).toStringAsFixed(1)}초 · '
+    '프로젝트 ${shot.project.length}줄 · 표식 ${shot.marker.length}줄 · '
+    '${valid ? '유효' : '무효 (${why.join(', ')})'}',
+  );
+  return run;
+}
+
+/// 회차 JSON 에서 [rule] 의 프로젝트 줄 수 — `lib` · `test` · `bin` 자리별.
+Map<String, int> ruleCounts(Map<String, dynamic> run, String rule) {
+  final byArea = run['countByAreaCode'] as Map<String, dynamic>;
+  return {
+    for (final a in projectAreas)
+      a: ((byArea[a] as Map<String, dynamic>?) ?? const {}).entries
+          .where((e) => codeMatchesRule(e.key, rule))
+          .fold<int>(0, (s, e) => s + (e.value as int)),
+  };
+}
+
+/// 자리별 수의 차이 (`a − b`).
+Map<String, int> subtractCounts(Map<String, int> a, Map<String, int> b) => {
+  for (final k in projectAreas) k: (a[k] ?? 0) - (b[k] ?? 0),
+};
+
+/// 자리별 수의 합.
+int total(Map<String, dynamic>? counts) => counts == null
+    ? 0
+    : projectAreas.fold<int>(0, (s, a) => s + ((counts[a] as int?) ?? 0));
+
+/// 회차 JSON 의 표식이 아닌 진단 — 코드 → 건수 (자리를 합친다).
+Map<String, int> nonMarkerByCode(Map<String, dynamic> run) {
+  final out = <String, int>{};
+  final byArea = run['countByAreaCode'] as Map<String, dynamic>;
+  for (final e in byArea.entries) {
+    if (e.key == 'marker') continue;
+    for (final c in (e.value as Map<String, dynamic>).entries) {
+      out.update(
+        c.key,
+        (v) => v + (c.value as int),
+        ifAbsent: () => c.value as int,
+      );
+    }
+  }
+  return out;
+}
+
+/// [shot] 에서 [rule] 의 첫 진단의 강도 (프로젝트 줄 먼저, 없으면 표식 줄). 없으면 null.
+String? firstSeverity(Shot shot, String rule) {
+  for (final d in [...shot.project, ...shot.marker]) {
+    if (codeMatchesRule(d.code, rule)) return d.severity;
+  }
+  return null;
+}
+
+/// 옵션 파일 줄에 붙은 `incompatible_lint` 를 그 줄의 규칙 이름으로 돌려 행에 적는다 (G3 의 근거).
+void noteIncompatibleLint(Context ctx, Shot shot, String optionsText) {
+  final lines = optionsText.split('\n');
+  final rulePattern = RegExp(r'^\s+(?:- )?([a-z0-9_]+)\s*(?::.*)?$');
+  for (final d in shot.diags) {
+    if (d.path != 'analysis_options.yaml' || d.code != 'incompatible_lint') {
+      continue;
+    }
+    if (d.line < 1 || d.line > lines.length) continue;
+    final name = rulePattern.firstMatch(lines[d.line - 1])?.group(1);
+    if (name == null || !candidateByName.containsKey(name)) continue;
+    final list = ctx.results.row(name)['incompatibleLintRuns'] as List<dynamic>;
+    if (!list.contains(shot.id)) list.add(shot.id);
+  }
+}
+
+/// 행에 회차를 적는다 — 무효 회차는 `invalidRuns` 에도 적는다.
+void noteRowRun(Context ctx, String rule, Run run) {
+  ctx.results.noteRun(rule, run.shot.id);
+  final invalid = ctx.results.row(rule)['invalidRuns'] as List<dynamic>;
+  invalid.remove(run.shot.id);
+  if (!run.valid) invalid.add(run.shot.id);
+}
+
+/// 그룹 실행 [g] 의 옵션 파일 내용.
+String groupOptions(Consumer c, GroupRun g) =>
+    g.rules.isEmpty && g.language.isEmpty
+    ? c.originalOptions
+    : c.optionsWith(rules: g.rules, language: g.language);
+
+/// 회차 JSON 의 `options` 로 [GroupRun] 을 되살린다 (`dart fix` 의 before 와 같은 옵션).
+GroupRun groupRunFromJson(String id, Map<String, dynamic> run) {
+  final o = run['options'] as Map<String, dynamic>;
+  return GroupRun(
+    id,
+    (o['rules'] as List).cast<String>(),
+    (o['language'] as Map<String, dynamic>).cast<String, bool>(),
+    o['sdk'] as String?,
+  );
+}
+
+/// 그룹 [g] 에서 [rules] 의 표식 파일 (`rule_probe/<규칙>.dart`). 표식이 없는 이름은 빠진다.
+Map<String, String> probesFor(GroupRun g, Iterable<String> rules) {
+  final out = <String, String>{};
+  for (final r in rules) {
+    final src = g.id == 'G4'
+        ? (ruleProbes313[r] ?? ruleProbes[r])
+        : ruleProbes[r];
+    if (src != null) out['rule_probe/$r.dart'] = src;
+  }
+  return out;
+}
+
+/// 그룹 [g] 가 주인인 후보 (이번 범위 안).
+List<Candidate> ownedBy(Options opts, GroupRun g) => [
+  for (final c in candidates)
+    if (opts.inScope(c.name) && primaryRunId(c) == g.id) c,
+];
+
+/// 회차 JSON 을 꺼낸다 — 없으면 [StateError] (입력 확인을 지났다면 일어나지 않는다).
+Map<String, dynamic> requireRun(Context ctx, String id) =>
+    ctx.results.run(id) ?? (throw StateError('회차 $id 가 결과에 없다 — 앞 단계를 먼저 돌린다'));
+
+// 복사본 단계 --------------------------------------------------------------
+
+/// 복사본을 준비한다 — 원본이 주어졌고 기준선을 잰다면(또는 `pristine/` 이 없으면) 새로 복사하고,
+/// 복사본이 없으면 `pristine/` 에서 다시 만들고, `woody_lints` 가 저장소를 가리키게 한다.
+Future<void> prepareConsumer(Context ctx) async {
+  final c = ctx.consumer;
+  final pristineExists = Directory(c.pristine).existsSync();
+  if (ctx.opts.source != null &&
+      (!pristineExists || ctx.opts.stages.contains('baseline'))) {
+    c.copy();
+  } else if (!File('${c.dir}/pubspec.yaml').existsSync()) {
+    c.rebuild();
+  }
+  if (!File('${c.dir}/pubspec_overrides.yaml').existsSync() ||
+      c.woodySource() != 'repo') {
+    c.setPubspec(c.originalPubspec);
+    await c.pointToRepo();
+  }
+}
+
+/// 복사본 단계 하나를 돌린다 (단계의 저장소 지문은 [RepoGuard] 가 견준다).
 Future<void> runConsumerStage(Context ctx, String stage) async {
-  throw UsageError('$stage: 아직 구현되지 않았다');
+  if (!ctx.consumerReady) {
+    await prepareConsumer(ctx);
+    ctx.consumerReady = true;
+  }
+  switch (stage) {
+    case 'baseline':
+      await measureBaseline(ctx);
+    case 'groups':
+      await measureGroups(ctx);
+    case 'markers':
+      await measureMarkers(ctx);
+    case 'ignore':
+      await measureIgnore(ctx);
+    case 'fix':
+      await measureFix(ctx);
+    case 'unnecessary-ignore':
+      await measureUnnecessaryIgnore(ctx);
+    default:
+      throw StateError('모르는 단계: $stage');
+  }
+}
+
+/// 원본 소스 · 원본 옵션 · 원본 하한으로 되돌린다 (단계의 끝).
+Future<void> restoreConsumer(Consumer c) async {
+  c.refreshSources();
+  c.setOptions(c.originalOptions);
+  await c.useSdk(null);
+}
+
+/// `baseline` — 기준선 B0 (원본 하한) 과 B0-313 (하한만 `^3.13.0`). 지금 켜 둔 6개의 값 ·
+/// 강도 · 표식 검출을 B0 에서 정한다 (그 규칙들은 `path:` 로 받은 `lib/base.yaml` 이 이미 켠다).
+Future<void> measureBaseline(Context ctx) async {
+  final c = ctx.consumer;
+  final r = ctx.results;
+  c.refreshSources();
+  c.setOptions(c.originalOptions);
+  c.setPubspec(c.originalPubspec);
+  await c.pointToRepo();
+  c.addExampleMarkers();
+  const noOptions = {'rules': <String>[], 'language': <String, bool>{}};
+  final b0 = await c.analyze('B0');
+  final run = validate(ctx, b0, {...noOptions, 'sdk': null});
+  final cond = r.conditions;
+  cond['sdkConstraint'] = c.originalSdkConstraint;
+  cond['languageVersion'] = c.languageVersion();
+  cond['dartFiles'] = c.dartFiles();
+  (cond['baseSet'] as Map<String, dynamic>)['consumer'] = baseSetVersions(
+    c.dir,
+  );
+  cond['plugin'] = b0.pluginVersion;
+
+  final b0Json = r.run('B0')!;
+  const sample = '${Diag.markerDir}added_rules.dart';
+  for (final cand in candidates.where((x) => x.group == 'current')) {
+    if (!ctx.opts.inScope(cand.name)) continue;
+    final row = r.row(cand.name);
+    row['counts'] = ruleCounts(b0Json, cand.name);
+    row['severity'] = firstSeverity(b0, cand.name);
+    // 표식으로 넣은 example 샘플이 곧 이 규칙들의 표식이다 (D-03).
+    row['hasProbe'] = true;
+    row['markerDetected'] = b0.marker.any(
+      (d) => d.path == sample && d.code == cand.name,
+    );
+    noteRowRun(ctx, cand.name, run);
+  }
+
+  await c.useSdk(sdk313);
+  final b313 = await c.analyze('B0-313');
+  validate(ctx, b313, {...noOptions, 'sdk': sdk313});
+  await c.useSdk(null);
+}
+
+/// `groups` — 그룹마다 켜고 잰다. 값 = 그룹 실행의 프로젝트 줄 − 같은 하한의 기준선, 자리별.
+/// G4 는 `counts313` 에, 같은 7개를 G1 실행에서 잰 지금 하한의 값은 `counts` 에 적는다.
+Future<void> measureGroups(Context ctx) async {
+  final c = ctx.consumer;
+  final r = ctx.results;
+  for (final g in groupRunsFor(ctx.opts)) {
+    c.refreshSources();
+    c.addExampleMarkers();
+    await c.useSdk(g.sdk);
+    final optionsText = groupOptions(c, g);
+    c.setOptions(optionsText);
+    final shot = await c.analyze(g.id);
+    final run = validate(ctx, shot, g.optionsJson);
+    noteIncompatibleLint(ctx, shot, optionsText);
+    final groupJson = r.run(g.id)!;
+    final baseJson = requireRun(ctx, g.baselineId);
+    for (final cand in ownedBy(ctx.opts, g)) {
+      final row = r.row(cand.name);
+      final value = subtractCounts(
+        ruleCounts(groupJson, cand.name),
+        ruleCounts(baseJson, cand.name),
+      );
+      row[g.id == 'G4' ? 'counts313' : 'counts'] = value;
+      row['severity'] = firstSeverity(shot, cand.name) ?? row['severity'];
+      noteRowRun(ctx, cand.name, run);
+    }
+    if (g.id == 'G1') {
+      // 언어 버전 3.13 전용 규칙의 지금 하한 값 (0 이어야 한다 — 규칙이 돌지 않음).
+      for (final name in g.rules.where(groups['G4']!.contains)) {
+        r.row(name)['counts'] = subtractCounts(
+          ruleCounts(groupJson, name),
+          ruleCounts(baseJson, name),
+        );
+        noteRowRun(ctx, name, run);
+      }
+    }
+  }
+  await restoreConsumer(c);
+}
+
+/// `markers` — 프로젝트 줄이 0 인(`--probe-all` 이면 범위의 전부) 후보에 표식을 넣고 그룹마다
+/// 한 번 더 분석한다 (D-03). 표식 줄은 `area` 로 갈라지므로 프로젝트 값에 섞이지 않는다.
+Future<void> measureMarkers(Context ctx) async {
+  final c = ctx.consumer;
+  final r = ctx.results;
+  final noProbe = <String>[];
+  for (final g in groupRunsFor(ctx.opts)) {
+    final targets = <String>[];
+    for (final cand in ownedBy(ctx.opts, g)) {
+      final row = r.row(cand.name);
+      final counts = row[g.id == 'G4' ? 'counts313' : 'counts'];
+      if (ctx.opts.probeAll ||
+          (counts is Map<String, dynamic> && total(counts) == 0)) {
+        targets.add(cand.name);
+      }
+    }
+    if (targets.isEmpty) continue;
+    final probes = probesFor(g, targets);
+    for (final t in targets) {
+      if (!probes.containsKey('rule_probe/$t.dart')) {
+        noProbe.add(t);
+        stderr.writeln('표식 없음: $t');
+        r.row(t)['markerDetected'] = null;
+      }
+    }
+    if (probes.isEmpty) continue;
+    c.refreshSources();
+    c.addExampleMarkers();
+    await c.useSdk(g.sdk);
+    c.setOptions(groupOptions(c, g));
+    c.addMarkers(probes);
+    final id = '${g.id}-marker';
+    final shot = await c.analyze(id);
+    final reported = <String, bool?>{
+      for (final t in targets)
+        t: probes.containsKey('rule_probe/$t.dart')
+            ? shot.marker.any(
+                (d) =>
+                    d.path == '${Diag.markerDir}rule_probe/$t.dart' &&
+                    codeMatchesRule(d.code, t),
+              )
+            : null,
+    };
+    final run = validate(ctx, shot, g.optionsJson, markersReported: reported);
+    for (final t in targets.where((t) => reported[t] != null)) {
+      final row = r.row(t);
+      row['markerDetected'] = reported[t];
+      row['severity'] ??= firstSeverity(shot, t);
+      noteRowRun(ctx, t, run);
+    }
+  }
+  if (noProbe.isNotEmpty) {
+    stderr.writeln('표식 없음 ${noProbe.length}개: ${noProbe.join(', ')}');
+  }
+  await restoreConsumer(c);
+}
+
+/// 무시 주석 — `// ignore: a, b` 와 `// ignore_for_file: a, b` (spike 023).
+final ignorePattern = RegExp(r'//\s*(ignore_for_file|ignore)\s*:\s*(.*)$');
+
+/// 분석되는 손으로 쓴 Dart 파일 (`lib` · `test` · `bin`, 생성 파일과 표식 폴더 제외).
+Iterable<File> analyzedDartFiles(Consumer c) sync* {
+  for (final top in projectAreas) {
+    final d = Directory('${c.dir}/$top');
+    if (!d.existsSync()) continue;
+    for (final f in d.listSync(recursive: true).whereType<File>()) {
+      final rel = f.path.substring(c.dir.length + 1);
+      if (!rel.endsWith('.dart') || rel.startsWith(Diag.markerDir)) continue;
+      if (rel.endsWith('.g.dart') || rel.endsWith('.freezed.dart')) continue;
+      yield f;
+    }
+  }
+}
+
+/// 분석되는 파일에서 무시 주석 부분만 지운다 — 줄은 남겨 줄 번호를 지킨다 (spike 023).
+/// 생성 파일과 표식 폴더(이 저장소의 샘플)는 건드리지 않는다. 지운 주석 수를 돌려준다.
+int stripIgnores(Consumer c) {
+  var n = 0;
+  for (final f in analyzedDartFiles(c)) {
+    final lines = f.readAsLinesSync();
+    var changed = false;
+    for (var i = 0; i < lines.length; i++) {
+      final m = ignorePattern.firstMatch(lines[i]);
+      if (m == null) continue;
+      lines[i] = lines[i].substring(0, m.start).trimRight();
+      changed = true;
+      n++;
+    }
+    if (changed) f.writeAsStringSync('${lines.join('\n')}\n');
+  }
+  return n;
+}
+
+/// `ignore` — 주석을 걷어낸 기준선 B0-strip 과 그룹마다의 `G<n>-strip`. 가린 줄 =
+/// strip 실행의 그 규칙 프로젝트 줄 − 주석을 둔 실행의 줄 (자리별).
+Future<void> measureIgnore(Context ctx) async {
+  final c = ctx.consumer;
+  final r = ctx.results;
+
+  c.refreshSources();
+  c.addExampleMarkers();
+  final stripped0 = stripIgnores(c);
+  await c.useSdk(null);
+  c.setOptions(c.originalOptions);
+  final b0s = await c.analyze('B0-strip');
+  final run0 = validate(ctx, b0s, {
+    'rules': <String>[],
+    'language': <String, bool>{},
+    'sdk': null,
+  }, ignoresStripped: stripped0);
+  final b0Json = requireRun(ctx, 'B0');
+  final b0sJson = r.run('B0-strip')!;
+  for (final cand in candidates.where((x) => x.group == 'current')) {
+    if (!ctx.opts.inScope(cand.name)) continue;
+    r.row(cand.name)['ignored'] = subtractCounts(
+      ruleCounts(b0sJson, cand.name),
+      ruleCounts(b0Json, cand.name),
+    );
+    noteRowRun(ctx, cand.name, run0);
+  }
+
+  for (final g in groupRunsFor(ctx.opts)) {
+    c.refreshSources();
+    c.addExampleMarkers();
+    final stripped = stripIgnores(c);
+    await c.useSdk(g.sdk);
+    c.setOptions(groupOptions(c, g));
+    final id = '${g.id}-strip';
+    final shot = await c.analyze(id);
+    final run = validate(ctx, shot, g.optionsJson, ignoresStripped: stripped);
+    final withComments = requireRun(ctx, g.id);
+    final strippedJson = r.run(id)!;
+    for (final cand in ownedBy(ctx.opts, g)) {
+      r.row(cand.name)['ignored'] = subtractCounts(
+        ruleCounts(strippedJson, cand.name),
+        ruleCounts(withComments, cand.name),
+      );
+      noteRowRun(ctx, cand.name, run);
+    }
+  }
+  await restoreConsumer(c);
+}
+
+/// `dart fix` 한 번의 결과 — 코드별 수정 수 (화면 원문은 `<work>/private/` 에만).
+class FixRun {
+  /// [id] 는 원문 파일 이름이다.
+  FixRun(this.id);
+
+  /// 원문 파일 이름 (`fix-<규칙>` · `fix-apply-<규칙>`).
+  final String id;
+
+  /// `dart fix` 의 종료 코드.
+  int exitCode = -1;
+
+  /// 걸린 시간.
+  int elapsedMs = 0;
+
+  /// 코드 → 수정 수 (파일을 합친다).
+  final byCode = <String, int>{};
+
+  /// [code] 의 수정 수.
+  int countOf(String code) => byCode[code] ?? 0;
+}
+
+/// 복사본에서 `dart fix --dry-run|--apply --code=<code>` 를 한 번 (빈 상태 폴더).
+/// 출력의 `  <코드> - N fix(es)` 줄을 센다 (spike 022 의 정규식).
+Future<FixRun> dryRun(
+  Context ctx,
+  String id,
+  String code, {
+  bool apply = false,
+}) async {
+  final c = ctx.consumer;
+  final state = Directory('${ctx.opts.work}/state/$id');
+  if (state.existsSync()) state.deleteSync(recursive: true);
+  state.createSync(recursive: true);
+  final result = FixRun(id);
+  final watch = Stopwatch()..start();
+  final r = await Process.run(
+    Platform.resolvedExecutable,
+    [
+      '--suppress-analytics',
+      'fix',
+      apply ? '--apply' : '--dry-run',
+      '--code=$code',
+    ],
+    workingDirectory: c.dir,
+    environment: {'ANALYZER_STATE_LOCATION_OVERRIDE': state.path},
+  );
+  result.elapsedMs = watch.elapsedMilliseconds;
+  result.exitCode = r.exitCode;
+  final out = '${r.stdout}';
+  final private = Directory('${ctx.opts.work}/private')
+    ..createSync(recursive: true);
+  File(
+    '${private.path}/$id.txt',
+  ).writeAsStringSync('$out\n--- exit ${r.exitCode}\n--- stderr\n${r.stderr}');
+  final fixLine = RegExp(r'^  (\S+) - (\d+) fix(?:es)?$');
+  for (final line in out.split('\n')) {
+    final m = fixLine.firstMatch(line.trimRight());
+    if (m == null) continue;
+    final n = int.parse(m.group(2)!);
+    result.byCode.update(m.group(1)!, (v) => v + n, ifAbsent: () => n);
+  }
+  if (r.exitCode != 0) {
+    throw SubcommandFailure(
+      'dart fix 가 돌지 않았다 ($id, exit ${r.exitCode}) — 원문은 <work>/private/$id.txt',
+    );
+  }
+  return result;
+}
+
+/// [rule] 하나를 apply 하고 다시 분석해 `fixRemoved` · `newErrors` · `otherDelta` 를 적는다.
+/// `dart fix` 는 표식 폴더의 사본도 고쳐 정답지 줄을 지우므로 표식은 apply **뒤에** 넣는다.
+Future<void> applyRule(
+  Context ctx,
+  Candidate cand,
+  GroupRun g,
+  Map<String, dynamic> before,
+  int projectLines,
+) async {
+  final c = ctx.consumer;
+  final row = ctx.results.row(cand.name);
+  await dryRun(ctx, 'fix-apply-${cand.name}', cand.name, apply: true);
+  c.addExampleMarkers();
+  c.addMarkers(probesFor(g, groups[g.id] ?? const []));
+  final id = 'apply-${cand.name}';
+  final shot = await c.analyze(id);
+  final run = validate(ctx, shot, g.optionsJson);
+  final after = ctx.results.run(id)!;
+  final remaining = total(ruleCounts(after, cand.name));
+  row['fixRemoved'] = projectLines - remaining;
+
+  Map<String, int> errorsOf(Map<String, dynamic> json) =>
+      ((((json['projectBySeverity'] as Map<String, dynamic>?) ??
+                      const {})['error']
+                  as Map<String, dynamic>?) ??
+              const {})
+          .map((k, v) => MapEntry(k, v as int));
+  final errorsBefore = errorsOf(before);
+  final errorsAfter = errorsOf(after);
+  row['newErrors'] = errorsAfter.entries
+      .where((e) => e.key != cand.name)
+      .map((e) => e.value - (errorsBefore[e.key] ?? 0))
+      .where((d) => d > 0)
+      .fold<int>(0, (s, d) => s + d);
+
+  final b = nonMarkerByCode(before);
+  final a = nonMarkerByCode(after);
+  final delta = <String, int>{};
+  for (final code in {...a.keys, ...b.keys}) {
+    if (code == cand.name) continue;
+    final d = (a[code] ?? 0) - (b[code] ?? 0);
+    if (d != 0) delta[code] = d;
+  }
+  row['otherDelta'] = Map.fromEntries(
+    delta.entries.toList()..sort((x, y) => x.key.compareTo(y.key)),
+  );
+  noteRowRun(ctx, cand.name, run);
+}
+
+/// `fix` — 프로젝트 줄 > 0 인 후보마다 원본 소스(표식 없음)에서 단독 dry 를 돌려 `aloneDry` 를
+/// 적고, 0 이 아니면 apply 해 사라진 그 규칙의 줄을 잰다 (D-02, spike 022). `current` 는 B0 를
+/// before 로 원본 옵션으로 돈다. 단독 dry 의 수는 apply 할 규칙을 고르는 데만 쓴다.
+Future<void> measureFix(Context ctx) async {
+  final c = ctx.consumer;
+  final r = ctx.results;
+  for (final cand in candidates) {
+    if (cand.isOption || !ctx.opts.inScope(cand.name)) continue;
+    final row = r.row(cand.name);
+    final beforeId = primaryRunId(cand);
+    final before = requireRun(ctx, beforeId);
+    final counts = row[cand.group == 'G4' ? 'counts313' : 'counts'];
+    if (counts is! Map<String, dynamic>) {
+      stderr.writeln('fix: ${cand.name} 의 값이 없다 — 건너뛴다');
+      continue;
+    }
+    final projectLines = total(counts);
+    if (projectLines == 0) {
+      row['aloneDry'] = null;
+      row['fixRemoved'] = null; // 해당 없음
+      row['newErrors'] = null;
+      row['otherDelta'] = null;
+      continue;
+    }
+    final g = groupRunFromJson(beforeId, before);
+    c.refreshSources();
+    await c.useSdk(g.sdk);
+    c.setOptions(groupOptions(c, g));
+    final dry = await dryRun(ctx, 'fix-${cand.name}', cand.name);
+    row['aloneDry'] = dry.countOf(cand.name);
+    if (dry.countOf(cand.name) == 0) {
+      row['fixRemoved'] = 0; // 0 (dry 0) — apply 하지 않는다
+      row['newErrors'] = null;
+      row['otherDelta'] = <String, int>{};
+    } else {
+      await applyRule(ctx, cand, g, before, projectLines);
+    }
+    r.save(); // 규칙 하나마다 작업 폴더에 — 중간에 죽어도 앞의 규칙은 남는다
+  }
+  await restoreConsumer(c);
+}
+
+/// [shot] 의 `unnecessary_ignore` 진단이 가리킨 주석에서 코드 이름만 뽑아 센다 (spike 023).
+/// 메시지 · 경로 · 설명 글은 남기지 않는다 — 이름 꼴이 아닌 것은 `(이름 아님)` 으로 센다.
+Map<String, int> unnecessaryIgnoreNames(Consumer c, Shot shot) {
+  final counts = <String, int>{};
+  final namePattern = RegExp(r'^(?:[a-z0-9_]+/)?[a-z0-9_]+$|^type=lint$');
+  for (final d in shot.project) {
+    if (!d.code.startsWith('unnecessary_ignore') || !d.inProjectArea) continue;
+    final file = File('${c.dir}/${d.path}');
+    if (!file.existsSync()) continue;
+    final src = file.readAsLinesSync();
+    String? found;
+    // 줄 단위 주석은 그 줄이나 바로 위 줄에 있다.
+    for (final i in [d.line - 1, d.line - 2]) {
+      if (i < 0 || i >= src.length) continue;
+      final m = ignorePattern.firstMatch(src[i]);
+      if (m == null) continue;
+      final codes = m
+          .group(2)!
+          .split(',')
+          .map((x) => x.trim().split(RegExp(r'\s')).first)
+          .where((x) => x.isNotEmpty)
+          .map((x) => namePattern.hasMatch(x) ? x : '(이름 아님)');
+      found = '${m.group(1)}:${codes.join(',')}';
+      break;
+    }
+    counts.update(found ?? '(찾지 못함)', (v) => v + 1, ifAbsent: () => 1);
+  }
+  return counts;
+}
+
+/// `unnecessary-ignore` — 결정을 반영한 뒤 따로 잰다 (D-17). 복사본은 `path:` 로 작업 중인
+/// 저장소를 받으므로 그때의 `lib/base.yaml` 이 그대로 적용된다. `countsUI` = UI − UI-base.
+Future<void> measureUnnecessaryIgnore(Context ctx) async {
+  final c = ctx.consumer;
+  final r = ctx.results;
+  const rule = 'unnecessary_ignore';
+  c.refreshSources();
+  c.addExampleMarkers();
+  await c.useSdk(null);
+  c.setOptions(c.originalOptions);
+  final base = await c.analyze('UI-base');
+  final baseRun = validate(ctx, base, {
+    'rules': <String>[],
+    'language': <String, bool>{},
+    'sdk': null,
+  });
+
+  c.refreshSources();
+  c.addExampleMarkers();
+  final options = {
+    'rules': [rule],
+    'language': <String, bool>{},
+    'sdk': null,
+  };
+  c.setOptions(c.optionsWith(rules: [rule]));
+  final ui = await c.analyze('UI');
+  final uiRun = validate(ctx, ui, options);
+
+  int areaCount(Shot s, String area) =>
+      s.diags.where((d) => d.area == area && d.code.startsWith(rule)).length;
+  r.row(rule)['countsUI'] = {
+    for (final a in projectAreas) a: areaCount(ui, a) - areaCount(base, a),
+  };
+  r.conditions['unnecessaryIgnoreNames'] = unnecessaryIgnoreNames(c, ui);
+  noteRowRun(ctx, rule, baseRun);
+  noteRowRun(ctx, rule, uiRun);
+  await restoreConsumer(c);
 }
 
 /// 도구의 입구.
@@ -2170,6 +2991,8 @@ Future<void> main(List<String> args) async {
     final Options opts;
     try {
       opts = parseArgs(args, repo);
+      // 앞 단계의 회차가 필요한 단계 — 결과 파일은 읽기만 한다 (아직 아무것도 만들지 않는다).
+      checkStageInputs(opts, existingRunIds(opts));
     } on UsageError catch (e) {
       stderr.writeln(scrub(e.message));
       stderr.writeln(usage);
