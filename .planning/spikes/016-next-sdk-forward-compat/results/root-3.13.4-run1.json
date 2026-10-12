@@ -1,0 +1,341 @@
+{
+  "dart": "3.13.4",
+  "os": "macos",
+  "cases": [
+    {
+      "id": "E0",
+      "note": "lib 비어 있음 (대조)",
+      "lib": "empty",
+      "example": false,
+      "excludes": [],
+      "exitCode": 0,
+      "lines": 0,
+      "codes": {},
+      "pluginFolders": 0,
+      "pluginConstraint": null,
+      "seconds": "0.5"
+    },
+    {
+      "id": "U1",
+      "note": "한 파일 구조, 제외 없음",
+      "lib": "unsplit",
+      "example": false,
+      "excludes": [],
+      "exitCode": 2,
+      "lines": 1,
+      "codes": {
+        "plugins_in_inner_options": 1
+      },
+      "pluginFolders": 0,
+      "pluginConstraint": null,
+      "seconds": "0.5"
+    },
+    {
+      "id": "U2",
+      "note": "한 파일 구조, lib 의 옵션 파일 제외",
+      "lib": "unsplit",
+      "example": false,
+      "excludes": [
+        "lib/analysis_options.yaml"
+      ],
+      "exitCode": 0,
+      "lines": 0,
+      "codes": {},
+      "pluginFolders": 0,
+      "pluginConstraint": null,
+      "seconds": "0.5"
+    },
+    {
+      "id": "S1",
+      "note": "나눈 구조, 제외 없음",
+      "lib": "split",
+      "example": false,
+      "excludes": [],
+      "exitCode": 0,
+      "lines": 0,
+      "codes": {},
+      "pluginFolders": 0,
+      "pluginConstraint": null,
+      "seconds": "0.5"
+    },
+    {
+      "id": "S2",
+      "note": "나눈 구조, 별칭 제외",
+      "lib": "split",
+      "example": false,
+      "excludes": [
+        "lib/analysis_options.yaml"
+      ],
+      "exitCode": 0,
+      "lines": 0,
+      "codes": {},
+      "pluginFolders": 0,
+      "pluginConstraint": null,
+      "seconds": "0.5"
+    },
+    {
+      "id": "S3",
+      "note": "나눈 구조에서 별칭 파일만 뺌 (조각 · 묶음만)",
+      "lib": "split-no-alias",
+      "example": false,
+      "excludes": [],
+      "exitCode": 0,
+      "lines": 0,
+      "codes": {},
+      "pluginFolders": 0,
+      "pluginConstraint": null,
+      "seconds": "0.5"
+    },
+    {
+      "id": "X1",
+      "note": "example 만, example 제외",
+      "lib": "empty",
+      "example": true,
+      "excludes": [
+        "example/**"
+      ],
+      "exitCode": 0,
+      "lines": 0,
+      "codes": {},
+      "pluginFolders": 0,
+      "pluginConstraint": null,
+      "seconds": "0.5"
+    },
+    {
+      "id": "X2",
+      "note": "example 만, 제외 없음",
+      "lib": "empty",
+      "example": true,
+      "excludes": [],
+      "exitCode": 2,
+      "lines": 2,
+      "codes": {
+        "include_file_not_found": 1,
+        "invalid_annotation_target": 1
+      },
+      "pluginFolders": 0,
+      "pluginConstraint": null,
+      "seconds": "3.3"
+    },
+    {
+      "id": "T0",
+      "note": "지금의 저장소 모양",
+      "lib": "unsplit",
+      "example": true,
+      "excludes": [
+        "lib/analysis_options.yaml",
+        "example/**"
+      ],
+      "exitCode": 0,
+      "lines": 0,
+      "codes": {},
+      "pluginFolders": 0,
+      "pluginConstraint": null,
+      "seconds": "0.5"
+    },
+    {
+      "id": "T1",
+      "note": "Phase 3 이 지을 모양 (lib 제외를 걷어냄)",
+      "lib": "split",
+      "example": true,
+      "excludes": [
+        "example/**"
+      ],
+      "exitCode": 0,
+      "lines": 0,
+      "codes": {},
+      "pluginFolders": 0,
+      "pluginConstraint": null,
+      "seconds": "0.5"
+    },
+    {
+      "id": "T2",
+      "note": "나눈 구조, 제외를 남겨 둠",
+      "lib": "split",
+      "example": true,
+      "excludes": [
+        "lib/analysis_options.yaml",
+        "example/**"
+      ],
+      "exitCode": 0,
+      "lines": 0,
+      "codes": {},
+      "pluginFolders": 0,
+      "pluginConstraint": null,
+      "seconds": "0.5"
+    }
+  ],
+  "checks": [
+    {
+      "label": "E0 lib 가 비어 있으면 0건이고 plugin 을 준비하지 않는다 (대조)",
+      "ok": true,
+      "note": "exit 0, 0줄, plugin 폴더 0개"
+    }
+  ],
+  "runs": [
+    {
+      "id": "E0",
+      "title": "lib 비어 있음 (대조) — lib: empty, example: 없음, 제외: 없음",
+      "exitCode": 0,
+      "elapsedMs": 520,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "U1",
+      "title": "한 파일 구조, 제외 없음 — lib: unsplit, example: 없음, 제외: 없음",
+      "exitCode": 2,
+      "elapsedMs": 500,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [
+        "lib/analysis_options.yaml:58  warning  plugins_in_inner_options"
+      ],
+      "messages": [
+        "Plugins can only be specified in the root of a pub workspace or the root of a package that isn't in a workspace."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "U2",
+      "title": "한 파일 구조, lib 의 옵션 파일 제외 — lib: unsplit, example: 없음, 제외: lib/analysis_options.yaml",
+      "exitCode": 0,
+      "elapsedMs": 488,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "S1",
+      "title": "나눈 구조, 제외 없음 — lib: split, example: 없음, 제외: 없음",
+      "exitCode": 0,
+      "elapsedMs": 508,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "S2",
+      "title": "나눈 구조, 별칭 제외 — lib: split, example: 없음, 제외: lib/analysis_options.yaml",
+      "exitCode": 0,
+      "elapsedMs": 507,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "S3",
+      "title": "나눈 구조에서 별칭 파일만 뺌 (조각 · 묶음만) — lib: split-no-alias, example: 없음, 제외: 없음",
+      "exitCode": 0,
+      "elapsedMs": 497,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "X1",
+      "title": "example 만, example 제외 — lib: empty, example: 있음, 제외: example/**",
+      "exitCode": 0,
+      "elapsedMs": 487,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "X2",
+      "title": "example 만, 제외 없음 — lib: empty, example: 있음, 제외: 없음",
+      "exitCode": 2,
+      "elapsedMs": 3296,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [
+        "example/analysis_options.yaml:1  warning  include_file_not_found",
+        "example/lib/should_not_appear.dart:5  warning  invalid_annotation_target"
+      ],
+      "messages": [
+        "The URI 'package:woody_lints/analysis_options.yaml' included in '<replica>/example/analysis_options.yaml' can't be found when analyzing '<replica>/example'.",
+        "The annotation 'immutable' can only be used on classes, extension types, or mixins."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "T0",
+      "title": "지금의 저장소 모양 — lib: unsplit, example: 있음, 제외: lib/analysis_options.yaml · example/**",
+      "exitCode": 0,
+      "elapsedMs": 475,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "T1",
+      "title": "Phase 3 이 지을 모양 (lib 제외를 걷어냄) — lib: split, example: 있음, 제외: example/**",
+      "exitCode": 0,
+      "elapsedMs": 512,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "T2",
+      "title": "나눈 구조, 제외를 남겨 둠 — lib: split, example: 있음, 제외: lib/analysis_options.yaml · example/**",
+      "exitCode": 0,
+      "elapsedMs": 505,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    }
+  ]
+}

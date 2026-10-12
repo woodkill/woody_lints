@@ -1,0 +1,146 @@
+Dart 3.13.4 on macos
+
+# 1부. 한 파일 구조 (1.3.0 의 모양 — 사용 프로젝트가 지금 받는 것)
+## U-old — 한 파일 구조, 옛 주소 한 줄
+   exit 2, 15.4s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+     lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables
+     lib/added_rules.dart:18  info  always_declare_return_types
+     lib/added_rules.dart:24  info  prefer_final_locals
+     lib/added_rules.dart:29  info  prefer_single_quotes
+     lib/added_rules.dart:33  info  unawaited_futures
+     lib/added_rules.dart:7  info  prefer_const_constructors
+     lib/base_rules.dart:12  info  sort_child_properties_last
+     lib/base_rules.dart:17  info  use_build_context_synchronously
+     lib/base_rules.dart:22  info  avoid_print
+     lib/base_rules.dart:30  info  control_flow_in_finally
+     lib/base_rules.dart:34  info  slash_for_doc_comments
+     lib/base_rules.dart:38  info  prefer_is_empty
+     lib/base_rules.dart:8  info  sized_box_for_whitespace
+     lib/main.dart:5  warning  missing_provider_scope
+     lib/riverpod_rules.dart:17  warning  provider_parameters
+     lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties
+   = U-old 한 파일 구조의 진단이 정답지와 같다 — exit 2, 16줄, 차이 0줄
+   = U-old plugin 준비 — 폴더 1개, plugin.aot 있음, 실패 머리말 없음
+   = plugin 쪽에서 풀린 버전 — riverpod_lint 3.1.9 / analyzer 14.5.0 / analysis_server_plugin 0.3.24
+## R1 — 한 파일 구조, 루트에서 lib/analysis_options.yaml 제외를 걷어냄
+   exit 2, 0.5s, 진단 1건 (plugin 0), plugin 폴더 0개
+     lib/analysis_options.yaml:58  warning  plugins_in_inner_options — Plugins can only be specified in the root of a pub workspace or the root of a package that isn't in a workspace.
+   = R1 한 파일 구조에서 루트의 lib 제외를 걷어내면 — plugins_in_inner_options 1건, exit 2
+
+# 2부. 나눈 구조 (Phase 3 이 지을 모양)
+## R2 — 나눈 구조, 루트에 lib 제외 없음
+   exit 0, 0.5s, 진단 0건 (plugin 0), plugin 폴더 0개
+   = R2 나눈 구조의 루트 분석 — exit 0, 0줄, plugin 폴더 0개
+## S-alias — 옛 주소 한 줄 (3단: 별칭 → 묶음 → 조각)
+   exit 2, 15.1s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+     lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables
+     lib/added_rules.dart:18  info  always_declare_return_types
+     lib/added_rules.dart:24  info  prefer_final_locals
+     lib/added_rules.dart:29  info  prefer_single_quotes
+     lib/added_rules.dart:33  info  unawaited_futures
+     lib/added_rules.dart:7  info  prefer_const_constructors
+     lib/base_rules.dart:12  info  sort_child_properties_last
+     lib/base_rules.dart:17  info  use_build_context_synchronously
+     lib/base_rules.dart:22  info  avoid_print
+     lib/base_rules.dart:30  info  control_flow_in_finally
+     lib/base_rules.dart:34  info  slash_for_doc_comments
+     lib/base_rules.dart:38  info  prefer_is_empty
+     lib/base_rules.dart:8  info  sized_box_for_whitespace
+     lib/main.dart:5  warning  missing_provider_scope
+     lib/riverpod_rules.dart:17  warning  provider_parameters
+     lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties
+   = S-alias 옛 주소의 진단이 정답지와 같다 — exit 2, 16줄, 차이 0줄
+   = S-alias plugin 준비 — 폴더 1개, plugin.aot 있음, 실패 머리말 없음
+## S-bundle — 묶음 주소 한 줄
+   exit 2, 15.1s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   = S-bundle 묶음 주소의 진단이 정답지와 같다 — exit 2, 16줄, 차이 0줄
+   = S-bundle plugin 준비 — 폴더 1개, plugin.aot 있음, 실패 머리말 없음
+## S-base-only — base.yaml 만
+   exit 2, 3.2s, 진단 18건 (plugin 0), plugin 폴더 0개
+   = S-base-only 기본만 — exit 2, 18줄, 차이 0줄
+   = S-base-only plugin 준비 — 폴더 0개
+## S-base-riverpod — base.yaml + riverpod.yaml
+   exit 2, 15.2s, 진단 21건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   = S-base-riverpod 기본 + Riverpod — exit 2, 21줄, 차이 0줄
+   = S-base-riverpod plugin 준비 — 폴더 1개, plugin.aot 있음, 실패 머리말 없음
+## S-base-codegen — base.yaml + codegen.yaml
+   exit 0, 3.1s, 진단 13건 (plugin 0), plugin 폴더 0개
+   = S-base-codegen 기본 + codegen — exit 0, 13줄, 차이 0줄
+   = S-base-codegen plugin 준비 — 폴더 0개
+
+# 3부. 규칙 검사 — 지금 규칙 12개 중 이 SDK 에서 deprecated / removed 가 된 것
+## K-base — base.yaml 그대로, SDK 하한 ^3.13.0 (저장소의 것)
+   exit 0, 0.5s, 진단 0건 (plugin 0), plugin 폴더 0개
+   = K-base 지금 규칙 (하한 ^3.13.0) — exit 0, 0줄
+## K-problem — base.yaml 에 문제 규칙 셋을 끼움, 하한 ^3.13.0
+   exit 2, 0.5s, 진단 3건 (plugin 0), plugin 폴더 0개
+     build/woody_rule_check/analysis_options.yaml:41  warning  deprecated_lint — The lint rule 'unnecessary_await_in_return' is deprecated and shouldn't be enabled.
+     build/woody_rule_check/analysis_options.yaml:42  warning  removed_lint — 'avoid_returning_null' was removed in Dart '3.3.0'
+     build/woody_rule_check/analysis_options.yaml:43  warning  undefined_lint — 'no_such_rule_zz9' isn't a recognized lint rule.
+   = K-problem 문제 규칙 셋 (하한 ^3.13.0) — exit 2, 3줄 (deprecated_lint, removed_lint, undefined_lint)
+   ✓ K-problem 없는 규칙이 보고된다 (규칙 검사가 이 SDK 에서 동작한다) — exit 2, 3줄 (deprecated_lint, removed_lint, undefined_lint)
+## K-base-^3.14.0 — base.yaml 그대로, SDK 하한 ^3.14.0
+   exit 0, 0.5s, 진단 0건 (plugin 0), plugin 폴더 0개
+   = K-base 지금 규칙 (하한 ^3.14.0) — exit 0, 0줄
+## K-base-^3.99.0 — base.yaml 그대로, SDK 하한 ^3.99.0
+   exit 0, 0.5s, 진단 0건 (plugin 0), plugin 폴더 0개
+   = K-base 지금 규칙 (하한 ^3.99.0) — exit 0, 0줄
+
+# 4부. 생성 파일 제외 — 패턴을 적은 곳에 따라
+## X-none — 제외 없음 (base.yaml + riverpod.yaml)
+   exit 2, 3.7s, 진단 23건 (plugin 4), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   = X-none 제외 없음 — 규칙 나옴 / plugin 나옴
+   ✓ X-none 제외가 없으면 생성 파일 샘플의 규칙 진단이 나온다 (대조) — 규칙 나옴 / plugin 나옴
+## X-bundle — 패키지의 codegen.yaml (묶음으로 받음)
+   exit 2, 3.5s, 진단 17건 (plugin 4), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   = X-bundle 패키지의 codegen.yaml 이 주는 제외 — 규칙 안 나옴 / plugin 나옴
+   = X-bundle 에서 example 의 생성 파일 샘플 4줄 — 0줄 나옴
+## X-own — 묶음 + 사용 프로젝트의 옵션 파일에 직접
+   exit 2, 3.5s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   = X-own 사용 프로젝트가 직접 적은 제외 — 규칙 안 나옴 / plugin 안 나옴
+## X-local-root — 프로젝트 루트의 local_excludes.yaml 을 include
+   exit 2, 3.5s, 진단 19건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   = X-local-root 프로젝트 루트의 파일에 적은 제외 — 규칙 안 나옴 / plugin 안 나옴
+## X-local-sub — 하위 폴더의 config/local_excludes.yaml 을 include
+   exit 2, 3.5s, 진단 20건 (plugin 4), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   = X-local-sub 하위 폴더의 파일에 적은 제외 — 규칙 안 나옴 / plugin 나옴
+## X-old — 한 파일 구조 (1.3.0 의 모양)
+   exit 2, 3.8s, 진단 17건 (plugin 4), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   = X-old 한 파일 구조가 주는 제외 — 규칙 안 나옴 / plugin 나옴
+
+# 기준 SDK (Dart 3.13.4) 의 값과 견줌
+= U-old 한 파일 구조의 진단이 정답지와 같다 — exit 2, 16줄, 차이 0줄
+= U-old plugin 준비 — 폴더 1개, plugin.aot 있음, 실패 머리말 없음
+= plugin 쪽에서 풀린 버전 — riverpod_lint 3.1.9 / analyzer 14.5.0 / analysis_server_plugin 0.3.24
+= R1 한 파일 구조에서 루트의 lib 제외를 걷어내면 — plugins_in_inner_options 1건, exit 2
+= R2 나눈 구조의 루트 분석 — exit 0, 0줄, plugin 폴더 0개
+= S-alias 옛 주소의 진단이 정답지와 같다 — exit 2, 16줄, 차이 0줄
+= S-alias plugin 준비 — 폴더 1개, plugin.aot 있음, 실패 머리말 없음
+= S-bundle 묶음 주소의 진단이 정답지와 같다 — exit 2, 16줄, 차이 0줄
+= S-bundle plugin 준비 — 폴더 1개, plugin.aot 있음, 실패 머리말 없음
+= S-base-only 기본만 — exit 2, 18줄, 차이 0줄
+= S-base-only plugin 준비 — 폴더 0개
+= S-base-riverpod 기본 + Riverpod — exit 2, 21줄, 차이 0줄
+= S-base-riverpod plugin 준비 — 폴더 1개, plugin.aot 있음, 실패 머리말 없음
+= S-base-codegen 기본 + codegen — exit 0, 13줄, 차이 0줄
+= S-base-codegen plugin 준비 — 폴더 0개
+= K-base 지금 규칙 (하한 ^3.13.0) — exit 0, 0줄
+= K-problem 문제 규칙 셋 (하한 ^3.13.0) — exit 2, 3줄 (deprecated_lint, removed_lint, undefined_lint)
+= K-base 지금 규칙 (하한 ^3.14.0) — exit 0, 0줄
+= K-base 지금 규칙 (하한 ^3.99.0) — exit 0, 0줄
+= X-none 제외 없음 — 규칙 나옴 / plugin 나옴
+= X-bundle 패키지의 codegen.yaml 이 주는 제외 — 규칙 안 나옴 / plugin 나옴
+= X-bundle 에서 example 의 생성 파일 샘플 4줄 — 0줄 나옴
+= X-own 사용 프로젝트가 직접 적은 제외 — 규칙 안 나옴 / plugin 안 나옴
+= X-local-root 프로젝트 루트의 파일에 적은 제외 — 규칙 안 나옴 / plugin 안 나옴
+= X-local-sub 하위 폴더의 파일에 적은 제외 — 규칙 안 나옴 / plugin 나옴
+= X-old 한 파일 구조가 주는 제외 — 규칙 안 나옴 / plugin 나옴
+모든 칸이 기준과 같다 (26칸)
+
+# 판정
+✓ K-problem 없는 규칙이 보고된다 (규칙 검사가 이 SDK 에서 동작한다) — exit 2, 3줄 (deprecated_lint, removed_lint, undefined_lint)
+✓ X-none 제외가 없으면 생성 파일 샘플의 규칙 진단이 나온다 (대조) — 규칙 나옴 / plugin 나옴
+모두 성립 (2건)
+
+원본 결과: <repo>/.planning/spikes/016-next-sdk-forward-compat/results/probe-3.13.4.json
+script exit 0

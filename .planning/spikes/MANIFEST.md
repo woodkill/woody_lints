@@ -82,6 +82,17 @@ spike 가 스스로 건 조건.
 - 베타의 `dart` 는 저장소 밖을 작업 디렉터리로 두고 스크립트의 절대 경로를 주어 띄운다 — 저장소 루트에서 `dart run` 을 하면 베타가 루트의 패키지를 다시 풀 수 있다
 - 스크립트는 Dart 이고 `dart:io`, `dart:convert` 만 쓴다. 진단은 정답지 형식 `상대경로:줄  강도  규칙이름` 으로 견준다
 
+spike 에서 나와 실제 구현과 문서가 지켜야 하는 것 (근거는 spike 의 README. 베타 `3.14.0-211.1.beta` 한 빌드의 결과이고 정식 버전에서 달라질 수 있다).
+
+- 구조(조각 셋 · 묶음 · 별칭)는 바꾸지 않는다. include 로 받는 `plugins:` 는 베타에서도 한 파일 구조 · 3단 별칭 · 묶음 · 조각 조합에서 모두 로드되고 진단의 내용이 같다 (016)
+- "`codegen.yaml` 을 받으면 생성 파일의 진단이 보고되지 않는다" 는 Dart 3.13.x 의 사실로 적는다. 베타에서는 이 패키지가 주는 제외가 규칙 진단에도 통하지 않아 정답지 셋(옛 주소 · 묶음 16줄 → 20줄, 기본 + codegen 13줄 → 17줄)에 생성 파일 샘플의 4줄이 생긴다. 한 파일 구조(1.3.0)도 같다 (016)
+- README 는 생성 파일 제외를 **사용 프로젝트의 옵션 파일에 직접** 적으라고 안내한다 — 두 SDK 에서 규칙과 plugin 을 모두 막는 방법은 이것 하나다. "프리셋의 제외가 통하지 않는다" 를 굳은 사실로 적지 않고 SDK 버전에 따라 다르다고 적는다. 상류가 `P1` 버그(sdk#64549)로 다루며 되돌리는 변경을 리뷰하고 있다 (2026-10-11) (016)
+- 루트 옵션 파일의 주석과 문서에 "plugin 을 준비하지 않도록" 을 이유로 적지 않는다. 베타에서는 `lib/analysis_options.yaml` 이 `plugins:` 에 닿는 한 루트 분석이 plugin 을 준비하고(0.5초 → 10초, 진단은 0줄) 루트의 제외로 막지 못한다. `plugins_in_inner_options` 는 베타에서 나오지 않는다 (016)
+- 연습용 프로젝트 폴더를 루트에서 제외하는 방식은 베타에서도 통한다 — 제외한 폴더는 plugin 을 준비시키지 않는다 (016)
+- 지금 규칙 12개는 베타에서 deprecated / removed 가 아니다 (pubspec 의 SDK 하한을 `^3.14.0` · `^3.99.0` 으로 올려도 0건) (016)
+- plugin 진단 확인은 베타에서도 `dart analyze` 로 한다. 베타의 `flutter analyze` 는 plugin 진단을 내지만 규칙 진단을 겹쳐 세고 그 수가 실행마다 달랐다 (016)
+- 고정 SDK 를 Dart 3.14 계열로 올리기 전에 016 의 두 스크립트를 그 SDK 로 돌린다. `≠` 가 0칸이면 되돌리는 변경이 들어간 것이고, 10칸이면 정답지 셋을 갱신하며 "SDK 가 바뀌어 생긴 줄" 로 기록한다 (016)
+
 ## Spikes
 
 | # | Idea | Name | Type | Validates | Verdict | Tags |
@@ -101,4 +112,4 @@ spike 가 스스로 건 조건.
 | 013 | preset-split-include-behavior | rule-check-after-split | standard | 규칙이 `base.yaml` 로 옮겨 간 뒤의 규칙 검사에서 문제 규칙 셋과 깨진 입력 셋이 어떤 종료 코드와 진단으로 드러나는지가 확정된다 | ✓ VALIDATED | linter-rules, deprecated-lint, rule-check, broken-yaml |
 | 014 | preset-split-include-behavior | multi-fixture-plugin-cost | standard | plugin 을 쓰는 연습용 프로젝트 넷을 차례로 돌릴 때의 시간과, 폴더마다 따로 두는 방식 대 작업 폴더 하나를 돌려 쓰는 방식의 차이가 재어진다 | ✓ VALIDATED | analyzer-plugin, timing, state-folder, fixture-layout |
 | 015 | preset-split-include-behavior | git-dependency-preset-load | standard | 나눈 구조를 `path:` 가 아니라 git 의존성으로 받아도(패키지가 pub cache 에 놓여도) plugin 이 로드되고 옛 주소 · 묶음 주소가 지금 정답지와 같으며, 생성 파일 제외의 모양이 `path:` 때와 같다 | ✓ VALIDATED | git-dependency, pub-cache, include, analyzer-plugin, lockfile |
-| 016 | next-sdk-forward-compat | next-sdk-forward-compat | standard | Flutter 베타 3.49.0-0.2.pre 에서 include 로 받는 `plugins:` 가 로드되는지, `codegen.yaml` 의 제외가 규칙 진단에 여전히 통하는지, 지금 규칙 12개 중 새로 deprecated 된 것이 있는지가 확정된다 | PENDING | beta-sdk, forward-compat, include, analyzer-plugin, exclude, deprecated-lint |
+| 016 | next-sdk-forward-compat | next-sdk-forward-compat | standard | Flutter 베타 3.49.0-0.2.pre 에서 include 로 받는 `plugins:` 가 로드되는지, `codegen.yaml` 의 제외가 규칙 진단에 여전히 통하는지, 지금 규칙 12개 중 새로 deprecated 된 것이 있는지가 확정된다 | ⚠ PARTIAL (plugin 로드와 규칙 12개는 그대로. 이 패키지가 주는 생성 파일 제외는 베타에서 규칙 진단에도 통하지 않는다 — 상류에서 되돌리는 중) | beta-sdk, forward-compat, include, analyzer-plugin, exclude, deprecated-lint, plugins-in-inner-options |
