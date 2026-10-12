@@ -79,6 +79,7 @@
 - **D-10:** CI 는 **모든 브랜치의 push, pull request, 수동 실행**에서 돈다. 겹치는 실행은 `concurrency` 로 자동 취소한다. 작업 브랜치를 점검하려고 PR 을 미리 열어 두지 않는다.
   - 이유: 올리기만 하면 결과가 보이고, `main` 에 합치는 방법(Phase 6 의 결정)을 지금 묶어 두지 않는다
   - tag 트리거는 이 phase 에서 넣지 않는다 (Phase 6 의 REL-03)
+    - 덧붙임 (2026-10-12, gap 닫기 02-05): 필터 없는 `push:` 는 GitHub Actions 동작상 tag push 에서도 돈다 (02-REVIEW.md WR-07, 02-VERIFICATION.md 사람 확인 6 · P12). 소유자 결정 — 동작은 그대로 두고 `.github/workflows/verify.yml` 의 주석만 "모든 브랜치와 tag" 로 바로잡는다. `branches: ['**']` 를 넣어 브랜치에서만 돌게 하는 안은 고르지 않았다. 릴리스 tag 에서 검증이 한 번 더 도는 것은 해가 없다. Phase 6 (REL-03) 이 `tags:` 를 더할 때 브랜치 push 가 빠지지 않도록 workflow 주석이 경고한다. 위 문장 "tag 트리거는 이 phase 에서 넣지 않는다" 는 "tag 전용 트리거 · 검사를 더하지 않는다" 는 뜻으로 읽는다.
   - 작업 브랜치를 올려도 사용 프로젝트 5개에는 영향이 없다. 그 프로젝트들은 `main` 을 따르고 `main` 은 이 phase 에서 건드리지 않는다
 
 ### 점검 명령의 모양

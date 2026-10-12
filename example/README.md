@@ -2,7 +2,7 @@
 
 이 폴더는 **일부러 규칙을 어긴 연습용 프로젝트**다. `woody_lints` 를 쓰는 프로젝트와 같은 모양으로 만들었다 — Flutter 패키지이고, `woody_lints` 를 `path: ..` 로 받으며, `analysis_options.yaml` 은 `include: package:woody_lints/analysis_options.yaml` 한 줄이다.
 
-저장소의 검증 명령 `tool/verify.dart` 가 이 폴더를 `dart analyze` 로 분석하고, 나온 경고를 커밋해 둔 정답지 `expected_diagnostics.txt` 와 한 줄씩 비교한다. 같으면 통과이고 한 줄이라도 다르면 실패다. 배포 파일 `lib/analysis_options.yaml` 을 고쳤을 때 "받는 프로젝트에서 무엇이 달라지는가" 가 이 비교에서 드러난다.
+저장소의 검증 명령 `tool/verify.dart` 가 이 폴더를 `dart analyze` 로 분석하고, 나온 경고를 커밋해 둔 정답지 `expected_diagnostics.txt` 와 한 줄씩 비교한다. 같으면 통과이고 한 줄이라도 다르면 실패다. 같은 줄이 여러 건 나오면 건수까지 견준다. 배포 파일 `lib/analysis_options.yaml` 을 고쳤을 때 "받는 프로젝트에서 무엇이 달라지는가" 가 이 비교에서 드러난다.
 
 이 폴더는 검증용이지 사용 예가 아니다. 설치와 사용법은 저장소 루트의 `README.md` 를 본다.
 
@@ -27,6 +27,7 @@ fvm dart run tool/verify.dart --update
 - 정답지를 쓰기 전에 바뀌는 줄을 화면에 보여 준다 (`- ` 는 사라지는 줄, `+ ` 는 새로 생기는 줄).
 - 갱신된 정답지의 `git diff` 가 "이 변경으로 생기거나 사라진 경고" 의 기록이다. 커밋 전에 읽어 본다.
 - CI 에서는 `--update` 가 거부된다 (종료 코드 64). 정답지는 로컬에서 갱신해 커밋한다.
+- 같은 실행에서 다른 단계(`[1/4]` ~ `[3/4]`)가 실패했으면 정답지를 쓰지 않고 `다른 단계가 실패해 정답지를 쓰지 않았다` 를 찍는다 (종료 코드 1). 실패를 고친 뒤 다시 돌린다. plugin 준비 실패와 도구 사망에서는 전과 같이 쓰지 않는다 — 그때는 이 문구 대신 `[4/4]` 의 실패 내용이 찍힌다. 썼을 때는 `정답지를 썼다: example/expected_diagnostics.txt` 가 찍힌다. 2026-10-12 에 더한 안전장치다 (아래 M12).
 
 이 폴더의 패키지를 손으로 받을 일이 있으면 `dart pub get` 을 쓴다. `flutter pub get` 은 쓰지 않는다 — `analysis_options.yaml` 에 `build/**` 제외를 써넣어 "include 한 줄" 이 아니게 만든다. 돌렸다면 `git checkout -- example/analysis_options.yaml` 로 되돌린다.
 
@@ -62,7 +63,7 @@ lib/added_rules.dart:18  info  always_declare_return_types
 - 주석이 아닌 첫 줄 `exit N` 은 **`dart analyze` 의 종료 코드**다. warning 이 하나라도 있으면 2, error 가 있으면 3, info 뿐이면 0 이다. 지금은 `riverpod_lint` 의 warning 이 있어 `exit 2` 다.
 - 그 뒤는 경고 한 건에 한 줄, `상대경로:줄  강도  규칙이름` 이다 (칸 사이는 공백 두 칸). 메시지 문구는 적지 않는다.
 - 줄은 문자열로 정렬한다. 그래서 `:13` 이 `:7` 보다 앞에 온다.
-- 경고가 생기거나, 사라지거나, 강도가 바뀌거나, `exit` 줄이 달라지면 검증이 실패한다.
+- 경고가 생기거나, 사라지거나, 강도가 바뀌거나, `exit` 줄이 달라지면 검증이 실패한다. 같은 줄이 여러 건이면 건수까지 견준다 — 한 줄에 같은 규칙이 두 번 걸리면 정답지에도 그 줄이 두 번 있어야 한다 (2026-10-12 에 고침, 아래 M10 · M11).
 
 ## 검증 명령의 종료 코드
 
@@ -77,7 +78,7 @@ lib/added_rules.dart:18  info  always_declare_return_types
 | 70 | 스크립트가 예외로 끝남 (파일 형식 · 파일 작업 · 프로세스 실행 실패) |
 | 78 | 실행 중인 SDK 가 `.fvmrc` 와 다름 — 검증을 시작하지 않음 |
 
-단계는 네 개다: `[1/4]` `lib/` 에 `.dart` 파일 없음, `[2/4]` 배포 파일의 규칙 이름, `[3/4]` `example/` 옵션 파일, `[4/4]` `example/` 정답지 비교. 하나가 실패해도 나머지를 모두 돌린다.
+단계는 네 개다: `[1/4]` `lib/` 에 `.dart` 파일 없음, `[2/4]` 배포 파일의 규칙 이름, `[3/4]` `example/` 옵션 파일, `[4/4]` `example/` 정답지 비교. 하나가 실패해도 나머지를 모두 돌린다. `[2/4]` 는 배포 파일에서 규칙을 하나도 읽지 못하면(최상위 `linter:` 아래 `rules:` 목록이 비어 있거나 없으면) 실패한다 — 규칙을 다른 파일로 옮길 때 경로를 잘못 잡은 것이 통과로 보이지 않게 (2026-10-12, 아래 M13 · M14).
 
 ## 검증이 실제로 잡아내는지 확인한 기록
 
@@ -133,5 +134,29 @@ lib/added_rules.dart:18  info  always_declare_return_types
 변경은 모두 커밋하지 않고 되돌렸다 (`git status` 로 확인). 변경 하나를 돌린 직후 그 파일을 되돌렸고, 끝에 검증 명령이 다시 종료 코드 0 인 것을 봤다.
 
 이 기록이 재지 않은 것도 있다. 기반 세트가 이미 켜는 규칙(예: `avoid_print`)을 배포 파일에서 지웠을 때 정답지가 그대로인지는 보지 않았다 (Phase 4 의 중복 선언 정리 때 확인한다). 이 기록은 한 번의 확인이고, 늘 도는 대조군 fixture 는 Phase 3 (VERIFY-05) 에서 만든다.
+
+### 추가 실측 — 건수 비교 · `--update` 안전장치 · 규칙 0개 (gap 닫기 02-05)
+
+실측 (02-05): Flutter 3.47.5 / Dart 3.13.4, riverpod_lint 3.1.9, 2026-10-12
+
+실행한 명령: `fvm dart run tool/verify.dart` (M12 와 그 대조 실행은 `--update` 를 붙여). 변경은 한 번에 하나만 만들고 바로 되돌렸다.
+
+| # | 변경 | 실패한 단계 | 정답지와의 차이 | 종료 코드 | 항목 |
+|---|------|-------------|-----------------|-----------|------|
+| M10 | 정답지 끝에 이미 있는 줄 `lib/base_rules.dart:22  info  avoid_print` 를 한 번 더 적음 (정답지에 같은 줄 2개, 실제는 1건) | `[4/4]` | `- lib/base_rules.dart:22  info  avoid_print` (1줄) | 1 | 성공 기준 1 · D-04 — 같은 줄의 건수 (02-VERIFICATION.md Gap 1, CR-01) |
+| M11 | `example/lib/dup_probe.dart` 의 한 줄에 `print` 둘을 두고 (`void twoPrints() { print('x'); print('y'); }`), 정답지에는 그 줄을 1개만 더함 | `[4/4]` | `+ lib/dup_probe.dart:2  info  avoid_print` (1줄) | 1 | 성공 기준 1 · D-04 — 같은 줄의 건수 (02-VERIFICATION.md Gap 1, CR-01) |
+| M12 | `example/analysis_options.yaml` 을 빈 파일로 두고 `--update` 로 실행 | `[3/4]`. `[4/4]` 는 갱신 모드라 통과로 찍힌다 | 정답지를 쓰지 않았다 (파일의 git hash 가 실행 전과 같다). 화면: `다른 단계가 실패해 정답지를 쓰지 않았다 — 실패를 먼저 고친 뒤 다시 실행하세요.` | 1 | D-14 — 망가진 실행의 `--update` (WR-01 case 1) |
+| M13 | `lib/analysis_options.yaml` 의 `linter:` 를 `lintr:` 로 바꿈 | `[2/4]` 과 `[4/4]` | `[2/4]` 가 낸 줄: `` `lib/analysis_options.yaml` 에서 규칙을 하나도 읽지 못했다 — 최상위 `linter:` 아래 `rules:` 목록이 비어 있거나 없다. ``<br>`[4/4]`: `- ` 이 패키지가 추가하는 규칙 6줄 (`lib/added_rules.dart` 의 6줄) | 1 | VERIFY-02 — 규칙 0개 (WR-03 의 절반) |
+| M14 | 규칙 목록(`linter:` 블록)을 새 파일 `lib/_probe_rules.yaml` 로 옮기고, 배포 파일은 `include: package:woody_lints/_probe_rules.yaml` 로 그 파일을 받게 함 (`analyzer:` 와 `plugins:` 는 배포 파일에 남김) | `[2/4]` 만. `[4/4]` 는 통과 | 차이 없음 (16줄 그대로 — 규칙은 include 를 거쳐 그대로 적용된다). `[2/4]` 가 낸 줄은 M13 과 같다 | 1 | VERIFY-02 — Phase 3 의 규칙 파일 이동 모양 |
+
+`- ` 와 `+ ` 의 뜻은 위 표와 같다. 걸린 시간은 M10 · M14 가 6초, M11 · M13 이 5초, M12 가 3초였다.
+
+- **고치기 전에는 M10 · M11 이 종료 코드 0 으로 통과했다.** 정답지 비교가 "이 줄이 있는가" 만 보고 "몇 번 있는가" 를 보지 않았기 때문이다 (02-VERIFICATION.md Gap 1). 고치기 직전의 스크립트로 같은 두 변경을 이 저장소에서 다시 만들어 `[4/4] 통과` 를 본 뒤 고쳤다. M11 의 샘플은 정답지에 그 줄을 **두 번** 적어야 통과한다.
+- **M12 도 고치기 전에는 정답지를 덮어썼다.** 같은 변경에서 고치기 전의 `--update` 는 정답지를 `exit 2` + `lib/should_not_appear.dart:5  warning  invalid_annotation_target` 한 줄로 바꿔 썼다 (종료 코드 1, 쓴 파일은 되돌렸다). M13 은 고치기 전에 `[2/4] 통과` · `[4/4] 실패` 였다 — 규칙을 하나도 보지 못한 단계가 통과로 찍혔다.
+- **`--update` 의 정상 경로는 그대로다.** M10 의 상태(정답지에 같은 줄 2개, 단계 넷은 문제 없음)에서 `--update` 를 돌리면 `- lib/base_rules.dart:22  info  avoid_print` 를 보여 준 뒤 정답지를 16줄로 되돌려 쓰고 `정답지를 썼다: example/expected_diagnostics.txt` 를 찍는다 (종료 코드 0, 5초; 쓴 파일은 되돌렸다). `--update` 가 자기가 쓰려는 차이에 막히지는 않는다. `CI=true` 를 준 `--update` 는 여전히 종료 코드 64 다.
+- **M14 는 Phase 3 을 위한 확인이다.** 규칙을 `base.yaml` 같은 다른 파일로 옮길 때 `[2/4]` 의 대상 파일을 함께 옮기지 않으면, 규칙이 멀쩡히 적용되어 `[4/4]` 가 통과하더라도 `[2/4]` 가 바로 실패한다. 고치기 전의 스크립트는 이 모양에서 단계 넷이 모두 통과했다 (02-VERIFICATION.md 의 복사본 실측 — 이번에 고치기 전 스크립트로 다시 재지는 않았다).
+- **막지 않는 것도 있다.** plugin 버전을 읽지 못해 화면의 `plugin` 줄이 `?` 인 실행에서 단계 넷이 모두 통과하면 `--update` 는 지금도 정답지를 쓰고 머리 주석에 `riverpod_lint ?` 를 적는다 (02-REVIEW.md WR-01 의 둘째 경우 — 이번에 다시 재지 않았다). `[2/4]` 는 규칙 수가 0 인지만 본다. deprecated / removed / 없는 규칙 밖의 경고(겹쳐 적은 규칙 등)는 여전히 이 단계에서 실패로 치지 않는다.
+
+변경은 모두 커밋하지 않고 되돌렸다 (`git status` 와, 정답지 · `lib/` 를 이 실측 전의 커밋과 견준 `git diff` 로 확인). `--update` 를 돌린 두 실행 뒤에는 정답지를 바로 되돌렸고, 끝에 검증 명령이 다시 종료 코드 0 인 것을 봤다.
 
 항목의 `VERIFY-NN` 은 `.planning/REQUIREMENTS.md` 의 요구사항 번호, `D-NN` 은 `.planning/phases/02-verification-harness/02-CONTEXT.md` 의 결정 번호다.
