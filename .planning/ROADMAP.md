@@ -27,7 +27,7 @@
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Baseline and Toolchain** - 1.3.0 기준점(`v1.3.0` tag)과 지원 SDK 정렬, 버전 정책과 CHANGELOG 형식 확정 (completed 2026-10-11)
-- [ ] **Phase 2: Verification Harness** - `lib/` 를 바꾸기 전에 1.3.0 동작을 기대 진단으로 고정하는 `example/` 검증과 CI
+- [x] **Phase 2: Verification Harness** - `lib/` 를 바꾸기 전에 1.3.0 동작을 기대 진단으로 고정하는 `example/` 검증과 CI (completed 2026-10-12)
 - [ ] **Phase 3: Preset Split** - 기본 / Riverpod / codegen 조각과 `recommended.yaml` 묶음, 옛 URI 별칭 (기대 진단 불변)
 - [ ] **Phase 4: Rule Reselection** - `flutter_starter_kit` 실측을 근거로 규칙을 하나씩 결정하고 근거를 기록
 - [ ] **Phase 5: Documentation** - README / CHANGELOG / YAML 주석을 확정된 설정에 맞춰 다시 쓰고 일치를 검증으로 고정
@@ -83,7 +83,7 @@ Plans:
   4. 배포 파일에서 규칙 하나를 지운 변경과 `example/` 의 include 줄을 지운 변경을 각각 실제로 만들어, 검증이 실패함을 확인한 기록이 있다
   5. push 와 PR 마다 GitHub Actions 가 같은 명령을 실행하고 job 에 시간 제한이 걸려 있으며, GitHub 에서 실제로 성공한 실행이 한 번 이상 있다
 
-**Plans**: 5/5 plans executed
+**Plans**: 5/5 plans complete
 
 Plans:
 **Wave 1**
@@ -242,7 +242,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Baseline and Toolchain | 4/4 | Complete    | 2026-10-11 |
-| 2. Verification Harness | 5/5 | In Progress | - |
+| 2. Verification Harness | 5/5 | Complete    | 2026-10-12 |
 | 3. Preset Split | 0/TBD | Not started | - |
 | 4. Rule Reselection | 0/TBD | Not started | - |
 | 5. Documentation | 0/TBD | Not started | - |

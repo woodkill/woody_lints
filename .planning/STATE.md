@@ -2,44 +2,44 @@
 gsd_state_version: "1.0"
 milestone: v2.0
 milestone_name: Package Rework
-current_phase: 02
-current_phase_name: Verification Harness
-status: Phase 02 재검증 human_needed — 사람 확인 9건 대기 (/gsd-verify-work 2)
-stopped_at: Completed 02-05-PLAN.md
-last_updated: "2026-10-12T01:50:44.241Z"
+current_phase: 3
+current_phase_name: Preset Split
+status: planning
+stopped_at: Phase 2 complete, ready to plan Phase 3
+last_updated: "2026-10-12T02:56:16.148Z"
 last_activity: 2026-10-12
-last_activity_desc: gap 수정 02-05 실행 · 재검증 human_needed (Gap 1 닫힘, 사람 확인 9건)
-state_head: 1bdfed0ba62896da323a01ec7e9c75b54f056f0e
+last_activity_desc: Phase 2 complete, transitioned to Phase 3
+state_head: 5f18f3cdb674754d1961c8ba2996f157478a5af6
 progress:
   total_phases: 6
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 9
   completed_plans: 9
-  percent: 17
+  percent: 33
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-10-11)
+See: .planning/PROJECT.md (updated 2026-10-12)
 
 **Core value:** 사용 프로젝트가 `include` 한 줄로 받는 규칙이 문서에 적힌 그대로 적용되고, 각 규칙이 왜 켜져 있는지 근거가 남아 있다.
-**Current focus:** Phase 02 — Verification Harness
+**Current focus:** Phase 03 — Preset Split
 
 ## Current Position
 
-Phase: 02 (Verification Harness) — EXECUTING
-Plan: 5 of 5
-Status: Phase 02 재검증 human_needed — 사람 확인 9건 대기 (/gsd-verify-work 2)
-Last activity: 2026-10-12 — gap 수정 02-05 실행 · 재검증 human_needed (Gap 1 닫힘, 사람 확인 9건)
+Phase: 3 — Preset Split
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-10-12 — Phase 2 complete, transitioned to Phase 3
 
-Progress: [██░░░░░░░░] 17%
+Progress: [███░░░░░░░] 33%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
+- Total plans completed: 9
 - Average duration: - min
 - Total execution time: 0.0 hours
 
@@ -48,6 +48,7 @@ Progress: [██░░░░░░░░] 17%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1 | 4 | - | - |
+| 2 | 5 | - | - |
 
 **Recent Trend:**
 - Last 5 plans: -
@@ -120,6 +121,9 @@ Recent decisions affecting current work:
 - [Phase 02]: 필터 없는 push: 가 tag push 에서도 도는 것은 그대로 둔다 (소유자 결정 2026-10-12, WR-07). workflow 주석과 02-CONTEXT.md D-10 덧붙임에 기록했고 설정은 1f06c55 와 같다. Phase 6 이 tags: 만 적으면 브랜치 push 에서 돌지 않게 된다
 - [Phase 02]: plan 02-05 의 세 커밋(37316e3, 40776b5, 008ea3f)은 push 하지 않았다 — origin/gsd/v2.0-package-rework 는 1f06c55 그대로다. 바뀐 스크립트는 로컬(Flutter 3.47.5 / Dart 3.13.4)에서만 돌려 봤고 GitHub runner 에서는 다음 push 때 처음 돈다
 - [Phase 02]: 정답지 갱신(--update)은 같은 실행에서 다른 단계가 실패하면 정답지를 쓰지 않고 그 사실을 화면에 찍는다 (종료 코드 1, WR-01 case 1). plugin 버전이 ? 인 실행의 갱신(case 2)은 막지 않는다 — 소유자 결정으로 열어 둔다. 쓴 뒤에는 '정답지를 썼다: 경로' 줄이 찍힌다
+- [Phase 02]: UAT 9개 완료 (2026-10-12) — 통과 7, 뒤로 미룸 2, 문제 0. 미룬 둘(4번 PR 에서 verify, 6번 수동 실행 버튼)은 릴리스 때에만 볼 수 있어 ROADMAP 의 Phase 6 Notes 에 적었다. 9번은 소유자 결정이다 — `--update` 가 망가진 결과를 정답지로 쓰는 남은 경로와 README 80행 · 30행 · `[2/4]` 실패 문구는 Phase 3 에서 정답지를 새로 쓰기 전에 가장 먼저 닫는다 (ROADMAP 의 Phase 3 Notes)
+- [Phase 02]: UAT 중 작업 브랜치를 두 번 더 올렸다 (2026-10-12T02:32Z, 소유자 확인 뒤, `1f06c55` → `cb5701a` → `ead9573`, 둘 다 fast-forward, 명령은 브랜치 이름 하나만 준 git push 한 줄). 1차 실행 38196218993 은 2차가 올라오자 `cancelled` (concurrency 동작 확인), 2차 실행 38196232990 은 `success` · 2분 · 로그에 `점검 통과 (4개 중 4개)` — plan 02-05 의 스크립트가 GitHub runner 에서도 통과한다. origin 의 작업 브랜치는 `ead9573` 이고 그 뒤의 커밋(UAT 완료, 로드맵 메모, phase 완료)은 origin 에 없다 — 위의 "origin 은 1f06c55 그대로" 두 줄은 이 줄로 갈음한다. `main` 은 `90a2736`, tag 는 `v1.3.0` 하나, PR 은 0건 그대로다. Phase 3 부터의 push 는 다시 소유자에게 묻는다 (D-09)
+- [Phase 02]: 실행해 보지 못했던 세 경로를 UAT 에서 복사본으로 실행했다 (2026-10-12, Flutter SDK 밖으로 복제한 Dart 3.13.4) — Flutter SDK 가 아닌 dart 는 안내 두 줄과 종료 코드 78, `FLUTTER_ROOT` 가 다른 버전(3.41.9)을 가리켜도 78, 맞는 버전(3.47.5)을 가리키면 단계 4개 통과. 분석 서버를 꺼서 도구를 죽이면 `[2/4]` 와 `[4/4]` 가 `도구가 죽었다 — … exit 255` 로 실패하고 종료 코드 1 이며 `--update` 를 붙여도 정답지를 쓰지 않는다. 위의 "실행해 보지 못했다" 두 줄은 이 줄로 갈음한다
 
 ### Pending Todos
 
@@ -127,12 +131,14 @@ None yet.
 
 ### Blockers/Concerns
 
-- [Phase 2] Spike 선행: plugin 실패 시 종료 코드, `riverpod_lint` 15개 규칙의 심각도, GitHub cold runner 동작이 확인되지 않았다
 - [Phase 3] Spike 선행: 이 저장소 구조에서의 include 경유 plugin 로드와 3단 include 가 확인되지 않았다. 실패하면 URI 결정을 소유자와 다시 본다
 - [Phase 4] D13: 규칙별 채택은 소유자 검토 지점이다. 실측 표 없이는 결정하지 않는다
 - [Phase 1] 리뷰 지적 13건이 열려 있다 (`01-REVIEW-DISPOSITION.md`, 합계 16). 그중 WR-03 의 남은 두 경우 — README/CHANGELOG 만 고친 변경, 새 프리셋 파일 추가 — 는 `VERSIONING.md` 의 판정 순서와 기준표가 다른 등급을 내며 D-05 를 건드리는 소유자 결정이 필요하다. 2.0.0 의 등급(major)에는 영향이 없다
 - [Phase 3] `riverpod_lint` 하한을 `^3.1.9` 로 올릴 때(PRESET-05): 3.1.9 는 Dart 3.13 이상을 요구한다. 지금은 `sdk: ^3.13.0` 이라 문제없지만 `VERSIONING.md` 에 이 전제가 적혀 있지 않다 (Backlog `Phase 999.1`)
+- [Phase 3] 가장 먼저 할 일: `--update` 가 망가진 결과를 정답지로 쓰는 경로를 닫고 `example/README.md` 80행 · 30행 · `[2/4]` 실패 문구를 코드에 맞춘다 (소유자 결정 2026-10-12, ROADMAP 의 Phase 3 Notes). 그 전에는 규칙 파일을 고친 뒤 `--update` 보다 보통 실행을 먼저 돌린다
+- [Phase 2] 리뷰 지적 15건이 열려 있다 (`02-REVIEW-DISPOSITION.md`, 합계 17 — WR-01 ~ WR-06 · WR-08 · IN-01 ~ IN-08). `02-VERIFICATION.md` 의 "다음 phase 가 알아야 할 것" 1 ~ 7 이 Phase 3 · 4 · 6 에 걸리는 것을 추렸다. WR-06 은 Phase 6 이 `version` 을 올릴 때 종료 코드 69 로 만난다
 - [Phase 6] `main` 병합은 `ref: main` 사용 프로젝트 5개에 새 버전을 배포하는 일이다. tag 와 병합의 순서를 계획 때 정한다
+- [Phase 6] Phase 2 에서 미룬 확인 둘 — PR 에서 `verify` 가 도는지, 수동 실행 버튼 (ROADMAP 의 Phase 6 Notes)
 
 ## Deferred Items
 
@@ -144,6 +150,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-12T01:10:47.842Z
-Stopped at: Completed 02-05-PLAN.md
+Last session: 2026-10-12T02:58:16.000Z
+Stopped at: Phase 2 complete, ready to plan Phase 3
 Resume file: None

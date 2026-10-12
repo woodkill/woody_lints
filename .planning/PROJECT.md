@@ -25,6 +25,7 @@
 - ✓ 저장소 고정 SDK(`.fvmrc`, `.vscode/settings.json`)가 지원 대상 SDK(Flutter 3.47.5 / Dart 3.13.4)와 일치한다 — Phase 1
 - ✓ 1.3.0 기준점 `v1.3.0` annotated tag 가 원격에 있어, 사용 프로젝트가 `ref: v1.3.0` 에 머물 수 있다 — Phase 1
 - ✓ 버전 정책과 CHANGELOG 항목 형식이 `VERSIONING.md` 에 정해져 있다 — Phase 1
+- ✓ `example/` 프로젝트와 검증 명령 하나(`fvm dart run tool/verify.dart`)로 배포 파일을 이 저장소 안에서 검증할 수 있다 — 정답지 비교(줄과 건수), 규칙 이름 검사, `lib/` 의 `.dart` 검사 — Phase 2
 
 ### Active
 
@@ -33,8 +34,7 @@
 - [ ] 규칙 세트 재선정: 후보 규칙을 조사하고 `flutter_starter_kit` 실측 근거(규칙별 경고 수)로 하나씩 켤지 결정한다
 - [ ] 기반 세트와 중복되는 선언 6개, 주석 처리된 설정 3개 각각에 대해 유지/삭제를 결정하고 사유를 남긴다
 - [ ] `README.md`, `CHANGELOG.md`, `lib/analysis_options.yaml` 머리 주석이 실제 설정과 일치한다
-- [ ] `example/` 프로젝트로 배포 파일을 이 저장소 안에서 검증할 수 있다
-- [ ] GitHub Actions 가 push 와 PR 마다 그 검증을 자동 실행한다
+- [ ] GitHub Actions 가 push 와 PR 마다 그 검증을 자동 실행한다 — push 쪽은 Phase 2 에서 확인했다 (성공한 실행 2건, 겹친 실행의 취소 1건, 2026-10-12). PR 에서 도는지와 수동 실행 버튼은 PR 이 처음 열리고 workflow 가 `main` 에 들어가는 Phase 6 에서 본다
 - [ ] git tag 로 릴리스하고, 사용 프로젝트가 `ref: vX.Y.Z` 로 버전을 고정할 수 있다
 - [ ] Riverpod / codegen 설정을 선택형 프리셋으로 분리해, 쓰지 않는 프로젝트가 받지 않을 수 있다
 - [ ] README 를 "몇 달 뒤의 내가 그대로 따라 하면 되는" 사용 안내로 다시 쓴다 (설치, 프리셋 선택, 규칙 재정의, 버전 올리기)
@@ -101,17 +101,20 @@
 | 규칙은 후보별 근거를 보고 하나씩 결정한다 | 구체적 불편이 없어 엄격도를 미리 정할 근거가 없다 | — Pending |
 | 근거에는 `flutter_starter_kit` 복사본 실측을 포함한다 | 규칙이 내 코드에 실제로 몇 건의 경고를 내는지가 판단 기준이다 | — Pending |
 | Riverpod / codegen 설정을 선택형 프리셋으로 분리한다 | 지금은 모든 주요 프로젝트가 Riverpod + codegen 이지만, 앞으로 다른 구성의 프로젝트가 생길 것을 대비한다 | — Pending |
-| 검증은 `example/` 프로젝트 + GitHub Actions 로 자동화한다 | 유일한 산출물이 자체 분석에서 제외되어 있어 검증 수단이 없다 | — Pending |
+| 검증은 `example/` 프로젝트 + GitHub Actions 로 자동화한다 | 유일한 산출물이 자체 분석에서 제외되어 있어 검증 수단이 없다 | ✓ Phase 2 — `tool/verify.dart` 와 `.github/workflows/verify.yml` (PR · 수동 실행 확인은 Phase 6) |
 | README 독자는 미래의 작성자 본인, 한국어로 쓴다 | 개인 사용 패키지다 | — Pending |
 | 완료 범위는 패키지 릴리스까지다 | 각 프로젝트 적용은 사용자가 원하는 시점에 따로 한다 | — Pending |
 | 묶음(기본 + Riverpod + codegen)의 정식 이름은 `package:woody_lints/recommended.yaml` 이다. 기존 URI `package:woody_lints/analysis_options.yaml` 은 `recommended.yaml` 을 include 하는 한 줄짜리 별칭으로 남긴다 | 조각 파일(`base.yaml` 등)처럼 묶음도 내용이 드러나는 이름을 쓴다. 옛 이름을 남겨 기존 프로젝트는 고칠 것이 없다. 옛 이름은 README 에 "예전 이름"으로만 적고 다음 major 에서 제거를 검토한다 | — Pending |
 | 기본 규칙 조각 파일의 이름은 `base.yaml` 이다 | 파일 이름이 곧 공개 URI 다. 공식 `lints` 패키지의 `core.yaml` 과 이름이 겹치지 않는다 | — Pending |
 | `lib/` 와 `pubspec.yaml` 을 고치는 작업은 milestone 브랜치에 쌓고 릴리스 때만 `main` 에 합친다 (`git.branching_strategy: milestone`) | 사용 프로젝트가 전부 `ref: main` 이라, `main` 에 push 된 중간 상태가 `pub upgrade` 때 그대로 배포된다 | — Pending |
-| 검증 판정은 기대 진단 비교(golden comparison)를 주 수단으로 한다 | lint 는 info 라 종료 코드만으로는 규칙이 켜져 있음을 증명하지 못한다 (조사 결과) | — Pending |
+| 검증 판정은 기대 진단 비교(golden comparison)를 주 수단으로 한다 | lint 는 info 라 종료 코드만으로는 규칙이 켜져 있음을 증명하지 못한다 (조사 결과) | ✓ Phase 2 — 정답지 `example/expected_diagnostics.txt` (`exit 2` + 16줄), 줄과 건수를 견준다 |
 | 1.3.0 기준점은 commit `90a2736` 의 annotated tag `v1.3.0` 이다. 한 번 올린 tag 는 옮기거나 지우지 않는다 | 사용 프로젝트의 `pubspec.lock` 이 받은 커밋 번호를 적어 두므로, tag 를 옮기면 기록과 어긋난다. 잘못이 발견되면 새 이름(v1.3.1 등)을 쓴다 | ✓ Phase 1 — origin 에 올림 (2026-10-11) |
 | 다음 릴리스는 2.0.0 이다. 준비하는 동안 milestone 브랜치의 `pubspec.yaml` 은 `2.0.0-dev` 로 둔다 | 이번 릴리스의 가장 큰 등급이 지원 SDK 하한 상향(`^3.10.4` → `^3.13.0`, major)이다 | — Pending |
 | 버전 등급의 기준은 "받는 쪽이 겪는 일" 이고 기준 문서는 루트 `VERSIONING.md` 다. 규칙을 새로 켜는 것은 그 규칙이 warning 등급이어도 minor 다 | 받는 쪽은 정확한 tag 하나에 고정하므로 버전 번호는 사람에게 보내는 신호다. 새로 켜는 규칙은 CHANGELOG 의 "새로 생기는 경고" 표에서 미리 볼 수 있다 | — Pending |
 | GSD 의 자동 tag(`git.create_tag`)를 끄고, 마일스톤 번호를 패키지 버전에 맞춰 `v2.0` 으로 둔다 | 이 저장소의 `v` tag 는 사용 프로젝트가 `ref:` 로 가리키는 패키지 릴리스다. 뜻이 다른 `v1.0` tag 가 최신 내용에 붙으면 옛 버전으로 오해한다 | — Pending |
+| `example/pubspec.lock` 을 커밋한다 (루트 `pubspec.lock` 은 지금처럼 커밋하지 않는다) | 소유자의 컴퓨터와 CI 가 같은 패키지 버전으로 판정한다. 정답지가 깨졌을 때 원인이 "저장소 변경" 또는 "plugin 새 버전" 으로 좁혀진다. `riverpod_lint` plugin 버전은 lock 이 묶지 못한다 | ✓ Phase 2 |
+| CI 를 돌리려고 작업 브랜치를 `.planning/` 과 함께 그대로 origin 에 올린다. CI 는 모든 push(브랜치와 tag) · PR · 수동 실행에서 돌고 예약 실행은 두지 않는다 | 올리기만 하면 결과가 보이고 `main` 에 합치는 방법을 미리 묶지 않는다. `.planning/` 을 뺀 사본 브랜치는 로컬과 원격의 이력을 갈라놓는다. 예약 실행은 60일 동안 활동이 없으면 꺼진다 | ✓ Phase 2 — Phase 3 부터의 push 는 다시 소유자에게 묻는다 |
+| `--update` 가 망가진 결과를 정답지로 쓰는 남은 경로는 Phase 3 에서 정답지를 새로 쓰기 전에 가장 먼저 닫는다 (지금 Phase 2 에서 한 바퀴 더 돌지 않는다) | `[2/4]` 가 통과로 잘못 찍히는 세 입력에서 `--update` 가 종료 코드 0 으로 끝난다. 보통 실행은 세 입력 모두 실패로 잡는다. 고칠 곳이 Phase 3 이 손대는 곳과 같다 | — Pending (Phase 3, 소유자 결정 2026-10-12) |
 
 ## Evolution
 
@@ -131,4 +134,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-11 after Phase 1*
+*Last updated: 2026-10-12 after Phase 2*
