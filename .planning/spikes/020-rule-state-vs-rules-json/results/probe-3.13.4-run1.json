@@ -1,0 +1,6389 @@
+{
+  "date": "2026-10-12T13:49:09.347179Z",
+  "dart": "3.13.4",
+  "upstream": {
+    "rules.json": {
+      "url": "https://raw.githubusercontent.com/dart-lang/sdk/3.13.4/pkg/linter/tool/machine/rules.json",
+      "bytes": 266554,
+      "fnv64": "0538b4c1ed2c140b"
+    },
+    "messages.yaml": {
+      "url": "https://raw.githubusercontent.com/dart-lang/sdk/3.13.4/pkg/linter/messages.yaml",
+      "bytes": 496484,
+      "fnv64": "22433360fd6c8171"
+    },
+    "machine-README.md": {
+      "url": "https://raw.githubusercontent.com/dart-lang/sdk/3.13.4/pkg/linter/tool/machine/README.md",
+      "bytes": 1247,
+      "fnv64": "d0dcd22da3515f17"
+    }
+  },
+  "readmeWarnsUnsupported": true,
+  "upstreamSets": {
+    "lints": "lints-6.1.0",
+    "flutter_lints": "flutter_lints-6.0.0"
+  },
+  "analyses": [
+    {
+      "label": "pkg13",
+      "constraint": "^3.13.0",
+      "exitCode": 2,
+      "elapsedMs": 525,
+      "jsonOk": true,
+      "outsideOptions": 0,
+      "countByCode": {
+        "removed_lint": 14,
+        "undefined_lint": 13,
+        "deprecated_lint": 6,
+        "incompatible_lint": 10
+      },
+      "unmapped": [],
+      "diagnostics": [
+        {
+          "line": 6,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'always_require_non_null_named_parameters' was removed in Dart '3.3.0'"
+        },
+        {
+          "line": 9,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'analyzer_element_model_tracking_bad' isn't a recognized lint rule."
+        },
+        {
+          "line": 10,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'analyzer_element_model_tracking_more_than_one' isn't a recognized lint rule."
+        },
+        {
+          "line": 11,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'analyzer_element_model_tracking_zero' isn't a recognized lint rule."
+        },
+        {
+          "line": 12,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'analyzer_public_api_bad_part_directive' isn't a recognized lint rule."
+        },
+        {
+          "line": 13,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'analyzer_public_api_bad_type' isn't a recognized lint rule."
+        },
+        {
+          "line": 14,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'analyzer_public_api_experimental_inconsistency' isn't a recognized lint rule."
+        },
+        {
+          "line": 15,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'analyzer_public_api_exports_non_public_name' isn't a recognized lint rule."
+        },
+        {
+          "line": 16,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'analyzer_public_api_impl_in_public_api' isn't a recognized lint rule."
+        },
+        {
+          "line": 21,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'avoid_as' was removed in Dart '2.12.0'"
+        },
+        {
+          "line": 39,
+          "severity": "warning",
+          "code": "deprecated_lint",
+          "message": "The lint rule 'avoid_null_checks_in_equality_operators' is deprecated and shouldn't be enabled."
+        },
+        {
+          "line": 42,
+          "severity": "warning",
+          "code": "deprecated_lint",
+          "message": "The lint rule 'avoid_private_typedef_functions' is deprecated and shouldn't be enabled."
+        },
+        {
+          "line": 47,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'avoid_returning_null' was removed in Dart '3.3.0'"
+        },
+        {
+          "line": 48,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'avoid_returning_null_for_future' was removed in Dart '3.3.0'"
+        },
+        {
+          "line": 57,
+          "severity": "warning",
+          "code": "incompatible_lint",
+          "message": "The rule 'avoid_types_on_closure_parameters' is incompatible with ''always_specify_types''."
+        },
+        {
+          "line": 59,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'avoid_unstable_final_fields' was removed in Dart 'null'"
+        },
+        {
+          "line": 90,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'enable_null_safety' was removed in Dart '3.0.0'"
+        },
+        {
+          "line": 103,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'invariant_booleans' was removed in Dart '3.0.0'"
+        },
+        {
+          "line": 104,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'iterable_contains_unrelated_type' was removed in Dart '3.3.0'"
+        },
+        {
+          "line": 111,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'lines_longer_than80_chars' isn't a recognized lint rule."
+        },
+        {
+          "line": 113,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'list_remove_unrelated_type' was removed in Dart '3.3.0'"
+        },
+        {
+          "line": 130,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'no_solo_tests' isn't a recognized lint rule."
+        },
+        {
+          "line": 131,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'no_trailing_spaces' isn't a recognized lint rule."
+        },
+        {
+          "line": 137,
+          "severity": "warning",
+          "code": "incompatible_lint",
+          "message": "The rule 'omit_local_variable_types' is incompatible with ''always_specify_types''."
+        },
+        {
+          "line": 138,
+          "severity": "warning",
+          "code": "incompatible_lint",
+          "message": "The rule 'omit_obvious_local_variable_types' is incompatible with ''always_specify_types''."
+        },
+        {
+          "line": 139,
+          "severity": "warning",
+          "code": "incompatible_lint",
+          "message": "The rule 'omit_obvious_property_types' is incompatible with ''always_specify_types''."
+        },
+        {
+          "line": 140,
+          "severity": "warning",
+          "code": "deprecated_lint",
+          "message": "The lint rule 'one_member_abstracts' is deprecated and shouldn't be enabled."
+        },
+        {
+          "line": 143,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'package_api_docs' was removed in Dart '3.7.0'"
+        },
+        {
+          "line": 150,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'prefer_bool_in_asserts' was removed in Dart '3.0.0'"
+        },
+        {
+          "line": 160,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'prefer_equal_for_default_values' was removed in Dart '3.0.0'"
+        },
+        {
+          "line": 165,
+          "severity": "warning",
+          "code": "deprecated_lint",
+          "message": "The lint rule 'prefer_final_parameters' is deprecated and shouldn't be enabled."
+        },
+        {
+          "line": 165,
+          "severity": "warning",
+          "code": "incompatible_lint",
+          "message": "The rule 'prefer_final_parameters' is incompatible with ''avoid_final_parameters''."
+        },
+        {
+          "line": 183,
+          "severity": "warning",
+          "code": "incompatible_lint",
+          "message": "The rule 'prefer_relative_imports' is incompatible with ''always_use_package_imports''."
+        },
+        {
+          "line": 184,
+          "severity": "warning",
+          "code": "incompatible_lint",
+          "message": "The rule 'prefer_single_quotes' is incompatible with ''prefer_double_quotes''."
+        },
+        {
+          "line": 203,
+          "severity": "warning",
+          "code": "incompatible_lint",
+          "message": "The rule 'specify_nonobvious_local_variable_types' is incompatible with ''omit_local_variable_types''."
+        },
+        {
+          "line": 206,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'super_goes_last' was removed in Dart '3.0.0'"
+        },
+        {
+          "line": 211,
+          "severity": "warning",
+          "code": "incompatible_lint",
+          "message": "The rule 'type_annotate_public_apis' is incompatible with ''omit_obvious_property_types''."
+        },
+        {
+          "line": 217,
+          "severity": "warning",
+          "code": "deprecated_lint",
+          "message": "The lint rule 'unnecessary_await_in_return' is deprecated and shouldn't be enabled."
+        },
+        {
+          "line": 223,
+          "severity": "warning",
+          "code": "incompatible_lint",
+          "message": "The rule 'unnecessary_final' is incompatible with ''prefer_final_in_for_each''."
+        },
+        {
+          "line": 250,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'unsafe_html' was removed in Dart '3.7.0'"
+        },
+        {
+          "line": 259,
+          "severity": "warning",
+          "code": "deprecated_lint",
+          "message": "The lint rule 'use_if_null_to_convert_nulls_to_bools' is deprecated and shouldn't be enabled."
+        },
+        {
+          "line": 277,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'visit_registered_nodes' isn't a recognized lint rule."
+        },
+        {
+          "line": 279,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'no_such_rule_zz9' isn't a recognized lint rule."
+        }
+      ]
+    },
+    {
+      "label": "pkg11",
+      "constraint": "^3.11.1",
+      "exitCode": 2,
+      "elapsedMs": 467,
+      "jsonOk": true,
+      "outsideOptions": 0,
+      "countByCode": {
+        "removed_lint": 14,
+        "undefined_lint": 13,
+        "deprecated_lint": 3,
+        "incompatible_lint": 10
+      },
+      "unmapped": [],
+      "diagnostics": [
+        {
+          "line": 6,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'always_require_non_null_named_parameters' was removed in Dart '3.3.0'"
+        },
+        {
+          "line": 9,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'analyzer_element_model_tracking_bad' isn't a recognized lint rule."
+        },
+        {
+          "line": 10,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'analyzer_element_model_tracking_more_than_one' isn't a recognized lint rule."
+        },
+        {
+          "line": 11,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'analyzer_element_model_tracking_zero' isn't a recognized lint rule."
+        },
+        {
+          "line": 12,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'analyzer_public_api_bad_part_directive' isn't a recognized lint rule."
+        },
+        {
+          "line": 13,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'analyzer_public_api_bad_type' isn't a recognized lint rule."
+        },
+        {
+          "line": 14,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'analyzer_public_api_experimental_inconsistency' isn't a recognized lint rule."
+        },
+        {
+          "line": 15,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'analyzer_public_api_exports_non_public_name' isn't a recognized lint rule."
+        },
+        {
+          "line": 16,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'analyzer_public_api_impl_in_public_api' isn't a recognized lint rule."
+        },
+        {
+          "line": 21,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'avoid_as' was removed in Dart '2.12.0'"
+        },
+        {
+          "line": 39,
+          "severity": "warning",
+          "code": "deprecated_lint",
+          "message": "The lint rule 'avoid_null_checks_in_equality_operators' is deprecated and shouldn't be enabled."
+        },
+        {
+          "line": 47,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'avoid_returning_null' was removed in Dart '3.3.0'"
+        },
+        {
+          "line": 48,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'avoid_returning_null_for_future' was removed in Dart '3.3.0'"
+        },
+        {
+          "line": 57,
+          "severity": "warning",
+          "code": "incompatible_lint",
+          "message": "The rule 'avoid_types_on_closure_parameters' is incompatible with ''always_specify_types''."
+        },
+        {
+          "line": 59,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'avoid_unstable_final_fields' was removed in Dart 'null'"
+        },
+        {
+          "line": 90,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'enable_null_safety' was removed in Dart '3.0.0'"
+        },
+        {
+          "line": 103,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'invariant_booleans' was removed in Dart '3.0.0'"
+        },
+        {
+          "line": 104,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'iterable_contains_unrelated_type' was removed in Dart '3.3.0'"
+        },
+        {
+          "line": 111,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'lines_longer_than80_chars' isn't a recognized lint rule."
+        },
+        {
+          "line": 113,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'list_remove_unrelated_type' was removed in Dart '3.3.0'"
+        },
+        {
+          "line": 130,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'no_solo_tests' isn't a recognized lint rule."
+        },
+        {
+          "line": 131,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'no_trailing_spaces' isn't a recognized lint rule."
+        },
+        {
+          "line": 137,
+          "severity": "warning",
+          "code": "incompatible_lint",
+          "message": "The rule 'omit_local_variable_types' is incompatible with ''always_specify_types''."
+        },
+        {
+          "line": 138,
+          "severity": "warning",
+          "code": "incompatible_lint",
+          "message": "The rule 'omit_obvious_local_variable_types' is incompatible with ''always_specify_types''."
+        },
+        {
+          "line": 139,
+          "severity": "warning",
+          "code": "incompatible_lint",
+          "message": "The rule 'omit_obvious_property_types' is incompatible with ''always_specify_types''."
+        },
+        {
+          "line": 143,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'package_api_docs' was removed in Dart '3.7.0'"
+        },
+        {
+          "line": 150,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'prefer_bool_in_asserts' was removed in Dart '3.0.0'"
+        },
+        {
+          "line": 160,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'prefer_equal_for_default_values' was removed in Dart '3.0.0'"
+        },
+        {
+          "line": 165,
+          "severity": "warning",
+          "code": "deprecated_lint",
+          "message": "The lint rule 'prefer_final_parameters' is deprecated and shouldn't be enabled."
+        },
+        {
+          "line": 165,
+          "severity": "warning",
+          "code": "incompatible_lint",
+          "message": "The rule 'prefer_final_parameters' is incompatible with ''avoid_final_parameters''."
+        },
+        {
+          "line": 183,
+          "severity": "warning",
+          "code": "incompatible_lint",
+          "message": "The rule 'prefer_relative_imports' is incompatible with ''always_use_package_imports''."
+        },
+        {
+          "line": 184,
+          "severity": "warning",
+          "code": "incompatible_lint",
+          "message": "The rule 'prefer_single_quotes' is incompatible with ''prefer_double_quotes''."
+        },
+        {
+          "line": 203,
+          "severity": "warning",
+          "code": "incompatible_lint",
+          "message": "The rule 'specify_nonobvious_local_variable_types' is incompatible with ''omit_local_variable_types''."
+        },
+        {
+          "line": 206,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'super_goes_last' was removed in Dart '3.0.0'"
+        },
+        {
+          "line": 211,
+          "severity": "warning",
+          "code": "incompatible_lint",
+          "message": "The rule 'type_annotate_public_apis' is incompatible with ''omit_obvious_property_types''."
+        },
+        {
+          "line": 223,
+          "severity": "warning",
+          "code": "incompatible_lint",
+          "message": "The rule 'unnecessary_final' is incompatible with ''prefer_final_in_for_each''."
+        },
+        {
+          "line": 250,
+          "severity": "warning",
+          "code": "removed_lint",
+          "message": "'unsafe_html' was removed in Dart '3.7.0'"
+        },
+        {
+          "line": 259,
+          "severity": "warning",
+          "code": "deprecated_lint",
+          "message": "The lint rule 'use_if_null_to_convert_nulls_to_bools' is deprecated and shouldn't be enabled."
+        },
+        {
+          "line": 277,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'visit_registered_nodes' isn't a recognized lint rule."
+        },
+        {
+          "line": 279,
+          "severity": "warning",
+          "code": "undefined_lint",
+          "message": "'no_such_rule_zz9' isn't a recognized lint rule."
+        }
+      ]
+    }
+  ],
+  "jsonMismatch": [
+    "erase_dart_type_extension_types",
+    "migrate_design_widgets",
+    "unnecessary_await_in_return"
+  ],
+  "messagesMismatch": [
+    "analyzer_element_model_tracking_bad",
+    "analyzer_element_model_tracking_more_than_one",
+    "analyzer_element_model_tracking_zero",
+    "analyzer_public_api_bad_part_directive",
+    "analyzer_public_api_bad_type",
+    "analyzer_public_api_experimental_inconsistency",
+    "analyzer_public_api_exports_non_public_name",
+    "analyzer_public_api_impl_in_public_api",
+    "erase_dart_type_extension_types",
+    "lines_longer_than80_chars",
+    "lines_longer_than_80_chars",
+    "migrate_design_widgets",
+    "no_solo_tests",
+    "no_trailing_spaces",
+    "use_primary_constructors",
+    "visit_registered_nodes"
+  ],
+  "jsonVsMessages": [
+    "analyzer_element_model_tracking_bad",
+    "analyzer_element_model_tracking_more_than_one",
+    "analyzer_element_model_tracking_zero",
+    "analyzer_public_api_bad_part_directive",
+    "analyzer_public_api_bad_type",
+    "analyzer_public_api_experimental_inconsistency",
+    "analyzer_public_api_exports_non_public_name",
+    "analyzer_public_api_impl_in_public_api",
+    "erase_dart_type_extension_types",
+    "lines_longer_than80_chars",
+    "lines_longer_than_80_chars",
+    "migrate_design_widgets",
+    "no_solo_tests",
+    "no_trailing_spaces",
+    "unnecessary_await_in_return",
+    "unnecessary_ignore",
+    "unnecessary_underscores",
+    "use_primary_constructors",
+    "visit_registered_nodes"
+  ],
+  "incompatibleDeclared": [
+    "always_specify_types × avoid_types_on_closure_parameters",
+    "always_specify_types × omit_local_variable_types",
+    "always_specify_types × omit_obvious_local_variable_types",
+    "always_specify_types × omit_obvious_property_types",
+    "always_use_package_imports × prefer_relative_imports",
+    "avoid_final_parameters × prefer_final_parameters",
+    "omit_local_variable_types × specify_nonobvious_local_variable_types",
+    "omit_obvious_property_types × type_annotate_public_apis",
+    "prefer_double_quotes × prefer_single_quotes",
+    "prefer_final_in_for_each × unnecessary_final",
+    "prefer_final_locals × unnecessary_final",
+    "prefer_final_parameters × unnecessary_final"
+  ],
+  "incompatibleReported": [
+    "always_specify_types × avoid_types_on_closure_parameters",
+    "always_specify_types × omit_local_variable_types",
+    "always_specify_types × omit_obvious_local_variable_types",
+    "always_specify_types × omit_obvious_property_types",
+    "always_use_package_imports × prefer_relative_imports",
+    "avoid_final_parameters × prefer_final_parameters",
+    "omit_local_variable_types × specify_nonobvious_local_variable_types",
+    "omit_obvious_property_types × type_annotate_public_apis",
+    "prefer_double_quotes × prefer_single_quotes",
+    "prefer_final_in_for_each × unnecessary_final"
+  ],
+  "checks": {
+    "K1 두 분석 모두 JSON 을 냈다": true,
+    "K2 대조: no_such_rule_zz9 → undefined_lint (두 하한)": true,
+    "K3 대조: unnecessary_await_in_return → ^3.13.0 에서 deprecated_lint, ^3.11.1 에서 없음": true,
+    "K4 대조: avoid_returning_null → removed_lint (두 하한)": true,
+    "K5 옵션 파일 밖의 진단이 없다 (패키지의 lib 는 깨끗하다)": true,
+    "K6 저장소가 그대로다 (git status · 루트 package_config)": true
+  },
+  "rules": [
+    {
+      "name": "always_declare_return_types",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "always_put_control_body_on_new_line",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "always_put_required_named_parameters_first",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "always_require_non_null_named_parameters",
+      "json": "removed",
+      "messages": "removed",
+      "messagesStates": [
+        {
+          "stable": "2.0",
+          "removed": "3.3"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "removed_lint"
+      ],
+      "actual11": [
+        "removed_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "removed",
+      "actualState11": "removed"
+    },
+    {
+      "name": "always_specify_types",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [
+        "avoid_types_on_closure_parameters",
+        "omit_local_variable_types",
+        "omit_obvious_local_variable_types",
+        "omit_obvious_property_types"
+      ],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "always_use_package_imports",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.10"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [
+        "prefer_relative_imports"
+      ],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.10",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "analyzer_element_model_tracking_bad",
+      "json": null,
+      "messages": "internal",
+      "messagesStates": [
+        {
+          "internal": "3.10"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "undefined_lint"
+      ],
+      "actual11": [
+        "undefined_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": null,
+      "jsonSince": null,
+      "upstreamSet": null,
+      "actualState13": "undefined",
+      "actualState11": "undefined"
+    },
+    {
+      "name": "analyzer_element_model_tracking_more_than_one",
+      "json": null,
+      "messages": "internal",
+      "messagesStates": [
+        {
+          "internal": "3.10"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "undefined_lint"
+      ],
+      "actual11": [
+        "undefined_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": null,
+      "jsonSince": null,
+      "upstreamSet": null,
+      "actualState13": "undefined",
+      "actualState11": "undefined"
+    },
+    {
+      "name": "analyzer_element_model_tracking_zero",
+      "json": null,
+      "messages": "internal",
+      "messagesStates": [
+        {
+          "internal": "3.10"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "undefined_lint"
+      ],
+      "actual11": [
+        "undefined_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": null,
+      "jsonSince": null,
+      "upstreamSet": null,
+      "actualState13": "undefined",
+      "actualState11": "undefined"
+    },
+    {
+      "name": "analyzer_public_api_bad_part_directive",
+      "json": null,
+      "messages": "internal",
+      "messagesStates": [
+        {
+          "internal": "3.10"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "undefined_lint"
+      ],
+      "actual11": [
+        "undefined_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": null,
+      "jsonSince": null,
+      "upstreamSet": null,
+      "actualState13": "undefined",
+      "actualState11": "undefined"
+    },
+    {
+      "name": "analyzer_public_api_bad_type",
+      "json": null,
+      "messages": "internal",
+      "messagesStates": [
+        {
+          "internal": "3.10"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "undefined_lint"
+      ],
+      "actual11": [
+        "undefined_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": null,
+      "jsonSince": null,
+      "upstreamSet": null,
+      "actualState13": "undefined",
+      "actualState11": "undefined"
+    },
+    {
+      "name": "analyzer_public_api_experimental_inconsistency",
+      "json": null,
+      "messages": "internal",
+      "messagesStates": [
+        {
+          "internal": "3.10"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "undefined_lint"
+      ],
+      "actual11": [
+        "undefined_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": null,
+      "jsonSince": null,
+      "upstreamSet": null,
+      "actualState13": "undefined",
+      "actualState11": "undefined"
+    },
+    {
+      "name": "analyzer_public_api_exports_non_public_name",
+      "json": null,
+      "messages": "internal",
+      "messagesStates": [
+        {
+          "internal": "3.10"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "undefined_lint"
+      ],
+      "actual11": [
+        "undefined_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": null,
+      "jsonSince": null,
+      "upstreamSet": null,
+      "actualState13": "undefined",
+      "actualState11": "undefined"
+    },
+    {
+      "name": "analyzer_public_api_impl_in_public_api",
+      "json": null,
+      "messages": "internal",
+      "messagesStates": [
+        {
+          "internal": "3.10"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "undefined_lint"
+      ],
+      "actual11": [
+        "undefined_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": null,
+      "jsonSince": null,
+      "upstreamSet": null,
+      "actualState13": "undefined",
+      "actualState11": "undefined"
+    },
+    {
+      "name": "annotate_overrides",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "annotate_redeclares",
+      "json": "experimental",
+      "messages": "experimental",
+      "messagesStates": [
+        {
+          "experimental": "3.2"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.2",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "async_return_with_no_await",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.13"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.13",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_annotating_with_dynamic",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_as",
+      "json": "removed",
+      "messages": "removed",
+      "messagesStates": [
+        {
+          "stable": "2.0",
+          "removed": "3.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "removed_lint"
+      ],
+      "actual11": [
+        "removed_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "removed",
+      "actualState11": "removed"
+    },
+    {
+      "name": "avoid_bool_literals_in_conditional_expressions",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_catches_without_on_clauses",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_catching_errors",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_classes_with_only_static_members",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_double_and_int_checks",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_dynamic_calls",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "experimental": "2.12",
+          "stable": "2.14"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.12",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_empty_else",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_equals_and_hash_code_on_mutable_classes",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.6"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.6",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_escaping_inner_quotes",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.8"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.8",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_field_initializers_in_const_classes",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_final_parameters",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.16"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [
+        "prefer_final_parameters"
+      ],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.16",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_function_literals_in_foreach_calls",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_futureor_void",
+      "json": "experimental",
+      "messages": "experimental",
+      "messagesStates": [
+        {
+          "experimental": "3.6"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "3.6",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_implementing_value_types",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.1"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.1",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_init_to_null",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_js_rounded_ints",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_multiple_declarations_per_line",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.13"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.13",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_null_checks_in_equality_operators",
+      "json": "deprecated",
+      "messages": "deprecated",
+      "messagesStates": [
+        {
+          "stable": "2.0",
+          "deprecated": "3.11"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "deprecated_lint"
+      ],
+      "actual11": [
+        "deprecated_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "deprecated",
+      "actualState11": "deprecated"
+    },
+    {
+      "name": "avoid_positional_boolean_parameters",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "experimental": "2.0",
+          "stable": "2.2"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_print",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.5"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.5",
+      "upstreamSet": "flutter",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_private_typedef_functions",
+      "json": "deprecated",
+      "messages": "deprecated",
+      "messagesStates": [
+        {
+          "stable": "2.0",
+          "deprecated": "3.13"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "deprecated_lint"
+      ],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "deprecated",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_redundant_argument_values",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.8"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.8",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_relative_lib_imports",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_renaming_method_parameters",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_return_types_on_setters",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_returning_null",
+      "json": "removed",
+      "messages": "removed",
+      "messagesStates": [
+        {
+          "stable": "2.0",
+          "removed": "3.3"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "removed_lint"
+      ],
+      "actual11": [
+        "removed_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "removed",
+      "actualState11": "removed"
+    },
+    {
+      "name": "avoid_returning_null_for_future",
+      "json": "removed",
+      "messages": "removed",
+      "messagesStates": [
+        {
+          "stable": "2.1",
+          "removed": "3.3"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "removed_lint"
+      ],
+      "actual11": [
+        "removed_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.1",
+      "upstreamSet": null,
+      "actualState13": "removed",
+      "actualState11": "removed"
+    },
+    {
+      "name": "avoid_returning_null_for_void",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.1"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.1",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_returning_this",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_setters_without_getters",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_shadowing_type_parameters",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.1"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.1",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_single_cascade_in_expression_statements",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_slow_async_io",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_type_to_string",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.12"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.12",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_types_as_parameter_names",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_types_on_closure_parameters",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "incompatible_lint"
+      ],
+      "actual11": [
+        "incompatible_lint"
+      ],
+      "jsonIncompatible": [
+        "always_specify_types"
+      ],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_unnecessary_containers",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.7"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.7",
+      "upstreamSet": "flutter",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_unstable_final_fields",
+      "json": "removed",
+      "messages": "removed",
+      "messagesStates": [
+        {
+          "experimental": "3.3",
+          "removed": "3.3"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "removed_lint"
+      ],
+      "actual11": [
+        "removed_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "3.3",
+      "upstreamSet": null,
+      "actualState13": "removed",
+      "actualState11": "removed"
+    },
+    {
+      "name": "avoid_unused_constructor_parameters",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_void_async",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.1"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.1",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "avoid_web_libraries_in_flutter",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "experimental": "2.6",
+          "stable": "2.14"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.6",
+      "upstreamSet": "flutter",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "await_only_futures",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "camel_case_extensions",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.6"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.6",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "camel_case_types",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "cancel_subscriptions",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "cascade_invocations",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "cast_nullable_to_non_nullable",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.12"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.12",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "close_sinks",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "collection_methods_unrelated_type",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.19"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.19",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "combinators_ordering",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.19"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.19",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "comment_references",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "conditional_uri_does_not_exist",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.16"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.16",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "constant_identifier_names",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "control_flow_in_finally",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "curly_braces_in_flow_control_structures",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "dangling_library_doc_comments",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.19"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.19",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "depend_on_referenced_packages",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.14"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "2.14",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "deprecated_consistency",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.13"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "2.13",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "deprecated_member_use_from_same_package",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "diagnostic_describe_all_properties",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.3"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.3",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "directives_ordering",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "discarded_futures",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.18"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.18",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "do_not_use_environment",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.9"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.9",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "document_ignores",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.5"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "3.5",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "empty_catches",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "empty_constructor_bodies",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "empty_container_bodies",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.13"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.13",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "empty_statements",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "enable_null_safety",
+      "json": "removed",
+      "messages": "removed",
+      "messagesStates": [
+        {
+          "stable": "2.19",
+          "removed": "3.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "removed_lint"
+      ],
+      "actual11": [
+        "removed_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.19",
+      "upstreamSet": null,
+      "actualState13": "removed",
+      "actualState11": "removed"
+    },
+    {
+      "name": "eol_at_end_of_file",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.14"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.14",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "erase_dart_type_extension_types",
+      "json": null,
+      "messages": "internal",
+      "messagesStates": [
+        {
+          "internal": "3.3"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": null,
+      "jsonSince": null,
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "exhaustive_cases",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.9"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.9",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "file_names",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "flutter_style_todos",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.1"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.1",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "hash_and_equals",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "implementation_imports",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "implicit_call_tearoffs",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.19"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.19",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "implicit_reopen",
+      "json": "experimental",
+      "messages": "experimental",
+      "messagesStates": [
+        {
+          "experimental": "3.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "initialize_in_field_declaration",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.13"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.13",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "invalid_case_patterns",
+      "json": "experimental",
+      "messages": "experimental",
+      "messagesStates": [
+        {
+          "experimental": "3.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "invalid_runtime_check_with_js_interop_types",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.5"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsEvaluation",
+      "jsonSince": "3.5",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "invariant_booleans",
+      "json": "removed",
+      "messages": "removed",
+      "messagesStates": [
+        {
+          "stable": "2.0",
+          "removed": "3.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "removed_lint"
+      ],
+      "actual11": [
+        "removed_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "removed",
+      "actualState11": "removed"
+    },
+    {
+      "name": "iterable_contains_unrelated_type",
+      "json": "removed",
+      "messages": "removed",
+      "messagesStates": [
+        {
+          "stable": "2.0",
+          "removed": "3.3"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "removed_lint"
+      ],
+      "actual11": [
+        "removed_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "removed",
+      "actualState11": "removed"
+    },
+    {
+      "name": "join_return_with_assignment",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "leading_newlines_in_multiline_strings",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.8"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.8",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "library_annotations",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.19"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.19",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "library_names",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "library_prefixes",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "library_private_types_in_public_api",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.14"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.14",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "lines_longer_than80_chars",
+      "json": null,
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "undefined_lint"
+      ],
+      "actual11": [
+        "undefined_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": null,
+      "jsonSince": null,
+      "upstreamSet": null,
+      "actualState13": "undefined",
+      "actualState11": "undefined"
+    },
+    {
+      "name": "lines_longer_than_80_chars",
+      "json": "stable",
+      "messages": null,
+      "messagesStates": null,
+      "messagesConsistent": null,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "list_remove_unrelated_type",
+      "json": "removed",
+      "messages": "removed",
+      "messagesStates": [
+        {
+          "stable": "2.0",
+          "removed": "3.3"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "removed_lint"
+      ],
+      "actual11": [
+        "removed_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "removed",
+      "actualState11": "removed"
+    },
+    {
+      "name": "literal_only_boolean_expressions",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "experimental": "2.0",
+          "stable": "2.2"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "matching_super_parameters",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "3.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "migrate_design_widgets",
+      "json": null,
+      "messages": "testing",
+      "messagesStates": [
+        {
+          "testing": "3.13"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": null,
+      "jsonSince": null,
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "missing_code_block_language_in_doc_comment",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.4"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsEvaluation",
+      "jsonSince": "3.4",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "missing_whitespace_between_adjacent_strings",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.8"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "2.8",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "no_adjacent_strings_in_list",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "no_default_cases",
+      "json": "experimental",
+      "messages": "experimental",
+      "messagesStates": [
+        {
+          "experimental": "2.9"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "2.9",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "no_duplicate_case_values",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "no_dynamic_casts",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.13"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "3.13",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "no_leading_underscores_for_library_prefixes",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.16"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.16",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "no_leading_underscores_for_local_identifiers",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.16"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.16",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "no_literal_bool_comparisons",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "no_logic_in_create_state",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.8"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.8",
+      "upstreamSet": "flutter",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "no_raw_types",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.13"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "3.13",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "no_runtimetype_tostring",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.8"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.8",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "no_self_assignments",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.1"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsEvaluation",
+      "jsonSince": "3.1",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "no_solo_tests",
+      "json": null,
+      "messages": "internal",
+      "messagesStates": [
+        {
+          "internal": "3.10"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "undefined_lint"
+      ],
+      "actual11": [
+        "undefined_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": null,
+      "jsonSince": null,
+      "upstreamSet": null,
+      "actualState13": "undefined",
+      "actualState11": "undefined"
+    },
+    {
+      "name": "no_trailing_spaces",
+      "json": null,
+      "messages": "internal",
+      "messagesStates": [
+        {
+          "internal": "3.10"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "undefined_lint"
+      ],
+      "actual11": [
+        "undefined_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": null,
+      "jsonSince": null,
+      "upstreamSet": null,
+      "actualState13": "undefined",
+      "actualState11": "undefined"
+    },
+    {
+      "name": "no_wildcard_variable_uses",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.1"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsEvaluation",
+      "jsonSince": "3.1",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "non_constant_identifier_names",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "noop_primitive_operations",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.14"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.14",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "null_check_on_nullable_type_parameter",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "experimental": "2.12",
+          "stable": "2.17"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.12",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "null_closures",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "omit_local_variable_types",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "incompatible_lint"
+      ],
+      "actual11": [
+        "incompatible_lint"
+      ],
+      "jsonIncompatible": [
+        "always_specify_types",
+        "specify_nonobvious_local_variable_types"
+      ],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "omit_obvious_local_variable_types",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "experimental": "3.6",
+          "stable": "3.11"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "incompatible_lint"
+      ],
+      "actual11": [
+        "incompatible_lint"
+      ],
+      "jsonIncompatible": [
+        "always_specify_types"
+      ],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.6",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "omit_obvious_property_types",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "experimental": "3.7",
+          "stable": "3.11"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "incompatible_lint"
+      ],
+      "actual11": [
+        "incompatible_lint"
+      ],
+      "jsonIncompatible": [
+        "always_specify_types",
+        "type_annotate_public_apis"
+      ],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.7",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "one_member_abstracts",
+      "json": "deprecated",
+      "messages": "deprecated",
+      "messagesStates": [
+        {
+          "stable": "2.0",
+          "deprecated": "3.13"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "deprecated_lint"
+      ],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "deprecated",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "only_throw_errors",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "overridden_fields",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "package_api_docs",
+      "json": "removed",
+      "messages": "removed",
+      "messagesStates": [
+        {
+          "stable": "2.0",
+          "removed": "3.7"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "removed_lint"
+      ],
+      "actual11": [
+        "removed_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "removed",
+      "actualState11": "removed"
+    },
+    {
+      "name": "package_names",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "package_prefixed_library_names",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "parameter_assignments",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_adjacent_string_concatenation",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_asserts_in_initializer_lists",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_asserts_with_message",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.3"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.3",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_bool_in_asserts",
+      "json": "removed",
+      "messages": "removed",
+      "messagesStates": [
+        {
+          "stable": "2.0",
+          "removed": "3.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "removed_lint"
+      ],
+      "actual11": [
+        "removed_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "removed",
+      "actualState11": "removed"
+    },
+    {
+      "name": "prefer_collection_literals",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_conditional_assignment",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_const_constructors",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_const_constructors_in_immutables",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "flutter",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_const_declarations",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_const_literals_to_create_immutables",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_constructors_over_static_methods",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_contains",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_double_quotes",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.4"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [
+        "prefer_single_quotes"
+      ],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.4",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_equal_for_default_values",
+      "json": "removed",
+      "messages": "removed",
+      "messagesStates": [
+        {
+          "stable": "2.0",
+          "removed": "3.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "removed_lint"
+      ],
+      "actual11": [
+        "removed_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "removed",
+      "actualState11": "removed"
+    },
+    {
+      "name": "prefer_expression_function_bodies",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_final_fields",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_final_in_for_each",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.1"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [
+        "unnecessary_final"
+      ],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.1",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_final_locals",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [
+        "unnecessary_final"
+      ],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_final_parameters",
+      "json": "deprecated",
+      "messages": "deprecated",
+      "messagesStates": [
+        {
+          "stable": "2.14",
+          "deprecated": "3.11"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "deprecated_lint",
+        "incompatible_lint"
+      ],
+      "actual11": [
+        "deprecated_lint",
+        "incompatible_lint"
+      ],
+      "jsonIncompatible": [
+        "unnecessary_final",
+        "avoid_final_parameters"
+      ],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.14",
+      "upstreamSet": null,
+      "actualState13": "deprecated",
+      "actualState11": "deprecated"
+    },
+    {
+      "name": "prefer_for_elements_to_map_fromiterable",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.3"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.3",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_foreach",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "experimental": "2.0",
+          "stable": "2.2"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_function_declarations_over_variables",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_generic_function_type_aliases",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_if_elements_to_conditional_expressions",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.3"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.3",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_if_null_operators",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.4"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.4",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_initializing_formals",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_inlined_adds",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.3"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.3",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_int_literals",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.1"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.1",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_interpolation_to_compose_strings",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_is_empty",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_is_not_empty",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_is_not_operator",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.7"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.7",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_iterable_wheretype",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_mixin",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.1"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "2.1",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_null_aware_method_calls",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.14"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "2.14",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_null_aware_operators",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.2"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.2",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_relative_imports",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.6"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "incompatible_lint"
+      ],
+      "actual11": [
+        "incompatible_lint"
+      ],
+      "jsonIncompatible": [
+        "always_use_package_imports"
+      ],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.6",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_single_quotes",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "incompatible_lint"
+      ],
+      "actual11": [
+        "incompatible_lint"
+      ],
+      "jsonIncompatible": [
+        "prefer_double_quotes"
+      ],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_spread_collections",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.3"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.3",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_typing_uninitialized_variables",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "prefer_void_to_null",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "experimental": "2.1",
+          "stable": "2.2"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.1",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "provide_deprecation_message",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.2"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.2",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "public_member_api_docs",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "recursive_getters",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "remove_deprecations_in_breaking_versions",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.10"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "3.10",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "require_trailing_commas",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.14"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.14",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "secure_pubspec_urls",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.16"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.16",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "simple_directive_paths",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.12"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.12",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "simplify_variable_pattern",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.11"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.11",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "sized_box_for_whitespace",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.9"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.9",
+      "upstreamSet": "flutter",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "sized_box_shrink_expand",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.16"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "2.16",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "slash_for_doc_comments",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "sort_child_properties_last",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.4"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.4",
+      "upstreamSet": "flutter",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "sort_constructors_first",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "sort_pub_dependencies",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.1"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "2.1",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "sort_unnamed_constructors_first",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "specify_nonobvious_local_variable_types",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "experimental": "3.6",
+          "stable": "3.11"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "incompatible_lint"
+      ],
+      "actual11": [
+        "incompatible_lint"
+      ],
+      "jsonIncompatible": [
+        "omit_local_variable_types"
+      ],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.6",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "specify_nonobvious_property_types",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "experimental": "3.7",
+          "stable": "3.11"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.7",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "strict_top_level_inference",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.7"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.7",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "super_goes_last",
+      "json": "removed",
+      "messages": "removed",
+      "messagesStates": [
+        {
+          "stable": "2.0",
+          "removed": "3.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "removed_lint"
+      ],
+      "actual11": [
+        "removed_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "removed",
+      "actualState11": "removed"
+    },
+    {
+      "name": "switch_on_type",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.9"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "3.9",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "test_types_in_equals",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "throw_in_finally",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "tighten_type_of_initializing_formals",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.12"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "2.12",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "type_annotate_public_apis",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "incompatible_lint"
+      ],
+      "actual11": [
+        "incompatible_lint"
+      ],
+      "jsonIncompatible": [
+        "omit_obvious_property_types"
+      ],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "type_init_formals",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "type_literal_in_constant_pattern",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.0",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unawaited_futures",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unintended_html_in_doc_comment",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.5"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "3.5",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_async",
+      "json": "experimental",
+      "messages": "experimental",
+      "messagesStates": [
+        {
+          "experimental": "3.7"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.7",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_await_in_return",
+      "json": "stable",
+      "messages": "deprecated",
+      "messagesStates": [
+        {
+          "stable": "2.1",
+          "deprecated": "3.13"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "deprecated_lint"
+      ],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.1",
+      "upstreamSet": null,
+      "actualState13": "deprecated",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_brace_in_string_interps",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_breaks",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_const",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_const_in_enum_constructor",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.13"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.13",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_constructor_name",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.15"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.15",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_final",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.7"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "incompatible_lint"
+      ],
+      "actual11": [
+        "incompatible_lint"
+      ],
+      "jsonIncompatible": [
+        "prefer_final_locals",
+        "prefer_final_parameters",
+        "prefer_final_in_for_each"
+      ],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.7",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_getters_setters",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_ignore",
+      "json": "stable",
+      "messages": "experimental",
+      "messagesStates": [
+        {
+          "experimental": "3.8"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.8",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_lambdas",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_late",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.16"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.16",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_library_directive",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.19"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.19",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_library_name",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.4"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.4",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_new",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_null_aware_assignments",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_null_aware_operator_on_extension_on_nullable",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.18"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.18",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_null_checks",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "experimental": "2.12",
+          "stable": "3.13"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.12",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_null_in_if_null_operators",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_nullable_for_final_variable_declarations",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.10"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.10",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_overrides",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_parenthesis",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_primary_constructor_body",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.13"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.13",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_raw_strings",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.8"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.8",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_statements",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_string_escapes",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.8"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.8",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_string_interpolations",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.8"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.8",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_this",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_to_list_in_spreads",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.18"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.18",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_type_name_in_constructor",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.13"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.13",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_unawaited",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.9"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.9",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unnecessary_underscores",
+      "json": "stable",
+      "messages": "experimental",
+      "messagesStates": [
+        {
+          "experimental": "3.7"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.7",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unreachable_from_main",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.19"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.19",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unrelated_type_equality_checks",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "unsafe_html",
+      "json": "removed",
+      "messages": "removed",
+      "messagesStates": [
+        {
+          "stable": "2.4",
+          "removed": "3.7"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "removed_lint"
+      ],
+      "actual11": [
+        "removed_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.4",
+      "upstreamSet": null,
+      "actualState13": "removed",
+      "actualState11": "removed"
+    },
+    {
+      "name": "unsafe_variance",
+      "json": "experimental",
+      "messages": "experimental",
+      "messagesStates": [
+        {
+          "experimental": "3.7"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "3.7",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_build_context_synchronously",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "experimental": "2.13",
+          "stable": "3.2"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.13",
+      "upstreamSet": "flutter",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_colored_box",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.17"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.17",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_declaring_parameters",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.13"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.13",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_decorated_box",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.16"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.16",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_enums",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.17"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.17",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_full_hex_values_for_flutter_colors",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.2"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.2",
+      "upstreamSet": "flutter",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_function_type_syntax_for_parameters",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.1"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.1",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_if_null_to_convert_nulls_to_bools",
+      "json": "deprecated",
+      "messages": "deprecated",
+      "messagesStates": [
+        {
+          "stable": "2.13",
+          "deprecated": "3.11"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "deprecated_lint"
+      ],
+      "actual11": [
+        "deprecated_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.13",
+      "upstreamSet": null,
+      "actualState13": "deprecated",
+      "actualState11": "deprecated"
+    },
+    {
+      "name": "use_is_even_rather_than_modulo",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.9"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "2.9",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_key_in_widget_constructors",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.8"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.8",
+      "upstreamSet": "flutter",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_late_for_private_fields_and_variables",
+      "json": "experimental",
+      "messages": "experimental",
+      "messagesStates": [
+        {
+          "experimental": "2.10"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "2.10",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_named_constants",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.13"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.13",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_null_aware_elements",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.8"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.8",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_primary_constructors",
+      "json": "experimental",
+      "messages": "testing",
+      "messagesStates": [
+        {
+          "testing": "3.13"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.13",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_raw_strings",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.8"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.8",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_rethrow_when_possible",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_setters_to_change_properties",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_string_buffers",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_string_in_part_of_directives",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.19"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.19",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_super_parameters",
+      "json": "experimental",
+      "messages": "experimental",
+      "messagesStates": [
+        {
+          "experimental": "2.17"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "2.17",
+      "upstreamSet": "recommended",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_test_throws_matchers",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.14"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "needsFix",
+      "jsonSince": "2.14",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_to_and_as_if_applicable",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "use_truncating_division",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "3.6"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.6",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "valid_regexps",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "var_with_no_type_annotation",
+      "json": "experimental",
+      "messages": "experimental",
+      "messagesStates": [
+        {
+          "experimental": "3.12"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "hasFix",
+      "jsonSince": "3.12",
+      "upstreamSet": null,
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    },
+    {
+      "name": "visit_registered_nodes",
+      "json": null,
+      "messages": "internal",
+      "messagesStates": [
+        {
+          "internal": "3.10"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [
+        "undefined_lint"
+      ],
+      "actual11": [
+        "undefined_lint"
+      ],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": null,
+      "jsonSince": null,
+      "upstreamSet": null,
+      "actualState13": "undefined",
+      "actualState11": "undefined"
+    },
+    {
+      "name": "void_checks",
+      "json": "stable",
+      "messages": "stable",
+      "messagesStates": [
+        {
+          "stable": "2.0"
+        }
+      ],
+      "messagesConsistent": true,
+      "actual13": [],
+      "actual11": [],
+      "jsonIncompatible": [],
+      "jsonSets": [],
+      "jsonFixStatus": "noFix",
+      "jsonSince": "2.0",
+      "upstreamSet": "core",
+      "actualState13": "stable-or-experimental",
+      "actualState11": "stable-or-experimental"
+    }
+  ]
+}

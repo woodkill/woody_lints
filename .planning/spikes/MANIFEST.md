@@ -101,6 +101,31 @@ spike 에서 나와 실제 구현과 문서가 지켜야 하는 것 (근거는 s
 - plugin 진단 확인은 베타에서도 `dart analyze` 로 한다. 베타의 `flutter analyze` 는 plugin 진단을 내지만 규칙 진단을 겹쳐 세고 그 수가 실행마다 달랐다 (016)
 - 고정 SDK 를 Dart 3.14 계열로 올리기 전에 016 의 두 스크립트를 그 SDK 로 돌린다. `probe.dart` 의 `≠` 10칸 중 생성 파일 제외에서 온 8칸이 `=` 로 돌아오면 되돌리는 변경이 들어간 것이고 (루트 분석의 2칸 R1 · R2 는 다른 변경(sdk#63627)에서 온 것이라 `≠` 로 남을 것이다), 10칸 그대로면 정답지 셋을 갱신하며 "SDK 가 바뀌어 생긴 줄" 로 기록한다 (016)
 
+### rule-reselection-measurement
+
+Phase 4 (Rule Reselection) 가 `flutter_starter_kit` 복사본에서 후보 규칙을 재기 전에, 그 실측 방법이 기대는 도구 동작을 실행으로 확인한다. 021 ~ 023 은 ROADMAP.md Phase 4 의 "Spike first" 가운데 019 가 재지 않은 셋(Dart 3.13 의 새 규칙과 언어 버전, 이미 있는 `// ignore` 주석, `dart fix --dry-run`)이고, 셋째 항목(복사본이 작업 중인 파일을 가리키는지)의 나머지 — `path:` 가 작업 중인 저장소 자체를 가리킬 때 — 를 021 이 함께 본다. 020 은 앞선 spike 와 로드맵 문구가 부딪치는 자리다 — Phase 4 Notes 는 평가표의 `state` 열을 SDK tag 의 `rules.json` 에서 가져온다고 적었고, 005 는 그 파일이 실제 동작과 어긋난 규칙을 하나 찾았다. Phase 4 의 논의(`04-CONTEXT.md`)보다 먼저 돌린다.
+
+**Requirements:**
+
+소유자가 확정한 것 (2026-10-12, `/gsd-spike` 의 후보 선택).
+
+- 네 개(020 ~ 023)를 Phase 4 의 논의보다 먼저 돌린다
+
+spike 가 스스로 건 조건 (019 의 조건을 그대로 잇는다).
+
+- `flutter_starter_kit` 원본은 읽기만 한다. 실측은 저장소 밖 작업 폴더의 복사본에서 한다 (PROJECT.md 의 Safety)
+- 비공개 프로젝트를 잰 결과에는 건수와 규칙 이름만 남긴다 — 경로 · 진단 메시지 · 코드 조각을 남기지 않는다. 원본의 경로는 스크립트에 적지 않고 인자로 준다
+- 저장소의 `lib/`, `example/`, `fixtures/`, `pubspec.yaml`, 루트 `analysis_options.yaml` 은 바꾸지 않는다. GitHub 에 올리지 않는다
+- 실측은 저장소 고정 SDK (Flutter 3.47.5 / Dart 3.13.4) 에서 하고, 스크립트는 Dart 이며 `dart:io`, `dart:convert` 만 쓴다. 진단은 정답지 형식 `상대경로:줄  강도  규칙이름` 으로 견준다
+- 결과는 어느 쪽이든 기록하고 계속한다. 복사본의 `pub get` 이나 분석이 작업 중인 저장소를 바꾸면 그 자리에서 멈춘다
+
+spike 에서 나와 Phase 4 의 실측과 평가표가 지켜야 하는 것 (근거는 각 spike 의 README).
+
+- 평가표의 `state` 열을 SDK tag 의 `rules.json` 에서 옮기지 않는다 — 상류가 같은 폴더의 README 에 "unsupported and deprecated, should not be relied on" 이라고 적었고, tag 3.13.4 의 그 파일은 `unnecessary_await_in_return` 을 stable 로 적었으며 `migrate_design_widgets` 를 빠뜨렸다. deprecated / removed / 없는 이름은 후보를 적은 옵션 파일을 저장소 하한(`^3.13.0`)의 pubspec 옆에서 분석해 정하고, stable / experimental / testing 은 tag 의 `pkg/linter/messages.yaml` 에서 읽는다. 출처끼리 갈리는 넷(`unnecessary_ignore`, `unnecessary_underscores`, `use_primary_constructors`, `migrate_design_widgets`)은 출처마다 적는다 (020)
+- 상류 세트 열은 저장소 루트가 받은 `lints` · `flutter_lints` 의 YAML 에서 읽는다. `rules.json` 의 `sets` 는 262개 모두 비어 있다. 이름은 소문자로 맞춰 견준다 (`prefer_iterable_whereType`) (020)
+- 비호환 쌍은 쌍마다 둘만 켜서 확인한다. 한 옵션 파일에 모두 켜면 규칙 한 줄에 `incompatible_lint` 가 하나만 붙어 일부 쌍(`unnecessary_final` × `prefer_final_locals` 등)이 가려진다. `rules.json` 이 선언한 12쌍은 따로 켜면 모두 보고된다 (020)
+- `migrate_design_widgets` 와 `use_primary_constructors` 는 tag 3.13.4 의 원본에서 `testing` (안정성 보장 없음, 일반 사용을 권하지 않음)이다. 후보 표에 올릴 때 이 상태를 함께 적는다 (020)
+
 ## Spikes
 
 | # | Idea | Name | Type | Validates | Verdict | Tags |
@@ -124,3 +149,7 @@ spike 에서 나와 실제 구현과 문서가 지켜야 하는 것 (근거는 s
 | 017 | preset-split-include-behavior | runner-six-fixtures | standard | 캐시 없는 GitHub Linux runner 에서 나눈 구조의 연습용 프로젝트 여섯을 차례로 · 한꺼번에 돌릴 때의 시간이 재어지고, 진단이 로컬과 같다 | ✓ VALIDATED | github-actions, ci, timing, fixture-layout, concurrency |
 | 018 | verify-harness-tool-behavior | runner-next-image | standard | 다음 runner 이미지(`ubuntu-26.04`)에서 지금의 검증 명령과 연습용 프로젝트 여섯이 `ubuntu-24.04` 와 같은 진단을 내고 plugin 준비가 실패하지 않는다 | ✓ VALIDATED | github-actions, ci, runner-image, ubuntu-26, forward-compat |
 | 019 | preset-split-include-behavior | real-consumer-split-invariance | standard | 실제 사용 프로젝트(`flutter_starter_kit`)의 복사본이 지금 받는 그대로 · 한 파일 구조 · 나눈 구조(옛 주소 · 묶음 주소)를 받을 때 진단이 줄 단위로 같다 | ✓ VALIDATED | real-consumer, include, analyzer-plugin, exclude, generated-files |
+| 020 | rule-reselection-measurement | rule-state-vs-rules-json | standard | SDK tag 3.13.4 의 `rules.json` 에 있는 규칙 전부를 SDK 하한을 적은 패키지(`^3.13.0` · `^3.11.1`)의 옵션 파일에 적고 분석하면, `rules.json` 의 `state` 와 실제로 보고되는 상태가 어긋나는 규칙과 `incompatible_lint` 쌍이 확정된다 | ✓ VALIDATED (`rules.json` 을 그대로 옮기면 안 된다 — deprecated 하나가 틀렸고 `sets` 는 전부 비었다. 열마다 출처를 바꾼다) | rules-json, messages-yaml, deprecated-lint, rule-check, incompatible-lint |
+| 021 | rule-reselection-measurement | new-rules-language-gate | standard | Dart 3.13 의 새 규칙과 strict 계열을 어기는 표식을 언어 버전 3.11 · 3.13 패키지와 `flutter_starter_kit` 복사본에서 분석하면, 규칙마다 언어 버전 3.11 에서 보고되는지가 확정된다 | PENDING | language-version, linter-rules, strict-mode, real-consumer, marker |
+| 022 | rule-reselection-measurement | dart-fix-dry-run-count | standard | `hasFix` 규칙을 켠 복사본에서 `dart fix --dry-run` 의 규칙별 건수, 진단 건수, `--apply` 뒤 남은 건수를 견주면, 평가표의 "`dart fix` 로 고칠 수 있는 건수" 를 세는 방법이 확정된다 | PENDING | dart-fix, fix-status, real-consumer |
+| 023 | rule-reselection-measurement | existing-ignore-comments | standard | `flutter_starter_kit` 복사본에서 `// ignore` 주석을 둔 채와 걷어낸 채로 1.3.0 과 후보 규칙을 분석하면, 주석이 숨기는 줄의 수와 주석의 출처(손으로 쓴 것 / 생성기)가 규칙별로 확정된다 | PENDING | ignore-comments, baseline, real-consumer, unnecessary-ignore |
