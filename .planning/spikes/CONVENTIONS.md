@@ -2,7 +2,7 @@
 
 spike 세션에서 굳어진 도구 선택과 방식이다. 새 spike 는 질문이 다른 방식을 요구하지 않는 한 이를 따른다. 두 개 이상의 spike 에서 반복된 것만 적었다.
 
-spike 가 확인한 사실 자체는 `.claude/skills/spike-findings-woody-lints/` 에 묶여 있다 (2026-10-11 wrap-up 두 번, spike 001~008). spike 009~014 (2026-10-12, Phase 3 의 사전 확인)는 아직 묶지 않았다 — 각 spike 의 README 가 원본이다.
+spike 가 확인한 사실 자체는 `.claude/skills/spike-findings-woody-lints/` 에 묶여 있다 (wrap-up 세 번 — 2026-10-11 에 spike 001~006 과 007~008, 2026-10-12 에 Phase 3 의 사전 확인인 009~014).
 
 ## Stack
 

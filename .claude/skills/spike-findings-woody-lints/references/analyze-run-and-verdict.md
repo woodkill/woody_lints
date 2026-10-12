@@ -1,8 +1,8 @@
 # `dart analyze` 실행과 결과 판정
 
-검증 명령(`tool/verify.dart`)이 `example/` 을 분석하고, 그 결과를 "통과 / 정답지와 다름 / plugin 준비 실패 / 도구가 죽음" 으로 가르는 부분이다. Analysis Server 가 plugin 을 받아 컴파일해 두는 상태 폴더를 어디에 두는지도 여기서 다룬다.
+검증 명령(`tool/verify.dart`)이 `example/` 을 분석하고, 그 결과를 "통과 / 정답지와 다름 / plugin 준비 실패 / 도구가 죽음" 으로 가르는 부분이다. Analysis Server 가 plugin 을 받아 컴파일해 두는 상태 폴더를 어디에 두는지도 여기서 다룬다. 연습용 프로젝트가 여섯으로 늘어도 프로젝트 하나를 분석하는 방식은 이 문서 그대로다 (여섯의 구성과 시간은 fixtures-after-split.md).
 
-모든 수치는 Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9, 2026-10-11 실측이다.
+모든 수치는 Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9 실측이다. 날짜를 따로 적지 않은 것은 2026-10-11 (001, 002, 008), 프로젝트가 여럿일 때의 상태 폴더와 시간은 2026-10-12 (014) 에 쟀다.
 
 ## Requirements
 
@@ -17,6 +17,11 @@ MANIFEST.md 의 `verify-harness-tool-behavior` 에서 이 영역에 걸리는 �
 - 진단의 강도는 JSON 의 `severity` 로 읽는다 (003)
 - 검증 명령은 `example/` 을 분석할 때 `ANALYZER_STATE_LOCATION_OVERRIDE` 로 **저장소 안의 전용 상태 폴더**를 준다. 실제 `riverpod_lint` 버전(D-07)은 그 폴더의 `.plugin_manager/*/pubspec.lock` 에서 읽는다. `dart:io` / `dart:convert` 에는 md5 가 없고, 기본 자리(`~/.dartServer`)에서는 폴더 내용으로도 파일 시각으로도 자기 폴더를 고를 수 없다 (008)
 - stderr 의 머리말은 첫 줄이 아닐 수 있으므로 `contains` 로 찾는다. plugin 실패를 알릴 때 "전용 상태 폴더를 지우고 다시 실행"을 안내한다 — 컴파일된 plugin 파일이 깨진 채 남으면 지울 때까지 계속 실패한다 (008)
+
+MANIFEST.md 의 `preset-split-include-behavior` 에서 이 영역에 걸리는 것.
+
+- 연습용 프로젝트는 폴더마다 따로 두고 상태 폴더도 프로젝트마다 따로 준다 (지금 검증 명령의 방식 그대로). 여섯이 로컬에서 처음 66초, 재실행 20 ~ 21초다. 상태 폴더를 하나로 합치면 plugin 폴더가 넷이 되어 버전을 읽지 못한다. plugin 준비는 경로가 다르면 나눠 쓰지 못한다 (014)
+- 시간이 문제가 되면 상태 폴더를 따로 둔 채 동시에 띄우는 것을 먼저 본다 — 로컬에서 여섯이 23초이고 결과가 같았다. GitHub runner 에서의 여섯은 재지 않았다 (추정 약 4분 20 ~ 30초) (014)
 
 ## How to Build It
 
@@ -55,7 +60,8 @@ Analysis Server 는 plugin 을 `<상태 폴더>/.plugin_manager/<hash>/` 에 받
 | 프로젝트 안의 점 폴더 (`.dart_tool/woody_verify_state`) | 통과, 15.0초 | 통과, 3.6초 | 1 | 3.1.9 |
 | 프로젝트 안의 평범한 폴더 (`verify_state`) | 통과, 15.3초 | 통과, 3.9초 | 1 | 3.1.9 |
 
-- **자리는 점으로 시작하는 폴더 아래로 잡는다.** `.dart_tool/` 아래면 `.gitignore` 의 `.dart_tool/` 에 이미 걸려 따로 손댈 것이 없다. 정확한 경로는 계획에서 정한다.
+- **자리는 점으로 시작하는 폴더 아래로 잡는다.** `.dart_tool/` 아래면 `.gitignore` 의 `.dart_tool/` 에 이미 걸려 따로 손댈 것이 없다. Phase 2 의 `tool/verify.dart` 는 `<저장소 루트>/.dart_tool/woody_verify/<프로젝트 이름>/` 을 쓴다.
+- **연습용 프로젝트가 여럿이면 상태 폴더도 프로젝트마다 따로 준다** (014). 하나를 함께 쓰면 plugin 을 쓰는 프로젝트 수만큼 plugin 폴더가 생겨(넷이면 4) 8번의 방법으로 버전을 읽을 수 없다. 함께 써서 얻는 것은 여섯 기준 처음 9 ~ 11초, 재실행 5초뿐이고 plugin 컴파일은 그대로 프로젝트마다 한다 (→ fixtures-after-split.md 5번).
 - 표의 세 자리는 작업 폴더에 복사한 연습용 프로젝트를 기준으로 쟀다. **실제 저장소 안의 자리에 두고 잰 것은 아니다.** `example/` 을 기준으로 옮겨 보면 저장소 루트의 `.dart_tool/…` 은 표의 "프로젝트 밖"에, `example/.dart_tool/…` 은 "프로젝트 안의 점 폴더"에 대응한다 (추론). 세 자리의 결과가 같았으므로 어느 쪽이든 같을 것으로 본다.
 - 프로젝트 안에 두어도 진단이 달라지지 않는 것은 상태 폴더의 내용물이 모두 점으로 시작하는 폴더(`.plugin_manager`, `.analysis-driver` 등)라 분석에 들어가지 않기 때문이다.
 - **폴더를 지우지 않고 둔다.** 재실행이 3.6초다. 지우는 것은 plugin 실패를 알렸을 때의 복구 수단이다 (→ 7번).
@@ -123,7 +129,7 @@ bool get hasPluginHeader =>
 |---|---|---|
 | 0 | 진단이 없거나 info 뿐 | 002, 003 |
 | 2 | warning 이 하나라도 있다 | 002, 003 |
-| 3 | error 가 하나라도 있다 | 003 |
+| 3 | error 가 하나라도 있다. 옵션 파일의 YAML 이 깨졌을 때도 3 인데, 그때는 JSON 의 진단이 **0건**이고 stderr 도 비어 있다 (규칙 검사의 복사본에서 잰 것이다 → rule-status-check.md 3번) | 003, 013 |
 | 4 | 진단이 **하나도 없고** 서버 오류가 있었다. `example/` 에서는 진단이 항상 있으므로 나올 일이 없다. 나오면 무조건 실패 | 002 (s2, s6) |
 | 255 | Analysis Server 가 죽었다. stdout 에 JSON 이 없다. 사용 통계를 끄지 않았을 때만 봤다 | 001 |
 
@@ -174,6 +180,8 @@ An error occurred while executing an analyzer plugin: Unrecorded error while sta
 
 `example/` 의 정답지에는 warning 인 plugin 진단이 들어가므로(`exit 2`), plugin 준비가 실패하면 plugin 줄이 빠지고, `exit` 줄이 0 으로 어긋나고, stderr 에 머리말이 찍힌다. 세 가지가 한꺼번에 어긋나 헛통과할 길이 없다.
 
+이 셋은 `example/` (과 같은 정답지를 쓰는 묶음 프로젝트) 의 이야기다. plugin 진단 말고도 warning 이 남는 조합 — `base.yaml` + `riverpod.yaml` 은 `invalid_annotation_target` 이 남는다 — 에서는 plugin 이 죽어도 `exit` 줄이 2 그대로일 것이다. 그때는 빠진 plugin 줄과 stderr 의 머리말 둘로 드러난다. 조합별 정답지의 모양(fixtures-after-split.md 2번)에서 따라 나오는 추론이고, 그 조합에서 plugin 을 죽여 본 것은 아니다.
+
 ### 7. 실패한 뒤 다음 실행이 스스로 회복하는가
 
 | 무슨 일이 있었나 | 다음 실행 | 근거 |
@@ -215,14 +223,16 @@ String? readPluginVersion(Directory pluginFolder) {
 }
 ```
 
-- **폴더가 하나가 아니면 버전을 `?` 로 찍고 이유를 알린다.**
+- **plugin 을 쓰는 프로젝트에서 폴더가 하나가 아니면 버전을 `?` 로 찍고 이유를 알린다.**
   - 0개: 서버가 이 상태 폴더에서 plugin 준비를 시작하지 않았다. `ANALYZER_STATE_LOCATION_OVERRIDE` 가 더는 듣지 않을 때가 이 모양이다 (→ Constraints).
-  - 2개 이상: 그 상태 폴더로 다른 경로의 프로젝트를 분석한 적이 있다. 폴더 이름이 경로에서 나오므로 저장소 폴더를 옮기거나 이름을 바꾸면 하나 더 생긴다 (이 경우를 직접 재지는 않았다). 상태 폴더를 지우고 다시 실행하면 하나가 된다.
+  - **plugin 을 선언하지 않는 조합(`base.yaml` 만, `base.yaml` + `codegen.yaml`)에서는 0개가 정상이다** (009, 014). 위의 "`?` 로 찍는다" 는 이 조합에 해당하지 않는다. 그 프로젝트의 `plugin` 줄과 `--update` 가 쓰는 머리 주석을 무엇으로 찍을지는 계획이 정한다 (03-CONTEXT.md) — 014 는 "해당 없음" 을 제안했다. Phase 2 의 코드는 조합을 가리지 않고 0개면 `?` 를 찍는다.
+  - 2개 이상: 그 상태 폴더로 다른 경로의 프로젝트를 분석한 적이 있다. 서로 다른 폴더의 프로젝트 넷을 상태 폴더 하나로 분석하면 plugin 폴더가 넷이 됐다 (014). 폴더 이름이 경로에서 나오므로 저장소 폴더를 옮기거나 이름을 바꿔도 하나 더 생길 것이다 (이 경우를 직접 재지는 않았다). 상태 폴더를 지우고 다시 실행하면 하나가 된다.
 - **폴더는 하나인데 `readPluginVersion` 이 null 이면 그때도 `?` 다.** plugin 을 받지 못한 실패가 이 모양일 수 있다 — 002 의 실패 문구가 `.plugin_manager/<hash>` 경로를 찍으므로 폴더는 생긴 것으로 보인다. 실패한 뒤의 폴더 수와 `pubspec.lock` 의 유무를 직접 재지는 않았다.
 - plugin 준비 실패를 알린 실행에서 읽힌 버전은 앞선 실행이 남긴 `pubspec.lock` 의 값일 수 있다 (재지 않았다). 그 실행에서는 버전 줄을 어떻게 찍을지 계획에서 정한다.
 - 분석이 끝난 **뒤에** 읽는다. 처음 실행에서는 분석 전에 폴더가 없다.
 - D-07 이 화면에 찍으라고 한 것은 셋이다: SDK(Flutter / Dart), 기반 세트(`flutter_lints` / `lints`), 해석된 `riverpod_lint` 버전 (`.planning/phases/02-verification-harness/02-CONTEXT.md`). 이 절은 셋째만 다룬다.
-- 서버가 만든 가상 패키지의 `pubspec.yaml` 은 배포 파일의 제약을 그대로 옮겨 적는다 (`riverpod_lint: ^3.1.3`). 실제로 풀린 값은 `pubspec.lock` 에만 있다.
+- 서버가 만든 가상 패키지의 `pubspec.yaml` 은 배포 파일의 제약을 그대로 옮겨 적는다 (`riverpod_lint: ^3.1.3`). 실제로 풀린 값은 `pubspec.lock` 에만 있다. 제약은 옛 주소 → 묶음 → 조각의 3단 include 를 거쳐도 그대로 적히고(010), 사용 프로젝트가 `plugins:` 를 다시 적으면 그 프로젝트가 적은 값이 적힌다(012). 제약이 바뀌면 서버는 plugin 을 다시 준비한다 (`^3.1.3` → `^3.1.9` 에서 15.8초, 010).
+- 같은 `pubspec.lock` 에 plugin 이 쓰는 `analyzer` 와 `analysis_server_plugin` 의 버전도 있다 (2026-10-12 에 14.5.0 / 0.3.24). SDK 에 든 analyzer(14.1.0-dev)와 다른 버전이고, 그 차이가 동작을 가른 예가 있다 (→ suppression-and-exclude.md 6번).
 
 기본 자리(`~/.dartServer`)를 그대로 쓰면서 자기 폴더를 고르는 길은 셋 다 막혀 있다.
 
@@ -240,12 +250,15 @@ String? readPluginVersion(Directory pluginFolder) {
 | 재실행 | 약 3.6~6초 (008 은 3.6~3.9초) | 약 8초 (5.5~10.6초) |
 | plugin 을 다시 컴파일만 할 때 | 약 13초 | 재지 않음 |
 | pub 서버에 닿지 못할 때 | 26~31초 뒤 plugin 진단 없이 끝남 | 재지 않음 |
+| plugin 을 쓰지 않는 프로젝트 (014) | 자기만 쓰는 상태 폴더에서 약 3.2초 (처음 · 재실행 같음), 다른 프로젝트가 채워 둔 상태 폴더에서 0.7초 | 재지 않음 |
+| 프로젝트 여섯을 차례로, 상태 폴더는 따로 (014) | 처음 66초, 재실행 20 ~ 21초 | 재지 않음 (추정은 fixtures-after-split.md 8번) |
+| 프로젝트 여섯을 동시에, 상태 폴더는 따로 (014) | 처음 23초 (벽시계) | 재지 않음 |
 
 서버가 뜰 때마다 하는 일은 셋이다: (1) 가상 패키지의 `pubspec.yaml` 과 `bin/plugin.dart` 를 내용이 다를 때만 다시 쓰고, (2) `dart pub upgrade` 를 **항상** 돌리고, (3) 기존 `bin/plugin.aot` (약 15MB) 이 `bin/depfile.txt` 기준으로 최신이면 그대로 쓰고 아니면 기존 파일을 지운 뒤 `dart compile aot-snapshot` 을 돌린다. `analysis_server` (tag 3.13.4) 의 소스에서 읽은 순서이고 008 의 실험 결과가 이와 맞았다. 처음 실행의 시간은 대부분 컴파일이다.
 
 ## What to Avoid
 
-- **하위 폴더를 인자로 주는 것** (`dart analyze lib`, `dart analyze lib/src`, 저장소 루트에서 `dart analyze example/lib`). plugin 진단을 전부 잃고 종료 코드도 0 이 된다. plugin 을 준비조차 하지 않는다. 조용히 통과하는 모양이라 가장 위험하다. (plugin 진단이 필요 없는 규칙 검사만 폴더를 인자로 준다 → rule-status-check.md)
+- **하위 폴더를 인자로 주는 것** (`dart analyze lib`, `dart analyze lib/src`, 저장소 루트에서 `dart analyze example/lib`). plugin 진단을 전부 잃고 종료 코드도 0 이 된다. plugin 을 준비조차 하지 않는다. 조용히 통과하는 모양이라 가장 위험하다. (plugin 진단이 필요 없는 규칙 검사만 폴더를 인자로 준다 → rule-status-check.md) 여기서 말하는 것은 **옵션 파일이 없는** 하위 폴더다. 인자로 준 폴더에 `analysis_options.yaml` 이 직접 들어 있고 그것이 `plugins:` 에 닿으면 반대로 plugin 을 준비한다 (013 → rule-status-check.md 의 Constraints).
 - **종료 코드만 보고 판정하는 것.** plugin 이 죽어도 0 이나 2 가 나온다.
 - **머리말을 `startsWith` 나 "stderr 의 첫 줄"로 찾는 것.** `plugin.aot` 을 읽어 들이지 못한 실패에서는 셋째 줄에 온다.
 - **사용 통계를 끄지 않고 실행하는 것.** 같은 명령이 가끔 종료 코드 255 로 죽는다. 이 컴퓨터에서 기본 방식 65번 중 8번이었다 (cold 24번 중 7번, warm 41번 중 1번). 끈 66번은 모두 정상이었다.
@@ -254,6 +267,8 @@ String? readPluginVersion(Directory pluginFolder) {
 - **검증 때마다 상태 폴더를 지우는 것.** 매번 처음 실행이 되어 로컬 15초, CI 43초가 든다. 지우는 것은 plugin 실패 뒤의 복구 수단이다.
 - **기본 자리(`~/.dartServer`)에서 버전을 읽는 것.** 다른 프로젝트의 폴더가 섞여 있고 자기 폴더를 고를 방법이 없다 (→ 8번). md5 를 손으로 구현하는 길(약 50줄)은 경로를 서버와 똑같이 만들어야 한다 — 링크를 풀고, UTF-8 바이트가 아니라 UTF-16 code unit 의 아래 8비트를 모은다. 경로에 영문·숫자만 있을 때는 UTF-8 과 결과가 같아 틀린 구현이 드러나지 않는다.
 - **검증 명령 둘을 빈 상태 폴더 하나에 동시에 띄우는 것.** 처음 실행 둘이 정확히 겹친 20쌍 중 1쌍(실행으로는 40번 중 1번)에서 한쪽이 plugin 진단 없이 exit 0 으로 끝났다. 한쪽이 `plugin.aot` 을 쓰는 도중에 다른 쪽이 읽은 것이다.
+- **여러 연습용 프로젝트의 상태 폴더를 하나로 합치는 것.** plugin 폴더가 프로젝트 수만큼 생겨 버전을 읽지 못한다 (014 → 2번).
+- **plugin 을 선언하지 않는 프로젝트에서 plugin 폴더가 0개인 것을 "준비 실패" 나 "환경변수가 듣지 않는다" 로 읽는 것.** 그 조합에서는 정상이다 (009, 014 → 8번).
 - **`flutter analyze`.** Flutter 3.47.5 에서 plugin 진단을 내지 않는다 (PROJECT.md).
 - **저장소 루트에서 `dart analyze example` 로 바꾸는 것.** 3.13.4 에서는 plugin 진단이 나왔지만(001, 007), 폴더 인자 문제(sdk#62710)와 맞닿은 형태라 채택하지 않았다.
 
@@ -277,12 +292,14 @@ String? readPluginVersion(Directory pluginFolder) {
   | 준비된 폴더에서 둘을 동시에 | 8 | 0 |
   | 대조군: 상태 폴더를 따로 주고 처음 실행 둘을 동시에 | 2 | 0 |
 
+  상태 폴더를 **따로** 준 동시 실행은 014 가 더 크게 봤다 — 서로 다른 프로젝트 넷, 그리고 여섯을 동시에 처음 실행으로 두 번씩 띄웠고 20건이 모두 예상한 진단을 냈다.
+
 - 오래 떠 있는 서버(`dart language-server`, IDE 가 프로젝트를 열어 둔 상황을 흉내 냄)와 상태 폴더를 함께 써도 명령줄 분석 3번이 모두 통과했다. 서버가 쓰고 있는 `plugin.aot` 을 명령줄 쪽이 지우고 다시 만들어도 서버는 죽지 않았다. 전용 폴더를 쓰면 IDE 와는 애초에 폴더가 나뉜다.
 - 전용 폴더의 비용: IDE 가 기본 자리에 이미 준비해 둔 plugin 을 쓰지 못하므로 첫 검증이 15초 든다. 시간 자체는 기본 자리와 같다.
 - 확인하지 않은 것: plugin 이 뜬 뒤 분석 도중에 죽는 경우, pub 서버가 느리게 응답만 하고 끝나지 않는 경우의 시간 (CI 의 `timeout-minutes` 가 막는다), 동시 실행의 실패가 폴더에 잘린 `plugin.aot` 을 남기는지, 실제 IDE(VS Code)와 함께 쓸 때, 008 의 실험을 GitHub Linux runner 에서 한 것.
 
 ## Origin
 
-Synthesized from spikes: 001, 002, 008 (정규화 함수는 006 의 스크립트에서 가져왔다)
-Source files available in: sources/001-analyze-invocation-form/, sources/002-plugin-setup-failure-exit/, sources/006-github-runner-cold-plugin/, sources/008-state-folder-placement/
-원본 로그와 JSON: `.planning/spikes/001-analyze-invocation-form/results/`, `.planning/spikes/002-plugin-setup-failure-exit/results/`, `.planning/spikes/008-state-folder-placement/results/`
+Synthesized from spikes: 001, 002, 008, 014 (정규화 함수는 006 의 스크립트에서 가져왔다. 009, 010, 012, 013 의 결과는 한 줄씩 덧붙인 것이다)
+Source files available in: sources/001-analyze-invocation-form/, sources/002-plugin-setup-failure-exit/, sources/006-github-runner-cold-plugin/, sources/008-state-folder-placement/, sources/014-multi-fixture-plugin-cost/
+원본 로그와 JSON: `.planning/spikes/001-analyze-invocation-form/results/`, `.planning/spikes/002-plugin-setup-failure-exit/results/`, `.planning/spikes/008-state-folder-placement/results/`, `.planning/spikes/014-multi-fixture-plugin-cost/results/`

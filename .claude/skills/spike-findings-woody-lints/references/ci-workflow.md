@@ -15,6 +15,13 @@ MANIFEST.md 의 `verify-harness-tool-behavior` 에서 이 영역에 걸리는 �
 - `dart analyze` 는 사용 통계 전송을 끈 채 실행한다 (001)
 - 검증 명령은 `example/` 을 분석할 때 `ANALYZER_STATE_LOCATION_OVERRIDE` 로 저장소 안의 전용 상태 폴더를 준다 (008)
 
+MANIFEST.md 의 `preset-split-include-behavior` 에서 이 영역에 걸리는 것.
+
+- 연습용 프로젝트는 폴더마다 따로 두고 상태 폴더도 프로젝트마다 따로 준다 (지금 검증 명령의 방식 그대로). 여섯이 로컬에서 처음 66초, 재실행 20 ~ 21초다. 상태 폴더를 하나로 합치면 plugin 폴더가 넷이 되어 버전을 읽지 못한다. plugin 준비는 경로가 다르면 나눠 쓰지 못한다 (014)
+- 시간이 문제가 되면 상태 폴더를 따로 둔 채 동시에 띄우는 것을 먼저 본다 — 로컬에서 여섯이 23초이고 결과가 같았다. GitHub runner 에서의 여섯은 재지 않았다 (추정 약 4분 20 ~ 30초) (014)
+
+이 문서에서 문서 이름 없이 적은 D-NN 은 02-CONTEXT.md 의 것이다. 03-CONTEXT.md 의 결정은 문서 이름을 붙여 적었다.
+
 ## How to Build It
 
 ### 1. workflow 의 뼈대
@@ -48,7 +55,7 @@ jobs:
         run: <검증 명령>
 ```
 
-spike 의 원본은 `sources/006-github-runner-cold-plugin/spike-006-cold-plugin.yml` 이다 (`timeout-minutes: 15`, `matrix.sample: [1..5]`, `fail-fast: false`).
+spike 의 원본은 `sources/006-github-runner-cold-plugin/spike-006-cold-plugin.yml` 이다 (`timeout-minutes: 15`, `matrix.sample: [1..5]`, `fail-fast: false`). Phase 2 가 이 뼈대로 `.github/workflows/verify.yml` 을 만들었다 — 마지막 step 은 `dart run tool/verify.dart`, `timeout-minutes` 는 10 이다.
 
 - **Flutter 버전 숫자를 workflow 에 적지 않는다.** `flutter-version-file: .fvmrc` 하나로 로컬과 같은 Flutter 3.47.5 / Dart 3.13.4 가 설치됐다.
 - **`timeout-minutes` 는 10** 이면 넉넉하다 (정상 약 2분). pub 서버에 닿지 못해도 plugin 준비는 약 30초 뒤 실패로 끝나므로, 멈춰 있는 경우만 막으면 된다.
@@ -67,6 +74,17 @@ spike 의 원본은 `sources/006-github-runner-cold-plugin/spike-006-cold-plugin
 | 합계 | **약 2분** |
 
 같은 프로젝트를 한 번 더 분석하면 약 8초(5.5~10.6초)가 더 든다. 규칙 검사(→ rule-status-check.md)는 로컬에서 0.5초다 (spike 007). runner 에서는 재지 않았다.
+
+**연습용 프로젝트가 여섯으로 늘면 (추정이다. 올려야 잴 수 있다).** runner 는 매번 빈 상태 폴더에서 시작하므로 plugin 을 쓰는 프로젝트 넷이 각각 plugin 을 받아 컴파일한다 — 폴더가 다르면 plugin 준비를 나눠 쓰지 못한다 (014).
+
+| 방식 | 셈 | 분석 | job 전체 |
+|---|---|---|---|
+| 폴더 · 상태 폴더를 프로젝트마다 따로 (채택) | plugin 넷 × 약 44초 + plugin 없는 둘 × 약 9초 | 약 3분 15초 | **약 4분 20 ~ 30초** |
+| 작업 폴더 하나에서 옵션 파일만 바꿔 가며 | 44초 + 재실행 셋 × 약 8초 + plugin 없는 둘 × 약 2초 | 약 1분 15초 | 약 2분 25초 |
+
+- 근거: 실제 `verify` job 이 1분 54초이고 그중 `example/` 분석이 약 44초, 그 밖이 약 70초다 (run 38158088016). plugin 없는 프로젝트의 9초는 로컬 3.2초에 runner / 로컬 비(약 2.9 — 014 가 쓴 값)를 곱한 값이다. 아래 Constraints 의 "2.5배쯤" (006) 은 로컬의 처음 실행을 약 17초로 본 값이고, 어느 쪽을 곱해도 이 항은 8 ~ 9초다.
+- 추정대로라면 `timeout-minutes: 10` 안에 든다. Phase 3 을 끝내기 전에 여섯으로 늘어난 검증을 올려서 본다 (03-CONTEXT.md D-09).
+- 동시에 띄우면 로컬(프로세서 10개)에서 여섯이 23초였다. runner(4 cores)에서의 값은 추정하지 않았다.
 
 ### 3. runner 의 환경
 
@@ -122,11 +140,11 @@ gh run view <run id> --log
 - 실제로 풀린 plugin 은 10대 모두 `riverpod_lint` 3.1.9 였다.
 - action 버전: `actions/checkout` v7.0.1 (2026-07-20), `subosito/flutter-action` v2.23.0 (2026-03-25). 둘 다 major tag(`v7`, `v2`)가 있다. `flutter-action` 의 `cache` 기본값은 `false` 다.
 - push 로 도는 workflow 는 올라간 브랜치의 workflow 파일을 쓴다. 기본 브랜치에 파일이 없어도 돈다.
-- 작업 브랜치(`gsd/v2.0-package-rework`)는 이미 원격에 올라가 있다 (D-08, D-09). `.planning/` 이 공개된다는 뜻이므로 결과 파일에는 로컬 절대 경로를 남기지 않는다.
-- 확인하지 않은 것: macOS / Windows runner (CI 는 Linux 만 쓴다), SDK 캐시(`cache: true`)를 켰을 때의 시간 (약 66초를 줄여 주지만 넣을지는 계획 때 정한다), GitHub 나 pub.dev 에 장애가 있을 때의 모습 (spike 002 의 로컬 재현으로 갈음), spike 007(루트의 `example/**` 제외, 규칙 검사의 실행 형태)과 008(상태 폴더를 함께 쓸 때, 깨진 뒤의 회복)의 실험을 runner 에서 한 것.
+- 작업 브랜치(`gsd/v2.0-package-rework`)는 이미 원격에 올라가 있다 (02-CONTEXT.md D-08, D-09). `.planning/` 이 공개된다는 뜻이므로 결과 파일에는 로컬 절대 경로를 남기지 않는다.
+- 확인하지 않은 것: macOS / Windows runner (CI 는 Linux 만 쓴다), SDK 캐시(`cache: true`)를 켰을 때의 시간 (약 66초를 줄여 주지만 넣을지는 계획 때 정한다), GitHub 나 pub.dev 에 장애가 있을 때의 모습 (spike 002 의 로컬 재현으로 갈음), spike 007(루트의 `example/**` 제외, 규칙 검사의 실행 형태)과 008(상태 폴더를 함께 쓸 때, 깨진 뒤의 회복)의 실험을 runner 에서 한 것, spike 009 ~ 014 의 실험을 runner 에서 한 것 (전부 로컬 macOS 에서 쟀다), 연습용 프로젝트 여섯의 실제 job 시간.
 
 ## Origin
 
-Synthesized from spikes: 006 (전용 상태 폴더와 규칙 검사 시간에 관한 두 줄은 007, 008 의 결과를 덧붙인 것이다)
-Source files available in: sources/006-github-runner-cold-plugin/
+Synthesized from spikes: 006 (전용 상태 폴더와 규칙 검사 시간에 관한 두 줄은 007, 008 의 결과를, 여섯으로 늘 때의 추정은 014 의 결과를 덧붙인 것이다)
+Source files available in: sources/006-github-runner-cold-plugin/, sources/014-multi-fixture-plugin-cost/
 원본 결과: `.planning/spikes/006-github-runner-cold-plugin/results/run-38136362920.json`, `run-38136362920-attempt2.json`

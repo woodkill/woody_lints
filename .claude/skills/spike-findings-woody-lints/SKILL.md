@@ -1,24 +1,30 @@
 ---
 name: spike-findings-woody-lints
-description: woody_lints 의 spike 실측에서 나온 구현 설계도(implementation blueprint). 검증 명령(`tool/verify.dart`), `example/` 연습용 프로젝트와 정답지, deprecated 규칙 검사, GitHub Actions CI 를 만들거나 고칠 때, 그리고 루트 `analysis_options.yaml` 의 exclude 를 고칠 때 읽는다. `dart analyze` 실행 형태, analyzer plugin(`riverpod_lint`) 준비 실패 판정과 복구, 종료 코드 해석, Analysis Server 상태 폴더(`ANALYZER_STATE_LOCATION_OVERRIDE`), plugin 버전 읽기, `pub get` 방식의 요구 사항과 검증된 방식을 담았다.
+description: woody_lints 의 spike 실측에서 나온 구현 설계도(implementation blueprint). 검증 명령(`tool/verify.dart`), `example/` 과 연습용 프로젝트 · 정답지, deprecated 규칙 검사, GitHub Actions CI 를 만들거나 고칠 때, 프리셋을 `base.yaml` / `riverpod.yaml` / `codegen.yaml` / `recommended.yaml` 로 나누거나 그 파일들과 루트 `analysis_options.yaml` 의 exclude 를 고칠 때, 진단을 끄는 방법(`// ignore`, `plugins:` 의 `diagnostics:`)이나 생성 파일 제외를 문서로 안내할 때 읽는다. `dart analyze` 실행 형태, analyzer plugin(`riverpod_lint`) 준비 실패 판정과 복구, 종료 코드 해석, Analysis Server 상태 폴더(`ANALYZER_STATE_LOCATION_OVERRIDE`), plugin 버전 읽기, `pub get` 방식, include 로 받는 `plugins:` 의 동작, `analyzer.exclude` 가 plugin 진단에 통하는 조건의 요구 사항과 검증된 방식을 담았다.
 ---
 
 <context>
 ## Project: woody_lints
 
-Phase 2 (Verification Harness) 의 나머지를 계획하기 전에, 검증 명령(`tool/verify.dart`)과 CI 가 기대는 도구 동작 6가지를 실행으로 확인한다. 대상은 `dart analyze`, analyzer plugin(`riverpod_lint`), `pub get`, GitHub Actions runner 이고, 목록은 ROADMAP.md Phase 2 의 "Spike first" 다. 결과의 처리 기준은 02-CONTEXT.md D-15 를 따른다 — "정답지 비교로 판정한다"를 지킬 수 없다는 결과면 멈추고 소유자에게 돌아가고, 값이나 세부만 다른 결과는 기록하고 계속한다.
+idea key 는 둘이다.
 
-8개 모두 VALIDATED 다. D-15 의 멈춤 조건에 해당한 것은 없다. 001~006 이 위의 6가지이고, 007 과 008 은 그 6개가 재지 않고 남긴 두 가지를 같은 idea 아래에서 잰 것이다 — `example/` 이 생긴 뒤의 저장소 루트 분석(02-CONTEXT.md 가 계획에 맡긴 항목)과 Analysis Server 상태 폴더의 자리(001 이 선택지로만 적어 둔 것).
+**`verify-harness-tool-behavior`** — Phase 2 (Verification Harness) 의 나머지를 계획하기 전에, 검증 명령(`tool/verify.dart`)과 CI 가 기대는 도구 동작 6가지를 실행으로 확인한다. 대상은 `dart analyze`, analyzer plugin(`riverpod_lint`), `pub get`, GitHub Actions runner 이고, 목록은 ROADMAP.md Phase 2 의 "Spike first" 다. 결과의 처리 기준은 02-CONTEXT.md D-15 를 따른다 — "정답지 비교로 판정한다"를 지킬 수 없다는 결과면 멈추고 소유자에게 돌아가고, 값이나 세부만 다른 결과는 기록하고 계속한다.
 
-Spike sessions wrapped: 2026-10-11 (001~006), 2026-10-11 (007~008)
+8개(001 ~ 008) 모두 VALIDATED 다. D-15 의 멈춤 조건에 해당한 것은 없다. 001 ~ 006 이 위의 6가지이고, 007 과 008 은 그 6개가 재지 않고 남긴 두 가지를 같은 idea 아래에서 잰 것이다 — `example/` 이 생긴 뒤의 저장소 루트 분석과 Analysis Server 상태 폴더의 자리.
 
-실측 조건: Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9, macOS arm64 (로컬) 와 `ubuntu-latest` (GitHub runner, 006 만). SDK 나 plugin 의 버전이 바뀌면 아래 내용은 다시 재야 한다.
+**`preset-split-include-behavior`** — Phase 3 (Preset Split) 의 나머지를 계획하기 전에, 한 파일(`lib/analysis_options.yaml`)을 조각 셋(`base.yaml` / `riverpod.yaml` / `codegen.yaml`)과 묶음(`recommended.yaml`), 옛 주소의 한 줄짜리 별칭으로 나눈 구조가 기대는 도구 동작을 실행으로 확인한다. 009 ~ 012 는 ROADMAP.md Phase 3 의 "Spike first" 네 항목이고, 013 과 014 는 앞선 spike 끼리 맞물리는 자리(규칙 검사 005 × 007, 여러 연습용 프로젝트의 plugin 준비 006 × 008)다. 결과의 처리 기준은 03-CONTEXT.md 를 따른다 — 009 ~ 011 중 하나라도 통과하지 못하면 멈추고 소유자에게 돌아가고, 012 는 결과가 어느 쪽이든 기록하고 계속한다 (D-07).
+
+6개(009 ~ 014) 중 다섯이 VALIDATED, 012 가 PARTIAL 이다. 멈춤 조건에 해당한 것은 없다 — 009 ~ 011 이 모두 통과했다. 012 는 끄는 방법 여섯 칸이 성립했고, 묶음이 주는 생성 파일 제외가 plugin 진단에 통하지 않는다는 것이 나왔다 (나누기 전의 1.3.0 도 같다).
+
+Spike sessions wrapped: 2026-10-11 (001 ~ 006), 2026-10-11 (007 ~ 008), 2026-10-12 (009 ~ 014)
+
+실측 조건: Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9, macOS arm64 (로컬) 와 `ubuntu-latest` (GitHub runner, 006 만). 009 ~ 014 는 모두 로컬에서, 저장소의 모양을 작업 폴더에 복사한 replica 와 `path:` 의존성으로 쟀다. plugin 쪽에서 풀린 `analyzer` 는 14.5.0, `analysis_server_plugin` 은 0.3.24 다 (2026-10-12). SDK 나 plugin 의 버전이 바뀌면 아래 내용은 다시 재야 한다.
 </context>
 
 <requirements>
 ## Requirements
 
-idea key 는 `verify-harness-tool-behavior` 하나다.
+### `verify-harness-tool-behavior`
 
 소유자가 이전에 확정해 spike 들이 그대로 따른 것 (출처는 02-CONTEXT.md).
 
@@ -44,12 +50,46 @@ spike 에서 나와 실제 구현이 지켜야 하는 것 (근거는 각 spike �
 - 검증 명령은 `example/` 을 분석할 때 `ANALYZER_STATE_LOCATION_OVERRIDE` 로 **저장소 안의 전용 상태 폴더**를 준다. 실제 `riverpod_lint` 버전(D-07)은 그 폴더의 `.plugin_manager/*/pubspec.lock` 에서 읽는다. `dart:io` / `dart:convert` 에는 md5 가 없고, 기본 자리(`~/.dartServer`)에서는 폴더 내용으로도 파일 시각으로도 자기 폴더를 고를 수 없다 (008)
 - stderr 의 머리말은 첫 줄이 아닐 수 있으므로 `contains` 로 찾는다. plugin 실패를 알릴 때 "전용 상태 폴더를 지우고 다시 실행"을 안내한다 — 컴파일된 plugin 파일이 깨진 채 남으면 지울 때까지 계속 실패한다 (008)
 
-읽을 때 헷갈리기 쉬운 두 가지.
+### `preset-split-include-behavior`
 
-- 위의 "인자 없이"는 **경로 인자**가 없다는 뜻이다. `example/` 분석의 실제 명령은 `dart --suppress-analytics analyze --format=json` 이고, 규칙 검사는 그 끝에 복사본 폴더 경로가 붙는다 (`… analyze --format=json build/woody_rule_check`).
-- 루트 `analysis_options.yaml` 은 기존 항목을 그대로 두고 `example/**` 한 줄을 **더하는** 것이다. "그대로 둔다"와 "한 줄을 더한다"는 서로 부딪치지 않는다.
+소유자가 이전에 확정해 spike 들이 그대로 따른 것 (출처는 03-CONTEXT.md, ROADMAP.md).
 
-skill 밖 문서의 자리: MANIFEST.md 는 `.planning/spikes/MANIFEST.md`, 02-CONTEXT.md (D-NN 결정) 는 `.planning/phases/02-verification-harness/02-CONTEXT.md`, ROADMAP.md 와 PROJECT.md 는 `.planning/`, PITFALLS.md 와 ARCHITECTURE.md 는 `.planning/research/` 에 있다.
+- 파일 이름은 `lib/base.yaml`, `lib/riverpod.yaml`, `lib/codegen.yaml`, `lib/recommended.yaml` 이고, `lib/analysis_options.yaml` 은 `recommended.yaml` 을 include 하는 한 줄짜리 별칭이다
+- 조각은 서로를 include 하지 않는다. `base.yaml` 만 `flutter_lints` 를 include 하고 조합은 include 하는 쪽이 한다
+- 나누는 것은 구조 변경이다. 규칙 목록 · 주석 처리된 줄 · 사유 주석은 옮기기만 한다 — spike 의 조각 파일은 저장소의 배포 파일을 **잘라서** 만들고 손으로 다시 쓰지 않는다
+- `invalid_annotation_target: ignore` 와 생성 파일 제외 두 줄은 `codegen.yaml` 에 둔다 (D-02). `riverpod_lint` 선언은 범위 지정이다 (D-01)
+- 실측은 저장소 복사본에서 한다. 저장소의 `lib/`, `pubspec.yaml`, 루트 `analysis_options.yaml`, `example/` 은 바꾸지 않는다
+- 실측은 저장소 고정 SDK (Flutter 3.47.5 / Dart 3.13.4) 에서 하고, 스크립트는 Dart 이며 `dart:io`, `dart:convert` 만 쓴다. 진단은 정답지 형식 `상대경로:줄  강도  규칙이름` 으로 견준다
+- pub workspace 와 Riverpod major 차이는 재지 않는다 (D-08)
+
+spike 에서 나와 실제 구현이 지켜야 하는 것 (근거는 각 spike 의 README).
+
+- 묶음(`recommended.yaml`)은 조각 셋을 `package:woody_lints/…` 주소의 목록으로 부르고, 옛 주소 파일은 `include: package:woody_lints/recommended.yaml` 한 줄이다. 이 3단 구조에서 plugin 이 로드되고 옛 주소 · 묶음 주소 둘 다 지금의 정답지(`exit 2` + 16줄)와 한 줄도 다르지 않다. 상대 경로로 불러도 결과가 같으므로 선례대로 `package:` 를 쓴다 (009, 010, 011)
+- 연습용 프로젝트별 정답지의 모양: 기본만 `exit 2` · 18줄, 기본 + Riverpod `exit 2` · 21줄, 기본 + codegen `exit 0` · 13줄. "기본만" 이 `exit 0` 이 아닌 것은 `invalid_annotation_target` 이 warning 이라서다 (009)
+- `riverpod_lint` 선언을 `^3.1.9` 로 올리는 커밋에서 정답지는 바뀌지 않는다 — 2026-10-12 에 `^3.1.3` 과 `^3.1.9` 가 둘 다 3.1.9 로 풀리는 동안의 사실이다 (010)
+- 루트 `analysis_options.yaml` 의 `lib/analysis_options.yaml` 제외는 파일을 나누는 커밋과 **같은 커밋이거나 그 뒤**에 지운다. 한 파일 구조에서 먼저 지우면 `lib/analysis_options.yaml:58  warning  plugins_in_inner_options` 로 루트 분석이 exit 2 가 된다 (011)
+- 새 연습용 프로젝트는 한 폴더 아래에 모으고 루트에서 `'<폴더>/**'` 한 줄로 제외한다. 기존 `example/**` 줄은 그대로 둔다. 제외하지 않으면 루트 분석에 그 폴더들의 진단이 섞이고 plugin 까지 준비한다 (011)
+- 루트 옵션 파일은 묶음을 include 하지 않는다 — 분석마다 plugin 을 준비한다. `base.yaml` 은 include 해도 plugin 을 준비하지 않고 지금의 `tool/verify.dart` 에 새 진단이 0건이다 (011)
+- 끄는 설정용 연습 프로젝트는 끈 자리 옆에 끄지 않은 같은 위반을 둔다. plugin 진단은 주석에 `riverpod_lint/` 접두사를 붙이고, 프로젝트 전체에서 끌 때는 `version` 을 함께 적는다. `version` 을 뺀 설정은 경고 없이 무시되고, `analyzer.errors` 로는 plugin 진단을 끌 수 없다 (012)
+- **`codegen.yaml` 이 주는 생성 파일 제외는 규칙 진단에만 통하고 plugin 진단에는 통하지 않는다.** plugin 이 쓰는 `analyzer` 14.4.0 이상이 제외 패턴을 그것을 적은 파일의 폴더 기준으로 풀기 때문이고, 나누기 전(1.3.0)에도 같다. 사용 프로젝트가 자기 옵션 파일에 직접 적은 제외는 plugin 도 따른다. 성공 기준 3 의 "생성 파일의 진단이 보고되지 않는다" 는 규칙 진단에 대한 말로 읽는다 (012)
+- 규칙 검사는 `base.yaml` · `codegen.yaml` · (`plugins:` 를 뺀) `riverpod.yaml` 을 `build/woody_rule_check/<조각 이름>/analysis_options.yaml` 로 복사해 한 번에 돌린다. 통과 조건은 "exit 0 이고 복사본의 진단이 0건" 이다. "규칙 0개" 확인은 `base.yaml` 에만 건다. 묶음과 별칭은 대상에 넣지 않는다 — 폴더를 인자로 준 분석에서는 include 를 거쳐 plugin 까지 준비한다 (013)
+- 깨진 YAML 은 exit 3 인데 JSON 의 진단이 0건이고 stderr 도 비어 있다. 원인(`parse_error`)은 형식 인자 없이 돌린 출력에만 찍힌다. `linter:` 키의 오타는 아무 신호도 남기지 않는다 (013)
+- 연습용 프로젝트는 폴더마다 따로 두고 상태 폴더도 프로젝트마다 따로 준다 (지금 검증 명령의 방식 그대로). 여섯이 로컬에서 처음 66초, 재실행 20 ~ 21초다. 상태 폴더를 하나로 합치면 plugin 폴더가 넷이 되어 버전을 읽지 못한다. plugin 준비는 경로가 다르면 나눠 쓰지 못한다 (014)
+- 시간이 문제가 되면 상태 폴더를 따로 둔 채 동시에 띄우는 것을 먼저 본다 — 로컬에서 여섯이 23초이고 결과가 같았다. GitHub runner 에서의 여섯은 재지 않았다 (추정 약 4분 20 ~ 30초) (014)
+
+### 읽을 때 헷갈리기 쉬운 것
+
+- "인자 없이"는 **경로 인자**가 없다는 뜻이다. 연습용 프로젝트 분석의 실제 명령은 `dart --suppress-analytics analyze --format=json` 이고, 규칙 검사는 그 끝에 복사본 폴더 경로가 붙는다 (`… analyze --format=json build/woody_rule_check`).
+- **"바꾸지 않는다" 는 spike 의 조건이다.** 두 idea 모두 spike 가 저장소의 파일을 고치지 않고 복사본에서 실험했다는 말이다. Phase 3 의 구현은 `lib/` 와 루트 `analysis_options.yaml` 을 바꾼다. 구현이 바꾸지 않는 것은 `example/` 의 샘플 소스와 정답지, `pubspec.yaml` 의 `version` 과 `dependencies`, `main` 이다 (03-CONTEXT.md).
+- **루트 `analysis_options.yaml` 의 exclude 는 phase 에 따라 다르다.** Phase 2 는 기존 `lib/analysis_options.yaml` 줄을 그대로 두고 `example/**` 를 **더했다** (첫째 idea — 지금의 저장소가 이 모양이다). 나눌 때부터는 둘이 달라진다 (둘째 idea): `lib/analysis_options.yaml` 줄은 파일을 나누는 커밋이나 그 뒤의 커밋에서 **지우고** (먼저 지우면 안 된다), 새 연습용 프로젝트 폴더의 제외 한 줄은 그 폴더를 만드는 변경에서 함께 **더한다**. `include` 줄은 그대로다. 두 요구 사항은 때가 다를 뿐 부딪치지 않는다.
+- **"지금의 정답지 (`exit 2` + 16줄)" 는 실제 `example/expected_diagnostics.txt` 다** (2026-10-12). example-project-and-expected-file.md 에 나오는 진단 4건은 spike 001 의 연습용 프로젝트 것이다.
+- **정답지의 "N줄" 은 진단 줄만 센 것이다.** 파일은 `#` 로 시작하는 머리 주석, `exit N` 한 줄, 진단 줄의 순서이고, 머리 주석과 `exit N` 줄은 줄 수에 넣지 않았다. "맨 위 줄" 은 `exit N` 줄을 말한다.
+- 연습용 프로젝트는 여섯이고 정답지는 다섯이다. 묶음을 받는 프로젝트가 `example/` 의 정답지와 견준다 (03-CONTEXT.md D-03).
+- **"끈 자리 옆에 끄지 않은 같은 위반" 은 주석으로 끄는 칸의 이야기다.** 프로젝트 전체에서 끈 진단은 그 프로젝트의 모든 자리에서 사라지므로 옆자리 대조가 성립하지 않는다. spike 012 는 여섯 칸을 같은 규칙 · 같은 진단으로 실행을 바꿔 가며 쟀고, 한 프로젝트에 함께 담아 돌리지 않았다 (→ suppression-and-exclude.md 8번).
+- 조각(fragment)은 `base.yaml` / `riverpod.yaml` / `codegen.yaml`, 묶음(bundle)은 `recommended.yaml`, 별칭(alias)과 옛 주소는 `lib/analysis_options.yaml` (`package:woody_lints/analysis_options.yaml`), 연습용 프로젝트는 fixture, 정답지는 expected / golden 파일이다. 프리셋(preset)은 이 패키지가 배포하는 옵션 파일을 통틀어 이르는 말이다. "묶음이 주는 생성 파일 제외", "`codegen.yaml` 이 주는 제외", "프리셋이 주는 제외" 는 같은 것 — `codegen.yaml` 에 적히는 `analyzer.exclude` 두 줄(나누기 전에는 `lib/analysis_options.yaml` 에 있다) — 을 가리킨다.
+- references 안의 "→ N번" 은 그 문서의 `### N.` 절 번호다.
+
+skill 밖 문서의 자리: MANIFEST.md 는 `.planning/spikes/MANIFEST.md`, 02-CONTEXT.md 와 02-VERIFICATION.md 는 `.planning/phases/02-verification-harness/`, 03-CONTEXT.md (Phase 3 의 D-NN 결정) 는 `.planning/phases/03-preset-split/`, ROADMAP.md 와 PROJECT.md 는 `.planning/`, PITFALLS.md 와 ARCHITECTURE.md 는 `.planning/research/` 에 있다. D-NN 번호는 phase 마다 따로 매겨져 있다 — 첫째 idea 의 D-NN 은 02-CONTEXT.md, 둘째 idea 의 D-NN 은 03-CONTEXT.md 의 것이다.
 </requirements>
 
 <findings_index>
@@ -57,18 +97,24 @@ skill 밖 문서의 자리: MANIFEST.md 는 `.planning/spikes/MANIFEST.md`, 02-C
 
 | Area | Reference | Key Finding |
 |------|-----------|-------------|
-| `dart analyze` 실행과 결과 판정 | references/analyze-run-and-verdict.md | `example/` 에서 인자 없이 `--suppress-analytics` 로, 저장소 안의 전용 상태 폴더를 주고 돌린다. plugin 이 죽어도 종료 코드는 0 / 2 라서 stderr 에 머리말이 **들어 있는지**(`contains`)로 알아챈다. plugin 버전은 전용 상태 폴더의 `pubspec.lock` 에서 읽는다 (기본 자리에서는 자기 폴더를 고를 수 없다). 깨진 `plugin.aot` 은 지울 때까지 계속 실패한다 |
-| `example/` 프로젝트와 정답지 | references/example-project-and-expected-file.md | `riverpod_lint` 15개는 info 3 / warning 11 / error 1 이다. 정답지에는 `missing_provider_scope` + `avoid_public_notifier_properties` 를 넣어 `exit 2` 로 만든다. 패키지는 `dart pub get` 으로 받는다. `example/` 을 만들 때 루트 옵션 파일에 `example/**` 제외를 함께 넣는다 — 넣지 않으면 루트 분석이 exit 3 (`pub get` 전) 또는 exit 2 + plugin 준비 15초 (`pub get` 후) 가 된다 |
-| deprecated / removed / 없는 규칙 검사 | references/rule-status-check.md | 배포 파일을 `plugins:` 를 뺀 채 저장소 **안**에 `analysis_options.yaml` 이름으로 복사하고, 루트에서 **그 폴더를 인자로** 분석한다 (0.5초, plugin 준비 없음). 저장소 밖에 두면 deprecated 와 removed 를 놓친다 (보고 여부가 pubspec 의 SDK 하한에 달려 있다) |
-| GitHub Actions CI | references/ci-workflow.md | `checkout@v7` + `flutter-action@v2` (`.fvmrc`) 만으로 캐시 없는 runner 에서 60번 중 60번 로컬과 같은 진단이 나왔다. 첫 분석 약 43초, job 약 2분, `timeout-minutes: 10`. 상태 폴더는 캐시하지 않는다 |
+| `dart analyze` 실행과 결과 판정 | references/analyze-run-and-verdict.md | 프로젝트 폴더에서 인자 없이 `--suppress-analytics` 로, 저장소 안의 전용 상태 폴더를 **프로젝트마다 따로** 주고 돌린다. plugin 이 죽어도 종료 코드는 0 / 2 라서 stderr 에 머리말이 **들어 있는지**(`contains`)로 알아챈다. plugin 버전은 전용 상태 폴더의 `pubspec.lock` 에서 읽는다. plugin 을 선언하지 않는 조합에서는 plugin 폴더 0개가 정상이다. 깨진 `plugin.aot` 은 지울 때까지 계속 실패한다 |
+| `example/` 프로젝트와 정답지 | references/example-project-and-expected-file.md | `riverpod_lint` 15개는 info 3 / warning 11 / error 1 이다. 정답지에는 `missing_provider_scope` + `avoid_public_notifier_properties` 를 넣어 `exit 2` 로 만든다. 패키지는 `dart pub get` 으로 받는다. `example/` 을 만들 때 루트 옵션 파일에 `example/**` 제외를 함께 넣는다. 나눈 뒤에도 `example/` 은 옛 주소 한 줄을 그대로 둔다 |
+| deprecated / removed / 없는 규칙 검사 | references/rule-status-check.md | 대상을 저장소 **안**에 `analysis_options.yaml` 이름으로 복사하고 루트에서 **그 폴더를 인자로** 분석한다 (0.5초, plugin 준비 없음). 나눈 뒤에는 조각 셋을 하위 폴더에 복사해 한 번에 돌리고 "exit 0 · 진단 0건" 으로 판정한다. 깨진 YAML 은 exit 3 인데 JSON 의 진단이 0건이고, `linter:` 의 오타는 "규칙 0개" 확인만 잡는다 |
+| GitHub Actions CI | references/ci-workflow.md | `checkout@v7` + `flutter-action@v2` (`.fvmrc`) 만으로 캐시 없는 runner 에서 60번 중 60번 로컬과 같은 진단이 나왔다. 첫 분석 약 43초, job 약 2분, `timeout-minutes: 10`. 상태 폴더는 캐시하지 않는다. 연습용 프로젝트가 여섯이면 약 4분 20 ~ 30초로 추정한다 (재지 않았다) |
+| 프리셋 나누기 (조각 · 묶음 · 별칭) | references/preset-split-structure.md | 이름이 `analysis_options.yaml` 이 아닌 조각의 `plugins:` 가 include 로 로드되고, 옛 주소 → 묶음 → 조각의 3단에서 정답지가 한 줄도 달라지지 않는다. 조각은 배포 파일을 잘라 만들고 이어 붙여 원본과 견준다. 루트의 `lib/analysis_options.yaml` 제외는 나누는 커밋이거나 그 뒤에 지운다. 루트는 묶음을 include 하지 않는다 |
+| 나눈 뒤의 연습용 프로젝트 여섯 | references/fixtures-after-split.md | 정답지의 모양은 기본만 `exit 2` · 18줄, 기본 + Riverpod `exit 2` · 21줄, 기본 + codegen `exit 0` · 13줄이다. 새 프로젝트는 한 폴더 아래에 모아 루트에서 한 줄로 제외하고, 상태 폴더는 프로젝트마다 따로 준다. 여섯이 로컬에서 처음 66초, 재실행 20 ~ 21초, 동시에 띄우면 23초다 |
+| 진단 끄기와 생성 파일 제외 | references/suppression-and-exclude.md | 끄는 방법 여섯 칸(프로젝트 전체 / 파일 / 한 줄 × 규칙 / plugin)이 모두 끈 것만 사라지게 한다. plugin 진단은 주석에 `riverpod_lint/` 접두사, 옵션 파일에는 `version` 이 있어야 꺼진다 — `version` 을 빼면 경고 없이 무시된다. **프리셋이 주는 생성 파일 제외는 규칙 진단에만 통한다** (1.3.0 도 같다) |
 
 ## 어느 것을 읽을지
 
 - `tool/verify.dart` 의 분석 실행, 상태 폴더, 종료 코드 해석, 실제 plugin 버전 표시(D-07), plugin 실패 안내 문구 → analyze-run-and-verdict.md
-- `example/` 의 파일 구성, 위반 코드, 정답지 내용, `pubspec.lock`, README 의 종료 코드 설명 → example-project-and-expected-file.md
-- 루트 `analysis_options.yaml` 의 exclude, 저장소 루트에서 돌린 `dart analyze`(커밋 전 린터)에 뜻밖의 진단이 나올 때 → example-project-and-expected-file.md 의 8번
-- VERIFY-02, 규칙 후보 선정(Phase 4) → rule-status-check.md
-- `.github/workflows/` → ci-workflow.md
+- `lib/` 의 파일을 나누는 일, 묶음과 별칭의 내용, plugin 하한을 올리는 커밋, 루트 `analysis_options.yaml` 의 include 와 exclude → preset-split-structure.md
+- 새 연습용 프로젝트의 폴더 · 옵션 파일 · 정답지의 모양, 프로젝트가 여럿일 때의 상태 폴더와 시간, `fixtures/**` 제외 → fixtures-after-split.md
+- 끄는 설정용 연습 프로젝트(PRESET-07)의 샘플과 옵션, README 의 "끄는 방법" · "생성 파일" 안내 (Phase 5) → suppression-and-exclude.md
+- `example/` 의 파일 구성, 위반 코드, `pubspec.lock`, README 의 종료 코드 설명, `riverpod_lint` 규칙의 강도 → example-project-and-expected-file.md
+- 저장소 루트에서 돌린 `dart analyze`(커밋 전 린터)에 뜻밖의 진단이 나올 때 → `example/` 의 것이면 example-project-and-expected-file.md 의 8번, `lib/analysis_options.yaml` 의 것이면 preset-split-structure.md 의 5번 · 6번 (루트의 `pub get` 을 했는지도 본다 — 같은 문서의 Constraints), 다른 연습용 프로젝트 폴더의 것이면 fixtures-after-split.md 의 4번
+- 규칙 검사 단계(VERIFY-02)의 대상과 통과 조건, 깨진 옵션 파일의 신호, 규칙 후보 선정(Phase 4) → rule-status-check.md
+- `.github/workflows/`, 자동 점검 시간 → ci-workflow.md
 - 새 spike 를 쓸 때의 관례 → `.planning/spikes/CONVENTIONS.md`
 
 ## 뒤의 spike 가 바꾼 결론
@@ -78,22 +124,38 @@ references 는 바뀐 뒤의 결론으로 적혀 있다. `sources/` 의 README �
 | 무엇 | 앞선 결론 | 지금의 결론 |
 |---|---|---|
 | 규칙 검사의 실행 형태 | 루트에서 인자 없이 돌리고 복사본의 진단만 고른다 (005) | 루트에서 복사본 폴더를 인자로 준다 (007) |
-| 상태 폴더 | 정해 주면 md5 없이 버전을 찾을 수 있다는 선택지 (001). 앞선 wrap-up 은 "검증 명령은 주지 않아도 된다"고 적었다 | 항상 저장소 안의 전용 폴더를 준다 (008) |
+| 상태 폴더 | 정해 주면 md5 없이 버전을 찾을 수 있다는 선택지 (001). 앞선 wrap-up 은 "검증 명령은 주지 않아도 된다"고 적었다 | 항상 저장소 안의 전용 폴더를 준다 (008). 프로젝트가 여럿이면 프로젝트마다 따로 준다 (014) |
 | plugin 버전을 읽는 자리 | runner 에서 `~/.dartServer/.plugin_manager/*/pubspec.lock` 을 읽었다 (006. 새 가상 머신이라 다른 프로젝트의 폴더가 없었다) | 전용 상태 폴더의 `.plugin_manager/*/pubspec.lock` 에서 읽는다. 기본 자리에서는 읽지 않는다 (008) |
 | stderr 의 머리말 | 모든 실패에서 stderr 가 머리말로 시작한다 (002) | 받기·컴파일 실패에서는 첫 줄, 컴파일된 파일을 읽지 못한 실패에서는 셋째 줄. `contains` 로 찾는다 (008) |
 | plugin 폴더 이름 | 패키지 루트 절대 경로의 md5 (001) | **링크를 푼** 경로의 **code unit** 을 md5 한 값. 영문·숫자뿐인 경로에서만 001 의 말과 같다 (008) |
+| 루트의 `lib/analysis_options.yaml` 제외 | 그대로 둔다 (Phase 2 의 요구 사항) | 파일을 나누는 커밋과 같은 커밋이거나 그 뒤에 지운다. 한 파일 구조에서 먼저 지우면 루트 분석이 exit 2 다 (011) |
+| 연습용 프로젝트가 늘 때의 루트 제외 | 폴더마다 제외 줄이 필요할 것이다 (007. 재지 않고 남긴 예상) | 한 폴더 아래에 모으면 한 줄이다 (011) |
+| 규칙 검사의 대상 | 배포 파일 하나 (005, 007) | 조각 셋을 하위 폴더에 복사해 한 번에. 묶음과 별칭은 넣지 않는다 (013) |
+| 규칙 검사의 통과 조건 | 세 코드(`deprecated_lint` / `removed_lint` / `undefined_lint`)가 없으면 통과 (005, 007) | exit 0 이고 복사본의 진단이 0건. "규칙 0개" 확인은 `base.yaml` 에만 (013) |
+| `plugins:` 를 빼는 단계 | 섹션을 찾지 못하면 실패한다 (007 의 `stripPlugins`) | 있으면 뺀다. `base.yaml` 은 그대로 복사해 줄 번호가 원본과 같다 (013) |
+| 종료 코드 3 | error 가 하나라도 있다 (003) | 옵션 파일의 YAML 이 깨졌을 때도 3 이고, 그때는 JSON 의 진단이 0건이다 (013) |
+| plugin 진단을 프로젝트 전체에서 끄기 | 같은 이름으로 다시 선언해 덮어쓴다 (003. 예시에 `version` 이 있었지만 필수라고 적지 않았다) | `version` 을 함께 적어야 한다. 빼면 경고 없이 무시된다 (012) |
+| JSON 의 `type` | 전부 `STATIC_WARNING` (003) | 그대로 맞다. 다만 주석의 `type=warning` 은 plugin 진단을 끄지 못하고 `type=lint` 가 끈다 (012) |
+| 생성 파일 제외 | 프리셋의 제외가 생성 파일의 진단을 막는다 (spike 가 잰 적 없는 전제) | 규칙 진단에만 통한다. plugin 진단에는 통하지 않고 1.3.0 도 같다 (012) |
+| plugin 폴더가 0개 | 버전을 `?` 로 찍고 이유를 알린다 (008) | plugin 을 선언하지 않는 조합에서는 정상이다 — "해당 없음" 으로 찍을 수 있다 (009, 014) |
+| 상태 폴더를 따로 준 동시 실행 | 2쌍에서 문제가 없었다 (008) | 넷 · 여섯을 두 번씩, 20건이 모두 통과했다 (014) |
 
 ## Source Files
 
 Original spike source files are preserved in `sources/` for complete reference.
 
-- `sources/` 는 **읽기용 사본**이다. README, 실측 스크립트, 연습용 프로젝트의 소스만 담았다. 실행은 원본(`.planning/spikes/NNN-name/`)에서 한다 — 사본의 `pubspec.yaml` 에 적힌 `path: ../../../..` 는 사본 자리에서는 맞지 않고, 007·008 의 스크립트는 자기 위치에서 저장소 루트와 spike 001 의 연습용 프로젝트를 찾는다.
+- `sources/` 는 **읽기용 사본**이다. README, 실측 스크립트, 연습용 프로젝트의 소스만 담았다. 실행은 원본(`.planning/spikes/NNN-name/`)에서 한다 — 사본의 `pubspec.yaml` 에 적힌 `path: ../../../..` 는 사본 자리에서는 맞지 않고, 007 ~ 014 의 스크립트는 자기 위치에서 저장소 루트를 찾는다.
 - 원본 로그와 JSON(`results/`), 생성 코드(`*.g.dart`), `pubspec.lock`, `.dart_tool/` 은 사본에 넣지 않았다. 원본 폴더에 있다.
 - 007 과 008 은 연습용 프로젝트를 새로 만들지 않았다. spike 001 의 것을 작업 폴더에 복사해 썼으므로 사본에는 README 와 스크립트만 있다.
+- 009 ~ 014 도 연습용 프로젝트를 따로 두지 않았다. 저장소 `example/` 의 샘플과 `pubspec.lock` 을 작업 폴더의 복사본(replica)에 복사해 썼다. 여섯이 함께 쓰는 조각이 `sources/009-preset-plugin-via-include/replica.dart` 이고, 나머지 스크립트는 `import '../009-preset-plugin-via-include/replica.dart';` 로 받는다. 012 에만 필요한 샘플은 그 스크립트 안에 문자열로 들어 있다.
 - 실측 스크립트에서 그대로 옮겨 쓸 수 있는 조각. 모두 `dart:io`, `dart:convert` 만 쓴다.
   - `sources/006-github-runner-cold-plugin/ci_probe.dart`: `normalizeDiagnostics`, `Expected.read`, `runAnalyze`, `runPubGet`
   - `sources/008-state-folder-placement/state_probe.dart`: `pluginFolders`, `readPluginVersion` (전용 상태 폴더에서 버전 읽기), `Outcome.hasPluginHeader` (`contains`), 접두사를 둘 받는 `normalizeDiagnostics`
-  - `sources/007-root-analysis-with-example/probe.dart`: `stripPlugins` (`plugins:` 섹션 빼기)
+  - `sources/007-root-analysis-with-example/probe.dart`: `stripPlugins` (`plugins:` 섹션 빼기 — 못 찾으면 던지는 형태다. 나눈 뒤에는 "있으면 뺀다" 로 쓴다)
+  - `sources/009-preset-plugin-via-include/replica.dart`: `Shipped` (배포 파일을 세 조각으로 자르고 이어 붙여 원본과 견주기), `Expected.predicted` (조합별 정답지 셈하기), `diffLines` (건수까지 세는 비교), `Replica.addFixture` (연습용 프로젝트 복사와 의존성 경로 맞추기), `Replica.declaredConstraint` (서버가 받은 plugin 선언 읽기), `Replica.scrub` (결과에서 로컬 경로 가리기)
+  - `sources/012-plugin-suppression-matrix/probe.dart`: `samples` (끈 자리 옆에 끄지 않은 같은 위반을 둔 샘플 9개), `cells` (칸마다 볼 자리). **`cells` 의 다섯째 인자는 결과가 아니라 소스를 읽어 세운 추정(`guess`)이다** — 세 칸(`type=lint`, `type=warning`, 생성 파일 제외의 plugin 쪽)은 실제와 반대였다. 결과는 suppression-and-exclude.md 의 표를 따른다
+  - `sources/013-rule-check-after-split/probe.dart`: `ruleCheck` (복사본을 두고 폴더를 인자로 분석한 뒤 `finally` 로 지우기 — 경로에 하위 폴더를 주면 여럿을 한 번에 본다), 깨진 입력 여섯(`broken`), `countDeclaredRules` (`tool/verify.dart` 의 것과 같은 셈)
+  - `sources/014-multi-fixture-plugin-cost/probe.dart`: `parallel` (상태 폴더를 따로 주고 `Future.wait` 로 동시에 띄우기)
 </findings_index>
 
 <metadata>
@@ -107,6 +169,12 @@ Original spike source files are preserved in `sources/` for complete reference.
 - 006-github-runner-cold-plugin
 - 007-root-analysis-with-example
 - 008-state-folder-placement
+- 009-preset-plugin-via-include
+- 010-alias-three-level-include
+- 011-root-analysis-after-split
+- 012-plugin-suppression-matrix
+- 013-rule-check-after-split
+- 014-multi-fixture-plugin-cost
 
 skill 이름은 `spike-findings-woody-lints` 다. 프로젝트 폴더 이름은 `woody_lints` 이지만 skill 이름에는 소문자·숫자·하이픈만 쓰는 규격에 맞춰 밑줄을 하이픈으로 바꿨다. 다음 wrap-up 은 이 폴더를 그대로 갱신한다.
 </metadata>
