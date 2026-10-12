@@ -1,0 +1,10 @@
+# analyzer plugin (Dart 3.10+ analysis_server_plugin 방식) — 최상위 키.
+# riverpod_lint 3.x 는 이 방식만 지원한다. 옛 `analyzer: plugins:` 선언은
+# 아무것도 로드하지 않았고, Dart 3.13 부터 legacy plugin 경고를 낸다.
+# plugin 은 프로젝트 pubspec.lock 과 별도로 Dart Analysis Server 의 plugin 캐시
+# (~/.dartServer/.plugin_manager)에서 해석된다.
+# 이 섹션을 바꾼 뒤에는 Dart Analysis Server 를 재시작해야 반영된다.
+# 결과 확인은 `dart analyze` 로 한다 — Flutter 3.47.5 의 `flutter analyze` 는
+# plugin 진단을 표시하지 않았다 (3.41.9 는 표시, 2026-09-20 실측).
+plugins:
+  riverpod_lint: ^3.1.3

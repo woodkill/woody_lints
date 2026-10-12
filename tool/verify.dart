@@ -1,7 +1,7 @@
 // woody_lints 검증 명령 — 배포 설정이 기대한 대로 적용되는지를 단계 4개로 확인한다.
 //
 //   [1/4] lib/ 에 .dart 파일이 없는지
-//   [2/4] 배포 파일(lib/analysis_options.yaml)의 복사본을 분석해 진단이 하나도 없는지 (deprecated / removed / 없는 규칙, 겹친 규칙 · 모르는 키 같은 옵션 경고, 깨진 YAML)
+//   [2/4] 조각 파일 셋(lib/base.yaml · codegen.yaml · riverpod.yaml)의 복사본을 분석해 진단이 하나도 없는지 (deprecated / removed / 없는 규칙, 겹친 규칙 · 모르는 키 같은 옵션 경고, 깨진 YAML)
 //   [3/4] example/analysis_options.yaml 이 include 한 줄인지
 //   [4/4] example/ 을 `dart analyze` 로 분석한 결과가 커밋된 정답지와 같은지
 //
@@ -34,8 +34,42 @@ const pluginFailureHeader =
 /// 지금은 `example` 하나다. fixture 마다 상태 폴더를 따로 주고 순서대로 분석한다.
 const fixtures = ['example'];
 
-/// 규칙이 적힌 배포 파일 (저장소 루트 기준). 읽기만 한다.
-const shippedOptionsPath = 'lib/analysis_options.yaml';
+/// 규칙 검사의 대상 — 규칙이 적힐 수 있는 조각 셋 (저장소 루트 기준). 읽기만 한다.
+///
+/// 묶음(`lib/recommended.yaml`)과 별칭(`lib/analysis_options.yaml`)은 넣지 않는다 —
+/// 폴더를 인자로 준 분석에서는 include 를 거쳐 plugin 까지 준비한다 (spike 013).
+/// 새 조각이 생기면 [expectedLibYamls] 와 함께 고친다.
+const ruleCheckTargets = [
+  'lib/base.yaml',
+  'lib/codegen.yaml',
+  'lib/riverpod.yaml',
+];
+
+/// "규칙 0개" 확인을 거는 조각 (저장소 루트 기준).
+///
+/// 이 조각에만 건다 — `codegen.yaml` 과 `plugins:` 를 뺀 `riverpod.yaml` 에는 규칙이 없다.
+const rulesFile = 'lib/base.yaml';
+
+/// `lib/` 에 있어야 하는 YAML 의 전부 (파일 이름).
+///
+/// 조각 셋 + 묶음 + 별칭이다. 새 조각이 생기면 이 집합과 [ruleCheckTargets] 를 함께 고친다 —
+/// 규칙 검사 대상에서 빠진 조각에 숨은 문제 규칙은 어느 단계도 잡지 못한다 (spike 013).
+const expectedLibYamls = {
+  'analysis_options.yaml',
+  'base.yaml',
+  'codegen.yaml',
+  'recommended.yaml',
+  'riverpod.yaml',
+};
+
+/// [2/4] 단계의 화면 이름.
+const ruleCheckLabel = '배포 파일의 규칙 이름';
+
+/// [2/4] 실패 문구의 마지막 안내 — 진단 줄에서 고칠 파일과 줄을 찾는 법.
+const fragmentLineHint =
+    '진단 줄의 폴더 이름이 조각 이름이다 — `lib/<이름>.yaml` 에서 그 줄을 고친다. '
+    '복사본의 줄 번호는 원본과 같다 (`riverpod.yaml` 은 `plugins:` 섹션을 빼고 복사하므로 '
+    '그 섹션 뒤에 적은 줄만 뺀 줄 수만큼 앞당겨진다).';
 
 /// 규칙 검사용 복사본을 두는 폴더 (저장소 루트 기준).
 ///
@@ -589,20 +623,75 @@ StepResult checkLibHasNoDart(String repoRoot) {
   );
 }
 
-/// 옵션 파일 내용에서 최상위 `plugins:` 섹션을 뺀다 (spike 007).
+/// 옵션 파일 내용에서 최상위 `plugins:` 섹션이 있으면 뺀다 (spike 007, 013).
 ///
-/// `plugins:` 줄과 그 바로 아래에 이어지는 들여쓴 줄만 지운다. 못 찾으면
-/// [FormatException] 을 던진다 — `plugins:` 를 담은 채 분석하면 plugin 을 준비한다
-/// (11초 + 네트워크).
-String stripPlugins(String options) {
+/// `plugins:` 줄과 그 바로 아래에 이어지는 들여쓴 줄만 지운다. 없으면 그대로 돌려준다 —
+/// 조각 셋 가운데 `plugins:` 가 있는 것은 `riverpod.yaml` 뿐이다.
+///
+/// 뺀 뒤에도 `plugins:` 줄이 남아 있으면 패턴이 섹션을 놓친 것이라 [FormatException] 을
+/// 던진다 ([shownAs] 는 문구에 쓸 원본 경로). `plugins:` 를 담은 채 분석하면 plugin 을
+/// 준비한다 (10초 + 네트워크) — 조용히 넘기지 않는다.
+String stripPlugins(String options, {required String shownAs}) {
   final stripped = options.replaceAll(
     RegExp(r'^plugins:\n(?:[ \t]+.*\n)+', multiLine: true),
     '',
   );
-  if (stripped == options) {
-    throw const FormatException('$shippedOptionsPath 에서 `plugins:` 섹션을 찾지 못했다');
+  if (RegExp(r'^plugins:', multiLine: true).hasMatch(stripped)) {
+    throw FormatException('$shownAs 의 `plugins:` 섹션을 빼지 못했다');
   }
   return stripped;
+}
+
+/// 조각 경로(`lib/base.yaml`)에서 조각 이름(`base`)을 뗀다 — 복사본의 하위 폴더 이름이다.
+String fragmentName(String target) {
+  final file = target.split('/').last;
+  return file.endsWith('.yaml')
+      ? file.substring(0, file.length - '.yaml'.length)
+      : file;
+}
+
+/// 규칙 검사 진단 줄의 경로(`build/woody_rule_check/<이름>/analysis_options.yaml:N`)에서
+/// 조각 이름을 읽는다. 못 읽으면 null.
+String? fragmentNameOfLine(String line) =>
+    RegExp('^${RegExp.escape(ruleCheckDir)}/([^/]+)/analysis_options\\.yaml:')
+        .firstMatch(line)
+        ?.group(1);
+
+/// `lib/` 의 YAML 이 정확히 [expectedLibYamls] 인지 본다 ([2/4] 의 첫 확인).
+///
+/// 같으면 null, 다르면 실패한 [StepResult] 를 돌려준다. 더 있는 파일은 규칙 검사 대상
+/// ([ruleCheckTargets])에서 빠졌을 수 있는 새 조각이고, 없는 파일은 지웠거나 이름을 바꾼
+/// 조각이다. `lib/` 가 없으면 다섯이 모두 없는 것으로 본다.
+StepResult? checkLibYamlSet(String repoRoot) {
+  final lib = Directory('$repoRoot/lib');
+  final present = lib.existsSync()
+      ? {
+          for (final entity in lib.listSync().whereType<File>())
+            if (entity.path.endsWith('.yaml'))
+              relativize(entity.path, '$repoRoot/lib'),
+        }
+      : <String>{};
+  final extra = present.difference(expectedLibYamls).toList()..sort();
+  final missing = expectedLibYamls.difference(present).toList()..sort();
+  if (extra.isEmpty && missing.isEmpty) return null;
+  return StepResult(
+    label: ruleCheckLabel,
+    passed: false,
+    detailLines: [
+      '`lib/` 의 YAML 이 정해진 다섯과 다르다.',
+      if (extra.isNotEmpty) ...[
+        '더 있는 것 (${extra.length})',
+        ...extra.map((n) => '  lib/$n'),
+      ],
+      if (missing.isNotEmpty) ...[
+        '없는 것 (${missing.length})',
+        ...missing.map((n) => '  lib/$n'),
+      ],
+      '',
+      '새 조각을 더했으면 tool/verify.dart 의 ruleCheckTargets 와 expectedLibYamls 에 함께 적는다. '
+          '지웠으면 두 상수에서 뺀다.',
+    ],
+  );
 }
 
 /// 복사본의 진단 줄 [line] 이 가리키는 줄에서 규칙 이름을 읽는다. 못 읽으면 null.
@@ -659,10 +748,13 @@ Future<List<String>> readParseErrorLines(String repoRoot) async {
   ];
 }
 
-/// [2/4] 배포 파일의 복사본을 분석해 진단이 하나도 없는지 본다 (VERIFY-02).
+/// [2/4] 조각 셋([ruleCheckTargets])의 복사본을 분석해 진단이 하나도 없는지 본다 (VERIFY-02).
 ///
-/// 규칙을 하나도 읽지 못하면([countDeclaredRules] 가 0) 실패다 — 검사가 본 것이 없는데
-/// "문제 없음" 으로 넘기지 않는다.
+/// 첫 확인은 `lib/` 의 YAML 집합이다 ([checkLibYamlSet]) — 대상에서 빠진 새 조각이 있으면
+/// 복사본을 만들기 전에 실패한다.
+///
+/// [rulesFile] 에서 규칙을 하나도 읽지 못하면([countDeclaredRules] 가 0) 실패다 — 검사가
+/// 본 것이 없는데 "문제 없음" 으로 넘기지 않는다.
 ///
 /// 통과는 복사본의 `dart analyze` 가 exit 0 이고 진단 0건일 때 하나다. 깨진 YAML 은
 /// exit 3 에 진단 0건으로 나오므로 형식 인자 없이 한 번 더 돌려 원인 줄을 보여 준다 (spike 013).
@@ -673,18 +765,32 @@ Future<List<String>> readParseErrorLines(String repoRoot) async {
 /// 2026-10-12 에 고쳤다 (CONTEXT '가장 먼저 할 일').
 ///
 /// analyzer 는 규칙의 상태를 `analysis_options.yaml` 이라는 이름의 파일에 직접 적힌
-/// 규칙에 대해서만 온전히 보고한다 (include 경유로는 없는 규칙만). 그래서 배포 파일을
-/// `plugins:` 없이 [ruleCheckDir] 에 그 이름으로 복사하고, 저장소 루트에서 그 폴더를
-/// 인자로 분석한다. 복사본은 어떤 경우에도 지운다. 배포 파일은 읽기만 한다.
+/// 규칙에 대해서만 온전히 보고한다 (include 경유로는 없는 규칙만). 그래서 조각마다
+/// `plugins:` 를 뺀 뒤 [ruleCheckDir]`/<조각 이름>/analysis_options.yaml` 로 복사하고,
+/// 저장소 루트에서 [ruleCheckDir] 폴더 하나를 인자로 한 번 분석한다 — 하위 폴더 셋이 함께
+/// 분석되고 진단 경로에 조각 이름이 들어간다 (spike 013 K7). 복사본은 어떤 경우에도
+/// 지운다. 조각은 읽기만 한다.
 Future<StepResult> checkRuleNames(String repoRoot) async {
-  const label = '배포 파일의 규칙 이름';
-  final copy = stripPlugins(
-    File('$repoRoot/$shippedOptionsPath').readAsStringSync(),
-  );
+  const label = ruleCheckLabel;
+  final setProblem = checkLibYamlSet(repoRoot);
+  if (setProblem != null) return setProblem;
+
+  // 조각 이름(`base` 등) → plugins: 를 뺀 복사본 내용.
+  final copies = <String, String>{
+    for (final target in ruleCheckTargets)
+      fragmentName(target): stripPlugins(
+        File('$repoRoot/$target').readAsStringSync(),
+        shownAs: target,
+      ),
+  };
+  final rulesCopy = copies[fragmentName(rulesFile)]!;
   final checkDir = Directory('$repoRoot/$ruleCheckDir');
   try {
-    checkDir.createSync(recursive: true);
-    File('${checkDir.path}/analysis_options.yaml').writeAsStringSync(copy);
+    for (final MapEntry(key: name, value: content) in copies.entries) {
+      final dir = Directory('${checkDir.path}/$name')
+        ..createSync(recursive: true);
+      File('${dir.path}/analysis_options.yaml').writeAsStringSync(content);
+    }
     // plugin 을 준비하지 않으므로 상태 폴더는 주지 않는다. 폴더 인자는 이 검사에서만 쓴다.
     final result = await Process.run(Platform.resolvedExecutable, [
       '--suppress-analytics',
@@ -730,7 +836,7 @@ Future<StepResult> checkRuleNames(String repoRoot) async {
           else
             ...parseErrors.map((l) => '  $l'),
           '',
-          '`$shippedOptionsPath` 의 그 줄을 고친다 (복사본의 줄 번호는 원본과 같다).',
+          fragmentLineHint,
         ],
       );
     }
@@ -754,16 +860,16 @@ Future<StepResult> checkRuleNames(String repoRoot) async {
 
     // 규칙을 하나도 읽지 못했으면 아래의 "문제 0건" 은 본 것이 없다는 뜻이다 —
     // `linter:` 키의 오타, 규칙을 include 뒤의 다른 파일로 옮긴 경우.
-    if (countDeclaredRules(copy) == 0) {
+    if (countDeclaredRules(rulesCopy) == 0) {
       return StepResult(
         label: label,
         passed: false,
         detailLines: [
-          '`$shippedOptionsPath` 의 최상위 `linter:` 블록 안에서 '
+          '`$rulesFile` 의 최상위 `linter:` 블록 안에서 '
               '`- 규칙이름` 줄을 하나도 세지 못했다.',
           '',
           '`linter:` / `rules:` 키와 들여쓰기를 확인하세요. '
-              '규칙을 include 뒤의 다른 파일로 옮겼으면 이 단계의 대상 파일을 그 파일로 바꿉니다.',
+              '규칙을 다른 조각으로 옮겼으면 tool/verify.dart 의 rulesFile 을 그 조각으로 바꿉니다.',
         ],
       );
     }
@@ -771,19 +877,26 @@ Future<StepResult> checkRuleNames(String repoRoot) async {
     // 진단이 하나라도 있으면 실패다 — 세 코드 밖의 옵션 경고(겹친 규칙, 모르는 키,
     // 없는 진단 코드 등)도 사용 프로젝트에 `included_file_warning` 으로 나타난다.
     if (lines.isNotEmpty) {
-      final copyLines = copy.split('\n');
+      // 진단 줄마다 그 줄이 가리키는 조각의 복사본에서 규칙 이름을 읽는다.
+      final copyLines = {
+        for (final MapEntry(key: name, value: content) in copies.entries)
+          name: content.split('\n'),
+      };
       return StepResult(
         label: label,
         passed: false,
         detailLines: [
           '배포 파일에 쓸 수 없는 규칙이나 옵션 경고가 있다 (${lines.length})',
           for (final line in lines)
-            switch (readRuleNameAt(line, copyLines)) {
+            switch (readRuleNameAt(
+              line,
+              copyLines[fragmentNameOfLine(line)] ?? const [],
+            )) {
               final name? => '  $line  ($name)',
               null => '  $line',
             },
           '',
-          '`$shippedOptionsPath` 에서 그 줄을 고친다 (복사본의 줄 번호는 원본과 같다).',
+          fragmentLineHint,
           'deprecated / removed / 없는 규칙은 지우거나 바꾸고, 그 밖의 옵션 경고'
               '(겹친 규칙, 모르는 키, 없는 진단 코드 등)는 그 줄을 고친다.',
         ],
