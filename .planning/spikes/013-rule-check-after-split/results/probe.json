@@ -1,0 +1,414 @@
+{
+  "dart": "3.13.4",
+  "os": "macos",
+  "problemRules": [
+    "unnecessary_await_in_return",
+    "avoid_returning_null",
+    "no_such_rule_zz9"
+  ],
+  "baseDeclaredRules": 12,
+  "brokenInputs": {
+    "B1": {
+      "title": "닫지 않은 따옴표 (깨진 YAML)",
+      "exitCode": 3,
+      "jsonOk": true,
+      "lines": [],
+      "countDeclaredRules": 12
+    },
+    "B2": {
+      "title": "rules: 키의 오타 (ruels:)",
+      "exitCode": 2,
+      "jsonOk": true,
+      "lines": [
+        "build/woody_rule_check/analysis_options.yaml:21  warning  unsupported_option"
+      ],
+      "countDeclaredRules": 12
+    },
+    "B3": {
+      "title": "겹친 규칙 (avoid_print 를 한 번 더)",
+      "exitCode": 2,
+      "jsonOk": true,
+      "lines": [
+        "build/woody_rule_check/analysis_options.yaml:41  warning  duplicate_rule"
+      ],
+      "countDeclaredRules": 13
+    },
+    "B4": {
+      "title": "linter: 키의 오타 (lintr:)",
+      "exitCode": 0,
+      "jsonOk": true,
+      "lines": [],
+      "countDeclaredRules": 0
+    },
+    "B5": {
+      "title": "목록과 맵을 섞음 (규칙 하나를 `이름: false` 로)",
+      "exitCode": 3,
+      "jsonOk": true,
+      "lines": [],
+      "countDeclaredRules": 12
+    },
+    "B6": {
+      "title": "codegen.yaml 의 진단 코드 오타 (invalid_annotation_targett)",
+      "exitCode": 2,
+      "jsonOk": true,
+      "lines": [
+        "build/woody_rule_check/analysis_options.yaml:3  warning  unrecognized_error_code"
+      ],
+      "countDeclaredRules": 0
+    }
+  },
+  "checks": [
+    {
+      "label": "K0 깨끗한 base.yaml 은 0건이고 plugin 을 준비하지 않는다",
+      "ok": true,
+      "note": "exit 0, 0줄, plugin 폴더 0개, 0.5초"
+    },
+    {
+      "label": "K1 세 코드가 끼운 줄 번호 그대로 나온다",
+      "ok": true,
+      "note": "3줄, exit 2"
+    },
+    {
+      "label": "K2 codegen.yaml 을 대상으로 두어도 0건이고 plugin 을 준비하지 않는다",
+      "ok": true,
+      "note": "exit 0, 0줄, plugin 폴더 0개"
+    },
+    {
+      "label": "K3 riverpod.yaml 을 그대로 대상으로 두면 plugin 을 준비한다 (대상으로 삼지 않을 이유)",
+      "ok": true,
+      "note": "exit 0, 0줄, plugin 폴더 1개, 9.9초"
+    },
+    {
+      "label": "K4 · K5 묶음이나 별칭을 대상으로 두면 include 를 거쳐 plugin 까지 준비한다",
+      "ok": true,
+      "note": "묶음 1개 · 별칭 1개"
+    },
+    {
+      "label": "K6 base.yaml 만 보면 다른 조각에 적힌 문제 규칙은 한 건도 잡히지 않는다",
+      "ok": true,
+      "note": "exit 0, 0줄"
+    },
+    {
+      "label": "K7 하위 폴더에 나눠 두고 한 번 돌리면 두 파일의 문제 규칙이 모두 잡힌다",
+      "ok": true,
+      "note": "base/ 3줄, riverpod/ 3줄, plugin 폴더 0개, 0.5초"
+    },
+    {
+      "label": "K8 정답지 비교는 없는 규칙만 잡고 deprecated · removed 는 놓친다",
+      "ok": true,
+      "note": "차이 1줄"
+    },
+    {
+      "label": "B1 지금의 판정(세 코드 + 규칙 0개)으로는 통과로 찍힌다 — 닫지 않은 따옴표 (깨진 YAML)",
+      "ok": true,
+      "note": "exit 3, 그 밖의 진단 0줄: "
+    },
+    {
+      "label": "B2 지금의 판정(세 코드 + 규칙 0개)으로는 통과로 찍힌다 — rules: 키의 오타 (ruels:)",
+      "ok": true,
+      "note": "exit 2, 그 밖의 진단 1줄: unsupported_option"
+    },
+    {
+      "label": "B3 지금의 판정(세 코드 + 규칙 0개)으로는 통과로 찍힌다 — 겹친 규칙 (avoid_print 를 한 번 더)",
+      "ok": true,
+      "note": "exit 2, 그 밖의 진단 1줄: duplicate_rule"
+    },
+    {
+      "label": "B4 지금의 판정(세 코드 + 규칙 0개)으로는 실패로 잡힌다 — linter: 키의 오타 (lintr:)",
+      "ok": true,
+      "note": "exit 0, 그 밖의 진단 0줄: "
+    },
+    {
+      "label": "B5 지금의 판정(세 코드 + 규칙 0개)으로는 통과로 찍힌다 — 목록과 맵을 섞음 (규칙 하나를 `이름: false` 로)",
+      "ok": true,
+      "note": "exit 3, 그 밖의 진단 0줄: "
+    },
+    {
+      "label": "B6 지금의 판정(세 코드 + 규칙 0개)으로는 실패로 잡힌다 — codegen.yaml 의 진단 코드 오타 (invalid_annotation_targett)",
+      "ok": true,
+      "note": "exit 2, 그 밖의 진단 1줄: unrecognized_error_code"
+    }
+  ],
+  "runs": [
+    {
+      "id": "K0",
+      "title": "base.yaml 그대로",
+      "exitCode": 0,
+      "elapsedMs": 486,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "K1",
+      "title": "base.yaml 에 문제 규칙 셋을 끼움",
+      "exitCode": 2,
+      "elapsedMs": 488,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [
+        "build/woody_rule_check/analysis_options.yaml:41  warning  deprecated_lint",
+        "build/woody_rule_check/analysis_options.yaml:42  warning  removed_lint",
+        "build/woody_rule_check/analysis_options.yaml:43  warning  undefined_lint"
+      ],
+      "messages": [
+        "The lint rule 'unnecessary_await_in_return' is deprecated and shouldn't be enabled.",
+        "'avoid_returning_null' was removed in Dart '3.3.0'",
+        "'no_such_rule_zz9' isn't a recognized lint rule."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "K2",
+      "title": "codegen.yaml 그대로",
+      "exitCode": 0,
+      "elapsedMs": 491,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "K3",
+      "title": "riverpod.yaml 그대로 (plugins: 를 담은 채)",
+      "exitCode": 0,
+      "elapsedMs": 9930,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginVersion": "3.1.9",
+      "pluginConstraint": "^3.1.3",
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "K4",
+      "title": "recommended.yaml 그대로 (조각 셋을 부르는 목록)",
+      "exitCode": 0,
+      "elapsedMs": 9890,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginVersion": "3.1.9",
+      "pluginConstraint": "^3.1.3",
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "K5",
+      "title": "별칭(lib/analysis_options.yaml) 그대로",
+      "exitCode": 0,
+      "elapsedMs": 9852,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginVersion": "3.1.9",
+      "pluginConstraint": "^3.1.3",
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "K6",
+      "title": "대상은 base.yaml 하나 (지금의 검사를 경로만 바꾼 모양)",
+      "exitCode": 0,
+      "elapsedMs": 485,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "K7",
+      "title": "조각마다 하위 폴더에 복사해 한 번에 (base/, riverpod/ — plugins: 는 뺌)",
+      "exitCode": 2,
+      "elapsedMs": 497,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [
+        "build/woody_rule_check/base/analysis_options.yaml:41  warning  deprecated_lint",
+        "build/woody_rule_check/base/analysis_options.yaml:42  warning  removed_lint",
+        "build/woody_rule_check/base/analysis_options.yaml:43  warning  undefined_lint",
+        "build/woody_rule_check/riverpod/analysis_options.yaml:12  warning  deprecated_lint",
+        "build/woody_rule_check/riverpod/analysis_options.yaml:13  warning  removed_lint",
+        "build/woody_rule_check/riverpod/analysis_options.yaml:14  warning  undefined_lint"
+      ],
+      "messages": [
+        "The lint rule 'unnecessary_await_in_return' is deprecated and shouldn't be enabled.",
+        "'avoid_returning_null' was removed in Dart '3.3.0'",
+        "'no_such_rule_zz9' isn't a recognized lint rule.",
+        "The lint rule 'unnecessary_await_in_return' is deprecated and shouldn't be enabled.",
+        "'avoid_returning_null' was removed in Dart '3.3.0'",
+        "'no_such_rule_zz9' isn't a recognized lint rule."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "K8",
+      "title": "example (옛 주소), riverpod.yaml 에 문제 규칙 셋이 숨어 있음",
+      "exitCode": 2,
+      "elapsedMs": 15056,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginVersion": "3.1.9",
+      "pluginConstraint": "^3.1.3",
+      "lines": [
+        "analysis_options.yaml:1  warning  included_file_warning",
+        "lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/added_rules.dart:18  info  always_declare_return_types",
+        "lib/added_rules.dart:24  info  prefer_final_locals",
+        "lib/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/added_rules.dart:33  info  unawaited_futures",
+        "lib/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/base_rules.dart:22  info  avoid_print",
+        "lib/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/base_rules.dart:38  info  prefer_is_empty",
+        "lib/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/main.dart:5  warning  missing_provider_scope",
+        "lib/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ],
+      "messages": [
+        "Warning in the included options file <replica>/lib/riverpod.yaml(577..592): 'no_such_rule_zz9' isn't a recognized lint rule.",
+        "Use 'const' literals as arguments to constructors of '@immutable' classes.",
+        "The function 'noReturnType' should have a return type but doesn't.",
+        "Local variables should be final.",
+        "Unnecessary use of double quotes.",
+        "Missing an 'await' for the 'Future' computed by this expression.",
+        "Use 'const' with the constructor to improve performance.",
+        "The 'child' argument should be last in widget constructor invocations.",
+        "Don't use 'BuildContext's across async gaps.",
+        "Don't invoke 'print' in production code.",
+        "Use of 'return' in a 'finally' clause.",
+        "Use the end-of-line form ('///') for doc comments.",
+        "Use 'isEmpty' instead of 'length' to test whether the collection is empty.",
+        "Use a 'SizedBox' to add whitespace to a layout.",
+        "Flutter applications using Riverpod must contain a ProviderScope at the root of their widget tree.",
+        "Providers should not rely on parameters for their value. Instead, they should use a family or read other providers.",
+        "Notifiers should not have public properties/getters. Instead, all their public API should be exposed through the `state` property."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "B1",
+      "title": "닫지 않은 따옴표 (깨진 YAML)",
+      "exitCode": 3,
+      "elapsedMs": 476,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "B2",
+      "title": "rules: 키의 오타 (ruels:)",
+      "exitCode": 2,
+      "elapsedMs": 491,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [
+        "build/woody_rule_check/analysis_options.yaml:21  warning  unsupported_option"
+      ],
+      "messages": [
+        "The option 'ruels' isn't supported by 'linter'."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "B3",
+      "title": "겹친 규칙 (avoid_print 를 한 번 더)",
+      "exitCode": 2,
+      "elapsedMs": 499,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [
+        "build/woody_rule_check/analysis_options.yaml:41  warning  duplicate_rule"
+      ],
+      "messages": [
+        "The rule 'avoid_print' is already enabled and doesn't need to be enabled again."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "B4",
+      "title": "linter: 키의 오타 (lintr:)",
+      "exitCode": 0,
+      "elapsedMs": 497,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "B5",
+      "title": "목록과 맵을 섞음 (규칙 하나를 `이름: false` 로)",
+      "exitCode": 3,
+      "elapsedMs": 492,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "B6",
+      "title": "codegen.yaml 의 진단 코드 오타 (invalid_annotation_targett)",
+      "exitCode": 2,
+      "elapsedMs": 491,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [
+        "build/woody_rule_check/analysis_options.yaml:3  warning  unrecognized_error_code"
+      ],
+      "messages": [
+        "'invalid_annotation_targett' isn't a recognized diagnostic code."
+      ],
+      "stderr": ""
+    }
+  ]
+}
