@@ -64,6 +64,8 @@ spike 에서 나와 실제 구현이 지켜야 하는 것 (근거는 각 spike �
 - 시간이 문제가 되면 상태 폴더를 따로 둔 채 동시에 띄우는 것을 먼저 본다 — 로컬에서 여섯이 23초이고 결과가 같았다. GitHub runner 에서의 여섯은 재지 않았다 (추정 약 4분 20 ~ 30초) (014)
 - `path:` 의존성으로 잰 009 ~ 012 의 결과는 git 의존성(패키지가 pub cache 의 `git/<저장소 이름>-<커밋 해시>/` 에 놓인다)에서도 줄 단위로 같다 — 3단 include 의 plugin 로드, 옛 주소 · 묶음 주소의 정답지 일치, 조합별 진단, 생성 파일 제외의 모양. 연습용 프로젝트를 git 의존성으로 따로 두지 않는다. 받아 오는 길(GitHub 주소, 실제 tag)은 Phase 6 의 smoke test 가 본다 (015)
 - 버전 올리기 안내는 받는 방식에 따라 다르게 적는다. tag 로 고정한 프로젝트는 `ref:` 를 고치고 `pub get`, `ref: main` 을 따르는 프로젝트는 `pub upgrade woody_lints` 다 — `ref: main` 의 `pub get` 은 lock 의 커밋에 머문다. `ref:` 만 고치고 `--enforce-lockfile` 을 돌리면 종료 코드 65 다 (015)
+- 연습용 프로젝트 여섯을 지금의 방식(차례로, 상태 폴더는 프로젝트마다 따로)으로 돌려도 GitHub runner 의 `timeout-minutes: 10` 안에 넉넉히 든다. 처음 실행의 분석이 146 ~ 191초, job 전체가 약 3분 20초 ~ 4분 20초다 (코어 4개, 표본 여섯, 2026-10-12). 014 의 추정(약 4분 20 ~ 30초)을 대신한다 (017)
+- 한꺼번에 띄우면 runner 에서 분석이 69 ~ 95초로 약 절반이 된다 (로컬처럼 3분의 1 이 되지는 않는다). plugin 을 쓰는 넷이 같은 패키지를 빈 pub cache 에 동시에 처음 받는 경우를 포함해 여섯 번 모두 결과가 같았다. 표본이 적어 "드물게 깨지는지" 는 알 수 없다. 차례로 돌려도 시간 제한에 여유가 있으므로 넣을지는 계획이 정한다 (017)
 
 ### next-sdk-forward-compat
 
@@ -113,6 +115,6 @@ spike 에서 나와 실제 구현과 문서가 지켜야 하는 것 (근거는 s
 | 014 | preset-split-include-behavior | multi-fixture-plugin-cost | standard | plugin 을 쓰는 연습용 프로젝트 넷을 차례로 돌릴 때의 시간과, 폴더마다 따로 두는 방식 대 작업 폴더 하나를 돌려 쓰는 방식의 차이가 재어진다 | ✓ VALIDATED | analyzer-plugin, timing, state-folder, fixture-layout |
 | 015 | preset-split-include-behavior | git-dependency-preset-load | standard | 나눈 구조를 `path:` 가 아니라 git 의존성으로 받아도(패키지가 pub cache 에 놓여도) plugin 이 로드되고 옛 주소 · 묶음 주소가 지금 정답지와 같으며, 생성 파일 제외의 모양이 `path:` 때와 같다 | ✓ VALIDATED | git-dependency, pub-cache, include, analyzer-plugin, lockfile |
 | 016 | next-sdk-forward-compat | next-sdk-forward-compat | standard | Flutter 베타 3.49.0-0.2.pre 에서 include 로 받는 `plugins:` 가 로드되는지, `codegen.yaml` 의 제외가 규칙 진단에 여전히 통하는지, 지금 규칙 12개 중 새로 deprecated 된 것이 있는지가 확정된다 | ⚠ PARTIAL (plugin 로드와 규칙 12개는 그대로. 이 패키지가 주는 생성 파일 제외는 베타에서 규칙 진단에도 통하지 않는다 — 상류에서 되돌리는 중) | beta-sdk, forward-compat, include, analyzer-plugin, exclude, deprecated-lint, plugins-in-inner-options |
-| 017 | preset-split-include-behavior | runner-six-fixtures | standard | 캐시 없는 GitHub Linux runner 에서 나눈 구조의 연습용 프로젝트 여섯을 차례로 · 한꺼번에 돌릴 때의 시간이 재어지고, 진단이 로컬과 같다 | PENDING | github-actions, ci, timing, fixture-layout, concurrency |
+| 017 | preset-split-include-behavior | runner-six-fixtures | standard | 캐시 없는 GitHub Linux runner 에서 나눈 구조의 연습용 프로젝트 여섯을 차례로 · 한꺼번에 돌릴 때의 시간이 재어지고, 진단이 로컬과 같다 | ✓ VALIDATED | github-actions, ci, timing, fixture-layout, concurrency |
 | 018 | verify-harness-tool-behavior | runner-next-image | standard | 다음 runner 이미지(`ubuntu-26.04`)에서 지금의 검증 명령과 연습용 프로젝트 여섯이 `ubuntu-24.04` 와 같은 진단을 내고 plugin 준비가 실패하지 않는다 | PENDING | github-actions, ci, runner-image, ubuntu-26, forward-compat |
 | 019 | preset-split-include-behavior | real-consumer-split-invariance | standard | 실제 사용 프로젝트(`flutter_starter_kit`)의 복사본이 지금 받는 그대로 · 한 파일 구조 · 나눈 구조(옛 주소 · 묶음 주소)를 받을 때 진단이 줄 단위로 같다 | PENDING | real-consumer, include, analyzer-plugin, exclude, generated-files |
