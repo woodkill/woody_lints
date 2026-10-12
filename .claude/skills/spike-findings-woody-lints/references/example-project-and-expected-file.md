@@ -2,7 +2,7 @@
 
 검증 명령이 분석할 `example/` 프로젝트의 모양, 거기에 넣을 위반 코드, 정답지에 적힐 줄, 패키지를 받는 방법, 그리고 `example/` 이 저장소 루트의 분석에 섞이지 않게 하는 방법이다.
 
-따로 적지 않은 수치는 Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9, 2026-10-11 실측이다 (2026-10-12 의 것은 spike 번호 010 ~ 012, 015, 016 을 붙였다. 베타의 값은 016 을 붙인 곳에만 있다). 이 문서에서 문서 이름 없이 적은 D-NN 은 02-CONTEXT.md 의 것이다.
+따로 적지 않은 수치는 Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9, 2026-10-11 실측이다 (2026-10-12 의 것은 spike 번호 010 ~ 012, 015, 016, 018, 019 를 붙였다. 베타의 값은 016 을 붙인 곳에만 있다). 이 문서에서 문서 이름 없이 적은 D-NN 은 02-CONTEXT.md 의 것이다.
 
 이 문서의 위반 코드와 진단 4건은 spike 001 의 연습용 프로젝트 것이다. Phase 2 가 만든 실제 `example/` 은 샘플이 더 많아 정답지가 `exit 2` + 16줄이다 (`example/expected_diagnostics.txt`, 2026-10-12). 프리셋을 나눈 뒤 더 생기는 연습용 프로젝트는 fixtures-after-split.md 에 있다.
 
@@ -295,6 +295,8 @@ analyzer:
   저장소의 변경이 아니라 SDK 에서 오는 차이이고, 한 파일 구조에서도 나눈 구조에서도 같다. 요구 사항의 "정답지 셋" 은 016 이 잰 칸 셋이고, 달라지는 정답지 파일은 next-sdk-forward-compat.md 3번에 있다. 상류가 되돌리려는 중이라 정식 3.14 에서 어느 쪽일지는 모른다. 016 은 `example/README.md` 에 이 경우를 적어 둘 만하다고 했다 — 넣을지는 계획이 정한다. 고정 SDK 를 올릴 때의 절차는 next-sdk-forward-compat.md 9번에 있다.
 - `riverpod_lint` 3.1.3 (배포 파일의 하한) 소스의 강도 선언 15개는 3.1.9 와 같다.
 - 규칙 15개의 강도 표는 GitHub Linux runner 에서도 같았다 (새 가상 머신 10대).
+- **지금의 정답지(`exit 2` · 16줄)는 GitHub runner 의 `ubuntu-26.04` 이미지(20260927.149.1)에서도 맞았다 (018, 2026-10-12, Dart 3.13.4).** 검증 명령을 그 이미지에서 세 번 돌려 세 번 모두 `점검 통과 (4개 중 4개)` 였다 — 정답지 비교는 한 줄이라도 다르면 실패한다 (→ ci-workflow.md 4번). 그 뒤에 나오는 이미지 버전은 재지 않았다.
+- **`example/lib` 의 샘플 일곱 개는 실제 사용 프로젝트 안에 넣어도 같은 16줄을 냈다 (019, 2026-10-12, Dart 3.13.4).** `flutter_starter_kit` 의 복사본의 `lib/woody_probe_marker/` 에 넣어 그 프로젝트의 옵션 파일(옛 주소 한 줄 + 자기 `analyzer.exclude`)로 분석했더니, 경로의 앞머리만 다르고 줄이 정답지와 같았다. 실제 프로젝트를 잴 때 "규칙과 plugin 이 켜져 있다" 를 가르는 표식으로 쓴다 (→ real-consumer-measurement.md 3번). 샘플을 고치면 그 쓰임에도 닿는다 — 샘플은 모두 문서 주석이 달려 있어 `public_member_api_docs` 의 표식으로는 쓰지 못했다.
 - `flutter pub get` 의 동작 (`AnalysisOptionsMigration`, Flutter 3.47.5): `flutter` 에 의존하는 프로젝트이고 `analysis_options.yaml` 이 있으면 `build/**` 와 **존재하는 플랫폼 폴더**(`android/**`, `ios/**`, `web/**`, `windows/**`, `macos/**`, `linux/**`)가 `analyzer.exclude` 에 있는지 보고, 없으면 덧붙인다. 볼 때 `include:` 를 따라간다 (상대 경로와 `package:` URI 모두). 한 번만 고치고 그 뒤로는 그대로다.
 - 사용 프로젝트에도 같은 일이 생긴다. 플랫폼 폴더가 있는 실제 앱에서 `flutter pub get` 을 돌리면 그 프로젝트의 옵션 파일에 제외 줄이 덧붙는다. 이 패키지의 문제는 아니다. include 한 파일이 이미 제외하고 있으면 덧붙지 않는다.
 - **Phase 4 로 넘긴 것:** 프리셋에 `build/**` (그리고 플랫폼 폴더) 제외를 넣을지. 넣으면 사용 프로젝트의 `flutter pub get` 이 옵션 파일을 고치지 않는다.
@@ -308,7 +310,7 @@ analyzer:
 
 ## Origin
 
-Synthesized from spikes: 003, 004, 007 (위반 코드와 기대 진단 파일은 001, 006 에서 가져왔다. 010, 011, 012 의 결과는 나눈 뒤에 달라지는 자리에, 015 · 016 의 결과는 받는 방식과 SDK 에 따라 달라지는 자리에 한두 줄씩 덧붙인 것이다)
+Synthesized from spikes: 003, 004, 007 (위반 코드와 기대 진단 파일은 001, 006 에서 가져왔다. 010, 011, 012 의 결과는 나눈 뒤에 달라지는 자리에, 015 · 016 의 결과는 받는 방식과 SDK 에 따라 달라지는 자리에 한두 줄씩 덧붙인 것이다. Ubuntu 26.04 의 한 줄은 018, 샘플을 표식으로 쓴 한 줄은 019 에서 왔다)
 Source files available in: sources/003-riverpod-lint-severity-matrix/, sources/004-fixture-pub-get/, sources/007-root-analysis-with-example/, sources/001-analyze-invocation-form/fixture/, sources/006-github-runner-cold-plugin/expected_001.txt, sources/006-github-runner-cold-plugin/expected_003.txt
 원본 로그와 JSON: `.planning/spikes/003-riverpod-lint-severity-matrix/results/`, `.planning/spikes/004-fixture-pub-get/results/`, `.planning/spikes/007-root-analysis-with-example/results/`
 생성 코드(`*.g.dart`)는 사본에 넣지 않았다. 원본은 `.planning/spikes/003-riverpod-lint-severity-matrix/fixture/lib/gen/` 에 있다.

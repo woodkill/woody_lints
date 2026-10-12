@@ -193,7 +193,7 @@ spike 에서 나와 실제 구현과 문서가 지켜야 하는 것 (베타 `3.1
 
 ### 8. Phase 5 의 README 에 적을 것
 
-- 생성 파일 제외는 **사용 프로젝트의 옵션 파일에 직접 적으라고 안내한다.** 3.13.x 에서는 plugin 진단 때문에, 베타에서는 규칙 진단까지 그렇다. `flutter_starter_kit` 은 이미 그렇게 적어 두었다 (2026-10-12 읽음).
+- 생성 파일 제외는 **사용 프로젝트의 옵션 파일에 직접 적으라고 안내한다.** 3.13.x 에서는 plugin 진단 때문에, 베타에서는 규칙 진단까지 그렇다. `flutter_starter_kit` 은 이미 그렇게 적어 두었다 (2026-10-12 읽음). 019 가 고정 SDK 에서 그 두 줄을 빼 봤는데 그 프로젝트의 생성 파일 62개에서는 제외가 어디에도 없어도 0줄이었다 — 베타에서 프리셋의 제외가 통하지 않게 되더라도 그 프로젝트에 곧바로 줄이 생긴다고 단정할 근거는 없다 (베타에서 그 프로젝트를 돌려 보지는 못했다 → Constraints).
 - "프리셋의 제외가 통하지 않는다" 를 굳은 사실로 적지 않는다. "SDK 버전에 따라 다르다" 로 적고 sdk#64549 를 가리킨다. 더 정확히는 축이 둘이다 (3번) — 규칙 진단은 SDK 의 버전, plugin 진단은 plugin 이 쓰는 `analyzer` 의 버전을 따른다. README 가 어디까지 풀어 적을지는 Phase 5 가 정한다.
 - 요구 사항의 "방법은 이것 하나" 를 README 에 "유일한 방법" 으로 옮기지 않는다. 실측에서 두 SDK 모두 막은 자리는 둘이었다 (3번).
 - `flutter analyze` 에 대한 문장은 "Flutter 3.47.5 에서는 plugin 진단을 내지 않는다" 까지만 단정한다.
@@ -308,10 +308,12 @@ void add(String label, String baseline, String actual) {
 - 두 스크립트를 SDK 마다 두 번씩 돌렸다. 첫 실행은 `probe.dart` 24칸(베타에서 9칸이 `≠`), 둘째 실행은 칸을 더한 26칸(10칸이 `≠`)이고, 겹치는 24칸은 두 번이 같았다. 둘째 실행에서 더한 칸 — `probe.dart` 의 X-local-root · X-local-sub, `root_probe.dart` 의 X3 · X4 — 은 SDK 마다 **한 번씩** 잰 것이다.
 - 연습용 프로젝트는 replica 안에서 `woody_lints` 를 `path:` 로 받았다. git 의존성으로 받은 경우는 베타에서 재지 않았다 (015 가 고정 SDK 에서 "`path:` 와 줄 단위로 같다" 를 봤다).
 - 고정 SDK 를 올리지 않아도 루트 옵션 파일이 `package:woody_lints/base.yaml` 을 include 하는 선택지(011)는 베타에서 재지 않았다. 폴더를 인자로 준 분석에서 묶음 · 별칭이 plugin 을 준비하는 것(013)도 베타에서 재지 않았다.
+- **실제 사용 프로젝트는 이 베타에서 재지 못했다 (019, 2026-10-12).** `flutter_starter_kit` 의 복사본에서 같은 스크립트를 베타로 띄웠더니 첫 `pub get` 의 의존성 풀이가 실패했다 (스크립트의 종료 코드 69, 분석까지 가지 못했다). 까닭은 이 패키지가 아니라 그 프로젝트의 의존성이다 — 베타의 `flutter_test` 가 고정하는 `matcher` · `test_api` 와 프로젝트가 적어 둔 `test` · `freezed` 의 제약이 함께 풀리지 않았다. 복사본의 의존성을 고쳐 가며 돌리지는 않았다. 이 문서의 베타 결과는 모두 `example/` 의 샘플 수준이다. 그 프로젝트가 2026-10-12 의 의존성 그대로는 이 베타에서 `pub get` 이 되지 않는다는 것은 이 패키지 밖의 일이지만 소유자가 알아 둘 일이다 (정식 3.49 에서도 그런지는 모른다).
+- **GitHub runner 의 다음 이미지(Ubuntu 26.04)는 SDK 와 다른 축이다.** 고정 SDK 그대로 이미지만 바꾼 실행은 지금과 같은 결과였다 (018 → ci-workflow.md 4번). 베타를 runner 에서 돌린 것은 아니다.
 - 확인하지 않은 것: 되돌리는 변경이 pub.dev 의 `analyzer` 로 나온 뒤 plugin 쪽의 동작 (그때는 프리셋의 제외가 plugin 진단에도 통하게 될 수 있다 — 추정), 끄는 방법 여섯 칸(012 의 주석 · `diagnostics:`)을 베타에서, 베타에서 루트 분석이 준비한 plugin 이 Dart 파일을 실제로 보는지 (replica 의 루트에는 Dart 파일이 없었다 — 실제 저장소에는 `tool/verify.dart` 가 있다), `lib/**` 처럼 폴더째 제외했을 때 베타의 루트 분석이 plugin 을 준비하는지, 베타의 루트 분석에서 plugin 준비가 실패했을 때(네트워크 없음)의 종료 코드와 stderr, 베타의 `flutter analyze` 가 규칙 진단을 겹쳐 세는 원인, `tool/verify.dart` 자체를 베타로 돌린 것, 하위 폴더를 인자로 주면 plugin 진단을 잃는 문제(001, sdk#62710)가 베타에서 고쳐졌는지, 사용 통계를 끄지 않았을 때의 종료 코드 255 (001) 가 베타에서도 나는지, GitHub Linux runner 에서의 같은 실행.
 
 ## Origin
 
-Synthesized from spikes: 016 (기준이 되는 고정 SDK 의 값은 009 ~ 013 과 015 가 잰 것과 같다)
-Source files available in: sources/016-next-sdk-forward-compat/ (`probe.dart`, `root_probe.dart`), sources/009-preset-plugin-via-include/ (`replica.dart`)
+Synthesized from spikes: 016 (기준이 되는 고정 SDK 의 값은 009 ~ 013 과 015 가 잰 것과 같다. 실제 사용 프로젝트를 베타로 돌리지 못했다는 한 줄은 019, runner 이미지에 관한 한 줄은 018 에서 왔다)
+Source files available in: sources/016-next-sdk-forward-compat/ (`probe.dart`, `root_probe.dart`), sources/009-preset-plugin-via-include/ (`replica.dart`), sources/019-real-consumer-split-invariance/ (README 의 6번)
 원본 로그와 JSON: `.planning/spikes/016-next-sdk-forward-compat/results/` — `probe-<Dart 버전>.{log,json}`, `root-<Dart 버전>.{log,json}`, `flutter-analyze-<Flutter 버전>.log`. 이름 끝이 `-run1` 인 것이 첫 실행이고, `-attempt1` 은 `sky_engine` 이 없어 멈춘 실행이다

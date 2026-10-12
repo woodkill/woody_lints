@@ -2,7 +2,7 @@
 
 프리셋을 나눈 뒤 검증 명령이 분석할 연습용 프로젝트 여섯(03-CONTEXT.md D-03)의 옵션 파일, 정답지의 모양, 폴더 배치와 루트 제외, 상태 폴더, 걸리는 시간이다. 지금의 `example/` (옛 주소 한 줄) 이 여섯 중 첫째다.
 
-따로 적지 않은 수치는 Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9, macOS arm64 (프로세서 10개), 2026-10-12 실측이다. 실험은 저장소의 모양을 작업 폴더에 복사한 replica 에서 했고, 연습용 프로젝트의 샘플은 저장소 `example/lib` 의 복사본이다.
+따로 적지 않은 수치는 Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9, macOS arm64 (프로세서 10개), 2026-10-12 실측이다. 실험은 저장소의 모양을 작업 폴더에 복사한 replica 에서 했고, 연습용 프로젝트의 샘플은 저장소 `example/lib` 의 복사본이다. GitHub Linux runner (코어 4개) 의 값은 8번에 따로 있다 (017, 같은 날).
 
 **정답지의 줄 수는 고정 SDK (Dart 3.13.4) 의 것이다.** 다음 SDK 의 베타(Dart 3.14.0-211.1.beta, 016)에서는 codegen 조각을 받는 조합에 4줄이 더 생긴다 (→ 2번 끝). 연습용 프로젝트는 모두 `path:` 의존성으로 받는다 — git 의존성으로 받아도 결과가 줄 단위로 같아(015) 그쪽 프로젝트는 따로 두지 않는다.
 
@@ -26,8 +26,12 @@ spike 에서 나와 실제 구현이 지켜야 하는 것.
 - 새 연습용 프로젝트는 한 폴더 아래에 모으고 루트에서 `'<폴더>/**'` 한 줄로 제외한다. 기존 `example/**` 줄은 그대로 둔다. 제외하지 않으면 루트 분석에 그 폴더들의 진단이 섞이고 plugin 까지 준비한다 (011)
 - 끄는 설정용 연습 프로젝트는 끈 자리 옆에 끄지 않은 같은 위반을 둔다. plugin 진단은 주석에 `riverpod_lint/` 접두사를 붙이고, 프로젝트 전체에서 끌 때는 `version` 을 함께 적는다. `version` 을 뺀 설정은 경고 없이 무시되고, `analyzer.errors` 로는 plugin 진단을 끌 수 없다 (012)
 - 연습용 프로젝트는 폴더마다 따로 두고 상태 폴더도 프로젝트마다 따로 준다 (지금 검증 명령의 방식 그대로). 여섯이 로컬에서 처음 66초, 재실행 20 ~ 21초다. 상태 폴더를 하나로 합치면 plugin 폴더가 넷이 되어 버전을 읽지 못한다. plugin 준비는 경로가 다르면 나눠 쓰지 못한다 (014)
-- 시간이 문제가 되면 상태 폴더를 따로 둔 채 동시에 띄우는 것을 먼저 본다 — 로컬에서 여섯이 23초이고 결과가 같았다. GitHub runner 에서의 여섯은 재지 않았다 (추정 약 4분 20 ~ 30초) (014)
+- 시간이 문제가 되면 상태 폴더를 따로 둔 채 동시에 띄우는 것을 먼저 본다 — 로컬에서 여섯이 23초이고 결과가 같았다. GitHub runner 에서의 여섯은 014 가 재지 않았다 (추정 약 4분 20 ~ 30초 — 그 뒤 017 이 쟀다) (014)
 - `path:` 의존성으로 잰 009 ~ 012 의 결과는 git 의존성(패키지가 pub cache 의 `git/<저장소 이름>-<커밋 해시>/` 에 놓인다)에서도 줄 단위로 같다 — 3단 include 의 plugin 로드, 옛 주소 · 묶음 주소의 정답지 일치, 조합별 진단, 생성 파일 제외의 모양. 연습용 프로젝트를 git 의존성으로 따로 두지 않는다. 받아 오는 길(GitHub 주소, 실제 tag)은 Phase 6 의 smoke test 가 본다 (015)
+- 연습용 프로젝트 여섯을 지금의 방식(차례로, 상태 폴더는 프로젝트마다 따로)으로 돌려도 GitHub runner 의 `timeout-minutes: 10` 안에 넉넉히 든다. 처음 실행의 분석이 146 ~ 191초이고, 재실행을 뺀 job 이 약 3분 20초 ~ 4분 20초다 (spike 의 스크립트를 돌린 값이고 여섯으로 늘린 `tool/verify.dart` 가 아니다. 코어 4개, 표본 여섯, 2026-10-12). 014 의 추정(약 4분 20 ~ 30초)을 대신한다 (017)
+- 한꺼번에 띄우면 runner 에서 분석이 69 ~ 95초로 약 절반이 된다 (로컬처럼 3분의 1 이 되지는 않는다). plugin 을 쓰는 넷이 plugin 쪽 패키지(`riverpod_lint`, `analyzer` 등)를 새 가상 머신의 pub cache 에 동시에 처음 받는 경우를 포함해 여섯 번 모두 결과가 같았다. 표본이 적어 "드물게 깨지는지" 는 알 수 없다. 차례로 돌려도 시간 제한에 여유가 있으므로 넣을지는 계획이 정한다 (017)
+
+위 목록에서 014 의 추정은 그 아래 017 의 두 줄이 대신한다 (→ 8번).
 
 MANIFEST.md 의 `next-sdk-forward-compat` 에서 이 영역에 걸리는 것 (베타 `3.14.0-211.1.beta` 한 빌드의 결과이고 정식 버전에서 달라질 수 있다).
 
@@ -169,7 +173,7 @@ File('$dir/pubspec.lock')
 
 ### 5. 상태 폴더는 프로젝트마다 따로
 
-Phase 2 의 `tool/verify.dart` 는 `fixtures` 목록(지금은 `example` 하나)을 차례로 돌며 `<저장소 루트>/.dart_tool/woody_verify/<이름>/` 을 상태 폴더로 준다. 이 방식을 여섯으로 그대로 늘린다. 프로젝트가 `fixtures/<이름>/` 처럼 한 단계 아래에 있을 때 상태 폴더의 `<이름>` 을 어떻게 지을지는 계획이 정한다 (014 는 작업 폴더의 `state/<마지막 폴더 이름>` 을 썼다).
+Phase 2 의 `tool/verify.dart` 는 `fixtures` 목록(지금은 `example` 하나)을 차례로 돌며 `<저장소 루트>/.dart_tool/woody_verify/<이름>/` 을 상태 폴더로 준다. 이 방식을 여섯으로 그대로 늘린다. 프로젝트가 `fixtures/<이름>/` 처럼 한 단계 아래에 있을 때 상태 폴더의 `<이름>` 을 어떻게 지을지는 계획이 정한다 (014 는 작업 폴더의 `state/A-<마지막 폴더 이름>` 을 썼다 — 방식의 글자가 앞에 붙는다).
 
 | 방식 | 처음 실행 | 재실행 | plugin 폴더 | 진단 |
 |---|---|---|---|---|
@@ -199,6 +203,7 @@ Phase 2 의 `tool/verify.dart` 는 `fixtures` 목록(지금은 `example` 하나)
 
 - plugin 을 쓰는 프로젝트는 폴더가 다르면 매번 컴파일한다. 상태 폴더를 함께 써도(A') 둘째부터 13초다 — 줄어든 2초는 컴파일이 아니라 분석 캐시다.
 - plugin 을 쓰지 않는 프로젝트는 자기만 쓰는 상태 폴더에서 약 3초, 다른 프로젝트가 채워 둔 상태 폴더에서 0.7초다. A 의 재실행(20초)에서 plugin 없는 둘이 3초씩 든다.
+- 위는 로컬의 값이다. GitHub runner 에서 A 로 돌린 프로젝트 하나씩의 시간은 plugin 을 쓰는 넷이 처음 30 ~ 45초, 쓰지 않는 둘이 6 ~ 8초다 (017 → ci-workflow.md 3번의 표).
 
 ### 7. 시간이 문제가 되면 — 동시에 띄우기
 
@@ -225,19 +230,26 @@ final runs = await Future.wait([
 
 - 차례로 돌린 66초가 23초가 된다. 하나하나는 느려진다 (15초 → 21 ~ 23초).
 - 두 번의 실행에서 20건(4 + 6, 두 번)이 모두 통과했다.
-- 화면에 찍는 순서를 따로 맞춰야 한다. 프로세서가 적은 기계(GitHub runner)에서의 이득은 재지 않았다.
+- 화면에 찍는 순서를 따로 맞춰야 한다.
+- **GitHub runner (코어 4개) 에서는 3분의 1 이 아니라 약 절반이 된다** — 차례로 145.8 ~ 191.2초이던 분석이 한꺼번에 68.8 ~ 94.9초다 (017 → 8번).
 
-### 8. GitHub 자동 점검 시간 (추정)
+### 8. GitHub 자동 점검 시간 (017 이 쟀다)
 
-**올려야 잴 수 있다.** 아래는 지금의 job 에서 셈한 값이다.
+A 와 P 를 GitHub Linux runner 에서 돌렸다 — 방식마다 job 을 따로 두고 표본 셋씩, 이미지 둘(`ubuntu-24.04`, `ubuntu-26.04`), 모두 코어 4개 (2026-10-12). 표와 프로젝트별 시간은 ci-workflow.md 3번에 있다.
 
-| 방식 | 셈 | 분석 | job 전체 |
+| 방식 | 처음 실행의 분석 (표본 여섯) | 재실행을 뺀 job (잰 job 시간에서 뺀 셈) | 014 의 셈 |
 |---|---|---|---|
-| A | plugin 넷 × 약 44초 + plugin 없는 둘 × 약 9초 | 약 3분 15초 | **약 4분 20 ~ 30초** |
-| B | 44초 + 재실행 셋 × 약 8초 + plugin 없는 둘 × 약 2초 | 약 1분 15초 | 약 2분 25초 |
+| A. 차례로 (채택) | 145.8 ~ 191.2초, 평균 172초 | 202 ~ 258초 — **약 3분 20초 ~ 4분 20초** | 분석 약 3분 15초, job 약 4분 20 ~ 30초 |
+| P. A 를 한꺼번에 | 68.8 ~ 94.9초, 평균 85초 | 114 ~ 158초 — 약 1분 55초 ~ 2분 40초 | 셈하지 않았다 |
+| B. 작업 폴더 하나에서 옵션 파일만 바꿔 가며 | **재지 않았다** | 재지 않았다 | 분석 약 1분 15초, job 약 2분 25초 |
 
-- 근거: 지금의 job 이 1분 54초이고 그중 `example/` 분석이 약 44초, 그 밖이 약 70초다 (run 38158088016). runner 의 재실행은 약 8초다 (006). plugin 없는 프로젝트의 9초는 로컬 3.2초에 runner / 로컬 비(약 2.9 — 014 가 쓴 값이고, runner 약 44초와 이번 로컬 약 15초의 비와 맞는다)를 곱한 값이다. ci-workflow.md 가 006 에서 적은 "2.5배쯤" 은 로컬의 처음 실행을 약 17초로 본 값이다. 어느 쪽을 곱해도 이 항은 8 ~ 9초다.
-- 추정대로라면 `timeout-minutes: 10` 안에 든다. phase 를 끝내기 전에 올려서 본다 (03-CONTEXT.md D-09).
+- **A 는 `timeout-minutes: 10` 안에 넉넉히 든다.** 가장 느린 표본이 258초다. 시간 제한 때문에 구조를 바꿀 까닭이 없다.
+- 014 의 셈은 A 를 조금 길게 잡았다 — job 추정 260 ~ 270초가 가장 느린 표본(258초)보다 조금 길다. 03-CONTEXT.md D-03 이 소유자에게 밝힌 "약 4분 15초" 는 잰 범위 안에 있다.
+- 열두 job 의 확인 288건이 모두 성립했다 — 여섯 프로젝트의 진단이 줄 단위로 로컬의 예상과 같고(16 / 16 / 18 / 15 / 21 / 13줄, 2번의 표 + `overrides` 15줄), plugin 을 쓰는 넷은 plugin 폴더 하나, 쓰지 않는 둘은 0개였다.
+- P 는 runner 에서 처음 실행 여섯 번 · 재실행 여섯 번이 모두 통과했다. 처음 실행에서는 plugin 을 쓰는 넷이 plugin 쪽 패키지를 동시에 처음 받는다 (새 가상 머신이라 그 패키지가 pub cache 에 없었을 것으로 읽었다. 로컬의 P 는 pub cache 가 채워진 상태였다). 표본이 적어 드물게 깨지는지는 알 수 없다.
+- 새 가상 머신에서 시작한 job 의 `pub get` 은 루트 0.06 ~ 0.15초, 첫째 프로젝트 1.2 ~ 3.5초, 둘째부터 0.1초 이하다.
+- **돌린 것은 spike 의 스크립트다.** 여섯으로 늘린 실제 `tool/verify.dart` 는 phase 를 끝내기 전에 올려서 본다 (03-CONTEXT.md D-09). 규칙 검사와 화면 출력의 시간은 위 값에 들어 있지 않다.
+- 여기의 `overrides` 는 묶음에 `provider_parameters` 하나를 끈 가벼운 옵션이다 (Constraints).
 
 ## What to Avoid
 
@@ -263,10 +275,12 @@ final runs = await Future.wait([
 - 014 는 두 번 돌려 48건씩 모두 성립했고 방식별 시간이 1 ~ 2초 안에서 재현됐다. pub cache 는 채워진 상태였다.
 - 첫 실행의 로그(`results/probe-run1.log`) 끝의 `pub get 여섯  259.0` 은 스톱워치를 멈추지 않은 스크립트의 잘못이다. 실제 값은 같은 로그 위쪽의 `합계 1.3초` 다.
 - 015 와 016 은 연습용 프로젝트 여섯을 만들어 돌린 것이 아니다. 받는 쪽 프로젝트 하나(015), replica 의 `example/` 하나(016)에서 옵션 파일을 바꿔 가며 쟀다. 시간과 상태 폴더에 관한 5 ~ 8번은 베타에서 재지 않았다 (베타의 처음 실행 한 번은 14.8 ~ 16.7초로 고정 SDK 와 같았다).
-- 확인하지 않은 것: GitHub Linux runner 에서의 여섯, 프로세서가 적은 기계에서의 동시 실행, pub cache 가 빈 상태의 `pub get` (runner 의 첫 프로젝트 — 여섯이 같은 패키지를 쓰므로 둘째부터는 채워진 상태다), Windows 와 Linux 에서의 심볼릭 링크, B 를 실제 검증 명령으로 옮긴 것, 상태 폴더가 여섯일 때의 디스크 사용량 (plugin 을 쓰는 넷마다 약 15MB 의 `plugin.aot` 이 생긴다), 프로젝트가 여럿일 때 `--update` 의 쓰기 순서와 화면.
+- 017 은 여섯 조합을 replica 에 만들어 GitHub runner 에서 돌렸다 (014 와 같은 구성 — `Fx` · `bundle` · `overrides` 를 014 의 스크립트에서 받아 쓴다). 로컬에서도 방식마다 한 번 돌렸지만 스크립트가 도는지를 본 연습이다 — 차례 실행 92.7초는 다른 스크립트의 컴파일과 겹친 값이라 쓰지 않고, 로컬의 시간은 위의 014 값을 쓴다. 재실행을 한꺼번에 띄운 값(6.4초)은 그 연습의 한 번이다.
+- **실제 사용 프로젝트에서도 여섯의 구성을 바꿀 까닭이 나오지 않았다 (019).** `flutter_starter_kit` 의 복사본에 넣은 표식 파일(`example/lib` 의 샘플)의 줄이 옛 주소 · 묶음 주소에서 정답지 16줄 그대로였고, `base.yaml` 만 받은 대조에서는 plugin 3줄이 빠지고 `invalid_annotation_target` 1줄이 생겼다 (→ real-consumer-measurement.md 5번).
+- 확인하지 않은 것: 여섯으로 늘린 실제 `tool/verify.dart` 를 GitHub runner 에서 돌린 것 (017 은 spike 의 스크립트다), runner 에서 한꺼번에 띄운 실행이 드물게 깨지는지 (표본 여섯), B 를 runner 에서, B 를 실제 검증 명령으로 옮긴 것, Windows 와 Linux 에서의 심볼릭 링크, 상태 폴더가 여섯일 때의 디스크 사용량 (plugin 을 쓰는 넷마다 약 15MB 의 `plugin.aot` 이 생긴다), 프로젝트가 여럿일 때 `--update` 의 쓰기 순서와 화면, runner 에서 `base_riverpod` 의 재실행만 3 ~ 6초 긴 까닭.
 
 ## Origin
 
-Synthesized from spikes: 009, 011, 014 (끄는 설정용 프로젝트의 요구 사항 한 줄은 012 에서 왔다. git 의존성에서의 줄 수는 015, 다음 SDK 에서의 줄 수와 루트 제외는 016 의 결과를 덧붙인 것이다)
-Source files available in: sources/009-preset-plugin-via-include/, sources/011-root-analysis-after-split/, sources/014-multi-fixture-plugin-cost/, sources/015-git-dependency-preset-load/, sources/016-next-sdk-forward-compat/
-원본 로그와 JSON: `.planning/spikes/009-preset-plugin-via-include/results/`, `.planning/spikes/011-root-analysis-after-split/results/`, `.planning/spikes/014-multi-fixture-plugin-cost/results/` (014 는 `probe-run1.*` 이 첫 번째, `probe.*` 이 두 번째 실행이다)
+Synthesized from spikes: 009, 011, 014, 017 (끄는 설정용 프로젝트의 요구 사항 한 줄은 012 에서 왔다. git 의존성에서의 줄 수는 015, 다음 SDK 에서의 줄 수와 루트 제외는 016, 실제 사용 프로젝트에서의 한 줄은 019 의 결과를 덧붙인 것이다)
+Source files available in: sources/009-preset-plugin-via-include/, sources/011-root-analysis-after-split/, sources/014-multi-fixture-plugin-cost/, sources/015-git-dependency-preset-load/, sources/016-next-sdk-forward-compat/, sources/017-runner-six-fixtures/
+원본 로그와 JSON: `.planning/spikes/009-preset-plugin-via-include/results/`, `.planning/spikes/011-root-analysis-after-split/results/`, `.planning/spikes/014-multi-fixture-plugin-cost/results/` (014 는 `probe-run1.*` 이 첫 번째, `probe.*` 이 두 번째 실행이다), `.planning/spikes/017-runner-six-fixtures/results/` (`run-38216842742.json` 이 runner, `local-seq.json` · `local-par.json` 이 로컬 연습)

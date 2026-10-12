@@ -6,6 +6,8 @@
 
 같은 구조를 두 조건에서 더 쟀다. git 의존성으로 받은 것(015)은 `path:` 때와 줄 단위로 같았다 (→ git-dependency-and-upgrade.md). 다음 SDK 의 베타(Dart 3.14.0-211.1.beta, 016)에서는 include 와 plugin 로드가 그대로였고 **저장소 루트의 분석이 달라졌다** — 이 문서의 6번에서 "plugin 준비 없음" 이라고 적은 것은 Dart 3.13.4 의 사실이다 (→ next-sdk-forward-compat.md). 베타에서 다시 잰 것은 3번의 조합과 6번의 루트 분석까지다. 4번(하한 상향), 5번(사슬이 끊겼을 때), Constraints 의 "루트 `pub get` 전" 은 Dart 3.13.4 의 값이고 베타에서 재지 않았다.
 
+그 뒤 두 자리에서 더 봤다 (둘 다 Dart 3.13.4, 2026-10-12). GitHub Linux runner 에서 나눈 구조의 여섯 조합이 로컬의 예상과 줄 단위로 같았고(017), 실제 사용 프로젝트 `flutter_starter_kit` 의 복사본에서 나누기 전후가 줄 단위로 같았다(019 → real-consumer-measurement.md). 둘 다 3번의 조합을 다시 본 것이고 5번 · 6번은 다시 재지 않았다.
+
 날짜 없이 적은 "지금" 은 2026-10-12 의, 나누기 전의 저장소다.
 
 ## Requirements
@@ -29,6 +31,7 @@ spike 에서 나와 실제 구현이 지켜야 하는 것.
 - 새 연습용 프로젝트는 한 폴더 아래에 모으고 루트에서 `'<폴더>/**'` 한 줄로 제외한다. 기존 `example/**` 줄은 그대로 둔다. 제외하지 않으면 루트 분석에 그 폴더들의 진단이 섞이고 plugin 까지 준비한다 (011)
 - 루트 옵션 파일은 묶음을 include 하지 않는다 — 분석마다 plugin 을 준비한다. `base.yaml` 은 include 해도 plugin 을 준비하지 않고 지금의 `tool/verify.dart` 에 새 진단이 0건이다 (011)
 - `path:` 의존성으로 잰 009 ~ 012 의 결과는 git 의존성(패키지가 pub cache 의 `git/<저장소 이름>-<커밋 해시>/` 에 놓인다)에서도 줄 단위로 같다 — 3단 include 의 plugin 로드, 옛 주소 · 묶음 주소의 정답지 일치, 조합별 진단, 생성 파일 제외의 모양. 연습용 프로젝트를 git 의존성으로 따로 두지 않는다. 받아 오는 길(GitHub 주소, 실제 tag)은 Phase 6 의 smoke test 가 본다 (015)
+- 실제 사용 프로젝트(`flutter_starter_kit` 의 복사본, Dart 파일 468개)에서도 나누기 전후가 줄 단위로 같다 — 지금 받는 그대로(git, 1.3.0) = 한 파일 구조 = 나눈 구조(옛 주소) = 나눈 구조(묶음 주소). 프로젝트 자신의 코드는 지금 0줄이라 표식 파일(정답지 16줄)과, `always_specify_types` 를 더 켠 짝(9,398줄이 줄 단위로 같다)으로 확인했다 (019)
 
 MANIFEST.md 의 `next-sdk-forward-compat` 에서 이 영역에 걸리는 것 (베타 `3.14.0-211.1.beta` 한 빌드의 결과이고 정식 버전에서 달라질 수 있다).
 
@@ -147,15 +150,18 @@ if (!shipped.basePart.contains('\nlinter:\n') || shipped.basePart.contains('plug
 | 별칭 앞에 징검다리 파일 셋 (6단) | 정답지와 같음, plugin 폴더 1. 깊이 제한이 없다 | 010 |
 | 옛 주소 + `riverpod.yaml` + `base.yaml` 을 한 목록에 | 정답지와 같음. 같은 조각에 두 길로 닿아도 진단이 두 번 나오지 않는다 | 010 |
 
-git 의존성과 다음 SDK 에서 다시 본 것.
+git 의존성, 다음 SDK, GitHub runner, 실제 사용 프로젝트에서 다시 본 것.
 
 | 조건 | 다시 잰 칸 | 결과 | 근거 |
 |---|---|---|---|
 | git 의존성 (패키지가 pub cache 에 놓인다), Dart 3.13.4 | 옛 주소 · 묶음 주소 · `base.yaml` + `riverpod.yaml` · `base.yaml` 만 | 정답지 · 009 의 예상과 같음. 선언 `^3.1.3` 이 3단을 거쳐 전해짐. 처음 실행 14.8 ~ 15.2초 | 015 |
 | 베타 (Dart 3.14.0-211.1.beta), `path:` | 한 파일 구조 · 옛 주소 · 묶음 주소 · `base.yaml` + `riverpod.yaml` · `base.yaml` 만 · `base.yaml` + `codegen.yaml` | plugin 로드와 plugin 폴더 수가 같음. 진단은 codegen 조각을 받는 칸에만 생성 파일 샘플의 4줄이 더 나옴 (16 → 20줄, 13 → 17줄) | 016 |
+| GitHub Linux runner (`ubuntu-24.04` · `ubuntu-26.04`, 코어 4개), Dart 3.13.4, `path:` | 옛 주소 · 묶음 주소 · `base.yaml` 만 · 묶음 + `provider_parameters` 를 끔 · `base.yaml` + `riverpod.yaml` · `base.yaml` + `codegen.yaml` | job 12개에서 여섯 조합의 진단이 로컬의 예상과 줄 단위로 같음 (16 / 16 / 18 / 15 / 21 / 13줄). plugin 을 쓰는 넷은 plugin 폴더 1, 쓰지 않는 둘은 0 | 017 |
+| 실제 사용 프로젝트의 복사본 (`flutter_starter_kit`, Dart 파일 468개), Dart 3.13.4 | 지금 받는 그대로(git, 1.3.0) · 한 파일 구조 · 옛 주소 · 묶음 주소 · `base.yaml` 만(대조) | 앞의 넷이 줄 단위로 같음 (표식 파일 16줄, 프로젝트의 줄 0). `always_specify_types` 를 더 켠 한 파일 구조와 나눈 구조가 9,398줄로 같음. 대조는 14줄로 달라짐 | 019 |
 
 - 베타의 4줄은 include 나 plugin 로드가 아니라 **생성 파일 제외**가 달라져 생긴 것이고, 한 파일 구조(1.3.0)에서도 똑같이 생긴다 (→ next-sdk-forward-compat.md 3번).
-- "가장자리에서 본 것" 의 실험(순서 뒤집기, 6단, 상대 경로 등)은 git 의존성으로도 베타로도 다시 재지 않았다.
+- "가장자리에서 본 것" 의 실험(순서 뒤집기, 6단, 상대 경로 등)은 git 의존성으로도 베타로도, runner 에서도 실제 프로젝트에서도 다시 재지 않았다.
+- 실제 프로젝트의 줄은 사용 프로젝트 자신의 옵션 파일(자기 `analyzer.exclude`, 주석뿐인 `linter: rules:`)을 거친 결과다. 사용 프로젝트가 맵 문법으로 규칙을 하나 더 켜도 3단 include 위에 그대로 얹혔다 (019). 표식 파일이 무엇이고 "프로젝트의 줄" 을 어떻게 세는지는 real-consumer-measurement.md 에 있다.
 
 조각별 연습용 프로젝트의 정답지 모양은 fixtures-after-split.md 2번에 있다.
 
@@ -293,10 +299,11 @@ analyzer:
 - 009 ~ 011 의 판정은 각각 23건, 23건, 20건이 모두 성립했다. 011 은 두 번 돌려 두 번 모두 같았다.
 - git 의존성으로 받았을 때의 include 와 plugin 로드는 015 가 로컬 git 저장소로 쟀다 (009 ~ 011 은 `path:` 다). 남은 것은 받아 오는 길 — 실제 GitHub 주소와 tag — 이고 Phase 6 의 smoke test 가 본다.
 - Dart 3.14 는 베타 한 빌드로 쟀다 (016). 정식 버전은 재지 않았다.
-- 확인하지 않은 것: GitHub Linux runner 에서의 같은 실행 (include 병합과 context root 를 다루는 코드는 운영체제와 무관하다), 루트를 IDE 로 열었을 때의 모습 (베타에서는 IDE 도 루트에서 plugin 을 준비할 것이다 — 추정), 순환 include (`recursive_include_file` — 이 구조에는 생기지 않는다), Dart 3.14 정식 버전, 주석을 단 묶음 · 별칭 파일, 루트 옵션 파일이 `base.yaml` 을 include 하는 선택지를 베타에서.
+- GitHub Linux runner 에서는 3번의 여섯 조합만 다시 봤다 (017). 사슬이 끊겼을 때(5번)와 저장소 루트의 분석(6번)은 runner 에서 재지 않았다 — include 병합과 context root 를 다루는 코드는 운영체제와 무관하다고 읽었다. 검증 명령(`tool/verify.dart`)은 루트를 인자 없이 분석하지 않으므로(→ next-sdk-forward-compat.md 4번) 지금의 `verify` job 도 6번의 실행을 지나지 않는다.
+- 확인하지 않은 것: 5번 · 6번을 GitHub Linux runner 에서 한 것, 루트를 IDE 로 열었을 때의 모습 (베타에서는 IDE 도 루트에서 plugin 을 준비할 것이다 — 추정), 순환 include (`recursive_include_file` — 이 구조에는 생기지 않는다), Dart 3.14 정식 버전, 주석을 단 묶음 · 별칭 파일, 루트 옵션 파일이 `base.yaml` 을 include 하는 선택지를 베타에서, 실제 사용 프로젝트를 베타에서 (019 는 그 프로젝트의 `pub get` 이 베타에서 풀리지 않아 돌리지 못했다), 학습용 프로젝트 넷.
 
 ## Origin
 
-Synthesized from spikes: 009, 010, 011 (015 의 git 의존성 결과와 016 의 베타 결과는 달라지는 자리에 덧붙인 것이다)
-Source files available in: sources/009-preset-plugin-via-include/, sources/010-alias-three-level-include/, sources/011-root-analysis-after-split/, sources/015-git-dependency-preset-load/, sources/016-next-sdk-forward-compat/
+Synthesized from spikes: 009, 010, 011 (015 의 git 의존성 결과와 016 의 베타 결과는 달라지는 자리에, 017 의 runner 결과와 019 의 실제 사용 프로젝트 결과는 3번의 표에 덧붙인 것이다)
+Source files available in: sources/009-preset-plugin-via-include/, sources/010-alias-three-level-include/, sources/011-root-analysis-after-split/, sources/015-git-dependency-preset-load/, sources/016-next-sdk-forward-compat/, sources/017-runner-six-fixtures/, sources/019-real-consumer-split-invariance/
 원본 로그와 JSON: `.planning/spikes/009-preset-plugin-via-include/results/`, `.planning/spikes/010-alias-three-level-include/results/`, `.planning/spikes/011-root-analysis-after-split/results/`, `.planning/spikes/015-git-dependency-preset-load/results/`, `.planning/spikes/016-next-sdk-forward-compat/results/`

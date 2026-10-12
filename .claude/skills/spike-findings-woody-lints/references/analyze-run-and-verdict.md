@@ -2,7 +2,7 @@
 
 검증 명령(`tool/verify.dart`)이 `example/` 을 분석하고, 그 결과를 "통과 / 정답지와 다름 / plugin 준비 실패 / 도구가 죽음" 으로 가르는 부분이다. Analysis Server 가 plugin 을 받아 컴파일해 두는 상태 폴더를 어디에 두는지도 여기서 다룬다. 연습용 프로젝트가 여섯으로 늘어도 프로젝트 하나를 분석하는 방식은 이 문서 그대로다 (여섯의 구성과 시간은 fixtures-after-split.md).
 
-따로 적지 않은 수치는 Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9 실측이다 (베타의 값은 `flutter analyze` 항목과 Constraints 의 한 항목에만 있다). 날짜를 따로 적지 않은 것은 2026-10-11 (001, 002, 008), 프로젝트가 여럿일 때의 상태 폴더와 시간은 2026-10-12 (014) 에 쟀다. 다음 SDK 의 베타에서 이 실행 형태가 통하는지는 016 이 봤다 (2026-10-12 → Constraints).
+따로 적지 않은 수치는 Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9 실측이다 (베타의 값은 `flutter analyze` 항목과 Constraints 의 한 항목에만 있다). 날짜를 따로 적지 않은 것은 2026-10-11 (001, 002, 008), 프로젝트가 여럿일 때의 상태 폴더와 시간은 2026-10-12 (014 가 로컬에서, 017 이 GitHub runner 에서) 에 쟀다. 018 · 019 를 붙인 줄도 2026-10-12 의 것이다. 다음 SDK 의 베타에서 이 실행 형태가 통하는지는 016 이 봤다 (2026-10-12 → Constraints).
 
 ## Requirements
 
@@ -21,7 +21,11 @@ MANIFEST.md 의 `verify-harness-tool-behavior` 에서 이 영역에 걸리는 �
 MANIFEST.md 의 `preset-split-include-behavior` 에서 이 영역에 걸리는 것.
 
 - 연습용 프로젝트는 폴더마다 따로 두고 상태 폴더도 프로젝트마다 따로 준다 (지금 검증 명령의 방식 그대로). 여섯이 로컬에서 처음 66초, 재실행 20 ~ 21초다. 상태 폴더를 하나로 합치면 plugin 폴더가 넷이 되어 버전을 읽지 못한다. plugin 준비는 경로가 다르면 나눠 쓰지 못한다 (014)
-- 시간이 문제가 되면 상태 폴더를 따로 둔 채 동시에 띄우는 것을 먼저 본다 — 로컬에서 여섯이 23초이고 결과가 같았다. GitHub runner 에서의 여섯은 재지 않았다 (추정 약 4분 20 ~ 30초) (014)
+- 시간이 문제가 되면 상태 폴더를 따로 둔 채 동시에 띄우는 것을 먼저 본다 — 로컬에서 여섯이 23초이고 결과가 같았다. GitHub runner 에서의 여섯은 014 가 재지 않았다 (추정 약 4분 20 ~ 30초 — 그 뒤 017 이 쟀다) (014)
+- 연습용 프로젝트 여섯을 지금의 방식(차례로, 상태 폴더는 프로젝트마다 따로)으로 돌려도 GitHub runner 의 `timeout-minutes: 10` 안에 넉넉히 든다. 처음 실행의 분석이 146 ~ 191초이고, 재실행을 뺀 job 이 약 3분 20초 ~ 4분 20초다 (spike 의 스크립트를 돌린 값이고 여섯으로 늘린 `tool/verify.dart` 가 아니다. 코어 4개, 표본 여섯, 2026-10-12). 014 의 추정(약 4분 20 ~ 30초)을 대신한다 (017)
+- 한꺼번에 띄우면 runner 에서 분석이 69 ~ 95초로 약 절반이 된다 (로컬처럼 3분의 1 이 되지는 않는다). plugin 을 쓰는 넷이 plugin 쪽 패키지(`riverpod_lint`, `analyzer` 등)를 새 가상 머신의 pub cache 에 동시에 처음 받는 경우를 포함해 여섯 번 모두 결과가 같았다. 표본이 적어 "드물게 깨지는지" 는 알 수 없다. 차례로 돌려도 시간 제한에 여유가 있으므로 넣을지는 계획이 정한다 (017)
+
+위 목록에서 014 의 추정은 017 의 두 줄이 대신한다. 017 의 값은 spike 의 스크립트를 runner 에서 돌린 것이다 (→ ci-workflow.md 3번).
 
 MANIFEST.md 의 `next-sdk-forward-compat` 에서 이 영역에 걸리는 것 (베타 `3.14.0-211.1.beta` 한 빌드의 결과이고 정식 버전에서 달라질 수 있다).
 
@@ -254,9 +258,12 @@ String? readPluginVersion(Directory pluginFolder) {
 | 재실행 | 약 3.6~6초 (008 은 3.6~3.9초) | 약 8초 (5.5~10.6초) |
 | plugin 을 다시 컴파일만 할 때 | 약 13초 | 재지 않음 |
 | pub 서버에 닿지 못할 때 | 26~31초 뒤 plugin 진단 없이 끝남 | 재지 않음 |
-| plugin 을 쓰지 않는 프로젝트 (014) | 자기만 쓰는 상태 폴더에서 약 3.2초 (처음 · 재실행 같음), 다른 프로젝트가 채워 둔 상태 폴더에서 0.7초 | 재지 않음 |
-| 프로젝트 여섯을 차례로, 상태 폴더는 따로 (014) | 처음 66초, 재실행 20 ~ 21초 | 재지 않음 (추정은 fixtures-after-split.md 8번) |
-| 프로젝트 여섯을 동시에, 상태 폴더는 따로 (014) | 처음 23초 (벽시계) | 재지 않음 |
+| plugin 을 쓰지 않는 프로젝트 (014, 017) | 자기만 쓰는 상태 폴더에서 약 3.2초 (처음 · 재실행 같음), 다른 프로젝트가 채워 둔 상태 폴더에서 0.7초 | 자기만 쓰는 상태 폴더에서 처음 6.2 ~ 8.1초, 재실행 5.7 ~ 7.7초 |
+| 프로젝트 여섯을 차례로, 상태 폴더는 따로 (014, 017) | 처음 66초, 재실행 20 ~ 21초 | 처음 145.8 ~ 191.2초 (평균 172초), 재실행 43.1 ~ 50.7초 |
+| 프로젝트 여섯을 동시에, 상태 폴더는 따로 (014, 017) | 처음 23초 (벽시계) | 처음 68.8 ~ 94.9초 (평균 85초), 재실행 20.2 ~ 30.2초 |
+
+- runner 의 아래 세 줄은 017 이 2026-10-12 에 코어 4개의 runner 에서 잰 것이다 (방식마다 job 여섯, 이미지 `ubuntu-24.04` 와 `ubuntu-26.04` 를 합친 범위 → ci-workflow.md 3번, fixtures-after-split.md 8번). 위 두 줄(006)의 "약 43초" 와 같은 자리에서 017 은 plugin 을 쓰는 프로젝트 하나에 30 ~ 45초를 쟀다.
+- 운영체제가 Ubuntu 26.04 (glibc 2.43) 인 runner 에서도 plugin 준비(받기 · AOT 컴파일)가 실패하지 않았다 — 이미지 `ubuntu-26.04` 20260927.149.1 에서 plugin 을 처음부터 준비한 실행 27번, 2026-10-12 (018 → ci-workflow.md 4번).
 
 서버가 뜰 때마다 하는 일은 셋이다: (1) 가상 패키지의 `pubspec.yaml` 과 `bin/plugin.dart` 를 내용이 다를 때만 다시 쓰고, (2) `dart pub upgrade` 를 **항상** 돌리고, (3) 기존 `bin/plugin.aot` (약 15MB) 이 `bin/depfile.txt` 기준으로 최신이면 그대로 쓰고 아니면 기존 파일을 지운 뒤 `dart compile aot-snapshot` 을 돌린다. `analysis_server` (tag 3.13.4) 의 소스에서 읽은 순서이고 008 의 실험 결과가 이와 맞았다. 처음 실행의 시간은 대부분 컴파일이다.
 
@@ -296,15 +303,16 @@ String? readPluginVersion(Directory pluginFolder) {
   | 준비된 폴더에서 둘을 동시에 | 8 | 0 |
   | 대조군: 상태 폴더를 따로 주고 처음 실행 둘을 동시에 | 2 | 0 |
 
-  상태 폴더를 **따로** 준 동시 실행은 014 가 더 크게 봤다 — 서로 다른 프로젝트 넷, 그리고 여섯을 동시에 처음 실행으로 두 번씩 띄웠고 20건이 모두 예상한 진단을 냈다.
+  상태 폴더를 **따로** 준 동시 실행은 014 가 더 크게 봤다 — 서로 다른 프로젝트 넷, 그리고 여섯을 동시에 처음 실행으로 두 번씩 띄웠고 20건이 모두 예상한 진단을 냈다. 017 은 같은 여섯을 GitHub runner 에서 동시에 띄웠다 — 처음 실행 여섯 번(job 마다 새 가상 머신이라 plugin 쪽 패키지를 넷이 동시에 처음 받는다)과 재실행 여섯 번이 모두 예상한 진단을 냈다. 드물게 깨지는지를 말하기에는 표본이 적다.
 
 - 오래 떠 있는 서버(`dart language-server`, IDE 가 프로젝트를 열어 둔 상황을 흉내 냄)와 상태 폴더를 함께 써도 명령줄 분석 3번이 모두 통과했다. 서버가 쓰고 있는 `plugin.aot` 을 명령줄 쪽이 지우고 다시 만들어도 서버는 죽지 않았다. 전용 폴더를 쓰면 IDE 와는 애초에 폴더가 나뉜다.
 - 전용 폴더의 비용: IDE 가 기본 자리에 이미 준비해 둔 plugin 을 쓰지 못하므로 첫 검증이 15초 든다. 시간 자체는 기본 자리와 같다.
 - **이 문서의 실행 형태는 다음 SDK 의 베타(Dart 3.14.0-211.1.beta)에서도 통했다 (016).** 프로젝트 폴더를 작업 디렉터리로 두고 인자 없이, `--suppress-analytics` 를 붙이고, 전용 상태 폴더를 준 실행에서 plugin 폴더 1개 · `plugin.aot` 있음 · 실패 머리말 없음이었고 plugin 진단 3줄이 고정 SDK 와 같았다. plugin 쪽에서 풀린 버전도 같았고(`riverpod_lint` 3.1.9 / `analyzer` 14.5.0 / `analysis_server_plugin` 0.3.24) 처음 실행은 14.8 ~ 16.7초다. 베타에서 재지 않은 것: 하위 폴더 인자(위의 sdk#62710), 사용 통계를 끄지 않았을 때의 255, plugin 준비 실패의 모양(002), 상태 폴더를 함께 쓰는 동시 실행(008).
-- 확인하지 않은 것: plugin 이 뜬 뒤 분석 도중에 죽는 경우, pub 서버가 느리게 응답만 하고 끝나지 않는 경우의 시간 (CI 의 `timeout-minutes` 가 막는다), 동시 실행의 실패가 폴더에 잘린 `plugin.aot` 을 남기는지, 실제 IDE(VS Code)와 함께 쓸 때, 008 의 실험을 GitHub Linux runner 에서 한 것.
+- **이 실행 형태는 실제 사용 프로젝트에서도 그대로 통했다 (019, 2026-10-12).** `flutter_starter_kit` 의 복사본(Dart 파일 468개)을 작업 디렉터리로 두고 인자 없이, `--suppress-analytics` 를 붙이고, 실행마다 빈 상태 폴더를 준 열두 번에서 plugin 폴더 1개 · `plugin.aot` 있음 · 실패 머리말 없음이었다. 처음 실행은 21.5 ~ 25.0초 (plugin 을 쓰지 않는 조합은 6.8초)다. 사용 프로젝트가 `dev_dependencies` 에 `riverpod_lint` 를 따로 적어 두고 lock 이 3.1.3 이어도 plugin 쪽은 3.1.9 로 풀렸다 — plugin 버전은 프로젝트의 lock 이 아니라 상태 폴더의 `pubspec.lock` 에서 읽는다는 8번이 실제 프로젝트에서도 맞다 (→ real-consumer-measurement.md).
+- 확인하지 않은 것: plugin 이 뜬 뒤 분석 도중에 죽는 경우, pub 서버가 느리게 응답만 하고 끝나지 않는 경우의 시간 (CI 의 `timeout-minutes` 가 막는다), 동시 실행의 실패가 폴더에 잘린 `plugin.aot` 을 남기는지, 실제 IDE(VS Code)와 함께 쓸 때, 008 의 실험(상태 폴더를 **함께** 쓰는 동시 실행, 깨진 뒤의 회복)과 002 의 실험(plugin 준비 실패의 모양)을 GitHub Linux runner 에서 한 것, plugin 을 다시 컴파일만 할 때와 pub 서버에 닿지 못할 때의 runner 시간.
 
 ## Origin
 
-Synthesized from spikes: 001, 002, 008, 014 (정규화 함수는 006 의 스크립트에서 가져왔다. 009, 010, 012, 013, 016 의 결과는 한 줄씩 덧붙인 것이다)
-Source files available in: sources/001-analyze-invocation-form/, sources/002-plugin-setup-failure-exit/, sources/006-github-runner-cold-plugin/, sources/008-state-folder-placement/, sources/014-multi-fixture-plugin-cost/
+Synthesized from spikes: 001, 002, 008, 014 (정규화 함수는 006 의 스크립트에서 가져왔다. 009, 010, 012, 013, 016 의 결과는 한 줄씩 덧붙인 것이다. 9번의 runner 값은 017, Ubuntu 26.04 의 한 줄은 018, 실제 사용 프로젝트의 한 줄은 019 에서 왔다)
+Source files available in: sources/001-analyze-invocation-form/, sources/002-plugin-setup-failure-exit/, sources/006-github-runner-cold-plugin/, sources/008-state-folder-placement/, sources/014-multi-fixture-plugin-cost/, sources/017-runner-six-fixtures/
 원본 로그와 JSON: `.planning/spikes/001-analyze-invocation-form/results/`, `.planning/spikes/002-plugin-setup-failure-exit/results/`, `.planning/spikes/008-state-folder-placement/results/`, `.planning/spikes/014-multi-fixture-plugin-cost/results/`

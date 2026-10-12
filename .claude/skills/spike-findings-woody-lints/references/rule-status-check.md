@@ -167,6 +167,8 @@ trap cleanup EXIT
 
 후보 규칙을 옵션 파일에 적고 고정 SDK 로 분석해 한 번 거른다. 규칙만 담은 순수 Dart 패키지를 만드는 함수가 `sources/005-initial-file-rule-status/probe.sh` 의 `make_rules_package` 에 있다 (`pubspec.yaml` 에 `sdk: ^3.13.0` 을 적는 것이 핵심이다).
 
+이 검사가 가르는 것은 규칙의 **상태**(deprecated / removed / 없음)다. 후보 규칙이 실제 사용 프로젝트에서 몇 줄을 내는지는 다른 실측이고, 그 방법 — 복사본, `pubspec_overrides.yaml`, 일부러 넣은 위반 — 은 real-consumer-measurement.md 에 있다 (019). 거기서 켜 본 두 규칙의 값 (2026-10-12 의 `flutter_starter_kit`, Dart 3.13.4): `always_specify_types` 는 9,374줄, 프리셋에 주석 처리되어 있는 `public_member_api_docs` 는 0줄이다 (그 규칙을 어기는 표식 둘은 2줄로 잡혔다 — `publish_to: 'none'` 인 앱 프로젝트에서도 켜진다).
+
 ## What to Avoid
 
 - **복사본을 저장소 밖 임시 폴더(`Directory.systemTemp`)에 두는 것.** deprecated 와 removed 를 놓치고 `undefined_lint` 만 잡힌다. 검사가 도는 것처럼 보이는데 반만 본다. 임시 폴더에는 pubspec 이 없어 SDK 하한이 없기 때문이다. `--packages` 로 패키지 설정을 넘겨도 같다.
@@ -217,10 +219,11 @@ trap cleanup EXIT
 - 요구 사항의 "`example/` 의 상태에 기대지 않는다"가 실측으로 받쳐지는 범위: `example/` 이 없을 때(005 의 4-2)와 `example/` 이 있고 그 패키지를 받았을 때(007). `example/` 은 있는데 패키지를 받기 전인 상태에서 폴더를 인자로 준 실행은 재지 않았다.
 - 규칙 검사 전에 **루트의 패키지가 받아져 있었다.** 007 과 013 은 replica 루트에서 `dart pub get` 을 먼저 했고, 005 는 루트의 `.dart_tool/package_config.json` 이 이미 있는 상태였다. 루트의 패키지를 받지 않은 상태(CI 가 저장소를 새로 받은 직후)에서의 규칙 검사는 재지 않았다. 복사본의 `include: package:flutter_lints/flutter.yaml` 을 풀려면 루트의 패키지 설정이 있어야 할 것이다 (추정).
 - 013 은 두 번 돌려 두 번 모두 같았고 판정 14건이 모두 성립했다.
-- 확인하지 않은 것: GitHub Linux runner 에서 규칙 검사에 걸리는 시간, 위 두 항목의 재지 않은 상태, 깨진 입력을 사용 프로젝트 쪽(include 로 받는 쪽)에서 봤을 때의 진단을 나눈 구조에서 (한 파일 구조에서는 Phase 2 의 검증이 재현했다 — `included_file_warning`, 정답지의 `exit` 줄이 3).
+- 지금의 검증 명령(규칙 검사 단계를 포함한 네 단계)은 GitHub runner 의 `ubuntu-24.04` 와 `ubuntu-26.04` 에서 `점검 통과 (4개 중 4개)` 였다 (018, 2026-10-12 — 한 파일 구조의 배포 파일 하나를 대상으로 한 Phase 2 의 형태다). 규칙 검사 단계만의 시간은 따로 찍히지 않아 모른다.
+- 확인하지 않은 것: GitHub Linux runner 에서 규칙 검사에 걸리는 시간, 조각 셋을 하위 폴더에 둔 규칙 검사를 runner 에서, 위 두 항목의 재지 않은 상태, 깨진 입력을 사용 프로젝트 쪽(include 로 받는 쪽)에서 봤을 때의 진단을 나눈 구조에서 (한 파일 구조에서는 Phase 2 의 검증이 재현했다 — `included_file_warning`, 정답지의 `exit` 줄이 3).
 
 ## Origin
 
-Synthesized from spikes: 005, 007, 013 (다음 SDK 에서의 상태는 016 의 3부를 덧붙인 것이다)
+Synthesized from spikes: 005, 007, 013 (다음 SDK 에서의 상태는 016 의 3부를 덧붙인 것이다. runner 의 두 이미지에서 통과했다는 한 줄은 018, 실제 사용 프로젝트에서 켜 본 두 규칙의 값은 019 에서 왔다)
 Source files available in: sources/005-initial-file-rule-status/, sources/007-root-analysis-with-example/, sources/013-rule-check-after-split/, sources/016-next-sdk-forward-compat/
 원본 로그: `.planning/spikes/005-initial-file-rule-status/results/probe.log`, `.planning/spikes/007-root-analysis-with-example/results/probe.log`, `.planning/spikes/013-rule-check-after-split/results/probe.log`, `.planning/spikes/016-next-sdk-forward-compat/results/probe-<Dart 버전>.log`

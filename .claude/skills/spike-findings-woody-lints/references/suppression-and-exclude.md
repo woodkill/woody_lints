@@ -6,6 +6,8 @@
 
 생성 파일 제외(6번)는 두 조건에서 더 쟀다. git 의존성으로 받은 것(015)은 `path:` 때와 한 줄도 다르지 않았다. 다음 SDK 의 베타(Dart 3.14.0-211.1.beta, 016)에서는 **프리셋이 주는 제외가 규칙 진단에도 통하지 않았다** — 6번의 "규칙 진단에는 통한다" 는 Dart 3.13.x 의 사실이다. 끄는 방법 여섯 칸(1 ~ 5번, 8번)은 git 의존성으로도 베타로도 다시 재지 않았다.
 
+실제 사용 프로젝트(`flutter_starter_kit` 의 복사본)의 진짜 생성 파일에서 제외를 넣고 빼 본 결과는 6번 끝에 있다 (019, Dart 3.13.4 — 제외가 어디에도 없어도 그 프로젝트의 생성 파일 62개에서는 0줄이었다).
+
 ## Requirements
 
 MANIFEST.md 의 `preset-split-include-behavior` 에서 이 영역에 걸리는 것.
@@ -20,6 +22,7 @@ spike 에서 나와 실제 구현이 지켜야 하는 것.
 - 끄는 설정용 연습 프로젝트는 끈 자리 옆에 끄지 않은 같은 위반을 둔다. plugin 진단은 주석에 `riverpod_lint/` 접두사를 붙이고, 프로젝트 전체에서 끌 때는 `version` 을 함께 적는다. `version` 을 뺀 설정은 경고 없이 무시되고, `analyzer.errors` 로는 plugin 진단을 끌 수 없다 (012)
 - **`codegen.yaml` 이 주는 생성 파일 제외는 규칙 진단에만 통하고 plugin 진단에는 통하지 않는다.** plugin 이 쓰는 `analyzer` 14.4.0 이상이 제외 패턴을 그것을 적은 파일의 폴더 기준으로 풀기 때문이고, 나누기 전(1.3.0)에도 같다. 사용 프로젝트가 자기 옵션 파일에 직접 적은 제외는 plugin 도 따른다. 성공 기준 3 의 "생성 파일의 진단이 보고되지 않는다" 는 규칙 진단에 대한 말로 읽는다 (012)
 - `path:` 의존성으로 잰 009 ~ 012 의 결과는 git 의존성(패키지가 pub cache 의 `git/<저장소 이름>-<커밋 해시>/` 에 놓인다)에서도 줄 단위로 같다 — 3단 include 의 plugin 로드, 옛 주소 · 묶음 주소의 정답지 일치, 조합별 진단, 생성 파일 제외의 모양. 연습용 프로젝트를 git 의존성으로 따로 두지 않는다. 받아 오는 길(GitHub 주소, 실제 tag)은 Phase 6 의 smoke test 가 본다 (015)
+- `flutter_starter_kit` 의 진짜 생성 파일 62개는 제외가 하나도 없어도 진단이 0줄이다 (2026-10-12, Dart 3.13.4. 57개가 머리에 `ignore_for_file: type=lint` 를 달고 있고, 머리 없는 5개도 지금의 규칙에 걸리지 않는다. 머리를 단 57개의 0줄이 그 머리 때문인지는 가르지 않았다). 012 · 016 의 "프리셋의 제외가 통하지 않는 경우" 는 이 프로젝트에 지금 새 줄을 만들지 않는다. 규칙이 늘면 머리 없는 5개에서 줄이 날 수 있다 (019)
 
 MANIFEST.md 의 `next-sdk-forward-compat` 에서 이 영역에 걸리는 것 (베타 `3.14.0-211.1.beta` 한 빌드의 결과이고 정식 버전에서 달라질 수 있다).
 
@@ -158,7 +161,8 @@ lib/suppress/type_warning_file.dart:8  warning  provider_parameters
 | `// ignore_for_file: type=warning` | 남음 | **남음** |
 
 - plugin 안에서 `riverpod_lint` 의 진단은 종류가 `LINT` 다. JSON 에 `type: STATIC_WARNING` 으로 나오는 것(003)은 서버가 plugin 진단을 옮겨 적을 때 붙는 값이고 주석 판정에는 쓰이지 않는다. 소스를 읽고 세운 추정(`type=warning` 이 끌 것)과 반대였다.
-- `riverpod_generator` 4.0.9 의 산출물은 `type=lint` 를 달고 나온다. spike 003 의 산출물 6개가 모두 10행에 `// ignore_for_file: type=lint, type=warning` 을 갖고 있다. `type=lint` 가 plugin 진단을 끄므로 그런 파일에서는 제외가 통하지 않아도 plugin 진단이 나오지 않을 것이다 — 위 표는 `type=lint` 만 단 손으로 쓴 샘플로 쟀고, 둘을 함께 단 실제 산출물에 위반을 넣어 돌린 것은 아니다. 다른 생성기(freezed, json_serializable)의 머리는 확인하지 않았다.
+- `riverpod_generator` 4.0.9 의 산출물은 `type=lint` 를 달고 나온다. spike 003 의 산출물 6개가 모두 10행에 `// ignore_for_file: type=lint, type=warning` 을 갖고 있다. `type=lint` 가 plugin 진단을 끄므로 그런 파일에서는 제외가 통하지 않아도 plugin 진단이 나오지 않을 것이다 — 위 표는 `type=lint` 만 단 손으로 쓴 샘플로 쟀고, 둘을 함께 단 실제 산출물에 위반을 넣어 돌린 것은 아니다.
+- 다른 생성기의 머리는 019 가 실제 사용 프로젝트(`flutter_starter_kit`, 2026-10-12)의 생성 파일 62개에서 읽었다. `*.g.dart` 50개가 `// ignore_for_file: type=lint, type=warning`, `*.g.dart` 5개는 머리가 없고, `*.freezed.dart` 7개가 `// ignore_for_file: type=lint` 다. 019 는 앞의 50개를 `riverpod_generator`, 머리 없는 5개를 `json_serializable` 의 산출물로 적었다 — 세 생성기의 버전은 기록하지 않았다. **이 프로젝트에서 `json_serializable` 의 산출물로 본 5개에는 진단을 막아 주는 머리가 없었다.**
 
 ### 6. `analyzer.exclude` — 어디에 적었느냐에 따라 갈린다
 
@@ -187,6 +191,19 @@ lib/generated/riverpod_violation.g.dart:5  warning  provider_parameters
 - 베타에서 지금의 `example/` 샘플을 분석하면 codegen 조각을 받는 조합에 생성 파일 샘플의 규칙 진단 4줄이 생긴다 (옛 주소 · 묶음 16 → 20줄, 기본 + codegen 13 → 17줄). 요구 사항의 "정답지 셋" 은 016 이 잰 이 세 칸이고, 어느 정답지 **파일**이 달라지는지는 next-sdk-forward-compat.md 3번에 있다.
 - **축이 둘이다 — 표의 "규칙" 칸은 SDK 를, "plugin" 칸은 pub.dev 에서 풀리는 `analyzer` 를 따른다.** SDK 를 바꿔 달라진 것은 규칙 칸뿐이다 (plugin 쪽 `analyzer` 는 두 SDK 에서 모두 14.5.0 이었다). plugin 은 분석할 때마다 pub.dev 에서 다시 풀리므로(→ analyze-run-and-verdict.md), plugin 칸은 저장소도 `.fvmrc` 도 그대로인 채 pub.dev 의 `analyzer` 릴리스로 바뀔 수 있다 — 상류가 되돌리는 변경이 그쪽으로 나오면 "나옴" 이 "안 나옴" 이 될 수 있다 (추정. 그런 릴리스는 2026-10-12 에 없었다).
 
+**실제 사용 프로젝트의 진짜 생성 파일에서는 (019, Dart 3.13.4).** `flutter_starter_kit` 의 복사본에서 생성 파일 제외를 넣고 빼며 분석했다. "프로젝트의 줄" 은 그 프로젝트의 생성 파일 62개에서 나온 진단이고, "표식 파일" 은 복사본에 넣은 `example/lib` 의 샘플이다 (생성 파일 샘플 둘에 규칙 위반 4줄이 있다 → real-consumer-measurement.md).
+
+| 제외가 적힌 곳 | 프로젝트의 생성 파일에서 나온 줄 | 표식 파일의 생성 파일 샘플 |
+|---|---|---|
+| 사용 프로젝트의 옵션 파일 + 프리셋 (원본 그대로) | 규칙 0 · plugin 0 | 0줄 |
+| 프리셋만 (직접 적은 두 줄을 뺌) — 한 파일 구조와 나눈 구조 | 규칙 0 · plugin 0 | 0줄 |
+| 어디에도 없음 (두 줄을 빼고 `base.yaml` + `riverpod.yaml` 만) | **규칙 0 · plugin 0** | 4줄 (예상대로) |
+
+- **이 프로젝트의 생성 파일은 제외가 하나도 없어도 0줄이었다.** 위 표의 "통하지 않는 경우" 가 실제 프로젝트에 곧바로 새 줄을 만드는 것은 아니다. 표식 파일의 4줄이 같은 실행에서 나왔으므로 규칙이 꺼져 있었던 것은 아니다.
+- **0줄의 까닭은 가르지 않았다.** 57개가 `type=lint` 머리를 달고 있지만, 그 머리가 진단을 막은 것인지 걸릴 코드가 없었던 것인지는 이 실행으로 알 수 없다. 머리 없는 5개는 머리 없이 0줄이었다 — 2026-10-12 의 규칙 12개 · 기반 세트 · `riverpod_lint` 에 걸리지 않았다는 뜻이고, 규칙이 늘면 여기서 줄이 날 수 있다.
+- 직접 적은 두 줄을 빼도 나누기 전후가 같았다 (한 파일 구조 16줄 = 나눈 구조 16줄).
+- 프로젝트 하나, SDK 하나의 값이다. 베타에서는 그 프로젝트의 `pub get` 이 풀리지 않아 돌리지 못했다 — 표식 파일 수준의 베타 결과는 위의 표(016)에 있다.
+
 Phase 3 의 계획이 이 결과로 정할 것.
 
 - **성공 기준 3 의 "생성 파일의 진단이 보고되지 않는다" 는 Dart 3.13.x 의 규칙 진단에 대해서만 참이다.** 지금의 `example/` 샘플(생성 파일에 규칙 위반만 있다)과 고정 SDK 로는 성립한다. 생성 파일에 plugin 위반을 두면 `codegen.yaml` 을 받아도 그 줄이 나오고, 다음 SDK 에서는 규칙 위반의 줄도 나올 수 있다.
@@ -194,10 +211,11 @@ Phase 3 의 계획이 이 결과로 정할 것.
 
 ### 7. Phase 5 의 README 에 적을 것
 
-- 생성 파일 제외는 **사용 프로젝트의 `analysis_options.yaml` 에 직접 적으라고 안내한다.** Dart 3.13.x 에서는 plugin 진단 때문에, 베타에서는 규칙 진단까지 그렇다. README 가 안내할 방법은 이것 하나로 한다 — "유일한 방법" 이라고 적지는 않는다 (실측에서 두 SDK 모두 막은 자리는 둘이다 → 6번). git 으로 받는 실제 사용 프로젝트에 그대로 해당한다 (015). `flutter_starter_kit` 은 이미 그렇게 적어 두었다 (2026-10-12 읽음).
-- 잰 직접 제외는 `'**/*.g.dart'` 한 줄이다. `**/*.freezed.dart` 를 직접 적은 경우는 재지 않았다 (같은 코드가 처리한다).
+- 생성 파일 제외는 **사용 프로젝트의 `analysis_options.yaml` 에 직접 적으라고 안내한다.** Dart 3.13.x 에서는 plugin 진단 때문에, 베타에서는 규칙 진단까지 그렇다. README 가 안내할 방법은 이것 하나로 한다 — "유일한 방법" 이라고 적지는 않는다 (실측에서 두 SDK 모두 막은 자리는 둘이다 → 6번). git 으로 받는 실제 사용 프로젝트에 그대로 해당한다 (015). `flutter_starter_kit` 은 이미 그렇게 적어 두었다 — `"**/*.g.dart"` 와 `"**/*.freezed.dart"` 두 줄이다 (019 가 2026-10-12 에 복사본으로 확인).
+- **"직접 적지 않으면 생성 파일에서 진단이 쏟아진다" 로 적지 않는다.** `flutter_starter_kit` 에서는 그 두 줄을 빼도, 제외가 어디에도 없어도 생성 파일의 진단이 0줄이었다 (019 → 6번 끝). 안내의 이유는 "규칙이 늘거나 생성기가 머리를 달지 않는 파일에서 줄이 날 수 있다" 쪽이다. 제외가 분석 시간을 줄이는지는 재지 않았다.
+- 잰 직접 제외는 `'**/*.g.dart'` 한 줄이다 (012). `**/*.freezed.dart` 를 직접 적어 plugin 위반을 막는지는 따로 재지 않았다 (같은 코드가 처리한다).
 - "프리셋의 제외가 통하지 않는다" 를 굳은 사실로 적지 않는다. 상류가 버그(sdk#64549, `P1`)로 다루며 되돌리는 변경을 리뷰하고 있으므로(2026-10-11 의 댓글, 2026-10-12 읽음) "SDK 버전에 따라 다르다" 로 적고 그 이슈를 가리킨다. 정확히는 규칙 진단이 SDK 의 버전을, plugin 진단이 plugin 이 쓰는 `analyzer` 의 버전을 따른다 — 어디까지 풀어 적을지는 Phase 5 가 정한다.
-- `// ignore_for_file: type=lint` 를 단 생성 파일에서는 제외와 상관없이 plugin 진단이 나오지 않는다. `riverpod_generator` 4.0.9 의 산출물이 이 머리를 단다 (다른 생성기는 확인하지 않았다).
+- `// ignore_for_file: type=lint` 를 단 생성 파일에서는 제외와 상관없이 plugin 진단이 나오지 않는다 (손으로 쓴 샘플로 잰 것이다 → 5번). `riverpod_generator` 4.0.9 의 산출물이 이 머리를 단다. `flutter_starter_kit` 의 `*.freezed.dart` 7개도 이 머리를 달고 있었고, `json_serializable` 의 산출물 5개에는 머리가 없었다 (019 — 생성기의 버전은 기록하지 않았다).
 - plugin 진단을 프로젝트 전체에서 끌 때 `version` 을 함께 적는다. 묶음과 같지 않아도 되지만 적은 값이 그 프로젝트의 plugin 버전 선언이 된다.
 - 주석으로 plugin 진단을 끌 때는 `riverpod_lint/` 접두사를 붙인다.
 - `diagnostics:` 에 `info` / `warning` / `error` 를 적어 강도를 바꿀 수 있다.
@@ -241,10 +259,11 @@ spike 는 여섯 칸을 **같은** 규칙(`prefer_single_quotes`)과 **같은** 
 - 판정에 넣은 확인 15건이 모두 성립했다. 소스를 읽어 세운 추정과 실제가 다른 칸은 29칸 중 3칸이었다 (`type=lint`, `type=warning`, 묶음이 주는 생성 파일 제외 — 셋 다 plugin 쪽).
 - 처음 실행은 15 ~ 20초다 (실행마다 빈 상태 폴더).
 - 015 와 016 이 다시 잰 것은 6번의 생성 파일 제외뿐이다. 끄는 방법 여섯 칸 — 주석의 접두사, `version`, `type=lint` (1 ~ 5번) — 은 git 의존성으로도 베타로도 재지 않았다.
-- 확인하지 않은 것: `**/*.freezed.dart` 를 plugin 위반 샘플로 (같은 코드가 처리한다. 베타에서 `example/` 의 `sample.freezed.dart` 에 규칙 진단 2줄이 나온 것은 016 이 봤다), freezed · json_serializable 의 실제 산출물이 어떤 머리를 다는지, `riverpod_lint` 의 다른 14개 진단 (주석과 제외를 처리하는 코드는 진단 이름과 무관하다), 규칙과 plugin 진단을 한 옵션 파일에서 함께 끄는 것, Dart 3.14 정식 버전, git 의존성으로 받은 경우를 베타에서.
+- 019 는 실제 사용 프로젝트에서 생성 파일 제외만 다시 봤다. 끄는 방법 여섯 칸은 실제 프로젝트에서 재지 않았고, 그 프로젝트가 직접 적어 둔 `// ignore` 주석이 가리는 줄의 수도 세지 않았다.
+- 확인하지 않은 것: `**/*.freezed.dart` 를 plugin 위반 샘플로 (같은 코드가 처리한다. 베타에서 `example/` 의 `sample.freezed.dart` 에 규칙 진단 2줄이 나온 것은 016 이 봤다), `type=lint` 머리를 단 **실제** 산출물에 위반을 넣었을 때 그 머리가 막는지 (019 의 0줄은 까닭을 가르지 않았다), `freezed` · `json_serializable` · `riverpod_generator` 의 다른 버전이 내는 머리, 실제 프로젝트의 생성 파일을 베타에서, 규칙을 더 켠 상태에서 실제 프로젝트의 제외를 뺀 경우, `riverpod_lint` 의 다른 14개 진단 (주석과 제외를 처리하는 코드는 진단 이름과 무관하다), 규칙과 plugin 진단을 한 옵션 파일에서 함께 끄는 것, Dart 3.14 정식 버전, git 의존성으로 받은 경우를 베타에서.
 
 ## Origin
 
-Synthesized from spikes: 012 (한 파일 구조에서 plugin 선언을 다시 적어 끄는 것은 003 이 먼저 봤다. 생성 파일 제외는 015 가 git 의존성으로, 016 이 베타로 다시 쟀다)
-Source files available in: sources/012-plugin-suppression-matrix/, sources/015-git-dependency-preset-load/, sources/016-next-sdk-forward-compat/
-원본 로그와 JSON: `.planning/spikes/012-plugin-suppression-matrix/results/`, `.planning/spikes/015-git-dependency-preset-load/results/`, `.planning/spikes/016-next-sdk-forward-compat/results/`
+Synthesized from spikes: 012 (한 파일 구조에서 plugin 선언을 다시 적어 끄는 것은 003 이 먼저 봤다. 생성 파일 제외는 015 가 git 의존성으로, 016 이 베타로, 019 가 실제 사용 프로젝트의 생성 파일로 다시 쟀다)
+Source files available in: sources/012-plugin-suppression-matrix/, sources/015-git-dependency-preset-load/, sources/016-next-sdk-forward-compat/, sources/019-real-consumer-split-invariance/
+원본 로그와 JSON: `.planning/spikes/012-plugin-suppression-matrix/results/`, `.planning/spikes/015-git-dependency-preset-load/results/`, `.planning/spikes/016-next-sdk-forward-compat/results/`, `.planning/spikes/019-real-consumer-split-invariance/results/`
