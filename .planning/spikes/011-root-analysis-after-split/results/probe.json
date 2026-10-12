@@ -1,0 +1,592 @@
+{
+  "dart": "3.13.4",
+  "os": "macos",
+  "checks": [
+    {
+      "label": "R0 지금의 저장소 모양은 깨끗하다",
+      "ok": true,
+      "note": "exit 0, 0줄, plugin 폴더 0개, 0.7초"
+    },
+    {
+      "label": "R1 한 파일 구조에서 제외를 걷어내면 plugins_in_inner_options 가 난다",
+      "ok": true,
+      "note": "exit 2, 1줄, plugin 폴더 0개"
+    },
+    {
+      "label": "R2 나눈 구조에서 제외를 걷어내도 루트 분석이 깨끗하다 (plugins_in_inner_options 없음)",
+      "ok": true,
+      "note": "exit 0, 0줄, plugin 폴더 0개, 0.6초"
+    },
+    {
+      "label": "R3 제외를 남겨 둬도 깨끗하다",
+      "ok": true,
+      "note": "exit 0, 0줄, plugin 폴더 0개, 0.6초"
+    },
+    {
+      "label": "R2-rel 상대 경로로 불러도 깨끗하다",
+      "ok": true,
+      "note": "exit 0, 0줄, plugin 폴더 0개, 0.6초"
+    },
+    {
+      "label": "R5 묶음이 없는 조각을 부르면 루트 분석이 별칭 파일에 진단을 붙인다",
+      "ok": true,
+      "note": "exit 2, 1줄"
+    },
+    {
+      "label": "C1 · C2 는 pub get 전에 C0 보다 진단이 는다 (늘면 기록할 사실, 줄지 않으면 성립)",
+      "ok": true,
+      "note": "C0 1줄 exit 2 / C1 2줄 exit 2 / C2 2줄 exit 2"
+    },
+    {
+      "label": "F0 pub get 전에도 fixtures/** 한 줄로 섞이지 않는다",
+      "ok": true,
+      "note": "exit 0, 0줄, plugin 폴더 0개, 0.6초"
+    },
+    {
+      "label": "F1 제외하지 않으면 fixtures 의 진단이 루트 분석에 섞인다",
+      "ok": true,
+      "note": "exit 2, 39줄 (fixtures/ 39줄), plugin 폴더 1개, 18.3초"
+    },
+    {
+      "label": "F2 fixtures/** 한 줄이면 폴더가 둘이어도 섞이지 않는다",
+      "ok": true,
+      "note": "exit 0, 0줄, plugin 폴더 0개, 0.6초"
+    },
+    {
+      "label": "F3 루트의 제외는 fixtures/base_riverpod 안에서의 분석을 건드리지 않는다",
+      "ok": true,
+      "note": "21줄, exit 2"
+    },
+    {
+      "label": "F4 fixtures/base_only 안에서의 분석도 예상과 같다",
+      "ok": true,
+      "note": "18줄, exit 2"
+    },
+    {
+      "label": "F4 기본만 받는 폴더는 plugin 을 준비하지 않는다",
+      "ok": true,
+      "note": "폴더 0개"
+    },
+    {
+      "label": "F5 plugins: 를 직접 적은 폴더도 제외하면 루트 분석에 걸리지 않는다 (pub get 전)",
+      "ok": true,
+      "note": "exit 0, 0줄, plugin 폴더 0개, 0.5초"
+    },
+    {
+      "label": "F6 pub get 후에도 걸리지 않는다",
+      "ok": true,
+      "note": "exit 0, 0줄, plugin 폴더 0개, 0.6초"
+    },
+    {
+      "label": "G0 flutter_lints 만 include 하면 tool/verify.dart 가 깨끗하다",
+      "ok": true,
+      "note": "exit 0, 0줄, plugin 폴더 0개, 0.5초"
+    },
+    {
+      "label": "G1 base.yaml 을 include 해도 plugin 을 준비하지 않는다",
+      "ok": true,
+      "note": "exit 0, 0줄, plugin 폴더 0개"
+    },
+    {
+      "label": "G3 flutter_lints 만으로는 겹따옴표가 걸리지 않는다 (대조)",
+      "ok": true,
+      "note": "exit 0, 0줄, plugin 폴더 0개, 0.5초"
+    },
+    {
+      "label": "G4 base.yaml 을 include 하면 이 패키지의 규칙이 tool/ 에 실제로 적용된다",
+      "ok": true,
+      "note": "exit 0, 1줄"
+    },
+    {
+      "label": "G2 묶음을 include 하면 루트 분석이 plugin 을 준비한다 (루트에서 쓰지 않는 이유)",
+      "ok": true,
+      "note": "exit 0, 0줄, plugin 폴더 1개, 10.3초"
+    }
+  ],
+  "runs": [
+    {
+      "id": "R0",
+      "title": "한 파일, 루트 옵션은 저장소의 것 그대로 (lib 제외 + example 제외)",
+      "exitCode": 0,
+      "elapsedMs": 705,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "R1",
+      "title": "한 파일, 루트에서 lib/analysis_options.yaml 제외를 걷어냄",
+      "exitCode": 2,
+      "elapsedMs": 627,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [
+        "lib/analysis_options.yaml:58  warning  plugins_in_inner_options"
+      ],
+      "messages": [
+        "Plugins can only be specified in the root of a pub workspace or the root of a package that isn't in a workspace."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "R2",
+      "title": "나눈 구조(package: 주소), lib 제외 없음",
+      "exitCode": 0,
+      "elapsedMs": 626,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "R3",
+      "title": "나눈 구조, 루트 옵션은 저장소의 것 그대로 (제외를 남겨 둠)",
+      "exitCode": 0,
+      "elapsedMs": 612,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "R2-rel",
+      "title": "나눈 구조(상대 경로), lib 제외 없음",
+      "exitCode": 0,
+      "elapsedMs": 603,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "R5",
+      "title": "묶음이 없는 조각을 부름, lib 제외 없음",
+      "exitCode": 2,
+      "elapsedMs": 605,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [
+        "lib/analysis_options.yaml:1  warning  include_file_not_found"
+      ],
+      "messages": [
+        "The URI 'package:woody_lints/no_such_fragment.yaml' included in '<replica>/lib/recommended.yaml' can't be found when analyzing '<replica>'."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "C0",
+      "title": "한 파일, 저장소의 루트 옵션 (지금의 모양, pub get 전)",
+      "exitCode": 2,
+      "elapsedMs": 615,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [
+        "analysis_options.yaml:6  warning  include_file_not_found"
+      ],
+      "messages": [
+        "The URI 'package:flutter_lints/flutter.yaml' included in '<replica>/analysis_options.yaml' can't be found when analyzing '<replica>'."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "C1",
+      "title": "나눈 구조(package: 주소), lib 제외 없음, pub get 전",
+      "exitCode": 2,
+      "elapsedMs": 596,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [
+        "analysis_options.yaml:1  warning  include_file_not_found",
+        "lib/analysis_options.yaml:1  warning  include_file_not_found"
+      ],
+      "messages": [
+        "The URI 'package:flutter_lints/flutter.yaml' included in '<replica>/analysis_options.yaml' can't be found when analyzing '<replica>'.",
+        "The URI 'package:woody_lints/recommended.yaml' included in '<replica>/lib/analysis_options.yaml' can't be found when analyzing '<replica>'."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "C2",
+      "title": "나눈 구조(상대 경로), lib 제외 없음, pub get 전",
+      "exitCode": 2,
+      "elapsedMs": 591,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [
+        "analysis_options.yaml:1  warning  include_file_not_found",
+        "lib/analysis_options.yaml:1  warning  include_file_not_found"
+      ],
+      "messages": [
+        "The URI 'package:flutter_lints/flutter.yaml' included in '<replica>/analysis_options.yaml' can't be found when analyzing '<replica>'.",
+        "The URI 'package:flutter_lints/flutter.yaml' included in '<replica>/lib/base.yaml' can't be found when analyzing '<replica>'."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "F0",
+      "title": "fixtures 는 pub get 전, 루트에 fixtures/** 제외",
+      "exitCode": 0,
+      "elapsedMs": 617,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "F1",
+      "title": "fixtures 는 pub get 후, 루트에 fixtures 제외 없음",
+      "exitCode": 2,
+      "elapsedMs": 18347,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginVersion": "3.1.9",
+      "pluginConstraint": "^3.1.3",
+      "lines": [
+        "fixtures/base_only/lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "fixtures/base_only/lib/added_rules.dart:18  info  always_declare_return_types",
+        "fixtures/base_only/lib/added_rules.dart:24  info  prefer_final_locals",
+        "fixtures/base_only/lib/added_rules.dart:29  info  prefer_single_quotes",
+        "fixtures/base_only/lib/added_rules.dart:33  info  unawaited_futures",
+        "fixtures/base_only/lib/added_rules.dart:7  info  prefer_const_constructors",
+        "fixtures/base_only/lib/base_rules.dart:12  info  sort_child_properties_last",
+        "fixtures/base_only/lib/base_rules.dart:17  info  use_build_context_synchronously",
+        "fixtures/base_only/lib/base_rules.dart:22  info  avoid_print",
+        "fixtures/base_only/lib/base_rules.dart:30  info  control_flow_in_finally",
+        "fixtures/base_only/lib/base_rules.dart:34  info  slash_for_doc_comments",
+        "fixtures/base_only/lib/base_rules.dart:38  info  prefer_is_empty",
+        "fixtures/base_only/lib/base_rules.dart:8  info  sized_box_for_whitespace",
+        "fixtures/base_only/lib/generated/sample.freezed.dart:4  info  avoid_print",
+        "fixtures/base_only/lib/generated/sample.freezed.dart:4  info  prefer_single_quotes",
+        "fixtures/base_only/lib/generated/sample.g.dart:4  info  avoid_print",
+        "fixtures/base_only/lib/generated/sample.g.dart:4  info  prefer_single_quotes",
+        "fixtures/base_only/lib/should_not_appear.dart:5  warning  invalid_annotation_target",
+        "fixtures/base_riverpod/lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "fixtures/base_riverpod/lib/added_rules.dart:18  info  always_declare_return_types",
+        "fixtures/base_riverpod/lib/added_rules.dart:24  info  prefer_final_locals",
+        "fixtures/base_riverpod/lib/added_rules.dart:29  info  prefer_single_quotes",
+        "fixtures/base_riverpod/lib/added_rules.dart:33  info  unawaited_futures",
+        "fixtures/base_riverpod/lib/added_rules.dart:7  info  prefer_const_constructors",
+        "fixtures/base_riverpod/lib/base_rules.dart:12  info  sort_child_properties_last",
+        "fixtures/base_riverpod/lib/base_rules.dart:17  info  use_build_context_synchronously",
+        "fixtures/base_riverpod/lib/base_rules.dart:22  info  avoid_print",
+        "fixtures/base_riverpod/lib/base_rules.dart:30  info  control_flow_in_finally",
+        "fixtures/base_riverpod/lib/base_rules.dart:34  info  slash_for_doc_comments",
+        "fixtures/base_riverpod/lib/base_rules.dart:38  info  prefer_is_empty",
+        "fixtures/base_riverpod/lib/base_rules.dart:8  info  sized_box_for_whitespace",
+        "fixtures/base_riverpod/lib/generated/sample.freezed.dart:4  info  avoid_print",
+        "fixtures/base_riverpod/lib/generated/sample.freezed.dart:4  info  prefer_single_quotes",
+        "fixtures/base_riverpod/lib/generated/sample.g.dart:4  info  avoid_print",
+        "fixtures/base_riverpod/lib/generated/sample.g.dart:4  info  prefer_single_quotes",
+        "fixtures/base_riverpod/lib/main.dart:5  warning  missing_provider_scope",
+        "fixtures/base_riverpod/lib/riverpod_rules.dart:17  warning  provider_parameters",
+        "fixtures/base_riverpod/lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties",
+        "fixtures/base_riverpod/lib/should_not_appear.dart:5  warning  invalid_annotation_target"
+      ],
+      "messages": [
+        "Use 'const' literals as arguments to constructors of '@immutable' classes.",
+        "The function 'noReturnType' should have a return type but doesn't.",
+        "Local variables should be final.",
+        "Unnecessary use of double quotes.",
+        "Missing an 'await' for the 'Future' computed by this expression.",
+        "Use 'const' with the constructor to improve performance.",
+        "The 'child' argument should be last in widget constructor invocations.",
+        "Don't use 'BuildContext's across async gaps.",
+        "Don't invoke 'print' in production code.",
+        "Use of 'return' in a 'finally' clause.",
+        "Use the end-of-line form ('///') for doc comments.",
+        "Use 'isEmpty' instead of 'length' to test whether the collection is empty.",
+        "Use a 'SizedBox' to add whitespace to a layout.",
+        "Don't invoke 'print' in production code.",
+        "Unnecessary use of double quotes.",
+        "Don't invoke 'print' in production code.",
+        "Unnecessary use of double quotes.",
+        "The annotation 'immutable' can only be used on classes, extension types, or mixins.",
+        "Use 'const' literals as arguments to constructors of '@immutable' classes.",
+        "The function 'noReturnType' should have a return type but doesn't.",
+        "Local variables should be final.",
+        "Unnecessary use of double quotes.",
+        "Missing an 'await' for the 'Future' computed by this expression.",
+        "Use 'const' with the constructor to improve performance.",
+        "The 'child' argument should be last in widget constructor invocations.",
+        "Don't use 'BuildContext's across async gaps.",
+        "Don't invoke 'print' in production code.",
+        "Use of 'return' in a 'finally' clause.",
+        "Use the end-of-line form ('///') for doc comments.",
+        "Use 'isEmpty' instead of 'length' to test whether the collection is empty.",
+        "Use a 'SizedBox' to add whitespace to a layout.",
+        "Don't invoke 'print' in production code.",
+        "Unnecessary use of double quotes.",
+        "Don't invoke 'print' in production code.",
+        "Unnecessary use of double quotes.",
+        "Flutter applications using Riverpod must contain a ProviderScope at the root of their widget tree.",
+        "Providers should not rely on parameters for their value. Instead, they should use a family or read other providers.",
+        "Notifiers should not have public properties/getters. Instead, all their public API should be exposed through the `state` property.",
+        "The annotation 'immutable' can only be used on classes, extension types, or mixins."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "F2",
+      "title": "fixtures 는 pub get 후, 루트에 fixtures/** 제외 한 줄",
+      "exitCode": 0,
+      "elapsedMs": 632,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "F3",
+      "title": "fixtures/base_riverpod 안에서 인자 없이 (루트에 fixtures/** 제외가 있는 채)",
+      "exitCode": 2,
+      "elapsedMs": 18256,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginVersion": "3.1.9",
+      "pluginConstraint": "^3.1.3",
+      "lines": [
+        "lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/added_rules.dart:18  info  always_declare_return_types",
+        "lib/added_rules.dart:24  info  prefer_final_locals",
+        "lib/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/added_rules.dart:33  info  unawaited_futures",
+        "lib/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/base_rules.dart:22  info  avoid_print",
+        "lib/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/base_rules.dart:38  info  prefer_is_empty",
+        "lib/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/generated/sample.freezed.dart:4  info  avoid_print",
+        "lib/generated/sample.freezed.dart:4  info  prefer_single_quotes",
+        "lib/generated/sample.g.dart:4  info  avoid_print",
+        "lib/generated/sample.g.dart:4  info  prefer_single_quotes",
+        "lib/main.dart:5  warning  missing_provider_scope",
+        "lib/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties",
+        "lib/should_not_appear.dart:5  warning  invalid_annotation_target"
+      ],
+      "messages": [
+        "Use 'const' literals as arguments to constructors of '@immutable' classes.",
+        "The function 'noReturnType' should have a return type but doesn't.",
+        "Local variables should be final.",
+        "Unnecessary use of double quotes.",
+        "Missing an 'await' for the 'Future' computed by this expression.",
+        "Use 'const' with the constructor to improve performance.",
+        "The 'child' argument should be last in widget constructor invocations.",
+        "Don't use 'BuildContext's across async gaps.",
+        "Don't invoke 'print' in production code.",
+        "Use of 'return' in a 'finally' clause.",
+        "Use the end-of-line form ('///') for doc comments.",
+        "Use 'isEmpty' instead of 'length' to test whether the collection is empty.",
+        "Use a 'SizedBox' to add whitespace to a layout.",
+        "Don't invoke 'print' in production code.",
+        "Unnecessary use of double quotes.",
+        "Don't invoke 'print' in production code.",
+        "Unnecessary use of double quotes.",
+        "Flutter applications using Riverpod must contain a ProviderScope at the root of their widget tree.",
+        "Providers should not rely on parameters for their value. Instead, they should use a family or read other providers.",
+        "Notifiers should not have public properties/getters. Instead, all their public API should be exposed through the `state` property.",
+        "The annotation 'immutable' can only be used on classes, extension types, or mixins."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "F4",
+      "title": "fixtures/base_only 안에서 인자 없이",
+      "exitCode": 2,
+      "elapsedMs": 3341,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [
+        "lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/added_rules.dart:18  info  always_declare_return_types",
+        "lib/added_rules.dart:24  info  prefer_final_locals",
+        "lib/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/added_rules.dart:33  info  unawaited_futures",
+        "lib/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/base_rules.dart:22  info  avoid_print",
+        "lib/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/base_rules.dart:38  info  prefer_is_empty",
+        "lib/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/generated/sample.freezed.dart:4  info  avoid_print",
+        "lib/generated/sample.freezed.dart:4  info  prefer_single_quotes",
+        "lib/generated/sample.g.dart:4  info  avoid_print",
+        "lib/generated/sample.g.dart:4  info  prefer_single_quotes",
+        "lib/should_not_appear.dart:5  warning  invalid_annotation_target"
+      ],
+      "messages": [
+        "Use 'const' literals as arguments to constructors of '@immutable' classes.",
+        "The function 'noReturnType' should have a return type but doesn't.",
+        "Local variables should be final.",
+        "Unnecessary use of double quotes.",
+        "Missing an 'await' for the 'Future' computed by this expression.",
+        "Use 'const' with the constructor to improve performance.",
+        "The 'child' argument should be last in widget constructor invocations.",
+        "Don't use 'BuildContext's across async gaps.",
+        "Don't invoke 'print' in production code.",
+        "Use of 'return' in a 'finally' clause.",
+        "Use the end-of-line form ('///') for doc comments.",
+        "Use 'isEmpty' instead of 'length' to test whether the collection is empty.",
+        "Use a 'SizedBox' to add whitespace to a layout.",
+        "Don't invoke 'print' in production code.",
+        "Unnecessary use of double quotes.",
+        "Don't invoke 'print' in production code.",
+        "Unnecessary use of double quotes.",
+        "The annotation 'immutable' can only be used on classes, extension types, or mixins."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "F5",
+      "title": "fixtures/overrides 는 pub get 전, 루트에 fixtures/** 제외",
+      "exitCode": 0,
+      "elapsedMs": 547,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "F6",
+      "title": "fixtures/overrides 는 pub get 후, 루트에 fixtures/** 제외",
+      "exitCode": 0,
+      "elapsedMs": 565,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "G0",
+      "title": "지금처럼 flutter_lints 만 include",
+      "exitCode": 0,
+      "elapsedMs": 534,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "G1",
+      "title": "base.yaml 을 include",
+      "exitCode": 0,
+      "elapsedMs": 534,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "G3",
+      "title": "겹따옴표 표식 파일을 두고 flutter_lints 만 include",
+      "exitCode": 0,
+      "elapsedMs": 522,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    },
+    {
+      "id": "G4",
+      "title": "겹따옴표 표식 파일을 두고 base.yaml 을 include",
+      "exitCode": 0,
+      "elapsedMs": 532,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [
+        "tool/quote_marker.dart:2  info  prefer_single_quotes"
+      ],
+      "messages": [
+        "Unnecessary use of double quotes."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "G2",
+      "title": "recommended.yaml 을 include",
+      "exitCode": 0,
+      "elapsedMs": 10297,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginVersion": "3.1.9",
+      "pluginConstraint": "^3.1.3",
+      "lines": [],
+      "messages": [],
+      "stderr": ""
+    }
+  ]
+}
