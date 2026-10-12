@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 03
 current_phase_name: Preset Split
 status: executing
-stopped_at: Completed 03-02-PLAN.md
-last_updated: "2026-10-12T11:40:10.860Z"
+stopped_at: Completed 03-03-PLAN.md
+last_updated: "2026-10-12T12:02:41.390Z"
 last_activity: 2026-10-12
 last_activity_desc: Phase 03 execution started
-state_head: 933b26f0072b1b526dcef48732a9486db750b49e
+state_head: 25e980e74671c1304dd9bf8333bf2bd68815bfdf
 progress:
   total_phases: 6
   completed_phases: 2
   total_plans: 13
-  completed_plans: 11
+  completed_plans: 12
   percent: 33
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-12)
 ## Current Position
 
 Phase: 03 (Preset Split) — EXECUTING
-Plan: 3 of 4
+Plan: 4 of 4
 Status: Ready to execute
 Last activity: 2026-10-12 — Phase 03 execution started
 
@@ -70,6 +70,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 02 P05 | 9 min | 3 tasks | 4 files |
 | Phase 03 P01 | 5 min | 2 tasks | 2 files |
 | Phase 03 P02 | 4 min | 2 tasks | 9 files |
+| Phase 03 P03 | 17 min | 3 tasks | 64 files |
 
 ## Accumulated Context
 
@@ -131,6 +132,11 @@ Recent decisions affecting current work:
 - [Phase 03]: lib/ 는 조각 셋(base.yaml · codegen.yaml · riverpod.yaml) + 묶음 recommended.yaml + 옛 주소 별칭 analysis_options.yaml 의 다섯이다. 조각은 90a2736 의 배포 파일을 sed 줄 범위로 잘라 만들었고 이어 붙이면 원본과 같다(diff 종료 코드 0). 옛 주소를 쓰는 example/ 의 정답지는 19ae5ec 그대로이고 검증 명령은 점검 통과 (4개 중 4개)다 (2026-10-12)
 - [Phase 03]: [2/4] 는 lib/*.yaml 집합 확인(expectedLibYamls) 뒤 조각 셋을 build/woody_rule_check/<조각 이름>/analysis_options.yaml 로 복사해 한 번에 분석한다. riverpod.yaml 끝에 숨긴 deprecated 규칙은 riverpod/analysis_options.yaml:11 로(원본 13행, plugins: 두 줄을 빼서 2 앞당겨짐), 여분 lib/_probe_extra.yaml 은 집합 확인이 잡았다. 새 조각을 더하면 ruleCheckTargets 와 expectedLibYamls 를 함께 고친다
 - [Phase 03]: 루트 analysis_options.yaml 의 exclude 는 'example/**' 하나이고 lib/analysis_options.yaml 제외 없이 루트 fvm dart analyze 가 exit 0 · No issues found 다 (Dart 3.13.4, 2026-10-12, PRESET-06). 03-03 이 'fixtures/**' 를 더한다. 이 plan 의 두 커밋(89d6073, 933b26f)은 push 하지 않았다
+- [Phase 03]: 검증 명령은 연습용 프로젝트 여섯을 Fixture 표 순서(example → recommended → base_only → base_riverpod → base_codegen → overrides)로 차례로 돌려 단계 9개를 찍는다. recommended 는 자기 정답지 없이 같은 실행의 example 결과와 견주고, 새 정답지 넷(base_only exit 2 · 18줄, base_riverpod exit 2 · 21줄, base_codegen exit 0 · 13줄, overrides exit 2 · 18줄)은 --update 로 처음 써 03-RESEARCH.md 권고 11 의 전문과 줄 단위로 같았다 (2026-10-12)
+- [Phase 03]: 검증 명령의 --update 는 바뀐 정답지만 쓰고 끝에 '정답지를 썼다 (N개):' 와 목록을 찍는다. 바뀐 것이 없으면 '바뀐 정답지가 없다 — 쓰지 않았다' 이고 머리 주석의 날짜도 다시 쓰지 않는다. plugin 을 쓰지 않는 fixture 의 머리 주석과 plugin 값은 '해당 없음' 이다
+- [Phase 03]: [3/9] 는 fixtures/overrides 의 version: 줄을 lib/riverpod.yaml 의 riverpod_lint 선언과 견준다 — 03-04 는 두 줄을 같은 커밋에서 함께 올려야 한다 (overrides 만 ^3.1.9 로 바꾼 실행에서 [3/9] 만 실패 확인)
+- [Phase 03]: M18 (묶음에서 riverpod.yaml 제거)에서 실패한 것은 [4/9] example 하나다 — recommended 는 example 과 같이 깨져 통과하고, overrides 는 자기 plugins: 선언으로 plugin 이 돌아 통과했다 (계획 예상과 다름). 묶음의 Riverpod 조각은 example 의 정답지가 지킨다. M19 (overrides 의 version 제거)는 [3/9] 와 [9/9] 가 잡는다
+- [Phase 03]: 연습용 프로젝트 여섯의 검증 시간은 로컬 처음 실행(상태 폴더 비움) 69초, 재실행 20 ~ 23초다. plugin 폴더는 example 1 · recommended 1 · base_only 0 · base_riverpod 1 · base_codegen 0 · overrides 1. 이 plan 의 커밋 셋(91bbeec, 9ed0fe5, 25e980e)은 push 하지 않았다
 
 ### Pending Todos
 
@@ -157,6 +163,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-12T11:40:10.835Z
-Stopped at: Completed 03-02-PLAN.md
+Last session: 2026-10-12T12:02:41.360Z
+Stopped at: Completed 03-03-PLAN.md
 Resume file: None

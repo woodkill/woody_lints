@@ -22,21 +22,21 @@
 - [x] **VERIFY-02**: 규칙이 적힌 배포 파일에 deprecated / removed / 존재하지 않는 규칙이 있으면 검증이 실패한다
 - [x] **VERIFY-03**: 소유자는 로컬에서 명령 하나로 전체 검증을 실행할 수 있다
 - [x] **VERIFY-04**: GitHub Actions 가 push 와 PR 마다 로컬과 같은 검증을 실행하며, 시간 제한이 걸려 있다
-- [ ] **VERIFY-05**: `base.yaml` 만 include 한 대조군 fixture 에서 Riverpod / codegen 설정이 적용되지 않음을 확인한다
+- [x] **VERIFY-05**: `base.yaml` 만 include 한 대조군 fixture 에서 Riverpod / codegen 설정이 적용되지 않음을 확인한다
 - [ ] **VERIFY-06**: README 의 규칙 목록이 실제 YAML 과 다르면 검증이 실패한다
 - [x] **VERIFY-07**: `lib/` 에 `.dart` 파일이 있으면 검증이 실패한다
 - [x] **VERIFY-08**: 검증이 실제로 문제를 잡아냄이 확인되어 있다 — 규칙 하나를 지운 변경과 include 줄을 지운 변경이 각각 검증에서 실패한다
 
 ### 프리셋 (PRESET)
 
-- [ ] **PRESET-01**: 사용 프로젝트는 `package:woody_lints/base.yaml` 만 include 해서, Riverpod plugin 과 codegen 설정 없이 기본 규칙만 받을 수 있다
-- [ ] **PRESET-02**: 사용 프로젝트는 `package:woody_lints/riverpod.yaml` 을 include 해서 `riverpod_lint` plugin 을 받을 수 있다
-- [ ] **PRESET-03**: 사용 프로젝트는 `package:woody_lints/codegen.yaml` 을 include 해서 코드 생성 관련 설정(생성 파일 제외 등)을 받을 수 있다
+- [x] **PRESET-01**: 사용 프로젝트는 `package:woody_lints/base.yaml` 만 include 해서, Riverpod plugin 과 codegen 설정 없이 기본 규칙만 받을 수 있다
+- [x] **PRESET-02**: 사용 프로젝트는 `package:woody_lints/riverpod.yaml` 을 include 해서 `riverpod_lint` plugin 을 받을 수 있다
+- [x] **PRESET-03**: 사용 프로젝트는 `package:woody_lints/codegen.yaml` 을 include 해서 코드 생성 관련 설정(생성 파일 제외 등)을 받을 수 있다
 - [x] **PRESET-04**: 기존 `package:woody_lints/analysis_options.yaml` 한 줄만 쓰는 프로젝트는 프리셋 분리 전과 같은 구성(기본 + Riverpod + codegen)을 받는다
 - [ ] **PRESET-05**: `riverpod_lint` plugin 의 버전 하한이 `^3.1.9` 다
 - [x] **PRESET-06**: 저장소 루트 분석이 배포 파일을 분석 대상에서 제외하지 않고도 경고 없이 통과한다
-- [ ] **PRESET-07**: 사용 프로젝트에서 규칙 하나를 끄는 방법과 plugin 진단 하나를 끄는 방법이 README 에 적힌 대로 동작함이 fixture 로 확인되어 있다
-- [ ] **PRESET-08**: 사용 프로젝트는 묶음의 정식 이름 `package:woody_lints/recommended.yaml` 한 줄로 기본 + Riverpod + codegen 구성을 받을 수 있고, 옛 URI 로 받는 구성과 같다
+- [x] **PRESET-07**: 사용 프로젝트에서 규칙 하나를 끄는 방법과 plugin 진단 하나를 끄는 방법이 README 에 적힌 대로 동작함이 fixture 로 확인되어 있다
+- [x] **PRESET-08**: 사용 프로젝트는 묶음의 정식 이름 `package:woody_lints/recommended.yaml` 한 줄로 기본 + Riverpod + codegen 구성을 받을 수 있고, 옛 URI 로 받는 구성과 같다
 
 ### 규칙 (RULES)
 
@@ -117,18 +117,18 @@
 | VERIFY-02 | Phase 2 | Complete |
 | VERIFY-03 | Phase 2 | Complete |
 | VERIFY-04 | Phase 2 | Complete |
-| VERIFY-05 | Phase 3 | Pending |
+| VERIFY-05 | Phase 3 | Complete |
 | VERIFY-06 | Phase 5 | Pending |
 | VERIFY-07 | Phase 2 | Complete |
 | VERIFY-08 | Phase 2 | Complete |
-| PRESET-01 | Phase 3 | Pending |
-| PRESET-02 | Phase 3 | Pending |
-| PRESET-03 | Phase 3 | Pending |
+| PRESET-01 | Phase 3 | Complete |
+| PRESET-02 | Phase 3 | Complete |
+| PRESET-03 | Phase 3 | Complete |
 | PRESET-04 | Phase 3 | Complete |
 | PRESET-05 | Phase 3 | Pending |
 | PRESET-06 | Phase 3 | Complete |
-| PRESET-07 | Phase 3 | Pending |
-| PRESET-08 | Phase 3 | Pending |
+| PRESET-07 | Phase 3 | Complete |
+| PRESET-08 | Phase 3 | Complete |
 | RULES-01 | Phase 4 | Pending |
 | RULES-02 | Phase 4 | Pending |
 | RULES-03 | Phase 4 | Pending |
