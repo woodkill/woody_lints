@@ -181,7 +181,7 @@ Plans:
 **Plans**: 10 plans
 
 Plans:
-**Wave 1**
+**Wave 1** *(04-02 의 smoke 는 저장소 지문을 견주므로 04-01 과 같은 worktree 에서 동시에 돌리지 않는다 — worktree 가 다르면 병렬, 같으면 04-01 뒤)*
 - [ ] 04-01-PLAN.md — (tracer) `lib/base.yaml` 겹침 6 · 주석 3 삭제(정답지 불변) + `RULES.md` 뼈대 + `tool/verify.dart` `[3/10] 배포 파일의 구성` (묶음 · 별칭은 include 만 / 기반 세트 겹침 / `RULES.md` 일치) + README M20 ~ M24 · CHANGELOG (RULES-01, RULES-02, RULES-06; D-11, D-12, D-20)
 - [ ] 04-02-PLAN.md — `tool/measure_rules.dart` 핵심: CLI · 후보 133 · `state` 단계 · 복사본 단계 여섯 · 회차 유효성 · 저장소 지문 — `example/` 을 사용 프로젝트 삼은 smoke 로 끝에서 끝까지 (RULES-03, RULES-04, RULES-05; D-09)
 
