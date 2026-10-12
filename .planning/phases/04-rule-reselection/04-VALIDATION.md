@@ -40,25 +40,25 @@ created: "2026-10-13"
 
 ## Per-Task Verification Map
 
-Task ID / Plan / Wave / Threat Ref 는 계획(`04-NN-PLAN.md`)이 확정된 뒤 채운다. 아래는 요구사항별 확인 방법이며 조사 문서에서 옮긴 것이다.
+Task ID / Plan / Wave / Threat Ref 는 계획(`04-01` ~ `04-10-PLAN.md`, 2026-10-13)으로 채웠다. Task ID 는 `<plan>-T<n>` 이고, 명령은 각 PLAN 의 `<automated>` 에 그대로 있다 (여기는 요지). W0 항목(`tool/verify.dart` 새 단계 · `tool/measure_rules.dart` · `RULES.md` 마커)은 wave 1 · 2 의 plan 이 만든다.
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 계획 뒤 채움 | — | — | RULES-01 | — | N/A | 단계 검사 (CI) | `fvm dart run tool/verify.dart` → 새 단계의 기반 세트 겹침 확인 통과. 보조: `lib/base.yaml` 에서 `sized_box_for_whitespace` · `sort_child_properties_last` · `slash_for_doc_comments` · `use_build_context_synchronously` · `avoid_print` · `control_flow_in_finally` 선언 줄이 0 | ❌ W0 (새 단계) | ⬜ pending |
-| 계획 뒤 채움 | — | — | RULES-02 | — | N/A | grep (CI 가능) | `grep -c -E 'require_trailing_commas\|public_member_api_docs\|trailing_commas' lib/base.yaml` → 0 | ✅ (명령만) | ⬜ pending |
-| 계획 뒤 채움 | — | — | RULES-03 | — | N/A | 데이터 검사 (로컬) | `measure_rules.dart --report` 가 후보 행 수와 빈 칸 0 을 단언 (exit 0), `RULES.md` § 실측 기록에 그 표 | ❌ W0 (`tool/measure_rules.dart`) | ⬜ pending |
-| 계획 뒤 채움 | — | — | RULES-04 | — | N/A | 데이터 검사 (로컬) | 같은 `--report` 가 `no_dynamic_casts` · `no_raw_types` · `strict-inference` 행을 단언 | ❌ W0 | ⬜ pending |
-| 계획 뒤 채움 | — | — | RULES-05 | — | 무효 회차의 수치가 표에 쓰이지 않는다 | 데이터 검사 (로컬) | `--report` 가 `valid` 가 아닌 회차를 참조한 행 0 을 단언, 회차마다 SDK / 기반 세트 / plugin 버전 필드가 있다 | ❌ W0 | ⬜ pending |
-| 계획 뒤 채움 | — | — | RULES-06 | — | N/A | 단계 검사 (CI) | `fvm dart run tool/verify.dart` → 새 단계의 `RULES.md` ↔ `lib/base.yaml` 확인 통과. 지워 보기 기록으로 헛통과가 아님을 보인다 | ❌ W0 (새 단계, `RULES.md`) | ⬜ pending |
-| 계획 뒤 채움 | — | — | RULES-07 | — | N/A | grep + 사람 확인 | `grep -c '성능 향상' lib/base.yaml` → 0 (D-18). 나머지 사유 주석은 checkpoint 에서 소유자가 `RULES.md` 의 켠 이유와 함께 본다 | ✅ (명령만) | ⬜ pending |
-| 계획 뒤 채움 | — | — | RULES-08 | — | N/A | 데이터 검사 (로컬) | `--report` 가 (후보 − 켠 규칙 − 켜지 않은 규칙 표의 이름 − v2 로 미룸) = 0개 와 B-7 의 상태 행을 단언 | ❌ W0 | ⬜ pending |
-| 계획 뒤 채움 | — | — | DOCS-11 | — | N/A | 데이터 검사 | `RULES.md` 의 켠 규칙 구역의 모든 행에 빈 칸이 없다 (`--report` 또는 `awk -F'|'` 한 줄) | ❌ W0 (`RULES.md`) | ⬜ pending |
-| 계획 뒤 채움 | — | — | (D-12 WR-01) | — | N/A | 단계 검사 (CI) | 새 단계가 `lib/recommended.yaml` · `lib/analysis_options.yaml` 에 `include:` 밖의 내용이 있으면 실패. 지워 보기 기록 | ❌ W0 (새 단계) | ⬜ pending |
-| 계획 뒤 채움 | — | — | (D-07) | — | 비공개 사용 프로젝트의 경로 · 메시지 · 코드가 저장소와 `.planning/` 에 없다 | grep (커밋 전) | `04-RESEARCH.md` § 8 의 (1) ~ (4) 모두 0줄 / `LEAK?` 0 | ✅ (명령만) | ⬜ pending |
-| 계획 뒤 채움 | — | — | (D-09) | — | 측정 도구가 원본 · 저장소를 바꾸지 않는다 | 자기 판정 (로컬) | `measure_rules.dart` 의 단계마다 저장소 지문 전후 동일, 작업 폴더가 저장소 밖이 아니면 시작 전 exit 1 | ❌ W0 | ⬜ pending |
-| 계획 뒤 채움 | — | — | (D-20) | — | N/A | 실행 기록 | 삭제 커밋에서 `fvm dart run tool/verify.dart --update` → 바뀐 정답지 없음, `git diff --stat -- '*expected_diagnostics.txt'` 비어 있음 | ✅ | ⬜ pending |
-| 계획 뒤 채움 | — | — | (D-10) | — | N/A | 정답지 비교 (CI) | 묶음 커밋의 정답지 `git diff` 에서 더한 줄이 새 규칙의 샘플과 하나씩 대응, `fvm dart run tool/verify.dart` exit 0 | ✅ (장치), ❌ (샘플) | ⬜ pending |
-| 계획 뒤 채움 | — | — | (D-22) | — | workflow 가 읽기 권한만 가진다 | e2e (GitHub, 읽기 전용 조회) | 소유자 확인 뒤 첫 push → `gh run list --workflow verify.yml --limit 1` → `completed success` | ✅ (`.github/workflows/verify.yml`) | ⬜ pending |
+| 04-01-T1 | 04-01 | 1 | RULES-01 | T-04-01 | N/A | 단계 검사 (CI) | `fvm dart run tool/verify.dart` → `[3/10] 배포 파일의 구성 … 통과` (겹침 검사). 보조: `grep -E '^\s*- [A-Za-z0-9_]+' lib/base.yaml \| wc -l` = 6 이고 그 여섯이 이 패키지만의 규칙; M20 (`avoid_print` 를 더하면 `[3/10]` 만 실패) | ❌ W0 → 04-01-T1 이 만든다 | ⬜ pending |
+| 04-01-T1 | 04-01 | 1 | RULES-02 | T-04-01 | N/A | grep (CI 가능) | `grep -c -E 'require_trailing_commas\|public_member_api_docs\|trailing_commas' lib/base.yaml` → 0, `^\s*#\s*-\s` 줄 0, `formatter:` 줄 0 | ✅ (명령만) | ⬜ pending |
+| 04-04-T2 | 04-04 | 3 | RULES-03 | T-04-11 | N/A | 데이터 검사 (로컬) | `fvm dart run tool/measure_rules.dart --report --in tool/measurements/*-R1.json` → exit 0 (행 133 · 결정 대상 121 행의 빈 칸 0 · 참조 회차 valid); 04-09-T1 의 `--report --write` 가 `RULES.md` § 실측 기록에 그 표 | ❌ W0 → 04-02 · 04-03 이 만든다 | ⬜ pending |
+| 04-04-T2 | 04-04 | 3 | RULES-04 | T-04-11 | N/A | 데이터 검사 (로컬) | 같은 `--report` + python 단언: `no_dynamic_casts` · `no_raw_types` · `strict-inference` 행에 값, `strict-inference` 강도 `warning` | ❌ W0 → 04-02 | ⬜ pending |
+| 04-04-T2 | 04-04 | 3 | RULES-05 | T-04-12 | 무효 회차의 수치가 표에 쓰이지 않는다 | 데이터 검사 (로컬) | python 단언: 모든 회차 `valid: true`, 회차마다 `dart` · `flutter` · `baseSet` · `plugin` · `languageVersion` · `sdkConstraint` · `dartFiles`, 행이 참조하는 회차 모두 valid; 0줄 행은 `markerDetected` 가 정해져 있다 (04-03-T1 이 표식 전부의 검출을 example/ 로 확인) | ❌ W0 → 04-02 · 04-03 | ⬜ pending |
+| 04-01-T2 · 04-06-T1 ~ T3 · 04-07-T1 ~ T2 · 04-08-T3 | 04-01 · 04-06 · 04-07 · 04-08 | 1 · 5 · 6 · 7 | RULES-06 | T-04-02 · T-04-16 · T-04-20 | N/A | 단계 검사 (CI) + python | `[3/10]` (c) `RULES.md` ↔ `lib/base.yaml`; M21 · M22 · M25 로 헛통과 아님; 묶음 커밋마다 python 단언 "더한 규칙 == `04-DECISIONS.md` 의 켬" | ❌ W0 → 04-01-T1 | ⬜ pending |
+| 04-06-T1 | 04-06 | 5 | RULES-07 | T-04-17 | N/A | grep + python + 사람 확인 | `grep -c '성능 향상' lib/base.yaml` → 0 (D-18); python 단언 "켠 이유(`RULES.md`) == 사유 주석(`base.yaml`)" (A5 를 자동화); 문장의 사실 여부는 04-05 checkpoint 에서 소유자가 본다 | ✅ (명령만) | ⬜ pending |
+| 04-07-T3 · 04-08-T3 · 04-09-T1 | 04-07 · 04-08 · 04-09 | 6 · 7 · 8 | RULES-08 | T-04-21 | N/A | 데이터 검사 (로컬) | `fvm dart run tool/measure_rules.dart --audit` → exit 0, 04-07 에서 `보류 1`, 04-08 · 04-09 에서 `보류 0` (후보 133 ∪ B-7 31 ⊆ 켠 ∪ 켜지 않음, 접두사 7종) | ❌ W0 → 04-03-T2 | ⬜ pending |
+| 04-06-T1 ~ T3 · 04-07-T1 ~ T2 · 04-09-T1 | 04-06 · 04-07 · 04-09 | 5 · 6 · 8 | DOCS-11 | T-04-17 | N/A | 데이터 검사 | 묶음 커밋의 python 단언: 켠 규칙 행의 칸 여섯이 비어 있지 않고 `(실측 전` 없음, 실측 칸 == R1 `counts`; `--audit` (d) | ❌ W0 → 04-01-T1 (`RULES.md`) | ⬜ pending |
+| 04-01-T2 | 04-01 | 1 | (D-12 WR-01) | T-04-02 | N/A | 단계 검사 (CI) | M23 · M24: `lib/recommended.yaml` · `lib/analysis_options.yaml` 에 규칙 세 줄 → `[3/10]` 실패; 04-09-T2 가 `03-REVIEW-DISPOSITION.md` WR-01 을 `fixed` 로 | ❌ W0 → 04-01-T1 | ⬜ pending |
+| 04-01-T2 · 04-04-T3 · 04-05-T1 · 04-08-T2 · 04-09-T1 ~ T2 · 04-10-T1 | 04-01 · 04-04 · 04-05 · 04-08 · 04-09 · 04-10 | 1 · 3 · 4 · 7 · 8 · 9 | (D-07) | T-04-03 · T-04-06 · T-04-11 · T-04-15 · T-04-23 · T-04-25 · T-04-26 | 비공개 사용 프로젝트의 경로 · 메시지 · 코드가 저장소와 `.planning/` 에 없다 | grep (커밋 전) | § 8 (1) ~ (3) 모두 0 (04-04-T3 · 04-10-T1 은 (4) 도 — 원본 경로는 환경변수로만); 도구 출력 구조에 경로 · 메시지 필드 없음 (`"message"` 0) | ✅ (명령만) | ⬜ pending |
+| 04-02-T1 ~ T2 · 04-04-T2 | 04-02 · 04-04 | 1 · 3 | (D-09) | T-04-04 · T-04-05 · T-04-08 · T-04-12 | 측정 도구가 원본 · 저장소를 바꾸지 않는다 | 자기 판정 (로컬) | `--work` 가 저장소 안이면 exit 64 (아무것도 만들지 않음); smoke · 실측 전후 저장소 `git status` 동일; 단계마다 지문 비교 (다르면 exit 1); 원본 `git status --porcelain` 줄 수 전후 동일 | ❌ W0 → 04-02-T1 | ⬜ pending |
+| 04-01-T1 | 04-01 | 1 | (D-20) | T-04-01 | N/A | 실행 기록 | 삭제 커밋에서 `fvm dart run tool/verify.dart --update` → `바뀐 정답지가 없다`, 정답지 다섯이 `19ae5ec` · `91bbeec` · `9ed0fe5` 와 `git diff --quiet`; 04-01-T2 가 README 확인 기록 (i) 로 남긴다 | ✅ | ⬜ pending |
+| 04-06-T2 ~ T3 · 04-07-T1 ~ T2 | 04-06 · 04-07 | 5 · 6 | (D-10) | T-04-16 · T-04-20 | N/A | 정답지 비교 (CI) + python | 묶음 커밋의 python 단언: 정답지 다섯의 `+lib/` 줄 규칙 집합 == 더한 규칙, `-` 0, `exit` 불변 (`strict-inference` 때 `base_codegen` 만 `exit 2`); 04-09-T2 의 M25 와 확인 기록 (ii) | ✅ (장치), ❌ (샘플 — 그 plan 이 만든다) | ⬜ pending |
+| 04-10-T1 ~ T3 | 04-10 | 9 | (D-22) | T-04-26 · T-04-27 · T-04-28 | workflow 가 읽기 권한만 가진다; `main` · tag 불변 | e2e (GitHub, 읽기 전용 조회) | push 전 점검(비공개 · fast-forward · `gh auth status`) → 소유자 확인 checkpoint → `git push origin gsd/v2.0-package-rework` → `gh run list` 의 HEAD run 이 `completed success`, 로그에 `점검 통과 (10개 중 10개)` 와 `[3/10] … 통과`, `main` `90a2736` · `v1.3.0` · PR 0 | ✅ (`.github/workflows/verify.yml`) | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -66,9 +66,9 @@ Task ID / Plan / Wave / Threat Ref 는 계획(`04-NN-PLAN.md`)이 확정된 뒤 
 
 ## Wave 0 Requirements
 
-- [ ] `tool/measure_rules.dart` — RULES-03 · 04 · 05 · 08 의 데이터 검사(`--report` 단언)를 포함해 만든다
-- [ ] `tool/verify.dart` 의 새 단계 — RULES-01 · 06, D-12 WR-01 의 확인
-- [ ] `RULES.md` 의 마커 구역 — RULES-06 확인의 대상
+- [ ] `tool/measure_rules.dart` — RULES-03 · 04 · 05 · 08 의 데이터 검사(`--report` · `--audit` 단언)를 포함해 만든다 → 04-02 (핵심 · 단계) · 04-03 (표식 · 출력 모드), wave 1 · 2
+- [ ] `tool/verify.dart` 의 새 단계 `[3/10] 배포 파일의 구성` — RULES-01 · 06, D-12 WR-01 의 확인 → 04-01-T1 (tracer), wave 1
+- [ ] `RULES.md` 의 마커 구역 넷 — RULES-06 확인의 대상 → 04-01-T1, wave 1
 - 프레임워크 설치: 없음
 
 ---

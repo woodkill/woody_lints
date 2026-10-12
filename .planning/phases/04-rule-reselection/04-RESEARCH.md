@@ -900,14 +900,18 @@ StepResult checkShippedComposition(String repoRoot) {
    - What we know: 다른 후보의 채택이 정해진 뒤 그 결과를 켠 채로 잰다 (D-17). 복사본은 `path:` 로 작업 중인 저장소를 받으므로 결정을 반영한 `lib/base.yaml` 이 그대로 적용된다.
    - What's unclear: 옵션 파일에 `unnecessary_ignore: true` 만 더하면 되는지 (그렇다 — 023 의 I4 가 그 모양), 그 회차의 "기준선" 을 무엇으로 적을지.
    - Recommendation: 회차 `UI` = 결정 반영 뒤의 저장소 + `unnecessary_ignore` 하나. 기준선은 같은 저장소의 B0 재측정(`UI-base`) 하나를 더 돌린다 (분석 1회).
+   - **RESOLVED (계획 2026-10-13 — 04-02 Task 2, 04-08):** 권고대로. `--stage unnecessary-ignore` 가 `UI-base` 와 `UI` 를 같은 run id (`R1`) 의 JSON 에 합쳐 쓰고 `rows.unnecessary_ignore.countsUI` 와 `conditions.unnecessaryIgnoreNames` (코드 이름 → 건수) 를 채운다. 복사본은 `<work>/pristine/` 에서 복원하므로 04-08 은 원본 경로 없이 작업 폴더 경로만 받아 돈다.
 2. **`strict-inference` 를 채택할 때 `lib/base.yaml` 의 `analyzer:` 블록**
    - What we know: 조각은 서로를 include 하지 않고 `codegen.yaml` 이 `analyzer:` 를 쓴다. 두 조각이 각각 `analyzer:` 를 가져도 include 병합은 키 단위라 충돌하지 않는다 (ARCHITECTURE.md § A — 이 세션에서 다시 읽지 않았다 `[ASSUMED]`).
    - Recommendation: 채택되면 `fixtures/base_codegen` 정답지가 `analyzer.language` 와 `analyzer.exclude` 의 공존을 실측으로 보인다 — 거기서 확인한다.
+   - **RESOLVED (계획 2026-10-13 — 04-06 Task 3):** 채택 시 `lib/base.yaml` 의 `include:` 와 `linter:` 사이에 최상위 `analyzer:` / `language:` / `strict-inference: true` 블록을 둔다. `tool/verify.dart` `[3/10]` (c) 가 `enabledLanguageOptions` 로 그 블록을 읽어 `RULES.md` 의 `enabled-options` 구역과 견주고, `fixtures/base_codegen` 정답지의 `exit 0` → `exit 2` 가 `analyzer.language` 와 `analyzer.exclude` 의 공존을 실측으로 고정한다 (검증 명령의 python 단언이 그 변화를 `strict-inference` 채택과 묶어 확인).
 3. **CHANGELOG `실측` 칸의 수 — 합계 하나인가 `lib` / `test` 나눔인가**
    - What we know: `VERSIONING.md:98` 은 "그 규칙이 낸 경고 건수" 한 수, D-07 은 `RULES.md` 에 `lib` / `test` 나눔.
    - Recommendation: CHANGELOG 는 합계 하나, 나눔은 `RULES.md`. 표 아래 한 줄에 "자리별 건수와 회차는 `RULES.md`" 를 덧붙인다.
+   - **RESOLVED (계획 2026-10-13 — 04-09 Task 1):** 권고대로. `실측` 칸은 `lib + test + bin` 합계 한 수(`N건`), `dart fix` 는 `fixRemoved` (`M건` / 실측 0 이면 `해당 없음`), 표 아래 `실측: flutter_starter_kit (Dart 파일 N개), Flutter 3.47.5, YYYY-MM-DD` 와 `자리별 건수(lib · test · bin)와 회차는 RULES.md 의 실측 기록에 있다.` 두 줄. 검증 명령이 행마다 R1 JSON 과 견준다.
 4. **`tool/measurements/` JSON 의 스키마 고정**
    - Recommendation: 머리에 `schema: 1` 을 두고, `--report` · `--summary` 가 그 값을 단언한다. RULES-13 때 바뀌면 올린다.
+   - **RESOLVED (계획 2026-10-13 — 04-02 Task 1, 04-03 Task 2):** 권고대로. 결과 JSON 의 최상위 키는 `schema: 1` · `runId` · `conditions` · `runs[]` · `rows{}` 이고, `--summary` · `--report` · `--audit` 는 `--in` 으로 읽은 JSON 의 `schema` 가 1 이 아니면 종료 코드 70 으로 끝난다.
 
 ## Environment Availability
 

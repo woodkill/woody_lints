@@ -178,7 +178,36 @@ Plans:
   4. 배포 파일에 기반 세트와 중복되는 선언과 주석 처리된 설정(`require_trailing_commas`, `public_member_api_docs`, `formatter: trailing_commas`)이 없고, 남은 규칙의 사유 주석이 사실과 일치한다
   5. 켠 규칙마다 이유와 실측 건수를 적은 근거 문서와, 채택하지 않은 규칙과 그 사유의 목록이 저장소에 있다
 
-**Plans**: TBD
+**Plans**: 10 plans
+
+Plans:
+**Wave 1**
+- [ ] 04-01-PLAN.md — (tracer) `lib/base.yaml` 겹침 6 · 주석 3 삭제(정답지 불변) + `RULES.md` 뼈대 + `tool/verify.dart` `[3/10] 배포 파일의 구성` (묶음 · 별칭은 include 만 / 기반 세트 겹침 / `RULES.md` 일치) + README M20 ~ M24 · CHANGELOG (RULES-01, RULES-02, RULES-06; D-11, D-12, D-20)
+- [ ] 04-02-PLAN.md — `tool/measure_rules.dart` 핵심: CLI · 후보 133 · `state` 단계 · 복사본 단계 여섯 · 회차 유효성 · 저장소 지문 — `example/` 을 사용 프로젝트 삼은 smoke 로 끝에서 끝까지 (RULES-03, RULES-04, RULES-05; D-09)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+- [ ] 04-03-PLAN.md — 규칙별 표식 (spike 022 의 0줄 후보 62개 + B-6 의 7개) 과 `--summary` · `--report [--write]` · `--audit` (RULES-03 ~ 05, RULES-08, DOCS-11; D-03, D-06, D-08)
+
+**Wave 3** *(blocked on Wave 2 — 소유자가 checkpoint 로 원본 · 작업 폴더 경로를 준다)*
+- [ ] 04-04-PLAN.md — 실측 회차 R1 (백그라운드 두 번), 비공개 점검 (1) ~ (4), `tool/measurements/<날짜>-R1.json` 커밋 (RULES-03 ~ 05; D-07, D-14, D-15)
+
+**Wave 4** *(blocked on Wave 3 — 소유자 결정 checkpoint 둘)*
+- [ ] 04-05-PLAN.md — `04-DECISIONS.md` 패널 · 권고 → 묶음 5 승인 → 개별 질문 7 (strict 3 · import · fire-and-forget · 쌍 · `unnecessary_underscores`) (로드맵 D13; D-04 ~ D-06, D-19)
+
+**Wave 5** *(blocked on Wave 4)*
+- [ ] 04-06-PLAN.md — 반영 A: 지금 켜 둔 6개 (D-18 사유 문구) · 버그 방지 + import + fire-and-forget · strict — 묶음별 커밋, 샘플 6벌, 정답지 다섯, `RULES.md`, CHANGELOG (RULES-06, RULES-07, DOCS-11; D-10, D-20)
+
+**Wave 6** *(blocked on Wave 5)*
+- [ ] 04-07-PLAN.md — 반영 B: 성능 · 가독성·스타일 · 켜지 않은 규칙 표 완성 (제외 권장 · 쌍 · v2 12 · B-7 31) — `--audit` 보류 1 (RULES-06, RULES-08, DOCS-11)
+
+**Wave 7** *(blocked on Wave 6 — 소유자 checkpoint 둘)*
+- [ ] 04-08-PLAN.md — `unnecessary_ignore` 재측정 (회차 UI · UI-base) → 질문 → 반영, `--audit` 보류 0 (RULES-06, RULES-08; D-17)
+
+**Wave 8** *(blocked on Wave 7)*
+- [ ] 04-09-PLAN.md — `RULES.md` 실측 기록 (`--report --write`) · CHANGELOG `### 새로 생기는 경고` 표 · README M25 · 03 리뷰 WR-01 ~ 03 · 로드맵 D-23 (RULES-03, RULES-05, RULES-07, RULES-08, DOCS-11; D-12, D-23)
+
+**Wave 9** *(blocked on Wave 8 — 소유자 확인(D-22 첫 push))*
+- [ ] 04-10-PLAN.md — push 전 점검 → 첫 push 확인 → push 와 GitHub `verify` 10단계 통과 확인 (RULES-01, RULES-06; D-22)
 
 **Spike first** (실측을 돌리기 전에 실행으로 확인한다):
 - Dart 3.13 신규 규칙이 language version 3.11 프로젝트에서 보고되는지 (`flutter_starter_kit` 의 SDK 제약은 `^3.11.1`). 0건이 "깨끗하다"인지 "규칙이 동작하지 않는다"인지가 여기서 갈린다.
@@ -258,7 +287,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Baseline and Toolchain | 4/4 | Complete    | 2026-10-11 |
 | 2. Verification Harness | 5/5 | Complete    | 2026-10-12 |
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
-| 4. Rule Reselection | 0/TBD | Not started | - |
+| 4. Rule Reselection | 0/10 | Not started | - |
 | 5. Documentation | 0/TBD | Not started | - |
 | 6. Release | 0/TBD | Not started | - |
 
