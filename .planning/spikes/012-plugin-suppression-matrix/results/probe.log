@@ -1,0 +1,118 @@
+Dart 3.13.4 on macos
+
+# 1부. 주석으로 끄기와 생성 파일 제외 — 묶음만 받은 실행
+## J0 — 묶음 한 줄 (끄는 설정 없음)
+   exit 2, 19.7s, 진단 25건 (plugin 9), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+     안 나옴  규칙 · 한 줄 `// ignore: 이름`
+     나옴       대조 (끄지 않음)
+     안 나옴  규칙 · 파일 `// ignore_for_file: 이름`
+     안 나옴  plugin · 한 줄 `// ignore: riverpod_lint/이름`
+     나옴     plugin · 한 줄, 접두사 없음 `// ignore: 이름`
+     안 나옴  plugin · 같은 줄 끝 `… // ignore: riverpod_lint/이름`
+     나옴       대조 (끄지 않음)
+     안 나옴  plugin · 파일 `// ignore_for_file: riverpod_lint/이름`
+     나옴     plugin · 파일, 접두사 없음 `// ignore_for_file: 이름`
+     안 나옴  한 주석에 둘을 함께 — 규칙 쪽
+     안 나옴  한 주석에 둘을 함께 — plugin 쪽
+     나옴       대조 — 규칙 쪽
+     나옴       대조 — plugin 쪽
+     안 나옴  `// ignore_for_file: type=lint` — 규칙 쪽
+   ≠ 안 나옴  `// ignore_for_file: type=lint` — plugin 쪽   ← 추정은 나옴
+     나옴     `// ignore_for_file: type=warning` — 규칙 쪽
+   ≠ 나옴     `// ignore_for_file: type=warning` — plugin 쪽   ← 추정은 안 나옴
+     안 나옴  생성 파일 제외(`**/*.g.dart`) — 규칙 쪽
+   ≠ 나옴     생성 파일 제외(`**/*.g.dart`) — plugin 쪽   ← 추정은 안 나옴
+   ✓ J0 더한 샘플 밖의 줄은 저장소의 정답지 그대로다 — 16줄, exit 2
+   ✓ J0 대조 자리(끄지 않은 위반)는 모두 나온다 — 대조 4칸
+
+# 1부-2. 대조 — codegen 조각을 받지 않으면 생성 파일의 위반이 나오는가
+## X2 — base.yaml + riverpod.yaml (codegen 없음)
+   exit 2, 19.9s, 진단 31건 (plugin 9), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+     나옴     생성 파일 제외(`**/*.g.dart`) — 규칙 쪽
+     나옴     생성 파일 제외(`**/*.g.dart`) — plugin 쪽
+   ✓ X2 생성 파일의 위반은 제외가 없으면 규칙 · plugin 둘 다 나온다 (제외가 가린 것이 맞다)
+
+# 2부. 프로젝트 전체에서 끄기
+   J0 의 prefer_single_quotes 4줄, provider_parameters 7줄, 전체 25줄
+## J1 — 규칙을 맵 문법으로 끔 (prefer_single_quotes: false)
+   exit 2, 20.1s, 진단 21건 (plugin 9), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ J1 규칙을 끄면 그 규칙의 줄만 사라진다 — 21줄, exit 2
+## J2 — plugin 진단을 끔 — version 을 다시 적음
+   exit 2, 15.9s, 진단 18건 (plugin 2), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ J2 version 과 함께 끄면 그 plugin 진단의 줄만 사라진다 — 18줄, exit 2
+   ✓ J2 다른 plugin 진단은 남는다 — plugin 폴더 1개, 선언 ^3.1.3
+## J3 — plugin 진단을 끔 — version 을 적지 않음
+   exit 2, 16.0s, 진단 25건 (plugin 9), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   J0 과의 차이 0줄, provider_parameters 7줄 남음, plugin 폴더 1개
+   ✓ J3 version 을 빼면 꺼지지 않는다 (조사가 임시 프로젝트에서 본 함정) — provider_parameters 7줄 (J0 은 7줄)
+## J4 — plugin 진단을 끔 — 묶음과 다른 version (^3.1.9) 을 적음
+   exit 2, 16.2s, 진단 18건 (plugin 2), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.9)
+   ✓ J4 다른 version 을 적어도 꺼진다 — 18줄, exit 2
+   ✓ J4 서버가 받은 선언은 사용 프로젝트가 적은 것이다 — 실제 ^3.1.9
+
+# 3부. 참고 — 표에 없는 다른 길
+## E1 — analyzer.errors 에 이름만 (provider_parameters: ignore)
+   exit 2, 15.5s, 진단 26건 (plugin 9), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   provider_parameters 7줄 남음 (J0 은 7줄)
+       analysis_options.yaml:5  warning  unrecognized_error_code — 'provider_parameters' isn't a recognized diagnostic code.
+## E2 — analyzer.errors 에 접두사를 붙여 (riverpod_lint/provider_parameters: ignore)
+   exit 2, 15.3s, 진단 26건 (plugin 9), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   provider_parameters 7줄 남음 (J0 은 7줄)
+       analysis_options.yaml:5  warning  unrecognized_error_code — 'riverpod_lint/provider_parameters' isn't a recognized diagnostic code.
+## S1 — diagnostics 에 강도를 적음 (provider_parameters: info)
+   exit 2, 15.1s, 진단 25건 (plugin 9), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   provider_parameters 7줄, 강도 info
+
+# 4부. 사용 프로젝트 자신의 analyzer.exclude
+## X3 — 묶음 + analyzer.exclude: ['lib/suppress/**']
+   exit 2, 15.0s, 진단 17건 (plugin 4), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ X3 사용 프로젝트가 직접 적은 제외는 규칙과 plugin 이 둘 다 따른다 — lib/suppress/ 아래 0줄 (J0 은 8줄)
+   ✓ X3 묶음에서 받은 제외와 합쳐진다 (생성 파일 샘플의 규칙 진단이 여전히 없다)
+
+# 5부. 예상 밖 — 묶음에서 받은 생성 파일 제외를 plugin 이 따르지 않는다. 어디에 적어야 따르는가
+## G-old — 나누지 않은 한 파일 (1.3.0 의 모양), 옛 주소 한 줄
+   exit 2, 15.1s, 진단 25건 (plugin 9), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+     안 나옴  생성 파일 제외(`**/*.g.dart`) — 규칙 쪽
+     나옴     생성 파일 제외(`**/*.g.dart`) — plugin 쪽
+   ✓ G-old 나누기 전의 구조에서도 같다 (나눠서 생긴 일이 아니다)
+## G-own — 묶음 + 사용 프로젝트의 옵션 파일에 같은 제외를 직접 적음
+   exit 2, 15.1s, 진단 24건 (plugin 8), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+     안 나옴  생성 파일 제외(`**/*.g.dart`) — 규칙 쪽
+     안 나옴  생성 파일 제외(`**/*.g.dart`) — plugin 쪽
+   ✓ G-own 사용 프로젝트의 옵션 파일에 직접 적으면 plugin 도 따른다
+## G-local-root — base + riverpod + 프로젝트 루트의 local_excludes.yaml 을 include
+   exit 2, 15.2s, 진단 27건 (plugin 8), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+     안 나옴  생성 파일 제외(`**/*.g.dart`) — 규칙 쪽
+     안 나옴  생성 파일 제외(`**/*.g.dart`) — plugin 쪽
+## G-local-sub — base + riverpod + 하위 폴더의 config/local_excludes.yaml 을 include
+   exit 2, 15.8s, 진단 28건 (plugin 9), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+     안 나옴  생성 파일 제외(`**/*.g.dart`) — 규칙 쪽
+     나옴     생성 파일 제외(`**/*.g.dart`) — plugin 쪽
+   ✓ G-local-root · G-local-sub plugin 은 제외 패턴을 그것을 적은 파일의 폴더 기준으로 푼다 — 루트의 파일: 안 나옴, 하위 폴더의 파일: 나옴
+   ✓ G-local-root · G-local-sub 규칙 쪽(분석 서버)은 두 경우 모두 제외한다
+
+# 추정과 실제
+29칸 중 추정과 다른 칸 3개
+  ≠ [J0] `// ignore_for_file: type=lint` — plugin 쪽 — 실제 안 나옴
+  ≠ [J0] `// ignore_for_file: type=warning` — plugin 쪽 — 실제 나옴
+  ≠ [J0] 생성 파일 제외(`**/*.g.dart`) — plugin 쪽 — 실제 나옴
+
+# 판정
+✓ J0 더한 샘플 밖의 줄은 저장소의 정답지 그대로다 — 16줄, exit 2
+✓ J0 대조 자리(끄지 않은 위반)는 모두 나온다 — 대조 4칸
+✓ X2 생성 파일의 위반은 제외가 없으면 규칙 · plugin 둘 다 나온다 (제외가 가린 것이 맞다)
+✓ J1 규칙을 끄면 그 규칙의 줄만 사라진다 — 21줄, exit 2
+✓ J2 version 과 함께 끄면 그 plugin 진단의 줄만 사라진다 — 18줄, exit 2
+✓ J2 다른 plugin 진단은 남는다 — plugin 폴더 1개, 선언 ^3.1.3
+✓ J3 version 을 빼면 꺼지지 않는다 (조사가 임시 프로젝트에서 본 함정) — provider_parameters 7줄 (J0 은 7줄)
+✓ J4 다른 version 을 적어도 꺼진다 — 18줄, exit 2
+✓ J4 서버가 받은 선언은 사용 프로젝트가 적은 것이다 — 실제 ^3.1.9
+✓ X3 사용 프로젝트가 직접 적은 제외는 규칙과 plugin 이 둘 다 따른다 — lib/suppress/ 아래 0줄 (J0 은 8줄)
+✓ X3 묶음에서 받은 제외와 합쳐진다 (생성 파일 샘플의 규칙 진단이 여전히 없다)
+✓ G-old 나누기 전의 구조에서도 같다 (나눠서 생긴 일이 아니다)
+✓ G-own 사용 프로젝트의 옵션 파일에 직접 적으면 plugin 도 따른다
+✓ G-local-root · G-local-sub plugin 은 제외 패턴을 그것을 적은 파일의 폴더 기준으로 푼다 — 루트의 파일: 안 나옴, 하위 폴더의 파일: 나옴
+✓ G-local-root · G-local-sub 규칙 쪽(분석 서버)은 두 경우 모두 제외한다
+모두 성립 (15건)
+
+원본 결과: <repo>/.planning/spikes/012-plugin-suppression-matrix/results/probe.json
