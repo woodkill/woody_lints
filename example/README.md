@@ -2,7 +2,7 @@
 
 이 폴더는 **일부러 규칙을 어긴 연습용 프로젝트**다. `woody_lints` 를 쓰는 프로젝트와 같은 모양으로 만들었다 — Flutter 패키지이고, `woody_lints` 를 `path: ..` 로 받으며, `analysis_options.yaml` 은 `include: package:woody_lints/analysis_options.yaml` 한 줄이다.
 
-저장소의 검증 명령 `tool/verify.dart` 가 이 폴더를 `dart analyze` 로 분석하고, 나온 경고를 커밋해 둔 정답지 `expected_diagnostics.txt` 와 한 줄씩 비교한다. 같으면 통과이고 한 줄이라도 다르면 실패다. 같은 줄이 여러 건 나오면 건수까지 견준다. 배포 파일 `lib/analysis_options.yaml` 을 고쳤을 때 "받는 프로젝트에서 무엇이 달라지는가" 가 이 비교에서 드러난다.
+저장소의 검증 명령 `tool/verify.dart` 가 이 폴더를 `dart analyze` 로 분석하고, 나온 경고를 커밋해 둔 정답지 `expected_diagnostics.txt` 와 한 줄씩 비교한다. 같으면 통과이고 한 줄이라도 다르면 실패다. 같은 줄이 여러 건 나오면 건수까지 견준다. 배포 파일(`lib/base.yaml` 등 `lib/` 의 조각 · 묶음 · 별칭)을 고쳤을 때 "받는 프로젝트에서 무엇이 달라지는가" 가 이 비교에서 드러난다.
 
 이 폴더는 검증용이지 사용 예가 아니다. 설치와 사용법은 저장소 루트의 `README.md` 를 본다.
 
