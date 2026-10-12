@@ -2,20 +2,20 @@
 gsd_state_version: "1.0"
 milestone: v2.0
 milestone_name: Package Rework
-current_phase: 03
-current_phase_name: Preset Split
-status: Verification human_needed — UAT 2건 대기 (/gsd-verify-work 03)
-stopped_at: Completed 03-04-PLAN.md
-last_updated: "2026-10-12T13:20:43.017Z"
+current_phase: 4
+current_phase_name: Rule Reselection
+status: planning
+stopped_at: Phase 3 complete, ready to plan Phase 4
+last_updated: "2026-10-12T13:36:00.038Z"
 last_activity: 2026-10-12
-last_activity_desc: "Phase 03 실행 · 검증 완료 (15/15 must-have, human_needed: 사람 확인 2건)"
-state_head: 83e8f5587911994ba804ad8c2165f74b77d6ff1a
+last_activity_desc: Phase 3 complete, transitioned to Phase 4
+state_head: 927342759b1e8d578edc55145d81e7e939da8d21
 progress:
   total_phases: 6
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 13
   completed_plans: 13
-  percent: 33
+  percent: 50
 ---
 
 # Project State
@@ -25,21 +25,21 @@ progress:
 See: .planning/PROJECT.md (updated 2026-10-12)
 
 **Core value:** 사용 프로젝트가 `include` 한 줄로 받는 규칙이 문서에 적힌 그대로 적용되고, 각 규칙이 왜 켜져 있는지 근거가 남아 있다.
-**Current focus:** Phase 03 — Preset Split
+**Current focus:** Phase 04 — Rule Reselection
 
 ## Current Position
 
-Phase: 03 (Preset Split) — EXECUTING
-Plan: 4 of 4
-Status: Verification human_needed — UAT 2건 대기 (/gsd-verify-work 03)
-Last activity: 2026-10-12 — Phase 03 실행 · 검증 완료 (15/15 must-have, human_needed: 사람 확인 2건)
+Phase: 4 — Rule Reselection
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-10-12 — Phase 3 complete, transitioned to Phase 4
 
-Progress: [███░░░░░░░] 33%
+Progress: [█████░░░░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
+- Total plans completed: 13
 - Average duration: - min
 - Total execution time: 0.0 hours
 
@@ -49,6 +49,7 @@ Progress: [███░░░░░░░] 33%
 |-------|-------|-------|----------|
 | 1 | 4 | - | - |
 | 2 | 5 | - | - |
+| 3 | 4 | - | - |
 
 **Recent Trend:**
 - Last 5 plans: -
@@ -141,6 +142,7 @@ Recent decisions affecting current work:
 - [Phase 03]: riverpod_lint 하한을 ^3.1.9 로 올렸다 (lib/riverpod.yaml 과 fixtures/overrides 의 version 을 같은 커밋 166d0be 에서). 정답지 다섯의 hash 가 올리기 전과 같고 --update 는 '바뀐 정답지가 없다' 였다 (Dart 3.13.4, 풀린 버전 3.1.9, 2026-10-12)
 - [Phase 03]: Phase 3 의 첫 push 는 소유자 응답 push 뒤 git push origin gsd/v2.0-package-rework 한 줄로 했다 (2026-10-12T12:12:44Z, 0d20c10..166d0be, 24커밋, fast-forward). 두 번째 push 는 D-09 대로 묻지 않고 했다 (12:18:00Z, 166d0be..79f27e5). main 은 90a2736, tag 는 v1.3.0 하나, PR 0건 그대로다. 03-04 의 마무리 커밋은 origin 에 없고 Phase 4 부터의 push 는 다시 소유자에게 묻는다
 - [Phase 03]: GitHub verify 가 연습용 프로젝트 여섯으로 두 번 성공했다 — run 38247615476 job 4분 7초 (검증 182초), run 38248171220 job 3분 33초 (검증 147초), ubuntu-24.04 20261004.327.1. 추정 약 4분 15초 (D-03) 를 대신한다. 360초 이하라 timeout-minutes 10 그대로 두고 workflow 25행 주석만 실측으로 고쳤다
+- [Phase 03]: UAT 4건 완료 (2026-10-12) — 통과 4, 문제 0. 1번은 소유자 결정이다 — 성공 기준 3 후반 "생성 파일의 진단이 보고되지 않는다" 를 Dart 3.13.x 의 규칙 진단에 대한 말로 읽고, README 가 그 범위와 직접 적는 방법을 밝히도록 ROADMAP 의 Phase 5 Notes 에 적었다 (`1ba1b31`). 2번 판단형 금지 사항은 plan 기준 16건이다 (검증 보고서의 "17건" 은 수 착오) — 근거 명령 16개를 다시 돌려 모두 통과했다. 3 · 4번은 SUMMARY coverage 의 사람 판단 항목(CHANGELOG 2.0.0, `example/README.md`)을 UAT 에 더한 것이다. `03-VERIFICATION.md` 는 `passed`
 
 ### Pending Todos
 
@@ -148,12 +150,11 @@ None yet.
 
 ### Blockers/Concerns
 
-- [Phase 3] Spike 선행 — 해소 (2026-10-12): include 경유 plugin 로드(009), 3단 include(010), 나눈 뒤 루트 분석의 `plugins_in_inner_options` 소멸(011)이 모두 VALIDATED 라 멈춤 조건은 발동하지 않았다. 넷째 항목(012)은 PARTIAL — 묶음이 주는 생성 파일 제외는 plugin 진단에 통하지 않아, 성공 기준 3 은 "Dart 3.13.4 의 규칙 진단" 으로 범위를 적어 검증한다 (`03-RESEARCH.md`)
 - [Phase 4] D13: 규칙별 채택은 소유자 검토 지점이다. 실측 표 없이는 결정하지 않는다
 - [Phase 1] 리뷰 지적 13건이 열려 있다 (`01-REVIEW-DISPOSITION.md`, 합계 16). 그중 WR-03 의 남은 두 경우 — README/CHANGELOG 만 고친 변경, 새 프리셋 파일 추가 — 는 `VERSIONING.md` 의 판정 순서와 기준표가 다른 등급을 내며 D-05 를 건드리는 소유자 결정이 필요하다. 2.0.0 의 등급(major)에는 영향이 없다
 - [Phase 3] `riverpod_lint` 하한을 `^3.1.9` 로 올릴 때(PRESET-05): 3.1.9 는 Dart 3.13 이상을 요구한다. 지금은 `sdk: ^3.13.0` 이라 문제없지만 `VERSIONING.md` 에 이 전제가 적혀 있지 않다 (Backlog `Phase 999.1`)
-- [Phase 3] 가장 먼저 할 일: `--update` 가 망가진 결과를 정답지로 쓰는 경로를 닫고 `example/README.md` 80행 · 30행 · `[2/4]` 실패 문구를 코드에 맞춘다 (소유자 결정 2026-10-12, ROADMAP 의 Phase 3 Notes). 그 전에는 규칙 파일을 고친 뒤 `--update` 보다 보통 실행을 먼저 돌린다
 - [Phase 2] 리뷰 지적 15건이 열려 있다 (`02-REVIEW-DISPOSITION.md`, 합계 17 — WR-01 ~ WR-06 · WR-08 · IN-01 ~ IN-08). `02-VERIFICATION.md` 의 "다음 phase 가 알아야 할 것" 1 ~ 7 이 Phase 3 · 4 · 6 에 걸리는 것을 추렸다. WR-06 은 Phase 6 이 `version` 을 올릴 때 종료 코드 69 로 만난다
+- [Phase 3] 리뷰 지적 14건이 열려 있다 (`03-REVIEW-DISPOSITION.md`, warning 8 · info 6). 그중 검증 장치의 빈틈 셋은 Phase 4 · 5 가 배포 YAML 을 고칠 때 밟는 자리다 — WR-01 `[2/9]` 가 묶음 · 별칭을 보지 않아 거기 적은 규칙을 놓친다 (거짓 통과), WR-02 `riverpod_lint` 줄 끝 주석 · 마지막 줄바꿈 없음에서 종료 코드 70 (거짓 실패), WR-03 `base.yaml` 의 맵 형식 규칙(`rule: false`)에서 `[2/9]` 거짓 실패. Phase 4 계획 때 먼저 닫을지 정한다 (`03-VERIFICATION.md` Gaps Summary)
 - [Phase 6] `main` 병합은 `ref: main` 사용 프로젝트 5개에 새 버전을 배포하는 일이다. tag 와 병합의 순서를 계획 때 정한다
 - [Phase 6] Phase 2 에서 미룬 확인 둘 — PR 에서 `verify` 가 도는지, 수동 실행 버튼 (ROADMAP 의 Phase 6 Notes)
 
@@ -167,6 +168,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-12T12:25:13.765Z
-Stopped at: Completed 03-04-PLAN.md
+Last session: 2026-10-12T13:37:22.000Z
+Stopped at: Phase 3 complete, ready to plan Phase 4
 Resume file: None
