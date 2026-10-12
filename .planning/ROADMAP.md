@@ -149,6 +149,7 @@ Plans:
 - 파일 분리와 `riverpod_lint` 하한 상향(PRESET-05)은 서로 다른 커밋으로 한다. 기대 진단이 바뀐다면 하한 상향 커밋에서만 바뀌어야 한다.
 - 조각은 서로를 include 하지 않는다 (`base.yaml` 만 `flutter_lints` 를 include 한다). 조합은 include 하는 쪽이 한다.
 - 규칙이 `base.yaml` 로 옮겨 가므로, Phase 2 의 deprecated / removed 검사가 새 위치를 대상으로 계속 실패를 잡는지 확인한다.
+- **가장 먼저 할 일 (소유자 결정 2026-10-12, `02-UAT.md` 9번):** 정답지를 새로 쓰거나 fixture 를 더하기 전에, `tool/verify.dart` 의 `--update` 가 망가진 결과를 정답지로 쓰는 경로를 닫는다. `[2/4]` 가 통과로 잘못 찍히는 세 입력(닫지 않은 따옴표로 깨진 YAML, `rules:` 키의 오타, 겹친 규칙 + 없는 진단 코드)에서 `--update` 는 지금 `정답지를 썼다` · `점검 통과 (4개 중 4개)` · 종료 코드 0 으로 끝나고, 그 뒤의 보통 실행도 통과한다 (보통 실행을 먼저 돌리면 세 입력 모두 종료 코드 1 이다). 이 결정은 02-05 가 일부러 넣지 않은 WR-03 의 다른 절반(세 코드 밖의 진단도 `[2/4]` 의 실패로 치기)을 뒤집는다. `example/README.md` 80행 · 30행과 `[2/4]` 의 실패 문구도 코드가 실제로 보는 것에 함께 맞춘다. 재현과 근거는 `02-VERIFICATION.md` 의 "다음 phase 가 알아야 할 것" 1 ~ 5.
 - 옛 URI 를 쓰는 fixture 를 남겨, 별칭이 plugin 을 잃는 일이 생기면 검증이 잡게 한다.
 - pub workspace 멤버 패키지에서의 plugin 로드, plugin 내부 `riverpod` 버전과 사용 프로젝트 `riverpod` major 가 다를 때의 동작을 조사할지는 이 phase 에서 정한다 (README 호환 범위에 쓰인다).
 
