@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 04
 current_phase_name: Rule Reselection
 status: executing
-stopped_at: Phase 4 planned (plan 10개, checker 통과)
-last_updated: "2026-10-12T22:57:03.056Z"
+stopped_at: Completed 04-01-PLAN.md
+last_updated: "2026-10-12T23:22:48.161Z"
 last_activity: 2026-10-13
-last_activity_desc: Phase 4 계획 완료 (plan 10개 · wave 9개, 계획 검사 2차 통과)
-state_head: fe1c1cafae3cf33e8a1c344ebcb56de89307d640
+last_activity_desc: Phase 04 execution started
+state_head: 33f8781fe17e841b6daf2acb52a0e0d4319af39b
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 23
-  completed_plans: 13
+  completed_plans: 14
   percent: 50
 ---
 
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-10-12)
 
 ## Current Position
 
-Phase: 04 (Rule Reselection) — READY TO EXECUTE
-Plan: Not started
+Phase: 04 (Rule Reselection) — EXECUTING
+Plan: 2 of 10
 Status: Ready to execute
-Last activity: 2026-10-13 — Phase 4 계획 완료 (plan 10개 · wave 9개, 계획 검사 2차 통과)
+Last activity: 2026-10-13 — Phase 04 execution started
 
 Progress: [█████░░░░░] 50%
 
@@ -73,6 +73,7 @@ Progress: [█████░░░░░] 50%
 | Phase 03 P02 | 4 min | 2 tasks | 9 files |
 | Phase 03 P03 | 17 min | 3 tasks | 64 files |
 | Phase 03 P04 | 18 min | 3 tasks | 4 files |
+| Phase 04 P01 | 15min | 2 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -143,6 +144,8 @@ Recent decisions affecting current work:
 - [Phase 03]: Phase 3 의 첫 push 는 소유자 응답 push 뒤 git push origin gsd/v2.0-package-rework 한 줄로 했다 (2026-10-12T12:12:44Z, 0d20c10..166d0be, 24커밋, fast-forward). 두 번째 push 는 D-09 대로 묻지 않고 했다 (12:18:00Z, 166d0be..79f27e5). main 은 90a2736, tag 는 v1.3.0 하나, PR 0건 그대로다. 03-04 의 마무리 커밋은 origin 에 없고 Phase 4 부터의 push 는 다시 소유자에게 묻는다
 - [Phase 03]: GitHub verify 가 연습용 프로젝트 여섯으로 두 번 성공했다 — run 38247615476 job 4분 7초 (검증 182초), run 38248171220 job 3분 33초 (검증 147초), ubuntu-24.04 20261004.327.1. 추정 약 4분 15초 (D-03) 를 대신한다. 360초 이하라 timeout-minutes 10 그대로 두고 workflow 25행 주석만 실측으로 고쳤다
 - [Phase 03]: UAT 4건 완료 (2026-10-12) — 통과 4, 문제 0. 1번은 소유자 결정이다 — 성공 기준 3 후반 "생성 파일의 진단이 보고되지 않는다" 를 Dart 3.13.x 의 규칙 진단에 대한 말로 읽고, README 가 그 범위와 직접 적는 방법을 밝히도록 ROADMAP 의 Phase 5 Notes 에 적었다 (`1ba1b31`). 2번 판단형 금지 사항은 plan 기준 16건이다 (검증 보고서의 "17건" 은 수 착오) — 근거 명령 16개를 다시 돌려 모두 통과했다. 3 · 4번은 SUMMARY coverage 의 사람 판단 항목(CHANGELOG 2.0.0, `example/README.md`)을 UAT 에 더한 것이다. `03-VERIFICATION.md` 는 `passed`
+- [Phase 04]: 검증 명령 [3/10] (c) 의 기호는 RULES.md 를 정답지, lib/base.yaml 을 실제 결과로 놓는다 — + 는 base.yaml 에만, - 는 RULES.md 에만 있는 이름 (04-01)
+- [Phase 04]: readRulesMdBlock 은 이름과 형식 오류 행을 함께 돌려주는 RulesMdBlock 을 돌려준다 — 첫 칸 이름이 둘인 행을 예외가 아닌 단계 실패로 알리기 위해 (04-01)
 
 ### Pending Todos
 
@@ -168,6 +171,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-12T20:23:10.558Z
-Stopped at: Phase 4 planned (plan 10개, checker 통과)
-Resume file: .planning/phases/04-rule-reselection/04-01-PLAN.md
+Last session: 2026-10-12T23:22:48.130Z
+Stopped at: Completed 04-01-PLAN.md
+Resume file: None
