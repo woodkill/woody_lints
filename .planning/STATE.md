@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 03
 current_phase_name: Preset Split
 status: executing
-stopped_at: Completed 03-01-PLAN.md
-last_updated: "2026-10-12T11:32:48.518Z"
+stopped_at: Completed 03-02-PLAN.md
+last_updated: "2026-10-12T11:40:10.860Z"
 last_activity: 2026-10-12
 last_activity_desc: Phase 03 execution started
-state_head: 533868af5f586f3c5a4f4c6e0b1d411f596916e0
+state_head: 933b26f0072b1b526dcef48732a9486db750b49e
 progress:
   total_phases: 6
   completed_phases: 2
   total_plans: 13
-  completed_plans: 10
+  completed_plans: 11
   percent: 33
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-12)
 ## Current Position
 
 Phase: 03 (Preset Split) — EXECUTING
-Plan: 2 of 4
+Plan: 3 of 4
 Status: Ready to execute
 Last activity: 2026-10-12 — Phase 03 execution started
 
@@ -69,6 +69,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 02 P04 | 7 min | 2 tasks | 1 files |
 | Phase 02 P05 | 9 min | 3 tasks | 4 files |
 | Phase 03 P01 | 5 min | 2 tasks | 2 files |
+| Phase 03 P02 | 4 min | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -127,6 +128,9 @@ Recent decisions affecting current work:
 - [Phase 02]: 실행해 보지 못했던 세 경로를 UAT 에서 복사본으로 실행했다 (2026-10-12, Flutter SDK 밖으로 복제한 Dart 3.13.4) — Flutter SDK 가 아닌 dart 는 안내 두 줄과 종료 코드 78, `FLUTTER_ROOT` 가 다른 버전(3.41.9)을 가리켜도 78, 맞는 버전(3.47.5)을 가리키면 단계 4개 통과. 분석 서버를 꺼서 도구를 죽이면 `[2/4]` 와 `[4/4]` 가 `도구가 죽었다 — … exit 255` 로 실패하고 종료 코드 1 이며 `--update` 를 붙여도 정답지를 쓰지 않는다. 위의 "실행해 보지 못했다" 두 줄은 이 줄로 갈음한다
 - [Phase 03]: [2/4] 의 통과 조건은 규칙 검사 복사본의 dart analyze 가 exit 0 이고 진단 0건 하나다. 닫지 않은 따옴표 · rules: 오타 · 겹친 규칙 + 없는 진단 코드의 세 입력에서 --update 가 고치기 전에는 셋 다 종료 코드 0 으로 정답지를 썼고, 고친 뒤에는 셋 다 종료 코드 1 · [2/4] 실패 · 정답지 hash 불변이다 (2026-10-12 실측, example/README.md 의 M15 ~ M17)
 - [Phase 03]: 깨진 YAML(exit 3 + JSON 진단 0건)은 같은 폴더를 형식 인자 없이 재실행한 출력의 parse_error 줄을 경로를 가려 보여 준다 (readParseErrorLines). 그 줄은 따옴표를 뗀 46행이 아니라 파서가 막힌 47행을 가리킨다. 03-02 는 깨진 옵션 파일 문구의 shippedOptionsPath 를 조각 이름으로 바꿔야 한다
+- [Phase 03]: lib/ 는 조각 셋(base.yaml · codegen.yaml · riverpod.yaml) + 묶음 recommended.yaml + 옛 주소 별칭 analysis_options.yaml 의 다섯이다. 조각은 90a2736 의 배포 파일을 sed 줄 범위로 잘라 만들었고 이어 붙이면 원본과 같다(diff 종료 코드 0). 옛 주소를 쓰는 example/ 의 정답지는 19ae5ec 그대로이고 검증 명령은 점검 통과 (4개 중 4개)다 (2026-10-12)
+- [Phase 03]: [2/4] 는 lib/*.yaml 집합 확인(expectedLibYamls) 뒤 조각 셋을 build/woody_rule_check/<조각 이름>/analysis_options.yaml 로 복사해 한 번에 분석한다. riverpod.yaml 끝에 숨긴 deprecated 규칙은 riverpod/analysis_options.yaml:11 로(원본 13행, plugins: 두 줄을 빼서 2 앞당겨짐), 여분 lib/_probe_extra.yaml 은 집합 확인이 잡았다. 새 조각을 더하면 ruleCheckTargets 와 expectedLibYamls 를 함께 고친다
+- [Phase 03]: 루트 analysis_options.yaml 의 exclude 는 'example/**' 하나이고 lib/analysis_options.yaml 제외 없이 루트 fvm dart analyze 가 exit 0 · No issues found 다 (Dart 3.13.4, 2026-10-12, PRESET-06). 03-03 이 'fixtures/**' 를 더한다. 이 plan 의 두 커밋(89d6073, 933b26f)은 push 하지 않았다
 
 ### Pending Todos
 
@@ -153,6 +157,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-12T11:32:48.493Z
-Stopped at: Completed 03-01-PLAN.md
+Last session: 2026-10-12T11:40:10.835Z
+Stopped at: Completed 03-02-PLAN.md
 Resume file: None
