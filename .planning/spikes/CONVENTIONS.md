@@ -2,14 +2,14 @@
 
 spike 세션에서 굳어진 도구 선택과 방식이다. 새 spike 는 질문이 다른 방식을 요구하지 않는 한 이를 따른다. 두 개 이상의 spike 에서 반복된 것만 적었다.
 
-spike 가 확인한 사실 자체는 `.claude/skills/spike-findings-woody-lints/` 에 묶여 있다 (wrap-up 세 번 — 2026-10-11 에 spike 001~006 과 007~008, 2026-10-12 에 Phase 3 의 사전 확인인 009~014).
+spike 가 확인한 사실 자체는 `.claude/skills/spike-findings-woody-lints/` 에 묶여 있다 (wrap-up 네 번 — 2026-10-11 에 spike 001~006 과 007~008, 2026-10-12 에 Phase 3 의 사전 확인인 009~014 와, 받는 방식 · 다음 SDK 를 잰 015~016).
 
 ## Stack
 
 - **실측 스크립트는 Dart 로 쓴다.** `dart:io`, `dart:convert` 만 쓰고 패키지 의존성을 두지 않는다 (001, 002, 003, 006). 실제 검증 명령(`tool/verify.dart`, 02-CONTEXT.md D-11)과 같은 조건이라 스크립트의 조각을 그대로 옮겨 갈 수 있다.
 - Dart 스크립트가 하위 `dart` 를 부를 때는 `Platform.resolvedExecutable` 을 쓴다 (001, 002, 003, 006). `fvm dart run …` 으로 띄운 그 SDK 가 그대로 쓰인다.
 - 명령을 차례로 돌리고 파일을 견주는 일은 `bash` + `python3` 으로 쓴다 (004, 005). Dart 로 하기 번거로운 일(프로세스 그룹에 신호 보내기, 견줄 md5 계산)도 `python3` 에 맡긴다 (008).
-- **저장소의 모양을 복사해 실험하는 일은 `009-preset-plugin-via-include/replica.dart` 를 import 해 쓴다** (009~016). 복사본 만들기(`Replica`), 배포 파일을 조각으로 자르기(`Shipped`), 정답지 읽기와 조합별 예상 셈하기(`Expected`), 분석 한 번(`Replica.analyze`), 확인 모으기(`Checks`)가 들어 있다. 스크립트는 `import '../009-preset-plugin-via-include/replica.dart';` 한 줄로 받는다.
+- **저장소의 모양을 복사해 실험하는 일은 `009-preset-plugin-via-include/replica.dart` 를 import 해 쓴다** (009~016). 복사본 만들기(`Replica`), 배포 파일을 조각으로 자르기(`Shipped`), 정답지 읽기와 조합별 예상 셈하기(`Expected`), 분석 한 번(`Replica.analyze`), 확인 모으기(`Checks`)가 들어 있다. 스크립트는 `import '../009-preset-plugin-via-include/replica.dart';` 한 줄로 받는다. `Shipped` 는 저장소의 `lib/analysis_options.yaml` 이 한 파일 구조일 때 그것을 잘라 조각을 만든다 — Phase 3 이 저장소를 나눈 뒤의 spike 는 이 조각을 나눈 파일을 읽게 고쳐 쓰거나 나누기 전의 커밋을 꺼낸 자리에서 돌린다 (스크립트를 읽은 것이고 돌려 보지는 않았다).
 - SDK 는 저장소 고정 버전이다 (Flutter 3.47.5 / Dart 3.13.4). 저장소 안에서는 `fvm dart …`, 저장소 밖 작업 폴더에서는 `<저장소>/.fvm/flutter_sdk/bin/dart` 를 직접 부른다 (`fvm` 이 `.fvmrc` 를 찾지 못하므로).
 - **다른 SDK 로 견줄 때는 같은 스크립트를 SDK 마다 한 번씩 돌린다** (016). 저장소 밖을 작업 디렉터리로 두고 `<SDK>/bin/cache/dart-sdk/bin/dart <스크립트의 절대 경로> <작업 폴더>` 로 띄운다 — 저장소 루트에서 `dart run` 을 하면 그 SDK 가 루트의 패키지를 다시 풀어 `.dart_tool/` 과 lock 을 바꿀 수 있다. 실행 뒤 루트 `.dart_tool/package_config.json` 의 `generatorVersion` 과 `git status` 로 저장소가 그대로인지 본다. 결과 파일 이름에 Dart 버전을 넣는다 (`results/probe-<버전>.json`).
 

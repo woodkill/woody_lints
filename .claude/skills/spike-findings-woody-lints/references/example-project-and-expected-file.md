@@ -2,9 +2,11 @@
 
 검증 명령이 분석할 `example/` 프로젝트의 모양, 거기에 넣을 위반 코드, 정답지에 적힐 줄, 패키지를 받는 방법, 그리고 `example/` 이 저장소 루트의 분석에 섞이지 않게 하는 방법이다.
 
-모든 수치는 Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9, 2026-10-11 실측이다 (2026-10-12 의 것은 spike 번호 010 ~ 012 를 붙였다).
+따로 적지 않은 수치는 Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9, 2026-10-11 실측이다 (2026-10-12 의 것은 spike 번호 010 ~ 012, 015, 016 을 붙였다. 베타의 값은 016 을 붙인 곳에만 있다). 이 문서에서 문서 이름 없이 적은 D-NN 은 02-CONTEXT.md 의 것이다.
 
 이 문서의 위반 코드와 진단 4건은 spike 001 의 연습용 프로젝트 것이다. Phase 2 가 만든 실제 `example/` 은 샘플이 더 많아 정답지가 `exit 2` + 16줄이다 (`example/expected_diagnostics.txt`, 2026-10-12). 프리셋을 나눈 뒤 더 생기는 연습용 프로젝트는 fixtures-after-split.md 에 있다.
+
+그 16줄은 고정 SDK (Dart 3.13.4) 의 것이다. 다음 SDK 의 베타(Dart 3.14.0-211.1.beta)로 같은 `example/` 을 분석하면 `exit 2` + 20줄이 된다 (016 → Constraints). git 의존성으로 받은 프로젝트에서는 같은 16줄이다 (015).
 
 ## Requirements
 
@@ -22,6 +24,12 @@ MANIFEST.md 의 `preset-split-include-behavior` 에서 이 영역에 걸리는 �
 - 루트 `analysis_options.yaml` 의 `lib/analysis_options.yaml` 제외는 파일을 나누는 커밋과 **같은 커밋이거나 그 뒤**에 지운다. 한 파일 구조에서 먼저 지우면 `lib/analysis_options.yaml:58  warning  plugins_in_inner_options` 로 루트 분석이 exit 2 가 된다 (011)
 - 새 연습용 프로젝트는 한 폴더 아래에 모으고 루트에서 `'<폴더>/**'` 한 줄로 제외한다. 기존 `example/**` 줄은 그대로 둔다. 제외하지 않으면 루트 분석에 그 폴더들의 진단이 섞이고 plugin 까지 준비한다 (011)
 - 끄는 설정용 연습 프로젝트는 끈 자리 옆에 끄지 않은 같은 위반을 둔다. plugin 진단은 주석에 `riverpod_lint/` 접두사를 붙이고, 프로젝트 전체에서 끌 때는 `version` 을 함께 적는다. `version` 을 뺀 설정은 경고 없이 무시되고, `analyzer.errors` 로는 plugin 진단을 끌 수 없다 (012)
+
+MANIFEST.md 의 `next-sdk-forward-compat` 에서 이 영역에 걸리는 것 (베타 `3.14.0-211.1.beta` 한 빌드의 결과이고 정식 버전에서 달라질 수 있다).
+
+- "`codegen.yaml` 을 받으면 생성 파일의 진단이 보고되지 않는다" 는 Dart 3.13.x 의 사실로 적는다. 베타에서는 이 패키지가 주는 제외가 규칙 진단에도 통하지 않아 정답지 셋(옛 주소 · 묶음 16줄 → 20줄, 기본 + codegen 13줄 → 17줄)에 생성 파일 샘플의 4줄이 생긴다. 한 파일 구조(1.3.0)도 같다 (016)
+- 루트 옵션 파일의 주석과 문서에 "plugin 을 준비하지 않도록" 을 이유로 적지 않는다. 베타에서는 `lib/analysis_options.yaml` 이 `plugins:` 에 닿는 한 루트 분석이 plugin 을 준비하고(0.5초 → 10초, 진단은 0줄) 루트의 제외로 막지 못한다. `plugins_in_inner_options` 는 베타에서 나오지 않는다 (016)
+- 연습용 프로젝트 폴더를 루트에서 제외하는 방식은 베타에서도 통한다 — 제외한 폴더는 plugin 을 준비시키지 않는다 (016)
 
 위 `verify-harness-tool-behavior` 목록의 "기존 exclude 항목(`lib/analysis_options.yaml`)을 그대로 둔다" 는 Phase 2 의 범위였다. 파일을 나눌 때부터는 `preset-split-include-behavior` 목록의 첫 줄이 그것을 대신한다 (→ preset-split-structure.md 6번).
 
@@ -251,13 +259,20 @@ analyzer:
 
 제외가 있으면 루트 분석은 0.5초면 끝난다. plugin 준비는 `example/` 안에서의 분석 한 번에만 든다.
 
+**위의 표와 "0.5초" 는 Dart 3.13.4 의 것이다.** 다음 SDK 의 베타(Dart 3.14.0-211.1.beta)에서 본 것 (016).
+
+- `example/**` 제외는 베타에서도 통했다. 제외한 `example/` 은 진단을 섞지 않고 plugin 을 준비시키지 않았고, 제외하지 않으면 두 SDK 모두 그 폴더의 진단이 섞였다 (베타에서는 20줄).
+- 그런데 2026-10-12 의 저장소와 같은 모양(한 파일 구조, 루트에 `lib/analysis_options.yaml` · `example/**` 제외)의 루트 분석이 베타에서는 **plugin 을 준비해 10초**가 든다. `example/` 때문이 아니라 `lib/analysis_options.yaml` 이 `plugins:` 를 담고 있어서이고, 그 파일을 루트에서 제외해도 막지 못했다 (→ preset-split-structure.md 6번 끝).
+- 그 실행의 진단은 0줄이었지만 **016 의 replica 에는 `tool/verify.dart` 가 없었다.** 실제 저장소의 루트 분석이 베타에서도 0줄인지는 재지 않았다.
+- 그래서 루트 옵션 파일의 주석에 `example/**` 제외의 이유를 적을 때 "그 폴더의 진단이 섞이지 않게" 로 적고, "루트 분석이 plugin 을 준비하지 않게" 로 적지 않는다.
+
 ## What to Avoid
 
-- **루트 제외 없이 `example/` 을 추가하는 것.** 커밋 전 린터(루트에서 `dart analyze`)가 저장소를 새로 받은 직후에는 exit 3, `example/` 의 패키지를 받은 뒤에는 exit 2 가 되고 15초와 네트워크가 든다.
+- **루트 제외 없이 `example/` 을 추가하는 것.** 커밋 전 린터(루트에서 `dart analyze`)가 `example/` 의 패키지를 받기 전에는 exit 3 (루트의 패키지는 받아 둔 상태로 쟀다), `example/` 의 패키지를 받은 뒤에는 exit 2 가 되고 15초와 네트워크가 든다.
 - **"spike 의 연습용 프로젝트는 루트 분석에 섞이지 않았으니 `example/` 도 그럴 것"이라는 가정.** 섞이지 않은 것은 `.planning/` 이 점으로 시작하기 때문이다.
 - **`example/` 에서 `flutter pub get` 을 돌리는 것.** 옵션 파일을 고친다. 분석 결과는 같지만 CI 에서 작업 트리가 바뀌고 로컬에는 커밋하지 않은 변경이 생긴다. 끄는 옵션은 Flutter 도구 소스에 없다.
 - **`riverpod_syntax_error` 를 정답지에 넣는 것.** `riverpod_annotation` 의존성과 가짜 `typedef` 가 필요하고, 정답지의 종료 코드가 3 이 되어 "warning 이 사라졌다"를 종료 코드로 구별하지 못한다.
-- **"코드 생성 없이 뜨는 후보는 6개"로 세는 것.** 5개다. `protected_notifier_properties` 는 `@riverpod` 가 붙은 class 안에서만 보고한다 (`if (enclosingClass.riverpod == null) return;`). 손으로 쓴 `Notifier` 에서 같은 위반을 한 대조 파일(`r04a_…_plain.dart`)에서는 진단이 나오지 않았다.
+- **"코드 생성 없이 뜨는 후보는 6개"로 세는 것.** 5개다 — 4번의 표에서 "`flutter_riverpod` 만" 으로 뜨는 다섯이고, `example/` 에 넣을 후보를 말한다 (`riverpod_annotation` 을 더하면 생성 코드 없이 뜨는 것이 둘 더 있다). `protected_notifier_properties` 는 `@riverpod` 가 붙은 class 안에서만 보고한다 (`if (enclosingClass.riverpod == null) return;`). 손으로 쓴 `Notifier` 에서 같은 위반을 한 대조 파일(`r04a_…_plain.dart`)에서는 진단이 나오지 않았다.
 - **"`riverpod_lint` 규칙은 전부 warning"으로 적는 것.** `registerWarningRule` 은 강도가 아니라 "기본으로 켠다"는 뜻이다. 강도는 규칙마다 `LintCode(..., severity: …)` 로 따로 적고, 적지 않은 3개가 info 로 보고된다.
 - **JSON 의 `type` 으로 강도를 읽는 것, `code` 에 `riverpod_lint/` 접두사가 있다고 가정하는 것.**
 - **README 에 "프리셋을 include 하면 종료 코드 2" 라고 단정하는 것.** 위반이 없거나 info 뿐이면 0 이다. 쓸 수 있는 문장: "`riverpod_lint` 진단은 규칙에 따라 info / warning / error 로 보고된다. 프리셋을 include 한 프로젝트에 warning 규칙의 위반이 있으면 `dart analyze` 의 종료 코드는 2 다."
@@ -267,13 +282,23 @@ analyzer:
 ## Constraints
 
 - plugin 은 `^3.1.3` 이 실행 시점의 최신 3.x 로 풀린다 (2026-10-11 과 10-12 에 3.1.9). 다음 버전에서 강도가 바뀔 수 있다. 정답지에 강도가 들어가므로 바뀌면 diff 로 드러난다. 선언을 `^3.1.9` 로 올려도 3.1.9 로 풀리는 동안에는 정답지가 그대로다 (010).
-- **프리셋이 주는 생성 파일 제외(`**/*.g.dart`, `**/*.freezed.dart`)는 규칙 진단에만 통한다.** `example/` 의 생성 파일 샘플에는 규칙 위반만 있어 지금의 정답지에는 드러나지 않는다. 생성 파일에 plugin 위반을 두면 그 줄이 나온다 — 1.3.0 의 한 파일 구조에서도 같다 (012 → suppression-and-exclude.md 6번).
+- **프리셋이 주는 생성 파일 제외(`**/*.g.dart`, `**/*.freezed.dart`)는 Dart 3.13.x 에서 규칙 진단에만 통한다.** `example/` 의 생성 파일 샘플에는 규칙 위반만 있어 지금의 정답지에는 드러나지 않는다. 생성 파일에 plugin 위반을 두면 그 줄이 나온다 — 1.3.0 의 한 파일 구조에서도 같다 (012 → suppression-and-exclude.md 6번).
+- **다음 SDK 의 베타에서는 그 제외가 규칙 진단에도 통하지 않아 `example/` 의 정답지에 4줄이 더 생긴다** (016 — `exit 2` 는 그대로, 16줄 → 20줄).
+
+  ```text
+  + lib/generated/sample.freezed.dart:4  info  avoid_print
+  + lib/generated/sample.freezed.dart:4  info  prefer_single_quotes
+  + lib/generated/sample.g.dart:4  info  avoid_print
+  + lib/generated/sample.g.dart:4  info  prefer_single_quotes
+  ```
+
+  저장소의 변경이 아니라 SDK 에서 오는 차이이고, 한 파일 구조에서도 나눈 구조에서도 같다. 요구 사항의 "정답지 셋" 은 016 이 잰 칸 셋이고, 달라지는 정답지 파일은 next-sdk-forward-compat.md 3번에 있다. 상류가 되돌리려는 중이라 정식 3.14 에서 어느 쪽일지는 모른다. 016 은 `example/README.md` 에 이 경우를 적어 둘 만하다고 했다 — 넣을지는 계획이 정한다. 고정 SDK 를 올릴 때의 절차는 next-sdk-forward-compat.md 9번에 있다.
 - `riverpod_lint` 3.1.3 (배포 파일의 하한) 소스의 강도 선언 15개는 3.1.9 와 같다.
 - 규칙 15개의 강도 표는 GitHub Linux runner 에서도 같았다 (새 가상 머신 10대).
 - `flutter pub get` 의 동작 (`AnalysisOptionsMigration`, Flutter 3.47.5): `flutter` 에 의존하는 프로젝트이고 `analysis_options.yaml` 이 있으면 `build/**` 와 **존재하는 플랫폼 폴더**(`android/**`, `ios/**`, `web/**`, `windows/**`, `macos/**`, `linux/**`)가 `analyzer.exclude` 에 있는지 보고, 없으면 덧붙인다. 볼 때 `include:` 를 따라간다 (상대 경로와 `package:` URI 모두). 한 번만 고치고 그 뒤로는 그대로다.
 - 사용 프로젝트에도 같은 일이 생긴다. 플랫폼 폴더가 있는 실제 앱에서 `flutter pub get` 을 돌리면 그 프로젝트의 옵션 파일에 제외 줄이 덧붙는다. 이 패키지의 문제는 아니다. include 한 파일이 이미 제외하고 있으면 덧붙지 않는다.
 - **Phase 4 로 넘긴 것:** 프리셋에 `build/**` (그리고 플랫폼 폴더) 제외를 넣을지. 넣으면 사용 프로젝트의 `flutter pub get` 이 옵션 파일을 고치지 않는다.
-- 하위 폴더가 별도 context root 가 되는 조건 (`analyzer` 14.5.0 의 `lib/src/dart/analysis/context_locator.dart`): 그 폴더의 package config(`.dart_tool/package_config.json`)가 상위 root 의 것과 다를 때다. 그래서 `example/` 에서 `pub get` 을 하기 전과 후에 루트 분석의 결과가 달라진다. 폴더 이름이 점으로 시작하거나 상위 root 의 exclude 에 걸리면 그 폴더로 들어가지 않는다.
+- 하위 폴더가 별도 context root 가 되는 조건 (pub cache 의 `analyzer` 14.5.0 의 `lib/src/dart/analysis/context_locator.dart` 에서 읽었다 — Dart 3.13.4 의 분석 서버가 쓰는 것은 그보다 앞선 14.1.0-dev 이고, 아래의 실행 결과는 이 설명과 맞았다): 그 폴더의 package config(`.dart_tool/package_config.json`)가 상위 root 의 것과 다를 때다. 그래서 `example/` 에서 `pub get` 을 하기 전과 후에 루트 분석의 결과가 달라진다. 폴더 이름이 점으로 시작하거나 상위 root 의 exclude 에 걸리면 그 폴더로 들어가지 않는다.
 - 루트 제외는 `example/**` 한 줄로 충분했다. 소스를 읽고는 "`example/**` 는 폴더 `example` 자체에는 맞지 않아 nested root 가 생길 수 있다"는 의문이 남았지만 실행에서는 제외됐다. `example` 만 적어도, 둘 다 적어도 결과가 같았다.
 - 루트 제외가 없고 `pub get` 전일 때 example 의 파일에서 `avoid_print`, `prefer_single_quotes` 도 나왔다. `example/analysis_options.yaml` 이 루트 context 의 하위 옵션 파일로 읽히고 그 안의 `include: package:woody_lints/…` 가 루트 패키지 자신으로 풀린다는 뜻이다. 이때 `plugins_in_inner_options` 는 나오지 않았다 (`plugins:` 가 하위 옵션 파일에 직접 적힌 것이 아니라 include 로 들어왔다).
 - 저장소 루트에서 `dart analyze example` 처럼 폴더를 인자로 준 형태는 루트 제외와 상관없이 4건이 나왔다. 채택한 형태가 아니다 (→ analyze-run-and-verdict.md).
@@ -283,7 +308,7 @@ analyzer:
 
 ## Origin
 
-Synthesized from spikes: 003, 004, 007 (위반 코드와 기대 진단 파일은 001, 006 에서 가져왔다. 010, 011, 012 의 결과는 나눈 뒤에 달라지는 자리에 한두 줄씩 덧붙인 것이다)
+Synthesized from spikes: 003, 004, 007 (위반 코드와 기대 진단 파일은 001, 006 에서 가져왔다. 010, 011, 012 의 결과는 나눈 뒤에 달라지는 자리에, 015 · 016 의 결과는 받는 방식과 SDK 에 따라 달라지는 자리에 한두 줄씩 덧붙인 것이다)
 Source files available in: sources/003-riverpod-lint-severity-matrix/, sources/004-fixture-pub-get/, sources/007-root-analysis-with-example/, sources/001-analyze-invocation-form/fixture/, sources/006-github-runner-cold-plugin/expected_001.txt, sources/006-github-runner-cold-plugin/expected_003.txt
 원본 로그와 JSON: `.planning/spikes/003-riverpod-lint-severity-matrix/results/`, `.planning/spikes/004-fixture-pub-get/results/`, `.planning/spikes/007-root-analysis-with-example/results/`
 생성 코드(`*.g.dart`)는 사본에 넣지 않았다. 원본은 `.planning/spikes/003-riverpod-lint-severity-matrix/fixture/lib/gen/` 에 있다.

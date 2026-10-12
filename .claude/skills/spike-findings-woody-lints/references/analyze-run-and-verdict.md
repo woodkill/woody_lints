@@ -2,7 +2,7 @@
 
 검증 명령(`tool/verify.dart`)이 `example/` 을 분석하고, 그 결과를 "통과 / 정답지와 다름 / plugin 준비 실패 / 도구가 죽음" 으로 가르는 부분이다. Analysis Server 가 plugin 을 받아 컴파일해 두는 상태 폴더를 어디에 두는지도 여기서 다룬다. 연습용 프로젝트가 여섯으로 늘어도 프로젝트 하나를 분석하는 방식은 이 문서 그대로다 (여섯의 구성과 시간은 fixtures-after-split.md).
 
-모든 수치는 Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9 실측이다. 날짜를 따로 적지 않은 것은 2026-10-11 (001, 002, 008), 프로젝트가 여럿일 때의 상태 폴더와 시간은 2026-10-12 (014) 에 쟀다.
+따로 적지 않은 수치는 Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9 실측이다 (베타의 값은 `flutter analyze` 항목과 Constraints 의 한 항목에만 있다). 날짜를 따로 적지 않은 것은 2026-10-11 (001, 002, 008), 프로젝트가 여럿일 때의 상태 폴더와 시간은 2026-10-12 (014) 에 쟀다. 다음 SDK 의 베타에서 이 실행 형태가 통하는지는 016 이 봤다 (2026-10-12 → Constraints).
 
 ## Requirements
 
@@ -22,6 +22,10 @@ MANIFEST.md 의 `preset-split-include-behavior` 에서 이 영역에 걸리는 �
 
 - 연습용 프로젝트는 폴더마다 따로 두고 상태 폴더도 프로젝트마다 따로 준다 (지금 검증 명령의 방식 그대로). 여섯이 로컬에서 처음 66초, 재실행 20 ~ 21초다. 상태 폴더를 하나로 합치면 plugin 폴더가 넷이 되어 버전을 읽지 못한다. plugin 준비는 경로가 다르면 나눠 쓰지 못한다 (014)
 - 시간이 문제가 되면 상태 폴더를 따로 둔 채 동시에 띄우는 것을 먼저 본다 — 로컬에서 여섯이 23초이고 결과가 같았다. GitHub runner 에서의 여섯은 재지 않았다 (추정 약 4분 20 ~ 30초) (014)
+
+MANIFEST.md 의 `next-sdk-forward-compat` 에서 이 영역에 걸리는 것 (베타 `3.14.0-211.1.beta` 한 빌드의 결과이고 정식 버전에서 달라질 수 있다).
+
+- plugin 진단 확인은 베타에서도 `dart analyze` 로 한다. 베타의 `flutter analyze` 는 plugin 진단을 내지만 규칙 진단을 겹쳐 세고 그 수가 실행마다 달랐다 (016)
 
 ## How to Build It
 
@@ -258,7 +262,7 @@ String? readPluginVersion(Directory pluginFolder) {
 
 ## What to Avoid
 
-- **하위 폴더를 인자로 주는 것** (`dart analyze lib`, `dart analyze lib/src`, 저장소 루트에서 `dart analyze example/lib`). plugin 진단을 전부 잃고 종료 코드도 0 이 된다. plugin 을 준비조차 하지 않는다. 조용히 통과하는 모양이라 가장 위험하다. (plugin 진단이 필요 없는 규칙 검사만 폴더를 인자로 준다 → rule-status-check.md) 여기서 말하는 것은 **옵션 파일이 없는** 하위 폴더다. 인자로 준 폴더에 `analysis_options.yaml` 이 직접 들어 있고 그것이 `plugins:` 에 닿으면 반대로 plugin 을 준비한다 (013 → rule-status-check.md 의 Constraints).
+- **하위 폴더를 인자로 주는 것** (`dart analyze lib`, `dart analyze lib/src`, 저장소 루트에서 `dart analyze example/lib`). plugin 진단을 전부 잃고 종료 코드도 0 이 된다. plugin 을 준비조차 하지 않는다 (Dart 3.13.4 — 베타에서는 이 형태를 재지 않았다). 조용히 통과하는 모양이라 가장 위험하다. (plugin 진단이 필요 없는 규칙 검사만 폴더를 인자로 준다 → rule-status-check.md) 여기서 말하는 것은 **옵션 파일이 없는** 하위 폴더다. 인자로 준 폴더에 `analysis_options.yaml` 이 직접 들어 있고 그것이 `plugins:` 에 닿으면 반대로 plugin 을 준비한다 (013 → rule-status-check.md 의 Constraints).
 - **종료 코드만 보고 판정하는 것.** plugin 이 죽어도 0 이나 2 가 나온다.
 - **머리말을 `startsWith` 나 "stderr 의 첫 줄"로 찾는 것.** `plugin.aot` 을 읽어 들이지 못한 실패에서는 셋째 줄에 온다.
 - **사용 통계를 끄지 않고 실행하는 것.** 같은 명령이 가끔 종료 코드 255 로 죽는다. 이 컴퓨터에서 기본 방식 65번 중 8번이었다 (cold 24번 중 7번, warm 41번 중 1번). 끈 66번은 모두 정상이었다.
@@ -269,7 +273,7 @@ String? readPluginVersion(Directory pluginFolder) {
 - **검증 명령 둘을 빈 상태 폴더 하나에 동시에 띄우는 것.** 처음 실행 둘이 정확히 겹친 20쌍 중 1쌍(실행으로는 40번 중 1번)에서 한쪽이 plugin 진단 없이 exit 0 으로 끝났다. 한쪽이 `plugin.aot` 을 쓰는 도중에 다른 쪽이 읽은 것이다.
 - **여러 연습용 프로젝트의 상태 폴더를 하나로 합치는 것.** plugin 폴더가 프로젝트 수만큼 생겨 버전을 읽지 못한다 (014 → 2번).
 - **plugin 을 선언하지 않는 프로젝트에서 plugin 폴더가 0개인 것을 "준비 실패" 나 "환경변수가 듣지 않는다" 로 읽는 것.** 그 조합에서는 정상이다 (009, 014 → 8번).
-- **`flutter analyze`.** Flutter 3.47.5 에서 plugin 진단을 내지 않는다 (PROJECT.md).
+- **`flutter analyze`.** Flutter 3.47.5 에서 plugin 진단을 내지 않는다 (PROJECT.md. 016 이 같은 프로젝트로 다시 봤다 — 13건 중 plugin 진단 0건, plugin 은 준비됐는데 화면에 없다). 베타(Flutter 3.49.0-0.2.pre)는 plugin 진단 3건을 내지만 규칙 진단을 겹쳐 세어 37건, 다시 돌리면 47건이었다 (같은 폴더의 `dart analyze` 는 20건). 어느 SDK 에서도 쓰지 않는다.
 - **저장소 루트에서 `dart analyze example` 로 바꾸는 것.** 3.13.4 에서는 plugin 진단이 나왔지만(001, 007), 폴더 인자 문제(sdk#62710)와 맞닿은 형태라 채택하지 않았다.
 
 ## Constraints
@@ -296,10 +300,11 @@ String? readPluginVersion(Directory pluginFolder) {
 
 - 오래 떠 있는 서버(`dart language-server`, IDE 가 프로젝트를 열어 둔 상황을 흉내 냄)와 상태 폴더를 함께 써도 명령줄 분석 3번이 모두 통과했다. 서버가 쓰고 있는 `plugin.aot` 을 명령줄 쪽이 지우고 다시 만들어도 서버는 죽지 않았다. 전용 폴더를 쓰면 IDE 와는 애초에 폴더가 나뉜다.
 - 전용 폴더의 비용: IDE 가 기본 자리에 이미 준비해 둔 plugin 을 쓰지 못하므로 첫 검증이 15초 든다. 시간 자체는 기본 자리와 같다.
+- **이 문서의 실행 형태는 다음 SDK 의 베타(Dart 3.14.0-211.1.beta)에서도 통했다 (016).** 프로젝트 폴더를 작업 디렉터리로 두고 인자 없이, `--suppress-analytics` 를 붙이고, 전용 상태 폴더를 준 실행에서 plugin 폴더 1개 · `plugin.aot` 있음 · 실패 머리말 없음이었고 plugin 진단 3줄이 고정 SDK 와 같았다. plugin 쪽에서 풀린 버전도 같았고(`riverpod_lint` 3.1.9 / `analyzer` 14.5.0 / `analysis_server_plugin` 0.3.24) 처음 실행은 14.8 ~ 16.7초다. 베타에서 재지 않은 것: 하위 폴더 인자(위의 sdk#62710), 사용 통계를 끄지 않았을 때의 255, plugin 준비 실패의 모양(002), 상태 폴더를 함께 쓰는 동시 실행(008).
 - 확인하지 않은 것: plugin 이 뜬 뒤 분석 도중에 죽는 경우, pub 서버가 느리게 응답만 하고 끝나지 않는 경우의 시간 (CI 의 `timeout-minutes` 가 막는다), 동시 실행의 실패가 폴더에 잘린 `plugin.aot` 을 남기는지, 실제 IDE(VS Code)와 함께 쓸 때, 008 의 실험을 GitHub Linux runner 에서 한 것.
 
 ## Origin
 
-Synthesized from spikes: 001, 002, 008, 014 (정규화 함수는 006 의 스크립트에서 가져왔다. 009, 010, 012, 013 의 결과는 한 줄씩 덧붙인 것이다)
+Synthesized from spikes: 001, 002, 008, 014 (정규화 함수는 006 의 스크립트에서 가져왔다. 009, 010, 012, 013, 016 의 결과는 한 줄씩 덧붙인 것이다)
 Source files available in: sources/001-analyze-invocation-form/, sources/002-plugin-setup-failure-exit/, sources/006-github-runner-cold-plugin/, sources/008-state-folder-placement/, sources/014-multi-fixture-plugin-cost/
 원본 로그와 JSON: `.planning/spikes/001-analyze-invocation-form/results/`, `.planning/spikes/002-plugin-setup-failure-exit/results/`, `.planning/spikes/008-state-folder-placement/results/`, `.planning/spikes/014-multi-fixture-plugin-cost/results/`

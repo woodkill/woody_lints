@@ -2,7 +2,9 @@
 
 프리셋을 나눈 뒤 검증 명령이 분석할 연습용 프로젝트 여섯(03-CONTEXT.md D-03)의 옵션 파일, 정답지의 모양, 폴더 배치와 루트 제외, 상태 폴더, 걸리는 시간이다. 지금의 `example/` (옛 주소 한 줄) 이 여섯 중 첫째다.
 
-모든 수치는 Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9, macOS arm64 (프로세서 10개), 2026-10-12 실측이다. 실험은 저장소의 모양을 작업 폴더에 복사한 replica 에서 했고, 연습용 프로젝트의 샘플은 저장소 `example/lib` 의 복사본이다.
+따로 적지 않은 수치는 Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9, macOS arm64 (프로세서 10개), 2026-10-12 실측이다. 실험은 저장소의 모양을 작업 폴더에 복사한 replica 에서 했고, 연습용 프로젝트의 샘플은 저장소 `example/lib` 의 복사본이다.
+
+**정답지의 줄 수는 고정 SDK (Dart 3.13.4) 의 것이다.** 다음 SDK 의 베타(Dart 3.14.0-211.1.beta, 016)에서는 codegen 조각을 받는 조합에 4줄이 더 생긴다 (→ 2번 끝). 연습용 프로젝트는 모두 `path:` 의존성으로 받는다 — git 의존성으로 받아도 결과가 줄 단위로 같아(015) 그쪽 프로젝트는 따로 두지 않는다.
 
 분석 한 번의 실행 형태(작업 디렉터리, `--suppress-analytics`, 상태 폴더, plugin 준비 실패 판정)는 analyze-run-and-verdict.md 를 그대로 따른다. 끄는 설정용 프로젝트(아래 표의 `overrides`)의 내용은 suppression-and-exclude.md 에 있다.
 
@@ -25,6 +27,13 @@ spike 에서 나와 실제 구현이 지켜야 하는 것.
 - 끄는 설정용 연습 프로젝트는 끈 자리 옆에 끄지 않은 같은 위반을 둔다. plugin 진단은 주석에 `riverpod_lint/` 접두사를 붙이고, 프로젝트 전체에서 끌 때는 `version` 을 함께 적는다. `version` 을 뺀 설정은 경고 없이 무시되고, `analyzer.errors` 로는 plugin 진단을 끌 수 없다 (012)
 - 연습용 프로젝트는 폴더마다 따로 두고 상태 폴더도 프로젝트마다 따로 준다 (지금 검증 명령의 방식 그대로). 여섯이 로컬에서 처음 66초, 재실행 20 ~ 21초다. 상태 폴더를 하나로 합치면 plugin 폴더가 넷이 되어 버전을 읽지 못한다. plugin 준비는 경로가 다르면 나눠 쓰지 못한다 (014)
 - 시간이 문제가 되면 상태 폴더를 따로 둔 채 동시에 띄우는 것을 먼저 본다 — 로컬에서 여섯이 23초이고 결과가 같았다. GitHub runner 에서의 여섯은 재지 않았다 (추정 약 4분 20 ~ 30초) (014)
+- `path:` 의존성으로 잰 009 ~ 012 의 결과는 git 의존성(패키지가 pub cache 의 `git/<저장소 이름>-<커밋 해시>/` 에 놓인다)에서도 줄 단위로 같다 — 3단 include 의 plugin 로드, 옛 주소 · 묶음 주소의 정답지 일치, 조합별 진단, 생성 파일 제외의 모양. 연습용 프로젝트를 git 의존성으로 따로 두지 않는다. 받아 오는 길(GitHub 주소, 실제 tag)은 Phase 6 의 smoke test 가 본다 (015)
+
+MANIFEST.md 의 `next-sdk-forward-compat` 에서 이 영역에 걸리는 것 (베타 `3.14.0-211.1.beta` 한 빌드의 결과이고 정식 버전에서 달라질 수 있다).
+
+- "`codegen.yaml` 을 받으면 생성 파일의 진단이 보고되지 않는다" 는 Dart 3.13.x 의 사실로 적는다. 베타에서는 이 패키지가 주는 제외가 규칙 진단에도 통하지 않아 정답지 셋(옛 주소 · 묶음 16줄 → 20줄, 기본 + codegen 13줄 → 17줄)에 생성 파일 샘플의 4줄이 생긴다. 한 파일 구조(1.3.0)도 같다 (016)
+- 연습용 프로젝트 폴더를 루트에서 제외하는 방식은 베타에서도 통한다 — 제외한 폴더는 plugin 을 준비시키지 않는다 (016)
+- 고정 SDK 를 Dart 3.14 계열로 올리기 전에 016 의 두 스크립트를 그 SDK 로 돌린다. `probe.dart` 의 `≠` 10칸 중 생성 파일 제외에서 온 8칸이 `=` 로 돌아오면 되돌리는 변경이 들어간 것이고 (루트 분석의 2칸 R1 · R2 는 다른 변경(sdk#63627)에서 온 것이라 `≠` 로 남을 것이다), 10칸 그대로면 정답지 셋을 갱신하며 "SDK 가 바뀌어 생긴 줄" 로 기록한다 (016)
 
 ## How to Build It
 
@@ -87,6 +96,22 @@ lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties
 - **"기본만" 의 맨 위 줄은 `exit 0` 이 아니라 `exit 2` 다.** 규칙 진단은 전부 info 지만 `invalid_annotation_target` 이 warning 이다. 종료 코드가 0 인 것은 "기본 + codegen" 하나뿐이다.
 - 이 셈은 샘플이 `example/lib` 의 복사본일 때 성립한다. 그 프로젝트에만 필요한 샘플을 더하면 그만큼 줄이 는다.
 - 실제 정답지는 `--update` 가 쓴다 (03-CONTEXT.md D-05). 위 표는 처음 쓰인 정답지를 읽을 때 견줄 기준이다.
+- git 의존성으로 받은 프로젝트에서도 옛 주소 · 묶음 16줄, 기본 + Riverpod 21줄, 기본만 18줄이 그대로 나왔다 (015).
+
+**다음 SDK 에서는 (016, 베타 Dart 3.14.0-211.1.beta).** codegen 조각을 받는 조합에서 프리셋의 생성 파일 제외가 규칙 진단에 통하지 않아, 위의 "codegen 조각을 받지 않으면 더해지는 5줄" 가운데 생성 파일의 4줄(`invalid_annotation_target` 을 뺀 것)이 codegen 조각을 받아도 나온다.
+
+| 연습용 프로젝트 | Dart 3.13.4 | 베타 |
+|---|---|---|
+| 옛 주소 / 묶음 | `exit 2` · 16줄 | `exit 2` · **20줄** |
+| 기본만 | `exit 2` · 18줄 | 그대로 |
+| 기본 + Riverpod | `exit 2` · 21줄 | 그대로 |
+| 기본 + codegen | `exit 0` · 13줄 | `exit 0` · **17줄** |
+
+- 맨 위 줄(`exit N`)은 바뀌지 않는다. 더해지는 4줄이 모두 info 다.
+- `overrides` 는 베타에서 재지 않았다. 묶음을 받으므로 그 프로젝트의 샘플에 `lib/generated/sample.*.dart` 가 들어 있다면 같은 4줄이 생길 것이다 (추론).
+- 이 차이는 저장소의 변경이 아니라 SDK 에서 온다. 상류가 되돌리려는 중이라 정식 3.14 에서 어느 쪽일지는 모른다. 고정 SDK 를 올릴 때의 절차는 next-sdk-forward-compat.md 9번에 있다.
+- 요구 사항의 "정답지 셋" 은 016 이 잰 칸 셋(옛 주소, 묶음, 기본 + codegen)이다. 정답지 **파일**로는 `example/` 의 것(`recommended` 가 함께 쓴다)과 `base_codegen` 의 것이고, 추론대로라면 `overrides` 의 것이 더해진다.
+- 연습용 프로젝트의 샘플에 **생성 파일의 plugin 위반**을 넣어 그 줄을 정답지에 고정하면, 그 줄은 SDK 가 아니라 pub.dev 에서 풀리는 plugin 쪽 `analyzer` 를 따른다 — 저장소와 `.fvmrc` 가 그대로여도 달라질 수 있다 (추론 → suppression-and-exclude.md 6번).
 
 ```dart
 // sources/009-preset-plugin-via-include/replica.dart 의 Expected 에서
@@ -139,6 +164,7 @@ File('$dir/pubspec.lock')
 
 - 이 제외는 폴더 안에서의 분석을 건드리지 않는다. 루트에 `fixtures/**` 제외가 있는 채로 `fixtures/base_riverpod` 안에서 인자 없이 돌리면 예상한 21줄 · exit 2 · plugin 폴더 1, `fixtures/base_only` 안에서는 18줄 · exit 2 · plugin 폴더 0 이었다.
 - 끄는 설정용 프로젝트는 옵션 파일에 `plugins:` 를 직접 적는다. 제외되어 있으면 `pub get` 전에도 `plugins_in_inner_options` 가 나지 않는다.
+- **이 제외는 베타에서도 통했다 (016).** 묶음을 부르는 `example/` 을 루트에서 제외하면 베타에서도 0줄이고 plugin 을 준비하지 않았고, 제외하지 않으면 그 폴더의 진단(베타에서는 20줄)이 섞였다. 베타에서 본 것은 이 한 구성이다 (`example/` 하나, `example/**`, 별칭이 없는 `lib/`, SDK 마다 한 번). 위 표의 나머지 — 프로젝트 여럿이 든 `fixtures/**`, `pub get` 전, `plugins:` 를 직접 적은 폴더 — 는 베타에서 재지 않았다. 다만 베타의 루트 분석은 `lib/analysis_options.yaml` 때문에 어차피 plugin 을 한 번 준비한다 (→ preset-split-structure.md 6번 끝) — 위 표의 "plugin 준비 없음" · "0.6초" 는 Dart 3.13.4 의 값이다. 제외의 이유는 "그 폴더의 진단이 루트 분석에 섞이지 않게" 로 적는다.
 - 루트 옵션 파일의 나머지 모양(`lib/analysis_options.yaml` 제외를 지우는 시점 등)은 preset-split-structure.md 6번에 있다.
 
 ### 5. 상태 폴더는 프로젝트마다 따로
@@ -225,6 +251,8 @@ final runs = await Future.wait([
 - **연습용 프로젝트를 `example/` 안에 두는 것.** `example/` 의 분석에 섞일 것이라 재지 않았다.
 - **연습용 프로젝트를 pub workspace 멤버로 만드는 것.** 하지 않기로 한 것이다 (03-CONTEXT.md, 02-CONTEXT.md).
 - **연습용 프로젝트에서 `flutter pub get` 을 돌리는 것.** 옵션 파일을 고친다 (004 → example-project-and-expected-file.md).
+- **git 의존성으로 받는 연습용 프로젝트를 하나 더 두는 것.** `path:` 로 받은 것과 줄 단위로 같았다. 받아 오는 길은 Phase 6 의 smoke test 가 본다 (015 → git-dependency-and-upgrade.md).
+- **고정 SDK 를 올린 뒤 codegen 조각을 받는 프로젝트의 정답지에 4줄이 생긴 것을 저장소의 변경 탓으로 읽는 것.** `lib/generated/sample.*.dart` 의 `avoid_print` · `prefer_single_quotes` 면 SDK 가 바뀌어 생긴 줄이다 (016).
 
 ## Constraints
 
@@ -234,10 +262,11 @@ final runs = await Future.wait([
 - 상태 폴더를 따로 주고 동시에 띄우는 것은 008 이 2쌍으로 봤고, 014 가 넷 · 여섯으로 두 번씩 돌려 모두 통과했다. 빈 상태 폴더 **하나를 함께** 쓰는 동시 실행은 드물게 깨진다 (008 — 20쌍 중 1쌍).
 - 014 는 두 번 돌려 48건씩 모두 성립했고 방식별 시간이 1 ~ 2초 안에서 재현됐다. pub cache 는 채워진 상태였다.
 - 첫 실행의 로그(`results/probe-run1.log`) 끝의 `pub get 여섯  259.0` 은 스톱워치를 멈추지 않은 스크립트의 잘못이다. 실제 값은 같은 로그 위쪽의 `합계 1.3초` 다.
+- 015 와 016 은 연습용 프로젝트 여섯을 만들어 돌린 것이 아니다. 받는 쪽 프로젝트 하나(015), replica 의 `example/` 하나(016)에서 옵션 파일을 바꿔 가며 쟀다. 시간과 상태 폴더에 관한 5 ~ 8번은 베타에서 재지 않았다 (베타의 처음 실행 한 번은 14.8 ~ 16.7초로 고정 SDK 와 같았다).
 - 확인하지 않은 것: GitHub Linux runner 에서의 여섯, 프로세서가 적은 기계에서의 동시 실행, pub cache 가 빈 상태의 `pub get` (runner 의 첫 프로젝트 — 여섯이 같은 패키지를 쓰므로 둘째부터는 채워진 상태다), Windows 와 Linux 에서의 심볼릭 링크, B 를 실제 검증 명령으로 옮긴 것, 상태 폴더가 여섯일 때의 디스크 사용량 (plugin 을 쓰는 넷마다 약 15MB 의 `plugin.aot` 이 생긴다), 프로젝트가 여럿일 때 `--update` 의 쓰기 순서와 화면.
 
 ## Origin
 
-Synthesized from spikes: 009, 011, 014 (끄는 설정용 프로젝트의 요구 사항 한 줄은 012 에서 왔다)
-Source files available in: sources/009-preset-plugin-via-include/, sources/011-root-analysis-after-split/, sources/014-multi-fixture-plugin-cost/
+Synthesized from spikes: 009, 011, 014 (끄는 설정용 프로젝트의 요구 사항 한 줄은 012 에서 왔다. git 의존성에서의 줄 수는 015, 다음 SDK 에서의 줄 수와 루트 제외는 016 의 결과를 덧붙인 것이다)
+Source files available in: sources/009-preset-plugin-via-include/, sources/011-root-analysis-after-split/, sources/014-multi-fixture-plugin-cost/, sources/015-git-dependency-preset-load/, sources/016-next-sdk-forward-compat/
 원본 로그와 JSON: `.planning/spikes/009-preset-plugin-via-include/results/`, `.planning/spikes/011-root-analysis-after-split/results/`, `.planning/spikes/014-multi-fixture-plugin-cost/results/` (014 는 `probe-run1.*` 이 첫 번째, `probe.*` 이 두 번째 실행이다)

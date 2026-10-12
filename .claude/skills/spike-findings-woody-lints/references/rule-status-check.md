@@ -2,7 +2,7 @@
 
 배포 파일에 적힌 규칙 중 deprecated 됐거나, 삭제됐거나, 존재하지 않는 것이 있으면 검증을 실패시키는 부분이다 (VERIFY-02). 프리셋을 나눈 뒤에는 조각 셋이 모두 대상이고, 깨진 옵션 파일도 이 단계가 잡는다.
 
-모든 수치는 Dart 3.13.4 실측이다. 복사본을 저장소 안에 두는 이유와 실행 형태는 2026-10-11 (005, 007), 나눈 뒤의 대상 · 통과 조건 · 깨진 입력은 2026-10-12 (013) 에 쟀다.
+따로 적지 않은 수치는 Dart 3.13.4 실측이다. 복사본을 저장소 안에 두는 이유와 실행 형태는 2026-10-11 (005, 007), 나눈 뒤의 대상 · 통과 조건 · 깨진 입력은 2026-10-12 (013) 에 쟀다. 다음 SDK 의 베타(Dart 3.14.0-211.1.beta)에서 같은 형태가 통하는지와 지금 규칙 12개의 상태는 2026-10-12 (016) 에 쟀다 — 둘 다 그대로였다.
 
 ## Requirements
 
@@ -20,11 +20,15 @@ MANIFEST.md 의 `preset-split-include-behavior` 에서 이 영역에 걸리는 �
 - 규칙 검사는 `base.yaml` · `codegen.yaml` · (`plugins:` 를 뺀) `riverpod.yaml` 을 `build/woody_rule_check/<조각 이름>/analysis_options.yaml` 로 복사해 한 번에 돌린다. 통과 조건은 "exit 0 이고 복사본의 진단이 0건" 이다. "규칙 0개" 확인은 `base.yaml` 에만 건다. 묶음과 별칭은 대상에 넣지 않는다 — 폴더를 인자로 준 분석에서는 include 를 거쳐 plugin 까지 준비한다 (013)
 - 깨진 YAML 은 exit 3 인데 JSON 의 진단이 0건이고 stderr 도 비어 있다. 원인(`parse_error`)은 형식 인자 없이 돌린 출력에만 찍힌다. `linter:` 키의 오타는 아무 신호도 남기지 않는다 (013)
 
+MANIFEST.md 의 `next-sdk-forward-compat` 에서 이 영역에 걸리는 것 (베타 `3.14.0-211.1.beta` 한 빌드의 결과이고 정식 버전에서 달라질 수 있다).
+
+- 지금 규칙 12개는 베타에서 deprecated / removed 가 아니다 (pubspec 의 SDK 하한을 `^3.14.0` · `^3.99.0` 으로 올려도 0건) (016)
+
 위 `verify-harness-tool-behavior` 목록의 "`lib/` 는 바꾸지 않는다 · 루트의 제외를 그대로 둔다" 는 Phase 2 의 범위였다. 이 검사가 `lib/` 를 **읽기만 한다**는 점은 나눈 뒤에도 같다.
 
 ## How to Build It
 
-analyzer 는 규칙의 상태를 **`analysis_options.yaml` 이라는 이름의 파일에 직접 적힌 규칙**에 대해서만 온전히 보고한다. include 로 받은 파일에 적힌 규칙은 "없는 규칙"만 보고된다. 그래서 대상 파일을 그 이름으로 복사해 놓고 분석한다.
+analyzer 는 규칙의 상태를 **`analysis_options.yaml` 이라는 이름의 파일에 직접 적힌 규칙**에 대해서만 온전히 보고한다. include 로 받은 파일에 적힌 규칙은 "없는 규칙"만 보고된다. 그래서 대상 파일을 그 이름으로 복사해 놓고 분석한다. (include 쪽의 이 동작은 Dart 3.13.4 에서 잰 것이다. 베타에서 잰 것은 직접 적힌 경우뿐이다 → 5번.)
 
 ### 1. 대상을 저장소 안에 복사한다
 
@@ -133,6 +137,20 @@ trap cleanup EXIT
 
 현재 선언된 규칙 12개는 깨끗하다. `plugins:` 를 뺀 한 파일 복사본도(005, 007), 나눈 뒤의 `base.yaml` 과 `codegen.yaml` 도(013) 0건, exit 0 이다.
 
+다음 SDK 의 베타(Dart 3.14.0-211.1.beta)에서도 같다 (016). `base.yaml` 을 복사본 하나로 두고 폴더를 인자로 준 같은 형태다.
+
+| 대상 | pubspec 의 SDK 하한 | Dart 3.13.4 | 베타 |
+|---|---|---|---|
+| `base.yaml` 그대로 | `^3.13.0` (저장소의 것) | exit 0, 0건 | 같음 |
+| `base.yaml` 그대로 | `^3.14.0` | exit 0, 0건 | 같음 |
+| `base.yaml` 그대로 | `^3.99.0` | exit 0, 0건 | 같음 |
+| 문제 규칙 셋을 끼움 | `^3.13.0` | exit 2, `deprecated_lint` · `removed_lint` · `undefined_lint` | 같음 |
+
+- deprecated 는 pubspec 의 SDK 하한이 그 버전 이상일 때만 보고되므로(Constraints) 하한만 올린 pubspec 으로도 봤다. `pub get` 은 다시 하지 않고 `pubspec.yaml` 의 줄만 바꿨다.
+- 기반 세트(`flutter_lints` 6.0.0 / `lints` 6.1.0)에서 올라오는 경고도 없었다. 다만 기반 세트는 include 로 받으므로 이 검사가 보일 수 있는 것은 "없는 규칙" 뿐이다 — 기반 세트의 규칙 가운데 베타에서 **없어진** 것이 없다는 데까지만 말한다. deprecated 됐는지는 이 방식으로 알 수 없다.
+- 규칙 검사의 형태는 베타에서도 0.5초이고 plugin 을 준비하지 않는다.
+- 베타에서 잰 것은 하위 폴더가 없는 평평한 복사본 하나다. 조각 셋을 하위 폴더에 둔 배치, 깨진 입력(3번의 표), `codegen.yaml` · `riverpod.yaml` 은 베타에서 재지 않았다.
+
 ### 6. 정답지 비교가 대신 잡아 주지 않는다
 
 `riverpod.yaml` 끝에 `linter: rules:` 블록과 문제 규칙 셋(deprecated, removed, 없는 규칙)을 숨겼을 때:
@@ -160,7 +178,7 @@ trap cleanup EXIT
 - **루트에서 인자 없이 분석하고 복사본의 진단만 골라내는 것** (005 가 골랐던 방식). 루트 옵션 파일에 `example/**` 제외가 없으면 `example/` 의 진단이 섞이고 plugin 까지 준비해 15초와 네트워크가 든다. 제외가 있으면 결과는 같지만 그 제외에 기대게 된다.
 - **include 로 받은 파일을 그대로 검사하는 것.** 문제 규칙 4개를 `shared.yaml` 에 적고 include 하면 `undefined_lint` 하나만 나온다 (`included_file_warning` 으로 include 줄에 보고된다). deprecated 와 removed 는 보고되지 않는다.
 - **SDK tag 의 `rules.json` 을 규칙 상태의 근거로 삼는 것.** tag 3.13.4 의 `rules.json` 은 `unnecessary_await_in_return` 을 `stable` 로 적었지만 같은 tag 의 규칙 소스는 `state: .deprecated(since: .new(3, 13, 0))` 이고, 실제 동작은 규칙 소스를 따른다.
-- **`plugins:` 를 담은 채 루트에서 인자 없이 분석하는 것.** `plugins_in_inner_options` 가 섞여 나온다 (005).
+- **`plugins:` 를 담은 채 루트에서 인자 없이 분석하는 것.** Dart 3.13.4 에서는 `plugins_in_inner_options` 가 섞여 나온다 (005). 베타에서는 이 경고가 나오지 않고 대신 안쪽 옵션 파일의 `plugins:` 가 쓰여 plugin 을 준비한다 (016 이 `lib/analysis_options.yaml` 로 잰 것이고, 규칙 검사의 복사본으로 잰 것은 아니다).
 - **폴더 이름을 점으로 시작하게 짓는 것** (`.woody_rule_check/` 등). 분석되지 않는다.
 - **error 강도의 옵션 파일 진단을 JSON 에서 찾는 것.** `dart analyze` 는 옵션 파일의 error 진단만 JSON 에서 빠뜨린다. 세 코드와 위 표의 warning 들은 해당하지 않는다. 깨진 YAML 의 `parse_error` (error) 가 JSON 에 나오지 않은 것이 이와 맞는다.
 
@@ -178,10 +196,10 @@ trap cleanup EXIT
   | | `^3.3.0` | `removed_lint` |
   | `unnecessary_await_in_return` | pubspec 없음 | 없음 |
 
-- 그래서 이 검사의 민감도는 루트 `pubspec.yaml` 의 SDK 하한을 따른다. 하한이 `^3.13.0` 인 동안에는 3.14 에서 deprecated 될 규칙을 3.14 SDK 로 돌려도 잡지 못한다. 하한을 올리는 릴리스에서 새로 잡히는 규칙이 생길 수 있다.
+- 그래서 이 검사의 민감도는 루트 `pubspec.yaml` 의 SDK 하한을 따른다. 하한이 `^3.13.0` 인 동안에는 3.14 에서 deprecated 될 규칙을 3.14 SDK 로 돌려도 잡지 못한다. 하한을 올리는 릴리스에서 새로 잡히는 규칙이 생길 수 있다. 지금 규칙 12개에 대해서는 016 이 미리 봤다 — 베타에서 하한을 `^3.14.0` 과 `^3.99.0` 으로 올려도 0건이다 (5번). Phase 4 가 더하는 규칙은 그때 다시 본다.
 - `unnecessary_await_in_return` 은 Dart 3.13.0 부터 deprecated 다. 규칙 후보에서 제외한 판정이 맞다.
 - Dart 3.13.4 의 deprecated 규칙은 6개다: `avoid_null_checks_in_equality_operators`, `avoid_private_typedef_functions`, `one_member_abstracts`, `prefer_final_parameters`, `use_if_null_to_convert_nulls_to_bools`, `unnecessary_await_in_return`.
-- **폴더를 인자로 준 분석은 그 폴더가 분석의 루트가 된다.** 복사본이 `plugins:` 를 직접 담든 include 로 닿든 plugin 을 준비한다 (`riverpod.yaml` 그대로, `recommended.yaml`, 별칭 — 셋 다 plugin 폴더 1, 10초). 저장소 루트에서 인자 없이 돌릴 때는 하위 옵션 파일의 `plugins:` 를 쓰지 않는다 (011) — 두 실행의 다른 점이다.
+- **폴더를 인자로 준 분석은 그 폴더가 분석의 루트가 된다.** 복사본이 `plugins:` 를 직접 담든 include 로 닿든 plugin 을 준비한다 (`riverpod.yaml` 그대로, `recommended.yaml`, 별칭 — 셋 다 plugin 폴더 1, 10초). 저장소 루트에서 인자 없이 돌릴 때는 하위 옵션 파일의 `plugins:` 를 쓰지 않는다 (011) — 두 실행의 다른 점이다. 이것은 Dart 3.13.4 의 차이다. 베타에서는 루트에서 인자 없이 돌려도 `lib/analysis_options.yaml` 이 닿는 `plugins:` 를 써서 plugin 을 준비한다 (016 → next-sdk-forward-compat.md 4번). 복사본 폴더를 인자로 준 규칙 검사는 베타에서도 plugin 을 준비하지 않았다.
 - 이것은 analyze-run-and-verdict.md 의 "하위 폴더를 인자로 주면 plugin 을 준비조차 하지 않는다" (001) 와 부딪치는 말이 아니다. 001 이 인자로 준 폴더(`lib`, `lib/src`)에는 옵션 파일이 없었고 옵션 파일은 그 위의 패키지 루트에 있었다. 여기서 인자로 준 폴더에는 `analysis_options.yaml` 이 **직접** 들어 있다. 두 실험에서 달랐던 조건을 적은 것이고, 그 조건 하나만 바꿔 원인을 가른 실험은 아니다.
 - "규칙 0개" 확인(`countDeclaredRules`)은 글자를 센다. 최상위 `linter:` 블록 안의 `- 이름` 줄 수이고 analyzer 가 실제로 읽은 규칙 수가 아니다. 맵 문법(`이름: true`)으로만 적은 목록은 0 으로 센다 (`02-VERIFICATION.md` 가 적어 둔 가정이고 일으켜 보지 않았다). 배포 파일은 목록 문법이다.
 - 복사 위치와 실행 형태별 결과 (한 파일 구조의 배포 파일에 문제 규칙 4개를 끼운 복사본):
@@ -203,6 +221,6 @@ trap cleanup EXIT
 
 ## Origin
 
-Synthesized from spikes: 005, 007, 013
-Source files available in: sources/005-initial-file-rule-status/, sources/007-root-analysis-with-example/, sources/013-rule-check-after-split/
-원본 로그: `.planning/spikes/005-initial-file-rule-status/results/probe.log`, `.planning/spikes/007-root-analysis-with-example/results/probe.log`, `.planning/spikes/013-rule-check-after-split/results/probe.log`
+Synthesized from spikes: 005, 007, 013 (다음 SDK 에서의 상태는 016 의 3부를 덧붙인 것이다)
+Source files available in: sources/005-initial-file-rule-status/, sources/007-root-analysis-with-example/, sources/013-rule-check-after-split/, sources/016-next-sdk-forward-compat/
+원본 로그: `.planning/spikes/005-initial-file-rule-status/results/probe.log`, `.planning/spikes/007-root-analysis-with-example/results/probe.log`, `.planning/spikes/013-rule-check-after-split/results/probe.log`, `.planning/spikes/016-next-sdk-forward-compat/results/probe-<Dart 버전>.log`

@@ -2,7 +2,7 @@
 
 검증 명령을 GitHub 의 Linux runner 에서 돌리는 workflow 다. 캐시가 하나도 없는 새 가상 머신에서도 plugin 진단이 로컬과 똑같이 나오는지, 얼마나 걸리는지를 쟀다.
 
-모든 수치는 Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9, `ubuntu-latest` (4 cores), 2026-10-11 실측이다. 새 가상 머신 10대에서 분석 60번.
+따로 적지 않은 수치는 Flutter 3.47.5 / Dart 3.13.4, `riverpod_lint` 3.1.9, `ubuntu-latest` (4 cores), 2026-10-11 실측이다. 새 가상 머신 10대에서 분석 60번. 연습용 프로젝트가 여섯일 때의 셈에 쓴 로컬 값은 014 (macOS, 2026-10-12), 다음 SDK 에 관한 줄은 016 (로컬의 베타, 2026-10-12) 의 것이다.
 
 ## Requirements
 
@@ -19,6 +19,13 @@ MANIFEST.md 의 `preset-split-include-behavior` 에서 이 영역에 걸리는 �
 
 - 연습용 프로젝트는 폴더마다 따로 두고 상태 폴더도 프로젝트마다 따로 준다 (지금 검증 명령의 방식 그대로). 여섯이 로컬에서 처음 66초, 재실행 20 ~ 21초다. 상태 폴더를 하나로 합치면 plugin 폴더가 넷이 되어 버전을 읽지 못한다. plugin 준비는 경로가 다르면 나눠 쓰지 못한다 (014)
 - 시간이 문제가 되면 상태 폴더를 따로 둔 채 동시에 띄우는 것을 먼저 본다 — 로컬에서 여섯이 23초이고 결과가 같았다. GitHub runner 에서의 여섯은 재지 않았다 (추정 약 4분 20 ~ 30초) (014)
+
+MANIFEST.md 의 `next-sdk-forward-compat` 에서 이 영역에 걸리는 것.
+
+- 고정 SDK 를 Dart 3.14 계열로 올리기 전에 016 의 두 스크립트를 그 SDK 로 돌린다. `probe.dart` 의 `≠` 10칸 중 생성 파일 제외에서 온 8칸이 `=` 로 돌아오면 되돌리는 변경이 들어간 것이고 (루트 분석의 2칸 R1 · R2 는 다른 변경(sdk#63627)에서 온 것이라 `≠` 로 남을 것이다), 10칸 그대로면 정답지 셋을 갱신하며 "SDK 가 바뀌어 생긴 줄" 로 기록한다 (016)
+- plugin 진단 확인은 베타에서도 `dart analyze` 로 한다. 베타의 `flutter analyze` 는 plugin 진단을 내지만 규칙 진단을 겹쳐 세고 그 수가 실행마다 달랐다 (016)
+
+위의 "8칸" · "2칸" 을 어떻게 읽는지와 "정답지 셋" 이 어느 파일인지는 next-sdk-forward-compat.md 9번 · 3번에 있다 — 칸의 수가 아니라 칸의 내용을 읽는다.
 
 이 문서에서 문서 이름 없이 적은 D-NN 은 02-CONTEXT.md 의 것이다. 03-CONTEXT.md 의 결정은 문서 이름을 붙여 적었다.
 
@@ -58,6 +65,7 @@ jobs:
 spike 의 원본은 `sources/006-github-runner-cold-plugin/spike-006-cold-plugin.yml` 이다 (`timeout-minutes: 15`, `matrix.sample: [1..5]`, `fail-fast: false`). Phase 2 가 이 뼈대로 `.github/workflows/verify.yml` 을 만들었다 — 마지막 step 은 `dart run tool/verify.dart`, `timeout-minutes` 는 10 이다.
 
 - **Flutter 버전 숫자를 workflow 에 적지 않는다.** `flutter-version-file: .fvmrc` 하나로 로컬과 같은 Flutter 3.47.5 / Dart 3.13.4 가 설치됐다.
+- 그래서 `.fvmrc` 를 올리는 커밋이 곧 CI 의 SDK 를 올리는 커밋이다. Dart 3.14 계열로 올리면 codegen 조각을 받는 연습용 프로젝트의 정답지에 4줄이 생겨 `verify` job 이 "정답지와 다름" 으로 실패할 수 있다 — 2026-10-12 의 베타에서는 그 4줄이 나왔고, 상류가 되돌리려는 중이다. 올리기 전에 016 의 두 스크립트를 그 SDK 로 돌려 본다 (→ next-sdk-forward-compat.md 9번). job 이 실패하는 모양 자체는 재지 않았다 (`tool/verify.dart` 를 베타로 돌리지 않았다).
 - **`timeout-minutes` 는 10** 이면 넉넉하다 (정상 약 2분). pub 서버에 닿지 못해도 plugin 준비는 약 30초 뒤 실패로 끝나므로, 멈춰 있는 경우만 막으면 된다.
 - **`~/.dartServer` 는 캐시하지 않는다.** 캐시 없이도 43초이고, 캐시하면 plugin 준비 실패가 가려질 수 있다 (PITFALLS.md Pitfall 12).
 - 검증 명령이 쓰는 전용 상태 폴더(→ analyze-run-and-verdict.md 2번)도 같은 이유로 캐시하지 않는다. runner 는 매번 저장소를 새로 받으므로 그 폴더는 비어 있고 첫 분석은 늘 처음 실행이다. 빈 폴더를 `ANALYZER_STATE_LOCATION_OVERRIDE` 로 준 cold 실행은 runner 에서 30번 돌려 30번 모두 통과했다 (27.0~52.6초, spike 006 의 C1~C3. 그때의 폴더는 저장소 밖 `RUNNER_TEMP` 아래였다).
@@ -129,7 +137,8 @@ gh run view <run id> --log
 - **`~/.dartServer` 를 캐시하는 것.** plugin 준비 실패가 가려질 수 있다. 캐시 없이도 첫 분석은 약 43초다. 캐시했을 때 얼마나 줄어드는지는 재지 않았다.
 - **workflow 에 Flutter 버전을 숫자로 적는 것.** `.fvmrc` 와 어긋날 자리가 하나 더 생긴다.
 - **수동 실행 버튼(`workflow_dispatch`)에 기대는 것.** 기본 브랜치(`main`)에 workflow 파일이 있어야 버튼이 보인다. `main` 에 들어가기 전에는 push 로만 돌릴 수 있다 (D-06).
-- **CI 에서 `flutter pub get` / `flutter analyze` 를 쓰는 것.** 앞의 것은 `example/analysis_options.yaml` 을 고치고(→ example-project-and-expected-file.md), 뒤의 것은 plugin 진단을 내지 않는다.
+- **CI 에서 `flutter pub get` / `flutter analyze` 를 쓰는 것.** 앞의 것은 `example/analysis_options.yaml` 을 고치고(→ example-project-and-expected-file.md), 뒤의 것은 Flutter 3.47.5 에서 plugin 진단을 내지 않는다. 베타(Flutter 3.49.0-0.2.pre)에서는 plugin 진단을 내지만 규칙 진단을 겹쳐 세고 건수가 실행마다 달랐다 (016).
+- **`.fvmrc` 를 올린 커밋에서 깨진 정답지를 그 커밋의 다른 변경 탓으로 읽는 것.** 더해진 줄이 `lib/generated/sample.*.dart` 의 4줄이면 SDK 가 바뀌어 생긴 것이다 (016).
 - **"runner 에서는 사용 통계가 자동으로 꺼지니 플래그를 빼도 된다"로 정리하는 것.** 로컬에서 같은 검증 명령이 255 로 죽는다.
 
 ## Constraints
@@ -141,10 +150,10 @@ gh run view <run id> --log
 - action 버전: `actions/checkout` v7.0.1 (2026-07-20), `subosito/flutter-action` v2.23.0 (2026-03-25). 둘 다 major tag(`v7`, `v2`)가 있다. `flutter-action` 의 `cache` 기본값은 `false` 다.
 - push 로 도는 workflow 는 올라간 브랜치의 workflow 파일을 쓴다. 기본 브랜치에 파일이 없어도 돈다.
 - 작업 브랜치(`gsd/v2.0-package-rework`)는 이미 원격에 올라가 있다 (02-CONTEXT.md D-08, D-09). `.planning/` 이 공개된다는 뜻이므로 결과 파일에는 로컬 절대 경로를 남기지 않는다.
-- 확인하지 않은 것: macOS / Windows runner (CI 는 Linux 만 쓴다), SDK 캐시(`cache: true`)를 켰을 때의 시간 (약 66초를 줄여 주지만 넣을지는 계획 때 정한다), GitHub 나 pub.dev 에 장애가 있을 때의 모습 (spike 002 의 로컬 재현으로 갈음), spike 007(루트의 `example/**` 제외, 규칙 검사의 실행 형태)과 008(상태 폴더를 함께 쓸 때, 깨진 뒤의 회복)의 실험을 runner 에서 한 것, spike 009 ~ 014 의 실험을 runner 에서 한 것 (전부 로컬 macOS 에서 쟀다), 연습용 프로젝트 여섯의 실제 job 시간.
+- 확인하지 않은 것: macOS / Windows runner (CI 는 Linux 만 쓴다), SDK 캐시(`cache: true`)를 켰을 때의 시간 (약 66초를 줄여 주지만 넣을지는 계획 때 정한다), GitHub 나 pub.dev 에 장애가 있을 때의 모습 (spike 002 의 로컬 재현으로 갈음), spike 007(루트의 `example/**` 제외, 규칙 검사의 실행 형태)과 008(상태 폴더를 함께 쓸 때, 깨진 뒤의 회복)의 실험을 runner 에서 한 것, spike 009 ~ 016 의 실험을 runner 에서 한 것 (전부 로컬 macOS 에서 쟀다), 연습용 프로젝트 여섯의 실제 job 시간, 다음 SDK 에서의 job (베타는 로컬에서만 돌렸고 CI 의 SDK 는 `.fvmrc` 를 따른다).
 
 ## Origin
 
-Synthesized from spikes: 006 (전용 상태 폴더와 규칙 검사 시간에 관한 두 줄은 007, 008 의 결과를, 여섯으로 늘 때의 추정은 014 의 결과를 덧붙인 것이다)
+Synthesized from spikes: 006 (전용 상태 폴더와 규칙 검사 시간에 관한 두 줄은 007, 008 의 결과를, 여섯으로 늘 때의 추정은 014 의 결과를, `.fvmrc` 를 올릴 때의 주의는 016 의 결과를 덧붙인 것이다)
 Source files available in: sources/006-github-runner-cold-plugin/, sources/014-multi-fixture-plugin-cost/
 원본 결과: `.planning/spikes/006-github-runner-cold-plugin/results/run-38136362920.json`, `run-38136362920-attempt2.json`
