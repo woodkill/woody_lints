@@ -229,6 +229,9 @@ Plans:
 **Notes**:
 - git 의존성으로 받은 프리셋의 `plugins:` 로드는 지금까지 `path:` 의존성으로만 확인되어 있고, smoke test 가 이를 처음 확인하는 자리다. tag 를 push 한 뒤에 실패를 발견하면 patch 릴리스로만 고칠 수 있으므로, tag 를 달기 전에 milestone 브랜치를 `ref:` 로 받는 빈 프로젝트에서 먼저 확인할지 계획 때 검토한다.
 - smoke test 를 어느 URI 로 할지(정식 이름 `recommended.yaml`, 옛 별칭, 둘 다)는 계획 때 정한다.
+- **Phase 2 에서 미룬 확인 둘 (`02-UAT.md` 4번 · 6번, 소유자 결정 2026-10-12)** — 릴리스 때에만 볼 수 있어 이 phase 로 넘겼다.
+  - PR 에서 `verify` 가 도는가: `main` 병합을 PR 로 한다면, PR 을 연 직후 Actions 탭에 `pull_request` event 의 `verify` 실행이 생기고 단계 4개가 통과하는지 본다. `.github/workflows/verify.yml` 에 `pull_request:` 가 조건 없이 선언되어 있지만 PR 이 열린 적이 없다 (2026-10-12 기준 0건). PR 없이 합치기로 정하면 이 확인은 "해당 없음" 으로 닫는다.
+  - 수동 실행 버튼: workflow 파일이 `main` 에 들어간 뒤 Actions → verify 화면에 `Run workflow` 버튼이 보이는지, 누르면 `workflow_dispatch` event 의 실행이 생겨 통과하는지 본다 (02-CONTEXT.md D-06).
 - 사용 프로젝트에 새 버전을 적용하고 경고를 정리하는 일은 이 마일스톤의 범위 밖이다.
 
 ## Progress
