@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 03
 current_phase_name: Preset Split
 status: executing
-stopped_at: Phase 3 planned (plan 4개, checker 통과)
-last_updated: "2026-10-12T11:05:18.100Z"
+stopped_at: Completed 03-01-PLAN.md
+last_updated: "2026-10-12T11:32:48.518Z"
 last_activity: 2026-10-12
-last_activity_desc: Phase 3 계획 완료 (plan 4개 · wave 4개, 계획 검사 2차 통과)
-state_head: 8f8fc33258ec9506a85e8af6e954501fcc062842
+last_activity_desc: Phase 03 execution started
+state_head: 533868af5f586f3c5a4f4c6e0b1d411f596916e0
 progress:
   total_phases: 6
   completed_phases: 2
   total_plans: 13
-  completed_plans: 9
+  completed_plans: 10
   percent: 33
 ---
 
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-10-12)
 
 ## Current Position
 
-Phase: 03 (Preset Split) — READY TO EXECUTE
-Plan: Not started
+Phase: 03 (Preset Split) — EXECUTING
+Plan: 2 of 4
 Status: Ready to execute
-Last activity: 2026-10-12 — Phase 3 계획 완료 (plan 4개 · wave 4개, 계획 검사 2차 통과)
+Last activity: 2026-10-12 — Phase 03 execution started
 
 Progress: [███░░░░░░░] 33%
 
@@ -68,6 +68,7 @@ Progress: [███░░░░░░░] 33%
 | Phase 02 P03 | 7 min | 2 tasks | 2 files |
 | Phase 02 P04 | 7 min | 2 tasks | 1 files |
 | Phase 02 P05 | 9 min | 3 tasks | 4 files |
+| Phase 03 P01 | 5 min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -124,6 +125,8 @@ Recent decisions affecting current work:
 - [Phase 02]: UAT 9개 완료 (2026-10-12) — 통과 7, 뒤로 미룸 2, 문제 0. 미룬 둘(4번 PR 에서 verify, 6번 수동 실행 버튼)은 릴리스 때에만 볼 수 있어 ROADMAP 의 Phase 6 Notes 에 적었다. 9번은 소유자 결정이다 — `--update` 가 망가진 결과를 정답지로 쓰는 남은 경로와 README 80행 · 30행 · `[2/4]` 실패 문구는 Phase 3 에서 정답지를 새로 쓰기 전에 가장 먼저 닫는다 (ROADMAP 의 Phase 3 Notes)
 - [Phase 02]: UAT 중 작업 브랜치를 두 번 더 올렸다 (2026-10-12T02:32Z, 소유자 확인 뒤, `1f06c55` → `cb5701a` → `ead9573`, 둘 다 fast-forward, 명령은 브랜치 이름 하나만 준 git push 한 줄). 1차 실행 38196218993 은 2차가 올라오자 `cancelled` (concurrency 동작 확인), 2차 실행 38196232990 은 `success` · 2분 · 로그에 `점검 통과 (4개 중 4개)` — plan 02-05 의 스크립트가 GitHub runner 에서도 통과한다. origin 의 작업 브랜치는 `ead9573` 이고 그 뒤의 커밋(UAT 완료, 로드맵 메모, phase 완료)은 origin 에 없다 — 위의 "origin 은 1f06c55 그대로" 두 줄은 이 줄로 갈음한다. `main` 은 `90a2736`, tag 는 `v1.3.0` 하나, PR 은 0건 그대로다. Phase 3 부터의 push 는 다시 소유자에게 묻는다 (D-09)
 - [Phase 02]: 실행해 보지 못했던 세 경로를 UAT 에서 복사본으로 실행했다 (2026-10-12, Flutter SDK 밖으로 복제한 Dart 3.13.4) — Flutter SDK 가 아닌 dart 는 안내 두 줄과 종료 코드 78, `FLUTTER_ROOT` 가 다른 버전(3.41.9)을 가리켜도 78, 맞는 버전(3.47.5)을 가리키면 단계 4개 통과. 분석 서버를 꺼서 도구를 죽이면 `[2/4]` 와 `[4/4]` 가 `도구가 죽었다 — … exit 255` 로 실패하고 종료 코드 1 이며 `--update` 를 붙여도 정답지를 쓰지 않는다. 위의 "실행해 보지 못했다" 두 줄은 이 줄로 갈음한다
+- [Phase 03]: [2/4] 의 통과 조건은 규칙 검사 복사본의 dart analyze 가 exit 0 이고 진단 0건 하나다. 닫지 않은 따옴표 · rules: 오타 · 겹친 규칙 + 없는 진단 코드의 세 입력에서 --update 가 고치기 전에는 셋 다 종료 코드 0 으로 정답지를 썼고, 고친 뒤에는 셋 다 종료 코드 1 · [2/4] 실패 · 정답지 hash 불변이다 (2026-10-12 실측, example/README.md 의 M15 ~ M17)
+- [Phase 03]: 깨진 YAML(exit 3 + JSON 진단 0건)은 같은 폴더를 형식 인자 없이 재실행한 출력의 parse_error 줄을 경로를 가려 보여 준다 (readParseErrorLines). 그 줄은 따옴표를 뗀 46행이 아니라 파서가 막힌 47행을 가리킨다. 03-02 는 깨진 옵션 파일 문구의 shippedOptionsPath 를 조각 이름으로 바꿔야 한다
 
 ### Pending Todos
 
@@ -150,6 +153,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-12T03:31:57.897Z
-Stopped at: Phase 3 planned (plan 4개, checker 통과)
-Resume file: .planning/phases/03-preset-split/03-01-PLAN.md
+Last session: 2026-10-12T11:32:48.493Z
+Stopped at: Completed 03-01-PLAN.md
+Resume file: None

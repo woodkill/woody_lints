@@ -132,11 +132,11 @@ Plans:
   4. 저장소 루트의 `analysis_options.yaml` 에서 배포 파일 exclude 를 걷어낸 상태로 루트 분석이 경고 없이 통과한다 (`plugins_in_inner_options` 포함)
   5. 재정의 fixture 에서 규칙 하나를 끄는 설정과 plugin 진단 하나를 끄는 설정이 각각 그 진단만 사라지게 한다
 
-**Plans**: 4 plans
+**Plans**: 1/4 plans executed
 
 Plans:
 **Wave 1**
-- [ ] 03-01-PLAN.md — "가장 먼저 할 일": `tool/verify.dart` 의 `[2/4]` 통과 조건을 "exit 0 이고 진단 0건" 으로 좁혀 세 입력(깨진 YAML · `rules:` 오타 · 겹친 규칙 + 없는 진단 코드)에서 `--update` 가 정답지를 쓰지 못하게 하고, `example/README.md` 의 30행 · 81행 · 158행과 M15 ~ M17 을 기록한다 (PRESET-04 의 전제; D-05; 권고 6)
+- [x] 03-01-PLAN.md — "가장 먼저 할 일": `tool/verify.dart` 의 `[2/4]` 통과 조건을 "exit 0 이고 진단 0건" 으로 좁혀 세 입력(깨진 YAML · `rules:` 오타 · 겹친 규칙 + 없는 진단 코드)에서 `--update` 가 정답지를 쓰지 못하게 하고, `example/README.md` 의 30행 · 81행 · 158행과 M15 ~ M17 을 기록한다 (PRESET-04 의 전제; D-05; 권고 6)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 - [ ] 03-02-PLAN.md — `lib/analysis_options.yaml` 을 줄 범위로 잘라 `base.yaml` / `codegen.yaml` / `riverpod.yaml` 과 `recommended.yaml` 묶음 · 옛 주소 별칭으로 나누고(같은 커밋에서 규칙 검사 대상을 조각 셋으로), 루트 `analysis_options.yaml` 의 `lib/analysis_options.yaml` 제외를 걷어내며 CHANGELOG 에 적는다 — `example/` 정답지 불변 (PRESET-04, PRESET-06, PRESET-08; D-02; 권고 5 · 7 · 8)
@@ -256,7 +256,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Baseline and Toolchain | 4/4 | Complete    | 2026-10-11 |
 | 2. Verification Harness | 5/5 | Complete    | 2026-10-12 |
-| 3. Preset Split | 0/4 | Planned | - |
+| 3. Preset Split | 1/4 | In Progress | - |
 | 4. Rule Reselection | 0/TBD | Not started | - |
 | 5. Documentation | 0/TBD | Not started | - |
 | 6. Release | 0/TBD | Not started | - |
