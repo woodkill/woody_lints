@@ -8,6 +8,7 @@
 // 실행: fvm dart run tool/verify.dart [--update]
 //   --update  정답지(example/expected_diagnostics.txt)를 실제 결과로 다시 쓴다.
 //             바뀐 줄을 먼저 화면에 보여 준다. CI 에서는 동작하지 않는다.
+//             같은 실행에서 다른 단계가 실패했으면 쓰지 않는다 (종료 코드 1).
 //
 // 단계에 앞서 준비를 한다: 실행 중인 SDK 가 .fvmrc 와 같은지 확인하고, 저장소 루트와
 // example/ 의 패키지를 받는다. 준비가 실패하면 검증을 시작하지 않는다.
@@ -171,6 +172,7 @@ class StepResult {
     this.plugin,
     this.pluginFailed = false,
     this.applyUpdate,
+    this.updateTarget,
   });
 
   /// 단계 이름 (예: `example/ 정답지 비교`).
@@ -189,7 +191,14 @@ class StepResult {
   final bool pluginFailed;
 
   /// `--update` 의 정답지 쓰기. `main` 이 [detailLines] 를 화면에 내보낸 뒤에 부른다.
+  ///
+  /// 같은 실행에서 다른 단계가 실패했으면 `main` 은 이것을 부르지 않는다.
   final void Function()? applyUpdate;
+
+  /// `--update` 가 쓰는 정답지의 저장소 기준 상대 경로.
+  ///
+  /// 정답지 비교 단계의 update 가지만 채운다 (화면의 "썼다" 줄에 쓴다).
+  final String? updateTarget;
 }
 
 /// 정답지와 실제 결과의 차이.
@@ -605,7 +614,32 @@ String? readRuleNameAt(String line, List<String> copyLines) {
       ?.group(1);
 }
 
+/// 옵션 파일 본문([options])의 최상위 `linter:` 블록에 적힌 규칙의 수를 센다.
+///
+/// 블록은 `linter:` 로 시작하는 줄부터 그 다음의 들여쓰기 없는 줄 앞까지다. 그 안에서
+/// `- 규칙이름` 꼴 줄만 센다 — 주석 처리된 줄(`# - …`)과 블록 밖의 목록 항목
+/// (`analyzer.exclude` 의 glob)은 세지 않는다. 블록이 없으면 0 이다.
+int countDeclaredRules(String options) {
+  final rulePattern = RegExp(r'^\s*-\s*[A-Za-z0-9_]+');
+  var inLinter = false;
+  var count = 0;
+  for (final line in options.split('\n')) {
+    if (RegExp(r'^linter:').hasMatch(line)) {
+      inLinter = true;
+    } else if (RegExp(r'^\S').hasMatch(line)) {
+      // 들여쓰기 없는 줄(다른 최상위 키나 주석)이 블록을 닫는다.
+      inLinter = false;
+    } else if (inLinter && rulePattern.hasMatch(line)) {
+      count++;
+    }
+  }
+  return count;
+}
+
 /// [2/4] 배포 파일에 deprecated / removed / 없는 규칙이 있는지 본다 (VERIFY-02).
+///
+/// 규칙을 하나도 읽지 못하면([countDeclaredRules] 가 0) 실패다 — 검사가 본 것이 없는데
+/// "문제 없음" 으로 넘기지 않는다.
 ///
 /// analyzer 는 규칙의 상태를 `analysis_options.yaml` 이라는 이름의 파일에 직접 적힌
 /// 규칙에 대해서만 온전히 보고한다 (include 경유로는 없는 규칙만). 그래서 배포 파일을
@@ -662,6 +696,22 @@ Future<StepResult> checkRuleNames(String repoRoot) async {
           ...unresolved.map((l) => '  $l'),
           '',
           '저장소 루트에서 `fvm dart pub get` 을 돌린 뒤 다시 실행하세요.',
+        ],
+      );
+    }
+
+    // 규칙을 하나도 읽지 못했으면 아래의 "문제 0건" 은 본 것이 없다는 뜻이다 —
+    // `linter:` 키의 오타, 규칙을 include 뒤의 다른 파일로 옮긴 경우.
+    if (countDeclaredRules(copy) == 0) {
+      return StepResult(
+        label: label,
+        passed: false,
+        detailLines: [
+          '`$shippedOptionsPath` 에서 규칙을 하나도 읽지 못했다 — '
+              '최상위 `linter:` 아래 `rules:` 목록이 비어 있거나 없다.',
+          '',
+          '`linter:` / `rules:` 키와 들여쓰기를 확인하세요. '
+              '규칙을 include 뒤의 다른 파일로 옮겼으면 이 단계의 대상 파일을 그 파일로 바꿉니다.',
         ],
       );
     }
@@ -739,7 +789,8 @@ StepResult checkFixtureOptions(String fixtureDir) {
 /// 판정 순서는 바꾸지 않는다: plugin 준비 실패 → 도구가 죽음 → 정답지 비교.
 /// [update] 이면 바뀌는 줄을 `detailLines` 에 담고 정답지 쓰기를 `applyUpdate` 로
 /// 돌려준다 — 쓰는 것은 `main` 이 그 줄을 화면에 내보낸 뒤다. 앞의 두 실패에서는
-/// [update] 여도 정답지를 건드리지 않는다. [sdk] 는 정답지 머리 주석에 적는다.
+/// [update] 여도 정답지를 건드리지 않는다. 다른 단계가 실패한 실행에서는 `main` 이
+/// 쓰기 직전에 막는다. [sdk] 는 정답지 머리 주석에 적는다.
 Future<StepResult> compareFixture({
   required String repoRoot,
   required String fixture,
@@ -813,13 +864,16 @@ Future<StepResult> compareFixture({
 
   if (update) {
     // 조용히 덮어쓰지 않는다 — 무엇이 바뀌는지 보여 주고, 그 뒤에 쓴다.
+    // 이 가지는 늘 통과다 — 실패로 세면 `--update` 가 자기가 쓰려는 차이에 막힌다.
     final measured = formatMeasuredLine(sdk, plugin, DateTime.now());
+    final target = '$fixture/$expectedFileName';
     return StepResult(
       label: label,
       passed: true,
       plugin: plugin,
+      updateTarget: target,
       detailLines: [
-        '정답지 갱신: $fixture/$expectedFileName',
+        '정답지 갱신 대상: $target',
         if (difference.isEmpty)
           '정답지와 같다 — 바뀐 줄 없음'
         else ...[
@@ -1007,12 +1061,22 @@ Future<void> main(List<String> args) async {
     }
 
     // `--update` 의 쓰기는 바뀌는 줄을 화면에 내보낸 뒤에 한다 (D-14).
+    // 다른 단계가 실패한 실행의 결과는 정답지로 쓰지 않는다 — 망가진 실행이 정답으로 굳는다.
     await stdout.flush();
-    for (final result in results) {
-      result.applyUpdate?.call();
+    final failed = results.where((r) => !r.passed).toList();
+    final updaters = results.where((r) => r.applyUpdate != null).toList();
+    if (updaters.isNotEmpty) {
+      stdout.writeln('');
+      if (failed.isNotEmpty) {
+        stdout.writeln('다른 단계가 실패해 정답지를 쓰지 않았다 — 실패를 먼저 고친 뒤 다시 실행하세요.');
+      } else {
+        for (final result in updaters) {
+          result.applyUpdate!();
+          stdout.writeln('정답지를 썼다: ${result.updateTarget}');
+        }
+      }
     }
 
-    final failed = results.where((r) => !r.passed).toList();
     stdout.writeln('');
     if (failed.isEmpty) {
       stdout.writeln('점검 통과 (${results.length}개 중 ${results.length}개)');
