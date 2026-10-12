@@ -129,6 +129,8 @@ class Consumer {
 
   String get _dart => Platform.resolvedExecutable;
 
+  static const _trees = ['lib', 'test', 'bin', 'assets'];
+
   /// 분석에 필요한 것만 옮긴다 (019 와 같은 목록). 원본은 읽기만 한다.
   void copy() {
     final d = Directory(dir);
@@ -140,15 +142,8 @@ class Consumer {
       file.copySync('$dir/$name');
       copiedFiles++;
     }
-    for (final name in ['lib', 'test', 'bin', 'assets']) {
-      final from = Directory('$source/$name');
-      if (!from.existsSync()) continue;
-      for (final f in from.listSync(recursive: true, followLinks: false).whereType<File>()) {
-        final to = File('$dir/$name${f.path.substring(from.path.length)}');
-        to.parent.createSync(recursive: true);
-        f.copySync(to.path);
-        copiedFiles++;
-      }
+    for (final name in _trees) {
+      copiedFiles += _copyTree(name);
     }
     originalPubspec = File('$dir/pubspec.yaml').readAsStringSync();
     originalLock = File('$dir/pubspec.lock').readAsStringSync();
@@ -156,6 +151,46 @@ class Consumer {
     if (!originalOptions.contains('include: package:woody_lints/analysis_options.yaml')) {
       throw const FormatException('복사본의 옵션 파일이 옛 주소를 include 하지 않는다 — 사용 프로젝트가 바뀌었다');
     }
+  }
+
+  int _copyTree(String name) {
+    final from = Directory('$source/$name');
+    if (!from.existsSync()) return 0;
+    var n = 0;
+    for (final f in from.listSync(recursive: true, followLinks: false).whereType<File>()) {
+      final to = File('$dir/$name${f.path.substring(from.path.length)}');
+      to.parent.createSync(recursive: true);
+      f.copySync(to.path);
+      n++;
+    }
+    return n;
+  }
+
+  /// `dart fix --apply` 로 고친 소스를 원본의 것으로 되돌린다 (표식은 다시 넣어야 한다) — 022.
+  void refreshSources() {
+    for (final name in _trees) {
+      final d = Directory('$dir/$name');
+      if (d.existsSync()) d.deleteSync(recursive: true);
+      _copyTree(name);
+    }
+  }
+
+  /// SDK 하한만 바꾸고 패키지를 다시 받는다 (`null` 이면 원본 그대로).
+  /// `pubspec.yaml` 만 바꾸고 `pub get` 을 하지 않으면 `package_config.json` 의 `languageVersion`
+  /// 이 앞의 값으로 남는다 — 021 의 끝(되돌리기)에서 그랬다 (측정 뒤라 021 의 결과와는 상관없다). 022.
+  Future<void> useSdk(String? constraint) async {
+    setPubspec(constraint == null ? originalPubspec : pubspecWithSdk(constraint));
+    await pubGet();
+  }
+
+  /// 복사본 패키지 자신의 언어 버전 (`package_config.json`).
+  String languageVersion() {
+    final config = File('$dir/.dart_tool/package_config.json');
+    if (!config.existsSync()) return '?';
+    final json = jsonDecode(config.readAsStringSync()) as Map<String, dynamic>;
+    final name = RegExp(r'^name: (\S+)', multiLine: true).firstMatch(originalPubspec)?.group(1);
+    final p = (json['packages'] as List).cast<Map<String, dynamic>>().where((p) => p['name'] == name);
+    return p.length == 1 ? '${p.single['languageVersion']}' : '?';
   }
 
   /// `woody_lints` 를 작업 중인 저장소로 돌리고 패키지를 받는다.

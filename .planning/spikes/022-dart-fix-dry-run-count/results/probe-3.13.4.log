@@ -1,0 +1,116 @@
+# Spike 022 — dart fix 의 건수
+SDK: 3.13.4
+
+## 1부 — 연습용 표식 (언어 버전 3.13, 새 규칙 10개)
+| 코드 | 진단 | 묶음 dry | 단독 dry | 묶음 apply 뒤 진단 |
+|---|---|---|---|---|
+| `async_return_with_no_await` | 1 | 0 | 0 | 1 |
+| `empty_container_bodies` | 2 | 2 | 2 | 0 |
+| `no_dynamic_casts` | 1 | 0 | 0 | 1 |
+| `no_raw_types` | 1 | 0 | 0 | 1 |
+| `unnecessary_const_in_enum_constructor` | 1 | 1 | 1 | 0 |
+| `unnecessary_type_name_in_constructor` | 4 | 3 | 4 | 0 |
+| `use_declaring_parameters` | 0 | 3 | 0 | 0 |
+| `use_primary_constructors` | 4 | 4 | 4 | 0 |
+- 묶음 dry-run: 13 proposed fixes in 5 files. / 묶음 apply: 13 fixes made in 5 files. (exit 0), dart fix 의 상태 폴더 항목 321
+
+## 2부 — 사용 프로젝트의 복사본
+- 복사한 파일 776개, 받은 자리 repo, 언어 버전 3.11
+- G1 (106개, 언어 버전 3.11): 분석 20066 ms · 줄 4512 (표식 26), 묶음 dry-run 28542 ms · 3525건 · 상태 폴더 항목 16286
+  - 묶음 dry-run 에 나온 후보 밖 코드: {always_declare_return_types: 1, empty_statements: 3, prefer_const_constructors: 1, prefer_const_literals_to_create_immutables: 1, prefer_final_locals: 1, prefer_is_empty: 1, prefer_single_quotes: 1, sized_box_for_whitespace: 1, slash_for_doc_comments: 1, sort_child_properties_last: 1}
+- G2 (4개, 언어 버전 3.11): 분석 20665 ms · 줄 13510 (표식 24), 묶음 dry-run 24595 ms · 13313건 · 상태 폴더 항목 9849
+  - 묶음 dry-run 에 나온 후보 밖 코드: {always_declare_return_types: 1, body_might_complete_normally_nullable: 6, invalid_null_aware_operator: 1, missing_dependency: 1, no_leading_underscores_for_local_identifiers: 228, prefer_const_constructors: 2, prefer_const_literals_to_create_immutables: 1, prefer_final_locals: 1, prefer_is_empty: 1, prefer_single_quotes: 1, sized_box_for_whitespace: 1, slash_for_doc_comments: 1, sort_child_properties_last: 1, undefined_identifier: 59, unnecessary_non_null_assertion: 1, unnecessary_null_comparison: 7}
+- G3 (2개, 언어 버전 3.11): 분석 20556 ms · 줄 27080 (표식 24), 묶음 dry-run 28223 ms · 106808건 · 상태 폴더 항목 10436
+  - 묶음 dry-run 에 나온 후보 밖 코드: {always_declare_return_types: 1, prefer_const_constructors: 2, prefer_const_literals_to_create_immutables: 1, prefer_final_locals: 12452, prefer_is_empty: 1, prefer_single_quotes: 40705, sized_box_for_whitespace: 1, slash_for_doc_comments: 1, sort_child_properties_last: 1}
+- G4 (7개, 언어 버전 3.13): 분석 20443 ms · 줄 1910 (표식 17), 묶음 dry-run 15131 ms · 2022건 · 상태 폴더 항목 9376
+  - 묶음 dry-run 에 나온 후보 밖 코드: {always_declare_return_types: 1, prefer_const_constructors: 23, prefer_const_constructors_in_immutables: 3, prefer_const_literals_to_create_immutables: 1, prefer_final_locals: 1, prefer_initializing_formals: 9, prefer_is_empty: 1, prefer_single_quotes: 1, sized_box_for_whitespace: 1, slash_for_doc_comments: 1, sort_child_properties_last: 1}
+
+### 규칙마다 — 진단 · 묶음 dry · 단독 dry (0 이 아닌 줄만)
+| 규칙 | 묶음 | fixStatus (rules.json) | 진단 | 묶음 dry | 단독 dry | 단독 dry 의 다른 코드 |
+|---|---|---|---|---|---|---|
+| `always_put_control_body_on_new_line` | G1 | hasFix | 398 | 0 | 0 | 0 |
+| `always_put_required_named_parameters_first` | G1 | hasFix | 32 | 16 | 16 | 0 |
+| `always_use_package_imports` | G1 | hasFix | 615 | 615 | 615 | 0 |
+| `async_return_with_no_await` | G1 | hasFix | 30 | 0 | 0 | 0 |
+| `avoid_annotating_with_dynamic` | G1 | hasFix | 1 | 1 | 1 | 0 |
+| `avoid_bool_literals_in_conditional_expressions` | G1 | hasFix | 1 | 1 | 1 | 0 |
+| `avoid_catching_errors` | G1 | noFix | 3 | 0 | 0 | 0 |
+| `avoid_classes_with_only_static_members` | G1 | noFix | 4 | 0 | 0 | 0 |
+| `avoid_dynamic_calls` | G1 | noFix | 28 | 0 | 0 | 0 |
+| `avoid_equals_and_hash_code_on_mutable_classes` | G1 | noFix | 8 | 0 | 0 | 0 |
+| `avoid_escaping_inner_quotes` | G1 | hasFix | 1 | 1 | 1 | 0 |
+| `avoid_implementing_value_types` | G1 | noFix | 25 | 0 | 0 | 0 |
+| `avoid_positional_boolean_parameters` | G1 | noFix | 5 | 0 | 0 | 0 |
+| `avoid_redundant_argument_values` | G1 | hasFix | 123 | 155 | 155 | 0 |
+| `avoid_types_on_closure_parameters` | G1 | hasFix | 234 | 234 | 234 | 0 |
+| `cast_nullable_to_non_nullable` | G1 | hasFix | 5 | 5 | 5 | 0 |
+| `comment_references` | G1 | hasFix | 196 | 30 | 10 | 0 |
+| `diagnostic_describe_all_properties` | G1 | hasFix | 123 | 50 | 46 | 0 |
+| `directives_ordering` | G1 | hasFix | 163 | 261 | 160 | 0 |
+| `discarded_futures` | G1 | hasFix | 11 | 0 | 0 | 0 |
+| `do_not_use_environment` | G1 | noFix | 17 | 0 | 0 | 0 |
+| `document_ignores` | G1 | needsFix | 48 | 0 | 0 | 0 |
+| `join_return_with_assignment` | G1 | needsFix | 1 | 0 | 0 | 0 |
+| `lines_longer_than_80_chars` | G1 | noFix | 111 | 0 | 0 | 0 |
+| `migrate_design_widgets` | G1 | null | 159 | 257 | 159 | 1 |
+| `missing_whitespace_between_adjacent_strings` | G1 | needsFix | 13 | 0 | 0 | 0 |
+| `no_adjacent_strings_in_list` | G1 | needsFix | 9 | 0 | 0 | 0 |
+| `no_runtimetype_tostring` | G1 | noFix | 1 | 0 | 0 | 0 |
+| `omit_local_variable_types` | G1 | hasFix | 885 | 873 | 885 | 0 |
+| `omit_obvious_local_variable_types` | G1 | hasFix | 236 | 12 | 236 | 0 |
+| `omit_obvious_property_types` | G1 | hasFix | 713 | 713 | 713 | 0 |
+| `only_throw_errors` | G1 | noFix | 4 | 0 | 0 | 0 |
+| `prefer_const_declarations` | G1 | hasFix | 5 | 8 | 5 | 0 |
+| `prefer_constructors_over_static_methods` | G1 | needsFix | 1 | 0 | 0 | 0 |
+| `prefer_foreach` | G1 | hasFix | 3 | 0 | 0 | 0 |
+| `prefer_if_elements_to_conditional_expressions` | G1 | hasFix | 3 | 1 | 1 | 0 |
+| `prefer_int_literals` | G1 | hasFix | 17 | 17 | 17 | 0 |
+| `sort_pub_dependencies` | G1 | needsFix | 2 | 0 | 0 | 0 |
+| `specify_nonobvious_property_types` | G1 | hasFix | 1 | 1 | 1 | 1 |
+| `unnecessary_ignore` | G1 | hasFix | 12 | 13 | 11 | 0 |
+| `unnecessary_lambdas` | G1 | hasFix | 197 | 198 | 197 | 0 |
+| `unnecessary_null_checks` | G1 | hasFix | 1 | 5 | 1 | 0 |
+| `unnecessary_parenthesis` | G1 | hasFix | 1 | 1 | 1 | 0 |
+| `unnecessary_raw_strings` | G1 | hasFix | 32 | 32 | 32 | 0 |
+| `unnecessary_unawaited` | G1 | hasFix | 3 | 3 | 3 | 0 |
+| `unreachable_from_main` | G1 | hasFix | 2 | 0 | 0 | 0 |
+| `use_decorated_box` | G1 | hasFix | 1 | 1 | 1 | 0 |
+| `use_raw_strings` | G1 | hasFix | 9 | 9 | 9 | 0 |
+| `use_setters_to_change_properties` | G1 | noFix | 3 | 0 | 0 | 0 |
+| `always_specify_types` | G2 | hasFix | 9382 | 8921 | 8913 | 1 |
+| `prefer_relative_imports` | G2 | hasFix | 9 | 9 | 9 | 0 |
+| `specify_nonobvious_local_variable_types` | G2 | hasFix | 4103 | 4070 | 4070 | 0 |
+| `prefer_double_quotes` | G3 | hasFix | 20353 | 40707 | 20353 | 0 |
+| `unnecessary_final` | G3 | hasFix | 6709 | 12936 | 6709 | 0 |
+| `empty_container_bodies` | G4 | hasFix | 615 | 620 | 615 | 0 |
+| `unnecessary_type_name_in_constructor` | G4 | hasFix | 281 | 40 | 281 | 0 |
+| `unnecessary_const_in_enum_constructor` | G4 | hasFix | 2 | 2 | 2 | 0 |
+| `use_primary_constructors` | G4 | hasFix | 969 | 969 | 969 | 0 |
+| `initialize_in_field_declaration` | G4 | hasFix | 0 | 12 | 0 | 0 |
+| `use_declaring_parameters` | G4 | hasFix | 0 | 332 | 0 | 0 |
+| `unnecessary_primary_constructor_body` | G4 | hasFix | 0 | 4 | 0 | 0 |
+- 진단도 dry-run 도 0 인 규칙 58개 (표식 없이 잰 0 — 이 spike 는 0 의 뜻을 가르지 않는다)
+
+### apply — 소스를 원본으로 되돌리고 규칙 하나씩 (9개)
+| 규칙 | 진단 | 단독 dry | apply 뒤 남은 그 규칙 | apply 뒤 다른 코드의 증감 | apply 의 종료 코드 |
+|---|---|---|---|---|---|
+| `always_put_required_named_parameters_first` | 32 | 16 | 0 | {lines_longer_than_80_chars: 3} | 0 |
+| `avoid_redundant_argument_values` | 123 | 155 | 0 | {unnecessary_lambdas: 1} | 0 |
+| `comment_references` | 196 | 10 | 96 | {migrate_design_widgets: 1, unused_import: 1, unnecessary_import: 2} | 0 |
+| `diagnostic_describe_all_properties` | 123 | 46 | 0 | {lines_longer_than_80_chars: 32, undefined_class: 40, undefined_method: 77, creation_with_non_type: 31} | 0 |
+| `prefer_double_quotes` | 20353 | 20353 | 0 | {prefer_single_quotes: 20352} | 0 |
+| `always_specify_types` | 9382 | 8913 | 469 | {specify_nonobvious_local_variable_types: -4070, argument_type_not_assignable: 1, ambiguous_import: 5, implementation_imports: 3, unnecessary_import: 36} | 0 |
+| `unnecessary_final` | 6709 | 6709 | 0 | {prefer_final_locals: 6263} | 0 |
+| `specify_nonobvious_local_variable_types` | 4103 | 4070 | 33 | {always_specify_types: -4070, argument_type_not_assignable: 1, ambiguous_import: 3, implementation_imports: 1, unnecessary_import: 4} | 0 |
+| `use_primary_constructors` | 969 | 969 | 0 | {unnecessary_type_name_in_constructor: -249, unnecessary_const_in_enum_constructor: -2, use_declaring_parameters: 332, initialize_in_field_declaration: 30, prefer_const_constructors_in_immutables: 3} | 0 |
+
+# 판정
+| 확인 | 결과 |
+|---|---|
+| K1 1부 대조: 단독 dry-run 의 수가 그 규칙의 진단 수와 같다 (use_primary_constructors) | 성립 |
+| K2 2부의 모든 분석에서 woody_lints 가 작업 중인 저장소를 가리켰다 | 성립 |
+| K3 2부의 모든 분석에서 example 정답지 16줄이 표식의 줄에 모두 들어 있다 (후보 규칙이 표식에 줄을 더할 수 있다) | 성립 |
+| K4 2부의 모든 분석에서 plugin 이 준비됐다 | 성립 |
+| K5 저장소가 그대로다 | **깨짐** |
+
+성립하지 않은 확인이 있다.
