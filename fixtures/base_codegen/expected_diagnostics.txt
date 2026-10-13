@@ -1,4 +1,4 @@
-# 실측: Flutter 3.47.5 / Dart 3.13.4, riverpod_lint 해당 없음, 2026-10-12
+# 실측: Flutter 3.47.5 / Dart 3.13.4, riverpod_lint 해당 없음, 2026-10-13
 # 형식: 상대경로:줄  강도  규칙이름 (문자열 정렬). 갱신: fvm dart run tool/verify.dart --update
 exit 0
 lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables
@@ -14,3 +14,28 @@ lib/base_rules.dart:30  info  control_flow_in_finally
 lib/base_rules.dart:34  info  slash_for_doc_comments
 lib/base_rules.dart:38  info  prefer_is_empty
 lib/base_rules.dart:8  info  sized_box_for_whitespace
+lib/bug_prevention_rules.dart:108  info  matching_super_parameters
+lib/bug_prevention_rules.dart:112  info  missing_whitespace_between_adjacent_strings
+lib/bug_prevention_rules.dart:115  info  no_adjacent_strings_in_list
+lib/bug_prevention_rules.dart:124  info  no_self_assignments
+lib/bug_prevention_rules.dart:13  info  async_return_with_no_await
+lib/bug_prevention_rules.dart:130  info  only_throw_errors
+lib/bug_prevention_rules.dart:135  info  parameter_assignments
+lib/bug_prevention_rules.dart:141  info  switch_on_type
+lib/bug_prevention_rules.dart:160  info  test_types_in_equals
+lib/bug_prevention_rules.dart:171  info  throw_in_finally
+lib/bug_prevention_rules.dart:177  info  unnecessary_statements
+lib/bug_prevention_rules.dart:20  info  avoid_catching_errors
+lib/bug_prevention_rules.dart:29  info  avoid_double_and_int_checks
+lib/bug_prevention_rules.dart:36  info  avoid_dynamic_calls
+lib/bug_prevention_rules.dart:39  info  avoid_js_rounded_ints
+lib/bug_prevention_rules.dart:45  info  avoid_type_to_string
+lib/bug_prevention_rules.dart:50  info  avoid_unused_constructor_parameters
+lib/bug_prevention_rules.dart:54  info  avoid_void_async
+lib/bug_prevention_rules.dart:60  info  cancel_subscriptions
+lib/bug_prevention_rules.dart:71  info  cast_nullable_to_non_nullable
+lib/bug_prevention_rules.dart:78  info  deprecated_member_use_from_same_package
+lib/bug_prevention_rules.dart:82  info  discarded_futures
+lib/bug_prevention_rules.dart:87  info  literal_only_boolean_expressions
+lib/bug_prevention_rules.dart:9  info  conditional_uri_does_not_exist
+lib/relative_imports_rule.dart:3  info  prefer_relative_imports
