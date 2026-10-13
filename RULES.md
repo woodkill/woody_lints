@@ -9,12 +9,12 @@
 <!-- woody:enabled-rules:start -->
 | 규칙 | 분류 | 켠 이유 | 실측 (lib · test · bin) | dart fix | 회차 |
 |---|---|---|---|---|---|
-| `prefer_const_constructors` | 성능 | 위젯 재사용을 극대화하여 성능 향상 | (실측 전 — 04-06 이 채운다) | (실측 전 — 04-06 이 채운다) | (실측 전 — 04-06 이 채운다) |
-| `prefer_const_literals_to_create_immutables` | 성능 | 불변 컬렉션의 효율적 관리 | (실측 전 — 04-06 이 채운다) | (실측 전 — 04-06 이 채운다) | (실측 전 — 04-06 이 채운다) |
-| `always_declare_return_types` | 가독성·스타일 | 함수의 명확한 의도 파악 | (실측 전 — 04-06 이 채운다) | (실측 전 — 04-06 이 채운다) | (실측 전 — 04-06 이 채운다) |
-| `prefer_final_locals` | 가독성·스타일 | 데이터의 불변성 보장 | (실측 전 — 04-06 이 채운다) | (실측 전 — 04-06 이 채운다) | (실측 전 — 04-06 이 채운다) |
-| `prefer_single_quotes` | 가독성·스타일 | 홑따옴표('') 사용 통일 | (실측 전 — 04-06 이 채운다) | (실측 전 — 04-06 이 채운다) | (실측 전 — 04-06 이 채운다) |
-| `unawaited_futures` | 버그 방지 | 처리되지 않은 Future 감지 | (실측 전 — 04-06 이 채운다) | (실측 전 — 04-06 이 채운다) | (실측 전 — 04-06 이 채운다) |
+| `prefer_const_constructors` | 성능 | 불변 위젯 트리를 const 로 적는 관례 — 성능 이득은 근거가 부족하다는 것이 Flutter 팀의 판단 (lints#205) | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-B0 · R1-B0-strip |
+| `prefer_const_literals_to_create_immutables` | 성능 | 위와 같은 관례 — 불변 위젯에 넘기는 리터럴도 const 로 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-B0 · R1-B0-strip |
+| `always_declare_return_types` | 가독성·스타일 | 기반 세트의 strict_top_level_inference 가 보지 않는 지역 함수 · 옛 typedef 의 반환 타입까지 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-B0 · R1-B0-strip |
+| `prefer_final_locals` | 가독성·스타일 | 데이터의 불변성 보장 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-B0 · R1-B0-strip |
+| `prefer_single_quotes` | 가독성·스타일 | 홑따옴표('') 사용 통일 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-B0 · R1-B0-strip |
+| `unawaited_futures` | 버그 방지 | 처리되지 않은 Future 감지 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-B0 · R1-B0-strip |
 <!-- woody:enabled-rules:end -->
 
 ### 켠 analyzer 옵션
