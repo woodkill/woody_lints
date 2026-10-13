@@ -716,6 +716,69 @@
 
 선택지: 없음 (보류를 알리기만 한다)
 
+## 질문 9 (재측정)
+
+04-06 · 04-07 의 결정(켠 규칙 80)이 `lib/base.yaml` 에 반영된 **뒤**, 복사본이 `path:` 로 그 저장소를 받은 채 다시 쟀다 (D-17, `--stage unnecessary-ignore`, 2026-10-13). 회차 `UI-base` (결정을 반영한 저장소 그대로) 와 `UI` (거기에 `unnecessary_ignore` 하나를 더 켬) 를 R1 JSON 에 합쳤고 둘 다 유효하다 — 받은 자리 `repo`, `example/` 정답지 92줄이 모두 표식에 있음, plugin 폴더 1. 값은 `UI` − `UI-base` 다.
+
+### 용어 풀이
+
+- **`unnecessary_ignore`:** 그 줄(줄 단위) 또는 그 파일(파일 단위)에 가리킬 진단이 없는 `// ignore:` · `// ignore_for_file:` 주석을 info 로 보고한다. **켜져 있지 않은 규칙을 가리키는 주석도 보고한다** — 그래서 값이 이 패키지가 어떤 규칙을 켜느냐에 묶인다 (spike 023).
+- **`unnecessaryIgnoreNames`:** R1 JSON 의 `conditions.unnecessaryIgnoreNames`. `UI` 회차에서 보고된 주석이 가리키던 코드 이름별 건수다 — 주석 종류(`ignore` / `ignore_for_file`)와 코드 이름, 수만 있고 경로 · 메시지 · 설명 글은 없다 (D-07).
+
+### 찾아본 것
+
+- **상태 출처가 갈린다** (`.claude/skills/spike-findings-woody-lints/references/rule-evaluation-table.md` 3번, spike 020): `messages.yaml` (tag 3.13.4) 은 experimental (3.8), `rules.json` 과 dart.dev 는 stable. 이 phase 는 `messages.yaml` 을 기준으로 삼아 도구가 `안 켬 (experimental)` 을 냈다. 상류 세트(`lints` · `flutter_lints`)에는 들어 있지 않다.
+- **선례 (D-05):** 기반 세트의 `use_super_parameters` 는 세 출처 모두 experimental 인데 `lints` 6.1.0 의 recommended 에 들어 있어, 이 패키지를 include 하는 프로젝트에서 이미 켜져 있다. 질문 7 (`unnecessary_underscores`, 같은 갈림) 의 답은 "그대로 둔다 — 기반 세트가 켠 것을 그대로 받는다" 였다. 두 선례 모두 **기반 세트가 고른** 규칙이고, `unnecessary_ignore` 는 이 패키지가 스스로 켜야 하는 규칙이다.
+- **REQUIREMENTS.md:** Out of Scope 에 "experimental 규칙 활성화 — 동작과 이름이 바뀔 수 있다" 가 있고, v2 의 RULES-12 가 "experimental 규칙 재검토 — stable 로 전환되면" 이다. `RULES.md` 의 B-7 experimental 9개는 `experimental — 재지 않음 (stable 이 될 때까지 보류)` 로 적혀 있다.
+- **G1 값과 다른 까닭:** 회차 `G1` 은 G1 후보 106개를 모두 켠 실행이라 `lines_longer_than_80_chars` 가 켜져 있었고, 그 규칙을 가리키는 파일 단위 주석 대부분이 "필요한 주석" 이었다. 소유자는 `lines_longer_than_80_chars` 를 **안 켬** 으로 정했으므로(묶음 5) 지금은 그 주석 30개가 모두 보고된다. 반대로 `discarded_futures` 는 **켬** 이라 그 규칙을 가리키는 주석은 보고되지 않는다.
+- **`document_ignores` 와의 관계:** 04-07 이 켠 `document_ignores` 가 이 프로젝트에 48줄 (lib 1 · test 46 · bin 1, `UI-base` · `UI` 같음) 을 낸다 — 설명 없는 무시 주석이다. R1 의 `unnecessary_ignore` apply 는 G1 상태에서 `document_ignores` 를 7줄 줄였다 (`otherDelta`). 필요 없는 주석을 지우면 그 주석에 붙던 `document_ignores` 도 함께 사라진다.
+
+### 실측 (`--summary ui`)
+
+```text
+[unnecessary_ignore] 1개 — 권고: 켬 0 · 안 켬 1 · 검토 0 · 결정 안 함 0        실측 R1 (2026-10-13, Flutter 3.47.5, flutter_starter_kit Dart 파일 474개)
+
+| 규칙               | 경고 (lib·test·bin)          | dart fix | 고친 뒤 error | 권고  | 이유                                                                                                    |
+|--------------------|------------------------------|----------|---------------|-------|---------------------------------------------------------------------------------------------------------|
+| unnecessary_ignore | 12 (1·10·1) / UI 36 (1·34·1) | 11       | 0             | 안 켬 | experimental (messages.yaml) — 출처마다 다름: messages.yaml experimental / rules.json · dart.dev stable |
+
+**권고:** 표의 권고 열대로 — 켬 0개, 안 켬 1개 (검토 0개는 사람이 정한다).
+선택지: (1) 권고대로  (2) 바꿀 규칙을 짚는다 (이름만 적으면 된다)  (3) 이 묶음은 보류
+```
+
+- 읽는 법: `12 (1·10·1)` 은 회차 `G1` (후보 106개를 함께 켬) 의 값이고, `UI 36 (1·34·1)` 이 이번 재측정 — **켜면 실제로 받는 줄**이다. 결정은 `UI` 값으로 한다 (D-17).
+- `dart fix` 11 · 고친 뒤 error 0 은 `G1` 상태(12줄)에서 잰 apply 의 값이다. `--stage unnecessary-ignore` 는 apply 를 다시 돌리지 않으므로 36줄에 대한 `dart fix` 값은 재지 않았다.
+- `UI-base` → `UI` 에서 프로젝트 줄은 960 → 996 으로 `unnecessary_ignore` 36줄만 늘었다 — 다른 규칙의 줄은 바뀌지 않았다.
+
+| 회차 | 켠 것 | `unnecessary_ignore` (lib·test·bin) |
+|---|---|---|
+| `G1` (R1, 04-04) | G1 후보 106개 함께 | 12 (1·10·1) |
+| `UI` (R1, 2026-10-13 재측정) | 결정을 반영한 `lib/base.yaml` (켠 규칙 80) + `unnecessary_ignore` | **36 (1·34·1)** |
+
+`conditions.unnecessaryIgnoreNames` — 보고된 주석이 가리키던 코드 이름별 건수 (합계 36):
+
+| 주석 · 코드 이름 | 건수 | 그 규칙의 상태 |
+|---|---|---|
+| `ignore_for_file: lines_longer_than_80_chars` | 30 | 이 패키지가 켜지 않음 (소유자 결정, 묶음 5) |
+| `ignore_for_file: avoid_print` | 1 | 켜져 있음 — 그 파일에 가릴 줄이 없다 |
+| `ignore: use_build_context_synchronously` | 1 | 켜져 있음 — 그 줄에 가릴 진단이 없다 |
+| `ignore: subtype_of_sealed_class` | 1 | analyzer 진단 — 그 줄에 없다 |
+| `ignore: unused_import` | 1 | analyzer 진단 — 그 줄에 없다 |
+| `ignore: argument_type_not_assignable` | 1 | analyzer 진단 — 그 줄에 없다 |
+| `ignore: unused_element_parameter` | 1 | analyzer 진단 — 그 줄에 없다 |
+
+- 36줄 가운데 30줄은 이 패키지가 켜지 않기로 한 규칙의 파일 단위 주석이다. 나머지 6줄이 "규칙이 켜져 있어도 이미 가릴 것이 없는" 주석이다.
+- 이 값은 이 패키지의 규칙 목록이 바뀔 때마다 움직인다 — 뒤의 버전에서 규칙을 빼면 그 규칙을 가리키던 사용 프로젝트의 주석이 새로 보고되고, 켜면 줄어든다.
+
+**권고:** 안 켬 — `messages.yaml` 기준 experimental 이라 D-05 의 공통 잣대와 REQUIREMENTS.md Out of Scope 에 걸리고, `use_super_parameters` · `unnecessary_underscores` 의 선례는 "기반 세트가 켠 것을 받는다" 이지 이 패키지가 experimental 규칙을 켠 예가 아니다. 36줄 중 30줄은 켜지 않기로 한 `lines_longer_than_80_chars` 의 주석이라 이 규칙 없이도 한 번에 지울 수 있다. stable 이 되면 RULES-12 (v2) 에서 다시 잰다.
+
+| 선택지 | 좋은 점 | 걸리는 점 |
+|---|---|---|
+| `켬` | 필요 없어진 무시 주석을 받는 쪽이 정리할 수 있다 — 지금 36줄 (info). 켠 `document_ignores` 와 짝을 이뤄 남는 주석이 모두 설명 있는 · 필요한 주석이 된다 | `messages.yaml` 기준 experimental (Out of Scope 와 부딪친다 — 켜면 소유자가 예외로 둔 것으로 적는다); 이 패키지의 규칙을 켜거나 끌 때마다 값이 움직인다; 36줄에 대한 `dart fix` 는 재지 않았다 |
+| `안 켬` | experimental 규칙을 켜지 않는 원칙과 맞다; `RULES.md` 에 사유와 재측정 값 (36줄) 이 남는다 | stable 이 되면 다시 재서 묻는다 (v2 — RULES-12 와 같은 결) |
+
+선택지: `켬` / `안 켬` (사유를 덧붙이면 그대로 적는다)
+
 ## 결정
 
 결정 표 — 후보 133개, 이름 순. `묶음` 칸은 `tool/measure_rules.dart` 의 `bundles` id 다. `권고` 는 위 패널의 것(도구 판정 포함)이고, `결정` · `사유` 는 소유자의 응답으로만 채운다. `결정` 칸의 `켬` / `안 켬` 118행은 2026-10-13 의 소유자 응답으로 채웠다 — 115행은 묶음 5 · 개별 질문 7, 3행(`sort_pub_dependencies` · `use_test_throws_matchers` · `remove_deprecations_in_breaking_versions`, 모두 `안 켬`)은 04-07 실행 전의 질문이다. 나머지 15행은 v2 12 · `unnecessary_ignore` 보류 1 · 규칙이 아무것도 보고하지 않아 도구가 0줄의 뜻을 가르지 못한 2(`require_trailing_commas` · `package_prefixed_library_names`, `RULES.md` 에는 `규칙이 돌지 않음` 으로 적는다) 다 (초안 그대로).
