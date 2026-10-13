@@ -1,7 +1,9 @@
+# woody_lints 의 코드 생성 조각 — freezed · json_serializable 의 invalid_annotation_target 을 끄고(analyzer.errors), 생성 파일 *.freezed.dart · *.g.dart 를 분석에서 뺀다(analyzer.exclude).
+# 이 조각만 받으려면 package:woody_lints/codegen.yaml 을 include 한다.
+# 여기 적은 exclude 는 SDK 에 따라 사용 프로젝트의 plugin 진단(베타에서는 규칙 진단에도)에 닿지 않을 수 있다 — 사용 프로젝트에 직접 적는 방법은 README.md 「생성 파일 제외」에 있다.
 analyzer:
   errors:
     invalid_annotation_target: ignore
   exclude:
     - '**/*.freezed.dart'
     - '**/*.g.dart'
-

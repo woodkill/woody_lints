@@ -1,3 +1,4 @@
 # 옛 주소 (package:woody_lints/analysis_options.yaml) 의 별칭 — 묶음(recommended.yaml) 과 같다.
 # 새 프로젝트는 package:woody_lints/recommended.yaml 을 include 한다.
+# 이미 이 주소를 쓰는 사용 프로젝트가 깨지지 않도록 남겨 둔 파일이다 — 자세한 것은 README.md.
 include: package:woody_lints/recommended.yaml

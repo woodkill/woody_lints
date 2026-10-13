@@ -1,5 +1,6 @@
 # woody_lints 묶음 — 기본 규칙 + Riverpod plugin + 코드 생성 설정을 한 번에 받는다.
 # 조각을 골라 받으려면 아래 셋 가운데 필요한 것만 include 한다.
+# 프리셋 고르기와 사용법은 README.md 에 있다.
 include:
   - package:woody_lints/base.yaml
   - package:woody_lints/riverpod.yaml

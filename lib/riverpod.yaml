@@ -1,10 +1,5 @@
-# analyzer plugin (Dart 3.10+ analysis_server_plugin 방식) — 최상위 키.
-# riverpod_lint 3.x 는 이 방식만 지원한다. 옛 `analyzer: plugins:` 선언은
-# 아무것도 로드하지 않았고, Dart 3.13 부터 legacy plugin 경고를 낸다.
-# plugin 은 프로젝트 pubspec.lock 과 별도로 Dart Analysis Server 의 plugin 캐시
-# (~/.dartServer/.plugin_manager)에서 해석된다.
-# 이 섹션을 바꾼 뒤에는 Dart Analysis Server 를 재시작해야 반영된다.
-# 결과 확인은 `dart analyze` 로 한다 — Flutter 3.47.5 의 `flutter analyze` 는
-# plugin 진단을 표시하지 않았다 (3.41.9 는 표시, 2026-09-20 실측).
+# woody_lints 의 Riverpod 조각 — riverpod_lint analyzer plugin 을 켠다. 이 조각만 받으려면 package:woody_lints/riverpod.yaml 을 include 한다.
+# plugins: 는 최상위 키여야 한다 — riverpod_lint 3.x 는 analysis_server_plugin 방식만 지원하고, 옛 `analyzer: plugins:` 선언은 아무것도 로드하지 않는다.
+# plugin 캐시 · Analysis Server 재시작 · `dart analyze` 와 `flutter analyze` 의 차이는 README.md 「문제 해결」에 있다.
 plugins:
-  riverpod_lint: ^3.1.9
+  riverpod_lint: ^3.1.9 # 하한을 올리면 fixtures/overrides/analysis_options.yaml 의 version: 도 같은 커밋에서 올린다 — 검증 명령의 "연습용 프로젝트 옵션 파일" 단계가 둘을 견준다

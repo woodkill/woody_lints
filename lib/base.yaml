@@ -1,18 +1,8 @@
-# This file configures the static analysis results for your project (errors,
-# warnings, and lints).
-#
-# This enables the 'recommended' set of lints from `package:lints`.
-# This set helps identify many issues that may lead to problems when running
-# or consuming Dart code, and enforces writing Dart using a single, idiomatic
-# style and format.
-#
-# If you want a smaller set of lints you can change this to specify
-# 'package:lints/core.yaml'. These are just the most critical lints
-# (the recommended set includes the core lints).
-# The core lints are also what is used by pub.dev for scoring packages.
+# woody_lints 기본 규칙 — flutter_lints 6 의 기반 세트(package:flutter_lints/flutter.yaml) 위에 이 패키지가 더 켜는 규칙을 준다.
+# 이 조각만 받으려면 package:woody_lints/base.yaml 을 include 한다.
+# 규칙은 이 파일에만 적는다 — 검증 명령의 "배포 파일의 구성" 단계가 RULES.md 켠 규칙 표 · README 의 규칙 목록과 같은지 견주므로 세 곳을 같은 커밋에서 고친다.
+# 규칙마다 켠 이유와 실측 건수는 RULES.md, 사용법은 README.md 에 있다.
 include: package:flutter_lints/flutter.yaml
-
-# Uncomment the following section to specify additional rules.
 
 linter:
   rules:
@@ -103,10 +93,3 @@ linter:
     # strict — Dart 3.13 에서 strict-casts · strict-raw-types 옵션을 대신하는 lint (info)
     - no_dynamic_casts # dynamic 값을 구체 타입 자리에 넣는 암묵적 cast 를 잡는다 — strict-casts 옵션의 공식 대체이고 info 라 받는 쪽 CI 를 막지 않는다
     - no_raw_types # 타입 인자를 생략한 제네릭 타입을 잡는다 — strict-raw-types 옵션의 공식 대체이고 info 다
-
-
-# For more information about the core and recommended set of lints, see
-# https://dart.dev/go/core-lints
-
-# For additional information about configuring this file, see
-# https://dart.dev/guides/language/analysis-options
