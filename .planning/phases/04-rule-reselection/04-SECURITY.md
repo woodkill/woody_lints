@@ -12,7 +12,7 @@ created: "2026-10-13"
 
 > Per-phase security contract: threat register, accepted risks, and audit trail.
 >
-> 출처: `04-01-PLAN.md` ~ `04-12-PLAN.md` 의 `<threat_model>` (계획 단계에서 작성됨 — 04-11 · 04-12 는 gap 수정 계획). ASVS level 1, block on `high`.
+> 출처: `04-01-PLAN.md` ~ `04-13-PLAN.md` 의 `<threat_model>` (계획 단계에서 작성됨 — 04-11 · 04-12 · 04-13 은 gap 수정 계획). ASVS level 1, block on `high`.
 > 이 phase 가 바꾼 실행 코드는 로컬 스크립트 둘이다 — `tool/verify.dart` (새 단계 `[3/10]`) 와 새 측정 도구 `tool/measure_rules.dart`. 배포 산출물은 `lib/base.yaml` 하나가 바뀌었다 (켠 규칙 6 → 80, gap 수정 04-12 에서 81). 사용자 입력 · 인증 · 저장 데이터가 없다. 해당 범주는 비공개 사용 프로젝트(`flutter_starter_kit`)의 정보가 공개 저장소로 새는 것, 측정 도구가 저장소 · 원본을 바꾸는 것, 결정 기록의 출처, 원격 쓰기, 공급망이다.
 > 아래 "확인" 은 2026-10-13 phase 실행 뒤(HEAD `5f5ff57`) 이 저장소에서 명령을 다시 돌리거나 파일을 직접 읽어 얻은 결과다. 실측 task (04-04 · 04-08) 처럼 비공개 원본이 있어야 도는 확인은 그 plan 의 SUMMARY 에 남은 실행 기록을 근거로 적었다.
 
@@ -73,7 +73,11 @@ created: "2026-10-13"
 | T-04-32 | Tampering | pubspec 순서 변경이 lock · `pub get` 을 깨거나 fixture 의 다른 진단을 바꾼다 | medium | mitigate | 확인: `268b823..HEAD` 에서 바뀐 `*.lock` 0개; 연습용 프로젝트 여섯의 `pubspec.yaml` diff 는 `flutter_riverpod: ^3.0.0` 줄의 자리 이동뿐 (−6 · +6); 정답지 다섯의 `944ca1c..HEAD` 진단 줄 변화는 각각 `+pubspec.yaml:11  info  sort_pub_dependencies` 하나; `verify.dart` 10/10; 04-12-T1 `<automated>` (헛통과 확인 포함) 자기 커밋 `6d64bee` 복제본에서 rc 0 | closed |
 | T-04-33 | Repudiation | `lib/base.yaml` · `RULES.md` · CHANGELOG · `04-DECISIONS.md` 가 다른 값 · 다른 사유를 적는다 | medium | mitigate | 확인: `sort_pub_dependencies` 사유 문장이 `RULES.md` 1 · CHANGELOG 1 에 글자 그대로; python 대조로 켠 규칙 81 = `base.yaml` 81, 켠 이유 ↔ 사유 주석 불일치 0; `--audit` `켠 81 · 옵션 0 · 켜지 않음 90 · 보류 0`; 04-12-T2 `<automated>` (결정 표의 다른 행 == `479ad21`) 자기 커밋 `fb6386a` 복제본에서 rc 0 | closed |
 | T-04-34 | Information disclosure | 결정 기록 · README · REQUIREMENTS 에 사용 프로젝트의 경로 · 메시지나 절대 경로 | high | mitigate | 적은 수치는 2줄 · 2곳 같은 건수뿐. 확인: T-04-31 과 같은 범위 점검 0; 04-12-T3 의 비공개 점검 구간은 적힌 그대로 판에서도 통과 (실패 구간은 `REQUIREMENTS.md` 고정 커밋 비교 — `04-VALIDATION.md` 감사 기록) | closed |
-| T-04-SC | Tampering | npm/pip/cargo installs (pub 의존성) | high | mitigate | 확인: `git diff 79f27e5..HEAD -- pubspec.yaml` 0줄; 두 스크립트의 실제 import 는 `dart:convert` · `dart:io` 뿐 (`tool/measure_rules.dart` 703행 이후의 `import` 줄은 표식 샘플을 담은 문자열 리터럴 안이다). gap 수정 뒤(04-11 · 04-12): 루트 `pubspec.yaml` 은 `268b823..HEAD` 에서 그대로, 바뀐 `*.lock` 0개, 연습용 프로젝트의 `pubspec.yaml` 은 항목 순서만 바뀜 (항목 · 버전 그대로) | closed |
+| T-04-35 | Tampering | `declaredRuleNames` 의 새 정규식이 analyzer 가 켜는 줄을 거부하거나(거짓 실패) 켜지 않는 줄을 이름으로 읽는다(거짓 통과) | medium | mitigate | 받는 꼴은 들여쓴 `rules:` 와 목록 항목 세 꼴(`- 이름` · `- '이름'` · `- "이름"`, 따옴표 짝 `\1`, 뒤에 `# 주석` 만)이고 그 밖은 행 번호 · 줄 내용과 함께 `FormatException` (70). 확인: 지금 `lib/base.yaml` 81개로 `verify.dart` 10/10; 04-13-T1 `<automated>` 를 자기 커밋 `67d1bc7` 복제본에서 적힌 그대로 rc 0 (M27 · M28 은 `[3/10]` 만 실패, M29 ~ M31 은 rc 70); 실패 방향 — 고치기 전 `verify.dart` (`c06d8d5`) 에 M27 을 더하면 10/10 (gap 재현); `declaredRuleNames` 본문에 건너뛰는 분기는 주석 · 빈 줄과 `rules:` 키뿐; `tool/measure_rules.dart` == `c06d8d5` | closed |
+| T-04-36 | Repudiation | README 의 M27 ~ M31 이 실제로 돌리지 않은 결과를 적는다 | medium | mitigate | 04-13-T1 `<automated>` 가 다섯 실험을 다시 일으켜 README 행의 신호(실패 단계 · 종료 코드 · stderr 문구 · `+ ` 줄)와 견준다. 확인: 그 명령이 `67d1bc7` 복제본에서 rc 0 (129초), HEAD 에서 상태 고정 단언 둘만 바꾼 판 rc 0 (68초, orchestrator 재실행) | closed |
+| T-04-37 | Information disclosure | README · REQUIREMENTS · DISPOSITION · SUMMARY 에 절대 경로나 사용 프로젝트 정보 | high | mitigate | 04-13 은 비공개 프로젝트를 돌리지 않았다 (출력 모드 `--audit` · `--report` 만). 확인: `4efb0ce..HEAD` 의 추가된 줄에 실제 홈 폴더 경로 · 임시 폴더 경로 · 이메일 꼴 0, 사용 프로젝트 이름 0, 비밀값 0 (`token` 이 든 줄은 SUMMARY 의 `tokens:` 수치 하나); 세 task 의 `git grep` 점검 rc 1 (짝 없음) | closed |
+| T-04-38 | Tampering | 지워 보기 실험이 `lib/base.yaml` 을 되돌리지 못한 채 커밋된다 | high | mitigate | 백업으로 되돌린 뒤 `git diff --quiet 6d64bee -- lib/base.yaml` · `git status` 단언, 최상위 `;` 없는 `&&` 사슬. 확인: `4efb0ce..HEAD` 에서 `lib/` 변경 0, `lib/base.yaml` == `6d64bee`; 복제본 감사 세 번 모두 실행 뒤 `git status --porcelain` 0줄 | closed |
+| T-04-SC | Tampering | npm/pip/cargo installs (pub 의존성) | high | mitigate | 확인: `git diff 79f27e5..HEAD -- pubspec.yaml` 0줄; 두 스크립트의 실제 import 는 `dart:convert` · `dart:io` 뿐 (`tool/measure_rules.dart` 703행 이후의 `import` 줄은 표식 샘플을 담은 문자열 리터럴 안이다). gap 수정 뒤(04-11 · 04-12): 루트 `pubspec.yaml` 은 `268b823..HEAD` 에서 그대로, 바뀐 `*.lock` 0개, 연습용 프로젝트의 `pubspec.yaml` 은 항목 순서만 바뀜 (항목 · 버전 그대로). gap 수정 2회차(04-13): `4efb0ce..HEAD` 에서 `pubspec.yaml` · `*.lock` 변경 0, `tool/verify.dart` 의 import 는 그대로 `dart:convert` · `dart:io` 뿐 | closed |
 
 *Status: open · closed · open — below high threshold (non-blocking)*
 *Severity: critical > high > medium > low — only open threats at or above workflow.security_block_on count toward threats_open*
@@ -95,12 +99,14 @@ T-04-26 의 "옛 커밋 `f1b4ed9` 의 변경 내역에 남는 1줄" 은 위협�
 |------------|---------------|--------|------|--------|
 | 2026-10-13 | 29 | 29 | 0 | orchestrator (secure-phase State B, ASVS L1 — 계획 위협 목록, 감사 에이전트 생략) |
 | 2026-10-13 (gap 수정 뒤) | 35 | 35 | 0 | orchestrator (secure-phase State A, ASVS L1 — 04-11 · 04-12 의 계획 위협 6개 추가, 감사 에이전트 생략) |
+| 2026-10-13 (gap 수정 2회차 뒤) | 39 | 39 | 0 | orchestrator (secure-phase State A, ASVS L1 — 04-13 의 계획 위협 4개 추가, T-04-SC 는 기존 행에 덧붙임, 감사 에이전트 생략) |
 
 감사 메모 (2026-10-13):
 
 - **실제로 올라간 범위.** `79f27e5..0db0fdd`, 64커밋, 133개 파일 (+66,396 / −213줄). 폴더별 파일 수는 다음과 같다: `.planning/phases` 33 · `.planning/spikes` 24 · `.claude/skills` 17 · `fixtures/` 39 · `example/` 9 · `tool/` 3 · `lib/base.yaml` · `RULES.md` · `CHANGELOG.md` · `.planning/` 의 `PROJECT.md` · `REQUIREMENTS.md` · `ROADMAP.md` · `STATE.md` · `WINDOWS.md`. 계획 문장의 점검 범위(Phase 4 문서 · 도구 · 결과)보다 넓다. 그래서 orchestrator 가 범위 전체의 추가된 줄을 따로 점검했다.
 - **추가로 본 것.** 단계 폴더 밖에서 `lib/` · `test/` 꼴 경로 후보를 찾았다. 모두 이 저장소의 표식 파일, 상류 SDK 의 공개 경로, spike 의 합성 프로젝트 경로였다. spike 결과 JSON 의 `"message"` 164개는 spike 020 의 probe 옵션 파일에 대한 SDK 규칙 상태 메시지("… was removed", "isn't a recognized lint rule")다. 사용 프로젝트의 진단이 아니다.
 - **gap 수정 실행(04-11 · 04-12)에는 push 가 없다.** 점검 범위는 `268b823..HEAD` (gap 계획 커밋 뒤부터)의 추가된 줄이다. 원격 작업 브랜치는 여전히 `0db0fdd` 다.
+- **gap 수정 2회차(04-13)에도 push 가 없다.** 점검 범위는 `4efb0ce..HEAD` (gap 계획 마무리 커밋 뒤부터)의 추가된 줄이다. 원격 작업 브랜치는 여전히 `0db0fdd` 다.
 - **마무리 커밋은 원격에 없다.** `432c7fe` 와 그 뒤의 검증 문서 커밋들이다. 다음 push 는 D-22 대로 다음 phase 의 첫 push 때 다시 묻는다.
 
 ---
@@ -112,7 +118,7 @@ T-04-26 의 "옛 커밋 `f1b4ed9` 의 변경 내역에 남는 1줄" 은 위협�
 - [x] `threats_open: 0` confirmed
 - [x] `status: verified` set in frontmatter
 
-**Approval:** verified 2026-10-13 (gap 수정 뒤 다시 확인 — threats_open 0)
+**Approval:** verified 2026-10-13 (gap 수정 2회차 뒤 다시 확인 — threats_open 0)
 
 ## Security Audit 2026-10-13
 
@@ -128,4 +134,12 @@ T-04-26 의 "옛 커밋 `f1b4ed9` 의 변경 내역에 남는 1줄" 은 위협�
 |---|---|
 | Threats found | 35 |
 | Closed | 35 |
+| Open | 0 |
+
+## Security Audit 2026-10-13
+
+| Metric | Count |
+|---|---|
+| Threats found | 39 |
+| Closed | 39 |
 | Open | 0 |
