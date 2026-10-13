@@ -4,16 +4,16 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 04
 current_phase_name: Rule Reselection
-status: Phase 04 gaps found — gap 수정 계획 필요 (/gsd-plan-phase 04 --gaps)
-stopped_at: Completed 04-10-PLAN.md
-last_updated: "2026-10-13T06:18:32.215Z"
+status: Phase 04 gap 수정 계획 완료 — 실행 대기 (/gsd-execute-phase 04 --gaps-only)
+stopped_at: Phase 04 gap 수정 계획 완료 (04-11 · 04-12)
+last_updated: "2026-10-13T08:10:55.707Z"
 last_activity: 2026-10-13
-last_activity_desc: Phase 04 execution started
-state_head: f46f4399f632d8fd2916d46a76f1d490a8e53c83
+last_activity_desc: Phase 04 gap 수정 계획 04-11 · 04-12 작성, plan checker 통과
+state_head: 8e49bcb20bcf1caadfa61d5a1f11100112f9b449
 progress:
   total_phases: 6
   completed_phases: 3
-  total_plans: 23
+  total_plans: 25
   completed_plans: 23
   percent: 50
 ---
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-10-12)
 
 ## Current Position
 
-Phase: 04 (Rule Reselection) — EXECUTING
-Plan: 10 of 10
-Status: Phase 04 gaps found — gap 수정 계획 필요 (/gsd-plan-phase 04 --gaps)
-Last activity: 2026-10-13 — Phase 04 execution started
+Phase: 04 (Rule Reselection) — READY TO EXECUTE
+Plan: 10 of 12
+Status: Phase 04 gap 수정 계획 완료 — 실행 대기 (/gsd-execute-phase 04 --gaps-only)
+Last activity: 2026-10-13 — Phase 04 gap 수정 계획 04-11 · 04-12 작성, plan checker 통과
 
 Progress: [█████░░░░░] 50%
 
@@ -182,6 +182,8 @@ Recent decisions affecting current work:
 - [Phase 04]: 04-10: Phase 4 의 첫 push 는 소유자 답 push 뒤 git push origin gsd/v2.0-package-rework 한 줄로 했다 (2026-10-13T05:23:45Z, 79f27e5..0db0fdd, 64커밋, fast-forward, 둘째 push 없음). main 90a2736, tag v1.3.0 하나, PR 0건 그대로다. 04-10 의 마무리 커밋은 origin 에 없고 Phase 5 부터의 push 는 다시 소유자에게 묻는다
 - [Phase 04]: 04-10: GitHub verify run 38351171683 이 단계 10개로 성공했다 (job 3분 30초, 검증 146초, ubuntu-24.04 20261004.327.1). [3/10] 은 runner 의 pub cache 에서도 상류 YAML 을 읽어 readUpstreamRules 를 고치지 않았다
 - [Phase 04]: 04-10: push 범위 전체 점검에서 03-04-SUMMARY 한 줄이 홈 폴더 경로 접두어와 소유자 이메일 앞부분을 적고 있어 소유자 결정으로 새 커밋 0db0fdd 에서 말로 바꿨다 (옛 커밋 기록은 다시 쓰지 않음). 다음 push 점검은 범위 전체에 돌린다
+- [Phase 04]: gap 수정 계획 전 소유자 결정 (2026-10-13, 모두 권고대로) — `sort_pub_dependencies` 는 켬으로 재결정 (실측 2줄, 모두 `pubspec.yaml`; 첫 결정 안 켬은 측정 도구가 그 자리를 세지 않아 생긴 0 을 근거로 했다), WR-02 · WR-05 · WR-06 은 gap 수정에 함께 넣음, CR-03 은 코드를 고치지 않고 REQUIREMENTS 의 RULES-13 옆 메모와 처리 기록 deferred 로 미룸. 나머지 리뷰 지적(WR-01 · 03 · 04 · 07 · 08, IN-01 ~ 07)은 open. 화면(UI) 설계 검사는 로드맵의 "회차 UI" 글자에 걸린 오탐이라 건너뜀
+- [Phase 04]: gap 수정 계획 04-11 (wave 10, 측정 도구 · 검증 도구) · 04-12 (wave 11, 켬 반영 · 문서 수치 · CR-03 메모) — 비공개 프로젝트는 다시 돌리지 않고 커밋된 R1 회차에서 행을 다시 센다 (`--recount`), `sort_pub_dependencies` 의 `dart fix` 칸은 `재지 않음`. plan checker 2회차 통과 (b9f42b9, 8e49bcb)
 
 ### Pending Todos
 
@@ -208,5 +210,5 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-10-13T05:30:29.444Z
-Stopped at: Completed 04-10-PLAN.md
-Resume file: None
+Stopped at: Phase 04 gap 수정 계획 완료 (04-11 · 04-12)
+Resume file: .planning/phases/04-rule-reselection/04-11-PLAN.md
