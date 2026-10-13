@@ -47,3 +47,5 @@ lib/relative_imports_rule.dart:3  info  prefer_relative_imports
 lib/riverpod_rules.dart:17  warning  provider_parameters
 lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties
 lib/should_not_appear.dart:5  warning  invalid_annotation_target
+lib/strict_rules.dart:14  info  no_raw_types
+lib/strict_rules.dart:6  info  no_dynamic_casts

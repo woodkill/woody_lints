@@ -40,6 +40,8 @@
 | `test_types_in_equals` | 버그 방지 | == 에서 인자 타입을 보지 않으면 cast 오류 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
 | `throw_in_finally` | 버그 방지 | finally 의 throw 는 원래 예외를 덮는다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
 | `unnecessary_statements` | 버그 방지 | 효과 없는 문장은 빠진 호출 · 대입의 흔적 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `no_dynamic_casts` | 버그 방지 (strict) | dynamic 값을 구체 타입 자리에 넣는 암묵적 cast 를 잡는다 — strict-casts 옵션의 공식 대체이고 info 라 받는 쪽 CI 를 막지 않는다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `no_raw_types` | 버그 방지 (strict) | 타입 인자를 생략한 제네릭 타입을 잡는다 — strict-raw-types 옵션의 공식 대체이고 info 다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
 <!-- woody:enabled-rules:end -->
 
 ### 켠 analyzer 옵션
@@ -77,6 +79,7 @@
 | `avoid_equals_and_hash_code_on_mutable_classes` | 소유자 결정 — `@immutable` 표시가 없을 뿐인 클래스도 걸린다 (8줄 모두 lib, dart fix 0) |
 | `avoid_implementing_value_types` | 소유자 결정 — test 의 mock · fake 가 걸리는 규칙 (25줄 모두 test) |
 | `unnecessary_unawaited` | 소유자 결정 — `dart fix` 가 3줄을 지우고 error 9건을 남긴다 |
+| `strict-inference` | 소유자 결정 — analyzer 옵션(`analyzer: language:`)이고 진단이 warning 이라 받는 쪽 `dart analyze` 가 바로 실패한다 (106줄 모두 test, dart fix 0) |
 <!-- woody:disabled-rules:end -->
 
 formatter: 설정은 기본 프리셋에 넣지 않는다 (04-CONTEXT.md D-13, REQUIREMENTS.md Out of Scope)

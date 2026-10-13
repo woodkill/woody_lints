@@ -40,6 +40,8 @@ lib/bug_prevention_rules.dart:9  info  conditional_uri_does_not_exist
 lib/relative_imports_rule.dart:3  info  prefer_relative_imports
 lib/riverpod_rules.dart:17  warning  provider_parameters
 lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties
+lib/strict_rules.dart:14  info  no_raw_types
+lib/strict_rules.dart:6  info  no_dynamic_casts
 lib/suppress/lint_line.dart:6  info  prefer_single_quotes
 lib/suppress/plugin_file_unprefixed.dart:8  warning  provider_parameters
 lib/suppress/plugin_line.dart:11  warning  provider_parameters

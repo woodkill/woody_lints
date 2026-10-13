@@ -34,6 +34,8 @@
 - `test_types_in_equals` — == 에서 인자 타입을 보지 않으면 cast 오류
 - `throw_in_finally` — finally 의 throw 는 원래 예외를 덮는다
 - `unnecessary_statements` — 효과 없는 문장은 빠진 호출 · 대입의 흔적
+- `no_dynamic_casts` — dynamic 값을 구체 타입 자리에 넣는 암묵적 cast 를 잡는다 — strict-casts 옵션의 공식 대체이고 info 라 받는 쪽 CI 를 막지 않는다
+- `no_raw_types` — 타입 인자를 생략한 제네릭 타입을 잡는다 — strict-raw-types 옵션의 공식 대체이고 info 다
 
 ### 그 밖의 변경
 
