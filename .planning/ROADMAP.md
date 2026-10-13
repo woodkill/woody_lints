@@ -178,7 +178,7 @@ Plans:
   4. 배포 파일에 기반 세트와 중복되는 선언과 주석 처리된 설정(`require_trailing_commas`, `public_member_api_docs`, `formatter: trailing_commas`)이 없고, 남은 규칙의 사유 주석이 사실과 일치한다
   5. 켠 규칙마다 이유와 실측 건수를 적은 근거 문서와, 채택하지 않은 규칙과 그 사유의 목록이 저장소에 있다
 
-**Plans**: 13 plans — 12 executed (gap 수정 plan 04-11 · 04-12 실행 완료 2026-10-13 — 재검증 gaps_found 10/11, WR-10 하나 남음), 2회차 gap 수정 plan 04-13 계획됨 (2026-10-13 — WR-10 과 소유자가 묶은 IN-08 · IN-10 · WR-09 메모)
+**Plans**: 13/13 plans executed (gap 수정 plan 04-11 · 04-12 실행 완료 2026-10-13 — 재검증 gaps_found 10/11, WR-10 하나 남음; 2회차 gap 수정 plan 04-13 실행 완료 2026-10-13 — 재검증 대기)
 
 Plans:
 **Wave 1** *(04-02 의 smoke 는 저장소 지문을 견주므로 04-01 과 같은 worktree 에서 동시에 돌리지 않는다 — worktree 가 다르면 병렬, 같으면 04-01 뒤)*
@@ -216,7 +216,7 @@ Plans:
 - [x] 04-12-PLAN.md — `sort_pub_dependencies` 켬 (소유자 재결정 2026-10-13 — 실측 2줄 모두 `pubspec.yaml`, 같은 잣대) — `lib/base.yaml` 81 · `RULES.md` 표 · pubspec 샘플 6 · 정답지 5 를 한 커밋으로; CHANGELOG 75 · `04-DECISIONS.md` 재결정 행; README 수치(WR-05) · CR-03 v2 메모(REQUIREMENTS RULES-13) · DISPOSITION `deferred` (RULES-03, RULES-06, RULES-07, RULES-08, DOCS-11; D-08, D-10, D-20)
 
 **Wave 12** *(gap 수정 2회차 — 재검증 04-VERIFICATION.md 에 남은 gap 하나(진실 6, 04-REVIEW.md WR-10)와 소유자가 묶은 IN-08 · IN-10 · WR-09 메모; blocked on Wave 11)*
-- [ ] 04-13-PLAN.md — (tracer) `[3/10]` 의 `declaredRuleNames` 가 따옴표 이름을 읽고 `linter:` 블록 안의 읽지 못하는 줄에서 `FormatException` (70) 으로 멈춤(WR-10 — 입력 하나가 아니라 결함 꼴을 닫음) · README M27 ~ M31; `RULES.md` `sort_pub_dependencies` 실측 칸을 합계 앞으로(IN-08) · README `added_rules.dart` 문장(IN-10); WR-09 를 RULES-13 v2 메모 · DISPOSITION `deferred` (RULES-01, RULES-06, DOCS-11; D-07, D-08, D-09, D-10, D-11)
+- [x] 04-13-PLAN.md — (tracer) `[3/10]` 의 `declaredRuleNames` 가 따옴표 이름을 읽고 `linter:` 블록 안의 읽지 못하는 줄에서 `FormatException` (70) 으로 멈춤(WR-10 — 입력 하나가 아니라 결함 꼴을 닫음) · README M27 ~ M31; `RULES.md` `sort_pub_dependencies` 실측 칸을 합계 앞으로(IN-08) · README `added_rules.dart` 문장(IN-10); WR-09 를 RULES-13 v2 메모 · DISPOSITION `deferred` (RULES-01, RULES-06, DOCS-11; D-07, D-08, D-09, D-10, D-11)
 
 **Spike first** (실측을 돌리기 전에 실행으로 확인한다 — **2026-10-12 완료**: spike 020 ~ 023 이 네 항목에 답했다. 멈춤 조건에 해당한 것 없음. 로드맵 문구 가운데 그대로 쓸 수 없게 된 것은 Notes 에 반영했다. `04-RESEARCH.md` 와 skill `spike-findings-woody-lints` 참조):
 - Dart 3.13 신규 규칙이 language version 3.11 프로젝트에서 보고되는지 (`flutter_starter_kit` 의 SDK 제약은 `^3.11.1`). 0건이 "깨끗하다"인지 "규칙이 동작하지 않는다"인지가 여기서 갈린다.
@@ -297,7 +297,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Baseline and Toolchain | 4/4 | Complete    | 2026-10-11 |
 | 2. Verification Harness | 5/5 | Complete    | 2026-10-12 |
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
-| 4. Rule Reselection | 12/13 | In Progress (재검증 gaps_found — WR-10; gap 수정 plan 04-13 계획됨) | - |
+| 4. Rule Reselection | 13/13 | In Progress (04-13 실행 완료 2026-10-13 — 재검증 대기) | - |
 | 5. Documentation | 0/TBD | Not started | - |
 | 6. Release | 0/TBD | Not started | - |
 

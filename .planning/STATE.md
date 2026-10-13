@@ -4,17 +4,17 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 04
 current_phase_name: Rule Reselection
-status: Phase 04 gap 수정 계획 04-13 완료 — 실행 대기 (/gsd-execute-phase 04 --gaps-only)
-stopped_at: Phase 04 gap 수정 계획 완료 (04-13)
-last_updated: "2026-10-13T12:17:18.085Z"
+status: executing
+stopped_at: Completed 04-13-PLAN.md
+last_updated: "2026-10-13T12:30:37.359Z"
 last_activity: 2026-10-13
-last_activity_desc: Phase 04 gap 수정 계획 04-13 작성, plan checker 통과
-state_head: 5aeeb4c7fb735c680c422ef00e35d7e48946d9dd
+last_activity_desc: Phase 04 execution started
+state_head: 8f4e257bf79baf22546198b2b2dbabcd872d1daa
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 26
-  completed_plans: 25
+  completed_plans: 26
   percent: 50
 ---
 
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-10-12)
 
 ## Current Position
 
-Phase: 04 (Rule Reselection) — READY TO EXECUTE
-Plan: 12 of 13
-Status: Phase 04 gap 수정 계획 04-13 완료 — 실행 대기 (/gsd-execute-phase 04 --gaps-only)
-Last activity: 2026-10-13 — Phase 04 gap 수정 계획 04-13 작성, plan checker 통과
+Phase: 04 (Rule Reselection) — EXECUTING
+Plan: 13 of 13
+Status: 04-13 실행 완료 — 코드 리뷰 · 재검증 대기
+Last activity: 2026-10-13 — 04-13 실행 완료 (67d1bc7 · 76dee2f · 8f4e257)
 
 Progress: [█████░░░░░] 50%
 
@@ -85,6 +85,7 @@ Progress: [█████░░░░░] 50%
 | Phase 04 P10 | 10min | 3 tasks | 1 files |
 | Phase 04 P11 | 9min | 2 tasks | 5 files |
 | Phase 04 P12 | 10min | 3 tasks | 18 files |
+| Phase 04 P13 | 7min | 3 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -194,6 +195,8 @@ Recent decisions affecting current work:
 - [Phase 04]: 04-12: CR-03 은 코드를 고치지 않고 REQUIREMENTS.md RULES-13 아래 메모와 처리 기록 deferred 로 남겼다 (소유자 결정 2026-10-13). example/README.md 의 줄 수는 정답지와 같다 (합계 93, WR-05)
 - [Phase 04]: gap 수정 2회차 계획 전 소유자 결정 (2026-10-13, 모두 권고대로) — WR-10 (`[3/10]` 이 따옴표 규칙 이름을 읽지 못함)은 고친다: 따옴표 이름을 읽고, `linter:` 블록 안에서 읽지 못하는 줄은 조용히 건너뛰지 않고 검증을 멈춘다 (입력 하나가 아니라 결함의 꼴을 닫음). IN-08 (`RULES.md` 의 `sort_pub_dependencies` 칸) · IN-10 (`example/README.md` 의 "규칙 6개" 문장)은 문장만 고치고 샘플 머리 주석은 그대로 둔다. WR-09 는 코드를 고치지 않고 RULES-13 메모 한 줄과 처리 기록 deferred. 화면(UI) 설계 검사는 "회차 UI" 오탐이라 건너뜀
 - [Phase 04]: gap 수정 계획 04-13 (wave 12) — Task 1 `declaredRuleNames` (M27 ~ M31: 따옴표 둘은 `[3/10]` 만 실패, 맵 항목 · 이름 없는 `-` · 대시 없는 맵 줄은 종료 코드 70), Task 2 IN-08 · IN-10, Task 3 WR-09 메모 · DISPOSITION. plan checker 2회차 통과 (a0322ac, 5aeeb4c)
+- [Phase 04]: 04-13: [3/10] 의 declaredRuleNames 는 linter: 블록 안에서 들여쓴 rules: 키 줄과 목록 항목(따옴표 없음 · 홑따옴표 · 큰따옴표, 뒤에 # 주석 가능)만 받고 그 밖의 줄은 FormatException 으로 종료 코드 70 (WR-10 — M27 · M28 은 [3/10] 만 실패, M29 ~ M31 은 70; 67d1bc7)
+- [Phase 04]: 04-13: 03-REVIEW.md WR-03 의 입력 꼴(맵 형식 규칙)은 이제 종료 코드 70 으로 멈춘다 (M31) — 03-REVIEW-DISPOSITION.md 는 손대지 않았다. WR-09 는 RULES-13 의 둘째 메모와 처리 기록 deferred (open 17, 8f4e257). IN-08 · IN-10 은 텍스트만 (76dee2f)
 
 ### Pending Todos
 
@@ -219,6 +222,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-13T08:47:58.359Z
-Stopped at: Phase 04 gap 수정 계획 완료 (04-13)
-Resume file: .planning/phases/04-rule-reselection/04-13-PLAN.md
+Last session: 2026-10-13T12:30:37.323Z
+Stopped at: Completed 04-13-PLAN.md
+Resume file: None
