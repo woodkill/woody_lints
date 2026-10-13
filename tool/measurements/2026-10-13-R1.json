@@ -91,7 +91,13 @@
       "require_trailing_commas",
       "sort_pub_dependencies",
       "use_test_throws_matchers"
-    ]
+    ],
+    "recount": {
+      "date": "2026-10-13",
+      "changedRows": [
+        "sort_pub_dependencies"
+      ]
+    }
   },
   "runs": [
     {
@@ -19491,7 +19497,8 @@
       "counts": {
         "lib": 9,
         "test": 2,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -19501,7 +19508,8 @@
       "ignored": {
         "lib": 2,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -19531,7 +19539,8 @@
       "counts": {
         "lib": 0,
         "test": 3,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 3,
@@ -19547,7 +19556,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -19578,7 +19588,8 @@
       "counts": {
         "lib": 16,
         "test": 14,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -19588,7 +19599,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -19618,7 +19630,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -19628,7 +19641,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -19659,7 +19673,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -19669,7 +19684,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -19700,7 +19716,8 @@
       "counts": {
         "lib": 0,
         "test": 28,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -19710,7 +19727,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -19740,7 +19758,8 @@
       "counts": {
         "lib": 0,
         "test": 5,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 5,
@@ -19750,7 +19769,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -19781,7 +19801,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -19791,7 +19812,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -19822,7 +19844,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -19832,7 +19855,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -19863,7 +19887,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -19873,7 +19898,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -19904,7 +19930,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -19914,7 +19941,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -19945,7 +19973,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -19955,7 +19984,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -19986,7 +20016,8 @@
       "counts": {
         "lib": 0,
         "test": 9,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -19996,7 +20027,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -20026,7 +20058,8 @@
       "counts": {
         "lib": 0,
         "test": 13,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -20036,7 +20069,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -20066,7 +20100,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -20076,7 +20111,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -20107,7 +20143,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -20117,7 +20154,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -20148,7 +20186,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -20158,7 +20197,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -20189,7 +20229,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -20199,7 +20240,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -20230,7 +20272,8 @@
       "counts": {
         "lib": 2,
         "test": 1,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -20240,7 +20283,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -20270,7 +20314,8 @@
       "counts": {
         "lib": 0,
         "test": 4,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -20280,7 +20325,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -20312,7 +20358,8 @@
       "counts": {
         "lib": 615,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 615,
@@ -20324,7 +20371,8 @@
       "ignored": {
         "lib": 6,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -20357,7 +20405,8 @@
       "counts": {
         "lib": 9,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 9,
@@ -20367,7 +20416,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -20398,7 +20448,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -20408,7 +20459,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -20439,7 +20491,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -20449,7 +20502,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -20480,7 +20534,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -20490,7 +20545,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -20521,7 +20577,8 @@
       "counts": {
         "lib": 8,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -20531,7 +20588,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -20561,7 +20619,8 @@
       "counts": {
         "lib": 0,
         "test": 25,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -20571,7 +20630,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -20601,7 +20661,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -20611,7 +20672,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -20642,7 +20704,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -20652,7 +20715,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -20683,7 +20747,8 @@
       "counts": {
         "lib": 2,
         "test": 3,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 5,
@@ -20693,7 +20758,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -20724,7 +20790,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -20734,7 +20801,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -20765,7 +20833,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -20775,7 +20844,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -20806,7 +20876,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -20816,7 +20887,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -20847,7 +20919,8 @@
       "counts": {
         "lib": 1,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -20857,7 +20930,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -20887,7 +20961,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -20897,7 +20972,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -20928,7 +21004,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -20938,7 +21015,8 @@
       "ignored": {
         "lib": 1,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -20969,7 +21047,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -20979,7 +21058,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -21012,7 +21092,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -21022,7 +21103,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -21053,7 +21135,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -21063,7 +21146,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -21096,7 +21180,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -21106,7 +21191,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -21137,7 +21223,8 @@
       "counts": {
         "lib": 3,
         "test": 163,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 164,
@@ -21147,7 +21234,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -21178,7 +21266,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -21188,7 +21277,8 @@
       "ignored": {
         "lib": 1,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -21219,7 +21309,8 @@
       "counts": {
         "lib": 9,
         "test": 103,
-        "bin": 12
+        "bin": 12,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 156,
@@ -21232,7 +21323,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -21263,7 +21355,8 @@
       "counts": {
         "lib": 0,
         "test": 197,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 197,
@@ -21273,7 +21366,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -21304,7 +21398,8 @@
       "counts": {
         "lib": 0,
         "test": 1,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 1,
@@ -21314,7 +21409,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -21345,7 +21441,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -21355,7 +21452,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -21386,7 +21484,8 @@
       "counts": {
         "lib": 0,
         "test": 1,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 1,
@@ -21396,7 +21495,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -21427,7 +21527,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -21437,7 +21538,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -21468,7 +21570,8 @@
       "counts": {
         "lib": 0,
         "test": 33,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 33,
@@ -21478,7 +21581,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -21509,7 +21613,8 @@
       "counts": {
         "lib": 0,
         "test": 9,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 9,
@@ -21519,7 +21624,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -21550,7 +21656,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -21560,7 +21667,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -21591,7 +21699,8 @@
       "counts": {
         "lib": 1,
         "test": 10,
-        "bin": 1
+        "bin": 1,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 11,
@@ -21603,7 +21712,8 @@
       "ignored": {
         "lib": -1,
         "test": -10,
-        "bin": -1
+        "bin": -1,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -21640,7 +21750,8 @@
       "counts": {
         "lib": 1,
         "test": 46,
-        "bin": 1
+        "bin": 1,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -21650,7 +21761,8 @@
       "ignored": {
         "lib": -1,
         "test": -46,
-        "bin": -1
+        "bin": -1,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -21680,7 +21792,8 @@
       "counts": {
         "lib": 1,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 1,
@@ -21692,7 +21805,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -21723,7 +21837,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -21733,7 +21848,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -21764,7 +21880,8 @@
       "counts": {
         "lib": 3,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 1,
@@ -21776,7 +21893,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -21807,7 +21925,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -21817,7 +21936,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -21848,7 +21968,8 @@
       "counts": {
         "lib": 5,
         "test": 12,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 17,
@@ -21860,7 +21981,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -21891,7 +22013,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -21901,7 +22024,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -21932,7 +22056,8 @@
       "counts": {
         "lib": 0,
         "test": 1,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 1,
@@ -21942,7 +22067,8 @@
       "ignored": {
         "lib": 39,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -21973,7 +22099,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -21983,7 +22110,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -22014,7 +22142,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -22024,7 +22153,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -22055,7 +22185,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -22065,7 +22196,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -22096,7 +22228,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -22106,7 +22239,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -22137,7 +22271,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -22147,7 +22282,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -22178,7 +22314,8 @@
       "counts": {
         "lib": 1,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -22188,7 +22325,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -22218,7 +22356,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -22228,7 +22367,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -22259,7 +22399,8 @@
       "counts": {
         "lib": 1,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -22269,7 +22410,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -22299,7 +22441,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -22309,7 +22452,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -22340,7 +22484,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -22350,7 +22495,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -22381,7 +22527,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 2
       },
       "counts313": null,
       "aloneDry": null,
@@ -22391,7 +22538,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -22401,7 +22549,8 @@
         "G1",
         "G1-strip"
       ],
-      "invalidRuns": []
+      "invalidRuns": [],
+      "fixSkipped": "R1 의 fix 단계는 이 규칙의 값이 0 으로 집계된 채 돌아 단독 dry 도 apply 도 하지 않았다 — 손으로 고칠 줄은 경고 전부로 본다"
     },
     "avoid_setters_without_getters": {
       "section": "B-3",
@@ -22421,7 +22570,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -22431,7 +22581,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -22462,7 +22613,8 @@
       "counts": {
         "lib": 0,
         "test": 3,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -22472,7 +22624,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -22502,7 +22655,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -22512,7 +22666,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -22542,7 +22697,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -22552,7 +22708,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -22583,7 +22740,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -22593,7 +22751,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -22624,7 +22783,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -22634,7 +22794,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -22667,7 +22828,8 @@
       "counts": {
         "lib": 1,
         "test": 235,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 236,
@@ -22679,7 +22841,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -22710,7 +22873,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -22720,7 +22884,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -22751,12 +22916,14 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": {
         "lib": 220,
         "test": 59,
-        "bin": 2
+        "bin": 2,
+        "pubspec.yaml": 0
       },
       "aloneDry": 281,
       "fixRemoved": 281,
@@ -22765,7 +22932,8 @@
       "ignored": {
         "lib": 5,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": false,
@@ -22798,7 +22966,8 @@
       "counts": {
         "lib": 62,
         "test": 95,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 157,
@@ -22814,7 +22983,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -22845,12 +23015,14 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": {
         "lib": 0,
         "test": 432,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "aloneDry": 432,
       "fixRemoved": 432,
@@ -22859,7 +23031,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": false,
@@ -22892,12 +23065,14 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": {
         "lib": 2,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "aloneDry": 2,
       "fixRemoved": 2,
@@ -22906,7 +23081,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": false,
@@ -22939,12 +23115,14 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "aloneDry": null,
       "fixRemoved": null,
@@ -22953,7 +23131,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -22985,12 +23164,14 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "aloneDry": null,
       "fixRemoved": null,
@@ -22999,7 +23180,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -23031,12 +23213,14 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "aloneDry": null,
       "fixRemoved": null,
@@ -23045,7 +23229,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -23077,7 +23262,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -23087,7 +23273,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -23118,7 +23305,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -23128,7 +23316,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -23159,7 +23348,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -23169,7 +23359,8 @@
       "ignored": {
         "lib": 12,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -23200,7 +23391,8 @@
       "counts": {
         "lib": 178,
         "test": 18,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 10,
@@ -23214,7 +23406,8 @@
       "ignored": {
         "lib": 4,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -23245,7 +23438,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -23255,7 +23449,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -23286,7 +23481,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -23296,7 +23492,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -23327,7 +23524,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -23337,7 +23535,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -23367,7 +23566,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -23377,7 +23577,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -23408,7 +23609,8 @@
       "counts": {
         "lib": 35,
         "test": 72,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -23418,7 +23620,8 @@
       "ignored": {
         "lib": 129,
         "test": 131,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -23448,7 +23651,8 @@
       "counts": {
         "lib": 324,
         "test": 53,
-        "bin": 21
+        "bin": 21,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -23458,7 +23662,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -23493,7 +23698,8 @@
       "counts": {
         "lib": 1524,
         "test": 7753,
-        "bin": 111
+        "bin": 111,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 8917,
@@ -23509,7 +23715,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -23544,7 +23751,8 @@
       "counts": {
         "lib": 2241,
         "test": 17901,
-        "bin": 190
+        "bin": 190,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 20332,
@@ -23556,7 +23764,8 @@
       "ignored": {
         "lib": 911,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -23592,7 +23801,8 @@
       "counts": {
         "lib": 1008,
         "test": 5632,
-        "bin": 84
+        "bin": 84,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 6724,
@@ -23604,7 +23814,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -23638,7 +23849,8 @@
       "counts": {
         "lib": 12,
         "test": 879,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 891,
@@ -23652,7 +23864,8 @@
       "ignored": {
         "lib": 4,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -23685,7 +23898,8 @@
       "counts": {
         "lib": 878,
         "test": 3181,
-        "bin": 52
+        "bin": 52,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 4078,
@@ -23701,7 +23915,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -23735,7 +23950,8 @@
       "counts": {
         "lib": 182,
         "test": 532,
-        "bin": 2
+        "bin": 2,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 716,
@@ -23747,7 +23963,8 @@
       "ignored": {
         "lib": 5,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -23780,7 +23997,8 @@
       "counts": {
         "lib": 2,
         "test": 235,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 237,
@@ -23792,7 +24010,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -23823,7 +24042,8 @@
       "counts": {
         "lib": 31,
         "test": 1,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 16,
@@ -23835,7 +24055,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -23866,7 +24087,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -23876,7 +24098,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -23907,7 +24130,8 @@
       "counts": {
         "lib": 1,
         "test": 4,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -23917,7 +24141,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -23947,7 +24172,8 @@
       "counts": {
         "lib": 4,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -23957,7 +24183,8 @@
       "ignored": {
         "lib": 1,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -23987,7 +24214,8 @@
       "counts": {
         "lib": 0,
         "test": 1,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 1,
@@ -23997,7 +24225,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -24028,7 +24257,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -24038,7 +24268,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -24069,7 +24300,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -24079,7 +24311,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -24110,7 +24343,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -24120,7 +24354,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -24151,7 +24386,8 @@
       "counts": {
         "lib": 5,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -24161,7 +24397,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -24191,7 +24428,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -24201,7 +24439,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -24232,7 +24471,8 @@
       "counts": {
         "lib": 0,
         "test": 3,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -24242,7 +24482,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -24272,7 +24513,8 @@
       "counts": {
         "lib": 6,
         "test": 44,
-        "bin": 10
+        "bin": 10,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -24282,7 +24524,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -24312,7 +24555,8 @@
       "counts": {
         "lib": 71,
         "test": 55,
-        "bin": 2
+        "bin": 2,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 121,
@@ -24326,7 +24570,8 @@
       "ignored": {
         "lib": 85,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -24357,7 +24602,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -24367,7 +24613,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -24398,7 +24645,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -24408,7 +24656,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -24439,7 +24688,8 @@
       "counts": {
         "lib": 1,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 1,
@@ -24449,7 +24699,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -24480,7 +24731,8 @@
       "counts": {
         "lib": 0,
         "test": 1,
-        "bin": 1
+        "bin": 1,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -24490,7 +24742,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -24520,7 +24773,8 @@
       "counts": {
         "lib": 122,
         "test": 1,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 46,
@@ -24536,7 +24790,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -24567,7 +24822,8 @@
       "counts": {
         "lib": 13,
         "test": 4,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -24577,7 +24833,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -24607,7 +24864,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -24617,7 +24875,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -24648,7 +24907,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -24658,7 +24918,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,
@@ -24688,7 +24949,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -24698,7 +24960,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": false,
       "markerDetectedCurrent": null,
@@ -24729,12 +24992,14 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": {
         "lib": 258,
         "test": 524,
-        "bin": 3
+        "bin": 3,
+        "pubspec.yaml": 0
       },
       "aloneDry": 785,
       "fixRemoved": 785,
@@ -24749,7 +25014,8 @@
       "ignored": {
         "lib": 6,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": false,
@@ -24782,7 +25048,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -24792,7 +25059,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -24822,7 +25090,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -24832,7 +25101,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -24862,7 +25132,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -24872,7 +25143,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -24904,7 +25176,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -24914,7 +25187,8 @@
       "ignored": {
         "lib": 4,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -24946,7 +25220,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -24956,7 +25231,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -24986,7 +25262,8 @@
       "counts": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": null,
@@ -24996,7 +25273,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": true,
       "markerDetectedCurrent": null,
@@ -25026,7 +25304,8 @@
       "counts": {
         "lib": 0,
         "test": 106,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "counts313": null,
       "aloneDry": 0,
@@ -25036,7 +25315,8 @@
       "ignored": {
         "lib": 0,
         "test": 0,
-        "bin": 0
+        "bin": 0,
+        "pubspec.yaml": 0
       },
       "markerDetected": null,
       "markerDetectedCurrent": null,

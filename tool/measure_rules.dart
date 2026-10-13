@@ -23,9 +23,13 @@
 //
 // 출력 모드 (분석을 돌리지 않는다 — 한 번에 하나):
 //   --summary <묶음>   묶음 하나의 터미널 요약 (D-06). 묶음 id 는 `bundles` 상수의 키
-//   --report [--write] RULES.md § 실측 기록 의 Markdown 을 stdout 으로 — 단언이 하나라도 어긋나면
-//                      종료 코드 1 이고 아무것도 쓰지 않는다. --write 면 통과했을 때만 RULES.md 의
-//                      woody:measurements 구역을 바꿔 쓴다
+//   --report [--write] RULES.md § 실측 기록 의 Markdown 을 stdout 으로 — 단언 (1) ~ (7) 가운데
+//                      하나라도 어긋나면 종료 코드 1 이고 아무것도 쓰지 않는다. --write 면 통과했을
+//                      때만 RULES.md 의 woody:measurements 구역을 바꿔 쓴다
+//   --recount [--write] [--in <결과 JSON> | --work <작업 폴더>] [--run-id R1]
+//                      회차는 그대로 두고 행의 counts · counts313 · ignored 를 회차의
+//                      countByAreaCode 에서 다시 센다 (자리 집계가 바뀌었을 때, 04-REVIEW.md CR-01).
+//                      --write 면 같은 결과 JSON 에 다시 쓴다
 //   --audit            후보 133 과 B-7 31 이 RULES.md 의 세 표에 모두 있는지 (RULES-08 · DOCS-11)
 //   결과 JSON 은 --in <경로>, 없으면 <work>/results/<run id>.json, 그것도 없으면
 //   tool/measurements/*-<run id>.json (정확히 하나) 에서 찾는다 (--audit 은 JSON 을 읽지 않는다).
@@ -92,7 +96,7 @@ const consumerStages = [
 ];
 
 /// 분석을 돌리지 않고 결과 JSON(또는 `RULES.md`)만 읽는 출력 모드 — 한 번에 하나만 준다.
-const outputModes = ['--summary', '--report', '--audit'];
+const outputModes = ['--summary', '--report', '--recount', '--audit'];
 
 /// 결과 JSON 의 모양 번호. 바꾸면 04-03 의 `--summary` · `--report`, 04-04 의 회차 기록,
 /// RULES-13 때의 재측정 diff 를 함께 고친다.
@@ -1286,7 +1290,8 @@ class BodyMarker(final int i) {
 /// null 로 둔다. 이름 목록은 결과 JSON 의 `conditions.noFileProbe` 에 적혀 검증 명령과 `--report`
 /// 가 같은 예외 집합을 읽는다.
 const noFileProbe = <String, String>{
-  'sort_pub_dependencies': 'pubspec.yaml 을 본다 — Dart 파일로는 어길 수 없다',
+  'sort_pub_dependencies':
+      'pubspec.yaml 을 본다 — Dart 파일 표식으로는 어길 수 없다 (값은 pubspec.yaml 자리에서 센다)',
   'use_test_throws_matchers':
       'package:test_api 의 fail() 을 찾는다 — flutter_test 를 import 하지 않는 lib/ 의 '
       '파일로는 어길 수 없다',
@@ -1336,6 +1341,7 @@ const usage = '''
    또는 (분석을 돌리지 않는 출력 모드):
         fvm dart run tool/measure_rules.dart --summary <묶음> [--in <결과 JSON> | --work <작업 폴더>] [--run-id R1]
         fvm dart run tool/measure_rules.dart --report [--write] [--in <결과 JSON> | --work <작업 폴더>] [--run-id R1]
+        fvm dart run tool/measure_rules.dart --recount [--write] [--in <결과 JSON> | --work <작업 폴더>] [--run-id R1]
         fvm dart run tool/measure_rules.dart --audit
    묶음: bug, perf, style, current, excluded, strict, import, fire, pairs, status, v2, ui''';
 
@@ -1353,7 +1359,7 @@ class RawArgs {
   /// 준 인자인지 (값 · 플래그 어느 쪽이든).
   bool has(String key) => values.containsKey(key) || flags.contains(key);
 
-  /// 준 출력 모드 (`--summary` · `--report` · `--audit`).
+  /// 준 출력 모드 (`--summary` · `--report` · `--recount` · `--audit`).
   List<String> get outputModesGiven => [
     for (final m in outputModes)
       if (has(m)) m,
@@ -1372,7 +1378,7 @@ RawArgs readRawArgs(List<String> args) {
     '--in',
     '--summary',
   };
-  const flags = {'--probe-all', '--report', '--write', '--audit'};
+  const flags = {'--probe-all', '--report', '--recount', '--write', '--audit'};
   final values = <String, String>{};
   final seenFlags = <String>{};
   for (var i = 0; i < args.length; i++) {
@@ -1551,13 +1557,13 @@ class OutputOptions {
     required this.runId,
   });
 
-  /// `--summary` / `--report` / `--audit`.
+  /// `--summary` / `--report` / `--recount` / `--audit`.
   final String mode;
 
   /// `--summary` 의 묶음 id ([bundles] 의 키), 그 밖에는 null.
   final String? bundle;
 
-  /// `--report --write` 인지.
+  /// `--report --write` · `--recount --write` 인지.
   final bool write;
 
   /// `--in` 으로 준 결과 JSON (절대), 또는 null.
@@ -1586,8 +1592,8 @@ OutputOptions parseOutputArgs(RawArgs raw) {
   ]) {
     if (raw.has(key)) throw UsageError('$key 는 출력 모드($mode)에 쓰지 않는다');
   }
-  if (raw.has('--write') && mode != '--report') {
-    throw UsageError('--write 는 --report 와 함께만 쓴다');
+  if (raw.has('--write') && mode != '--report' && mode != '--recount') {
+    throw UsageError('--write 는 --report · --recount 와 함께만 쓴다');
   }
   if (mode == '--audit') {
     for (final key in ['--in', '--work', '--run-id']) {
@@ -1717,8 +1723,15 @@ class Diag {
   String get text => '$path:$line  $severity  $code';
 }
 
-/// 규칙의 값을 나누는 자리 (D-02).
+/// Dart 소스 자리 — 파일 수 · 표식 · 무시 주석 걷기에 쓴다.
 const projectAreas = ['lib', 'test', 'bin'];
+
+/// `pubspec.yaml` 에 보고되는 진단의 자리 (`Diag.area` 가 파일 이름 그대로 돌려준다).
+const pubspecArea = 'pubspec.yaml';
+
+/// 규칙의 값을 나누는 자리 (D-02) — Dart 소스 자리 셋 + `pubspec.yaml` 에 보고되는
+/// 규칙(`sort_pub_dependencies`)의 자리. 04-REVIEW.md CR-01.
+const valueAreas = ['lib', 'test', 'bin', pubspecArea];
 
 /// [code] 가 후보 [rule] 의 진단인지 — `strict-inference` 는 `inference_failure_on_*` 전부다.
 bool codeMatchesRule(String code, String rule) => rule == strictInference
@@ -3286,11 +3299,12 @@ Run validate(
   return run;
 }
 
-/// 회차 JSON 에서 [rule] 의 프로젝트 줄 수 — `lib` · `test` · `bin` 자리별.
+/// 회차 JSON 에서 [rule] 의 프로젝트 줄 수 — `lib` · `test` · `bin` · `pubspec.yaml` 자리별
+/// ([valueAreas]).
 Map<String, int> ruleCounts(Map<String, dynamic> run, String rule) {
   final byArea = run['countByAreaCode'] as Map<String, dynamic>;
   return {
-    for (final a in projectAreas)
+    for (final a in valueAreas)
       a: ((byArea[a] as Map<String, dynamic>?) ?? const {}).entries
           .where((e) => codeMatchesRule(e.key, rule))
           .fold<int>(0, (s, e) => s + (e.value as int)),
@@ -3299,13 +3313,13 @@ Map<String, int> ruleCounts(Map<String, dynamic> run, String rule) {
 
 /// 자리별 수의 차이 (`a − b`).
 Map<String, int> subtractCounts(Map<String, int> a, Map<String, int> b) => {
-  for (final k in projectAreas) k: (a[k] ?? 0) - (b[k] ?? 0),
+  for (final k in valueAreas) k: (a[k] ?? 0) - (b[k] ?? 0),
 };
 
-/// 자리별 수의 합.
+/// 자리별 수의 합 ([valueAreas] — 키가 없는 옛 모양은 0 으로 읽는다).
 int total(Map<String, dynamic>? counts) => counts == null
     ? 0
-    : projectAreas.fold<int>(0, (s, a) => s + ((counts[a] as int?) ?? 0));
+    : valueAreas.fold<int>(0, (s, a) => s + ((counts[a] as int?) ?? 0));
 
 /// 회차 JSON 의 표식이 아닌 진단 — 코드 → 건수 (자리를 합친다).
 Map<String, int> nonMarkerByCode(Map<String, dynamic> run) {
@@ -3729,7 +3743,7 @@ class FixRun {
 List<String> ruleCodesIn(Map<String, dynamic> run, String rule) {
   final byArea = run['countByAreaCode'] as Map<String, dynamic>;
   final codes = <String>{
-    for (final a in projectAreas)
+    for (final a in valueAreas)
       for (final e
           in ((byArea[a] as Map<String, dynamic>?) ?? const {}).entries)
         if (codeMatchesRule(e.key, rule) && (e.value as int) > 0) e.key,
@@ -3947,7 +3961,7 @@ Future<void> measureUnnecessaryIgnore(Context ctx) async {
   int areaCount(Shot s, String area) =>
       s.diags.where((d) => d.area == area && d.code.startsWith(rule)).length;
   r.row(rule)['countsUI'] = {
-    for (final a in projectAreas) a: areaCount(ui, a) - areaCount(base, a),
+    for (final a in valueAreas) a: areaCount(ui, a) - areaCount(base, a),
   };
   r.conditions['unnecessaryIgnoreNames'] = unnecessaryIgnoreNames(c, ui);
   noteRowRun(ctx, rule, baseRun);
@@ -4064,16 +4078,19 @@ List<String> invalidReferences(
     if (runsById[id]?['valid'] != true) id,
 ];
 
-/// 자리별 수 `lib·test·bin`.
-String areaTriple(Map<String, dynamic> counts) =>
-    projectAreas.map((a) => '${counts[a] ?? 0}').join('·');
+/// 자리별 수를 [areas] 순서로 `·` 로 잇는다 — 기본은 값의 자리 넷 `lib·test·bin·pubspec`,
+/// 회차 표의 Dart 파일 칸은 [projectAreas] 셋을 넘긴다 (`pubspec.yaml` 은 Dart 파일이 아니다).
+String areaTriple(
+  Map<String, dynamic> counts, [
+  List<String> areas = valueAreas,
+]) => areas.map((a) => '${counts[a] ?? 0}').join('·');
 
-/// 자리별 수의 칸 — 합계 > 0 이면 `N (l·t·b)`, 0 이면 `0 (<zeroNote>)` (null 이면 `0`), 값이
-/// 없으면 `—`.
+/// 자리별 수의 칸 — 합계가 0 이 아니면 부호째 `N (l·t·b·p)` (가린 줄은 음수일 수 있다 —
+/// 04-REVIEW.md WR-02), 0 이면 `0 (<zeroNote>)` (null 이면 `0`), 값이 없으면 `—`.
 String countCell(Map<String, dynamic>? counts, String? zeroNote) {
   if (counts == null) return '—';
   final n = total(counts);
-  if (n > 0) return '$n (${areaTriple(counts)})';
+  if (n != 0) return '$n (${areaTriple(counts)})';
   return zeroNote == null ? '0' : '0 ($zeroNote)';
 }
 
@@ -4094,7 +4111,7 @@ String currentBoundNote(Object? detected) => switch (detected) {
   _ => '표식 없음',
 };
 
-/// 경고 칸 — 합계 (lib·test·bin) 와 0줄의 뜻. G4 는 지금 하한과 3.13 하한의 값 둘,
+/// 경고 칸 — 합계 (lib·test·bin·pubspec) 와 0줄의 뜻. G4 는 지금 하한과 3.13 하한의 값 둘,
 /// `unnecessary_ignore` 는 재측정 값(`countsUI`)을 덧붙이고, `strict-inference` 는 강도를 붙인다.
 /// 행이 참조하는 회차에 무효가 있으면 수치 대신 `회차 무효` (RULES-05).
 String warningCell(
@@ -4128,11 +4145,13 @@ String warningCell(
 Map<String, dynamic>? valueCounts(Map<String, dynamic> row) =>
     asMap(row[row['group'] == 'G4' ? 'counts313' : 'counts']);
 
-/// `dart fix` 칸 — 사라진 줄 (`fixRemoved`). 0줄이면 `해당 없음`, 단독 dry 가 0 이면 `0 (dry 0)`.
+/// `dart fix` 칸 — 사라진 줄 (`fixRemoved`). 0줄이면 `해당 없음`, 재지 않은 행(`fixSkipped`)은
+/// `재지 않음`, 단독 dry 가 0 이면 `0 (dry 0)`.
 String fixCell(Map<String, dynamic> row) {
   final counts = valueCounts(row);
   if (counts == null) return '—';
   if (total(counts) == 0) return '해당 없음';
+  if (row['fixSkipped'] is String) return '재지 않음';
   if (row['aloneDry'] == 0) return '0 (dry 0)';
   final removed = row['fixRemoved'];
   return removed is int ? '$removed' : '재지 않음';
@@ -4188,9 +4207,11 @@ int manualLines(Map<String, dynamic> row) =>
   final bundle = row['bundle'];
   if (bundle == 'perf' || bundle == 'style') {
     final manual = manualLines(row);
+    // `dart fix` 를 재지 않은 행은 손으로 고칠 줄 = 경고 전부다 — 그 사실을 이유에 붙인다.
+    final skipped = row['fixSkipped'] is String ? ' — dart fix 는 재지 않음' : '';
     return manual <= manualFixLimit
-        ? ('켬', '손으로 고칠 줄 $manual (≤ $manualFixLimit)')
-        : ('안 켬', '손으로 고칠 줄 $manual (> $manualFixLimit)');
+        ? ('켬', '손으로 고칠 줄 $manual (≤ $manualFixLimit)$skipped')
+        : ('안 켬', '손으로 고칠 줄 $manual (> $manualFixLimit)$skipped');
   }
   return ('검토', '실제 문제를 가리키는가 — 사람이 본다');
 }
@@ -4289,7 +4310,7 @@ List<String> summaryLines(Map<String, dynamic> data, String bundleId) {
   ];
   const header = [
     '규칙',
-    '경고 (lib·test·bin)',
+    '경고 (lib·test·bin·pubspec)',
     'dart fix',
     '고친 뒤 error',
     '권고',
@@ -4381,7 +4402,7 @@ String stateCell(String name, Map<String, dynamic> row) {
   return note == null ? messages : '$messages · $note';
 }
 
-/// `--report` — 단언 (1) ~ (6) 을 모두 보고, 통과하면 `RULES.md` § 실측 기록 의 Markdown
+/// `--report` — 단언 (1) ~ (7) 을 모두 보고, 통과하면 `RULES.md` § 실측 기록 의 Markdown
 /// (회차 표 + 전체 평가표)을 만든다 (RULES-03 · RULES-04 · RULES-05).
 Report buildReport(Map<String, dynamic> data) {
   final problems = <String>[];
@@ -4428,9 +4449,11 @@ Report buildReport(Map<String, dynamic> data) {
     final counts = asMap(row['counts']);
     if (counts != null && total(counts) > 0) {
       if (row['severity'] == null) lack.add('severity');
-      // analyzer 옵션(`strict-inference`)도 그 진단 코드로 dart fix 단계를 돈다.
-      if (row['fixRemoved'] == null) lack.add('fixRemoved');
-      if (row['newErrors'] == null) lack.add('newErrors');
+      // analyzer 옵션(`strict-inference`)도 그 진단 코드로 dart fix 단계를 돈다. 재지 않은 사유
+      // (`fixSkipped`)가 적힌 행은 빈 `fixRemoved` · `newErrors` 를 빠진 칸으로 세지 않는다.
+      final skipped = row['fixSkipped'] is String;
+      if (row['fixRemoved'] == null && !skipped) lack.add('fixRemoved');
+      if (row['newErrors'] == null && !skipped) lack.add('newErrors');
     } else if (counts != null && row['markerDetected'] == null) {
       if (unprobeable.contains(c.name)) {
         excepted.add(c.name);
@@ -4513,6 +4536,40 @@ Report buildReport(Map<String, dynamic> data) {
     problems.add('조건이 빈 회차 ${badRuns.length}개: ${badRuns.join(', ')}');
   }
 
+  // (7) 값에 넣지 않은 자리의 진단 — 행이 참조한 회차에서 `marker` · `generated` · [valueAreas]
+  // 밖의 자리에 그 규칙 코드가 있으면 값이 그 줄을 빠뜨린 것이다 (04-REVIEW.md CR-01). 같은 규칙 ·
+  // 같은 자리는 회차가 여럿이어도 한 번만 적는다.
+  final outsideAreas = <String, Set<String>>{};
+  for (final c in candidates) {
+    if (c.deferredTo != null) continue;
+    final row = asMap(rows[c.name]);
+    if (row == null) continue; // (1) 이 잡는다
+    for (final id in ((row['runs'] as List?) ?? const []).map((e) => '$e')) {
+      final byArea = asMap(runsById[id]?['countByAreaCode']);
+      if (byArea == null) continue; // (5) 가 잡는다
+      for (final area in byArea.entries) {
+        if (area.key == 'marker' ||
+            area.key == 'generated' ||
+            valueAreas.contains(area.key)) {
+          continue;
+        }
+        final codes = asMap(area.value) ?? const <String, dynamic>{};
+        final hit = codes.entries.any(
+          (e) =>
+              codeMatchesRule(e.key, c.name) && e.value is int && e.value != 0,
+        );
+        if (hit) outsideAreas.putIfAbsent(c.name, () => {}).add(area.key);
+      }
+    }
+  }
+  if (outsideAreas.isNotEmpty) {
+    final names = outsideAreas.keys.toList()..sort();
+    problems.add(
+      '값에 넣지 않은 자리에 진단이 있는 행 ${names.length}개: '
+      '${names.map((n) => '$n (${(outsideAreas[n]!.toList()..sort()).join(', ')})').join(', ')}',
+    );
+  }
+
   if (problems.isNotEmpty) return Report(problems, null);
 
   final runId = data['runId'];
@@ -4543,7 +4600,7 @@ Report buildReport(Map<String, dynamic> data) {
             '${r['plugin']}',
             '${r['languageVersion']}',
             '${r['sdkConstraint']}',
-            '${areaTriple(asMap(r['dartFiles'])!)}, '
+            '${areaTriple(asMap(r['dartFiles'])!, projectAreas)}, '
                 '생성 ${asMap(r['dartFiles'])!['generated'] ?? 0}',
             r['valid'] == true ? '예' : '아니오',
           ],
@@ -4571,7 +4628,7 @@ Report buildReport(Map<String, dynamic> data) {
         '분류',
         '상태',
         '강도',
-        '실측 (lib·test·bin)',
+        '실측 (lib·test·bin·pubspec)',
         '3.13 하한',
         'dart fix',
         '고친 뒤 error',
@@ -4639,10 +4696,36 @@ Report buildReport(Map<String, dynamic> data) {
       )
       ..add('');
   }
+  // `dart fix` 를 재지 않은 행과 그 사유 (RULES-03 의 "dart fix 로 고칠 수 있는 건수" 를 사실대로).
+  final fixSkipped = [
+    for (final name in names)
+      if (asMap(rows[name])?['fixSkipped'] is String)
+        '$name — ${asMap(rows[name])!['fixSkipped']}',
+  ];
+  if (fixSkipped.isNotEmpty) {
+    out
+      ..add('dart fix 를 재지 않은 행: ${fixSkipped.join(' / ')}')
+      ..add('');
+  }
+  // 가린 줄이 음수인 행 — 무시 주석 자체를 보는 규칙 (04-REVIEW.md WR-02).
+  final negativeIgnored = [
+    for (final name in names)
+      if (total(asMap(asMap(rows[name])?['ignored'])) < 0)
+        '$name ${total(asMap(asMap(rows[name])?['ignored']))}',
+  ];
+  if (negativeIgnored.isNotEmpty) {
+    out
+      ..add(
+        '가린 줄이 음수인 행은 무시 주석 자체를 보는 규칙이다 — 주석을 걷어내면 그 규칙의 줄도 '
+        '함께 사라진다: ${negativeIgnored.join(', ')}',
+      )
+      ..add('');
+  }
   out
     ..add(
       '실측: flutter_starter_kit (Dart 파일 ${dartFileTotal(conditions)}개), '
-      'Flutter ${conditions['flutter']}, ${conditions['date']} — 자리별 건수는 무시 주석을 둔 채 잰 값',
+      'Flutter ${conditions['flutter']}, ${conditions['date']} — 자리별 건수는 무시 주석을 둔 채 잰 값'
+      ' · pubspec 자리는 pubspec.yaml 파일에 보고된 줄',
     )
     ..add('')
     ..add('이 절은 tool/measure_rules.dart --report --write 가 생성한다. 손으로 고치지 않는다.');
@@ -4815,10 +4898,149 @@ int audit(String repoRoot) {
   return 0;
 }
 
-/// 출력 모드 하나를 돌리고 종료 코드를 돌려준다 — 0 통과 / 1 단언 · 감사 실패 / 64 사용법
-/// (결과 JSON 없음 포함) / 70 파일 모양 (`schema` 가 1 이 아님 · 마커 없음).
+/// `--recount` — 회차(`runs`)는 그대로 두고 행의 `counts` · `counts313` · `ignored` 를 회차의
+/// `countByAreaCode` 에서 단계가 쓰는 식 그대로 다시 센다 (자리 집계가 바뀌었을 때 — 04-REVIEW.md
+/// CR-01). 바뀐 행마다 한 줄을 [out] (기본 stdout) 에 찍고 바뀐 행의 이름을 돌려준다. 값 칸에
+/// `pubspec.yaml` 키가 0 으로 더해지는 것은 바뀐 것으로 세지 않는다. 어느 회차가 결과에 없으면 그
+/// 칸은 건드리지 않는다. 다시 센 뒤 줄이 있는데 `dart fix` 를 잰 흔적(단독 dry · 사라진 줄 ·
+/// `apply-<규칙>` 회차)이 없는 미루지 않은 행에는 `fixSkipped` 사유를 적는다. 화면에는 규칙 이름과
+/// 건수만 찍는다 (D-07).
+List<String> recountRows(Map<String, dynamic> data, {StringSink? out}) {
+  final sink = out ?? stdout;
+  final rows = data['rows'] as Map<String, dynamic>;
+  final runsById = runsByIdOf(data);
+  final runId = '${data['runId']}';
+
+  Map<String, int>? countsOf(String id, String rule) {
+    final run = runsById[id];
+    return run == null ? null : ruleCounts(run, rule);
+  }
+
+  Map<String, int>? diff(String a, String b, String rule) {
+    final x = countsOf(a, rule);
+    final y = countsOf(b, rule);
+    return x == null || y == null ? null : subtractCounts(x, y);
+  }
+
+  bool same(Object? before, Map<String, int> after) {
+    final b = asMap(before);
+    if (b == null) return false;
+    return valueAreas.every((a) => ((b[a] as int?) ?? 0) == after[a]);
+  }
+
+  String cell(Object? counts) {
+    final m = asMap(counts);
+    return m == null ? '—' : areaTriple(m);
+  }
+
+  final changed = <String>[];
+  var recounted = 0;
+  for (final c in candidates) {
+    final row = asMap(rows[c.name]);
+    if (row == null) continue;
+    recounted++;
+    // 단계가 쓰는 식 — measureBaseline · measureGroups · measureIgnore 와 같다.
+    final fresh = <String, Map<String, int>?>{};
+    switch (c.group) {
+      case 'current':
+        fresh['counts'] = countsOf('B0', c.name);
+        fresh['ignored'] = diff('B0-strip', 'B0', c.name);
+      case 'G4':
+        fresh['counts313'] = diff('G4', 'B0-313', c.name);
+        // G1 실행이 G4 의 규칙도 켠다 — 지금 하한의 값.
+        fresh['counts'] = diff('G1', 'B0', c.name);
+        fresh['ignored'] = diff('G4-strip', 'G4', c.name);
+      default:
+        final g = primaryRunId(c);
+        fresh['counts'] = diff(g, 'B0', c.name);
+        fresh['ignored'] = diff('$g-strip', g, c.name);
+    }
+    final notes = <String>[];
+    final countsBefore = row['counts'];
+    var countsChanged = false;
+    for (final e in fresh.entries) {
+      final after = e.value;
+      if (after == null) continue; // 회차가 없다 — 건드리지 않는다
+      final before = row[e.key];
+      if (!same(before, after)) {
+        if (e.key == 'counts') {
+          countsChanged = true;
+        } else {
+          notes.add('${e.key} ${cell(before)} → ${areaTriple(after)}');
+        }
+      }
+      row[e.key] = after;
+    }
+    if (c.deferredTo == null &&
+        total(valueCounts(row)) > 0 &&
+        row['fixRemoved'] == null &&
+        row['aloneDry'] == null &&
+        !runsById.containsKey('apply-${c.name}')) {
+      final reason =
+          '$runId 의 fix 단계는 이 규칙의 값이 0 으로 집계된 채 돌아 단독 dry 도 apply 도 하지 '
+          '않았다 — 손으로 고칠 줄은 경고 전부로 본다';
+      if (row['fixSkipped'] != reason) {
+        row['fixSkipped'] = reason;
+        notes.add('fixSkipped 적음');
+      }
+    }
+    if (countsChanged || notes.isNotEmpty) {
+      changed.add(c.name);
+      sink.writeln(
+        '${c.name}: counts ${cell(countsBefore)} → ${cell(row['counts'])}'
+        '${notes.map((n) => ' · $n').join()}',
+      );
+    }
+  }
+  sink.writeln(
+    changed.isEmpty
+        ? '다시 센 행 $recounted개 — 바뀐 행이 없다'
+        : '다시 센 행 $recounted개 — 바뀐 행 ${changed.length}개',
+  );
+  return changed;
+}
+
+/// [path] 를 저장소 상대 경로로 — 저장소 밖이면 파일 이름만 (절대 경로를 찍지 않는다, D-07).
+String repoRelative(String path, String repoRoot) =>
+    path.startsWith('$repoRoot/')
+    ? path.substring(repoRoot.length + 1)
+    : '(저장소 밖) ${path.split('/').last}';
+
+/// `--recount [--write]` — 다시 세고, `--write` 이고 바뀐 행이 있을 때만 `conditions.recount`
+/// (`date` · `changedRows`, 앞의 기록과 합집합) 를 적어 읽은 그 파일에 다시 쓴다.
+int runRecount(OutputOptions o, Repo repo) {
+  final path = locateResults(o, repo);
+  final data = loadResultsJson(path);
+  final changed = recountRows(data);
+  if (!o.write) return 0;
+  if (changed.isEmpty) {
+    stderr.writeln('바뀐 행이 없다 — 쓰지 않았다');
+    return 0;
+  }
+  final conditions = data['conditions'] as Map<String, dynamic>;
+  final previous = asMap(conditions['recount'])?['changedRows'];
+  final names = <String>{
+    if (previous is List) ...previous.map((e) => '$e'),
+    ...changed,
+  }.toList()..sort();
+  conditions['recount'] = <String, dynamic>{
+    'date': localDate(),
+    'changedRows': names,
+  };
+  // `Results.encode` 와 같은 모양 (들여쓰기 두 칸 + 끝 줄바꿈).
+  File(
+    path,
+  ).writeAsStringSync('${const JsonEncoder.withIndent('  ').convert(data)}\n');
+  stderr.writeln('결과 JSON 을 다시 썼다: ${repoRelative(path, repo.root)}');
+  return 0;
+}
+
+/// 출력 모드 하나를 돌리고 종료 코드를 돌려준다 — 0 통과 (`--recount` 는 바뀐 행이 있든 없든) /
+/// 1 단언 · 감사 실패 / 64 사용법 (결과 JSON 없음 포함) / 70 파일 모양 (`schema` 가 1 이 아님 ·
+/// 마커 없음).
 int runOutputMode(OutputOptions o, Repo repo) {
   if (o.mode == '--audit') return audit(repo.root);
+  if (o.mode == '--recount') return runRecount(o, repo);
   final data = loadResultsJson(locateResults(o, repo));
   if (o.mode == '--summary') {
     printSummary(data, o.bundle!);
@@ -4863,7 +5085,8 @@ Future<void> main(List<String> args) async {
     try {
       final raw = readRawArgs(args);
       if (raw.outputModesGiven.isNotEmpty) {
-        // 출력 모드 — 분석을 돌리지 않고, 저장소에는 `--report --write` 의 RULES.md 말고 쓰지 않는다.
+        // 출력 모드 — 분석을 돌리지 않고, 저장소에는 `--report --write` 의 RULES.md 와
+        // `--recount --write` 의 결과 JSON 말고 쓰지 않는다.
         final code = runOutputMode(parseOutputArgs(raw), repo);
         await stdout.flush();
         await stderr.flush();
