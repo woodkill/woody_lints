@@ -781,7 +781,7 @@
 
 ## 결정
 
-결정 표 — 후보 133개, 이름 순. `묶음` 칸은 `tool/measure_rules.dart` 의 `bundles` id 다. `권고` 는 위 패널의 것(도구 판정 포함)이고, `결정` · `사유` 는 소유자의 응답으로만 채운다. `결정` 칸의 `켬` / `안 켬` 119행은 2026-10-13 의 소유자 응답으로 채웠다 — 115행은 묶음 5 · 개별 질문 7, 3행(`sort_pub_dependencies` · `use_test_throws_matchers` · `remove_deprecations_in_breaking_versions`, 모두 `안 켬`)은 04-07 실행 전의 질문, 1행(`unnecessary_ignore`, `안 켬`)은 04-08 의 질문 9 (재측정) 이다. 나머지 14행은 v2 12 · 규칙이 아무것도 보고하지 않아 도구가 0줄의 뜻을 가르지 못한 2(`require_trailing_commas` · `package_prefixed_library_names`, `RULES.md` 에는 `규칙이 돌지 않음` 으로 적는다) 다 (초안 그대로).
+결정 표 — 후보 133개, 이름 순. `묶음` 칸은 `tool/measure_rules.dart` 의 `bundles` id 다. `권고` 는 위 패널의 것(도구 판정 포함)이고, `결정` · `사유` 는 소유자의 응답으로만 채운다. `결정` 칸의 `켬` / `안 켬` 119행은 2026-10-13 의 소유자 응답으로 채웠다 — 115행은 묶음 5 · 개별 질문 7, 3행(`sort_pub_dependencies` · `use_test_throws_matchers` · `remove_deprecations_in_breaking_versions`, 모두 `안 켬`)은 04-07 실행 전의 질문, 1행(`unnecessary_ignore`, `안 켬`)은 04-08 의 질문 9 (재측정) 이다. 나머지 14행은 v2 12 · 규칙이 아무것도 보고하지 않아 도구가 0줄의 뜻을 가르지 못한 2(`require_trailing_commas` · `package_prefixed_library_names`, `RULES.md` 에는 `규칙이 돌지 않음` 으로 적는다) 다 (초안 그대로). 그 3행 가운데 `sort_pub_dependencies` 는 2026-10-13 gap 수정 계획 전 질문에서 `켬` 으로 재결정했다 — 측정 도구의 결함(04-REVIEW.md CR-01)으로 0 으로 실린 값이 2줄(모두 `pubspec.yaml`)로 바로잡힌 뒤다 (아래 행과 "표 밖의 응답과 메모").
 
 | 규칙 | 묶음 | 권고 | 결정 | 사유 |
 |---|---|---|---|---|
@@ -879,7 +879,7 @@
 | `simplify_variable_pattern` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
 | `sized_box_shrink_expand` | perf | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
 | `sort_constructors_first` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
-| `sort_pub_dependencies` | style | 결정 안 함 (표식 불가) | 안 켬 | 권고 이유 승인 — 실제 프로젝트 0줄이고 `lib/` 샘플로 걸리는 것을 보일 수 없어 이번에는 켜지 않는다 (04-07 실행 전 질문) |
+| `sort_pub_dependencies` | style | 결정 안 함 (표식 불가) | 켬 | 권고 이유 승인 (재결정 — 2026-10-13, gap 수정 계획 전 질문) — 실측 2줄, 모두 `pubspec.yaml`; 다른 스타일 규칙과 같은 잣대(손으로 고칠 줄 50 이하); 막았던 이유 둘(0줄 · `lib/` 샘플로 보일 수 없음)은 측정 도구 수정(04-REVIEW.md CR-01, 04-11)과 `example/pubspec.yaml` 샘플(04-12)로 사라졌다. `dart fix` 는 재지 않았다 — 손으로 2곳. 첫 결정은 안 켬 (04-07 실행 전 질문) — 측정 도구가 `pubspec.yaml` 자리를 세지 않아 0 으로 실린 값("실제 프로젝트 0줄")을 근거로 했고, 그 근거는 사실이 아니었다 |
 | `sort_unnamed_constructors_first` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
 | `specify_nonobvious_local_variable_types` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — 도구 판정: dart fix 가 error 4건을 남긴다 |
 | `specify_nonobvious_property_types` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
@@ -930,3 +930,4 @@
 - **질문 7 (`unnecessary_underscores`): 그대로 둔다** — 기반 세트(`lints` 6.1.0 recommended)가 켜는 그대로 받고 `lib/base.yaml` 에서 끄지 않는다. 후보가 아니라 이 표에 행이 없다.
 - 질문 8 (v2 12개)은 묻지 않았고, 질문 9 (`unnecessary_ignore`)는 보류 (04-08) 를 알렸다.
 - **질문 9 (재측정, 04-08): 안 켬** — orchestrator 가 `## 질문 9 (재측정)` 절을 원문 그대로 보인 뒤 받은 응답이다 (2026-10-13). 권고대로 골랐고 소유자는 사유를 덧붙이지 않았다 — 결정 표 `사유` 칸의 `권고 이유 승인 — …` 는 패널의 권고 이유를 소유자가 승인했다는 뜻이고 소유자가 쓴 말이 아니다.
+- **재결정 (`sort_pub_dependencies`, 2026-10-13, gap 수정 계획 전 질문): 켬** — 묶음 3 패널의 `0 (표식 불가)` 는 측정 도구가 `pubspec.yaml` 자리의 진단을 값에 넣지 않아 생긴 틀린 값이다 (04-REVIEW.md CR-01, 04-VERIFICATION.md gap 1). 커밋된 R1 회차에서 다시 센 값은 `pubspec.yaml` 2줄 · Dart 파일 0줄이고(04-11, `--recount`), 고친 도구의 판정은 `켬 (손으로 고칠 줄 2 ≤ 50)` 이다. orchestrator 가 실측(2줄)과 선택지 둘(켬 / 안 켬 — 바뀌는 것, 사용 프로젝트에의 영향)을 비교표로 보였고 소유자는 권고(켬)를 골랐다 — 사유를 따로 덧붙이지 않았다. 패널 블록은 그날 찍힌 원문 그대로 두고 결정 표의 행만 고쳤다. `dart fix` 는 재지 않았다 (손으로 2곳).

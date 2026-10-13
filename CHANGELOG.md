@@ -67,6 +67,7 @@
 - `simple_directive_paths` — directive 경로에 ./ 나 되돌아가는 ../ 를 넣지 않는다
 - `simplify_variable_pattern` — 변수 pattern 에 같은 이름의 getter 를 다시 적지 않는다
 - `sort_constructors_first` — 생성자를 다른 멤버보다 먼저 둔다
+- `sort_pub_dependencies` — pubspec.yaml 의 dependencies · dev_dependencies 를 이름 순으로 적는다 — 목록에서 찾기 쉽고 끼워 넣을 자리가 정해진다
 - `sort_unnamed_constructors_first` — 이름 없는 생성자를 이름 있는 생성자보다 먼저 둔다
 - `specify_nonobvious_property_types` — 타입이 자명하지 않은 top-level · static 변수에는 타입을 적는다
 - `tighten_type_of_initializing_formals` — assert(p != null) 대신 초기화 매개변수의 타입으로 null 아님을 적는다
@@ -95,6 +96,7 @@
 - 규칙 근거 문서 `RULES.md` 를 추가하고 검증 명령에 `[3/10]` 배포 파일의 구성 단계를 더함 — 기반 세트와의 겹침, `RULES.md` 와의 일치, 묶음 · 별칭이 include 만 담는지. 사용하는 프로젝트에는 영향 없음.
 - 규칙 실측 도구 `tool/measure_rules.dart` 와 회차 기록 `tool/measurements/` 를 추가 — 비공개 사용 프로젝트의 복사본이 있어야 돌므로 CI 에서는 돌지 않는다. 사용하는 프로젝트에는 영향 없음.
 - 1.3.0 부터 켜 둔 규칙 6개(`prefer_const_constructors`, `prefer_const_literals_to_create_immutables`, `always_declare_return_types`, `prefer_final_locals`, `prefer_single_quotes`, `unawaited_futures`)를 모두 남기고, `lib/base.yaml` 의 사유 주석 셋을 사실에 맞게 고침 — const 규칙 둘의 "성능 향상" 문구(Flutter 팀이 근거 부족으로 본 주장, dart-lang/lints#205)와 `always_declare_return_types` 의 범위. 주석만 바뀌어 사용하는 프로젝트에는 영향 없음 (소유자 결정 2026-10-13).
+- 측정 도구 `tool/measure_rules.dart` 가 `pubspec.yaml` 에 보고되는 진단을 규칙의 값에 넣지 않던 결함을 고치고(04-REVIEW.md CR-01) 커밋된 회차에서 R1 의 행을 다시 셈 (`--recount` — `sort_pub_dependencies` 0 → 2, 다른 행은 그대로). 검증 명령 `[3/10]` 이 `lib/base.yaml` 의 열 0 주석 뒤에 적힌 규칙을 보지 못하던 구멍(CR-02)과, 기반 세트 YAML 에서 규칙을 하나도 읽지 못해도 겹침 검사가 통과하던 구멍(WR-06)을 막음. 사용하는 프로젝트에는 영향 없음.
 
 ### 새로 생기는 경고
 
@@ -158,6 +160,7 @@
 | `simple_directive_paths` | info | 0건 | 해당 없음 |
 | `simplify_variable_pattern` | info | 0건 | 해당 없음 |
 | `sort_constructors_first` | info | 0건 | 해당 없음 |
+| `sort_pub_dependencies` | info | 2건 | 재지 않음 |
 | `sort_unnamed_constructors_first` | info | 0건 | 해당 없음 |
 | `specify_nonobvious_property_types` | info | 0건 | 해당 없음 |
 | `tighten_type_of_initializing_formals` | info | 0건 | 해당 없음 |
@@ -177,7 +180,9 @@
 
 실측: flutter_starter_kit (Dart 파일 474개), Flutter 3.47.5, 2026-10-13
 
-자리별 건수(lib · test · bin)와 회차는 RULES.md 의 실측 기록에 있다.
+자리별 건수(lib · test · bin · pubspec)와 회차는 RULES.md 의 실측 기록에 있다.
+
+`sort_pub_dependencies` 의 2건은 Dart 파일이 아니라 `pubspec.yaml` 에 보고되는 줄이다 (의존성 두 곳의 순서) — `dart fix` 는 재지 않았다. 손으로 고치는 2곳이다.
 
 ## 1.3.0
 
