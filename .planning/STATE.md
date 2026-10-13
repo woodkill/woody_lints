@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 04
 current_phase_name: Rule Reselection
 status: executing
-stopped_at: Completed 04-08-PLAN.md
-last_updated: "2026-10-13T04:46:37.453Z"
+stopped_at: Completed 04-09-PLAN.md
+last_updated: "2026-10-13T05:01:27.208Z"
 last_activity: 2026-10-13
 last_activity_desc: Phase 04 execution started
-state_head: 479ad216781c826bba43620aa3b972aca41454c2
+state_head: 2b2b475248ce0c1e7c4196284e8bb4d165c7f9fb
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 23
-  completed_plans: 21
+  completed_plans: 22
   percent: 50
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-12)
 ## Current Position
 
 Phase: 04 (Rule Reselection) — EXECUTING
-Plan: 8 of 10
+Plan: 9 of 10
 Status: Ready to execute
 Last activity: 2026-10-13 — Phase 04 execution started
 
@@ -81,6 +81,7 @@ Progress: [█████░░░░░] 50%
 | Phase 04 P06 | 16min | 3 tasks | 26 files |
 | Phase 04 P07 | 17min | 3 tasks | 26 files |
 | Phase 04 P08 | 17min | 3 tasks | 4 files |
+| Phase 04 P09 | 7min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -175,6 +176,8 @@ Recent decisions affecting current work:
 - [Phase 04]: avoid_final_parameters 샘플은 언어 버전 3.11 로 둔 lib/final_parameters_rule.dart 한 파일에 있다 — 연습용 프로젝트가 sdk ^3.13.0 이라 다른 파일에서는 규칙이 돌지 않고 final 매개변수가 error 다 (04-07)
 - [Phase 04]: 04-07 계획의 Task 1 · 2 검증 명령은 relative_imports_rule.dart 때문에 복사본 diff -rq 에서 쓰인 그대로 실패한다 (04-06 과 같은 결함) — 고친 판으로 rc 0, Task 3 은 쓰인 그대로 rc 0 (04-07-SUMMARY)
 - [Phase 04]: unnecessary_ignore 는 안 켬 — 결정 반영 뒤 재측정 UI 36줄 (lib 1 · test 34 · bin 1, G1 은 12), 소유자가 질문 9 (재측정) 권고대로 고름 (사유 없음, 04-08)
+- [Phase 04]: 04-09: CHANGELOG 2.0.0 새로 생기는 경고 표는 새로 켠 규칙 74행(R1 JSON 의 lib + test + bin 합계 · fixRemoved), 칸 맞춤 없이 쓴다
+- [Phase 04]: 04-09: 03 리뷰 WR-01 fixed · WR-02 deferred (Phase 5 첫 일) · WR-03 open; M25 는 no_self_assignments 로 [3/10] 과 정답지 단계 다섯이 함께 실패함을 확인
 
 ### Pending Todos
 
@@ -200,6 +203,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-13T04:46:37.420Z
-Stopped at: Completed 04-08-PLAN.md
+Last session: 2026-10-13T05:01:27.174Z
+Stopped at: Completed 04-09-PLAN.md
 Resume file: None
