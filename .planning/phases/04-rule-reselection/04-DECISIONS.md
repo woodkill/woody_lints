@@ -718,7 +718,7 @@
 
 ## 결정
 
-결정 표 — 후보 133개, 이름 순. `묶음` 칸은 `tool/measure_rules.dart` 의 `bundles` id 다. `권고` 는 위 패널의 것(도구 판정 포함)이고, `결정` · `사유` 는 소유자의 응답으로만 채운다. `결정` 칸의 `켬` / `안 켬` 115행은 2026-10-13 의 소유자 응답(묶음 5 · 개별 질문 7)으로 채웠고, 나머지 18행은 v2 12 · `unnecessary_ignore` 보류 1 · 도구가 0줄의 뜻을 가르지 못한 5 다 (초안 그대로).
+결정 표 — 후보 133개, 이름 순. `묶음` 칸은 `tool/measure_rules.dart` 의 `bundles` id 다. `권고` 는 위 패널의 것(도구 판정 포함)이고, `결정` · `사유` 는 소유자의 응답으로만 채운다. `결정` 칸의 `켬` / `안 켬` 118행은 2026-10-13 의 소유자 응답으로 채웠다 — 115행은 묶음 5 · 개별 질문 7, 3행(`sort_pub_dependencies` · `use_test_throws_matchers` · `remove_deprecations_in_breaking_versions`, 모두 `안 켬`)은 04-07 실행 전의 질문이다. 나머지 15행은 v2 12 · `unnecessary_ignore` 보류 1 · 규칙이 아무것도 보고하지 않아 도구가 0줄의 뜻을 가르지 못한 2(`require_trailing_commas` · `package_prefixed_library_names`, `RULES.md` 에는 `규칙이 돌지 않음` 으로 적는다) 다 (초안 그대로).
 
 | 규칙 | 묶음 | 권고 | 결정 | 사유 |
 |---|---|---|---|---|
@@ -810,13 +810,13 @@
 | `prefer_single_quotes` | current | 켬 | 켬 | 권고 이유 승인 — 남긴다 — 0줄 (프로젝트가 이미 따른다) |
 | `prefer_void_to_null` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — 풀리지 않은 오탐 (very_good_analysis 가 뺀다) — 0줄 |
 | `public_member_api_docs` | v2 | v2 (RULES-09) | 결정 안 함 (v2, RULES-09) |  |
-| `remove_deprecations_in_breaking_versions` | excluded | 결정 안 함 (표식 미검출) | 결정 안 함 (표식 미검출) |  |
+| `remove_deprecations_in_breaking_versions` | excluded | 결정 안 함 (표식 미검출) | 안 켬 | 권고 이유 승인 — 사용 프로젝트의 version 이 x.0.0 일 때만 경고하고, 실측 0줄 · 표식 미검출이다 (04-07 실행 전 질문) |
 | `require_trailing_commas` | excluded | 결정 안 함 (표식 불가) | 결정 안 함 (표식 불가) |  |
 | `simple_directive_paths` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
 | `simplify_variable_pattern` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
 | `sized_box_shrink_expand` | perf | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
 | `sort_constructors_first` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
-| `sort_pub_dependencies` | style | 결정 안 함 (표식 불가) | 결정 안 함 (표식 불가) |  |
+| `sort_pub_dependencies` | style | 결정 안 함 (표식 불가) | 안 켬 | 권고 이유 승인 — 실제 프로젝트 0줄이고 `lib/` 샘플로 걸리는 것을 보일 수 없어 이번에는 켜지 않는다 (04-07 실행 전 질문) |
 | `sort_unnamed_constructors_first` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
 | `specify_nonobvious_local_variable_types` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — 도구 판정: dart fix 가 error 4건을 남긴다 |
 | `specify_nonobvious_property_types` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
@@ -852,7 +852,7 @@
 | `use_raw_strings` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
 | `use_setters_to_change_properties` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 3 (≤ 50) |
 | `use_string_buffers` | perf | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
-| `use_test_throws_matchers` | style | 결정 안 함 (표식 불가) | 결정 안 함 (표식 불가) |  |
+| `use_test_throws_matchers` | style | 결정 안 함 (표식 불가) | 안 켬 | 권고 이유 승인 — 실제 프로젝트 0줄이고 `lib/` 샘플로 걸리는 것을 보일 수 없어 이번에는 켜지 않는다 (04-07 실행 전 질문) |
 | `use_to_and_as_if_applicable` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — API 설계 취향 규칙 — 0줄 |
 | `use_truncating_division` | perf | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
 
