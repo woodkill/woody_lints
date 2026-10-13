@@ -131,8 +131,8 @@ status: complete
 |---|---|---|
 | (d) 표시 구역 | 이름 81개, malformed 0 | `lib/base.yaml` 81개 — 같음 |
 | (e) 주소 | `analysis_options.yaml`(1) · `base.yaml`(3) · `codegen.yaml`(1) · `recommended.yaml`(2) · `riverpod.yaml`(1) → 집합 다섯 | `expectedLibYamls` 다섯 — 모두 있음 |
-| (f) plugin 버전 | 18 · 333행 바깥의 블록 줄 두 개: `  riverpod_lint: ^3.1.9`, `    version: ^3.1.9` | `^3.1.9` |
-| (g) ref | 블록 안 `ref: v2.0.0` 두 줄 (설치 · tag 로 옮기기) | `2.0.0-dev` → `2.0.0` |
+| (f) plugin 버전 | 블록 안 두 줄: 198행 `  riverpod_lint: ^3.1.9` (조각마다의 설정), 234행 `    version: ^3.1.9` (끄기 예시) | `^3.1.9` |
+| (g) ref | 블록 안 두 줄: 18행 · 333행 `ref: v2.0.0` (설치 · tag 로 옮기기) | `2.0.0-dev` → `2.0.0` |
 
 ## 지워 보기 (확인만 — 기록은 05-06 의 M38 ~ M42)
 

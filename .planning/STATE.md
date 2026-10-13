@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 05
 current_phase_name: Documentation
 status: executing
-stopped_at: Completed 05-02-PLAN.md
-last_updated: "2026-10-13T17:13:38.094Z"
+stopped_at: Completed 05-03-PLAN.md
+last_updated: "2026-10-13T17:31:24.197Z"
 last_activity: 2026-10-14
-last_activity_desc: 05-01 완료 — tool/verify.dart WR-02 · WR-11 · IN-14 닫음, M32 ~ M37
-state_head: 8e4199faba0efa80892d105e81cea374583165c0
+last_activity_desc: 05-03 완료 — README 전면 재작성 · [3/10] README 검사 (d) ~ (g)
+state_head: 3df0ecb08630afca49bd60d6797a7c40726bab1e
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 32
-  completed_plans: 28
+  completed_plans: 29
   percent: 67
 ---
 
@@ -30,9 +30,9 @@ See: .planning/PROJECT.md (updated 2026-10-13)
 ## Current Position
 
 Phase: 05 (Documentation) — EXECUTING
-Plan: 3 of 6
+Plan: 4 of 6
 Status: Ready to execute
-Last activity: 2026-10-14 — 05-01 완료 (tool/verify.dart WR-02 · WR-11 · IN-14, M32 ~ M37)
+Last activity: 2026-10-14 — 05-03 완료 (README 전면 재작성, [3/10] README 검사 (d) ~ (g))
 
 Progress: [███████░░░] 67%
 
@@ -89,6 +89,7 @@ Progress: [███████░░░] 67%
 | Phase 04 P13 | 7min | 3 tasks | 5 files |
 | Phase 05 P01 | 9min | 3 tasks | 4 files |
 | Phase 05 P02 | 4min | 2 tasks | 6 files |
+| Phase 05 P03 | 13min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -207,6 +208,9 @@ Recent decisions affecting current work:
 - [Phase 05]: 05-01: stripPlugins 는 plugins: 섹션을 빈 줄로 바꿔 줄 번호를 보존하고 readShippedPluginConstraint 는 줄 끝 주석 · 맵 형식을 받는다 (M32 · M33 통과, M34 70, M37 진단 줄 :13)
 - [Phase 05]: 05-02: lib/recommended.yaml · lib/analysis_options.yaml 에도 README.md 를 가리키는 # 줄을 하나씩 더했다 — 다섯 파일 모두 머리 주석이 README 를 가리킨다
 - [Phase 05]: 05-02: .claude/CLAUDE.md 71행은 [3/10] 이 lib/base.yaml · RULES.md · README 표시 구역의 일치를 본다고 적었다 — CHANGELOG 는 검증 대상이 아니다
+- [Phase 05]: 05-03: pub workspace 공식 문서에 멤버 패키지의 analysis_options.yaml 해석 문장이 없어(2026-10-14 읽음) README 는 분석에 관한 문장 하나를 옮기고 "이 패키지로는 돌려 보지 않았다" 고 적었다
+- [Phase 05]: 05-03: README 의 복사해 쓰는 값(include 주소 · version: · ref:)은 코드 블록 안에 두고, [3/10] (f) · (g) 는 코드 블록 안만 읽는다 — 읽은 값이 0개면 실패
+- [Phase 05]: 05-03: plugin 복구 안내는 이 프로젝트의 .plugin_manager/<hash>/ (또는 bin/plugin.aot) 로 범위를 좁혔다 — 기본 자리 전체 삭제는 안내하지 않는다
 
 ### Pending Todos
 
@@ -232,6 +236,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-13T17:13:38.050Z
-Stopped at: Completed 05-02-PLAN.md
+Last session: 2026-10-13T17:31:24.155Z
+Stopped at: Completed 05-03-PLAN.md
 Resume file: None
