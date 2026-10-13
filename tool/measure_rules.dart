@@ -2257,14 +2257,30 @@ class Consumer {
       environmentSdk(originalPubspec).replace(constraint);
 
   /// 표식 — 이 저장소 `example/lib` 의 샘플을 `lib/woody_probe_marker/` 로 (저장소는 읽기만).
+  /// 샘플이 자기 패키지를 `package:` 로 부르는 주소(`relative_imports_rule.dart` — 04-06 에서
+  /// 더함)는 복사본 패키지의 표식 폴더 주소로 바꿔 쓴다. 그대로 두면 복사본에 없는 패키지라
+  /// `uri_does_not_exist` 가 되고 정답지의 `prefer_relative_imports` 줄이 표식에서 빠진다.
   void addExampleMarkers() {
     final from = Directory('${repo.root}/example/lib');
+    final self = 'package:${examplePackageName(repo.root)}/';
+    final name = RegExp(
+      r'^name: (\S+)',
+      multiLine: true,
+    ).firstMatch(originalPubspec)?.group(1);
+    if (name == null) throw StateError('복사본 pubspec.yaml 의 name: 을 읽지 못했다');
+    final markerPackage =
+        'package:$name/${Diag.markerDir.substring('lib/'.length)}';
     for (final f in from.listSync(recursive: true).whereType<File>()) {
       final to = File(
         '$dir/${Diag.markerDir}${f.path.substring(from.path.length + 1)}',
       );
       to.parent.createSync(recursive: true);
-      f.copySync(to.path);
+      final text = f.readAsStringSync();
+      if (f.path.endsWith('.dart') && text.contains(self)) {
+        to.writeAsStringSync(text.replaceAll(self, markerPackage));
+      } else {
+        f.copySync(to.path);
+      }
     }
   }
 
@@ -2562,6 +2578,15 @@ String digest(List<int> bytes) {
   }
   String half(int v) => (v & 0xffffffff).toRadixString(16).padLeft(8, '0');
   return half(hash >> 32) + half(hash);
+}
+
+/// `example/pubspec.yaml` 의 패키지 이름 (`woody_lints_example`) — 표식으로 옮길 때 바꿔 쓸 주소.
+String examplePackageName(String repoRoot) {
+  final name = RegExp(r'^name: (\S+)', multiLine: true)
+      .firstMatch(File('$repoRoot/example/pubspec.yaml').readAsStringSync())
+      ?.group(1);
+  if (name == null) throw StateError('example/pubspec.yaml 의 name: 을 읽지 못했다');
+  return name;
 }
 
 /// 정답지 파일에서 진단 줄만 (`#` 머리 주석과 `exit N` 줄을 뺀다).
