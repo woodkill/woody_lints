@@ -192,6 +192,57 @@
 - `flutter_lints` 를 `dev_dependencies` → `dependencies` 로 이동. `include: package:flutter_lints/flutter.yaml` 이 사용하는 프로젝트의 직접 의존 여부와 무관하게 해석된다.
 - 저장소 자체 분석용 루트 `analysis_options.yaml` 추가 — `lib/analysis_options.yaml` 의 `plugins:` 가 이 저장소 안에서는 inner 옵션으로 취급되어 나는 `plugins_in_inner_options` 경고를 제외한다. 사용하는 프로젝트에는 영향 없음.
 
+## 1.2.5
+
+2026-03-23, 커밋 `dbcd20b` (tag 없음)
+
+- `formatter:` / `trailing_commas: preserve` 두 줄, `require_trailing_commas`, `public_member_api_docs` 를 주석 처리. 줄은 지우지 않고 남겼다 (지운 것은 2.0.0).
+
+## 1.2.4
+
+2026-02-27, 커밋 `212365d` (tag 없음)
+
+- `public_member_api_docs` 규칙 추가 (당시 patch 로 냄 — `VERSIONING.md` 의 실제 사례 참고).
+- `analyzer:` 블록 신설.
+  - 옛 방식 `analyzer: plugins:` 로 `riverpod_lint` 선언 추가 — 1.3.0 항목 참고, 이 방식은 riverpod_lint 3.x 를 로드하지 않았다.
+  - `errors: invalid_annotation_target: ignore`.
+  - `exclude:` 에 `'**/*.freezed.dart'` · `'**/*.g.dart'`.
+- 템플릿에서 온 주석 처리된 `# analyzer:` 예시 세 줄을 지움.
+- 저장소 안쪽: FVM 설정 `.fvmrc` (Flutter 3.38.9) · `.vscode/settings.json` 과 `.gitignore` 의 `.fvm/` 추가 (`a97fd20`, 2026-01-30), 이 버전 커밋에서 `.fvmrc` 를 3.38.9 → 3.41.2 로, `.vscode/settings.json` 의 SDK 경로를 `.fvm/versions/3.41.2` 로. 사용하는 프로젝트에는 영향 없음.
+
+## 1.2.3
+
+2026-01-28, 커밋 `9451f6b` (tag 없음)
+
+- `slash_for_doc_comments` 규칙 추가 (가독성 및 스타일, 당시 patch 로 냄 — `VERSIONING.md` 의 실제 사례 참고). README 의 규칙 목록에도 한 줄.
+- 저장소 안쪽: `.gitignore` 에 `.DS_Store` 추가 (`1693a97`, 같은 날). 사용하는 프로젝트에는 영향 없음.
+
+## 1.2.2
+
+2026-01-03, 커밋 `31c8cb1` (tag 없음)
+
+- 설정 변경 없음 — 버전 숫자만 바뀌었다. 같은 날 README 수정 (`7b7455e` — 의존성 블록을 따로 보이고 설치 순서 문구를 고침).
+
+## 1.2.1
+
+2025-12-30, 커밋 `21c5689` (tag 없음)
+
+- 설정 변경 없음 — 버전 숫자만 바뀌었다. 같은 날 README 수정 (`9950fd1` — 설치 확인 방법 추가, 포맷터 절을 규칙 목록의 한 항목으로).
+
+## 1.2.0
+
+2025-12-24, 커밋 `ec66e3f` (tag 없음)
+
+- `formatter:` / `trailing_commas: preserve` 두 줄 추가 (`include:` 와 `linter:` 사이). README 에 포맷터 절 추가.
+
+## 1.1.0
+
+2025-12-22, 커밋 `2249a0b` (tag 없음) — 내용은 `126aa43`, 같은 날
+
+- 기반 세트를 `package:lints/recommended.yaml` 에서 `package:flutter_lints/flutter.yaml` 로 바꿈.
+- `dev_dependencies` 의 `lints: ^6.0.0` 을 `flutter_lints: ^6.0.0` 으로 바꿈 (1.3.0 이 `dependencies` 로 옮겼다).
+- 같은 날 README 에 `flutter pub upgrade woody_lints` 안내 추가 (`9bf0d86`).
+
 ## 1.0.0
 
 - Initial version.
