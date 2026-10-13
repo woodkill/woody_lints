@@ -447,6 +447,26 @@ List<String> checkCandidates() {
     count((c) => c.bundle == 'v2' && c.deferredTo != null),
     12,
   );
+  // 표식 상수 — 후보가 아닌 이름 · 표식과 표식 불가에 함께 있는 이름 · 지금 켜 둔 규칙의 표식.
+  final known = names.toSet();
+  for (final name in {
+    ...ruleProbes.keys,
+    ...ruleProbes313.keys,
+    ...noFileProbe.keys,
+  }) {
+    if (!known.contains(name)) problems.add('표식 상수에 후보가 아닌 이름: $name');
+  }
+  for (final name in noFileProbe.keys) {
+    if (ruleProbes.containsKey(name) || ruleProbes313.containsKey(name)) {
+      problems.add('표식이 있는데 표식 불가에도 있다: $name');
+    }
+  }
+  for (final name in currentRules) {
+    if (ruleProbes.containsKey(name)) problems.add('지금 켜 둔 규칙의 표식: $name');
+  }
+  for (final name in ruleProbes313.keys) {
+    if (!g4Rules.contains(name)) problems.add('G4 가 아닌 3.13 표식: $name');
+  }
   return problems;
 }
 
@@ -473,23 +493,195 @@ const expectedStateCounts = {'stable': 129, 'testing': 2, 'experimental': 1};
 // 표식 --------------------------------------------------------------------
 //
 // 규칙 이름 → 그 규칙을 어기는 Dart 소스. markers 단계가
-// `lib/woody_probe_marker/rule_probe/<규칙>.dart` 로 넣는다 (D-03). 04-03 이 약 60개를 더한다.
+// `lib/woody_probe_marker/rule_probe/<규칙>.dart` 로 넣는다 (D-03).
+//
+// 범위 (D-03, RULES-05): spike 022 에서 프로젝트 줄이 0 이었던 후보 62개(022 결과 JSON 의
+// `rows[].diagProject == 0`), spike 021 `oldSamples` · `newSyntaxSamples` 와 023 `markers` 의 나머지,
+// 022 가 빠뜨린 B-6 의 7개(그날의 복사본에서 0줄일 수 있어 미리 둔다). 지금 켜 둔 6개(`current`)는
+// 표식을 두지 않는다 — `example/lib/added_rules.dart` 의 줄이 그 표식이다 (baseline 단계).
+//
+// 표식 하나는 그 규칙을 **확실히** 어기는 선언이다. 다른 규칙도 함께 어겨도 된다 — 표식 줄은
+// `area == 'marker'` 로 갈라져 프로젝트 값에 섞이지 않는다. 파일 맨 위 `// ignore_for_file:` 을
+// 쓰지 않고, `package:flutter/material.dart` 나 `dart:*` 만 import 한다 (복사본은 Flutter 앱이다).
+// 근거는 FEATURES.md 의 "잡는 것" 과 tag 3.13.4 의 규칙 소스(`pkg/linter/lib/src/rules/<규칙>.dart`).
+// 채택되면 D-10 의 샘플로 옮긴다 — 그때는 한 줄에 규칙 하나만 걸리게 고친다.
+
+// 언어 버전 3.11 문법으로도 쓸 수 있는 G4 의 넷 — 3.11 판과 3.13 판이 같은 코드다 (spike 021 의
+// `oldSamples`. 3.13 패키지에서 걸리고 3.11 패키지에서는 막는 조건 때문에 걸리지 않았다).
+const _emptyContainerBodiesProbe = '''
+/// 표식 — 몸통이 빈 클래스.
+class EmptyBodyMarker {}
+''';
+
+const _unnecessaryConstInEnumProbe = '''
+/// 표식 — enum 생성자의 const.
+enum ConstEnumMarker {
+  /// a.
+  a(1),
+
+  /// b.
+  b(2);
+
+  const ConstEnumMarker(this.i);
+
+  /// 값.
+  final int i;
+}
+''';
+
+const _unnecessaryTypeNameProbe = '''
+/// 표식 — 생성자 선언에 적은 타입 이름.
+class TypeNameMarker {
+  /// 기본 생성자.
+  TypeNameMarker();
+
+  /// 이름 있는 생성자.
+  TypeNameMarker.named();
+}
+''';
+
+const _usePrimaryConstructorsProbe = '''
+/// 표식 — 생성자 하나와 필드로 된 클래스.
+class PointMarker {
+  /// 생성자.
+  PointMarker(this.x, this.y);
+
+  /// x.
+  final int x;
+
+  /// y.
+  final int y;
+}
+''';
 
 /// 언어 버전 3.11 로 컴파일되는 표식 (G1 ~ G4 어디에나 넣을 수 있다).
-/// 출발점은 spike 021 `probe.dart` 의 `oldSamples` 다 — 이 plan 은 smoke 가 쓰는 셋만 옮겼다.
+/// 출발점은 spike 021 `probe.dart` 의 `oldSamples` 와 spike 023 `probe.dart` 의 `markers` 다.
+///
+/// G4 의 넷(`empty_container_bodies` · `unnecessary_const_in_enum_constructor` ·
+/// `unnecessary_type_name_in_constructor` · `use_primary_constructors`)은 G1 의 marker 실행에도
+/// 넣어 지금 하한에서 걸리는지를 행의 `markerDetectedCurrent` 에 적는다 (D-15 의 값 둘 가운데
+/// "지금 하한" 쪽의 근거). G4 의 marker 실행은 [ruleProbes313] 의 판을 쓴다.
 const ruleProbes = <String, String>{
+  // B-1 버그 방지 ---------------------------------------------------------
   'async_return_with_no_await': '''
 /// 표식 — async 함수가 Future 를 await 없이 돌려준다.
 Future<String> asyncReturnMarker(Future<String> value) async {
   return value;
 }
 ''',
-  'no_raw_types': '''
-/// 표식 — 타입 인자를 생략한 제네릭 타입.
-class BoxMarker<T> {}
+  'avoid_double_and_int_checks': '''
+/// 표식 — is double 검사 뒤의 is int 검사 (web 에서 뜻이 달라진다).
+String numberKindMarker(num x) {
+  if (x is double) {
+    return 'double';
+  } else if (x is int) {
+    return 'int';
+  }
+  return 'other';
+}
+''',
+  'avoid_js_rounded_ints': '''
+/// 표식 — JavaScript 에서 정밀도가 깨지는 정수 리터럴.
+const int jsRoundedMarker = 9007199254740993;
+''',
+  'avoid_type_to_string': '''
+// 표식 — Type 을 implements 한 클래스의 toString(). `x.runtimeType.toString()` 은 tag 3.13.4 의
+// SDK 에서 걸리지 않았다 — dart:core 의 Type 이 toString() 을 선언해, 규칙이 보는 "Object 의
+// toString" 이 아니다 (2026-10-13, example/ 복사본).
 
-/// 타입 인자 없이 선언한 변수.
-BoxMarker rawBoxMarker = BoxMarker<int>();
+/// 표식용 — Type 을 implements 하는 클래스.
+class TypeLikeMarker implements Type {}
+
+/// Type 의 toString() 결과에 기대는 코드.
+String typeLikeNameMarker() => TypeLikeMarker().toString();
+''',
+  'avoid_unused_constructor_parameters': '''
+/// 표식 — 쓰이지 않는 생성자 매개변수.
+class UnusedParameterMarker {
+  /// 생성자.
+  UnusedParameterMarker(int unused);
+}
+''',
+  'avoid_void_async': '''
+/// 표식 — 반환 타입이 void 인 async 함수.
+void voidAsyncMarker() async {
+  await Future<void>.value();
+}
+''',
+  'cancel_subscriptions': '''
+import 'dart:async';
+
+/// 표식 — cancel 하지 않는 StreamSubscription.
+void subscriptionMarker(Stream<int> stream) {
+  final StreamSubscription<int> subscription = stream.listen((_) {});
+  subscription.pause();
+}
+''',
+  'cast_nullable_to_non_nullable': '''
+/// 표식용 타입.
+class CastBaseMarker {}
+
+/// 표식용 하위 타입.
+class CastChildMarker extends CastBaseMarker {}
+
+/// 표식 — nullable 값을 non-nullable 하위 타입으로 as.
+CastChildMarker castMarker(CastBaseMarker? value) => value as CastChildMarker;
+''',
+  'conditional_uri_does_not_exist': '''
+// 표식 — 조건부 import 가 가리키는 파일이 없다.
+// (쓰지 않는 import 라 unused_import 도 함께 걸린다 — 고른 쪽이 없는 파일이면 이름을 못 찾는다.)
+import 'dart:math' if (dart.library.io) 'woody_missing_probe_target.dart';
+
+/// 값.
+const int conditionalImportMarker = 1;
+''',
+  'deprecated_member_use_from_same_package': '''
+/// 표식용 deprecated 함수.
+@Deprecated('표식')
+int deprecatedValueMarker() => 1;
+
+/// 표식 — 같은 패키지 안에서 deprecated 멤버를 쓴다.
+int useDeprecatedMarker() => deprecatedValueMarker();
+''',
+  'discarded_futures': '''
+/// 표식 — 동기 함수에서 Future 를 버린다.
+void discardMarker() {
+  Future<void>.delayed(Duration.zero);
+}
+
+/// 표식 — 같은 위반을 무시 주석으로 가렸다 (주석을 걷어낸 실행에서만 보인다).
+void discardIgnoredMarker() {
+  // ignore: discarded_futures
+  Future<void>.delayed(Duration.zero);
+}
+''',
+  'literal_only_boolean_expressions': '''
+/// 표식 — 리터럴만으로 이루어진 조건식.
+int literalConditionMarker() {
+  if (1 > 2) {
+    return 0;
+  }
+  return 1;
+}
+''',
+  'matching_super_parameters': '''
+/// 표식용 부모 클래스.
+class SuperBaseMarker {
+  /// 생성자.
+  SuperBaseMarker(this.first, this.second);
+
+  /// 첫째.
+  final int first;
+
+  /// 둘째.
+  final int second;
+}
+
+/// 표식 — super 매개변수의 이름이 부모 생성자와 다르다 (순서 착오).
+class SuperChildMarker extends SuperBaseMarker {
+  /// 생성자.
+  SuperChildMarker(super.second, super.first);
+}
 ''',
   'no_dynamic_casts': '''
 /// 표식 — dynamic 에서의 암묵적 cast.
@@ -498,13 +690,524 @@ int dynamicCastMarker(dynamic x) {
   return y;
 }
 ''',
+  'no_self_assignments': '''
+/// 표식 — 자기 자신을 대입한다.
+class SelfAssignMarker {
+  /// 값.
+  int value = 0;
+
+  /// 같은 값을 다시 넣는다.
+  void reset() {
+    value = value;
+  }
+}
+''',
+  'parameter_assignments': '''
+/// 표식 — 매개변수에 다시 대입한다.
+int parameterAssignMarker(int x) {
+  x = x + 1;
+  return x;
+}
+''',
+  'switch_on_type': '''
+/// 표식 — runtimeType 으로 switch.
+String switchTypeMarker(Object value) {
+  switch (value.runtimeType) {
+    case int:
+      return 'int';
+    default:
+      return 'other';
+  }
+}
+''',
+  'test_types_in_equals': '''
+/// 표식 — operator == 에서 인자의 타입을 검사하지 않는다.
+class EqualsMarker {
+  /// 생성자.
+  const EqualsMarker(this.value);
+
+  /// 값.
+  final int value;
+
+  @override
+  bool operator ==(Object other) => (other as EqualsMarker).value == value;
+
+  @override
+  int get hashCode => value.hashCode;
+}
+''',
+  'throw_in_finally': '''
+/// 표식 — finally 안의 throw.
+int throwInFinallyMarker() {
+  try {
+    return int.parse('1');
+  } finally {
+    throw StateError('표식');
+  }
+}
+''',
+  'unnecessary_statements': '''
+/// 표식 — 효과가 없는 문장.
+void statementMarker(int x) {
+  x + 1;
+}
+''',
+  // B-2 성능 --------------------------------------------------------------
+  'avoid_slow_async_io': '''
+import 'dart:io';
+
+/// 표식 — 느린 dart:io async 메서드.
+Future<bool> slowIoMarker() => File('woody_probe_missing.txt').exists();
+''',
+  'noop_primitive_operations': '''
+/// 표식 — 효과 없는 원시 타입 연산.
+int noopIntMarker(int x) => x.toInt();
+
+/// 표식 — 문자열의 toString().
+String noopStringMarker(String s) => s.toString();
+''',
+  'sized_box_shrink_expand': '''
+import 'package:flutter/material.dart';
+
+/// 표식 — SizedBox.shrink 로 쓸 수 있는 SizedBox.
+Widget shrinkMarker() => const SizedBox(width: 0, height: 0);
+''',
+  'use_colored_box': '''
+import 'package:flutter/material.dart';
+
+/// 표식 — 색만 지정한 Container.
+Widget coloredMarker() => Container(color: Colors.red, child: const Text('a'));
+''',
+  'use_string_buffers': '''
+/// 표식 — 루프 안의 문자열 누적 연결.
+String bufferMarker(List<String> parts) {
+  var joined = '';
+  for (final part in parts) {
+    joined += part;
+  }
+  return joined;
+}
+''',
+  'use_truncating_division': '''
+/// 표식 — (a / b).toInt().
+int truncatingDivisionMarker(int a, int b) => (a / b).toInt();
+''',
+  // B-3 가독성·스타일 ------------------------------------------------------
+  'avoid_final_parameters': '''
+// @dart=3.11
+// 이 파일만 언어 버전 3.11 로 둔다 — 3.13 에서는 primary constructor 기능이 켜져 이 규칙이 돌지 않고
+// (규칙 소스의 Feature.primary_constructors 조건) 보통 매개변수의 final 이 error(extraneous_modifier)
+// 다. 3.11 은 사용 프로젝트의 지금 하한과 같다 — 하한을 3.13 으로 올리면 이 규칙은 꺼진다 (RULES-10).
+
+/// 표식 — 매개변수 선언의 final.
+int finalParameterMarker(final int x) => x;
+''',
+  'avoid_multiple_declarations_per_line': '''
+/// 표식 — 한 줄에 변수 여러 개 선언.
+int multipleDeclarationsMarker() {
+  var a = 1, b = 2;
+  return a + b;
+}
+''',
+  'avoid_setters_without_getters': '''
+/// 표식 — getter 없는 setter.
+class SetterOnlyMarker {
+  int _value = 0;
+
+  /// setter 만 있다.
+  set value(int v) {
+    _value = v;
+  }
+
+  /// 값을 읽는다.
+  int read() => _value;
+}
+''',
+  'combinators_ordering': '''
+// 표식 — show 의 이름이 정렬되어 있지 않다.
+import 'dart:math' show sin, cos;
+
+/// show 로 받은 이름을 쓰는 자리.
+double combinatorsMarker() => sin(0) + cos(0);
+''',
+  'flutter_style_todos': '''
+/// 표식 — Flutter 형식이 아닌 TODO.
+// TODO: 표식
+const int todoMarker = 1;
+''',
+  'leading_newlines_in_multiline_strings': '''
+/// 표식 — 개행으로 시작하지 않는 여러 줄 문자열.
+const String multilineMarker = """첫 줄
+둘째 줄""";
+''',
+  'no_literal_bool_comparisons': '''
+/// 표식 — bool 리터럴과의 비교.
+bool boolComparisonMarker(bool b) => b == true;
+''',
+  'prefer_asserts_in_initializer_lists': '''
+/// 표식 — 생성자 본문의 assert.
+class AssertBodyMarker {
+  /// 생성자.
+  AssertBodyMarker(this.value) {
+    assert(value > 0);
+  }
+
+  /// 값.
+  final int value;
+}
+''',
+  'prefer_final_in_for_each': '''
+/// 표식 — 다시 대입하지 않는 for-in 변수에 final 이 없다.
+int forEachMarker(List<int> values) {
+  var sum = 0;
+  for (var value in values) {
+    sum += value;
+  }
+  return sum;
+}
+''',
+  'prefer_null_aware_method_calls': '''
+/// 표식 — null 검사 뒤의 f!() 호출.
+void nullAwareCallMarker(void Function()? callback) {
+  if (callback != null) callback!();
+}
+''',
+  'simple_directive_paths': '''
+// 표식 — 되돌아가는 `../` 가 낀 directive 경로 (자기 자신을 import 한다).
+import '../rule_probe/simple_directive_paths.dart' as self_probe;
+
+/// 값.
+int simpleDirectiveMarker() => 1;
+
+/// import 한 이름을 쓰는 자리.
+int simpleDirectiveUseMarker() => self_probe.simpleDirectiveMarker();
+''',
+  'simplify_variable_pattern': '''
+/// 표식 — 변수 pattern 에 같은 이름의 getter 를 다시 적는다.
+int variablePatternMarker(Object value) {
+  if (value case Duration(inSeconds: var inSeconds)) {
+    return inSeconds;
+  }
+  return 0;
+}
+''',
+  'sort_constructors_first': '''
+/// 표식 — 생성자보다 앞에 둔 멤버.
+class SortConstructorsMarker {
+  /// 값.
+  int get value => 1;
+
+  /// 생성자.
+  SortConstructorsMarker();
+}
+''',
+  'sort_unnamed_constructors_first': '''
+/// 표식 — 이름 없는 생성자보다 앞에 둔 이름 있는 생성자.
+class SortUnnamedMarker {
+  /// 이름 있는 생성자.
+  SortUnnamedMarker.named();
+
+  /// 이름 없는 생성자.
+  SortUnnamedMarker();
+}
+''',
+  'specify_nonobvious_property_types': '''
+/// 표식 — 타입이 자명하지 않은 top-level 변수의 타입 누락.
+final nonObviousPropertyMarker = int.parse('1');
+''',
+  'tighten_type_of_initializing_formals': '''
+/// 표식 — assert 로 null 아님을 검사하는 nullable 초기화 매개변수.
+class TightenMarker {
+  /// 생성자.
+  TightenMarker(this.value) : assert(value != null);
+
+  /// 값.
+  final String? value;
+}
+''',
+  'unnecessary_breaks': '''
+/// 표식 — 불필요한 break.
+int breakMarker(int x) {
+  var y = x;
+  switch (x) {
+    case 1:
+      y++;
+      break;
+    default:
+      y--;
+  }
+  return y;
+}
+''',
+  'unnecessary_ignore': '''
+/// 표식 — 아무것도 가리지 않는 무시 주석.
+// ignore: avoid_print
+int unnecessaryIgnoreMarker() => 1;
+''',
+  'unnecessary_library_directive': '''
+// 표식 — 문서 주석도 annotation 도 없는 library 지시문.
+library;
+
+/// 값.
+const int libraryDirectiveMarker = 1;
+''',
+  'unnecessary_null_aware_operator_on_extension_on_nullable': '''
+/// 표식용 — nullable 타입의 extension.
+extension NullableExtensionMarker on int? {
+  /// null 이면 0.
+  int get orZero => this ?? 0;
+}
+
+/// 표식 — nullable 대상 extension 에 쓴 ?.
+int? nullAwareExtensionMarker(int? x) => x?.orZero;
+''',
+  'use_enums': '''
+/// 표식 — enum 처럼 쓰는 클래스.
+class EnumLikeMarker {
+  const EnumLikeMarker._(this.value);
+
+  /// 첫째.
+  static const EnumLikeMarker first = EnumLikeMarker._(1);
+
+  /// 둘째.
+  static const EnumLikeMarker second = EnumLikeMarker._(2);
+
+  /// 값.
+  final int value;
+}
+''',
+  'use_is_even_rather_than_modulo': '''
+/// 표식 — % 2 == 0.
+bool evenMarker(int x) => x % 2 == 0;
+''',
+  'use_named_constants': '''
+/// 표식 — Duration.zero 대신 쓴 const Duration().
+Duration namedConstantMarker() => const Duration();
+''',
+  // B-4 Dart 3.13 의 새 규칙 ------------------------------------------------
+  'empty_container_bodies': _emptyContainerBodiesProbe,
+  'no_raw_types': '''
+/// 표식 — 타입 인자를 생략한 제네릭 타입.
+class BoxMarker<T> {}
+
+/// 타입 인자 없이 선언한 변수.
+BoxMarker rawBoxMarker = BoxMarker<int>();
+''',
+  'unnecessary_const_in_enum_constructor': _unnecessaryConstInEnumProbe,
+  'unnecessary_type_name_in_constructor': _unnecessaryTypeNameProbe,
+  'use_primary_constructors': _usePrimaryConstructorsProbe,
+  // B-5 API 문서 (v2 로 미룸 — 재기는 한다) ---------------------------------
+  'deprecated_consistency': '''
+/// 표식 — deprecated 클래스의 deprecated 아닌 생성자.
+@Deprecated('표식')
+class DeprecatedClassMarker {
+  /// 생성자.
+  DeprecatedClassMarker();
+}
+''',
+  'missing_code_block_language_in_doc_comment': '''
+/// 표식 — 언어를 적지 않은 doc comment 코드 블록.
+///
+/// ```
+/// codeBlockMarker();
+/// ```
+void codeBlockMarker() {}
+''',
+  'public_member_api_docs': '''
+// 표식 — 문서 주석이 없는 공개 멤버.
+int publicDocsMarker() => 1;
+''',
+  // B-6 제외 권장 -----------------------------------------------------------
+  'avoid_catches_without_on_clauses': '''
+/// 표식 — on 절 없는 catch.
+int catchMarker() {
+  try {
+    return int.parse('x');
+  } catch (e) {
+    return 0;
+  }
+}
+''',
+  'avoid_field_initializers_in_const_classes': '''
+/// 표식 — const 클래스의 필드 초기화.
+class ConstFieldInitMarker {
+  /// 생성자.
+  const ConstFieldInitMarker();
+
+  /// 값.
+  final int value = 1;
+}
+''',
+  'avoid_returning_this': '''
+/// 표식 — this 를 돌려주는 메서드.
+class ReturnThisMarker {
+  /// 자기 자신을 돌려준다.
+  ReturnThisMarker touch() {
+    return this;
+  }
+}
+''',
+  'cascade_invocations': '''
+/// 표식 — 같은 대상에 이어지는 호출 (cascade 로 쓸 수 있다).
+List<int> cascadeMarker() {
+  final values = <int>[];
+  values.add(1);
+  values.add(2);
+  return values;
+}
+''',
+  'close_sinks': '''
+import 'dart:async';
+
+/// 표식 — close 하지 않는 sink.
+void sinkMarker() {
+  final controller = StreamController<int>();
+  controller.add(1);
+}
+''',
+  'eol_at_end_of_file': '''
+/// 표식 — 끝에 줄바꿈이 없는 파일.
+const int eolMarker = 1;''',
+  'library_names': '''
+/// 표식 — lower_case_with_underscores 가 아닌 라이브러리 이름.
+library WoodyLibraryNameMarker;
+
+/// 값.
+const int libraryNameMarker = 1;
+''',
+  'lines_longer_than_80_chars': '''
+/// 표식 — 80자를 넘는 줄.
+const longLineMarker = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+''',
+  'prefer_asserts_with_message': '''
+/// 표식 — 메시지 없는 assert.
+void assertMessageMarker(int x) {
+  assert(x > 0);
+}
+''',
+  'prefer_expression_function_bodies': '''
+/// 표식 — return 하나뿐인 블록 몸통.
+int expressionBodyMarker() {
+  return 1;
+}
+''',
+  'prefer_mixin': '''
+// @dart=2.19
+// 표식 — mixin 이 아닌 클래스를 with 로 섞는다. 언어 버전 3.0 이상에서는 그 자체가 error 라
+// (class_used_as_mixin) 이 파일만 2.19 로 둔다 — 규칙은 언어 버전으로 막히지 않는다.
+
+/// 섞이는 쪽.
+class LegacyMixinMarker {}
+
+/// 표식 — 클래스를 with 로 섞는다.
+class UsesLegacyMixinMarker with LegacyMixinMarker {}
+''',
+  'prefer_void_to_null': '''
+/// 표식 — void 대신 쓴 Null.
+Future<Null> nullFutureMarker() async {}
+''',
+  'remove_deprecations_in_breaking_versions': '''
+/// 표식 — 사용 프로젝트의 version 이 x.0.0 / 0.x.0 일 때 남은 @Deprecated.
+@Deprecated('표식')
+const int removeDeprecationMarker = 1;
+''',
+  'use_to_and_as_if_applicable': '''
+/// 표식용 — 변환된 값.
+class ToAsTargetMarker {
+  /// 생성자.
+  ToAsTargetMarker(this.source);
+
+  /// 원래 값.
+  final ToAsMarker source;
+}
+
+/// 표식 — 이름이 to / as 로 시작하지 않는 변환 메서드.
+class ToAsMarker {
+  /// 변환한다.
+  ToAsTargetMarker convert() => ToAsTargetMarker(this);
+}
+''',
+  // G2 ----------------------------------------------------------------------
+  'type_annotate_public_apis': '''
+/// 표식 — 타입 표기가 없는 공개 API 매개변수.
+void typeAnnotateMarker(value) {}
+''',
+  // analyzer 옵션 ------------------------------------------------------------
+  strictInference: '''
+/// 표식 — 추론이 실패해 dynamic 이 되는 자리 (strict-inference).
+List<Object?> strictInferenceMarker() {
+  final empty = [];
+  return empty;
+}
+''',
 };
 
-/// 언어 버전 3.13 문법(primary constructor)으로만 쓸 수 있는 표식 — G4 실행(하한 `^3.13.0`)에만
-/// 넣는다. 지금 하한의 복사본에 넣으면 `experiment_not_enabled` error 가 난다 (Pitfall 6).
-const ruleProbes313 = <String, String>{};
+/// 언어 버전 3.13 문법으로 재는 G4 의 표식 — G4 실행(하한 `^3.13.0`)에만 넣는다. primary
+/// constructor 문법이 든 셋은 지금 하한의 복사본에 넣으면 `experiment_not_enabled` error 가 난다
+/// (Pitfall 6). 나머지 넷은 3.11 판([ruleProbes])과 같은 코드다 — 하한 3.13 에서만 걸린다.
+/// 출발점은 spike 021 `probe.dart` 의 `newSyntaxSamples` · `oldSamples`.
+const ruleProbes313 = <String, String>{
+  'empty_container_bodies': _emptyContainerBodiesProbe,
+  'unnecessary_type_name_in_constructor': _unnecessaryTypeNameProbe,
+  'use_primary_constructors': _usePrimaryConstructorsProbe,
+  'unnecessary_const_in_enum_constructor':
+      '$_unnecessaryConstInEnumProbe'
+      '''
 
-/// `--rules @probes` 가 뜻하는 이름 — 표식 상수에 이름이 있는 규칙 전부 (04-03 이 뜻을 넓힌다).
+/// 표식 — enum primary constructor 의 const.
+enum const ConstEnumPrimaryMarker(final int i) {
+  /// a.
+  a(1),
+
+  /// b.
+  b(2);
+}
+''',
+  'initialize_in_field_declaration': '''
+/// 표식 — primary constructor 의 초기화 목록.
+class InitInFieldMarker(int x) {
+  this : y = x;
+
+  /// y.
+  int y;
+}
+''',
+  'use_declaring_parameters': '''
+/// 표식 — 선언 매개변수로 쓸 수 있는 매개변수.
+class DeclaringMarker(int i) {
+  /// i.
+  final int i;
+
+  this : i = i;
+}
+''',
+  'unnecessary_primary_constructor_body': '''
+/// 표식 — 빈 primary constructor 몸통.
+class BodyMarker(final int i) {
+  this;
+}
+''',
+};
+
+/// Dart 파일 하나(복사본의 `lib/woody_probe_marker/` 아래, `package:flutter/material.dart` 와
+/// `dart:*` 만 import)로는 어길 수 없는 규칙 → 이유. 표식을 두지 않는다 — markers 단계는 이
+/// 규칙을 `표식 없음` 으로 세지 않고 `표식 불가 (<이유>)` 로 따로 알리며 `markerDetected` 를
+/// null 로 둔다. 이름 목록은 결과 JSON 의 `conditions.noFileProbe` 에 적혀 검증 명령과 `--report`
+/// 가 같은 예외 집합을 읽는다.
+const noFileProbe = <String, String>{
+  'sort_pub_dependencies': 'pubspec.yaml 을 본다 — Dart 파일로는 어길 수 없다',
+  'use_test_throws_matchers':
+      'package:test_api 의 fail() 을 찾는다 — flutter_test 를 import 하지 않는 lib/ 의 '
+      '파일로는 어길 수 없다',
+  'require_trailing_commas':
+      '언어 버전 3.7 이상의 라이브러리에서는 돌지 않는다 (규칙 소스의 language37 조건) — '
+      '사용 프로젝트의 하한에서 걸리는 파일이 없다',
+  'package_prefixed_library_names':
+      '규칙 소스(tag 3.13.4)의 visitLibraryDirective 가 곧바로 return 한다 — 아무것도 '
+      '보고하지 않는다 (dart-lang/linter#3395)',
+};
+
+/// `--rules @probes` 가 뜻하는 이름 — [ruleProbes] ∪ [ruleProbes313] 의 이름 전부.
 List<String> probeRuleNames() =>
     ({...ruleProbes.keys, ...ruleProbes313.keys}.toList()..sort());
 
@@ -998,6 +1701,7 @@ class Results {
           'stateSource': null,
           'incompatiblePairs': <Object>[],
           'unnecessaryIgnoreNames': null,
+          'noFileProbe': null,
         },
         'runs': <Object>[],
         'rows': <String, dynamic>{},
@@ -1083,6 +1787,7 @@ class Results {
     'otherDelta': null,
     'ignored': null,
     'markerDetected': null,
+    'markerDetectedCurrent': null,
     'hasProbe': null,
     'countsUI': null,
     'runs': <Object>[],
@@ -1106,7 +1811,7 @@ class Results {
   ];
 }
 
-/// [c] 에 표식이 있는지 — G4 는 3.13 문법 표식도 쓴다.
+/// [c] 에 표식이 있는지 — G4 는 3.13 문법 표식도 쓴다. [noFileProbe] 의 규칙은 false 다.
 bool hasProbe(Candidate c) =>
     ruleProbes.containsKey(c.name) ||
     (c.group == 'G4' && ruleProbes313.containsKey(c.name));
@@ -2603,7 +3308,10 @@ Future<void> measureGroups(Context ctx) async {
 Future<void> measureMarkers(Context ctx) async {
   final c = ctx.consumer;
   final r = ctx.results;
+  // 검증 명령과 `--report` 가 같은 예외 집합을 읽는 자리.
+  r.conditions['noFileProbe'] = noFileProbe.keys.toList()..sort();
   final noProbe = <String>[];
+  final unprobeable = <String>[];
   for (final g in groupRunsFor(ctx.opts)) {
     final targets = <String>[];
     for (final cand in ownedBy(ctx.opts, g)) {
@@ -2614,13 +3322,29 @@ Future<void> measureMarkers(Context ctx) async {
         targets.add(cand.name);
       }
     }
-    if (targets.isEmpty) continue;
-    final probes = probesFor(g, targets);
+    // G1 실행은 G4 의 규칙도 켠다 — 그 규칙들의 3.11 판 표식으로 지금 하한에서 걸리는지 본다.
+    final currentBoundTargets = g.id == 'G1'
+        ? [
+            for (final name in g.rules.where(groups['G4']!.contains))
+              if (ruleProbes.containsKey(name)) name,
+          ]
+        : <String>[];
+    if (targets.isEmpty && currentBoundTargets.isEmpty) continue;
+    final probes = {
+      ...probesFor(g, targets),
+      for (final name in currentBoundTargets)
+        'rule_probe/$name.dart': ruleProbes[name]!,
+    };
     for (final t in targets) {
-      if (!probes.containsKey('rule_probe/$t.dart')) {
+      if (probes.containsKey('rule_probe/$t.dart')) continue;
+      r.row(t)['markerDetected'] = null;
+      final reason = noFileProbe[t];
+      if (reason != null) {
+        unprobeable.add(t);
+        stderr.writeln('표식 불가: $t ($reason)');
+      } else {
         noProbe.add(t);
         stderr.writeln('표식 없음: $t');
-        r.row(t)['markerDetected'] = null;
       }
     }
     if (probes.isEmpty) continue;
@@ -2631,15 +3355,15 @@ Future<void> measureMarkers(Context ctx) async {
     c.addMarkers(probes);
     final id = '${g.id}-marker';
     final shot = await c.analyze(id);
+    bool detected(String t) => shot.marker.any(
+      (d) =>
+          d.path == '${Diag.markerDir}rule_probe/$t.dart' &&
+          codeMatchesRule(d.code, t),
+    );
     final reported = <String, bool?>{
       for (final t in targets)
-        t: probes.containsKey('rule_probe/$t.dart')
-            ? shot.marker.any(
-                (d) =>
-                    d.path == '${Diag.markerDir}rule_probe/$t.dart' &&
-                    codeMatchesRule(d.code, t),
-              )
-            : null,
+        t: probes.containsKey('rule_probe/$t.dart') ? detected(t) : null,
+      for (final t in currentBoundTargets) t: detected(t),
     };
     final run = validate(ctx, shot, g.optionsJson, markersReported: reported);
     for (final t in targets.where((t) => reported[t] != null)) {
@@ -2648,9 +3372,16 @@ Future<void> measureMarkers(Context ctx) async {
       row['severity'] ??= firstSeverity(shot, t);
       noteRowRun(ctx, t, run);
     }
+    for (final t in currentBoundTargets) {
+      r.row(t)['markerDetectedCurrent'] = reported[t];
+      noteRowRun(ctx, t, run);
+    }
   }
   if (noProbe.isNotEmpty) {
     stderr.writeln('표식 없음 ${noProbe.length}개: ${noProbe.join(', ')}');
+  }
+  if (unprobeable.isNotEmpty) {
+    stderr.writeln('표식 불가 ${unprobeable.length}개: ${unprobeable.join(', ')}');
   }
   await restoreConsumer(c);
 }
