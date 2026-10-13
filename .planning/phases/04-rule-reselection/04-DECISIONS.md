@@ -21,7 +21,7 @@
 - **묶음 1 ~ 5** 는 묶음마다 한 번 답한다 — `(1) 권고대로` 면 표의 `권고` 열이 그대로 결정이 되고, `(2)` 는 바꿀 규칙의 이름과 켬 / 안 켬 만 적으면 나머지는 권고대로다. `(3)` 은 그 묶음을 보류한다 (보류한 묶음은 반영되지 않고 다시 묻는다).
 - **질문 1 ~ 9** 는 하나씩 묻는다 — strict 계열 셋, import 스타일, fire-and-forget, 함께 쓸 수 없는 쌍, 상태 출처가 갈리는 규칙. 질문 8 (v2 로 미룬 12개) 은 숫자만 보이고, 질문 9 (`unnecessary_ignore`) 는 보류를 알리기만 한다.
 - **도구가 이미 판정한 행** — `v2` · `결정 안 함 (표식 …)` · `안 켬 (dart fix 가 error …)` · `안 켬 (비호환 …)` · `켬 (손으로 고칠 줄 …)` — 은 도구의 판정이 권고다. Claude 는 그 행에 덧붙일 것만 적었다.
-- 결정은 맨 아래 결정 표의 `결정` · `사유` 칸에 소유자의 응답으로만 적는다. 지금 그 칸이 채워진 행은 결정이 아니라 도구 판정의 결과(`v2` · `결정 안 함`)와 이 plan 이 정한 보류(`unnecessary_ignore`)뿐이다.
+- 결정은 맨 아래 결정 표의 `결정` · `사유` 칸에 소유자의 응답으로만 적는다. 초안(`0362628`)에서 그 칸이 채워진 행은 결정이 아니라 도구 판정의 결과(`v2` · `결정 안 함`)와 이 plan 이 정한 보류(`unnecessary_ignore`)뿐이었다 — `켬` / `안 켬` 은 2026-10-13 의 응답으로 채웠다.
 
 ### 권고의 잣대 (D-05)
 
@@ -718,140 +718,151 @@
 
 ## 결정
 
-결정 표 — 후보 133개, 이름 순. `묶음` 칸은 `tool/measure_rules.dart` 의 `bundles` id 다. `권고` 는 위 패널의 것(도구 판정 포함)이고, `결정` · `사유` 는 소유자의 응답으로만 채운다. 지금 채워진 `결정` 칸은 v2 12 · `unnecessary_ignore` 보류 1 · 도구가 0줄의 뜻을 가르지 못한 5 뿐이다.
+결정 표 — 후보 133개, 이름 순. `묶음` 칸은 `tool/measure_rules.dart` 의 `bundles` id 다. `권고` 는 위 패널의 것(도구 판정 포함)이고, `결정` · `사유` 는 소유자의 응답으로만 채운다. `결정` 칸의 `켬` / `안 켬` 115행은 2026-10-13 의 소유자 응답(묶음 5 · 개별 질문 7)으로 채웠고, 나머지 18행은 v2 12 · `unnecessary_ignore` 보류 1 · 도구가 0줄의 뜻을 가르지 못한 5 다 (초안 그대로).
 
 | 규칙 | 묶음 | 권고 | 결정 | 사유 |
 |---|---|---|---|---|
-| `always_declare_return_types` | current | 켬 |  |  |
-| `always_put_control_body_on_new_line` | excluded | 안 켬 |  |  |
-| `always_put_required_named_parameters_first` | excluded | 안 켬 |  |  |
-| `always_specify_types` | excluded | 안 켬 |  |  |
-| `always_use_package_imports` | import | 안 켬 |  |  |
-| `async_return_with_no_await` | bug | 켬 |  |  |
-| `avoid_annotating_with_dynamic` | excluded | 안 켬 |  |  |
-| `avoid_bool_literals_in_conditional_expressions` | style | 켬 |  |  |
-| `avoid_catches_without_on_clauses` | excluded | 안 켬 |  |  |
-| `avoid_catching_errors` | bug | 켬 |  |  |
-| `avoid_classes_with_only_static_members` | excluded | 안 켬 |  |  |
-| `avoid_double_and_int_checks` | bug | 켬 |  |  |
-| `avoid_dynamic_calls` | bug | 켬 |  |  |
-| `avoid_equals_and_hash_code_on_mutable_classes` | bug | 안 켬 |  |  |
-| `avoid_escaping_inner_quotes` | style | 켬 |  |  |
-| `avoid_field_initializers_in_const_classes` | excluded | 안 켬 |  |  |
-| `avoid_final_parameters` | style | 켬 |  |  |
-| `avoid_implementing_value_types` | bug | 안 켬 |  |  |
-| `avoid_js_rounded_ints` | bug | 켬 |  |  |
-| `avoid_multiple_declarations_per_line` | style | 켬 |  |  |
-| `avoid_positional_boolean_parameters` | excluded | 안 켬 |  |  |
-| `avoid_redundant_argument_values` | style | 켬 |  |  |
-| `avoid_returning_this` | excluded | 안 켬 |  |  |
-| `avoid_setters_without_getters` | style | 켬 |  |  |
-| `avoid_slow_async_io` | perf | 켬 |  |  |
-| `avoid_type_to_string` | bug | 켬 |  |  |
-| `avoid_types_on_closure_parameters` | excluded | 안 켬 |  |  |
-| `avoid_unused_constructor_parameters` | bug | 켬 |  |  |
-| `avoid_void_async` | bug | 켬 |  |  |
-| `cancel_subscriptions` | bug | 켬 |  |  |
-| `cascade_invocations` | excluded | 안 켬 |  |  |
-| `cast_nullable_to_non_nullable` | bug | 켬 |  |  |
-| `close_sinks` | excluded | 안 켬 |  |  |
-| `combinators_ordering` | style | 켬 |  |  |
+| `always_declare_return_types` | current | 켬 | 켬 | 권고 이유 승인 — 남긴다 — 0줄 (사유 문구는 "기반 세트의 strict_top_level_inference 가 보지 않는 지역 함수 · 옛 typedef" 로, D-18). 사유 문구 (D-18 승인): 기반 세트의 strict_top_level_inference 가 보지 않는 지역 함수 · 옛 typedef 의 반환 타입까지 |
+| `always_put_control_body_on_new_line` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — formatter 와 어긋날 수 있다 — 398줄, dart fix 0 |
+| `always_put_required_named_parameters_first` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — Flutter 의 `super.key` 를 앞에 두는 관례와 어긋난다 — 32줄 |
+| `always_specify_types` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — 도구 판정: dart fix 가 error 6건을 남긴다 |
+| `always_use_package_imports` | import | 안 켬 | 안 켬 | 권고 이유 승인 — 질문 4 (a) — 소수 쪽, 켜면 615줄 |
+| `async_return_with_no_await` | bug | 켬 | 켬 | 권고 이유 승인 — await 없이 넘긴 Future 는 이 함수의 try/catch 를 지나 예외가 밖에서 난다 — 30줄 손으로 (dart fix 0) |
+| `avoid_annotating_with_dynamic` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — `dynamic` 을 적는 것은 의도 표시이기도 하다 — 1줄, 채택 0/7 |
+| `avoid_bool_literals_in_conditional_expressions` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `avoid_catches_without_on_clauses` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — 모든 catch 에 `on` 을 요구하는 매우 엄격한 규칙 — 지금 0줄이지만 앞으로의 코드에 부담 (lint 가 뺀다) |
+| `avoid_catching_errors` | bug | 켬 | 켬 | 권고 이유 승인 — `Error` 를 잡으면 프로그램 버그가 숨는다 — 3줄 손으로 |
+| `avoid_classes_with_only_static_members` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — 상수 모음 클래스가 흔하다 — 4줄 손으로 |
+| `avoid_double_and_int_checks` | bug | 켬 | 켬 | 권고 이유 승인 — web 에서 뜻이 달라지는 검사 — 0줄, web 빌드를 할 때를 대비 |
+| `avoid_dynamic_calls` | bug | 켬 | 켬 | 권고 이유 승인 — dynamic 위의 호출은 타입 오류를 실행 때까지 숨긴다 — 28줄 모두 test, lib 0 |
+| `avoid_equals_and_hash_code_on_mutable_classes` | bug | 안 켬 | 안 켬 | 권고 이유 승인 — `@immutable` 표시가 없을 뿐인 클래스도 걸린다 — 8줄 모두 lib, dart fix 0, 채택 2/7 |
+| `avoid_escaping_inner_quotes` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `avoid_field_initializers_in_const_classes` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — API 설계 취향 규칙 — 0줄 |
+| `avoid_final_parameters` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `avoid_implementing_value_types` | bug | 안 켬 | 안 켬 | 권고 이유 승인 — test 의 mock · fake 가 걸리는 규칙 — 25줄 모두 test (very_good_analysis 가 같은 이유로 뺀다) |
+| `avoid_js_rounded_ints` | bug | 켬 | 켬 | 권고 이유 승인 — web 에서 정밀도가 깨지는 정수 — 0줄 |
+| `avoid_multiple_declarations_per_line` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `avoid_positional_boolean_parameters` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — `void Function(bool)` 콜백에서 오탐 — 5줄 손으로 |
+| `avoid_redundant_argument_values` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `avoid_returning_this` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — API 설계 취향 규칙 — 0줄, 앱 코드에서 실익이 작다 |
+| `avoid_setters_without_getters` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `avoid_slow_async_io` | perf | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `avoid_type_to_string` | bug | 켬 | 켬 | 권고 이유 승인 — release 빌드에서 타입 이름이 바뀔 수 있다 — 0줄 |
+| `avoid_types_on_closure_parameters` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — 취향 규칙 — dart fix 가 237줄 모두 고치지만 closure 매개변수의 타입을 지우는 쪽으로 강제할 근거가 약하다 (채택 3/7) |
+| `avoid_unused_constructor_parameters` | bug | 켬 | 켬 | 권고 이유 승인 — 쓰지 않는 생성자 매개변수는 빠뜨린 대입 — 0줄 |
+| `avoid_void_async` | bug | 켬 | 켬 | 권고 이유 승인 — `void` 를 돌려주는 async 는 호출한 쪽이 기다리거나 오류를 받을 수 없다 — 0줄 |
+| `cancel_subscriptions` | bug | 켬 | 켬 | 권고 이유 승인 — 닫지 않은 `StreamSubscription` 은 메모리 누수 — 0줄 |
+| `cascade_invocations` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — "더 빽빽한 코드" 를 강제한다 — 60줄, dart fix 0 |
+| `cast_nullable_to_non_nullable` | bug | 켬 | 켬 | 권고 이유 승인 — null 일 수 있는 값을 `as` 로 단정하면 실행 중 오류 — 5줄 모두 dart fix |
+| `close_sinks` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — 풀리지 않은 오탐 (very_good_analysis · lint 가 뺀다) — 0줄 |
+| `combinators_ordering` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
 | `comment_references` | v2 | v2 (RULES-09) | 결정 안 함 (v2, RULES-09) |  |
-| `conditional_uri_does_not_exist` | bug | 켬 |  |  |
+| `conditional_uri_does_not_exist` | bug | 켬 | 켬 | 권고 이유 승인 — 조건부 import 가 없는 파일을 가리키면 다른 플랫폼에서 빌드가 깨진다 — 0줄 |
 | `deprecated_consistency` | v2 | v2 (RULES-09) | 결정 안 함 (v2, RULES-09) |  |
-| `deprecated_member_use_from_same_package` | bug | 켬 |  |  |
-| `diagnostic_describe_all_properties` | excluded | 안 켬 |  |  |
-| `directives_ordering` | style | 켬 |  |  |
-| `discarded_futures` | fire | 켬 |  |  |
-| `do_not_use_environment` | excluded | 안 켬 |  |  |
-| `document_ignores` | style | 켬 |  |  |
+| `deprecated_member_use_from_same_package` | bug | 켬 | 켬 | 권고 이유 승인 — 같은 패키지 안의 deprecated 사용을 잡는다 — 0줄 |
+| `diagnostic_describe_all_properties` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — 도구 판정: dart fix 가 error 148건을 남긴다 |
+| `directives_ordering` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `discarded_futures` | fire | 켬 | 켬 | 권고 이유 승인 — 질문 5 — 동기 콜백에서 버린 Future 의 오류가 사라진다, 11줄 손으로 unawaited() 로 감싼다 |
+| `do_not_use_environment` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — `--dart-define` 을 쓰는 앱은 모두 걸린다 — 17줄 (lib 13) |
+| `document_ignores` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 48 (≤ 50) |
 | `empty_container_bodies` | v2 | v2 (RULES-10) | 결정 안 함 (v2, RULES-10) |  |
-| `eol_at_end_of_file` | excluded | 안 켬 |  |  |
-| `flutter_style_todos` | style | 켬 |  |  |
+| `eol_at_end_of_file` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — `dart format` 이 이미 보장한다 — 0줄 |
+| `flutter_style_todos` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
 | `initialize_in_field_declaration` | v2 | v2 (RULES-10) | 결정 안 함 (v2, RULES-10) |  |
-| `join_return_with_assignment` | style | 켬 |  |  |
-| `leading_newlines_in_multiline_strings` | style | 켬 |  |  |
-| `library_names` | excluded | 안 켬 |  |  |
-| `lines_longer_than_80_chars` | excluded | 안 켬 |  |  |
-| `literal_only_boolean_expressions` | bug | 켬 |  |  |
-| `matching_super_parameters` | bug | 켬 |  |  |
+| `join_return_with_assignment` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 1 (≤ 50) |
+| `leading_newlines_in_multiline_strings` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `library_names` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — 기반 세트의 `unnecessary_library_name` 이 대신한다 — 0줄 |
+| `lines_longer_than_80_chars` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — 줄바꿈은 formatter 의 몫 — 107줄, dart fix 0 |
+| `literal_only_boolean_expressions` | bug | 켬 | 켬 | 권고 이유 승인 — 늘 참/거짓인 조건은 남은 디버그 코드 — 0줄 |
+| `matching_super_parameters` | bug | 켬 | 켬 | 권고 이유 승인 — super 매개변수의 순서 착오 — 0줄 |
 | `migrate_design_widgets` | v2 | v2 (RULES-11) | 결정 안 함 (v2, RULES-11) |  |
 | `missing_code_block_language_in_doc_comment` | v2 | v2 (RULES-09) | 결정 안 함 (v2, RULES-09) |  |
-| `missing_whitespace_between_adjacent_strings` | bug | 켬 |  |  |
-| `no_adjacent_strings_in_list` | bug | 켬 |  |  |
-| `no_dynamic_casts` | strict | 켬 |  |  |
-| `no_literal_bool_comparisons` | style | 켬 |  |  |
-| `no_raw_types` | strict | 켬 |  |  |
-| `no_runtimetype_tostring` | perf | 켬 |  |  |
-| `no_self_assignments` | bug | 켬 |  |  |
-| `noop_primitive_operations` | perf | 켬 |  |  |
-| `omit_local_variable_types` | excluded | 안 켬 |  |  |
-| `omit_obvious_local_variable_types` | style | 켬 |  |  |
-| `omit_obvious_property_types` | excluded | 안 켬 |  |  |
-| `only_throw_errors` | bug | 켬 |  |  |
+| `missing_whitespace_between_adjacent_strings` | bug | 켬 | 켬 | 권고 이유 승인 — 이어 붙인 문자열 사이의 공백 누락으로 문장이 붙는다 — 13줄 모두 test, 손으로 |
+| `no_adjacent_strings_in_list` | bug | 켬 | 켬 | 권고 이유 승인 — 리스트 안의 붙은 문자열은 쉼표 누락일 때가 많다 — 9줄 모두 test, 손으로 |
+| `no_dynamic_casts` | strict | 켬 | 켬 | 권고 이유 승인 — 질문 1 — strict-casts 옵션의 공식 대체, info 라 받는 쪽 CI 를 막지 않는다, 0줄 (표식 1) |
+| `no_literal_bool_comparisons` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `no_raw_types` | strict | 켬 | 켬 | 권고 이유 승인 — 질문 2 — strict-raw-types 옵션의 공식 대체, info, 0줄 (표식 1) |
+| `no_runtimetype_tostring` | perf | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 1 (≤ 50) |
+| `no_self_assignments` | bug | 켬 | 켬 | 권고 이유 승인 — `x = x` 는 거의 늘 오타 — 0줄 |
+| `noop_primitive_operations` | perf | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `omit_local_variable_types` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — 도구 판정: dart fix 가 error 4건을 남긴다 |
+| `omit_obvious_local_variable_types` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `omit_obvious_property_types` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — `type_annotate_public_apis` (묶음 3 켬 권고)와 함께 쓸 수 없다 — 716줄 |
+| `only_throw_errors` | bug | 켬 | 켬 | 권고 이유 승인 — `Exception` / `Error` 가 아닌 값을 던지면 잡는 쪽이 스택을 잃는다 — 4줄 모두 test |
 | `package_prefixed_library_names` | excluded | 결정 안 함 (표식 불가) | 결정 안 함 (표식 불가) |  |
-| `parameter_assignments` | bug | 켬 |  |  |
-| `prefer_asserts_in_initializer_lists` | style | 켬 |  |  |
-| `prefer_asserts_with_message` | excluded | 안 켬 |  |  |
-| `prefer_const_constructors` | current | 켬 |  |  |
-| `prefer_const_declarations` | perf | 켬 |  |  |
-| `prefer_const_literals_to_create_immutables` | current | 켬 |  |  |
-| `prefer_constructors_over_static_methods` | style | 켬 |  |  |
-| `prefer_double_quotes` | pairs | 안 켬 |  |  |
-| `prefer_expression_function_bodies` | excluded | 안 켬 |  |  |
-| `prefer_final_in_for_each` | style | 켬 |  |  |
-| `prefer_final_locals` | current | 켬 |  |  |
-| `prefer_foreach` | excluded | 안 켬 |  |  |
-| `prefer_if_elements_to_conditional_expressions` | style | 켬 |  |  |
-| `prefer_int_literals` | style | 켬 |  |  |
-| `prefer_mixin` | excluded | 안 켬 |  |  |
-| `prefer_null_aware_method_calls` | style | 켬 |  |  |
-| `prefer_relative_imports` | import | 켬 |  |  |
-| `prefer_single_quotes` | current | 켬 |  |  |
-| `prefer_void_to_null` | excluded | 안 켬 |  |  |
+| `parameter_assignments` | bug | 켬 | 켬 | 권고 이유 승인 — 매개변수를 다시 쓰면 원래 값을 잃는다 — 0줄 |
+| `prefer_asserts_in_initializer_lists` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `prefer_asserts_with_message` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — API 설계 취향 규칙 — 5줄 손으로 |
+| `prefer_const_constructors` | current | 켬 | 켬 | 권고 이유 승인 — 남긴다 — 0줄 (사유 문구는 "불변 위젯 트리를 const 로 적는 관례" 로 고친다, D-18). 사유 문구 (D-18 승인): 불변 위젯 트리를 const 로 적는 관례 — 성능 이득은 근거가 부족하다는 것이 Flutter 팀의 판단 (lints#205) |
+| `prefer_const_declarations` | perf | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `prefer_const_literals_to_create_immutables` | current | 켬 | 켬 | 권고 이유 승인 — 남긴다 — 0줄 (사유 문구는 위와 같이 고친다, D-18). 사유 문구 (D-18 승인): 위와 같은 관례 — 불변 위젯에 넘기는 리터럴도 const 로 |
+| `prefer_constructors_over_static_methods` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 1 (≤ 50) |
+| `prefer_double_quotes` | pairs | 안 켬 | 안 켬 | 권고 이유 승인 — 질문 6 — 지금 켜 둔 prefer_single_quotes 와 함께 쓸 수 없다 (도구 판정) |
+| `prefer_expression_function_bodies` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — "더 빽빽한 코드" 를 강제한다 — 128줄 중 121 dart fix (very_good_analysis 가 10.1.0 에서 뺐다) |
+| `prefer_final_in_for_each` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `prefer_final_locals` | current | 켬 | 켬 | 권고 이유 승인 — 남긴다 — 0줄, `fixtures/overrides` 의 끄기 시연이 이 규칙을 쓴다 (Pitfall 3) |
+| `prefer_foreach` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — "더 빽빽한 코드" 를 강제한다 — 3줄 손으로 (lint 가 뺀다) |
+| `prefer_if_elements_to_conditional_expressions` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 2 (≤ 50) |
+| `prefer_int_literals` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `prefer_mixin` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — API 설계 취향 규칙 — 0줄 |
+| `prefer_null_aware_method_calls` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `prefer_relative_imports` | import | 켬 | 켬 | 권고 이유 승인 — 질문 4 (a) — 다수 쪽 (lib 의 상대 경로 import 615 대 package import 9), 9줄 모두 dart fix |
+| `prefer_single_quotes` | current | 켬 | 켬 | 권고 이유 승인 — 남긴다 — 0줄 (프로젝트가 이미 따른다) |
+| `prefer_void_to_null` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — 풀리지 않은 오탐 (very_good_analysis 가 뺀다) — 0줄 |
 | `public_member_api_docs` | v2 | v2 (RULES-09) | 결정 안 함 (v2, RULES-09) |  |
 | `remove_deprecations_in_breaking_versions` | excluded | 결정 안 함 (표식 미검출) | 결정 안 함 (표식 미검출) |  |
 | `require_trailing_commas` | excluded | 결정 안 함 (표식 불가) | 결정 안 함 (표식 불가) |  |
-| `simple_directive_paths` | style | 켬 |  |  |
-| `simplify_variable_pattern` | style | 켬 |  |  |
-| `sized_box_shrink_expand` | perf | 켬 |  |  |
-| `sort_constructors_first` | style | 켬 |  |  |
+| `simple_directive_paths` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `simplify_variable_pattern` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `sized_box_shrink_expand` | perf | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `sort_constructors_first` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
 | `sort_pub_dependencies` | style | 결정 안 함 (표식 불가) | 결정 안 함 (표식 불가) |  |
-| `sort_unnamed_constructors_first` | style | 켬 |  |  |
-| `specify_nonobvious_local_variable_types` | excluded | 안 켬 |  |  |
-| `specify_nonobvious_property_types` | style | 켬 |  |  |
-| `strict-inference` | strict | 안 켬 |  |  |
-| `switch_on_type` | bug | 켬 |  |  |
-| `test_types_in_equals` | bug | 켬 |  |  |
-| `throw_in_finally` | bug | 켬 |  |  |
-| `tighten_type_of_initializing_formals` | style | 켬 |  |  |
-| `type_annotate_public_apis` | style | 켬 |  |  |
-| `unawaited_futures` | fire | 켬 |  |  |
-| `unnecessary_breaks` | style | 켬 |  |  |
+| `sort_unnamed_constructors_first` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `specify_nonobvious_local_variable_types` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — 도구 판정: dart fix 가 error 4건을 남긴다 |
+| `specify_nonobvious_property_types` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `strict-inference` | strict | 안 켬 | 안 켬 | 권고 이유 승인 — 질문 3 — warning 이라 받는 쪽 dart analyze 가 바로 실패한다, 106줄 모두 test · dart fix 0 |
+| `switch_on_type` | bug | 켬 | 켬 | 권고 이유 승인 — `runtimeType` 으로 가르면 하위 타입을 놓친다 — 0줄 (lints 7 의 core 에 들어갈 예정 — 그때 겹침 검사가 잡는다) |
+| `test_types_in_equals` | bug | 켬 | 켬 | 권고 이유 승인 — `==` 에서 인자 타입을 보지 않으면 cast 오류 — 0줄 |
+| `throw_in_finally` | bug | 켬 | 켬 | 권고 이유 승인 — `finally` 의 throw 는 원래 예외를 덮는다 — 0줄 |
+| `tighten_type_of_initializing_formals` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `type_annotate_public_apis` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `unawaited_futures` | fire | 켬 | 켬 | 권고 이유 승인 — 질문 5 — 남김, async 본문에서 버린 Future, 0줄 (표식 1) |
+| `unnecessary_breaks` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
 | `unnecessary_const_in_enum_constructor` | v2 | v2 (RULES-10) | 결정 안 함 (v2, RULES-10) |  |
-| `unnecessary_final` | pairs | 안 켬 |  |  |
+| `unnecessary_final` | pairs | 안 켬 | 안 켬 | 권고 이유 승인 — 질문 6 — 지금 켜 둔 prefer_final_locals 와 함께 쓸 수 없다 (도구 판정) |
 | `unnecessary_ignore` | ui | 보류 (도구: 안 켬 — experimental) | 보류 (04-08) |  |
-| `unnecessary_lambdas` | style | 켬 |  |  |
-| `unnecessary_library_directive` | style | 켬 |  |  |
-| `unnecessary_null_aware_operator_on_extension_on_nullable` | style | 켬 |  |  |
-| `unnecessary_null_checks` | style | 켬 |  |  |
-| `unnecessary_parenthesis` | style | 켬 |  |  |
+| `unnecessary_lambdas` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `unnecessary_library_directive` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `unnecessary_null_aware_operator_on_extension_on_nullable` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `unnecessary_null_checks` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `unnecessary_parenthesis` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
 | `unnecessary_primary_constructor_body` | v2 | v2 (RULES-10) | 결정 안 함 (v2, RULES-10) |  |
-| `unnecessary_raw_strings` | style | 켬 |  |  |
-| `unnecessary_statements` | bug | 켬 |  |  |
+| `unnecessary_raw_strings` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `unnecessary_statements` | bug | 켬 | 켬 | 권고 이유 승인 — 효과 없는 문장은 빠진 호출 · 대입의 흔적 — 0줄 |
 | `unnecessary_type_name_in_constructor` | v2 | v2 (RULES-10) | 결정 안 함 (v2, RULES-10) |  |
-| `unnecessary_unawaited` | fire | 안 켬 |  |  |
-| `unreachable_from_main` | excluded | 안 켬 |  |  |
-| `use_colored_box` | perf | 켬 |  |  |
+| `unnecessary_unawaited` | fire | 안 켬 | 안 켬 | 권고 이유 승인 — 질문 5 — dart fix 가 3줄을 지우고 error 9건을 남긴다 (도구 판정) |
+| `unreachable_from_main` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — very_good_analysis 가 10.3.0 에서 기본으로 껐다 — 2줄 |
+| `use_colored_box` | perf | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
 | `use_declaring_parameters` | v2 | v2 (RULES-10) | 결정 안 함 (v2, RULES-10) |  |
-| `use_decorated_box` | excluded | 안 켬 |  |  |
-| `use_enums` | style | 켬 |  |  |
-| `use_is_even_rather_than_modulo` | style | 켬 |  |  |
-| `use_named_constants` | style | 켬 |  |  |
+| `use_decorated_box` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — 상류에 알려진 오동작이 있다 (very_good_analysis · lint 가 뺀다) — 1줄 |
+| `use_enums` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `use_is_even_rather_than_modulo` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `use_named_constants` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
 | `use_primary_constructors` | v2 | v2 (RULES-10) | 결정 안 함 (v2, RULES-10) |  |
-| `use_raw_strings` | style | 켬 |  |  |
-| `use_setters_to_change_properties` | style | 켬 |  |  |
-| `use_string_buffers` | perf | 켬 |  |  |
+| `use_raw_strings` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+| `use_setters_to_change_properties` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 3 (≤ 50) |
+| `use_string_buffers` | perf | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
 | `use_test_throws_matchers` | style | 결정 안 함 (표식 불가) | 결정 안 함 (표식 불가) |  |
-| `use_to_and_as_if_applicable` | excluded | 안 켬 |  |  |
-| `use_truncating_division` | perf | 켬 |  |  |
+| `use_to_and_as_if_applicable` | excluded | 안 켬 | 안 켬 | 권고 이유 승인 — API 설계 취향 규칙 — 0줄 |
+| `use_truncating_division` | perf | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
+
+### 표 밖의 응답과 메모 (2026-10-13)
+
+- 응답은 orchestrator 가 위의 묶음 1 ~ 5 · 질문 1 ~ 9 패널을 원문 그대로 보인 뒤 선택지 질문으로 받았다. 묶음 1 ~ 5 는 모두 `(1) 권고대로`, 질문 1 ~ 6 은 모두 권고와 같은 답이다. 소유자는 어느 항목에도 사유를 따로 덧붙이지 않았다 — `사유` 칸의 `권고 이유 승인 — …` 는 Claude 가 패널에 적은 이유(또는 도구 판정)를 소유자가 승인했다는 뜻이고 소유자가 쓴 말이 아니다.
+- **D-18 사유 문구 (묶음 4, 승인):** 04-06 · 04-07 이 `lib/base.yaml` 의 사유 주석과 `RULES.md` 의 켠 이유로 쓴다.
+  - prefer_const_constructors — 불변 위젯 트리를 const 로 적는 관례 — 성능 이득은 근거가 부족하다는 것이 Flutter 팀의 판단 (lints#205)
+  - prefer_const_literals_to_create_immutables — 위와 같은 관례 — 불변 위젯에 넘기는 리터럴도 const 로
+  - always_declare_return_types — 기반 세트의 strict_top_level_inference 가 보지 않는 지역 함수 · 옛 typedef 의 반환 타입까지
+  - prefer_final_locals · prefer_single_quotes — 지금 사유 그대로
+- **질문 7 (`unnecessary_underscores`): 그대로 둔다** — 기반 세트(`lints` 6.1.0 recommended)가 켜는 그대로 받고 `lib/base.yaml` 에서 끄지 않는다. 후보가 아니라 이 표에 행이 없다.
+- 질문 8 (v2 12개)은 묻지 않았고, 질문 9 (`unnecessary_ignore`)는 보류 (04-08) 를 알렸다.
