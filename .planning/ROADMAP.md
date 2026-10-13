@@ -178,7 +178,7 @@ Plans:
   4. 배포 파일에 기반 세트와 중복되는 선언과 주석 처리된 설정(`require_trailing_commas`, `public_member_api_docs`, `formatter: trailing_commas`)이 없고, 남은 규칙의 사유 주석이 사실과 일치한다
   5. 켠 규칙마다 이유와 실측 건수를 적은 근거 문서와, 채택하지 않은 규칙과 그 사유의 목록이 저장소에 있다
 
-**Plans**: 10/10 plans executed
+**Plans**: 10/12 plans executed (gap 수정 plan 둘 대기 — 04-VERIFICATION.md gaps_found, 소유자 결정 2026-10-13)
 
 Plans:
 **Wave 1** *(04-02 의 smoke 는 저장소 지문을 견주므로 04-01 과 같은 worktree 에서 동시에 돌리지 않는다 — worktree 가 다르면 병렬, 같으면 04-01 뒤)*
@@ -208,6 +208,12 @@ Plans:
 
 **Wave 9** *(blocked on Wave 8 — 소유자 확인(D-22 첫 push))*
 - [x] 04-10-PLAN.md — push 전 점검 → 첫 push 확인 → push 와 GitHub `verify` 10단계 통과 확인 (RULES-01, RULES-06; D-22)
+
+**Wave 10** *(gap 수정 — 04-VERIFICATION.md 의 gap 둘과 소유자가 묶은 리뷰 지적 WR-02 · WR-05 · WR-06, CR-03 은 v2 메모; blocked on Wave 9)*
+- [ ] 04-11-PLAN.md — (tracer) 측정 도구가 `pubspec.yaml` 자리의 진단을 값에 넣고(CR-01, `valueAreas`) 단언 (7) · `--recount` 로 R1 행 재계산(`sort_pub_dependencies` 0 → 2, 회차는 그대로) · `fixSkipped` · 가린 줄 부호째(WR-02) · `--report --write`; `[3/10]` 이 열 0 주석 뒤의 규칙도 읽음(CR-02) · 기반 세트 YAML 0규칙 guard 두 도구(WR-06) · README M26 (RULES-01, RULES-03, RULES-05, RULES-06, RULES-08; D-02, D-07, D-11)
+
+**Wave 11** *(blocked on Wave 10)*
+- [ ] 04-12-PLAN.md — `sort_pub_dependencies` 켬 (소유자 재결정 2026-10-13 — 실측 2줄 모두 `pubspec.yaml`, 같은 잣대) — `lib/base.yaml` 81 · `RULES.md` 표 · pubspec 샘플 6 · 정답지 5 를 한 커밋으로; CHANGELOG 75 · `04-DECISIONS.md` 재결정 행; README 수치(WR-05) · CR-03 v2 메모(REQUIREMENTS RULES-13) · DISPOSITION `deferred` (RULES-03, RULES-06, RULES-07, RULES-08, DOCS-11; D-08, D-10, D-20)
 
 **Spike first** (실측을 돌리기 전에 실행으로 확인한다 — **2026-10-12 완료**: spike 020 ~ 023 이 네 항목에 답했다. 멈춤 조건에 해당한 것 없음. 로드맵 문구 가운데 그대로 쓸 수 없게 된 것은 Notes 에 반영했다. `04-RESEARCH.md` 와 skill `spike-findings-woody-lints` 참조):
 - Dart 3.13 신규 규칙이 language version 3.11 프로젝트에서 보고되는지 (`flutter_starter_kit` 의 SDK 제약은 `^3.11.1`). 0건이 "깨끗하다"인지 "규칙이 동작하지 않는다"인지가 여기서 갈린다.
@@ -288,7 +294,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Baseline and Toolchain | 4/4 | Complete    | 2026-10-11 |
 | 2. Verification Harness | 5/5 | Complete    | 2026-10-12 |
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
-| 4. Rule Reselection | 10/10 | In Progress | - |
+| 4. Rule Reselection | 10/12 | In Progress (gap 수정 대기) | - |
 | 5. Documentation | 0/TBD | Not started | - |
 | 6. Release | 0/TBD | Not started | - |
 
