@@ -85,6 +85,7 @@
 - **RULES-11**: `migrate_design_widgets` 검토 — 대체 패키지와 이전 가능 여부 조사 후
 - **RULES-12**: experimental 규칙 재검토 — stable 로 전환되면
 - **RULES-13**: `lints` 7.0.0 / `flutter_lints` 7 대응 — 기반 세트로 들어오는 규칙의 중복 선언 제거
+  - 재측정 전에 먼저 고칠 것: 측정 도구 `tool/measure_rules.dart` 가 "지금 켜 둔 규칙" 을 1.3.0 의 6개(`currentRules`)로 박아 두어, 지금 저장소(`lib/base.yaml` 81개)에서 다시 재면 2.0.0 에서 켠 규칙이 기준선 B0 에 섞여 0줄로 나온다 — 기준선을 어떻게 잡을지 설계부터 정한다 (04-REVIEW.md CR-03; 소유자 결정 2026-10-13 — v2 메모로 남김; 지금 커밋된 R1 값에는 영향 없음 — R1 때 `lib/base.yaml` 은 6개였다)
 
 ## Out of Scope
 

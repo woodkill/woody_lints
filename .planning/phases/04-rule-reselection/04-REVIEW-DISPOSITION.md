@@ -13,7 +13,7 @@ findings:
     title: "`[3/10]` 이 `linter:` 블록 안의 열 0 주석 뒤에 적힌 규칙을 보지 못한다 — 겹침 · `RULES.md` 일치 검사의 거짓 통과"
   - id: CR-03
     severity: critical
-    disposition: open
+    disposition: deferred
     title: "측정 도구가 \"지금 켜 둔 규칙\" 을 1.3.0 의 6개로 박아 두어, 지금 저장소에서 다시 재면 채택한 74개가 모두 0줄이 된다"
   - id: WR-01
     severity: warning
@@ -75,7 +75,7 @@ findings:
     severity: info
     disposition: open
     title: "결과 파일 이름 · 출력 모드 · 종료 코드의 세부"
-open: 18
+open: 17
 total: 18
 recorded: 2026-10-13T06:05:41.344Z
 ---
@@ -86,7 +86,7 @@ recorded: 2026-10-13T06:05:41.344Z
 |---------|----------|-------------|--------|
 | CR-01 | critical | open | - |
 | CR-02 | critical | open | - |
-| CR-03 | critical | open | - |
+| CR-03 | critical | deferred | v2 (RULES-13) 의 선행 작업으로 미룸 — 지금 커밋된 R1 값에는 영향이 없고(R1 때 lib/base.yaml 은 6개), 다음 재측정(lints 7 · Dart 3.14) 전에 기준선 설계부터 정한다; REQUIREMENTS.md RULES-13 옆에 메모 (소유자 결정 2026-10-13) |
 | WR-01 | warning | open | - |
 | WR-02 | warning | open | - |
 | WR-03 | warning | open | - |

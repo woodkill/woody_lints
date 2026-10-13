@@ -39,12 +39,18 @@ fvm dart run tool/verify.dart --update
 | `lib/added_rules.dart` | 이 패키지가 기반 세트 위에 추가하는 규칙 6개를 한 건씩 어긴다 | 6 |
 | `lib/base_rules.dart` | 기반 세트(`flutter_lints` / `lints`)가 켜는 규칙 7개를 한 건씩 어긴다 — 그중 6개는 2.0.0 전까지 배포 파일에도 겹쳐 적혀 있었다 | 7 |
 | `lib/main.dart` | `riverpod_lint` 의 `missing_provider_scope` (warning) | 1 |
-| `lib/riverpod_rules.dart` | `riverpod_lint` 의 `avoid_public_notifier_properties` (info), `provider_parameters` (warning) | 2 |
+| `lib/riverpod_rules.dart` | `riverpod_lint` 의 `avoid_public_notifier_properties` (info), `provider_parameters` (warning), 04-07 부터 `specify_nonobvious_property_types` (13행) | 3 |
+| `lib/bug_prevention_rules.dart` | 04-06 에 켠 버그 방지 규칙 24개(`discarded_futures` 포함)를 한 건씩 어긴다 — 135행은 `parameter_assignments` 와 04-07 의 `join_return_with_assignment` 에 함께 걸려 정답지에 두 줄이다 | 25 |
+| `lib/performance_rules.dart` | 04-07 에 켠 성능 규칙 8개를 한 건씩 어긴다 | 8 |
+| `lib/style_rules.dart` | 04-07 에 켠 가독성·스타일 규칙 38개를 한 건씩 어긴다 (`avoid_final_parameters` 는 아래 파일에 있다) | 38 |
+| `lib/strict_rules.dart` | 04-06 에 켠 strict 계열 `no_dynamic_casts` · `no_raw_types` 를 한 건씩 어긴다 | 2 |
+| `lib/final_parameters_rule.dart` | `avoid_final_parameters` — 이 규칙은 언어 버전 3.13 의 라이브러리에서 돌지 않아 파일 머리를 `// @dart=3.11` 로 둔다 | 1 |
+| `lib/relative_imports_rule.dart` | `prefer_relative_imports` — 3행 import 의 패키지 이름이 연습용 프로젝트마다 다르다 (아래 복사본 규칙) | 1 |
 | `lib/should_not_appear.dart` | `invalid_annotation_target` 을 일으킨다. 배포 파일이 억제하므로 **나오면 안 된다** | 0 |
 | `lib/generated/sample.g.dart`, `lib/generated/sample.freezed.dart` | 위반을 담은 생성 파일 흉내. 배포 파일이 분석에서 빼므로 **나오면 안 된다** | 0 |
 | `analysis_options.yaml` | `include:` 한 줄. 검증 명령이 한 줄인지도 확인한다 | - |
-| `expected_diagnostics.txt` | 정답지 (`exit 2` + 16줄) | - |
-| `pubspec.yaml` | 저장소 루트의 `woody_lints` 를 `path: ..` 로 받는다 | - |
+| `expected_diagnostics.txt` | 정답지 (`exit 2` + 93줄) | - |
+| `pubspec.yaml` | 저장소 루트의 `woody_lints` 를 `path: ..` 로 받는다. `dependencies` 에서 `flutter_riverpod` 를 `flutter` 앞에 두어 `sort_pub_dependencies` 를 한 건 어긴다 (2.0.0) | 1 |
 | `pubspec.lock` | 커밋한다. 로컬과 CI 가 같은 패키지 버전으로 판정하게 하려는 것이다. `riverpod_lint` plugin 의 버전은 이 파일이 묶지 못한다 (Analysis Server 가 따로 받는다) | - |
 
 ## 연습용 프로젝트 여섯
@@ -53,12 +59,12 @@ fvm dart run tool/verify.dart --update
 
 | # | 폴더 | include | plugin | 정답지 | 줄 수 | 증명하는 것 |
 |---|------|---------|--------|--------|-------|-------------|
-| 1 | `example/` | 옛 주소 한 줄 (`analysis_options.yaml`) | 씀 | `expected_diagnostics.txt` (`exit 2`) | 16 | 분리 전후로 정답지가 같다. 별칭이 plugin 을 잃지 않는다 |
-| 2 | `fixtures/recommended/` | `recommended.yaml` | 씀 | 없음 (같은 실행의 `example` 결과와 견줌) | 16 | 옛 주소와 같은 진단 |
-| 3 | `fixtures/base_only/` | `base.yaml` 만 | 안 씀 | `expected_diagnostics.txt` (`exit 2`) | 18 | 기본 규칙은 나오고 `riverpod_lint` 진단은 안 나온다. 생성 파일의 규칙 진단과 `invalid_annotation_target` 은 나온다 |
-| 4 | `fixtures/overrides/` | 묶음 + 끄는 설정 | 씀 | `expected_diagnostics.txt` (`exit 2`) | 18 | 끈 진단만 사라진다 — 프로젝트 전체 · 파일 · 한 줄 × 규칙 · plugin. 접두사 없는 주석은 끄지 못한다 |
-| 5 | `fixtures/base_riverpod/` | `base.yaml` + `riverpod.yaml` | 씀 | `expected_diagnostics.txt` (`exit 2`) | 21 | Riverpod 조각만 받아도 plugin 이 돈다. codegen 설정은 딸려 오지 않는다 |
-| 6 | `fixtures/base_codegen/` | `base.yaml` + `codegen.yaml` | 안 씀 | `expected_diagnostics.txt` (`exit 0`) | 13 | codegen 조각만 받아도 생성 파일이 빠진다 (Dart 3.13.4 의 규칙 진단 기준). plugin 은 딸려 오지 않는다 |
+| 1 | `example/` | 옛 주소 한 줄 (`analysis_options.yaml`) | 씀 | `expected_diagnostics.txt` (`exit 2`) | 93 | 분리 전후로 정답지가 같다. 별칭이 plugin 을 잃지 않는다 |
+| 2 | `fixtures/recommended/` | `recommended.yaml` | 씀 | 없음 (같은 실행의 `example` 결과와 견줌) | 93 | 옛 주소와 같은 진단 |
+| 3 | `fixtures/base_only/` | `base.yaml` 만 | 안 씀 | `expected_diagnostics.txt` (`exit 2`) | 95 | 기본 규칙은 나오고 `riverpod_lint` 진단은 안 나온다. 생성 파일의 규칙 진단과 `invalid_annotation_target` 은 나온다 |
+| 4 | `fixtures/overrides/` | 묶음 + 끄는 설정 | 씀 | `expected_diagnostics.txt` (`exit 2`) | 104 | 끈 진단만 사라진다 — 프로젝트 전체 · 파일 · 한 줄 × 규칙 · plugin. 접두사 없는 주석은 끄지 못한다 |
+| 5 | `fixtures/base_riverpod/` | `base.yaml` + `riverpod.yaml` | 씀 | `expected_diagnostics.txt` (`exit 2`) | 98 | Riverpod 조각만 받아도 plugin 이 돈다. codegen 설정은 딸려 오지 않는다 |
+| 6 | `fixtures/base_codegen/` | `base.yaml` + `codegen.yaml` | 안 씀 | `expected_diagnostics.txt` (`exit 0`) | 90 | codegen 조각만 받아도 생성 파일이 빠진다 (Dart 3.13.4 의 규칙 진단 기준). plugin 은 딸려 오지 않는다 |
 
 화면과 검증 명령의 순서는 1 → 2 → 3 → 5 → 6 → 4 다 (`[5/10]` ~ `[10/10]`). 2 는 1 의 결과를 받아 견주므로 반드시 1 뒤에 돈다.
 
