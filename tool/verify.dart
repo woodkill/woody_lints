@@ -871,7 +871,8 @@ int countDeclaredRules(String options) => declaredRuleNames(options).length;
 
 /// 옵션 파일 본문([options])의 최상위 `linter:` 블록에 적힌 규칙 이름을 적힌 순서대로 돌려준다.
 ///
-/// 블록은 `linter:` 로 시작하는 줄부터 그 다음의 들여쓰기 없는 줄 앞까지다. 그 안에서
+/// 블록은 `linter:` 로 시작하는 줄부터 그 다음의 들여쓰기 없는 비주석 줄 앞까지다 (주석 줄과
+/// 빈 줄은 건너뛴다). 그 안에서
 /// `- 규칙이름` 꼴 줄만 읽는다 — 주석 처리된 줄(`# - …`)과 블록 밖의 목록 항목
 /// (`analyzer.exclude` 의 glob)은 읽지 않는다. 블록이 없으면 빈 목록이다.
 /// 같은 이름이 두 번 적혀 있으면 두 번 들어간다 (`[3/N]` 이 중복을 잡는다).
@@ -880,10 +881,13 @@ List<String> declaredRuleNames(String options) {
   var inLinter = false;
   final names = <String>[];
   for (final line in options.split('\n')) {
+    // 주석 줄과 빈 줄은 블록을 닫지 않는다 — YAML 에서 열 0 주석은 블록 밖이 아니다 (04-REVIEW.md CR-02)
+    final trimmed = line.trimLeft();
+    if (trimmed.isEmpty || trimmed.startsWith('#')) continue;
     if (RegExp(r'^linter:').hasMatch(line)) {
       inLinter = true;
     } else if (RegExp(r'^\S').hasMatch(line)) {
-      // 들여쓰기 없는 줄(다른 최상위 키나 주석)이 블록을 닫는다.
+      // 들여쓰기 없는 줄(다른 최상위 키)이 블록을 닫는다.
       inLinter = false;
     } else if (inLinter) {
       final match = rulePattern.firstMatch(line);
@@ -1206,6 +1210,8 @@ List<String>? significantLines(File file) {
 /// `.dart_tool/package_config.json` 의 `rootUri` 를 그 파일 기준으로 푼다 — `file:` 절대
 /// URI 면 그대로, 상대 경로면 `.dart_tool/` 기준이다. 저장소 루트의 `pub get` (준비 3) 뒤에
 /// 부른다. 패키지가 없으면 [FormatException] (main 이 종료 코드 70 으로 끝낸다).
+/// 파일마다 규칙을 하나도 읽지 못하면 [FormatException] (70) — 겹침 검사가 `겹침 0` 으로
+/// 통과하지 않게 (04-REVIEW.md WR-06).
 ///
 /// measure_rules.dart 의 `readUpstreamSets` 와 같다 — 두 파일은 서로 import 하지 않는다.
 Map<String, String> readUpstreamRules(String repoRoot) {
@@ -1230,10 +1236,17 @@ Map<String, String> readUpstreamRules(String repoRoot) {
     final root = rootOf(package);
     final folder = root.uri.pathSegments.where((s) => s.isNotEmpty).last;
     final file = File.fromUri(root.uri.resolve('lib/$fileName'));
+    var read = 0;
     for (final line in file.readAsLinesSync()) {
       final name = RegExp(r'^    - (\w+)').firstMatch(line)?.group(1);
       if (name == null) continue;
+      read++;
       rules.putIfAbsent(name.toLowerCase(), () => '$folder $fileName');
+    }
+    if (read == 0) {
+      throw FormatException(
+        '$folder $fileName 에서 규칙을 하나도 읽지 못했다 — 상류 YAML 의 형식이 바뀌었다 (04-REVIEW.md WR-06)',
+      );
     }
   }
 

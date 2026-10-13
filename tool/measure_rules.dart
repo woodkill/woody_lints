@@ -2714,17 +2714,28 @@ UpstreamSets readUpstreamSets(String packageDir) {
     return path.endsWith('/') ? path : '$path/';
   }
 
-  Set<String> rulesOf(String path) =>
-      File(path)
-          .readAsLinesSync()
-          .map((l) => RegExp(r'^    - (\w+)').firstMatch(l)?.group(1))
-          .whereType<String>()
-          .toSet();
+  // 지역 함수는 선언 뒤에서만 부를 수 있다 — `rulesOf` 가 파일 이름에 쓰므로 먼저 둔다.
+  String last(String p) => p.split('/').where((s) => s.isNotEmpty).last;
+
+  /// 파일에서 규칙을 하나도 읽지 못하면 [FormatException] (70) — 형식이 바뀐 상류에서 겹침
+  /// 비교가 빈 집합으로 통과하지 않게 (04-REVIEW.md WR-06).
+  Set<String> rulesOf(String path) {
+    final rules = File(path)
+        .readAsLinesSync()
+        .map((l) => RegExp(r'^    - (\w+)').firstMatch(l)?.group(1))
+        .whereType<String>()
+        .toSet();
+    if (rules.isEmpty) {
+      throw FormatException(
+        '${last(path)} 에서 규칙을 하나도 읽지 못했다 — 상류 YAML 의 형식이 바뀌었다 (04-REVIEW.md WR-06)',
+      );
+    }
+    return rules;
+  }
 
   final sets = UpstreamSets();
   final lints = root('lints');
   final flutterLints = root('flutter_lints');
-  String last(String p) => p.split('/').where((s) => s.isNotEmpty).last;
   sets.sources['lints'] = last(lints);
   sets.sources['flutter_lints'] = last(flutterLints);
   sets.core.addAll(rulesOf('${lints}lib/core.yaml'));

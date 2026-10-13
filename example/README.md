@@ -104,10 +104,10 @@ lib/added_rules.dart:18  info  always_declare_return_types
 | 1 | 단계 중 하나라도 실패 (plugin 준비 실패, 도구 사망 포함) |
 | 64 | 사용법 오류 (모르는 인자, CI 에서 `--update`) |
 | 69 | 하위 명령 실패 (`pub get`) — 검증을 시작하지 않음 |
-| 70 | 스크립트가 예외로 끝남 (파일 형식 · 파일 작업 · 프로세스 실행 실패) |
+| 70 | 스크립트가 예외로 끝남 (파일 형식 · 파일 작업 · 프로세스 실행 실패 — 기반 세트 YAML 에서 규칙을 하나도 읽지 못한 경우 포함) |
 | 78 | 실행 중인 SDK 가 `.fvmrc` 와 다름 — 검증을 시작하지 않음 |
 
-단계는 열 개다: `[1/10]` `lib/` 에 `.dart` 파일 없음, `[2/10]` 배포 파일(조각 셋)의 규칙 이름, `[3/10]` 배포 파일의 구성 (묶음 `recommended.yaml` 과 별칭 `analysis_options.yaml` 이 `include:` 만 담는지, `lib/base.yaml` 의 규칙이 기반 세트 — 저장소 루트가 받은 `lints` · `flutter_lints` 의 YAML — 와 겹치지 않는지, `RULES.md` 의 켠 규칙 표와 `lib/base.yaml` 의 규칙 목록이 같은지. analyzer 를 돌리지 않고 파일끼리 견준다), `[4/10]` 연습용 프로젝트 여섯의 옵션 파일 (주석 · 빈 줄을 뺀 내용을 통째로 견준다 — `overrides` 의 `version:` 은 `lib/riverpod.yaml` 의 선언과 같아야 한다), `[5/10]` ~ `[10/10]` 연습용 프로젝트마다 정답지 비교 (위 표의 순서. `recommended` 는 같은 실행의 `example` 결과와). 하나가 실패해도 나머지를 모두 돌린다. `[2/10]` 는 배포 파일을 `plugins:` 없이 복사한 폴더를 `dart analyze` 로 분석해, 종료 코드가 0 이 아니거나 진단이 하나라도 있으면 실패한다 — deprecated / removed / 없는 규칙뿐 아니라 겹친 규칙 · 모르는 키 · 없는 진단 코드 같은 옵션 경고도 실패다. 깨진 YAML 은 종료 코드 3 에 진단 0건으로 나오므로 같은 폴더를 형식 인자 없이 한 번 더 돌려 `parse_error` 줄을 보여 준다. 배포 파일의 최상위 `linter:` 블록에서 `- 규칙이름` 줄을 하나도 세지 못해도 실패한다 — 규칙을 다른 파일로 옮길 때 경로를 잘못 잡은 것이 통과로 보이지 않게 (2026-10-12, 아래 M13 ~ M17).
+단계는 열 개다: `[1/10]` `lib/` 에 `.dart` 파일 없음, `[2/10]` 배포 파일(조각 셋)의 규칙 이름, `[3/10]` 배포 파일의 구성 (묶음 `recommended.yaml` 과 별칭 `analysis_options.yaml` 이 `include:` 만 담는지, `lib/base.yaml` 의 규칙이 기반 세트 — 저장소 루트가 받은 `lints` · `flutter_lints` 의 YAML — 와 겹치지 않는지, `RULES.md` 의 켠 규칙 표와 `lib/base.yaml` 의 규칙 목록이 같은지. analyzer 를 돌리지 않고 파일끼리 견준다. 규칙 목록은 열 0 주석 뒤의 줄도 읽는다 (2026-10-13 에 고침, 아래 M26)), `[4/10]` 연습용 프로젝트 여섯의 옵션 파일 (주석 · 빈 줄을 뺀 내용을 통째로 견준다 — `overrides` 의 `version:` 은 `lib/riverpod.yaml` 의 선언과 같아야 한다), `[5/10]` ~ `[10/10]` 연습용 프로젝트마다 정답지 비교 (위 표의 순서. `recommended` 는 같은 실행의 `example` 결과와). 하나가 실패해도 나머지를 모두 돌린다. `[2/10]` 는 배포 파일을 `plugins:` 없이 복사한 폴더를 `dart analyze` 로 분석해, 종료 코드가 0 이 아니거나 진단이 하나라도 있으면 실패한다 — deprecated / removed / 없는 규칙뿐 아니라 겹친 규칙 · 모르는 키 · 없는 진단 코드 같은 옵션 경고도 실패다. 깨진 YAML 은 종료 코드 3 에 진단 0건으로 나오므로 같은 폴더를 형식 인자 없이 한 번 더 돌려 `parse_error` 줄을 보여 준다. 배포 파일의 최상위 `linter:` 블록에서 `- 규칙이름` 줄을 하나도 세지 못해도 실패한다 — 규칙을 다른 파일로 옮길 때 경로를 잘못 잡은 것이 통과로 보이지 않게 (2026-10-12, 아래 M13 ~ M17).
 
 ## 검증이 실제로 잡아내는지 확인한 기록
 
@@ -260,5 +260,24 @@ lib/added_rules.dart:18  info  always_declare_return_types
 - (ii) 결정 묶음 커밋마다 정답지 다섯의 `+` 줄 수가 그 묶음의 샘플 수와 같았다 — B2 `354959c`: 규칙 25 · `+` 25줄 × 5, B3 `52402df`: 규칙 2 · `+` 2줄 × 5, B4 `6c0bc83`: 규칙 8 · `+` 8줄 × 5, B5 `944ca1c`: 규칙 39 · `+` 41줄 × 4 와 `overrides` 50줄. 다섯 커밋 모두 `-lib/` 줄은 0 이고 `exit` 줄은 그대로였다. B1 `9cff42e` (지금 켜 둔 6개의 사유 주석만 고침) 과 B6 `ba58060` (`RULES.md` 의 켜지 않은 규칙 표만 채움) 은 샘플도 정답지의 변화도 0 이다. B5 만 수가 다르다 — 같은 커밋에서 켠 규칙이 기존 샘플에도 걸린 줄(정답지 다섯 모두 `join_return_with_assignment` · `specify_nonobvious_property_types` 각 1줄, `overrides` 는 끄는 설정 시연 파일의 `document_ignores` 6줄 · `specify_nonobvious_property_types` 3줄 더)이고, 새 규칙 39개 밖의 이름은 없었다. 04-08 은 `unnecessary_ignore` 를 켜지 않아 묶음 커밋이 없다. 수는 커밋마다 `git diff <커밋>^ <커밋> -- <정답지>` 의 `+lib/` · `-lib/` 줄로 04-09 에서 다시 셌다 (04-06 · 04-07 · 04-08 의 SUMMARY 와 같다).
 
 변경은 모두 커밋하지 않고 되돌렸다 (`git status` 와, `lib` · `RULES.md` 를 HEAD 와 견준 `git diff` 로 확인). 끝에 검증 명령이 다시 종료 코드 0, `점검 통과 (10개 중 10개)` 인 것을 봤다.
+
+### 추가 실측 — 열 0 주석 뒤의 규칙 · 기반 세트 읽기 실패 (04-11)
+
+실측 (04-11): Flutter 3.47.5 / Dart 3.13.4, riverpod_lint 3.1.9, 2026-10-13
+
+실행한 명령: `fvm dart run tool/verify.dart` (연습용 프로젝트 여섯 · 단계 10개). 변경은 한 번에 하나만 만들고, 돌린 직후 복사해 둔 `lib/base.yaml` 로 되돌렸다.
+
+| # | 변경 | 실패한 단계 | 정답지와의 차이 | 종료 코드 | 항목 |
+|---|------|-------------|-----------------|-----------|------|
+| M26 | `lib/base.yaml` 의 마지막 규칙 `- no_raw_types` 줄 바로 뒤에 세 줄 — 열 0 주석 `# 실험 중 (열 0 주석)`, `    - avoid_print # 기반 세트와 겹침`, `    - prefer_mixin # RULES.md 켠 규칙 표에 없음` | `[3/10]` 만. `[2/10]` 과 `[5/10]` ~ `[10/10]` 은 통과 | 차이 없음. `[3/10]` 이 낸 줄:<br>`` `lib/base.yaml` 의 규칙이 기반 세트와 겹친다 (1) — 기반 세트가 이미 켜므로 지운다. ``<br>`avoid_print  (flutter_lints-6.0.0 flutter.yaml)`<br>`` `RULES.md` 의 켠 규칙 표와 `lib/base.yaml` 의 규칙 목록이 다르다. ``<br>`+ avoid_print  (base.yaml 에만)`<br>`+ prefer_mixin  (base.yaml 에만)` | 1 | RULES-01 · RULES-06 · D-11 — 04-REVIEW.md CR-02 (04-VERIFICATION.md gap 2) |
+
+`- ` 와 `+ ` 의 뜻은 04-01 소절과 같다 — `+ ` 는 `lib/base.yaml` 에만 있는 이름, `- ` 는 `RULES.md` 의 켠 규칙 표에만 있는 이름이다. 화면의 요약은 `점검 실패 (10개 중 1개)` 였고, 걸린 시간은 23초, 되돌린 뒤의 보통 실행은 21초였다.
+
+읽는 법은 다음과 같다.
+
+- **M26 은 고치기 전에는 열 단계를 모두 통과했다.** 04-VERIFICATION.md 가 같은 세 줄을 더한 입력으로 `점검 통과 (10개 중 10개)`, 종료 코드 0 을 기록했다 (이번에 고치기 전의 스크립트로 다시 재지는 않았다). YAML 파서는 `linter:` 블록에서 규칙 82개를 읽는데, `[3/10]` 이 쓰는 `declaredRuleNames` 는 들여쓰기 없는 줄을 블록의 끝으로 보아 열 0 주석에서 블록을 닫고 80개만 봤다 — 그 뒤의 두 규칙은 기반 세트와의 겹침 (b) 에도 `RULES.md` 와의 일치 (c) 에도 들지 않았다. 고친 뒤에는 주석 줄과 빈 줄이 블록을 닫지 않는다. `[2/10]` 은 고치기 전에도 뒤에도 통과한다 — 조각의 복사본은 기반 세트와 겹친 규칙을 경고하지 않고, 두 규칙은 샘플에 걸리지 않는다.
+- **WR-06 은 함수 단위로 확인했다.** 검증 명령의 준비 단계가 저장소 루트의 `pub get` 으로 `.dart_tool/package_config.json` 을 다시 쓰므로, 상류 파일의 형식이 바뀐 상태를 검증 명령 전체로는 만들 수 없다. 대신 git 이 무시하는 `.dart_tool/woody_gap_probe/` 에 두 도구를 import 하는 탐침과 가짜 `lints` · `flutter_lints` 패키지 · `package_config.json` 을 두고 `tool/verify.dart` 의 `readUpstreamRules` 와 `tool/measure_rules.dart` 의 `readUpstreamSets` 를 두 번 불렀다. 규칙 줄의 들여쓰기가 4칸(지금 상류의 형식)이면 둘 다 규칙 2개를 읽었고(`control verify 2 measure 2`), 2칸(형식이 바뀐 상류)이면 둘 다 `FormatException` 이었다 — `lints core.yaml 에서 규칙을 하나도 읽지 못했다 — 상류 YAML 의 형식이 바뀌었다 (04-REVIEW.md WR-06)` 와 `core.yaml 에서 …` (같은 문구). 검증 명령에서는 `main` 이 이 예외를 받아 종료 코드 70 `파일 모양이 예상과 다르다: lints-6.1.0 core.yaml 에서 규칙을 하나도 읽지 못했다 …` 로 끝난다 (코드에서 읽은 경로다 — 위 까닭으로 검증 명령 전체로는 돌려 보지 못했다). 고치기 전에는 빈 집합이 되어 `[3/10]` 의 겹침 검사가 `겹침 0` 으로 통과했다. 탐침과 가짜 패키지는 실행 뒤 지웠고 커밋하지 않았다.
+
+변경은 모두 커밋하지 않고 되돌렸다 (`git status` 와 `lib/base.yaml` 을 HEAD 와 견준 `git diff` 로 확인). 끝에 검증 명령이 다시 종료 코드 0, `점검 통과 (10개 중 10개)` 인 것을 봤다.
 
 항목의 `VERIFY-NN` · `PRESET-NN` · `RULES-NN` 은 `.planning/REQUIREMENTS.md` 의 요구사항 번호, `D-NN` 은 `.planning/phases/02-verification-harness/02-CONTEXT.md` 의 결정 번호다. 03-NN 소절의 `D-NN` 은 `.planning/phases/03-preset-split/03-CONTEXT.md` 의 결정 번호다. 04-NN 소절의 `D-NN` 은 `.planning/phases/04-rule-reselection/04-CONTEXT.md` 의 결정 번호다.
