@@ -29,7 +29,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Baseline and Toolchain** - 1.3.0 기준점(`v1.3.0` tag)과 지원 SDK 정렬, 버전 정책과 CHANGELOG 형식 확정 (completed 2026-10-11)
 - [x] **Phase 2: Verification Harness** - `lib/` 를 바꾸기 전에 1.3.0 동작을 기대 진단으로 고정하는 `example/` 검증과 CI (completed 2026-10-12)
 - [x] **Phase 3: Preset Split** - 기본 / Riverpod / codegen 조각과 `recommended.yaml` 묶음, 옛 URI 별칭 (기대 진단 불변) (completed 2026-10-12)
-- [ ] **Phase 4: Rule Reselection** - `flutter_starter_kit` 실측을 근거로 규칙을 하나씩 결정하고 근거를 기록
+- [x] **Phase 4: Rule Reselection** - `flutter_starter_kit` 실측을 근거로 규칙을 하나씩 결정하고 근거를 기록 (completed 2026-10-13)
 - [ ] **Phase 5: Documentation** - README / CHANGELOG / YAML 주석을 확정된 설정에 맞춰 다시 쓰고 일치를 검증으로 고정
 - [ ] **Phase 6: Release** - 새 버전 annotated tag 와 git 의존성 smoke test
 
@@ -178,7 +178,7 @@ Plans:
   4. 배포 파일에 기반 세트와 중복되는 선언과 주석 처리된 설정(`require_trailing_commas`, `public_member_api_docs`, `formatter: trailing_commas`)이 없고, 남은 규칙의 사유 주석이 사실과 일치한다
   5. 켠 규칙마다 이유와 실측 건수를 적은 근거 문서와, 채택하지 않은 규칙과 그 사유의 목록이 저장소에 있다
 
-**Plans**: 13/13 plans executed (gap 수정 plan 04-11 · 04-12 실행 완료 2026-10-13 — 재검증 gaps_found 10/11, WR-10 하나 남음; 2회차 gap 수정 plan 04-13 실행 완료 2026-10-13 — 재검증 대기)
+**Plans**: 13/13 plans complete (gap 수정 plan 04-11 · 04-12 실행 완료 2026-10-13 — 재검증 gaps_found 10/11, WR-10 하나 남음; 2회차 gap 수정 plan 04-13 실행 완료 2026-10-13 — 재검증 passed 11/11, WR-11 은 Phase 5 의 VERIFY-06 과 함께)
 
 Plans:
 **Wave 1** *(04-02 의 smoke 는 저장소 지문을 견주므로 04-01 과 같은 worktree 에서 동시에 돌리지 않는다 — worktree 가 다르면 병렬, 같으면 04-01 뒤)*
@@ -255,6 +255,7 @@ Plans:
 
 **Notes**:
 - **가장 먼저 할 일 (04-CONTEXT.md D-12):** `tool/verify.dart` 의 WR-02 (거짓 실패 — `lib/riverpod.yaml` 의 plugin 줄 끝 주석 · 마지막 줄바꿈 없음에서 `stripPlugins` · `readShippedPluginConstraint` 가 종료 코드 70) 를 YAML 머리 주석(DOCS-10)을 고치기 전에 닫는다 (`03-REVIEW.md` WR-02).
+- **VERIFY-06 과 함께 닫을 것 (`04-REVIEW.md` WR-11, 소유자 결정 2026-10-13):** `[3/10]` 의 겹침 (b) · `RULES.md` 일치 (c) 는 `lib/base.yaml` 만 읽어, `lib/codegen.yaml` · `lib/riverpod.yaml` 에 적은 규칙은 사용 프로젝트에 적용되는데도 두 검사를 지나친다 (복사본에서 rc 0 재현, 지금 조각 넷의 규칙은 0개). VERIFY-06 이 같은 비교를 README 로 넓힐 때 비교 대상을 `lib/base.yaml` 하나로 잡으면 같은 빈자리가 README 쪽에도 생긴다 — 배포 YAML 다섯 전체에서 규칙을 모으거나, `lib/base.yaml` 밖 조각에 규칙이 없음을 먼저 확인한다. `declaredRuleNames` 를 다른 파일에 쓰면 그 `FormatException` 문구에 파일 이름을 넣는다 (IN-14).
 - README 는 묶음의 정식 이름 `package:woody_lints/recommended.yaml` 을 안내하고, 옛 이름은 "예전 이름"으로만 적는다.
 - 도구 동작은 fixture 로 뒷받침되는 것만 단정형으로 쓴다. `riverpod_lint` 심각도가 Phase 2 에서 확정되기 전에는 "프리셋을 include 하면 종료 코드 2" 같은 문장을 쓰지 않는다.
 - 빠지기 쉬운 내용: exclude 는 사용 프로젝트에서 되돌릴 수 없다, plugin 진단 재정의에는 `version` 이 필수다, `dev_dependencies` 의 `riverpod_lint` 제거, plugin 변경 뒤 Analysis Server 재시작, 버전 올리기는 `pub upgrade` 가 아니라 `ref:` 수정과 `pub get` 이다 (현재 README 는 `pub upgrade` 를 안내한다), tag 를 고정해도 plugin 버전은 바뀔 수 있다, `ref: main` 프로젝트가 받는 영향.
@@ -297,7 +298,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Baseline and Toolchain | 4/4 | Complete    | 2026-10-11 |
 | 2. Verification Harness | 5/5 | Complete    | 2026-10-12 |
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
-| 4. Rule Reselection | 13/13 | In Progress (04-13 실행 완료 2026-10-13 — 재검증 대기) | - |
+| 4. Rule Reselection | 13/13 | Complete    | 2026-10-13 |
 | 5. Documentation | 0/TBD | Not started | - |
 | 6. Release | 0/TBD | Not started | - |
 

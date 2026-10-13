@@ -33,7 +33,7 @@ findings:
     title: "`--recount` 가 `fixSkipped` 를 원인을 확인하지 않고 R1 전용 문장으로 적고, 어느 단계도 지우지 않는다 — 단언 (2) 를 우회하고 권고를 뒤집는다"
   - id: WR-11
     severity: warning
-    disposition: open
+    disposition: deferred
     title: "`[3/10]` 의 겹침 · `RULES.md` 일치 검사가 `lib/base.yaml` 만 읽는다 — `lib/codegen.yaml` · `lib/riverpod.yaml` 에 적은 규칙은 두 검사를 모두 지나친다"
   - id: IN-01
     severity: info
@@ -115,7 +115,7 @@ findings:
     severity: warning
     disposition: fixed
     title: "기반 세트 YAML 에서 규칙을 하나도 읽지 못해도 겹침 검사가 통과한다"
-open: 19
+open: 18
 total: 28
 recorded: 2026-10-13T12:57:48.873Z
 ---
@@ -131,7 +131,7 @@ recorded: 2026-10-13T12:57:48.873Z
 | WR-07 | warning | open | - |
 | WR-08 | warning | open | - |
 | WR-09 | warning | deferred | v2 (RULES-13) 의 선행 작업으로 미룸 — 지금 커밋된 R1 에서 fixSkipped 가 붙은 행은 sort_pub_dependencies 하나이고 그 문장은 사실이다; 다음 재측정(lints 7 · Dart 3.14) 전에 CR-03 과 함께 고친다; REQUIREMENTS.md RULES-13 옆에 메모 (소유자 결정 2026-10-13) |
-| WR-11 | warning | open | - |
+| WR-11 | warning | deferred | Phase 5 의 VERIFY-06 과 함께 고친다 — 배포 YAML 다섯 전체에서 규칙을 모으거나 base.yaml 밖 조각에 규칙이 없음을 먼저 확인; 지금 조각 넷의 규칙은 0개라 성공 기준은 성립 (04-VERIFICATION.md 경고, gap 아님); ROADMAP Phase 5 Notes (소유자 결정 2026-10-13) |
 | IN-01 | info | open | - |
 | IN-02 | info | open | - |
 | IN-03 | info | open | - |
