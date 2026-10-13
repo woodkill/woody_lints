@@ -309,4 +309,24 @@ lib/added_rules.dart:18  info  always_declare_return_types
 
 변경은 모두 커밋하지 않고 되돌렸다 (`git status` 와 `lib/base.yaml` 을 HEAD 와 견준 `git diff` 로 확인). 끝에 검증 명령이 다시 종료 코드 0, `점검 통과 (10개 중 10개)` 인 것을 봤다.
 
-항목의 `VERIFY-NN` · `PRESET-NN` · `RULES-NN` 은 `.planning/REQUIREMENTS.md` 의 요구사항 번호, `D-NN` 은 `.planning/phases/02-verification-harness/02-CONTEXT.md` 의 결정 번호다. 03-NN 소절의 `D-NN` 은 `.planning/phases/03-preset-split/03-CONTEXT.md` 의 결정 번호다. 04-NN 소절의 `D-NN` 은 `.planning/phases/04-rule-reselection/04-CONTEXT.md` 의 결정 번호다.
+### 추가 실측 — plugin 선언의 꼴과 다른 조각의 규칙 (05-01)
+
+실측 (05-01): Flutter 3.47.5 / Dart 3.13.4, riverpod_lint 3.1.9, 2026-10-14
+
+실행한 명령: `fvm dart run tool/verify.dart` (연습용 프로젝트 여섯 · 단계 10개). 변경은 한 번에 하나만 만들고, 줄 번호가 아니라 내용을 기준으로 바꿨다 — M32 는 `lib/riverpod.yaml` 의 `  riverpod_lint: ^3.1.9` 줄 끝에 ` # 하한` 을 붙였고, M33 은 같은 파일의 마지막 줄바꿈을 지웠고, M34 는 들여쓴 `riverpod_lint:` 줄을 지웠다 (`plugins:` 만 남는다). 돌린 직후 `git checkout -- lib/riverpod.yaml` 로 되돌렸다.
+
+| # | 변경 | 실패한 단계 | 정답지와의 차이 | 종료 코드 | 항목 |
+|---|------|-------------|-----------------|-----------|------|
+| M32 | `lib/riverpod.yaml` 의 plugin 줄을 `  riverpod_lint: ^3.1.9 # 하한` 으로 — 줄 끝 주석 | 실패 없음 | 차이 없음. 화면 요약 `점검 통과 (10개 중 10개)`, plugin 표시줄 `riverpod_lint 3.1.9` | 0 | 03-REVIEW.md WR-02 · 05-CONTEXT.md D-08 (순서) |
+| M33 | `lib/riverpod.yaml` 의 마지막 줄바꿈 삭제 (마지막 바이트가 `9`) | 실패 없음 | 차이 없음. 화면 요약 `점검 통과 (10개 중 10개)` | 0 | 03-REVIEW.md WR-02 · 05-CONTEXT.md D-08 (순서) |
+| M34 | `lib/riverpod.yaml` 의 `  riverpod_lint: ^3.1.9` 줄 삭제 — `plugins:` 만 남는다 | 단계를 돌리지 못했다 — 예외는 `[2/10]` 이 조각을 복사할 때가 아니라 `[4/10]` 이 선언을 읽을 때 났다 | 화면 없음 (stdout 비어 있음). stderr 한 줄:<br>`파일 모양이 예상과 다르다: lib/riverpod.yaml 에서 riverpod_lint 선언을 찾지 못했다` | 70 | 03-REVIEW.md WR-02 (reader 가 없는 선언을 만들어 내지 않는다) |
+
+읽는 법은 다음과 같다.
+
+- **M32 · M33 은 고치기 전에는 종료 코드 70 이었던 입력이다.** 03-REVIEW.md WR-02 가 지적했고 05-RESEARCH.md § 1 이 2026-10-13 에 저장소 복제본에서 재현했다 — 줄 끝 주석은 `lib/riverpod.yaml 에서 riverpod_lint 선언을 찾지 못했다`, 마지막 줄바꿈 없음은 `` lib/riverpod.yaml 의 `plugins:` 섹션을 빼지 못했다 `` 로, 둘 다 stdout 0 바이트였다. 두 변경 모두 YAML 로 올바르고 analyzer 의 동작도 같으므로 거짓 실패였다 (이번에 고치기 전의 스크립트로 다시 재지는 않았다).
+- 고친 `stripPlugins` 는 줄 단위로 걸으며 `plugins:` 섹션을 지우지 않고 **빈 줄로 바꾼다** — `[2/10]` 복사본의 줄 수와 줄 번호가 원본과 같다 (아래 M37 이 실행으로 보인다). 받는 꼴은 줄 끝 주석, `plugins:` 뒤의 주석 · 공백, 섹션 안의 빈 줄 · 열 0 주석, CRLF, 마지막 줄바꿈 없음이다. 고친 `readShippedPluginConstraint` 는 들여쓴 스칼라 줄(줄 끝 주석 가능)과 맵 형식(`riverpod_lint:` 다음의 첫 비주석 줄 `version: <값>` — `fixtures/overrides` 의 꼴)을 받는다. 이 목록 가운데 실행으로 본 것은 M32 · M33 둘이고, 나머지는 05-RESEARCH.md § 1 의 함수 단위 확인이다.
+- **M34 는 reader 가 헛통과가 아니라는 확인이다.** 선언이 없으면 지금도 `선언을 찾지 못했다` 로 멈춘다 — 고친 reader 가 없는 선언을 만들어 내거나 다른 줄의 값을 읽지 않는다. 고치기 전에는 같은 입력이 `` `plugins:` 섹션을 빼지 못했다 `` 로 70 이었다 (05-RESEARCH.md § 1, 2026-10-13 복제본). 고친 뒤에는 `[2/10]` 의 복사가 지나가고 `[4/10]` 의 선언 읽기에서 멈춘다 (예외가 난 자리는 코드에서 읽은 것이고, 실행에서 본 것은 종료 코드 · stdout · stderr 다 — stderr 에 연습용 프로젝트의 `분석 중…` 줄이 하나도 없었다).
+
+변경은 모두 커밋하지 않고 되돌렸다 (`git status` 와 `lib/riverpod.yaml` 을 HEAD 와 견준 `git diff` 로 확인). 끝에 검증 명령이 다시 종료 코드 0, `점검 통과 (10개 중 10개)` 인 것을 봤다.
+
+항목의 `VERIFY-NN` · `PRESET-NN` · `RULES-NN` 은 `.planning/REQUIREMENTS.md` 의 요구사항 번호, `D-NN` 은 `.planning/phases/02-verification-harness/02-CONTEXT.md` 의 결정 번호다. 03-NN 소절의 `D-NN` 은 `.planning/phases/03-preset-split/03-CONTEXT.md` 의 결정 번호다. 04-NN 소절의 `D-NN` 은 `.planning/phases/04-rule-reselection/04-CONTEXT.md` 의 결정 번호다. 05-NN 소절의 `D-NN` 은 `.planning/phases/05-documentation/05-CONTEXT.md` 의 결정 번호다.

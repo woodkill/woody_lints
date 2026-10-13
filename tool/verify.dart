@@ -168,8 +168,7 @@ const ruleCheckLabel = '배포 파일의 규칙 이름';
 /// [2/4] 실패 문구의 마지막 안내 — 진단 줄에서 고칠 파일과 줄을 찾는 법.
 const fragmentLineHint =
     '진단 줄의 폴더 이름이 조각 이름이다 — `lib/<이름>.yaml` 에서 그 줄을 고친다. '
-    '복사본의 줄 번호는 원본과 같다 (`riverpod.yaml` 은 `plugins:` 섹션을 빼고 복사하므로 '
-    '그 섹션 뒤에 적은 줄만 뺀 줄 수만큼 앞당겨진다).';
+    '복사본의 줄 번호는 원본과 같다 (`plugins:` 섹션은 빈 줄로 바꿔 복사한다).';
 
 /// 규칙 검사용 복사본을 두는 폴더 (저장소 루트 기준).
 ///
@@ -784,17 +783,32 @@ StepResult checkLibHasNoDart(String repoRoot) {
 
 /// 옵션 파일 내용에서 최상위 `plugins:` 섹션이 있으면 뺀다 (spike 007, 013).
 ///
-/// `plugins:` 줄과 그 바로 아래에 이어지는 들여쓴 줄만 지운다. 없으면 그대로 돌려준다 —
-/// 조각 셋 가운데 `plugins:` 가 있는 것은 `riverpod.yaml` 뿐이다.
+/// 줄 단위로 걸으며 `plugins:` 줄부터 다음 최상위 키(들여쓰기 없는 비주석 줄) 앞까지를
+/// 지우지 않고 빈 줄로 바꾼다 (줄 번호 보존) — 복사본의 줄 수와 줄 번호가 원본과 같다.
+/// 없으면 그대로 돌려준다 — 조각 셋 가운데 `plugins:` 가 있는 것은 `riverpod.yaml` 뿐이다.
+/// 받는 꼴: 줄 끝 주석, `plugins:` 뒤의 주석 · 공백, 섹션 안의 빈 줄 · 열 0 주석, CRLF,
+/// 마지막 줄바꿈 없음 (03-REVIEW.md WR-02, 2026-10-13 복제본에서 입력 10가지 확인).
 ///
-/// 뺀 뒤에도 `plugins:` 줄이 남아 있으면 패턴이 섹션을 놓친 것이라 [FormatException] 을
+/// 바꾼 뒤에도 `plugins:` 줄이 남아 있으면 섹션을 놓친 것이라 [FormatException] 을
 /// 던진다 ([shownAs] 는 문구에 쓸 원본 경로). `plugins:` 를 담은 채 분석하면 plugin 을
 /// 준비한다 (10초 + 네트워크) — 조용히 넘기지 않는다.
 String stripPlugins(String options, {required String shownAs}) {
-  final stripped = options.replaceAll(
-    RegExp(r'^plugins:\n(?:[ \t]+.*\n)+', multiLine: true),
-    '',
-  );
+  final lines = options.replaceAll('\r\n', '\n').split('\n');
+  var inPlugins = false;
+  for (var i = 0; i < lines.length; i++) {
+    final line = lines[i];
+    if (RegExp(r'^plugins:[ \t]*(#.*)?$').hasMatch(line)) {
+      inPlugins = true;
+    } else if (inPlugins &&
+        RegExp(r'^\S').hasMatch(line) &&
+        !line.startsWith('#')) {
+      // 들여쓰기 없는 비주석 줄(다른 최상위 키)이 섹션을 닫는다.
+      inPlugins = false;
+    }
+    // 지우지 않고 빈 줄로 — 줄 번호 보존 (03-REVIEW.md WR-02)
+    if (inPlugins) lines[i] = '';
+  }
+  final stripped = lines.join('\n');
   if (RegExp(r'^plugins:', multiLine: true).hasMatch(stripped)) {
     throw FormatException('$shownAs 의 `plugins:` 섹션을 빼지 못했다');
   }
@@ -1184,22 +1198,38 @@ StepResult checkFixtureOptions(String repoRoot, List<Fixture> fixtures) {
   );
 }
 
-/// `lib/riverpod.yaml` 의 `riverpod_lint:` 선언(예: `^3.1.3`)을 읽는다.
+/// `lib/riverpod.yaml` 의 `riverpod_lint:` 선언(예: `^3.1.9`)을 읽는다.
 ///
-/// 들여쓴 `riverpod_lint: <값>` 줄의 첫 값이다. 없으면 [FormatException] — 조각의 모양이
-/// 바뀐 것이라 `[4/N]` 이 견줄 기준이 없다 (main 이 종료 코드 70 으로 끝낸다).
+/// 받는 꼴은 둘이다 — 들여쓴 스칼라 줄 `riverpod_lint: <값>` (줄 끝 `# 주석` 가능)과,
+/// 맵 형식 `riverpod_lint:` 줄 다음의 첫 비주석 줄 `version: <값>` (끄는 설정의 모양 —
+/// `fixtures/overrides/analysis_options.yaml`). 돌려주는 값은 `^3.1.9` 꼴 그대로다.
+/// `[4/N]` 이 쓰고, `[3/N]` 의 README 검사도 같은 값을 쓴다.
+/// 없으면 [FormatException] — 조각의 모양이 바뀐 것이라 견줄 기준이 없다 (main 이 종료 코드
+/// 70 으로 끝낸다. 03-REVIEW.md WR-02 로 줄 끝 주석 · 맵 형식을 받게 고쳤다).
 String readShippedPluginConstraint(String repoRoot) {
-  final text = File('$repoRoot/lib/riverpod.yaml').readAsStringSync();
-  final match = RegExp(
-    r'^\s+riverpod_lint:\s*(\S+)\s*$',
-    multiLine: true,
-  ).firstMatch(text);
-  if (match == null) {
-    throw const FormatException(
-      'lib/riverpod.yaml 에서 riverpod_lint 선언을 찾지 못했다',
-    );
+  const shownAs = 'lib/riverpod.yaml';
+  final lines = File('$repoRoot/$shownAs')
+      .readAsStringSync()
+      .replaceAll('\r\n', '\n')
+      .split('\n');
+  final scalar = RegExp(r'^[ \t]+riverpod_lint:[ \t]*([^\s#]+)[ \t]*(?:#.*)?$');
+  final mapKey = RegExp(r'^[ \t]+riverpod_lint:[ \t]*(?:#.*)?$');
+  final version = RegExp(r'^[ \t]+version:[ \t]*([^\s#]+)[ \t]*(?:#.*)?$');
+  for (var i = 0; i < lines.length; i++) {
+    final scalarMatch = scalar.firstMatch(lines[i]);
+    if (scalarMatch != null) return scalarMatch.group(1)!;
+    if (mapKey.hasMatch(lines[i])) {
+      // 맵 형식 — 빈 줄 · 주석 줄을 건너뛴 첫 줄이 `version:` 이어야 한다. 아니면 여기서 끊는다.
+      for (var j = i + 1; j < lines.length; j++) {
+        final trimmed = lines[j].trim();
+        if (trimmed.isEmpty || trimmed.startsWith('#')) continue;
+        final versionMatch = version.firstMatch(lines[j]);
+        if (versionMatch != null) return versionMatch.group(1)!;
+        break;
+      }
+    }
   }
-  return match.group(1)!;
+  throw const FormatException('$shownAs 에서 riverpod_lint 선언을 찾지 못했다');
 }
 
 /// 두 줄 목록이 순서와 내용까지 같은지 본다.
