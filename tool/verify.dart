@@ -872,17 +872,31 @@ int countDeclaredRules(String options) => declaredRuleNames(options).length;
 /// 옵션 파일 본문([options])의 최상위 `linter:` 블록에 적힌 규칙 이름을 적힌 순서대로 돌려준다.
 ///
 /// 블록은 `linter:` 로 시작하는 줄부터 그 다음의 들여쓰기 없는 비주석 줄 앞까지다 (주석 줄과
-/// 빈 줄은 건너뛴다). 그 안에서
-/// `- 규칙이름` 꼴 줄만 읽는다 — 주석 처리된 줄(`# - …`)과 블록 밖의 목록 항목
-/// (`analyzer.exclude` 의 glob)은 읽지 않는다. 블록이 없으면 빈 목록이다.
-/// 같은 이름이 두 번 적혀 있으면 두 번 들어간다 (`[3/N]` 이 중복을 잡는다).
+/// 빈 줄은 건너뛴다). 그 안에서 받는 줄은 둘뿐이다 — 들여쓴 `rules:` 키 줄과, 목록 항목
+/// `- 이름` · `- '이름'` · `- "이름"` (뒤에 공백과 `# 주석` 가능). 주석 처리된 줄(`# - …`)과
+/// 블록 밖의 목록 항목(`analyzer.exclude` 의 glob)은 읽지 않는다.
+///
+/// 블록 안의 그 밖의 줄(이름 없는 `-`, `- 이름: true`, 맵 형식 `이름: true`, 이름 뒤에 다른
+/// 것이 붙은 줄)은 건너뛰지 않고 [FormatException] 을 던진다 — main 이 종료 코드 70 으로
+/// 끝낸다 (04-REVIEW.md WR-10). `linter:` 줄 자체에 붙은 flow 표기(`linter: {rules: [...]}`)는
+/// 블록 안의 줄이 아니라 읽지 않는다 — 그러면 규칙 0개라 `[2/N]` 이 잡는다.
+/// 블록이 없으면 빈 목록이다. 같은 이름이 두 번 적혀 있으면 두 번 들어간다 (`[3/N]` 이 중복을
+/// 잡는다).
 List<String> declaredRuleNames(String options) {
-  final rulePattern = RegExp(r'^\s*-\s*([A-Za-z0-9_]+)');
+  // 목록 항목 — 여는 따옴표와 닫는 따옴표가 같아야 하고(없어도 된다), 이름 뒤에는 공백 하나
+  // 이상과 `# 주석` 만 올 수 있다. 그 밖의 꼴은 아래에서 멈춘다 (04-REVIEW.md WR-10)
+  final rulePattern = RegExp(
+    r'''^\s*-\s+(['"]?)([A-Za-z0-9_]+)\1(?:\s+#.*)?\s*$''',
+  );
+  // 들여쓴 `rules:` 키 줄 — 블록 안에서 이름 없이 받는 유일한 줄
+  final rulesKeyPattern = RegExp(r'^\s+rules:\s*(?:#.*)?$');
   var inLinter = false;
   final names = <String>[];
-  for (final line in options.split('\n')) {
+  final lines = options.split('\n');
+  for (var i = 0; i < lines.length; i++) {
+    final line = lines[i];
     // 주석 줄과 빈 줄은 블록을 닫지 않는다 — YAML 에서 열 0 주석은 블록 밖이 아니다 (04-REVIEW.md CR-02)
-    final trimmed = line.trimLeft();
+    final trimmed = line.trim();
     if (trimmed.isEmpty || trimmed.startsWith('#')) continue;
     if (RegExp(r'^linter:').hasMatch(line)) {
       inLinter = true;
@@ -890,8 +904,18 @@ List<String> declaredRuleNames(String options) {
       // 들여쓰기 없는 줄(다른 최상위 키)이 블록을 닫는다.
       inLinter = false;
     } else if (inLinter) {
+      if (rulesKeyPattern.hasMatch(line)) continue;
       final match = rulePattern.firstMatch(line);
-      if (match != null) names.add(match.group(1)!);
+      // 블록 안에서 읽지 못하는 줄은 건너뛰지 않고 멈춘다 — 건너뛰면 겹침 검사 (b) 와
+      // `RULES.md` 일치 검사 (c) 가 그 규칙을 보지 못한 채 통과한다 (04-REVIEW.md WR-10)
+      if (match == null) {
+        throw FormatException(
+          '`linter:` 블록의 ${i + 1}행을 읽지 못했다 — '
+          '목록 항목(`- 이름` · `- \'이름\'` · `- "이름"`, 뒤에 `# 주석` 가능)과 '
+          '`rules:` 만 받는다 (04-REVIEW.md WR-10): $trimmed',
+        );
+      }
+      names.add(match.group(2)!);
     }
   }
   return names;
