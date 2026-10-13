@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 05
 current_phase_name: Documentation
 status: executing
-stopped_at: Completed 05-01-PLAN.md
-last_updated: "2026-10-13T17:04:30.153Z"
+stopped_at: Completed 05-02-PLAN.md
+last_updated: "2026-10-13T17:13:38.094Z"
 last_activity: 2026-10-14
 last_activity_desc: 05-01 완료 — tool/verify.dart WR-02 · WR-11 · IN-14 닫음, M32 ~ M37
-state_head: 2be345e9c4b291d7b3fa45582b6b07e6a6809660
+state_head: 8e4199faba0efa80892d105e81cea374583165c0
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 32
-  completed_plans: 27
+  completed_plans: 28
   percent: 67
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-13)
 ## Current Position
 
 Phase: 05 (Documentation) — EXECUTING
-Plan: 2 of 6
+Plan: 3 of 6
 Status: Ready to execute
 Last activity: 2026-10-14 — 05-01 완료 (tool/verify.dart WR-02 · WR-11 · IN-14, M32 ~ M37)
 
@@ -88,6 +88,7 @@ Progress: [███████░░░] 67%
 | Phase 04 P12 | 10min | 3 tasks | 18 files |
 | Phase 04 P13 | 7min | 3 tasks | 5 files |
 | Phase 05 P01 | 9min | 3 tasks | 4 files |
+| Phase 05 P02 | 4min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -204,6 +205,8 @@ Recent decisions affecting current work:
 - [Phase 05]: CHANGELOG 2.0.0 의 `### 새로 생기는 경고` 표는 75행이다 (조사 문서의 74 는 04-12 전 값). 05-04 는 수를 박지 않고 "표 행 수 == 추가한 규칙 불릿 수" 로 단언한다
 - [Phase 05]: 05-01: WR-11 은 B안 — [3/10] (b′) 가 lib/base.yaml 밖 조각의 linter: 블록에 규칙이 있으면 실패, 규칙은 lib/base.yaml 에만
 - [Phase 05]: 05-01: stripPlugins 는 plugins: 섹션을 빈 줄로 바꿔 줄 번호를 보존하고 readShippedPluginConstraint 는 줄 끝 주석 · 맵 형식을 받는다 (M32 · M33 통과, M34 70, M37 진단 줄 :13)
+- [Phase 05]: 05-02: lib/recommended.yaml · lib/analysis_options.yaml 에도 README.md 를 가리키는 # 줄을 하나씩 더했다 — 다섯 파일 모두 머리 주석이 README 를 가리킨다
+- [Phase 05]: 05-02: .claude/CLAUDE.md 71행은 [3/10] 이 lib/base.yaml · RULES.md · README 표시 구역의 일치를 본다고 적었다 — CHANGELOG 는 검증 대상이 아니다
 
 ### Pending Todos
 
@@ -229,6 +232,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-13T17:04:30.111Z
-Stopped at: Completed 05-01-PLAN.md
+Last session: 2026-10-13T17:13:38.050Z
+Stopped at: Completed 05-02-PLAN.md
 Resume file: None

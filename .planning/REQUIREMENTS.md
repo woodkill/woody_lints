@@ -60,7 +60,7 @@
 - [ ] **DOCS-07**: CHANGELOG 에 새 릴리스 항목이 있다 (추가·삭제 규칙, 지원 SDK 변경)
 - [ ] **DOCS-08**: CHANGELOG 의 1.0.0 과 1.3.0 사이 누락이 git 이력에서 확인되는 범위로 보완되어 있다
 - [ ] **DOCS-09**: CHANGELOG 새 릴리스 항목에 새로 생기는 진단 안내가 있다 (규칙별 실측 건수, `dart fix` 가능 여부)
-- [ ] **DOCS-10**: 배포 YAML 의 머리 주석이 실제 구성을 설명하고, README 와 YAML 에 남은 템플릿 보일러플레이트가 제거되어 있다
+- [x] **DOCS-10**: 배포 YAML 의 머리 주석이 실제 구성을 설명하고, README 와 YAML 에 남은 템플릿 보일러플레이트가 제거되어 있다
 - [x] **DOCS-11**: 켠 규칙마다 이유와 실측 건수를 적은 근거 문서가 있다
 
 ### 릴리스 (REL)
@@ -148,7 +148,7 @@
 | DOCS-07 | Phase 5 | Pending |
 | DOCS-08 | Phase 5 | Pending |
 | DOCS-09 | Phase 5 | Pending |
-| DOCS-10 | Phase 5 | Pending |
+| DOCS-10 | Phase 5 | Complete |
 | DOCS-11 | Phase 4 | Complete |
 | REL-01 | Phase 1 | Complete |
 | REL-02 | Phase 6 | Pending |
