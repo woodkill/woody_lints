@@ -4,12 +4,12 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 05
 current_phase_name: Documentation
-status: verifying
-stopped_at: Completed 05-05-PLAN.md
-last_updated: "2026-10-13T20:12:12.399Z"
+status: Phase 05 검증 gaps_found (23/25) — gap 수정 계획 대기 (/gsd-plan-phase 05 --gaps)
+stopped_at: Phase 05 검증 gaps_found — gap 2건 (VERIFY-06 README 목록 reader, (b′) flow 표기)
+last_updated: "2026-10-13T20:50:12.404Z"
 last_activity: 2026-10-14
 last_activity_desc: 05-05 완료 — 첫 push 0db0fdd..92d478a (65커밋) · GitHub verify run 38460138720 단계 10개 통과
-state_head: ce245a5cc805c4331d05f1f0e4b3c0dacd83cc5c
+state_head: 46bd8e7e560ca70c81f033ef3a330e4c8c262f55
 progress:
   total_phases: 6
   completed_phases: 4
@@ -31,7 +31,7 @@ See: .planning/PROJECT.md (updated 2026-10-13)
 
 Phase: 05 (Documentation) — EXECUTING
 Plan: 6 of 6
-Status: Phase complete — ready for verification
+Status: Phase 05 검증 gaps_found (23/25) — gap 수정 계획 대기 (/gsd-plan-phase 05 --gaps)
 Last activity: 2026-10-14 — 05-05 완료 (소유자 결정 "push" 뒤 git push origin gsd/v2.0-package-rework 한 줄, 0db0fdd..92d478a 65커밋 fast-forward; GitHub verify run 38460138720 success · 점검 통과 (10개 중 10개)). Phase 5 의 plan 6개 모두 끝남 — 05-05 의 SUMMARY · 메타데이터 커밋은 origin 에 없다
 
 Progress: [███████░░░] 67%
@@ -245,5 +245,5 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-10-13T20:12:12.357Z
-Stopped at: Completed 05-05-PLAN.md
+Stopped at: Phase 05 검증 gaps_found — gap 2건 (VERIFY-06 README 목록 reader, (b′) flow 표기)
 Resume file: None
