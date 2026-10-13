@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 04
 current_phase_name: Rule Reselection
 status: executing
-stopped_at: Completed 04-04-PLAN.md
-last_updated: "2026-10-13T01:45:47.395Z"
+stopped_at: Completed 04-05-PLAN.md
+last_updated: "2026-10-13T02:16:18.811Z"
 last_activity: 2026-10-13
 last_activity_desc: Phase 04 execution started
-state_head: bb6eedb73351d0307ebcece28faf63d5682c0c50
+state_head: c31e59bcece76584bbcfaaac5581f232b4bbf986
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 23
-  completed_plans: 17
+  completed_plans: 18
   percent: 50
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-12)
 ## Current Position
 
 Phase: 04 (Rule Reselection) — EXECUTING
-Plan: 4 of 10
+Plan: 5 of 10
 Status: Ready to execute
 Last activity: 2026-10-13 — Phase 04 execution started
 
@@ -77,6 +77,7 @@ Progress: [█████░░░░░] 50%
 | Phase 04 P02 | 27min | 2 tasks | 1 files |
 | Phase 04 P03 | 27min | 2 tasks | 1 files |
 | Phase 04 P04 | 40min | 3 tasks | 3 files |
+| Phase 04 P05 | 21min | 3 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -158,6 +159,10 @@ Recent decisions affecting current work:
 - [Phase 04]: 실측 회차 R1 (2026-10-13, Flutter 3.47.5 / Dart 3.13.4, riverpod_lint 3.1.9) 의 결과 tool/measurements/2026-10-13-R1.json 은 회차 50개가 모두 유효하고 평가표의 단일 출처다. 결정 대상 121행 가운데 줄이 있는 행 54, 0줄 67 (표식 검출 62 · 표식 미검출 1 · 표식 불가 4) — 결정 안 함이 될 규칙 5개 (04-04)
 - [Phase 04]: 실측 도구의 fix 단계는 analyzer 옵션 strict-inference 도 그 회차의 inference_failure_on_* 코드를 모두 --code= 로 주어 잰다 — R1 에서 test 106줄, 단독 dry 0, 사라진 줄 0, 새 error 0. --report 의 옵션 행 예외는 걷었다 (04-04)
 - [Phase 04]: 비공개 점검 (3) 의 dart fix 화면 문구 grep 은 이 phase 의 PLAN · RESEARCH 에 적힌 자기 패턴 10줄에 걸린다 — 04-04 는 PLAN · RESEARCH 를 뺀 범위로 0줄을 확인했다. 04-09 · 04-10 의 같은 점검도 같은 10줄을 만난다 (04-04)
+- [Phase 04]: 소유자가 규칙별 채택을 정했다 (2026-10-13, 로드맵 D13) — 묶음 1 ~ 5 모두 권고대로, 질문 1 ~ 6 모두 권고와 같은 답. 켬 80 (새로 켜는 74 + 지금 켜 둔 6 남김) · 안 켬 35 · 결정 안 함 5 (표식 불가 4 · 표식 미검출 1) · v2 12 · 보류 1 (unnecessary_ignore, 04-08). 원본은 04-DECISIONS.md 의 결정 표 (04-05)
+- [Phase 04]: strict 계열은 no_dynamic_casts · no_raw_types 를 켜고 strict-inference 는 켜지 않는다 (warning, 106줄 모두 test) — fixtures/base_codegen 의 exit 0 은 그대로다. import 는 prefer_relative_imports, fire-and-forget 은 unawaited_futures · discarded_futures 를 켜고 unnecessary_unawaited 는 켜지 않는다 (04-05)
+- [Phase 04]: 지금 켜 둔 5개의 사유 문구는 D-18 제안대로 고친다 (승인) — 문구는 04-DECISIONS.md 의 표 밖의 응답과 메모. unnecessary_underscores 는 후보가 아니라(기반 세트) 그대로 둔다 (04-05)
+- [Phase 04]: 결정 대상은 120 이 아니라 115 다 — 도구가 결정 안 함으로 판정한 행이 표식 불가 4 · 표식 미검출 1 의 다섯이다. 04-06 의 precondition 이 120 을 세면 115 로 읽는다 (04-05)
 
 ### Pending Todos
 
@@ -183,6 +188,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-13T01:45:47.363Z
-Stopped at: Completed 04-04-PLAN.md
+Last session: 2026-10-13T02:16:18.777Z
+Stopped at: Completed 04-05-PLAN.md
 Resume file: None
