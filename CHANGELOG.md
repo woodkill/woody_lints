@@ -44,6 +44,45 @@
 - `use_colored_box` — 색만 지정한 Container 대신 가벼운 ColoredBox
 - `use_string_buffers` — 루프 안의 문자열 누적 연결 대신 StringBuffer
 - `use_truncating_division` — (a / b).toInt() 대신 정수 나눗셈 a ~/ b
+- `avoid_bool_literals_in_conditional_expressions` — cond ? true : false 류는 조건식 하나로 줄인다
+- `avoid_escaping_inner_quotes` — 바깥 따옴표를 바꾸면 없앨 수 있는 escape — prefer_single_quotes 의 보완
+- `avoid_final_parameters` — 매개변수 선언의 final 은 읽기만 어렵게 한다 (언어 버전 3.13 의 라이브러리에서는 돌지 않는다)
+- `avoid_multiple_declarations_per_line` — 한 줄에 변수 하나씩 선언한다
+- `avoid_redundant_argument_values` — 기본값과 같은 값을 다시 적은 인자
+- `avoid_setters_without_getters` — getter 없는 setter 는 읽을 수 없는 프로퍼티를 만든다
+- `combinators_ordering` — show / hide 의 이름을 알파벳 순으로
+- `directives_ordering` — import / export 를 정해진 구역과 알파벳 순으로
+- `document_ignores` — 무시 주석(// ignore) 바로 윗줄에 끄는 까닭을 적는다
+- `flutter_style_todos` — TODO 는 // TODO(이름): 형식으로 담당자를 적는다
+- `join_return_with_assignment` — 대입 직후 같은 변수를 return 하지 않고 한 문장으로 쓴다
+- `leading_newlines_in_multiline_strings` — 여러 줄 문자열은 개행으로 시작해 줄 맞춤을 읽기 쉽게 한다
+- `no_literal_bool_comparisons` — x == true 같은 bool 리터럴 비교
+- `omit_obvious_local_variable_types` — 타입이 자명한 지역 변수에는 타입을 적지 않는다
+- `prefer_asserts_in_initializer_lists` — 생성자 본문의 assert 는 초기화 목록으로 옮긴다
+- `prefer_constructors_over_static_methods` — 인스턴스를 만드는 static 메서드 대신 이름 있는 생성자
+- `prefer_final_in_for_each` — 다시 대입하지 않는 for-in 변수는 final 로 — prefer_final_locals 와 같은 관례
+- `prefer_if_elements_to_conditional_expressions` — 컬렉션 안의 삼항 연산자 대신 if 요소
+- `prefer_int_literals` — double 자리의 1.0 은 1 로 적는다
+- `prefer_null_aware_method_calls` — if (f != null) f!() 대신 f?.call()
+- `simple_directive_paths` — directive 경로에 ./ 나 되돌아가는 ../ 를 넣지 않는다
+- `simplify_variable_pattern` — 변수 pattern 에 같은 이름의 getter 를 다시 적지 않는다
+- `sort_constructors_first` — 생성자를 다른 멤버보다 먼저 둔다
+- `sort_unnamed_constructors_first` — 이름 없는 생성자를 이름 있는 생성자보다 먼저 둔다
+- `specify_nonobvious_property_types` — 타입이 자명하지 않은 top-level · static 변수에는 타입을 적는다
+- `tighten_type_of_initializing_formals` — assert(p != null) 대신 초기화 매개변수의 타입으로 null 아님을 적는다
+- `type_annotate_public_apis` — 공개 API 에는 타입을 적는다
+- `unnecessary_breaks` — switch case 끝의 불필요한 break
+- `unnecessary_lambdas` — tear-off 로 쓸 수 있는 람다
+- `unnecessary_library_directive` — 문서 주석도 annotation 도 없는 library; 지시문
+- `unnecessary_null_aware_operator_on_extension_on_nullable` — nullable 대상 extension 에 쓴 불필요한 ?.
+- `unnecessary_null_checks` — nullable 을 받는 자리에 쓴 불필요한 !
+- `unnecessary_parenthesis` — 불필요한 괄호
+- `unnecessary_raw_strings` — escape 가 없는 문자열의 불필요한 raw 표시
+- `use_enums` — enum 처럼 쓰는 클래스는 enum 으로
+- `use_is_even_rather_than_modulo` — % 2 == 0 대신 isEven
+- `use_named_constants` — Duration(seconds: 0) 같은 값 대신 Duration.zero 같은 이름 있는 상수
+- `use_raw_strings` — escape 를 늘어놓는 대신 raw 문자열
+- `use_setters_to_change_properties` — 프로퍼티를 바꾸는 메서드 대신 setter
 
 ### 그 밖의 변경
 

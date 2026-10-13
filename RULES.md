@@ -23,6 +23,45 @@
 | `prefer_final_locals` | 가독성·스타일 | 데이터의 불변성 보장 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-B0 · R1-B0-strip |
 | `prefer_single_quotes` | 가독성·스타일 | 홑따옴표('') 사용 통일 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-B0 · R1-B0-strip |
 | `prefer_relative_imports` | 가독성·스타일 | lib 안의 같은 패키지 파일은 상대 경로로 import 한다 — 사용 프로젝트의 다수 쪽 스타일 | 9 · 0 · 0 | 9 | R1-G2 · R1-G2-strip · R1-apply-prefer_relative_imports |
+| `avoid_bool_literals_in_conditional_expressions` | 가독성·스타일 | cond ? true : false 류는 조건식 하나로 줄인다 | 1 · 0 · 0 | 1 | R1-G1 · R1-G1-strip · R1-apply-avoid_bool_literals_in_conditional_expressions |
+| `avoid_escaping_inner_quotes` | 가독성·스타일 | 바깥 따옴표를 바꾸면 없앨 수 있는 escape — prefer_single_quotes 의 보완 | 0 · 1 · 0 | 1 | R1-G1 · R1-G1-strip · R1-apply-avoid_escaping_inner_quotes |
+| `avoid_final_parameters` | 가독성·스타일 | 매개변수 선언의 final 은 읽기만 어렵게 한다 (언어 버전 3.13 의 라이브러리에서는 돌지 않는다) | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `avoid_multiple_declarations_per_line` | 가독성·스타일 | 한 줄에 변수 하나씩 선언한다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `avoid_redundant_argument_values` | 가독성·스타일 | 기본값과 같은 값을 다시 적은 인자 | 9 · 103 · 12 | 124 | R1-G1 · R1-G1-strip · R1-apply-avoid_redundant_argument_values |
+| `avoid_setters_without_getters` | 가독성·스타일 | getter 없는 setter 는 읽을 수 없는 프로퍼티를 만든다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `combinators_ordering` | 가독성·스타일 | show / hide 의 이름을 알파벳 순으로 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `directives_ordering` | 가독성·스타일 | import / export 를 정해진 구역과 알파벳 순으로 | 3 · 163 · 0 | 166 | R1-G1 · R1-G1-strip · R1-apply-directives_ordering |
+| `document_ignores` | 가독성·스타일 | 무시 주석(// ignore) 바로 윗줄에 끄는 까닭을 적는다 | 1 · 46 · 1 | 0 (dry 0) | R1-G1 · R1-G1-strip |
+| `flutter_style_todos` | 가독성·스타일 | TODO 는 // TODO(이름): 형식으로 담당자를 적는다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `join_return_with_assignment` | 가독성·스타일 | 대입 직후 같은 변수를 return 하지 않고 한 문장으로 쓴다 | 1 · 0 · 0 | 0 (dry 0) | R1-G1 · R1-G1-strip |
+| `leading_newlines_in_multiline_strings` | 가독성·스타일 | 여러 줄 문자열은 개행으로 시작해 줄 맞춤을 읽기 쉽게 한다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `no_literal_bool_comparisons` | 가독성·스타일 | x == true 같은 bool 리터럴 비교 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `omit_obvious_local_variable_types` | 가독성·스타일 | 타입이 자명한 지역 변수에는 타입을 적지 않는다 | 1 · 235 · 0 | 236 | R1-G1 · R1-G1-strip · R1-apply-omit_obvious_local_variable_types |
+| `prefer_asserts_in_initializer_lists` | 가독성·스타일 | 생성자 본문의 assert 는 초기화 목록으로 옮긴다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `prefer_constructors_over_static_methods` | 가독성·스타일 | 인스턴스를 만드는 static 메서드 대신 이름 있는 생성자 | 1 · 0 · 0 | 0 (dry 0) | R1-G1 · R1-G1-strip |
+| `prefer_final_in_for_each` | 가독성·스타일 | 다시 대입하지 않는 for-in 변수는 final 로 — prefer_final_locals 와 같은 관례 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `prefer_if_elements_to_conditional_expressions` | 가독성·스타일 | 컬렉션 안의 삼항 연산자 대신 if 요소 | 3 · 0 · 0 | 1 | R1-G1 · R1-G1-strip · R1-apply-prefer_if_elements_to_conditional_expressions |
+| `prefer_int_literals` | 가독성·스타일 | double 자리의 1.0 은 1 로 적는다 | 5 · 12 · 0 | 17 | R1-G1 · R1-G1-strip · R1-apply-prefer_int_literals |
+| `prefer_null_aware_method_calls` | 가독성·스타일 | if (f != null) f!() 대신 f?.call() | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `simple_directive_paths` | 가독성·스타일 | directive 경로에 ./ 나 되돌아가는 ../ 를 넣지 않는다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `simplify_variable_pattern` | 가독성·스타일 | 변수 pattern 에 같은 이름의 getter 를 다시 적지 않는다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `sort_constructors_first` | 가독성·스타일 | 생성자를 다른 멤버보다 먼저 둔다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `sort_unnamed_constructors_first` | 가독성·스타일 | 이름 없는 생성자를 이름 있는 생성자보다 먼저 둔다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `specify_nonobvious_property_types` | 가독성·스타일 | 타입이 자명하지 않은 top-level · static 변수에는 타입을 적는다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `tighten_type_of_initializing_formals` | 가독성·스타일 | assert(p != null) 대신 초기화 매개변수의 타입으로 null 아님을 적는다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `type_annotate_public_apis` | 가독성·스타일 | 공개 API 에는 타입을 적는다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G2 · R1-G2-marker · R1-G2-strip |
+| `unnecessary_breaks` | 가독성·스타일 | switch case 끝의 불필요한 break | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `unnecessary_lambdas` | 가독성·스타일 | tear-off 로 쓸 수 있는 람다 | 0 · 197 · 0 | 197 | R1-G1 · R1-G1-strip · R1-apply-unnecessary_lambdas |
+| `unnecessary_library_directive` | 가독성·스타일 | 문서 주석도 annotation 도 없는 library; 지시문 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `unnecessary_null_aware_operator_on_extension_on_nullable` | 가독성·스타일 | nullable 대상 extension 에 쓴 불필요한 ?. | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `unnecessary_null_checks` | 가독성·스타일 | nullable 을 받는 자리에 쓴 불필요한 ! | 0 · 1 · 0 | 1 | R1-G1 · R1-G1-strip · R1-apply-unnecessary_null_checks |
+| `unnecessary_parenthesis` | 가독성·스타일 | 불필요한 괄호 | 0 · 1 · 0 | 1 | R1-G1 · R1-G1-strip · R1-apply-unnecessary_parenthesis |
+| `unnecessary_raw_strings` | 가독성·스타일 | escape 가 없는 문자열의 불필요한 raw 표시 | 0 · 33 · 0 | 33 | R1-G1 · R1-G1-strip · R1-apply-unnecessary_raw_strings |
+| `use_enums` | 가독성·스타일 | enum 처럼 쓰는 클래스는 enum 으로 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `use_is_even_rather_than_modulo` | 가독성·스타일 | % 2 == 0 대신 isEven | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `use_named_constants` | 가독성·스타일 | Duration(seconds: 0) 같은 값 대신 Duration.zero 같은 이름 있는 상수 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `use_raw_strings` | 가독성·스타일 | escape 를 늘어놓는 대신 raw 문자열 | 0 · 9 · 0 | 9 | R1-G1 · R1-G1-strip · R1-apply-use_raw_strings |
+| `use_setters_to_change_properties` | 가독성·스타일 | 프로퍼티를 바꾸는 메서드 대신 setter | 0 · 3 · 0 | 0 (dry 0) | R1-G1 · R1-G1-strip |
 | `unawaited_futures` | 버그 방지 | 처리되지 않은 Future 감지 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-B0 · R1-B0-strip |
 | `async_return_with_no_await` | 버그 방지 | await 없이 넘긴 Future 는 이 함수의 try/catch 를 지나 예외가 밖에서 난다 | 16 · 14 · 0 | 0 (dry 0) | R1-G1 · R1-G1-strip |
 | `avoid_catching_errors` | 버그 방지 | Error 를 잡으면 프로그램 버그가 숨는다 | 2 · 1 · 0 | 0 (dry 0) | R1-G1 · R1-G1-strip |
@@ -83,11 +122,14 @@
 | `use_build_context_synchronously` | 기반 세트 — `flutter_lints` 6.0.0 `flutter.yaml` 이 켠다 |
 | `avoid_print` | 기반 세트 — `flutter_lints` 6.0.0 `flutter.yaml` 이 켠다 |
 | `control_flow_in_finally` | 기반 세트 — `lints` 6.1.0 `recommended.yaml` 이 켠다 |
+| `unnecessary_underscores` | 기반 세트 — `lints` 6.1.0 `recommended.yaml` 이 켠다 — 상태 출처가 갈린다 (`messages.yaml` experimental 3.7 · `rules.json` · dart.dev stable) |
 | `always_use_package_imports` | 비호환 — 켠 `prefer_relative_imports` 와 함께 쓸 수 없다 (소유자 결정 2026-10-13, 사용 프로젝트의 소수 쪽 스타일이라 켜면 615줄) |
 | `avoid_equals_and_hash_code_on_mutable_classes` | 소유자 결정 — `@immutable` 표시가 없을 뿐인 클래스도 걸린다 (8줄 모두 lib, dart fix 0) |
 | `avoid_implementing_value_types` | 소유자 결정 — test 의 mock · fake 가 걸리는 규칙 (25줄 모두 test) |
 | `unnecessary_unawaited` | 소유자 결정 — `dart fix` 가 3줄을 지우고 error 9건을 남긴다 |
 | `strict-inference` | 소유자 결정 — analyzer 옵션(`analyzer: language:`)이고 진단이 warning 이라 받는 쪽 `dart analyze` 가 바로 실패한다 (106줄 모두 test, dart fix 0) |
+| `sort_pub_dependencies` | 소유자 결정 — 실제 프로젝트 0줄이고 `lib/` 샘플로 걸리는 것을 보일 수 없어 이번에는 켜지 않는다 (04-07 실행 전 질문) |
+| `use_test_throws_matchers` | 소유자 결정 — 실제 프로젝트 0줄이고 `lib/` 샘플로 걸리는 것을 보일 수 없어 이번에는 켜지 않는다 (04-07 실행 전 질문) |
 <!-- woody:disabled-rules:end -->
 
 formatter: 설정은 기본 프리셋에 넣지 않는다 (04-CONTEXT.md D-13, REQUIREMENTS.md Out of Scope)
