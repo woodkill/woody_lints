@@ -104,3 +104,4 @@ lib/suppress/plugin_line.dart:12  info  document_ignores
 lib/suppress/plugin_line.dart:13  warning  provider_parameters
 lib/suppress/plugin_line.dart:4  info  specify_nonobvious_property_types
 lib/suppress/plugin_line.dart:8  info  document_ignores
+pubspec.yaml:11  info  sort_pub_dependencies

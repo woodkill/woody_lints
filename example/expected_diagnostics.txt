@@ -93,3 +93,4 @@ lib/style_rules.dart:76  info  no_literal_bool_comparisons
 lib/style_rules.dart:80  info  omit_obvious_local_variable_types
 lib/style_rules.dart:88  info  prefer_asserts_in_initializer_lists
 lib/style_rules.dart:9  info  combinators_ordering
+pubspec.yaml:11  info  sort_pub_dependencies

@@ -7,9 +7,9 @@ environment:
   sdk: ^3.13.0
 
 dependencies:
+  flutter_riverpod: ^3.0.0
   flutter:
     sdk: flutter
-  flutter_riverpod: ^3.0.0
 
 dev_dependencies:
   # 저장소 루트의 woody_lints 를 그대로 받는다 (사용 프로젝트의 git 의존성 자리).

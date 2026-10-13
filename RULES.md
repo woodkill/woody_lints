@@ -46,6 +46,7 @@
 | `simple_directive_paths` | 가독성·스타일 | directive 경로에 ./ 나 되돌아가는 ../ 를 넣지 않는다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
 | `simplify_variable_pattern` | 가독성·스타일 | 변수 pattern 에 같은 이름의 getter 를 다시 적지 않는다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
 | `sort_constructors_first` | 가독성·스타일 | 생성자를 다른 멤버보다 먼저 둔다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `sort_pub_dependencies` | 가독성·스타일 | pubspec.yaml 의 dependencies · dev_dependencies 를 이름 순으로 적는다 — 목록에서 찾기 쉽고 끼워 넣을 자리가 정해진다 | 0 · 0 · 0 (pubspec.yaml 2줄) | 재지 않음 | R1-G1 · R1-G1-strip |
 | `sort_unnamed_constructors_first` | 가독성·스타일 | 이름 없는 생성자를 이름 있는 생성자보다 먼저 둔다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
 | `specify_nonobvious_property_types` | 가독성·스타일 | 타입이 자명하지 않은 top-level · static 변수에는 타입을 적는다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
 | `tighten_type_of_initializing_formals` | 가독성·스타일 | assert(p != null) 대신 초기화 매개변수의 타입으로 null 아님을 적는다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
@@ -130,7 +131,6 @@
 | `avoid_implementing_value_types` | 소유자 결정 — test 의 mock · fake 가 걸리는 규칙 (25줄 모두 test) |
 | `unnecessary_unawaited` | 소유자 결정 — `dart fix` 가 3줄을 지우고 error 9건을 남긴다 |
 | `strict-inference` | 소유자 결정 — analyzer 옵션(`analyzer: language:`)이고 진단이 warning 이라 받는 쪽 `dart analyze` 가 바로 실패한다 (106줄 모두 test, dart fix 0) |
-| `sort_pub_dependencies` | 소유자 결정 — 실제 프로젝트 0줄이고 `lib/` 샘플로 걸리는 것을 보일 수 없어 이번에는 켜지 않는다 (04-07 실행 전 질문) |
 | `use_test_throws_matchers` | 소유자 결정 — 실제 프로젝트 0줄이고 `lib/` 샘플로 걸리는 것을 보일 수 없어 이번에는 켜지 않는다 (04-07 실행 전 질문) |
 | `always_put_control_body_on_new_line` | 소유자 결정 — formatter 와 어긋날 수 있다 — 398줄, dart fix 0 |
 | `always_put_required_named_parameters_first` | 소유자 결정 — Flutter 의 `super.key` 를 앞에 두는 관례와 어긋난다 — 32줄 |
