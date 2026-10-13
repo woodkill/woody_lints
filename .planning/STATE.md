@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 04
 current_phase_name: Rule Reselection
 status: Phase 04 gap 수정 실행 중 (04-11 · 04-12, --gaps-only)
-stopped_at: Completed 04-11-PLAN.md
-last_updated: "2026-10-13T08:32:40.537Z"
+stopped_at: Completed 04-12-PLAN.md
+last_updated: "2026-10-13T08:47:58.393Z"
 last_activity: 2026-10-13
 last_activity_desc: Phase 04 execution started
-state_head: 561a61d1dd8b48a27fe86518c560a309a2d37266
+state_head: 1fcd26c9f2a1e1ca2cd1e6f6aa4d5c150c744d56
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 25
-  completed_plans: 24
+  completed_plans: 25
   percent: 50
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-12)
 ## Current Position
 
 Phase: 04 (Rule Reselection) — EXECUTING
-Plan: 11 of 12
+Plan: 12 of 12
 Status: Phase 04 gap 수정 실행 중 (04-11 · 04-12, --gaps-only)
 Last activity: 2026-10-13 — Phase 04 execution started
 
@@ -84,6 +84,7 @@ Progress: [█████░░░░░] 50%
 | Phase 04 P09 | 7min | 2 tasks | 5 files |
 | Phase 04 P10 | 10min | 3 tasks | 1 files |
 | Phase 04 P11 | 9min | 2 tasks | 5 files |
+| Phase 04 P12 | 10min | 3 tasks | 18 files |
 
 ## Accumulated Context
 
@@ -188,6 +189,9 @@ Recent decisions affecting current work:
 - [Phase 04]: 04-11: 측정 도구의 값 자리는 valueAreas (lib · test · bin · pubspec.yaml) 넷이고 projectAreas 셋은 Dart 파일 수 · 표식 · 무시 주석 걷기에만 쓴다. --report 단언 (7) 이 값 밖 자리의 같은 규칙 코드를 잡는다 (b567100)
 - [Phase 04]: 04-11: R1 의 행을 --recount 로 커밋된 회차에서 다시 셌다 — 바뀐 행은 sort_pub_dependencies 하나 (0·0·0·0 → 0·0·0·2), runs 그대로, dart fix 칸은 재지 않음 (fixSkipped). --summary style 판정은 켬 · 손으로 고칠 줄 2 (≤ 50). 비공개 프로젝트는 돌리지 않았다
 - [Phase 04]: 04-11: [3/10] 의 declaredRuleNames 는 주석 · 빈 줄을 건너뛴다 (CR-02, M26 이 [3/10] 만으로 실패, 점검 실패 (10개 중 1개)). 상류 YAML 에서 규칙 0개면 tool/verify.dart · tool/measure_rules.dart 둘 다 FormatException (WR-06, c06d8d5)
+- [Phase 04]: 04-12: sort_pub_dependencies 를 켰다 (소유자 재결정 2026-10-13 의 반영, 6d64bee) — lib/base.yaml 81개 == RULES.md 켠 규칙 81 == 결정 표 켬 81, --audit 켠 81 · 옵션 0 · 켜지 않음 90 · 보류 0
+- [Phase 04]: 04-12: 샘플은 연습용 프로젝트 여섯의 pubspec.yaml 에서 dependencies 의 flutter_riverpod 를 flutter 앞에 둔 것이고 정답지 다섯에 pubspec.yaml:11  info  sort_pub_dependencies 한 줄씩 생겼다 (exit 줄 · 다른 줄 · pubspec.lock 그대로). example/pubspec.yaml 만 되돌리면 [5/10] · [6/10] 이 실패한다
+- [Phase 04]: 04-12: CR-03 은 코드를 고치지 않고 REQUIREMENTS.md RULES-13 아래 메모와 처리 기록 deferred 로 남겼다 (소유자 결정 2026-10-13). example/README.md 의 줄 수는 정답지와 같다 (합계 93, WR-05)
 
 ### Pending Todos
 
@@ -213,6 +217,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-13T08:32:40.502Z
-Stopped at: Completed 04-11-PLAN.md
+Last session: 2026-10-13T08:47:58.359Z
+Stopped at: Completed 04-12-PLAN.md
 Resume file: None
