@@ -19,6 +19,14 @@ linter:
     # 성능
     - prefer_const_constructors # 불변 위젯 트리를 const 로 적는 관례 — 성능 이득은 근거가 부족하다는 것이 Flutter 팀의 판단 (lints#205)
     - prefer_const_literals_to_create_immutables # 위와 같은 관례 — 불변 위젯에 넘기는 리터럴도 const 로
+    - avoid_slow_async_io # 느린 dart:io async 메서드(exists · stat 등) 대신 sync 판을 쓴다
+    - no_runtimetype_tostring # runtimeType 의 toString() 은 비용이 크다 — 로깅 · toString 구현에서 흔하다
+    - noop_primitive_operations # 효과 없는 원시 타입 연산(int 의 toInt() · String 의 toString() 등)
+    - prefer_const_declarations # const 로 선언할 수 있는 final 은 const 로 적는 관례 — prefer_const_constructors 와 함께 기반 세트에서 빠진 셋 중 하나 (lints#205)
+    - sized_box_shrink_expand # SizedBox.shrink / SizedBox.expand 로 쓸 수 있는 SizedBox
+    - use_colored_box # 색만 지정한 Container 대신 가벼운 ColoredBox
+    - use_string_buffers # 루프 안의 문자열 누적 연결 대신 StringBuffer
+    - use_truncating_division # (a / b).toInt() 대신 정수 나눗셈 a ~/ b
 
     # 가독성 및 스타일
     - always_declare_return_types # 기반 세트의 strict_top_level_inference 가 보지 않는 지역 함수 · 옛 typedef 의 반환 타입까지

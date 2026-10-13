@@ -11,6 +11,14 @@
 |---|---|---|---|---|---|
 | `prefer_const_constructors` | 성능 | 불변 위젯 트리를 const 로 적는 관례 — 성능 이득은 근거가 부족하다는 것이 Flutter 팀의 판단 (lints#205) | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-B0 · R1-B0-strip |
 | `prefer_const_literals_to_create_immutables` | 성능 | 위와 같은 관례 — 불변 위젯에 넘기는 리터럴도 const 로 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-B0 · R1-B0-strip |
+| `avoid_slow_async_io` | 성능 | 느린 dart:io async 메서드(exists · stat 등) 대신 sync 판을 쓴다 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `no_runtimetype_tostring` | 성능 | runtimeType 의 toString() 은 비용이 크다 — 로깅 · toString 구현에서 흔하다 | 1 · 0 · 0 | 0 (dry 0) | R1-G1 · R1-G1-strip |
+| `noop_primitive_operations` | 성능 | 효과 없는 원시 타입 연산(int 의 toInt() · String 의 toString() 등) | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `prefer_const_declarations` | 성능 | const 로 선언할 수 있는 final 은 const 로 적는 관례 — prefer_const_constructors 와 함께 기반 세트에서 빠진 셋 중 하나 (lints#205) | 2 · 3 · 0 | 5 | R1-G1 · R1-G1-strip · R1-apply-prefer_const_declarations |
+| `sized_box_shrink_expand` | 성능 | SizedBox.shrink / SizedBox.expand 로 쓸 수 있는 SizedBox | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `use_colored_box` | 성능 | 색만 지정한 Container 대신 가벼운 ColoredBox | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `use_string_buffers` | 성능 | 루프 안의 문자열 누적 연결 대신 StringBuffer | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
+| `use_truncating_division` | 성능 | (a / b).toInt() 대신 정수 나눗셈 a ~/ b | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-G1 · R1-G1-marker · R1-G1-strip |
 | `always_declare_return_types` | 가독성·스타일 | 기반 세트의 strict_top_level_inference 가 보지 않는 지역 함수 · 옛 typedef 의 반환 타입까지 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-B0 · R1-B0-strip |
 | `prefer_final_locals` | 가독성·스타일 | 데이터의 불변성 보장 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-B0 · R1-B0-strip |
 | `prefer_single_quotes` | 가독성·스타일 | 홑따옴표('') 사용 통일 | 0 · 0 · 0 (표식 검출) | 해당 없음 | R1-B0 · R1-B0-strip |

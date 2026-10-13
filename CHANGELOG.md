@@ -36,6 +36,14 @@
 - `unnecessary_statements` — 효과 없는 문장은 빠진 호출 · 대입의 흔적
 - `no_dynamic_casts` — dynamic 값을 구체 타입 자리에 넣는 암묵적 cast 를 잡는다 — strict-casts 옵션의 공식 대체이고 info 라 받는 쪽 CI 를 막지 않는다
 - `no_raw_types` — 타입 인자를 생략한 제네릭 타입을 잡는다 — strict-raw-types 옵션의 공식 대체이고 info 다
+- `avoid_slow_async_io` — 느린 dart:io async 메서드(exists · stat 등) 대신 sync 판을 쓴다
+- `no_runtimetype_tostring` — runtimeType 의 toString() 은 비용이 크다 — 로깅 · toString 구현에서 흔하다
+- `noop_primitive_operations` — 효과 없는 원시 타입 연산(int 의 toInt() · String 의 toString() 등)
+- `prefer_const_declarations` — const 로 선언할 수 있는 final 은 const 로 적는 관례 — prefer_const_constructors 와 함께 기반 세트에서 빠진 셋 중 하나 (lints#205)
+- `sized_box_shrink_expand` — SizedBox.shrink / SizedBox.expand 로 쓸 수 있는 SizedBox
+- `use_colored_box` — 색만 지정한 Container 대신 가벼운 ColoredBox
+- `use_string_buffers` — 루프 안의 문자열 누적 연결 대신 StringBuffer
+- `use_truncating_division` — (a / b).toInt() 대신 정수 나눗셈 a ~/ b
 
 ### 그 밖의 변경
 

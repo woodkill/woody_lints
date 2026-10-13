@@ -38,6 +38,14 @@ lib/bug_prevention_rules.dart:78  info  deprecated_member_use_from_same_package
 lib/bug_prevention_rules.dart:82  info  discarded_futures
 lib/bug_prevention_rules.dart:87  info  literal_only_boolean_expressions
 lib/bug_prevention_rules.dart:9  info  conditional_uri_does_not_exist
+lib/performance_rules.dart:13  info  no_runtimetype_tostring
+lib/performance_rules.dart:17  info  noop_primitive_operations
+lib/performance_rules.dart:20  info  prefer_const_declarations
+lib/performance_rules.dart:23  info  sized_box_shrink_expand
+lib/performance_rules.dart:26  info  use_colored_box
+lib/performance_rules.dart:32  info  use_string_buffers
+lib/performance_rules.dart:38  info  use_truncating_division
+lib/performance_rules.dart:8  info  avoid_slow_async_io
 lib/relative_imports_rule.dart:3  info  prefer_relative_imports
 lib/strict_rules.dart:14  info  no_raw_types
 lib/strict_rules.dart:6  info  no_dynamic_casts

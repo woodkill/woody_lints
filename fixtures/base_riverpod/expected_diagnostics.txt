@@ -43,6 +43,14 @@ lib/generated/sample.freezed.dart:4  info  prefer_single_quotes
 lib/generated/sample.g.dart:4  info  avoid_print
 lib/generated/sample.g.dart:4  info  prefer_single_quotes
 lib/main.dart:5  warning  missing_provider_scope
+lib/performance_rules.dart:13  info  no_runtimetype_tostring
+lib/performance_rules.dart:17  info  noop_primitive_operations
+lib/performance_rules.dart:20  info  prefer_const_declarations
+lib/performance_rules.dart:23  info  sized_box_shrink_expand
+lib/performance_rules.dart:26  info  use_colored_box
+lib/performance_rules.dart:32  info  use_string_buffers
+lib/performance_rules.dart:38  info  use_truncating_division
+lib/performance_rules.dart:8  info  avoid_slow_async_io
 lib/relative_imports_rule.dart:3  info  prefer_relative_imports
 lib/riverpod_rules.dart:17  warning  provider_parameters
 lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties
