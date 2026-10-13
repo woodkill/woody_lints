@@ -40,12 +40,12 @@
 
 ### 규칙 (RULES)
 
-- [ ] **RULES-01**: 기반 세트와 중복되는 선언 6개가 삭제되어, 배포 파일에는 이 패키지가 실제로 추가하는 규칙만 적혀 있다
+- [x] **RULES-01**: 기반 세트와 중복되는 선언 6개가 삭제되어, 배포 파일에는 이 패키지가 실제로 추가하는 규칙만 적혀 있다
 - [x] **RULES-02**: 주석 처리된 설정 3개(`require_trailing_commas`, `public_member_api_docs`, `formatter: trailing_commas`)가 배포 파일에서 삭제되어 있다
 - [x] **RULES-03**: 소유자는 후보 규칙(버그 방지, 성능, 가독성·스타일)마다 `flutter_starter_kit` 복사본에서 잰 진단 건수와 `dart fix` 로 고칠 수 있는 건수를 표로 볼 수 있다
 - [x] **RULES-04**: strict 계열(`no_dynamic_casts`, `no_raw_types`, `strict-inference`)이 같은 실측 표에 포함되어 있다
 - [x] **RULES-05**: 실측 결과를 믿을 수 있다 — 회차마다 SDK / 기반 세트 / plugin 버전이 기록되고, 일부러 넣은 위반이 보고된 회차의 수치만 쓴다
-- [ ] **RULES-06**: 후보 규칙마다 소유자가 채택 여부를 결정했고, 그 결정이 배포 파일에 반영되어 있다
+- [x] **RULES-06**: 후보 규칙마다 소유자가 채택 여부를 결정했고, 그 결정이 배포 파일에 반영되어 있다
 - [x] **RULES-07**: 남기는 규칙의 사유 주석이 사실과 일치한다
 - [x] **RULES-08**: 채택하지 않은 규칙과 그 사유가 목록으로 남아 있다
 
@@ -129,12 +129,12 @@
 | PRESET-06 | Phase 3 | Complete |
 | PRESET-07 | Phase 3 | Complete |
 | PRESET-08 | Phase 3 | Complete |
-| RULES-01 | Phase 4 | Pending |
+| RULES-01 | Phase 4 | Complete |
 | RULES-02 | Phase 4 | Complete |
 | RULES-03 | Phase 4 | Complete |
 | RULES-04 | Phase 4 | Complete |
 | RULES-05 | Phase 4 | Complete |
-| RULES-06 | Phase 4 | Pending |
+| RULES-06 | Phase 4 | Complete |
 | RULES-07 | Phase 4 | Complete |
 | RULES-08 | Phase 4 | Complete |
 | DOCS-01 | Phase 5 | Pending |

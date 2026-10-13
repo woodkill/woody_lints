@@ -178,7 +178,7 @@ Plans:
   4. 배포 파일에 기반 세트와 중복되는 선언과 주석 처리된 설정(`require_trailing_commas`, `public_member_api_docs`, `formatter: trailing_commas`)이 없고, 남은 규칙의 사유 주석이 사실과 일치한다
   5. 켠 규칙마다 이유와 실측 건수를 적은 근거 문서와, 채택하지 않은 규칙과 그 사유의 목록이 저장소에 있다
 
-**Plans**: 9/10 plans executed
+**Plans**: 10/10 plans executed
 
 Plans:
 **Wave 1** *(04-02 의 smoke 는 저장소 지문을 견주므로 04-01 과 같은 worktree 에서 동시에 돌리지 않는다 — worktree 가 다르면 병렬, 같으면 04-01 뒤)*
@@ -207,7 +207,7 @@ Plans:
 - [x] 04-09-PLAN.md — `RULES.md` 실측 기록 (`--report --write`) · CHANGELOG `### 새로 생기는 경고` 표 · README M25 · 03 리뷰 WR-01 ~ 03 · 로드맵 D-23 (RULES-03, RULES-05, RULES-07, RULES-08, DOCS-11; D-12, D-23)
 
 **Wave 9** *(blocked on Wave 8 — 소유자 확인(D-22 첫 push))*
-- [ ] 04-10-PLAN.md — push 전 점검 → 첫 push 확인 → push 와 GitHub `verify` 10단계 통과 확인 (RULES-01, RULES-06; D-22)
+- [x] 04-10-PLAN.md — push 전 점검 → 첫 push 확인 → push 와 GitHub `verify` 10단계 통과 확인 (RULES-01, RULES-06; D-22)
 
 **Spike first** (실측을 돌리기 전에 실행으로 확인한다 — **2026-10-12 완료**: spike 020 ~ 023 이 네 항목에 답했다. 멈춤 조건에 해당한 것 없음. 로드맵 문구 가운데 그대로 쓸 수 없게 된 것은 Notes 에 반영했다. `04-RESEARCH.md` 와 skill `spike-findings-woody-lints` 참조):
 - Dart 3.13 신규 규칙이 language version 3.11 프로젝트에서 보고되는지 (`flutter_starter_kit` 의 SDK 제약은 `^3.11.1`). 0건이 "깨끗하다"인지 "규칙이 동작하지 않는다"인지가 여기서 갈린다.
@@ -288,7 +288,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Baseline and Toolchain | 4/4 | Complete    | 2026-10-11 |
 | 2. Verification Harness | 5/5 | Complete    | 2026-10-12 |
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
-| 4. Rule Reselection | 9/10 | In Progress | - |
+| 4. Rule Reselection | 10/10 | In Progress | - |
 | 5. Documentation | 0/TBD | Not started | - |
 | 6. Release | 0/TBD | Not started | - |
 
