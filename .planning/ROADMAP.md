@@ -248,7 +248,22 @@ Plans:
   4. CHANGELOG 최상단에 새 릴리스 항목이 Phase 1 에서 정한 형식으로 있고(추가·삭제 규칙, 지원 SDK 변경, 규칙별 실측 건수와 `dart fix` 가능 여부), 1.0.0 과 1.3.0 사이 항목이 git 이력으로 확인되는 범위에서 채워져 있다
   5. 배포 YAML 의 머리 주석이 실제 구성(조각 파일, 묶음, 옛 이름 별칭)을 설명하고, README 와 YAML 에 템플릿 보일러플레이트가 남아 있지 않다
 
-**Plans**: TBD
+**Plans**: 5 plans
+
+Plans:
+
+**Wave 1**
+- [ ] 05-01-PLAN.md — (tracer) `tool/verify.dart` 결함 둘 닫기: WR-02 (`stripPlugins` 빈 줄 치환 · `readShippedPluginConstraint` 줄 끝 주석 · 맵 형식, M32 ~ M34) · WR-11 / IN-14 (`[3/10]` (b′) 다른 조각에 규칙 없음, `declaredRuleNames(shownAs)`, M35 · M36) + 처리 기록 셋 (VERIFY-06 의 전제, DOCS-10 의 전제; D-19)
+
+**Wave 2** *(blocked on Wave 1 — `lib/riverpod.yaml` 주석은 WR-02 뒤에)*
+- [ ] 05-02-PLAN.md — 배포 YAML 다섯의 머리 주석 (템플릿 삭제 · `codegen.yaml` 신설 · `riverpod.yaml` 줄이기, 정답지 불변) + `.claude/CLAUDE.md` 71 · 181행 (DOCS-10; D-08, D-09)
+
+**Wave 3** *(blocked on Wave 2 — 05-03 · 05-04 는 파일이 겹치지 않아 나란히)*
+- [ ] 05-03-PLAN.md — README 전면 재작성 (tag 설치 · 프리셋 표 · 표시 구역 81개 · 끄기 · 생성 파일 · 버전 올리기 · 문제 해결) + `[3/10]` (d) ~ (g) README 검사 — 같은 커밋, M37 ~ M41 (DOCS-01 ~ 06, VERIFY-06; D-01 ~ D-04, D-10 ~ D-16, D-18, D-20)
+- [ ] 05-04-PLAN.md — CHANGELOG 1.1.0 ~ 1.2.5 복원 7항목 + 2.0.0 `### 올리기 전에` · `### 그 밖의 변경` 정리 + DOCS-07 · 09 확인 + 01 WR-05 fixed (DOCS-07 ~ 09; D-05 ~ D-07, D-17, D-19)
+
+**Wave 4** *(blocked on Wave 3 — 첫 push 는 소유자 확인)*
+- [ ] 05-05-PLAN.md — push 전 비공개 점검 (범위 전체) → 첫 push 확인 checkpoint (blocking-human) → `git push origin gsd/v2.0-package-rework` 와 GitHub `verify` 확인 (D-21)
 
 **Decision points** (이 phase 안에서 소유자가 정한다):
 - **D10** — README 의 규칙 목록을 어떻게 유지할지: 생성 스크립트 / YAML 로 링크만 / 사람이 맞춤 / 마커 구역과 비교 스크립트. VERIFY-06 이 "다르면 실패"를 요구하므로 비교 검사 하나는 있어야 한다. 조사 권고는 생성까지 가지 않는 비교 검사다.
