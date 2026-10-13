@@ -71,7 +71,7 @@ Task ID / Plan / Wave / Threat Ref 는 계획(`05-NN-PLAN.md`)이 확정된 뒤 
 
 ## Wave 0 Requirements
 
-- [ ] `tool/verify.dart` — `stripPlugins` · `readShippedPluginConstraint` · `fragmentLineHint` 고침 (WR-02), `declaredRuleNames` 의 파일 이름 인자 (IN-14), `[3/10]` (b′) (WR-11), `[3/10]` (d) ~ (g) (VERIFY-06 — README 와 같은 커밋)
+- [ ] `tool/verify.dart` — `stripPlugins` · `readShippedPluginConstraint` · `fragmentLineHint` 고침 (WR-02), `declaredRuleNames` 의 파일 이름 인자 (IN-14), `[3/10]` (b′) (WR-11), `[3/10]` (d) ~ (g) (VERIFY-06 — README 재작성 커밋 뒤의 다른 커밋, 05-03 Task 2)
 - [ ] `README.md` 의 표시 구역 — VERIFY-06 확인의 대상
 - [ ] `example/README.md` 의 새 소절 — M32 ~ 의 지워 보기 기록
 - 프레임워크 설치: 없음

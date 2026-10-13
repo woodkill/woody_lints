@@ -317,7 +317,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Verification Harness | 5/5 | Complete    | 2026-10-12 |
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
 | 4. Rule Reselection | 13/13 | Complete    | 2026-10-13 |
-| 5. Documentation | 0/TBD | Not started | - |
+| 5. Documentation | 0/6 | Planned | - |
 | 6. Release | 0/TBD | Not started | - |
 
 ## Backlog

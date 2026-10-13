@@ -2,18 +2,18 @@
 gsd_state_version: "1.0"
 milestone: v2.0
 milestone_name: Package Rework
-current_phase: 5
+current_phase: 05
 current_phase_name: Documentation
-status: planning
-stopped_at: Phase 5 context gathered
-last_updated: "2026-10-13T13:44:47.365Z"
-last_activity: 2026-10-13
-last_activity_desc: Phase 04 complete, transitioned to Phase 5
-state_head: f2cc1220f1ccd786d49077413c95fcccb0400343
+status: Phase 05 계획 완료 — 실행 대기 (/gsd-execute-phase 05)
+stopped_at: Phase 05 계획 완료 (05-01 ~ 05-06)
+last_updated: "2026-10-13T16:06:32.830Z"
+last_activity: 2026-10-14
+last_activity_desc: Phase 05 계획 6개 작성, plan checker 2회차 통과
+state_head: edcdf7c37b80eab2ccdb8126c141cd07c64d47a0
 progress:
   total_phases: 6
   completed_phases: 4
-  total_plans: 26
+  total_plans: 32
   completed_plans: 26
   percent: 67
 ---
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-10-13)
 
 ## Current Position
 
-Phase: 5 — Documentation
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-10-13 — Phase 04 complete, transitioned to Phase 5
+Phase: 05 (Documentation) — READY TO EXECUTE
+Plan: 0 of 6
+Status: Phase 05 계획 완료 — 실행 대기 (/gsd-execute-phase 05)
+Last activity: 2026-10-14 — Phase 05 계획 6개 작성 (wave 5), plan checker 2회차 통과
 
 Progress: [███████░░░] 67%
 
@@ -199,6 +199,8 @@ Recent decisions affecting current work:
 - [Phase 04]: 04-13: [3/10] 의 declaredRuleNames 는 linter: 블록 안에서 들여쓴 rules: 키 줄과 목록 항목(따옴표 없음 · 홑따옴표 · 큰따옴표, 뒤에 # 주석 가능)만 받고 그 밖의 줄은 FormatException 으로 종료 코드 70 (WR-10 — M27 · M28 은 [3/10] 만 실패, M29 ~ M31 은 70; 67d1bc7)
 - [Phase 04]: 04-13: 03-REVIEW.md WR-03 의 입력 꼴(맵 형식 규칙)은 이제 종료 코드 70 으로 멈춘다 (M31) — 03-REVIEW-DISPOSITION.md 는 손대지 않았다. WR-09 는 RULES-13 의 둘째 메모와 처리 기록 deferred (open 17, 8f4e257). IN-08 · IN-10 은 텍스트만 (76dee2f)
 - [Phase 04]: Phase 4 재검증 passed 11/11 (2026-10-13). 리뷰 WR-11 ([3/10] 의 겹침 · RULES.md 일치가 lib/base.yaml 만 읽음) 은 gap 이 아닌 경고이고, 소유자 결정으로 Phase 5 의 VERIFY-06 과 함께 고친다 — 처리 기록 deferred, ROADMAP Phase 5 Notes
+- [Phase 05]: 계획 6개 · wave 5 — 05-01 verify.dart WR-02 · WR-11 (B안, 규칙은 lib/base.yaml 에만) · IN-14 (M32 ~ M37), 05-02 배포 YAML 머리 주석 · CLAUDE.md 두 줄, 05-03 README 재작성 → [3/10] (d) ~ (g) 두 커밋, 05-04 CHANGELOG 복원 · 2.0.0 두 칸, 05-06 지워 보기 M38 ~ M42, 05-05 첫 push (소유자 확인). plan checker 2회차 통과 (de67ffb, edcdf7c)
+- [Phase 05]: CHANGELOG 2.0.0 의 `### 새로 생기는 경고` 표는 75행이다 (조사 문서의 74 는 04-12 전 값). 05-04 는 수를 박지 않고 "표 행 수 == 추가한 규칙 불릿 수" 로 단언한다
 
 ### Pending Todos
 
@@ -224,6 +226,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-13T13:44:47.306Z
-Stopped at: Phase 5 context gathered
-Resume file: .planning/phases/05-documentation/05-CONTEXT.md
+Last session: 2026-10-13T16:06:32.830Z
+Stopped at: Phase 05 계획 완료 (05-01 ~ 05-06)
+Resume file: None
