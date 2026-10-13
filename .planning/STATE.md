@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 04
 current_phase_name: Rule Reselection
 status: executing
-stopped_at: Completed 04-03-PLAN.md
-last_updated: "2026-10-13T00:54:52.500Z"
+stopped_at: Completed 04-04-PLAN.md
+last_updated: "2026-10-13T01:45:47.395Z"
 last_activity: 2026-10-13
 last_activity_desc: Phase 04 execution started
-state_head: cd1dc56bdde8ff23c5f228a7d207a3063ddfe97a
+state_head: bb6eedb73351d0307ebcece28faf63d5682c0c50
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 23
-  completed_plans: 16
+  completed_plans: 17
   percent: 50
 ---
 
@@ -76,6 +76,7 @@ Progress: [█████░░░░░] 50%
 | Phase 04 P01 | 15min | 2 tasks | 11 files |
 | Phase 04 P02 | 27min | 2 tasks | 1 files |
 | Phase 04 P03 | 27min | 2 tasks | 1 files |
+| Phase 04 P04 | 40min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -154,6 +155,9 @@ Recent decisions affecting current work:
 - [Phase 04]: avoid_final_parameters 는 언어 버전 3.13 에서 꺼진다(Feature.primary_constructors, 보통 매개변수의 final 은 error) — 표식은 그 파일만 // @dart=3.11 이고, 하한을 3.13 으로 올리면(RULES-10) 이 규칙은 돌지 않는다. avoid_type_to_string 은 tag 3.13.4 의 SDK 에서 x.runtimeType.toString() 에 걸리지 않는다 (04-03)
 - [Phase 04]: 실측 도구의 출력 모드는 --summary <묶음> · --report [--write] · --audit 이다. --report 는 단언 여섯이 모두 맞을 때만 Markdown 을 내고 --write 는 그때만 RULES.md 의 woody:measurements 를 바꿔 쓴다. --audit 은 후보 133 ∪ B-7 31 이 RULES.md 의 세 표에 있는지 본다 — 04-01 뼈대에서는 빠짐 158 · 빈 칸 6 으로 종료 코드 1 (04-03)
 - [Phase 04]: bundles 상수는 묶음 id → 한국어 이름 12개이고 하나씩 묻는 묶음의 규칙 표는 bundleRules 다. dart fix 단계는 단독 dry 0 인 행의 newErrors 를 0 으로 적는다 — --report 단언 (2) 를 실제 데이터에서 넘기 위해서다 (04-03)
+- [Phase 04]: 실측 회차 R1 (2026-10-13, Flutter 3.47.5 / Dart 3.13.4, riverpod_lint 3.1.9) 의 결과 tool/measurements/2026-10-13-R1.json 은 회차 50개가 모두 유효하고 평가표의 단일 출처다. 결정 대상 121행 가운데 줄이 있는 행 54, 0줄 67 (표식 검출 62 · 표식 미검출 1 · 표식 불가 4) — 결정 안 함이 될 규칙 5개 (04-04)
+- [Phase 04]: 실측 도구의 fix 단계는 analyzer 옵션 strict-inference 도 그 회차의 inference_failure_on_* 코드를 모두 --code= 로 주어 잰다 — R1 에서 test 106줄, 단독 dry 0, 사라진 줄 0, 새 error 0. --report 의 옵션 행 예외는 걷었다 (04-04)
+- [Phase 04]: 비공개 점검 (3) 의 dart fix 화면 문구 grep 은 이 phase 의 PLAN · RESEARCH 에 적힌 자기 패턴 10줄에 걸린다 — 04-04 는 PLAN · RESEARCH 를 뺀 범위로 0줄을 확인했다. 04-09 · 04-10 의 같은 점검도 같은 10줄을 만난다 (04-04)
 
 ### Pending Todos
 
@@ -179,6 +183,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-13T00:54:52.469Z
-Stopped at: Completed 04-03-PLAN.md
+Last session: 2026-10-13T01:45:47.363Z
+Stopped at: Completed 04-04-PLAN.md
 Resume file: None

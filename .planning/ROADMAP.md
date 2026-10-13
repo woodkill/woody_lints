@@ -178,7 +178,7 @@ Plans:
   4. 배포 파일에 기반 세트와 중복되는 선언과 주석 처리된 설정(`require_trailing_commas`, `public_member_api_docs`, `formatter: trailing_commas`)이 없고, 남은 규칙의 사유 주석이 사실과 일치한다
   5. 켠 규칙마다 이유와 실측 건수를 적은 근거 문서와, 채택하지 않은 규칙과 그 사유의 목록이 저장소에 있다
 
-**Plans**: 3/10 plans executed
+**Plans**: 4/10 plans executed
 
 Plans:
 **Wave 1** *(04-02 의 smoke 는 저장소 지문을 견주므로 04-01 과 같은 worktree 에서 동시에 돌리지 않는다 — worktree 가 다르면 병렬, 같으면 04-01 뒤)*
@@ -189,7 +189,7 @@ Plans:
 - [x] 04-03-PLAN.md — 규칙별 표식 (spike 022 의 0줄 후보 62개 + B-6 의 7개) 과 `--summary` · `--report [--write]` · `--audit` (RULES-03 ~ 05, RULES-08, DOCS-11; D-03, D-06, D-08)
 
 **Wave 3** *(blocked on Wave 2 — 소유자가 checkpoint 로 원본 · 작업 폴더 경로를 준다)*
-- [ ] 04-04-PLAN.md — 실측 회차 R1 (백그라운드 두 번), 비공개 점검 (1) ~ (4), `tool/measurements/<날짜>-R1.json` 커밋 (RULES-03 ~ 05; D-07, D-14, D-15)
+- [x] 04-04-PLAN.md — 실측 회차 R1 (백그라운드 두 번), 비공개 점검 (1) ~ (4), `tool/measurements/<날짜>-R1.json` 커밋 (RULES-03 ~ 05; D-07, D-14, D-15)
 
 **Wave 4** *(blocked on Wave 3 — 소유자 결정 checkpoint 둘)*
 - [ ] 04-05-PLAN.md — `04-DECISIONS.md` 패널 · 권고 → 묶음 5 승인 → 개별 질문 7 (strict 3 · import · fire-and-forget · 쌍 · `unnecessary_underscores`) (로드맵 D13; D-04 ~ D-06, D-19)
@@ -287,7 +287,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Baseline and Toolchain | 4/4 | Complete    | 2026-10-11 |
 | 2. Verification Harness | 5/5 | Complete    | 2026-10-12 |
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
-| 4. Rule Reselection | 3/10 | In Progress | - |
+| 4. Rule Reselection | 4/10 | In Progress | - |
 | 5. Documentation | 0/TBD | Not started | - |
 | 6. Release | 0/TBD | Not started | - |
 
