@@ -29,13 +29,13 @@
 - ✓ Riverpod / codegen 설정을 선택형 프리셋으로 분리해, 쓰지 않는 프로젝트가 받지 않을 수 있다 — 조각 셋 · 묶음 · 옛 주소 별칭, 옛 주소와 묶음의 진단이 분리 전과 줄 단위로 같다. 연습용 프로젝트 여섯 · 단계 9개로 검증 — Phase 3
 - ✓ `riverpod_lint` plugin 하한 `^3.1.9`, 루트 분석이 배포 파일을 제외하지 않고 경고 없이 통과 — Phase 3
 - ✓ 규칙 하나 · plugin 진단 하나를 끄는 방법(프로젝트 전체 · 파일 · 한 줄)이 fixture 로 확인되어 있다 — README 쪽은 Phase 5 — Phase 3
+- ✓ 규칙 세트 재선정: 후보 규칙을 `flutter_starter_kit` 복사본 실측(회차 R1, 52회 모두 유효)으로 재고 소유자가 하나씩 결정했다 — 켠 규칙 81개(1.3.0 의 6개 유지 + 새로 75개, 모두 info), 켜지 않은 규칙 90개와 사유가 `RULES.md` 에 있고 검증 명령 `[3/10]` 이 `lib/base.yaml` 과의 일치를 지킨다 — Phase 4
+- ✓ 기반 세트와 겹치는 선언 6개와 주석 처리된 설정 3개를 배포 파일에서 지웠다 — 정답지 다섯 그대로, 사유는 CHANGELOG 2.0.0 항목 — Phase 4
 
 ### Active
 
 <!-- 이번 작업 범위. 릴리스되어 확인되기 전까지는 가설이다. -->
 
-- [ ] 규칙 세트 재선정: 후보 규칙을 조사하고 `flutter_starter_kit` 실측 근거(규칙별 경고 수)로 하나씩 켤지 결정한다
-- [ ] 기반 세트와 중복되는 선언 6개, 주석 처리된 설정 3개 각각에 대해 유지/삭제를 결정하고 사유를 남긴다
 - [ ] `README.md`, `CHANGELOG.md`, `lib/analysis_options.yaml` 머리 주석이 실제 설정과 일치한다
 - [ ] GitHub Actions 가 push 와 PR 마다 그 검증을 자동 실행한다 — push 쪽은 Phase 2 에서 확인했다 (성공한 실행 2건, 겹친 실행의 취소 1건, 2026-10-12). PR 에서 도는지와 수동 실행 버튼은 PR 이 처음 열리고 workflow 가 `main` 에 들어가는 Phase 6 에서 본다
 - [ ] git tag 로 릴리스하고, 사용 프로젝트가 `ref: vX.Y.Z` 로 버전을 고정할 수 있다
@@ -101,8 +101,8 @@
 |----------|-----------|---------|
 | git tag 로 릴리스하고 README 를 `ref: vX.Y.Z` 기준으로 안내한다 | 규칙 재검토로 새 경고가 많이 생길 수 있어, 프로젝트마다 올리는 시점을 고를 수 있어야 한다 | — Pending |
 | 최신 stable 만 지원한다 (Dart 3.13 이상) | 사용 프로젝트가 Flutter 3.47.5 이고 이전 SDK 를 쓰는 프로젝트는 이전 tag 에 머물 수 있다 | — Pending |
-| 규칙은 후보별 근거를 보고 하나씩 결정한다 | 구체적 불편이 없어 엄격도를 미리 정할 근거가 없다 | — Pending |
-| 근거에는 `flutter_starter_kit` 복사본 실측을 포함한다 | 규칙이 내 코드에 실제로 몇 건의 경고를 내는지가 판단 기준이다 | — Pending |
+| 규칙은 후보별 근거를 보고 하나씩 결정한다 | 구체적 불편이 없어 엄격도를 미리 정할 근거가 없다 | ✓ Phase 4 — 묶음 다섯 · 질문 아홉을 소유자가 정함 (`04-DECISIONS.md` 결정 표: 켬 81 · 안 켬 38 · 결정 안 함 14), `sort_pub_dependencies` 는 측정 도구 결함을 고친 뒤 다시 정함 |
+| 근거에는 `flutter_starter_kit` 복사본 실측을 포함한다 | 규칙이 내 코드에 실제로 몇 건의 경고를 내는지가 판단 기준이다 | ✓ Phase 4 — `tool/measure_rules.dart` 의 회차 기록 `tool/measurements/2026-10-13-R1.json` (경로 · 메시지 없이 건수만), 원본은 바꾸지 않음. 재측정 전에 고칠 것 둘(CR-03 · WR-09)은 RULES-13 메모 |
 | Riverpod / codegen 설정을 선택형 프리셋으로 분리한다 | 지금은 모든 주요 프로젝트가 Riverpod + codegen 이지만, 앞으로 다른 구성의 프로젝트가 생길 것을 대비한다 | ✓ Phase 3 — 조각은 서로를 include 하지 않고, 묶음이 셋을 `package:` 주소 목록으로 include 한다 |
 | 검증은 `example/` 프로젝트 + GitHub Actions 로 자동화한다 | 유일한 산출물이 자체 분석에서 제외되어 있어 검증 수단이 없다 | ✓ Phase 2 — `tool/verify.dart` 와 `.github/workflows/verify.yml` (PR · 수동 실행 확인은 Phase 6) |
 | README 독자는 미래의 작성자 본인, 한국어로 쓴다 | 개인 사용 패키지다 | — Pending |
@@ -138,4 +138,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-12 after Phase 3*
+*Last updated: 2026-10-13 after Phase 4*
