@@ -483,6 +483,7 @@ M37 은 Phase 4 M21 의 README 판이고 기호는 `+` 다 (M21 읽는 법 — �
 - D-07 의 "저장소 안쪽" 으로 합칠 불릿: 90행(연습 프로젝트 · 검증 명령 · CI), 93행(루트 분석 설정), 96행의 뒷부분(`[3/10]` 단계 추가), 97행(측정 도구 · 회차 기록), 99행(측정 도구 · 검증 명령 결함 수정). 남길 불릿: 91(프리셋 분리) · 92(별칭) · 94(plugin 하한) · 95(겹침 6 · 주석 3 삭제) · 96 앞부분(`RULES.md` 추가 — 따로 한 줄) · 98(사유 주석 셋). 이 phase 의 README · YAML 주석 정리를 새 불릿으로.
 - D-06 의 새 `### 올리기 전에`: 지금 두 줄 + "받는 때" 한 문단 (`ref: main` 은 `main` 병합 뒤 `pub upgrade woody_lints` 때 — spike 015 pub-2 · pub-4 `[VERIFIED: git-dependency-and-upgrade.md § 3]`) + README "버전 올리기" 절 링크.
 - DOCS-09 확인 명령 (수치는 건드리지 않는다): `sed -n '/^### 새로 생기는 경고/,/^## 1.3.0/p' CHANGELOG.md | grep -c '^| `'` = 74, `grep -c '^- `' <(sed -n '/^### 추가한 규칙/,/^### 그 밖의/p' CHANGELOG.md)` = 75 (`sort_pub_dependencies` 가 추가 75 · 표 74 인 것은 04-12 의 결과 — 표 163행에 `재지 않음` 으로 있다 `[VERIFIED: CHANGELOG.md:163]`; 75 vs 74 의 차이는 planner 가 04-09 · 04-12 SUMMARY 로 한 번 확인한다 `[ASSUMED — 이 세션은 두 수를 셌을 뿐 차이의 원인 커밋을 읽지 않았다]`).
+  - **정정 (계획 단계, 2026-10-14 셈):** HEAD `fb6386a` 의 CHANGELOG 에서 두 명령은 **둘 다 75** 다 — `fb6386a` (04-12) 가 `sort_pub_dependencies` 행을 표에 `재지 않음` 으로 더해 표의 규칙 행이 74 → 75 가 됐다. 위의 "표 74" 와 이 문서의 다른 74 (D-17 인용 · phase_requirements · Validation Architecture 의 DOCS-09 행) 는 그 전의 값이다. 계획(05-04 Task 2)은 수를 박지 않고 "`### 추가한 규칙` 불릿 수 == 표의 규칙 행 수" 와 `fb6386a` 와의 절 diff 로 단언한다. A2 도 이것으로 해소.
 
 ## 4. README 내용 목록 — 사실 · 출처 · 단정 여부 (planner 질문 4)
 
@@ -819,18 +820,23 @@ awk '/^    # /{sub(/^    # /,""); print "\n**" $0 "**\n"; next} /^    - /{sub(/^
 | A4 | Keep a Changelog · very_good_analysis README · lints `recommended.yaml` · pub.dev riverpod_lint 의 내용은 CONTEXT 가 2026-10-13 에 읽은 그대로다 | User Constraints 의 참고 | 이 세션은 다시 열지 않았다 — README 문구에 옮길 때 planner 가 인용을 CONTEXT 의 문장 범위로 한정하면 영향 없음 |
 | A5 | 선택 M 기록(deprecated 규칙을 `riverpod.yaml` 끝에)에서 진단 행이 원본과 같은 13행으로 나온다 | § 1 | 복사본 줄 수가 같아지는 것은 probe 로 확인(10 → 10줄). analyzer 가 그 줄을 보고하는 행 번호까지는 돌리지 않았다 |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **pub workspace 문장의 출처**
+세 질문은 계획 단계(05-01 ~ 05-06, 2026-10-14)가 답했다.
+
+1. **pub workspace 문장의 출처** — RESOLVED
    - What we know: 03-CONTEXT D-08 — workspace 는 재지 않았고 README 는 공식 문서 문장을 출처와 함께 옮긴다.
    - What's unclear: 이 세션은 dart.dev 의 workspace 문서를 열지 않았다 — 옮길 문장과 URL 이 없다.
    - Recommendation: planner 가 "workspace 멤버 패키지에서는 이 패키지로 돌려 보지 않았다" 한 줄만 두고 공식 문서 링크(dart.dev/tools/pub/workspaces) 는 실행 때 열어 확인 `[ASSUMED — URL 은 훈련 지식]`.
-2. **README 표시 구역을 표로 할지 불릿으로 할지**
+   - RESOLVED: URL `https://dart.dev/tools/pub/workspaces` 는 2026-10-14 에 HTTP 200 으로 열렸다 (plan checker 확인). 05-03 Task 1 action B-4 는 D-08 글자대로 — 실행 때 그 문서를 열어 멤버 패키지의 `analysis_options.yaml` 해석에 관한 **문장 하나를 출처(URL · 읽은 날짜)와 함께 옮기고** "이 패키지로는 돌려 보지 않았다" 를 적는다 (링크만 두지 않는다). 위 Recommendation 의 "한 줄만" 은 결정보다 좁았다.
+2. **README 표시 구역을 표로 할지 불릿으로 할지** — RESOLVED
    - What we know: 표면 `readRulesMdBlock` 재사용(코드 0줄), 불릿이면 10줄 변형. D-01 은 "이름만".
    - Recommendation: 불릿 (읽기 쉬움, 분류 소제목과 어울림) + 10줄 reader. 표를 고르면 `| 규칙 |` 한 열 표 네 개.
-3. **`example/README.md` 의 M 기록에 "거짓 실패가 사라졌다" (통과) 행을 넣는 꼴**
+   - RESOLVED: 불릿 + 새 reader `readBulletBlock` (05-03 Task 2 action A-2). 분류 소제목은 backtick 없는 굵은 글씨, 구역 안에는 이름 외 backtick 없음.
+3. **`example/README.md` 의 M 기록에 "거짓 실패가 사라졌다" (통과) 행을 넣는 꼴** — RESOLVED
    - What we know: 지금 표의 열은 `실패한 단계 | 정답지와의 차이 | 종료 코드` — 통과 행은 "실패 없음 · 차이 없음 · 0".
    - Recommendation: 같은 표에 두고 읽는 법에 "M32 · M33 은 고치기 전 70 이었던 입력" 을 적는다. M34 가 헛통과 아님을 받친다.
+   - RESOLVED: 그대로 — 05-01 Task 1 action 4 (같은 표, 통과 행은 `실패 없음` · `차이 없음` · `0`, 읽는 법에 고치기 전 70 의 출처). § 1 의 "(선택)" M (riverpod.yaml 끝 deprecated 규칙) 은 05-01 Task 2 의 M37 로 필수가 됐다 — 줄 번호 보존과 (b′) 의 대상 범위를 가르는 유일한 실행이다 (plan checker 재현: 줄을 지우는 `stripPlugins` 는 `:11`, 바른 판은 `:13`).
 
 ## Environment Availability
 
@@ -868,7 +874,7 @@ awk '/^    # /{sub(/^    # /,""); print "\n**" $0 "**\n"; next} /^    - /{sub(/^
 | DOCS-06 | 불일치 2건 해소, `analyzer:` 설명 | grep + 검사 (d) | `! grep -q 'require_trailing_commas' README.md && ! grep -q 'trailing_commas' README.md && grep -q 'invalid_annotation_target' README.md`; `[3/10]` 통과; M37 실패 | ❌ |
 | DOCS-07 | 2.0.0 항목 형식 | grep | `head -1 CHANGELOG.md` = `## 2.0.0 - 미출시`, `sed -n 3p` 가 `지원 SDK:` 로 시작, 칸 다섯 제목 순서 | ✓ (확인만) |
 | DOCS-08 | 1.1.0 ~ 1.2.5 항목 7개 | grep | `for v in 1.1.0 1.2.0 1.2.1 1.2.2 1.2.3 1.2.4 1.2.5; do grep -qx "## $v" CHANGELOG.md || exit 1; done`; 커밋 번호 7개 `grep -c -E '2249a0b|ec66e3f|21c5689|31c8cb1|9451f6b|212365d|dbcd20b' CHANGELOG.md` ≥ 7; 순서 `grep -n '^## ' CHANGELOG.md` 가 내림차순 | ❌ |
-| DOCS-09 | 표 74행 + 실측 줄 | grep | `sed -n '/^### 새로 생기는 경고/,/^## 1.3.0/p' CHANGELOG.md \| grep -c '^| \`'` = 74; `grep -q '^실측: flutter_starter_kit' CHANGELOG.md` | ✓ (확인만) |
+| DOCS-09 | 표의 규칙 행 수 == `### 추가한 규칙` 불릿 수 (2026-10-14 셈 75 · 75 — 위 § 3 정정) + 실측 줄 | grep | `test "$(sed -n '/^### 새로 생기는 경고/,/^## 1.3.0/p' CHANGELOG.md \| grep '^| \`' \| wc -l)" = "$(sed -n '/^### 추가한 규칙/,/^### 그 밖의/p' CHANGELOG.md \| grep '^- \`' \| wc -l)"`; `grep -q '^실측: flutter_starter_kit' CHANGELOG.md` | ✓ (확인만) |
 | DOCS-10 | 템플릿 없음, 머리 주석 | grep | `! grep -q 'This README describes' README.md && ! grep -q 'Uncomment the following' lib/base.yaml && ! grep -q 'dart.dev/go/core-lints' lib/base.yaml && head -1 lib/codegen.yaml \| grep -q '^#'`; 다섯 파일 `head -1` 이 `#`; `--update` → `바뀐 정답지가 없다` | ❌ |
 | VERIFY-06 | README 목록 어긋남 → 실패 | 지워 보기 | M37 (이름 삭제) rc 1 · `[3/10]` 실패; M38 ~ M40; (선택) 마커 삭제 | ❌ `[3/10]` (d) ~ (g) |
 | (WR-02) | 거짓 실패 해소 | 지워 보기 | M32 · M33 rc 0, M34 rc 70 | ❌ |
