@@ -240,3 +240,7 @@ None - no external service configuration required.
 ---
 *Phase: 04-rule-reselection*
 *Completed: 2026-10-13*
+
+## Self-Check: PASSED
+
+- 생성 파일 18개 모두 있음, 커밋 `9cff42e` · `354959c` · `52402df` · `25d5dd2` 모두 HEAD 의 조상, `example/lib/added_rules.dart` 는 `74fafb2` 와 같음.
