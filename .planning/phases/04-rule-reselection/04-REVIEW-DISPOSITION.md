@@ -31,10 +31,10 @@ findings:
     severity: warning
     disposition: deferred
     title: "`--recount` 가 `fixSkipped` 를 원인을 확인하지 않고 R1 전용 문장으로 적고, 어느 단계도 지우지 않는다 — 단언 (2) 를 우회하고 권고를 뒤집는다"
-  - id: WR-10
+  - id: WR-11
     severity: warning
     disposition: open
-    title: "`[3/10]` 이 따옴표로 감싼 규칙 이름을 읽지 못한다 — CR-02 와 같은 거짓 통과가 다른 입력으로 남았다"
+    title: "`[3/10]` 의 겹침 · `RULES.md` 일치 검사가 `lib/base.yaml` 만 읽는다 — `lib/codegen.yaml` · `lib/riverpod.yaml` 에 적은 규칙은 두 검사를 모두 지나친다"
   - id: IN-01
     severity: info
     disposition: open
@@ -63,10 +63,6 @@ findings:
     severity: info
     disposition: open
     title: "결과 파일 이름 · 출력 모드 · 종료 코드의 세부"
-  - id: IN-08
-    severity: info
-    disposition: open
-    title: "`RULES.md` 켠 규칙 표의 머리가 `실측 (lib · test · bin)` 그대로다 — `sort_pub_dependencies` 행이 0줄처럼 읽힌다"
   - id: IN-09
     severity: info
     disposition: open
@@ -79,6 +75,26 @@ findings:
     severity: info
     disposition: open
     title: "\"가린 줄이 음수인 행은 무시 주석 자체를 보는 규칙이다\" 는 확인하지 않은 원인을 생성기가 단정한다"
+  - id: IN-12
+    severity: info
+    disposition: open
+    title: "04-13 소절의 \"두 규칙은 샘플에 걸리지 않는다\" 가 `avoid_print` 에는 사실과 다르다"
+  - id: IN-13
+    severity: info
+    disposition: open
+    title: "`readRuleNameAt` 은 옛 패턴을 그대로 써서, 따옴표 이름 줄의 `[2/10]` 실패 출력에서 규칙 이름이 빠진다"
+  - id: IN-14
+    severity: info
+    disposition: open
+    title: "읽지 못하는 줄의 `FormatException` 문구가 파일을 적지 않고, 부르는 쪽의 문서 주석은 예외를 말하지 않는다"
+  - id: WR-10
+    severity: warning
+    disposition: fixed
+    title: "`[3/10]` 이 따옴표로 감싼 규칙 이름을 읽지 못한다 — CR-02 와 같은 거짓 통과가 다른 입력으로 남았다"
+  - id: IN-08
+    severity: info
+    disposition: fixed
+    title: "`RULES.md` 켠 규칙 표의 머리가 `실측 (lib · test · bin)` 그대로다 — `sort_pub_dependencies` 행이 0줄처럼 읽힌다"
   - id: CR-01
     severity: critical
     disposition: fixed
@@ -99,9 +115,9 @@ findings:
     severity: warning
     disposition: fixed
     title: "기반 세트 YAML 에서 규칙을 하나도 읽지 못해도 겹침 검사가 통과한다"
-open: 17
-total: 24
-recorded: 2026-10-13T09:13:21.137Z
+open: 19
+total: 28
+recorded: 2026-10-13T12:57:48.873Z
 ---
 
 # Phase 04: Code Review Disposition
@@ -115,7 +131,7 @@ recorded: 2026-10-13T09:13:21.137Z
 | WR-07 | warning | open | - |
 | WR-08 | warning | open | - |
 | WR-09 | warning | deferred | v2 (RULES-13) 의 선행 작업으로 미룸 — 지금 커밋된 R1 에서 fixSkipped 가 붙은 행은 sort_pub_dependencies 하나이고 그 문장은 사실이다; 다음 재측정(lints 7 · Dart 3.14) 전에 CR-03 과 함께 고친다; REQUIREMENTS.md RULES-13 옆에 메모 (소유자 결정 2026-10-13) |
-| WR-10 | warning | open | - |
+| WR-11 | warning | open | - |
 | IN-01 | info | open | - |
 | IN-02 | info | open | - |
 | IN-03 | info | open | - |
@@ -123,10 +139,14 @@ recorded: 2026-10-13T09:13:21.137Z
 | IN-05 | info | open | - |
 | IN-06 | info | open | - |
 | IN-07 | info | open | - |
-| IN-08 | info | open | - |
 | IN-09 | info | open | - |
 | IN-10 | info | open | - |
 | IN-11 | info | open | - |
+| IN-12 | info | open | - |
+| IN-13 | info | open | - |
+| IN-14 | info | open | - |
+| WR-10 | warning | fixed | 04-13-PLAN.md Task 1 (67d1bc7) — declaredRuleNames 가 따옴표 이름을 읽고 linter: 블록 안의 읽지 못하는 줄에서 FormatException (70), README M27 ~ M31; 재리뷰 고쳐짐 확인 (같은 꼴의 다른 조각 파일은 새 발견 WR-11) (not in the current review) |
+| IN-08 | info | fixed | 04-13-PLAN.md Task 2 (76dee2f) — RULES.md 의 sort_pub_dependencies 실측 칸을 2 (pubspec.yaml 2 — lib · test · bin 은 0) 로 (머리를 넷으로 바꾸는 안은 소유자가 고르지 않음); 재리뷰 고쳐짐 확인 (not in the current review) |
 | CR-01 | critical | fixed | 04-11-PLAN.md Task 1 (b567100) — valueAreas · 단언 (7) · --recount; 재리뷰(4397888) 고쳐짐 확인 (not in the current review) |
 | CR-02 | critical | fixed | 04-11-PLAN.md Task 2 (c06d8d5) — declaredRuleNames 가 주석 · 빈 줄을 건너뜀, README M26; 재리뷰(4397888) 고쳐짐 확인 (not in the current review) |
 | WR-02 | warning | fixed | 04-11-PLAN.md Task 1 (b567100) — countCell 이 부호째 찍음 (-48 · -12); 재리뷰(4397888) 고쳐짐 확인 (not in the current review) |
