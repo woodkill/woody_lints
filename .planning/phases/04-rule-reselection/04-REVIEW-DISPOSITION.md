@@ -29,7 +29,7 @@ findings:
     title: "단계가 예외로 끝나면 저장소 지문을 견주지 않고 결과도 저장하지 않는다"
   - id: WR-09
     severity: warning
-    disposition: open
+    disposition: deferred
     title: "`--recount` 가 `fixSkipped` 를 원인을 확인하지 않고 R1 전용 문장으로 적고, 어느 단계도 지우지 않는다 — 단언 (2) 를 우회하고 권고를 뒤집는다"
   - id: WR-10
     severity: warning
@@ -99,7 +99,7 @@ findings:
     severity: warning
     disposition: fixed
     title: "기반 세트 YAML 에서 규칙을 하나도 읽지 못해도 겹침 검사가 통과한다"
-open: 18
+open: 17
 total: 24
 recorded: 2026-10-13T09:13:21.137Z
 ---
@@ -114,7 +114,7 @@ recorded: 2026-10-13T09:13:21.137Z
 | WR-04 | warning | open | - |
 | WR-07 | warning | open | - |
 | WR-08 | warning | open | - |
-| WR-09 | warning | open | - |
+| WR-09 | warning | deferred | v2 (RULES-13) 의 선행 작업으로 미룸 — 지금 커밋된 R1 에서 fixSkipped 가 붙은 행은 sort_pub_dependencies 하나이고 그 문장은 사실이다; 다음 재측정(lints 7 · Dart 3.14) 전에 CR-03 과 함께 고친다; REQUIREMENTS.md RULES-13 옆에 메모 (소유자 결정 2026-10-13) |
 | WR-10 | warning | open | - |
 | IN-01 | info | open | - |
 | IN-02 | info | open | - |

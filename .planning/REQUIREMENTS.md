@@ -86,6 +86,7 @@
 - **RULES-12**: experimental 규칙 재검토 — stable 로 전환되면
 - **RULES-13**: `lints` 7.0.0 / `flutter_lints` 7 대응 — 기반 세트로 들어오는 규칙의 중복 선언 제거
   - 재측정 전에 먼저 고칠 것: 측정 도구 `tool/measure_rules.dart` 가 "지금 켜 둔 규칙" 을 1.3.0 의 6개(`currentRules`)로 박아 두어, 지금 저장소(`lib/base.yaml` 81개)에서 다시 재면 2.0.0 에서 켠 규칙이 기준선 B0 에 섞여 0줄로 나온다 — 기준선을 어떻게 잡을지 설계부터 정한다 (04-REVIEW.md CR-03; 소유자 결정 2026-10-13 — v2 메모로 남김; 지금 커밋된 R1 값에는 영향 없음 — R1 때 `lib/base.yaml` 은 6개였다)
+  - 재측정 전에 먼저 고칠 것: `--recount` 가 `fixSkipped` 를 원인을 확인하지 않고 R1 전용 문장으로 적고, `measureFix` 가 잴 때 그것을 지우지 않으며, `fixCell` 이 `fixRemoved` 보다 `fixSkipped` 를 먼저 본다 — fix 단계가 죽은 결과(WR-08 꼴)에 `--recount --write` 를 돌리면 사실이 아닌 사유가 붙고 `--report` 단언 (2) 를 우회해 `--summary` 의 권고가 뒤집힌다; 원인이 확인될 때만 적고, 잴 때 지우고, 잰 값을 먼저 보게 CR-03 과 함께 고친다 (04-REVIEW.md WR-09; 소유자 결정 2026-10-13 — v2 메모로 남김; 지금 커밋된 R1 값에는 영향 없음 — `fixSkipped` 가 붙은 행은 `sort_pub_dependencies` 하나이고 그 문장은 사실이다)
 
 ## Out of Scope
 
