@@ -40,7 +40,7 @@ created: "2026-10-13"
 
 ## Per-Task Verification Map
 
-Task ID / Plan / Wave / Threat Ref 는 계획(`04-01` ~ `04-10-PLAN.md`, 2026-10-13)으로 채웠다. Task ID 는 `<plan>-T<n>` 이고, 명령은 각 PLAN 의 `<automated>` 에 그대로 있다 (여기는 요지). W0 항목(`tool/verify.dart` 새 단계 · `tool/measure_rules.dart` · `RULES.md` 마커)은 wave 1 · 2 의 plan 이 만든다.
+Task ID / Plan / Wave / Threat Ref 는 계획(`04-01` ~ `04-10-PLAN.md`, 2026-10-13)으로 채웠다. gap 수정 plan `04-11` · `04-12` 의 행 다섯은 gap 계획 때 더했다. Task ID 는 `<plan>-T<n>` 이고, 명령은 각 PLAN 의 `<automated>` 에 그대로 있다 (여기는 요지). W0 항목(`tool/verify.dart` 새 단계 · `tool/measure_rules.dart` · `RULES.md` 마커)은 wave 1 · 2 의 plan 이 만든다.
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
@@ -59,11 +59,11 @@ Task ID / Plan / Wave / Threat Ref 는 계획(`04-01` ~ `04-10-PLAN.md`, 2026-10
 | 04-01-T1 | 04-01 | 1 | (D-20) | T-04-01 | N/A | 실행 기록 | 삭제 커밋에서 `fvm dart run tool/verify.dart --update` → `바뀐 정답지가 없다`, 정답지 다섯이 `19ae5ec` · `91bbeec` · `9ed0fe5` 와 `git diff --quiet`; 04-01-T2 가 README 확인 기록 (i) 로 남긴다 | ✅ | ✅ green |
 | 04-06-T2 ~ T3 · 04-07-T1 ~ T2 | 04-06 · 04-07 | 5 · 6 | (D-10) | T-04-16 · T-04-20 | N/A | 정답지 비교 (CI) + python | 묶음 커밋의 python 단언: 정답지 다섯의 `+lib/` 줄 규칙 집합 == 더한 규칙, `-` 0, `exit` 불변 (`strict-inference` 때 `base_codegen` 만 `exit 2`); 04-09-T2 의 M25 와 확인 기록 (ii) | ✅ | ✅ green |
 | 04-10-T1 ~ T3 | 04-10 | 9 | (D-22) | T-04-26 · T-04-27 · T-04-28 | workflow 가 읽기 권한만 가진다; `main` · tag 불변 | e2e (GitHub, 읽기 전용 조회) | push 전 점검(비공개 · fast-forward · `gh auth status`) → 소유자 확인 checkpoint → `git push origin gsd/v2.0-package-rework` → `gh run list` 의 HEAD run 이 `completed success`, 로그에 `점검 통과 (10개 중 10개)` 와 `[3/10] … 통과`, `main` `90a2736` · `v1.3.0` · PR 0 | ✅ | ✅ green |
-| 04-11-T1 | 04-11 (gap) | 10 | RULES-03 · RULES-05 | T-04-29 · T-04-30 | `--recount --write` 가 회차(`runs`)를 바꾸지 않는다; 다시 센 값의 출처가 `conditions.recount` 에 남는다 | 데이터 검사 (로컬) + 출력 모드 | `jq` 로 R1 JSON 의 `rows.sort_pub_dependencies.counts["pubspec.yaml"]` = 2 · `fixSkipped` · `conditions.recount`; `runs` · 다른 행 · 다른 칸이 `bcc8c91` 과 같음(`jq -S` diff 0); `--recount --in …` → `바뀐 행이 없다`; `--report --in …` rc 0 이고 출력 == `RULES.md` 실측 기록, `sort_pub_dependencies` 행 `2 (0·0·0·2)` · `재지 않음`, 가린 줄 `-48 (-1·-46·-1·0)`; 단언 (7) 의 실패 방향 — G1 · G1-strip 의 `pubspec.yaml` 자리를 `analysis_options.yaml` 로 옮긴 임시 JSON 으로 `--report --in` rc 1 · `값에 넣지 않은 자리에 진단이 있는 행 1개: sort_pub_dependencies (analysis_options.yaml)`; `--summary style` 의 행 `켬 · 손으로 고칠 줄 2 (≤ 50)`; `--audit` 80 · 0 · 91 · 0 그대로; `fvm dart run tool/verify.dart` 10/10 | ✅ | ⬜ pending |
-| 04-11-T2 | 04-11 (gap) | 10 | RULES-01 · RULES-06 | T-04-31 | 상류 YAML 에서 규칙 0개면 두 도구가 `FormatException` (70) | 단계 검사 (CI) + 함수 단위 탐침 | M26 (`lib/base.yaml` 의 `no_raw_types` 뒤 열 0 주석 + `- avoid_print` + `- prefer_mixin`) → `[3/10]` 만 실패, `+ avoid_print` · `+ prefer_mixin`, rc 1; `.dart_tool/woody_gap_probe/probe.dart` 가 들여쓰기 4칸에서 `control verify 2 measure 2`, 2칸에서 두 `FormatException`; README 에 `| M26 |` · `WR-06 은 함수 단위로 확인했다`; 되돌린 뒤 10/10 | ✅ | ⬜ pending |
-| 04-12-T1 | 04-12 (gap) | 11 | RULES-06 · RULES-08 · DOCS-11 | T-04-32 · T-04-33 | pubspec 순서 변경이 lock · 다른 진단을 바꾸지 않는다 | 정답지 비교 (CI) + 단계 검사 | `lib/base.yaml` 81개(`sort_pub_dependencies` 가 `sort_constructors_first` 바로 다음), `RULES.md` 켠 81 · 켜지 않음 90, 사유 문장이 두 파일에서 같음; pubspec 여섯 10행 `flutter_riverpod` → 11행 `flutter:`; 정답지 다섯 `+pubspec.yaml:11  info  sort_pub_dependencies` 한 줄뿐(`944ca1c` 와 diff), lock 여섯 불변; `--audit` 81 · 0 · 90 · 0; `--report` 출력 == 실측 기록; verify 10/10 · `--update` `바뀐 정답지가 없다`; `example/pubspec.yaml` 만 되돌리면 `[5/10]` · `[6/10]` 실패 (헛통과 아님) | ✅ | ⬜ pending |
-| 04-12-T2 | 04-12 (gap) | 11 | RULES-03 · RULES-07 · RULES-08 | T-04-33 · T-04-34 | 결정 표 · CHANGELOG 가 같은 사유 · 같은 값 | grep (커밋 전) | CHANGELOG `### 추가한 규칙` 75 (사유 == `lib/base.yaml`) · `### 새로 생기는 경고` 75 (`| info | 2건 | 재지 않음 |`) · 각주 · 도구 수정 불릿, 1.3.0 아래 == `90a2736`; `04-DECISIONS.md` 의 `sort_pub_dependencies` 행 `… | 결정 안 함 (표식 불가) | 켬 | 권고 이유 승인 (재결정 …` 하나, `켬` 81 · `안 켬` 38, 다른 행 · 패널(184 ~ 280행) · 245행 == `479ad21`; 비공개 점검 (1) · (3) 0 | ✅ | ⬜ pending |
-| 04-12-T3 | 04-12 (gap) | 11 | (WR-05 · CR-03) | T-04-34 | N/A | grep + 합계 (커밋 전) | README `expected_diagnostics.txt` 행의 줄 수 · 여섯 표의 줄 수 여섯 · 파일 표 각 행의 줄 수가 정답지에서 센 값과 같고 파일 표 합계 == 정답지 진단 줄 수; REQUIREMENTS.md RULES-13 바로 아래 `재측정 전에 먼저 고칠 것` 한 줄(그 밖은 `f5962c3`); DISPOSITION CR-03 `deferred` (frontmatter · 표); verify 10/10 | ✅ | ⬜ pending |
+| 04-11-T1 | 04-11 (gap) | 10 | RULES-03 · RULES-05 | T-04-29 · T-04-30 | `--recount --write` 가 회차(`runs`)를 바꾸지 않는다; 다시 센 값의 출처가 `conditions.recount` 에 남는다 | 데이터 검사 (로컬) + 출력 모드 | `jq` 로 R1 JSON 의 `rows.sort_pub_dependencies.counts["pubspec.yaml"]` = 2 · `fixSkipped` · `conditions.recount`; `runs` · 다른 행 · 다른 칸이 `bcc8c91` 과 같음(`jq -S` diff 0); `--recount --in …` → `바뀐 행이 없다`; `--report --in …` rc 0 이고 출력 == `RULES.md` 실측 기록, `sort_pub_dependencies` 행 `2 (0·0·0·2)` · `재지 않음`, 가린 줄 `-48 (-1·-46·-1·0)`; 단언 (7) 의 실패 방향 — G1 · G1-strip 의 `pubspec.yaml` 자리를 `analysis_options.yaml` 로 옮긴 임시 JSON 으로 `--report --in` rc 1 · `값에 넣지 않은 자리에 진단이 있는 행 1개: sort_pub_dependencies (analysis_options.yaml)`; `--summary style` 의 행 `켬 · 손으로 고칠 줄 2 (≤ 50)`; `--audit` 80 · 0 · 91 · 0 그대로; `fvm dart run tool/verify.dart` 10/10 | ✅ | ✅ green |
+| 04-11-T2 | 04-11 (gap) | 10 | RULES-01 · RULES-06 | T-04-31 | 상류 YAML 에서 규칙 0개면 두 도구가 `FormatException` (70) | 단계 검사 (CI) + 함수 단위 탐침 | M26 (`lib/base.yaml` 의 `no_raw_types` 뒤 열 0 주석 + `- avoid_print` + `- prefer_mixin`) → `[3/10]` 만 실패, `+ avoid_print` · `+ prefer_mixin`, rc 1; `.dart_tool/woody_gap_probe/probe.dart` 가 들여쓰기 4칸에서 `control verify 2 measure 2`, 2칸에서 두 `FormatException`; README 에 `| M26 |` · `WR-06 은 함수 단위로 확인했다`; 되돌린 뒤 10/10 | ✅ | ✅ green |
+| 04-12-T1 | 04-12 (gap) | 11 | RULES-06 · RULES-08 · DOCS-11 | T-04-32 · T-04-33 | pubspec 순서 변경이 lock · 다른 진단을 바꾸지 않는다 | 정답지 비교 (CI) + 단계 검사 | `lib/base.yaml` 81개(`sort_pub_dependencies` 가 `sort_constructors_first` 바로 다음), `RULES.md` 켠 81 · 켜지 않음 90, 사유 문장이 두 파일에서 같음; pubspec 여섯 10행 `flutter_riverpod` → 11행 `flutter:`; 정답지 다섯 `+pubspec.yaml:11  info  sort_pub_dependencies` 한 줄뿐(`944ca1c` 와 diff), lock 여섯 불변; `--audit` 81 · 0 · 90 · 0; `--report` 출력 == 실측 기록; verify 10/10 · `--update` `바뀐 정답지가 없다`; `example/pubspec.yaml` 만 되돌리면 `[5/10]` · `[6/10]` 실패 (헛통과 아님) | ✅ | ✅ green |
+| 04-12-T2 | 04-12 (gap) | 11 | RULES-03 · RULES-07 · RULES-08 | T-04-33 · T-04-34 | 결정 표 · CHANGELOG 가 같은 사유 · 같은 값 | grep (커밋 전) | CHANGELOG `### 추가한 규칙` 75 (사유 == `lib/base.yaml`) · `### 새로 생기는 경고` 75 (`| info | 2건 | 재지 않음 |`) · 각주 · 도구 수정 불릿, 1.3.0 아래 == `90a2736`; `04-DECISIONS.md` 의 `sort_pub_dependencies` 행 `… | 결정 안 함 (표식 불가) | 켬 | 권고 이유 승인 (재결정 …` 하나, `켬` 81 · `안 켬` 38, 다른 행 · 패널(184 ~ 280행) · 245행 == `479ad21`; 비공개 점검 (1) · (3) 0 | ✅ | ✅ green |
+| 04-12-T3 | 04-12 (gap) | 11 | (WR-05 · CR-03) | T-04-34 | N/A | grep + 합계 (커밋 전) | README `expected_diagnostics.txt` 행의 줄 수 · 여섯 표의 줄 수 여섯 · 파일 표 각 행의 줄 수가 정답지에서 센 값과 같고 파일 표 합계 == 정답지 진단 줄 수; REQUIREMENTS.md RULES-13 바로 아래 `재측정 전에 먼저 고칠 것` 한 줄(그 밖은 `f5962c3` — 적힌 그대로는 04-11 의 RULES-01 · 05 완료 표시 4줄 때문에 실패, 기준을 `548e3e1` 로 바꾼 판으로 판정); DISPOSITION CR-03 `deferred` (frontmatter · 표); verify 10/10 | ✅ | ✅ green |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -125,6 +125,39 @@ phase 실행이 끝난 뒤(HEAD `432c7fe`) 표의 행마다 지금 상태에서 
 
 ---
 
+## 감사 기록 (2026-10-13, gap 수정 실행 뒤)
+
+gap 수정 plan 04-11 · 04-12 의 실행이 끝난 뒤(HEAD `f8dc71c`) 새 행 다섯을 감사했다. 앞 감사와 같은 방식이다. task 마다 자기 커밋으로 되돌린 로컬 복제본(`git clone --local` + `git checkout --detach`)에서 `<automated>` 를 적힌 그대로 `bash -x` 로 돌렸다. 복제본은 감사 뒤 지웠다.
+
+**task 별 `<automated>` (복제본, 적힌 그대로)**
+
+| Task | 커밋 | rc | 걸린 시간 | 비고 |
+|---|---|---|---|---|
+| 04-11-T1 | `b567100` | 0 | 76초 | 복제본에 루트 `fvm dart pub get` 을 먼저 했다 (아래) |
+| 04-11-T2 | `c06d8d5` | 0 | 100초 | 같음. M26 · WR-06 탐침을 다시 일으켜 같은 결과 |
+| 04-12-T1 | `6d64bee` | 0 | 126초 | 같음. 헛통과 확인(`example/pubspec.yaml` 만 되돌림)까지 다시 돌았다 |
+| 04-12-T2 | `fb6386a` | 0 | 80초 | — |
+| 04-12-T3 | `9eb8ee5` | 1 | 0초 | 단언 결함 — `diff <(git show f5962c3:.planning/REQUIREMENTS.md) …` 구간. 04-11 의 마무리 커밋 `548e3e1` 이 RULES-01 · 05 를 완료로 표시해 4줄(체크박스 2 · 추적 표 2)이 다르다. 기준만 `548e3e1` 로 바꾼 판은 rc 0 (86초). 실행 때 executor 의 기록과 같다 (`04-12-SUMMARY.md`) |
+
+- 복제본에는 `.dart_tool` 이 없다 (git 이 무시하는 폴더). 그래서 `fvm dart analyze` 로 시작하는 세 명령(04-11-T1 · T2, 04-12-T1)이 첫 감사에서 0 ~ 1초 만에 rc 1 이었다. 단언 결함이 아니라 준비 차이다. 루트 `fvm dart pub get` 뒤 다시 돌린 결과가 위 표다. 본 작업 폴더에는 이미 `.dart_tool` 이 있어 executor 의 실행에서는 이 차이가 없었다.
+- 다섯 모두 실행 뒤 복제본의 `git status --porcelain` 이 0줄이다. 깨기 실험(M26 · 탐침 · 헛통과 확인 · 단언 (7) 의 변형 JSON)이 스스로 되돌렸다.
+
+**지금 상태 (HEAD) — 모두 통과**
+
+| 돌린 것 | 결과 |
+|---|---|
+| `fvm dart run tool/verify.dart` | rc 0 · `점검 통과 (10개 중 10개)` |
+| 루트 `fvm dart analyze` | `No issues found!` |
+| `--audit` | rc 0 · `감사 통과 — 켠 81 · 옵션 0 · 켜지 않음 90 · 보류 0` |
+| `--report --in tool/measurements/2026-10-13-R1.json` | rc 0, 출력 == `RULES.md` 실측 기록 |
+| `--recount --in …` (쓰지 않음) | `다시 센 행 133개 — 바뀐 행이 없다` |
+| python 대조 | `lib/base.yaml` 81개 == `RULES.md` 켠 규칙 표 81행, 켠 이유 ↔ 사유 주석 불일치 0; `grep -c '성능 향상' lib/base.yaml` 0 |
+| 04-11-T2 · 04-12-T2 `<automated>` (HEAD, 적힌 그대로) | 둘 다 rc 0 |
+
+- 계획 파일은 고치지 않았다. 04-12-T3 의 결함은 "앞 gap plan 의 요구사항 완료 표시가 고정 커밋 비교를 깬다" 는 꼴이다. 뒤에 같은 꼴의 단언을 쓸 때는 기준 커밋을 dispatch 시점 HEAD 로 잡는다.
+
+---
+
 ## Validation Sign-Off
 
 - [x] All tasks have `<automated>` verify or Wave 0 dependencies (checkpoint task 6개는 소유자 결정 · 경로 입력 — Manual-Only)
@@ -135,6 +168,8 @@ phase 실행이 끝난 뒤(HEAD `432c7fe`) 표의 행마다 지금 상태에서 
 - [x] `nyquist_compliant: true` set in frontmatter
 
 **Approval:** validated 2026-10-13 (phase 실행 뒤 감사 — gap 0)
+
+**Approval (gap 수정 뒤):** validated 2026-10-13 (04-11 · 04-12 의 task 다섯 감사 — gap 0, 04-12-T3 은 단언 결함 하나를 고친 판으로 판정)
 
 ## Validation Audit 2026-10-13
 
