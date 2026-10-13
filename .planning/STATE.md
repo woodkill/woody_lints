@@ -4,17 +4,17 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 05
 current_phase_name: Documentation
-status: executing
-stopped_at: Completed 05-06-PLAN.md
-last_updated: "2026-10-13T17:50:13.909Z"
+status: verifying
+stopped_at: Completed 05-05-PLAN.md
+last_updated: "2026-10-13T20:12:12.399Z"
 last_activity: 2026-10-14
-last_activity_desc: 05-06 완료 — README 검사 (d) ~ (g) 의 지워 보기 M38 ~ M42 기록 · 단계 설명 덧붙임
-state_head: 1d283466bcd1beeef5bef577154743ac66bc42b2
+last_activity_desc: 05-05 완료 — 첫 push 0db0fdd..92d478a (65커밋) · GitHub verify run 38460138720 단계 10개 통과
+state_head: ce245a5cc805c4331d05f1f0e4b3c0dacd83cc5c
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 32
-  completed_plans: 31
+  completed_plans: 32
   percent: 67
 ---
 
@@ -31,8 +31,8 @@ See: .planning/PROJECT.md (updated 2026-10-13)
 
 Phase: 05 (Documentation) — EXECUTING
 Plan: 6 of 6
-Status: Ready to execute
-Last activity: 2026-10-14 — 05-06 완료 (README 검사 (d) ~ (g) 의 지워 보기 M38 ~ M42 다섯 모두 [3/10] 만 실패 · 종료 코드 1, example/README.md 에 기록). 남은 plan 은 05-05 (첫 push, 소유자 확인)
+Status: Phase complete — ready for verification
+Last activity: 2026-10-14 — 05-05 완료 (소유자 결정 "push" 뒤 git push origin gsd/v2.0-package-rework 한 줄, 0db0fdd..92d478a 65커밋 fast-forward; GitHub verify run 38460138720 success · 점검 통과 (10개 중 10개)). Phase 5 의 plan 6개 모두 끝남 — 05-05 의 SUMMARY · 메타데이터 커밋은 origin 에 없다
 
 Progress: [███████░░░] 67%
 
@@ -92,6 +92,7 @@ Progress: [███████░░░] 67%
 | Phase 05 P03 | 13min | 2 tasks | 2 files |
 | Phase 05 P04 | 3min | 2 tasks | 2 files |
 | Phase 05 P06 | 9min | 1 tasks | 1 files |
+| Phase 05 P05 | 2h 16m | 3 tasks | 0 files |
 
 ## Accumulated Context
 
@@ -216,6 +217,8 @@ Recent decisions affecting current work:
 - [Phase 05]: 05-04: CHANGELOG 1.1.0 ~ 1.2.5 를 버전마다 한 항목으로 복원했다 — diff 로 확인한 변경만, RESEARCH 표에 없던 9bf0d86 (1.1.0 README) · a97fd20 (1.2.4 의 FVM 설정)을 더했다
 - [Phase 05]: 05-04: 2.0.0 올리기 전에는 불릿 넷(받는 때 = main 병합 뒤 flutter pub upgrade woody_lints, README 버전 올리기 링크), 그 밖의 변경은 불릿 여덟(저장소 안쪽 한 줄). 01 WR-05 fixed, open 12
 - [Phase 05]: 05-06: README 검사 (d) ~ (g) 의 지워 보기 M38 ~ M42 다섯 모두 종료 코드 1 · [3/10] 만 실패 · 점검 실패 (10개 중 1개), 각 19초 — (e) 는 첫 주소(50행)가 아닌 뒤쪽 주소(78행)의 오타를 잡았다. (f) · (g) 의 코드 블록 한정은 fencedLines 코드를 읽은 것이고 실행으로 가르지 않았다
+- [Phase 05]: 05-05: 소유자 결정 "push" (권고안 승인, 2026-10-14) — Phase 5 의 첫 push 는 git push origin gsd/v2.0-package-rework 한 줄로 했다 (2026-10-13T20:06:03Z UTC, 0db0fdd..92d478a, 65커밋 — Phase 4 gap 수정 38 · Phase 5 27, fast-forward, 둘째 push 없음). main 90a2736, tag v1.3.0 하나, PR 0건 그대로다. 05-05 의 SUMMARY · 메타데이터 커밋은 origin 에 없다
+- [Phase 05]: 05-05: GitHub verify run 38460138720 이 단계 10개로 성공했다 (job 3분 31초, 검증 148초, ubuntu-24.04 20261004.327.1) — README 검사 (d) ~ (g) 가 runner 에서도 통과해 고치지 않았다 (VERIFY-06 의 CI 쪽)
 
 ### Pending Todos
 
@@ -241,6 +244,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-13T17:50:13.866Z
-Stopped at: Completed 05-06-PLAN.md
+Last session: 2026-10-13T20:12:12.357Z
+Stopped at: Completed 05-05-PLAN.md
 Resume file: None
