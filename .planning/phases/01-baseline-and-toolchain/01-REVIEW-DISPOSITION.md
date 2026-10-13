@@ -9,8 +9,9 @@ findings:
     title: "판정 순서와 기준표가 같은 변경에 다른 등급을 낸다 (세 가지 경우)"
   - id: WR-05
     severity: warning
-    disposition: open
+    disposition: fixed
     title: "\"받는 쪽은 tag 하나에 고정해서 받는다\" 는 전제가 지금 사실이 아니고, CHANGELOG 의 \"올리기 전에\" 가 그 전제 위에 쓰여 있다"
+    note: "05-04: CHANGELOG 2.0.0 ### 올리기 전에 에 ref: main 프로젝트가 받는 때(main 병합 뒤 pub upgrade)를 적음 — 받는 쪽이 tag 에 고정한다는 전제를 두지 않는다 (05-CONTEXT.md D-06)"
   - id: WR-06
     severity: warning
     disposition: open
@@ -67,7 +68,7 @@ findings:
     severity: warning
     disposition: fixed
     title: "52행 \"major 는 … 고쳐야 하는 변경에만 쓴다\" 가 25행, 40-42행, 54행과 모순된다"
-open: 13
+open: 12
 total: 16
 recorded: 2026-10-11T08:42:53.702Z
 ---
@@ -77,7 +78,7 @@ recorded: 2026-10-11T08:42:53.702Z
 | Finding | Severity | Disposition | Source |
 |---------|----------|-------------|--------|
 | WR-03 | warning | open | - |
-| WR-05 | warning | open | - |
+| WR-05 | warning | fixed | 05-04-PLAN.md Task 2 (06f62a5) — CHANGELOG 2.0.0 '올리기 전에' 에 ref: main 프로젝트가 받는 때와 README 버전 올리기 절 링크를 적음 (D-06) |
 | WR-06 | warning | open | - |
 | WR-07 | warning | open | - |
 | WR-08 | warning | open | - |
