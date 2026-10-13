@@ -248,7 +248,7 @@ Plans:
   4. CHANGELOG 최상단에 새 릴리스 항목이 Phase 1 에서 정한 형식으로 있고(추가·삭제 규칙, 지원 SDK 변경, 규칙별 실측 건수와 `dart fix` 가능 여부), 1.0.0 과 1.3.0 사이 항목이 git 이력으로 확인되는 범위에서 채워져 있다
   5. 배포 YAML 의 머리 주석이 실제 구성(조각 파일, 묶음, 옛 이름 별칭)을 설명하고, README 와 YAML 에 템플릿 보일러플레이트가 남아 있지 않다
 
-**Plans**: 4/6 plans executed
+**Plans**: 5/6 plans executed
 
 Plans:
 
@@ -263,7 +263,7 @@ Plans:
 - [x] 05-04-PLAN.md — CHANGELOG 1.1.0 ~ 1.2.5 복원 7항목 + 2.0.0 `### 올리기 전에` · `### 그 밖의 변경` 정리 + DOCS-07 · 09 확인 + 01 WR-05 fixed (DOCS-07 ~ 09; D-05 ~ D-07, D-17, D-19)
 
 **Wave 4** *(blocked on 05-03)*
-- [ ] 05-06-PLAN.md — README 검사 넷의 지워 보기 M38 ~ M42 (규칙 이름 삭제 · 뒤쪽 블록의 주소 오타 · plugin 버전 · `ref:` · 마커 삭제) 를 실제로 돌려 `example/README.md` 에 기록 (VERIFY-06; D-01, D-02)
+- [x] 05-06-PLAN.md — README 검사 넷의 지워 보기 M38 ~ M42 (규칙 이름 삭제 · 뒤쪽 블록의 주소 오타 · plugin 버전 · `ref:` · 마커 삭제) 를 실제로 돌려 `example/README.md` 에 기록 (VERIFY-06; D-01, D-02)
 
 **Wave 5** *(blocked on Wave 3 · 4 — 첫 push 는 소유자 확인)*
 - [ ] 05-05-PLAN.md — push 전 비공개 점검 (범위 전체) → 첫 push 확인 checkpoint (blocking-human) → `git push origin gsd/v2.0-package-rework` 와 GitHub `verify` 확인 (D-21)
@@ -317,7 +317,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Verification Harness | 5/5 | Complete    | 2026-10-12 |
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
 | 4. Rule Reselection | 13/13 | Complete    | 2026-10-13 |
-| 5. Documentation | 4/6 | In Progress | - |
+| 5. Documentation | 5/6 | In Progress | - |
 | 6. Release | 0/TBD | Not started | - |
 
 ## Backlog

@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 05
 current_phase_name: Documentation
 status: executing
-stopped_at: Completed 05-04-PLAN.md
-last_updated: "2026-10-13T17:38:35.813Z"
+stopped_at: Completed 05-06-PLAN.md
+last_updated: "2026-10-13T17:50:13.909Z"
 last_activity: 2026-10-14
-last_activity_desc: 05-04 완료 — CHANGELOG 1.1.0 ~ 1.2.5 복원 · 2.0.0 두 칸 정리 · 01 WR-05 fixed
-state_head: 152a3cd19f4d6e1d434084a0359555ae4d0819d3
+last_activity_desc: 05-06 완료 — README 검사 (d) ~ (g) 의 지워 보기 M38 ~ M42 기록 · 단계 설명 덧붙임
+state_head: 1d283466bcd1beeef5bef577154743ac66bc42b2
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 32
-  completed_plans: 30
+  completed_plans: 31
   percent: 67
 ---
 
@@ -30,9 +30,9 @@ See: .planning/PROJECT.md (updated 2026-10-13)
 ## Current Position
 
 Phase: 05 (Documentation) — EXECUTING
-Plan: 5 of 6
+Plan: 6 of 6
 Status: Ready to execute
-Last activity: 2026-10-14 — 05-04 완료 (CHANGELOG 1.1.0 ~ 1.2.5 복원, 2.0.0 올리기 전에 · 그 밖의 변경 정리, 01 WR-05 fixed)
+Last activity: 2026-10-14 — 05-06 완료 (README 검사 (d) ~ (g) 의 지워 보기 M38 ~ M42 다섯 모두 [3/10] 만 실패 · 종료 코드 1, example/README.md 에 기록). 남은 plan 은 05-05 (첫 push, 소유자 확인)
 
 Progress: [███████░░░] 67%
 
@@ -91,6 +91,7 @@ Progress: [███████░░░] 67%
 | Phase 05 P02 | 4min | 2 tasks | 6 files |
 | Phase 05 P03 | 13min | 2 tasks | 2 files |
 | Phase 05 P04 | 3min | 2 tasks | 2 files |
+| Phase 05 P06 | 9min | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -214,6 +215,7 @@ Recent decisions affecting current work:
 - [Phase 05]: 05-03: plugin 복구 안내는 이 프로젝트의 .plugin_manager/<hash>/ (또는 bin/plugin.aot) 로 범위를 좁혔다 — 기본 자리 전체 삭제는 안내하지 않는다
 - [Phase 05]: 05-04: CHANGELOG 1.1.0 ~ 1.2.5 를 버전마다 한 항목으로 복원했다 — diff 로 확인한 변경만, RESEARCH 표에 없던 9bf0d86 (1.1.0 README) · a97fd20 (1.2.4 의 FVM 설정)을 더했다
 - [Phase 05]: 05-04: 2.0.0 올리기 전에는 불릿 넷(받는 때 = main 병합 뒤 flutter pub upgrade woody_lints, README 버전 올리기 링크), 그 밖의 변경은 불릿 여덟(저장소 안쪽 한 줄). 01 WR-05 fixed, open 12
+- [Phase 05]: 05-06: README 검사 (d) ~ (g) 의 지워 보기 M38 ~ M42 다섯 모두 종료 코드 1 · [3/10] 만 실패 · 점검 실패 (10개 중 1개), 각 19초 — (e) 는 첫 주소(50행)가 아닌 뒤쪽 주소(78행)의 오타를 잡았다. (f) · (g) 의 코드 블록 한정은 fencedLines 코드를 읽은 것이고 실행으로 가르지 않았다
 
 ### Pending Todos
 
@@ -239,6 +241,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-13T17:38:35.767Z
-Stopped at: Completed 05-04-PLAN.md
+Last session: 2026-10-13T17:50:13.866Z
+Stopped at: Completed 05-06-PLAN.md
 Resume file: None
