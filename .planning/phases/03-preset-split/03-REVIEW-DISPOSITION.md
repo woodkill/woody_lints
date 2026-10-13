@@ -10,9 +10,9 @@ findings:
     note: "04-01: tool/verify.dart [3/10] 배포 파일의 구성이 묶음 · 별칭은 include 만 담는지 본다 (example/README.md M23 · M24)"
   - id: WR-02
     severity: warning
-    disposition: deferred
+    disposition: fixed
     title: "`lib/riverpod.yaml` 을 YAML 로 문제없게 고쳐도 검증이 종료 코드 70 으로 멈춘다 (재현함)"
-    note: "Phase 5 의 첫 일 — YAML 머리 주석(DOCS-10)을 고치기 전에 닫는다 (04-CONTEXT.md D-12, ROADMAP Phase 5 Notes)"
+    note: "05-01: stripPlugins 가 plugins: 섹션을 빈 줄로 바꾸고 readShippedPluginConstraint 가 줄 끝 주석 · 맵 형식을 받는다 (example/README.md M32 ~ M34)"
   - id: WR-03
     severity: warning
     disposition: open
@@ -72,7 +72,7 @@ recorded: 2026-10-12T13:04:38.618Z
 | Finding | Severity | Disposition | Source |
 |---------|----------|-------------|--------|
 | WR-01 | warning | fixed | 04-01 tool/verify.dart [3/10] (example/README.md M23 · M24) |
-| WR-02 | warning | deferred | Phase 5 의 첫 일 — DOCS-10 전에 닫는다 (04-CONTEXT.md D-12) |
+| WR-02 | warning | fixed | 05-01-PLAN.md Task 1 (1831c04) — stripPlugins 가 plugins: 섹션을 빈 줄로 바꾸고(줄 번호 보존) readShippedPluginConstraint 가 줄 끝 주석 · 맵 형식을 받는다, README M32 ~ M34 (M32 · M33 은 고치기 전 70) |
 | WR-03 | warning | open | - |
 | WR-04 | warning | open | - |
 | WR-05 | warning | open | - |
