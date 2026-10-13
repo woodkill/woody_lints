@@ -68,7 +68,7 @@
 - `analyzer.exclude`: `**/*.freezed.dart`, `**/*.g.dart`
 - 최상위 `plugins:`: `riverpod_lint: ^3.1.3`
 - `analyzer.exclude` 에 `lib/analysis_options.yaml` 을 넣어 `plugins_in_inner_options` 경고를 피한다. 사용하는 프로젝트에는 전달되지 않는다.
-- 규칙은 `lib/analysis_options.yaml` 의 분류 주석(성능 / 가독성 및 스타일 / 버그 방지) 아래에 추가하고, `README.md` 의 "포함된 규칙 목록" 과 `CHANGELOG.md`, `pubspec.yaml` 의 `version` 을 함께 갱신한다.
+- 규칙은 `lib/base.yaml` 의 분류 주석(성능 / 가독성 및 스타일 / 버그 방지 / strict) 아래에 더하고, `RULES.md` 켠 규칙 표 · `README.md` 의 표시 구역(`woody:readme-rules`) · `CHANGELOG.md` 를 같은 커밋에서 고친다 (검증 명령 `[3/10]` 이 `lib/base.yaml` · `RULES.md` · README 표시 구역의 일치를 본다).
 - analyzer plugin 은 `analyzer: plugins:` 가 아니라 최상위 `plugins:` 에 선언한다.
 - `pubspec.yaml` - 패키지 이름 `woody_lints`, 버전 `1.3.0`, `publish_to: 'none'`
 - `.fvmrc` - Flutter `3.41.2`
@@ -178,7 +178,7 @@
 
 ## Comments
 
-- YAML 주석은 한국어로 쓴다. 템플릿에서 온 영어 주석(`lib/analysis_options.yaml` 1-12행, 60-64행)은 그대로 둔다.
+- YAML 주석은 한국어로 쓴다. 템플릿에서 온 영어 주석은 두지 않는다 (2.0.0 에서 지웠다).
 - 설정의 **이유(why)** 를 적는다. "무엇을 하는가"가 아니라 "왜 이 위치/방식인가"를 설명한다. 예: `pubspec.yaml` 13-15행(왜 `dependencies` 인가), `analysis_options.yaml` 1-6행(왜 exclude 하는가), `lib/analysis_options.yaml` 49-56행(왜 최상위 `plugins:` 인가).
 - 실측으로 확인한 동작은 버전과 날짜를 함께 적는다. 예: `lib/analysis_options.yaml` 55-56행 "Flutter 3.47.5 의 `flutter analyze` 는 plugin 진단을 표시하지 않았다 (3.41.9 는 표시, 2026-09-20 실측)".
 - 한국어 문장에서 영어 식별자 뒤 조사는 한 칸 띄어 쓴다. 예: "riverpod_lint 를", "`plugins:` 가".
