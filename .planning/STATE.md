@@ -4,17 +4,17 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 05
 current_phase_name: Documentation
-status: Phase 05 계획 완료 — 실행 대기 (/gsd-execute-phase 05)
-stopped_at: Phase 05 계획 완료 (05-01 ~ 05-06)
-last_updated: "2026-10-13T16:06:32.830Z"
+status: executing
+stopped_at: Completed 05-01-PLAN.md
+last_updated: "2026-10-13T17:04:30.153Z"
 last_activity: 2026-10-14
-last_activity_desc: Phase 05 계획 6개 작성, plan checker 2회차 통과
-state_head: edcdf7c37b80eab2ccdb8126c141cd07c64d47a0
+last_activity_desc: 05-01 완료 — tool/verify.dart WR-02 · WR-11 · IN-14 닫음, M32 ~ M37
+state_head: 2be345e9c4b291d7b3fa45582b6b07e6a6809660
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 32
-  completed_plans: 26
+  completed_plans: 27
   percent: 67
 ---
 
@@ -25,14 +25,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-10-13)
 
 **Core value:** 사용 프로젝트가 `include` 한 줄로 받는 규칙이 문서에 적힌 그대로 적용되고, 각 규칙이 왜 켜져 있는지 근거가 남아 있다.
-**Current focus:** Phase 5 — Documentation
+**Current focus:** Phase 05 — Documentation
 
 ## Current Position
 
-Phase: 05 (Documentation) — READY TO EXECUTE
-Plan: 0 of 6
-Status: Phase 05 계획 완료 — 실행 대기 (/gsd-execute-phase 05)
-Last activity: 2026-10-14 — Phase 05 계획 6개 작성 (wave 5), plan checker 2회차 통과
+Phase: 05 (Documentation) — EXECUTING
+Plan: 2 of 6
+Status: Ready to execute
+Last activity: 2026-10-14 — 05-01 완료 (tool/verify.dart WR-02 · WR-11 · IN-14, M32 ~ M37)
 
 Progress: [███████░░░] 67%
 
@@ -87,6 +87,7 @@ Progress: [███████░░░] 67%
 | Phase 04 P11 | 9min | 2 tasks | 5 files |
 | Phase 04 P12 | 10min | 3 tasks | 18 files |
 | Phase 04 P13 | 7min | 3 tasks | 5 files |
+| Phase 05 P01 | 9min | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -201,6 +202,8 @@ Recent decisions affecting current work:
 - [Phase 04]: Phase 4 재검증 passed 11/11 (2026-10-13). 리뷰 WR-11 ([3/10] 의 겹침 · RULES.md 일치가 lib/base.yaml 만 읽음) 은 gap 이 아닌 경고이고, 소유자 결정으로 Phase 5 의 VERIFY-06 과 함께 고친다 — 처리 기록 deferred, ROADMAP Phase 5 Notes
 - [Phase 05]: 계획 6개 · wave 5 — 05-01 verify.dart WR-02 · WR-11 (B안, 규칙은 lib/base.yaml 에만) · IN-14 (M32 ~ M37), 05-02 배포 YAML 머리 주석 · CLAUDE.md 두 줄, 05-03 README 재작성 → [3/10] (d) ~ (g) 두 커밋, 05-04 CHANGELOG 복원 · 2.0.0 두 칸, 05-06 지워 보기 M38 ~ M42, 05-05 첫 push (소유자 확인). plan checker 2회차 통과 (de67ffb, edcdf7c)
 - [Phase 05]: CHANGELOG 2.0.0 의 `### 새로 생기는 경고` 표는 75행이다 (조사 문서의 74 는 04-12 전 값). 05-04 는 수를 박지 않고 "표 행 수 == 추가한 규칙 불릿 수" 로 단언한다
+- [Phase 05]: 05-01: WR-11 은 B안 — [3/10] (b′) 가 lib/base.yaml 밖 조각의 linter: 블록에 규칙이 있으면 실패, 규칙은 lib/base.yaml 에만
+- [Phase 05]: 05-01: stripPlugins 는 plugins: 섹션을 빈 줄로 바꿔 줄 번호를 보존하고 readShippedPluginConstraint 는 줄 끝 주석 · 맵 형식을 받는다 (M32 · M33 통과, M34 70, M37 진단 줄 :13)
 
 ### Pending Todos
 
@@ -226,6 +229,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-13T16:06:32.830Z
-Stopped at: Phase 05 계획 완료 (05-01 ~ 05-06)
+Last session: 2026-10-13T17:04:30.111Z
+Stopped at: Completed 05-01-PLAN.md
 Resume file: None

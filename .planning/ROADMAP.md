@@ -248,12 +248,12 @@ Plans:
   4. CHANGELOG 최상단에 새 릴리스 항목이 Phase 1 에서 정한 형식으로 있고(추가·삭제 규칙, 지원 SDK 변경, 규칙별 실측 건수와 `dart fix` 가능 여부), 1.0.0 과 1.3.0 사이 항목이 git 이력으로 확인되는 범위에서 채워져 있다
   5. 배포 YAML 의 머리 주석이 실제 구성(조각 파일, 묶음, 옛 이름 별칭)을 설명하고, README 와 YAML 에 템플릿 보일러플레이트가 남아 있지 않다
 
-**Plans**: 6 plans
+**Plans**: 1/6 plans executed
 
 Plans:
 
 **Wave 1**
-- [ ] 05-01-PLAN.md — (tracer) `tool/verify.dart` 결함 둘 닫기: WR-02 (`stripPlugins` 빈 줄 치환 · `readShippedPluginConstraint` 줄 끝 주석 · 맵 형식, M32 ~ M34) · WR-11 / IN-14 (`[3/10]` (b′) 다른 조각에 규칙 없음, `declaredRuleNames(shownAs)`, M35 ~ M37 — M37 이 줄 번호 보존과 (b′) 의 범위를 가른다) + 처리 기록 셋 (VERIFY-06 의 전제, DOCS-10 의 전제; D-19)
+- [x] 05-01-PLAN.md — (tracer) `tool/verify.dart` 결함 둘 닫기: WR-02 (`stripPlugins` 빈 줄 치환 · `readShippedPluginConstraint` 줄 끝 주석 · 맵 형식, M32 ~ M34) · WR-11 / IN-14 (`[3/10]` (b′) 다른 조각에 규칙 없음, `declaredRuleNames(shownAs)`, M35 ~ M37 — M37 이 줄 번호 보존과 (b′) 의 범위를 가른다) + 처리 기록 셋 (VERIFY-06 의 전제, DOCS-10 의 전제; D-19)
 
 **Wave 2** *(blocked on Wave 1 — `lib/riverpod.yaml` 주석은 WR-02 뒤에)*
 - [ ] 05-02-PLAN.md — 배포 YAML 다섯의 머리 주석 (템플릿 삭제 · `codegen.yaml` 신설 · `riverpod.yaml` 줄이기, 정답지 불변) + `.claude/CLAUDE.md` 71 · 181행 (DOCS-10; D-08, D-09)
@@ -317,7 +317,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Verification Harness | 5/5 | Complete    | 2026-10-12 |
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
 | 4. Rule Reselection | 13/13 | Complete    | 2026-10-13 |
-| 5. Documentation | 0/6 | Planned | - |
+| 5. Documentation | 1/6 | In Progress | - |
 | 6. Release | 0/TBD | Not started | - |
 
 ## Backlog
