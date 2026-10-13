@@ -36,7 +36,7 @@ fvm dart run tool/verify.dart --update
 
 | 파일 | 역할 | 정답지 줄 수 |
 |------|------|--------------|
-| `lib/added_rules.dart` | 이 패키지가 기반 세트 위에 추가하는 규칙 6개를 한 건씩 어긴다 | 6 |
+| `lib/added_rules.dart` | 1.3.0 부터 켜 둔 규칙 6개를 한 건씩 어긴다 (이 패키지가 더하는 규칙 81개 가운데 1.3.0 의 것 — 나머지 75개의 샘플은 아래 파일들과 `pubspec.yaml` 에 있다) | 6 |
 | `lib/base_rules.dart` | 기반 세트(`flutter_lints` / `lints`)가 켜는 규칙 7개를 한 건씩 어긴다 — 그중 6개는 2.0.0 전까지 배포 파일에도 겹쳐 적혀 있었다 | 7 |
 | `lib/main.dart` | `riverpod_lint` 의 `missing_provider_scope` (warning) | 1 |
 | `lib/riverpod_rules.dart` | `riverpod_lint` 의 `avoid_public_notifier_properties` (info), `provider_parameters` (warning), 04-07 부터 `specify_nonobvious_property_types` (13행) | 3 |
