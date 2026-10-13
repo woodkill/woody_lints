@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 05
 current_phase_name: Documentation
 status: executing
-stopped_at: Completed 05-03-PLAN.md
-last_updated: "2026-10-13T17:31:24.197Z"
+stopped_at: Completed 05-04-PLAN.md
+last_updated: "2026-10-13T17:38:35.813Z"
 last_activity: 2026-10-14
-last_activity_desc: 05-03 완료 — README 전면 재작성 · [3/10] README 검사 (d) ~ (g)
-state_head: 3df0ecb08630afca49bd60d6797a7c40726bab1e
+last_activity_desc: 05-04 완료 — CHANGELOG 1.1.0 ~ 1.2.5 복원 · 2.0.0 두 칸 정리 · 01 WR-05 fixed
+state_head: 152a3cd19f4d6e1d434084a0359555ae4d0819d3
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 32
-  completed_plans: 29
+  completed_plans: 30
   percent: 67
 ---
 
@@ -30,9 +30,9 @@ See: .planning/PROJECT.md (updated 2026-10-13)
 ## Current Position
 
 Phase: 05 (Documentation) — EXECUTING
-Plan: 4 of 6
+Plan: 5 of 6
 Status: Ready to execute
-Last activity: 2026-10-14 — 05-03 완료 (README 전면 재작성, [3/10] README 검사 (d) ~ (g))
+Last activity: 2026-10-14 — 05-04 완료 (CHANGELOG 1.1.0 ~ 1.2.5 복원, 2.0.0 올리기 전에 · 그 밖의 변경 정리, 01 WR-05 fixed)
 
 Progress: [███████░░░] 67%
 
@@ -90,6 +90,7 @@ Progress: [███████░░░] 67%
 | Phase 05 P01 | 9min | 3 tasks | 4 files |
 | Phase 05 P02 | 4min | 2 tasks | 6 files |
 | Phase 05 P03 | 13min | 2 tasks | 2 files |
+| Phase 05 P04 | 3min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -211,6 +212,8 @@ Recent decisions affecting current work:
 - [Phase 05]: 05-03: pub workspace 공식 문서에 멤버 패키지의 analysis_options.yaml 해석 문장이 없어(2026-10-14 읽음) README 는 분석에 관한 문장 하나를 옮기고 "이 패키지로는 돌려 보지 않았다" 고 적었다
 - [Phase 05]: 05-03: README 의 복사해 쓰는 값(include 주소 · version: · ref:)은 코드 블록 안에 두고, [3/10] (f) · (g) 는 코드 블록 안만 읽는다 — 읽은 값이 0개면 실패
 - [Phase 05]: 05-03: plugin 복구 안내는 이 프로젝트의 .plugin_manager/<hash>/ (또는 bin/plugin.aot) 로 범위를 좁혔다 — 기본 자리 전체 삭제는 안내하지 않는다
+- [Phase 05]: 05-04: CHANGELOG 1.1.0 ~ 1.2.5 를 버전마다 한 항목으로 복원했다 — diff 로 확인한 변경만, RESEARCH 표에 없던 9bf0d86 (1.1.0 README) · a97fd20 (1.2.4 의 FVM 설정)을 더했다
+- [Phase 05]: 05-04: 2.0.0 올리기 전에는 불릿 넷(받는 때 = main 병합 뒤 flutter pub upgrade woody_lints, README 버전 올리기 링크), 그 밖의 변경은 불릿 여덟(저장소 안쪽 한 줄). 01 WR-05 fixed, open 12
 
 ### Pending Todos
 
@@ -218,7 +221,7 @@ None yet.
 
 ### Blockers/Concerns
 
-- [Phase 1] 리뷰 지적 13건이 열려 있다 (`01-REVIEW-DISPOSITION.md`, 합계 16). 그중 WR-03 의 남은 두 경우 — README/CHANGELOG 만 고친 변경, 새 프리셋 파일 추가 — 는 `VERSIONING.md` 의 판정 순서와 기준표가 다른 등급을 내며 D-05 를 건드리는 소유자 결정이 필요하다. 2.0.0 의 등급(major)에는 영향이 없다
+- [Phase 1] 리뷰 지적 12건이 열려 있다 (`01-REVIEW-DISPOSITION.md`, 합계 16 — WR-05 는 05-04 가 닫음). 그중 WR-03 의 남은 두 경우 — README/CHANGELOG 만 고친 변경, 새 프리셋 파일 추가 — 는 `VERSIONING.md` 의 판정 순서와 기준표가 다른 등급을 내며 D-05 를 건드리는 소유자 결정이 필요하다. 2.0.0 의 등급(major)에는 영향이 없다
 - [Phase 3] `riverpod_lint` 하한을 `^3.1.9` 로 올릴 때(PRESET-05): 3.1.9 는 Dart 3.13 이상을 요구한다. 지금은 `sdk: ^3.13.0` 이라 문제없지만 `VERSIONING.md` 에 이 전제가 적혀 있지 않다 (Backlog `Phase 999.1`)
 - [Phase 2] 리뷰 지적 15건이 열려 있다 (`02-REVIEW-DISPOSITION.md`, 합계 17 — WR-01 ~ WR-06 · WR-08 · IN-01 ~ IN-08). `02-VERIFICATION.md` 의 "다음 phase 가 알아야 할 것" 1 ~ 7 이 Phase 3 · 4 · 6 에 걸리는 것을 추렸다. WR-06 은 Phase 6 이 `version` 을 올릴 때 종료 코드 69 로 만난다
 - [Phase 3] 리뷰 지적 14건이 열려 있다 (`03-REVIEW-DISPOSITION.md`, warning 8 · info 6). 그중 검증 장치의 빈틈 셋은 Phase 4 · 5 가 배포 YAML 을 고칠 때 밟는 자리다 — WR-01 `[2/9]` 가 묶음 · 별칭을 보지 않아 거기 적은 규칙을 놓친다 (거짓 통과), WR-02 `riverpod_lint` 줄 끝 주석 · 마지막 줄바꿈 없음에서 종료 코드 70 (거짓 실패), WR-03 `base.yaml` 의 맵 형식 규칙(`rule: false`)에서 `[2/9]` 거짓 실패. Phase 4 계획 때 먼저 닫을지 정한다 (`03-VERIFICATION.md` Gaps Summary) — 정함 (2026-10-13, `04-CONTEXT.md` D-12): WR-01 은 plan 04-01 의 `[3/10]` 이 닫고, WR-02 는 Phase 5 의 첫 일, WR-03 은 목록 형식 관례로 피하고 열어 둔다. 04-13 뒤에는 `lib/base.yaml` 의 맵 형식 규칙 줄에서 `[3/10]` 이 거짓 통과 대신 종료 코드 70 으로 멈춘다 (README M31)
@@ -236,6 +239,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-13T17:31:24.155Z
-Stopped at: Completed 05-03-PLAN.md
+Last session: 2026-10-13T17:38:35.767Z
+Stopped at: Completed 05-04-PLAN.md
 Resume file: None
