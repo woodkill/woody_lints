@@ -20,13 +20,24 @@
 //   --out     기본 tool/measurements/<YYYY-MM-DD>-<run id>.json. 모든 단계와 마지막 지문 비교가 끝난
 //             뒤에만 쓴다 — 실행 중에는 저장소 안에 아무것도 만들지 않는다.
 //
+// 출력 모드 (분석을 돌리지 않는다 — 한 번에 하나):
+//   --summary <묶음>   묶음 하나의 터미널 요약 (D-06). 묶음 id 는 `bundles` 상수의 키
+//   --report [--write] RULES.md § 실측 기록 의 Markdown 을 stdout 으로 — 단언이 하나라도 어긋나면
+//                      종료 코드 1 이고 아무것도 쓰지 않는다. --write 면 통과했을 때만 RULES.md 의
+//                      woody:measurements 구역을 바꿔 쓴다
+//   --audit            후보 133 과 B-7 31 이 RULES.md 의 세 표에 모두 있는지 (RULES-08 · DOCS-11)
+//   결과 JSON 은 --in <경로>, 없으면 <work>/results/<run id>.json, 그것도 없으면
+//   tool/measurements/*-<run id>.json (정확히 하나) 에서 찾는다 (--audit 은 JSON 을 읽지 않는다).
+//
 // 비공개 사용 프로젝트의 경로 · 진단 메시지 · 코드 조각은 결과 JSON · 화면 · 예외 문구 어디에도
 // 쓰지 않는다. 진단 줄 전문과 `dart fix` 화면 원문은 `<작업 폴더>/private/` 에만 쓴다.
 // spike 020 ~ 023 의 스크립트 조각(.claude/skills/spike-findings-woody-lints/sources/)을 이 파일
 // 하나에 옮겨 넣었다 — tool/ 에 import 할 다른 Dart 파일을 두지 않는다.
 //
-// 종료 코드: 0 모든 회차가 유효 / 1 판정 실패(저장소 지문이 바뀜 · 유효하지 않은 회차 · 단언 실패)
-//            / 64 사용법 / 69 하위 명령(pub get · dart analyze · dart fix)이 돌지 않음 / 70 예외로 끝남
+// 종료 코드: 0 모든 회차가 유효 / 1 판정 실패(저장소 지문이 바뀜 · 유효하지 않은 회차 · 단언 실패 ·
+//            감사 실패) / 64 사용법 (출력 모드의 결과 JSON 을 찾지 못함 포함) / 69 하위 명령(pub get ·
+//            dart analyze · dart fix)이 돌지 않음 / 70 예외로 끝남 (결과 JSON 의 schema 가 1 이 아님 ·
+//            RULES.md 의 마커 없음 포함)
 import 'dart:convert';
 import 'dart:io';
 
@@ -79,8 +90,8 @@ const consumerStages = [
   'unnecessary-ignore',
 ];
 
-/// 04-03 이 구현하는 출력 모드 — 지금은 받아들이되 종료 코드 64 로 끝낸다.
-const pendingModes = ['--summary', '--report', '--write', '--audit'];
+/// 분석을 돌리지 않고 결과 JSON(또는 `RULES.md`)만 읽는 출력 모드 — 한 번에 하나만 준다.
+const outputModes = ['--summary', '--report', '--audit'];
 
 /// 결과 JSON 의 모양 번호. 바꾸면 04-03 의 `--summary` · `--report`, 04-04 의 회차 기록,
 /// RULES-13 때의 재측정 diff 를 함께 고친다.
@@ -288,11 +299,27 @@ const g4Rules = [
   'unnecessary_primary_constructor_body',
 ];
 
+/// 검토 묶음의 id → 한국어 이름 (D-04 · D-06). `--summary <id>` 와 행의 `bundle` 이 이 id 를 쓴다.
+const bundles = <String, String>{
+  'bug': '버그 방지',
+  'perf': '성능',
+  'style': '가독성·스타일',
+  'current': '지금 켜 둔 5개',
+  'excluded': '제외 권장',
+  'strict': 'strict 계열',
+  'import': 'import 스타일',
+  'fire': 'fire-and-forget',
+  'pairs': '함께 쓸 수 없는 쌍',
+  'status': '상태 출처가 갈리는 규칙',
+  'v2': 'v2 로 미룸',
+  'ui': 'unnecessary_ignore',
+};
+
 /// 하나씩 묻는 묶음 (D-04 · D-05) → 그 묶음의 규칙. 나머지 묶음은 절과 그룹에서 정해진다.
 ///
 /// `status` 의 `unnecessary_underscores` 는 상태 출처가 갈리는 규칙이지만(D-05) 기반 세트
 /// (lints recommended)에 들어 있어 후보가 아니다 — 이 표에만 있고 평가표의 행은 없다.
-const bundles = <String, List<String>>{
+const bundleRules = <String, List<String>>{
   'import': ['always_use_package_imports', 'prefer_relative_imports'],
   'fire': ['unawaited_futures', 'discarded_futures', 'unnecessary_unawaited'],
   'strict': ['no_dynamic_casts', 'no_raw_types', strictInference],
@@ -389,7 +416,7 @@ List<Candidate> buildCandidates() {
   }
 
   String bundleOf(String name, String section) {
-    for (final e in bundles.entries) {
+    for (final e in bundleRules.entries) {
       if (e.value.contains(name)) return e.key;
     }
     if (deferredRules.containsKey(name)) return 'v2';
@@ -467,6 +494,21 @@ List<String> checkCandidates() {
   for (final name in ruleProbes313.keys) {
     if (!g4Rules.contains(name)) problems.add('G4 가 아닌 3.13 표식: $name');
   }
+  // B-7 — 31개, 상태별 수, 후보와 겹치지 않음.
+  expect('B-7', b7Rules.length, 31);
+  for (final e in b7StateCounts.entries) {
+    expect(
+      'B-7 ${e.key}',
+      b7Rules.values.where((v) => v == e.key).length,
+      e.value,
+    );
+  }
+  for (final name in b7Rules.keys) {
+    if (known.contains(name)) problems.add('B-7 이 후보와 겹친다: $name');
+  }
+  for (final id in {...bundleRules.keys, ...candidates.map((c) => c.bundle)}) {
+    if (!bundles.containsKey(id)) problems.add('이름이 없는 묶음: $id');
+  }
   return problems;
 }
 
@@ -489,6 +531,54 @@ const incompatiblePairs = [
 
 /// 2026-10-13 에 lint 후보 132개의 `messages.yaml` 상태를 센 값 (spike 020 의 결과와 같다).
 const expectedStateCounts = {'stable': 129, 'testing': 2, 'experimental': 1};
+
+/// 재지 않고 `RULES.md` 의 켜지 않은 규칙 표에 상태만 적는 이름 (FEATURES.md B-7, D-01) → 상태.
+///
+/// FEATURES.md 256 ~ 273행 산문의 backtick 이름 가운데 deprecated 6 · removed 14 · Dart 3.13 에
+/// 없는 2 · experimental 9 = 31. 2026-10-13 에 spike 020 결과 JSON 의 `rules[].messages` ·
+/// `actualState13` 과 대조했다 — deprecated · removed 는 두 값이 같고, 없는 둘은 그 JSON 에 이름이
+/// 없으며, experimental 9 는 `messages: experimental` 이다. `--audit` 이 이 이름들도 찾는다.
+const b7Rules = <String, String>{
+  'avoid_null_checks_in_equality_operators': 'deprecated',
+  'avoid_private_typedef_functions': 'deprecated',
+  'one_member_abstracts': 'deprecated',
+  'prefer_final_parameters': 'deprecated',
+  'unnecessary_await_in_return': 'deprecated',
+  'use_if_null_to_convert_nulls_to_bools': 'deprecated',
+  'always_require_non_null_named_parameters': 'removed',
+  'avoid_as': 'removed',
+  'avoid_returning_null': 'removed',
+  'avoid_returning_null_for_future': 'removed',
+  'avoid_unstable_final_fields': 'removed',
+  'enable_null_safety': 'removed',
+  'invariant_booleans': 'removed',
+  'iterable_contains_unrelated_type': 'removed',
+  'list_remove_unrelated_type': 'removed',
+  'package_api_docs': 'removed',
+  'prefer_bool_in_asserts': 'removed',
+  'prefer_equal_for_default_values': 'removed',
+  'super_goes_last': 'removed',
+  'unsafe_html': 'removed',
+  'future_sync_value': '없음',
+  'unnecessary_this_alias': '없음',
+  'annotate_redeclares': 'experimental',
+  'avoid_futureor_void': 'experimental',
+  'implicit_reopen': 'experimental',
+  'invalid_case_patterns': 'experimental',
+  'no_default_cases': 'experimental',
+  'unnecessary_async': 'experimental',
+  'unsafe_variance': 'experimental',
+  'use_late_for_private_fields_and_variables': 'experimental',
+  'var_with_no_type_annotation': 'experimental',
+};
+
+/// [b7Rules] 의 상태별 수 — 상수를 고치다 이름을 빠뜨리면 시작할 때 멈춘다.
+const b7StateCounts = {
+  'deprecated': 6,
+  'removed': 14,
+  '없음': 2,
+  'experimental': 9,
+};
 
 // 표식 --------------------------------------------------------------------
 //
@@ -1241,55 +1331,36 @@ class SubcommandFailure implements Exception {
 const usage = '''
 사용법: fvm dart run tool/measure_rules.dart --work <저장소 밖 작업 폴더> [--source <사용 프로젝트>]
           [--stage state,baseline,groups,markers,ignore,fix,unnecessary-ignore|all]
-          [--rules a,b,…|@probes] [--probe-all] [--run-id R1] [--out <경로>] [--in <결과 JSON>]''';
+          [--rules a,b,…|@probes] [--probe-all] [--run-id R1] [--out <경로>]
+   또는 (분석을 돌리지 않는 출력 모드):
+        fvm dart run tool/measure_rules.dart --summary <묶음> [--in <결과 JSON> | --work <작업 폴더>] [--run-id R1]
+        fvm dart run tool/measure_rules.dart --report [--write] [--in <결과 JSON> | --work <작업 폴더>] [--run-id R1]
+        fvm dart run tool/measure_rules.dart --audit
+   묶음: bug, perf, style, current, excluded, strict, import, fire, pairs, status, v2, ui''';
 
-/// 읽은 인자.
-class Options {
-  /// 검증은 [parseArgs] 가 한다.
-  Options({
-    required this.work,
-    required this.source,
-    required this.stages,
-    required this.rules,
-    required this.probeAll,
-    required this.runId,
-    required this.out,
-    required this.inPath,
-  });
+/// 읽기만 한 인자 — 값이 있는 인자와 플래그 (검증 전).
+class RawArgs {
+  /// [values] 는 `--key` → 값, [flags] 는 준 플래그다.
+  RawArgs(this.values, this.flags);
 
-  /// 작업 폴더의 절대 경로 (저장소 밖).
-  final String work;
+  /// 값이 있는 인자.
+  final Map<String, String> values;
 
-  /// 사용 프로젝트 원본의 링크를 푼 절대 경로, 또는 null.
-  final String? source;
+  /// 준 플래그.
+  final Set<String> flags;
 
-  /// 돌릴 단계 — [allStages] 의 순서.
-  final List<String> stages;
+  /// 준 인자인지 (값 · 플래그 어느 쪽이든).
+  bool has(String key) => values.containsKey(key) || flags.contains(key);
 
-  /// 범위를 좁힌 규칙 이름, 또는 null (후보 전부).
-  final Set<String>? rules;
-
-  /// markers 단계가 범위의 규칙 전부에 표식을 넣는지.
-  final bool probeAll;
-
-  /// 회차 묶음의 id (결과 파일 이름).
-  final String runId;
-
-  /// `--out` 으로 준 경로 (절대), 또는 null (기본 자리).
-  final String? out;
-
-  /// `--in` 으로 준 결과 JSON 경로 — 04-03 의 출력 모드가 읽는다. 지금은 받아만 둔다.
-  final String? inPath;
-
-  /// 이 실행에 복사본 단계가 있는지.
-  bool get hasConsumerStage => stages.any(consumerStages.contains);
-
-  /// [name] 이 이번 범위에 드는지.
-  bool inScope(String name) => rules == null || rules!.contains(name);
+  /// 준 출력 모드 (`--summary` · `--report` · `--audit`).
+  List<String> get outputModesGiven => [
+    for (final m in outputModes)
+      if (has(m)) m,
+  ];
 }
 
-/// 인자를 읽고 검증한다. 틀리면 [UsageError] 다 — 이 함수는 파일을 만들지 않는다.
-Options parseArgs(List<String> args, Repo repo) {
+/// 인자를 값과 플래그로 나눠 읽는다. 모르는 인자 · 값 없는 인자 · 두 번 준 인자는 [UsageError].
+RawArgs readRawArgs(List<String> args) {
   const valued = {
     '--source',
     '--work',
@@ -1326,13 +1397,71 @@ Options parseArgs(List<String> args, Repo repo) {
       throw UsageError('모르는 인자: $arg');
     }
   }
+  return RawArgs(values, seenFlags);
+}
 
-  final pending = [
-    for (final m in pendingModes)
-      if (values.containsKey(m) || seenFlags.contains(m)) m,
-  ];
-  if (pending.isNotEmpty) {
-    throw UsageError('${pending.join(', ')}: 아직 구현되지 않았다 (plan 04-03 이 더한다)');
+/// `--run-id` 를 읽는다 (기본 `R1`).
+String readRunId(RawArgs raw) {
+  final runId = raw.values['--run-id'] ?? 'R1';
+  if (!RegExp(r'^[A-Za-z0-9._-]+$').hasMatch(runId)) {
+    throw UsageError('--run-id 는 영문 · 숫자 · . _ - 만 쓴다: "$runId"');
+  }
+  return runId;
+}
+
+/// 읽은 인자 (단계를 돌리는 실행).
+class Options {
+  /// 검증은 [parseArgs] 가 한다.
+  Options({
+    required this.work,
+    required this.source,
+    required this.stages,
+    required this.rules,
+    required this.probeAll,
+    required this.runId,
+    required this.out,
+  });
+
+  /// 작업 폴더의 절대 경로 (저장소 밖).
+  final String work;
+
+  /// 사용 프로젝트 원본의 링크를 푼 절대 경로, 또는 null.
+  final String? source;
+
+  /// 돌릴 단계 — [allStages] 의 순서.
+  final List<String> stages;
+
+  /// 범위를 좁힌 규칙 이름, 또는 null (후보 전부).
+  final Set<String>? rules;
+
+  /// markers 단계가 범위의 규칙 전부에 표식을 넣는지.
+  final bool probeAll;
+
+  /// 회차 묶음의 id (결과 파일 이름).
+  final String runId;
+
+  /// `--out` 으로 준 경로 (절대), 또는 null (기본 자리).
+  final String? out;
+
+  /// 이 실행에 복사본 단계가 있는지.
+  bool get hasConsumerStage => stages.any(consumerStages.contains);
+
+  /// [name] 이 이번 범위에 드는지.
+  bool inScope(String name) => rules == null || rules!.contains(name);
+}
+
+/// 단계를 돌리는 실행의 인자를 읽고 검증한다. 틀리면 [UsageError] 다 — 이 함수는 파일을
+/// 만들지 않는다. 출력 모드(`--summary` · `--report` · `--audit`)는 [parseOutputArgs] 가 읽는다.
+Options parseArgs(List<String> args, Repo repo) {
+  final raw = readRawArgs(args);
+  final values = raw.values;
+  final seenFlags = raw.flags;
+  if (raw.outputModesGiven.isNotEmpty) {
+    throw UsageError('출력 모드는 단계와 함께 돌지 않는다 — parseOutputArgs 로 읽는다');
+  }
+  if (raw.has('--write')) throw UsageError('--write 는 --report 와 함께만 쓴다');
+  if (raw.has('--in')) {
+    throw UsageError('--in 은 출력 모드(--summary · --report)에만 쓴다');
   }
 
   final workArg = values['--work'];
@@ -1374,10 +1503,7 @@ Options parseArgs(List<String> args, Repo repo) {
     if (rules.isEmpty) throw UsageError('--rules 가 비었다 (@probes 에 이름이 없다)');
   }
 
-  final runId = values['--run-id'] ?? 'R1';
-  if (!RegExp(r'^[A-Za-z0-9._-]+$').hasMatch(runId)) {
-    throw UsageError('--run-id 는 영문 · 숫자 · . _ - 만 쓴다: "$runId"');
-  }
+  final runId = readRunId(raw);
 
   String? source;
   final sourceArg = values['--source'];
@@ -1401,7 +1527,6 @@ Options parseArgs(List<String> args, Repo repo) {
   }
 
   final outArg = values['--out'];
-  final inArg = values['--in'];
   return Options(
     work: work,
     source: source,
@@ -1410,7 +1535,82 @@ Options parseArgs(List<String> args, Repo repo) {
     probeAll: seenFlags.contains('--probe-all'),
     runId: runId,
     out: outArg == null ? null : absoluteNormalized(outArg),
+  );
+}
+
+/// 출력 모드의 인자 — 분석을 돌리지 않고 결과 JSON(또는 `RULES.md`)만 읽는다.
+class OutputOptions {
+  /// 검증은 [parseOutputArgs] 가 한다.
+  OutputOptions({
+    required this.mode,
+    required this.bundle,
+    required this.write,
+    required this.inPath,
+    required this.work,
+    required this.runId,
+  });
+
+  /// `--summary` / `--report` / `--audit`.
+  final String mode;
+
+  /// `--summary` 의 묶음 id ([bundles] 의 키), 그 밖에는 null.
+  final String? bundle;
+
+  /// `--report --write` 인지.
+  final bool write;
+
+  /// `--in` 으로 준 결과 JSON (절대), 또는 null.
+  final String? inPath;
+
+  /// `--work` 로 준 작업 폴더 (절대), 또는 null — `<work>/results/<run id>.json` 을 찾는다.
+  final String? work;
+
+  /// 찾을 결과의 run id.
+  final String runId;
+}
+
+/// 출력 모드의 인자를 검증한다 — 모드는 하나만, 단계용 인자는 받지 않는다. 틀리면 [UsageError].
+OutputOptions parseOutputArgs(RawArgs raw) {
+  final modes = raw.outputModesGiven;
+  if (modes.length != 1) {
+    throw UsageError('출력 모드는 하나만 준다: ${modes.join(', ')}');
+  }
+  final mode = modes.single;
+  for (final key in [
+    '--source',
+    '--stage',
+    '--rules',
+    '--probe-all',
+    '--out',
+  ]) {
+    if (raw.has(key)) throw UsageError('$key 는 출력 모드($mode)에 쓰지 않는다');
+  }
+  if (raw.has('--write') && mode != '--report') {
+    throw UsageError('--write 는 --report 와 함께만 쓴다');
+  }
+  if (mode == '--audit') {
+    for (final key in ['--in', '--work', '--run-id']) {
+      if (raw.has(key)) {
+        throw UsageError('--audit 은 RULES.md 만 읽는다 — $key 를 쓰지 않는다');
+      }
+    }
+  }
+  String? bundle;
+  if (mode == '--summary') {
+    bundle = raw.values['--summary'];
+    if (!bundles.containsKey(bundle)) {
+      throw UsageError('모르는 묶음: "$bundle" (허용: ${bundles.keys.join(', ')})');
+    }
+  }
+  final inArg = raw.values['--in'];
+  final workArg = raw.values['--work'];
+  return OutputOptions(
+    mode: mode,
+    bundle: bundle,
+    write: raw.has('--write'),
     inPath: inArg == null ? null : absoluteNormalized(inArg),
+    work: workArg == null ? null : absoluteNormalized(workArg),
+    runId: readRunId(raw),
   );
 }
 
@@ -3621,8 +3821,10 @@ Future<void> measureFix(Context ctx) async {
     final dry = await dryRun(ctx, 'fix-${cand.name}', cand.name);
     row['aloneDry'] = dry.countOf(cand.name);
     if (dry.countOf(cand.name) == 0) {
-      row['fixRemoved'] = 0; // 0 (dry 0) — apply 하지 않는다
-      row['newErrors'] = null;
+      // 0 (dry 0) — apply 하지 않는다. 고친 것이 없으니 새로 생긴 error 도 0 이다 (`--report` 의
+      // 단언 (2) 는 줄이 있는 행에 `newErrors` 가 있기를 요구한다).
+      row['fixRemoved'] = 0;
+      row['newErrors'] = 0;
       row['otherDelta'] = <String, int>{};
     } else {
       await applyRule(ctx, cand, g, before, projectLines);
@@ -3701,6 +3903,895 @@ Future<void> measureUnnecessaryIgnore(Context ctx) async {
   await restoreConsumer(c);
 }
 
+// 출력 모드 ----------------------------------------------------------------
+//
+// 분석을 돌리지 않는다. 결과 JSON 에는 사용 프로젝트의 경로 · 메시지가 없고(04-02), 아래 함수는
+// 건수 · 규칙 이름 · 회차 조건 칸만 읽는다 — 출력에 경로 · 메시지가 들어갈 자리가 없다 (D-07).
+
+/// `RULES.md` 의 실측 기록 구역 (`--report --write` 가 바꿔 쓴다).
+const measurementsStart = '<!-- woody:measurements:start -->';
+
+/// 실측 기록 구역의 끝.
+const measurementsEnd = '<!-- woody:measurements:end -->';
+
+/// 켜지 않은 규칙 표의 이유 접두사 (04-RESEARCH.md § 3 의 7종 + 임시 `보류`).
+const disabledReasonPrefixes = [
+  '기반 세트',
+  '비호환',
+  'experimental',
+  'testing',
+  'v2 로 미룸',
+  'deprecated',
+  'removed',
+  '없음',
+  '규칙이 돌지 않음',
+  '소유자 결정',
+  '보류',
+];
+
+/// 상태 출처가 갈리는 후보 → `messages.yaml` 밖 출처의 값 (D-02 — 출처마다 적는다, spike 020).
+/// `unnecessary_underscores` 도 갈리지만 기반 세트라 후보가 아니다.
+const stateSourceNotes = {
+  'unnecessary_ignore': 'rules.json · dart.dev 는 stable',
+  'use_primary_constructors': 'rules.json 은 experimental',
+  'migrate_design_widgets': 'rules.json 에 없다',
+};
+
+/// 성능 · 가독성·스타일 묶음의 "켬" 잣대 — 손으로 고칠 줄이 이 값 이하 (D-05, 추정 값).
+const manualFixLimit = 50;
+
+/// 결과 JSON 을 찾는다 — `--in`, `<work>/results/<run id>.json`,
+/// `<저장소>/tool/measurements/*-<run id>.json` (정확히 하나) 순. 없으면 [UsageError] (64).
+String locateResults(OutputOptions o, Repo repo) {
+  final inPath = o.inPath;
+  if (inPath != null) {
+    if (!File(inPath).existsSync()) throw UsageError('--in 의 결과 JSON 이 없다');
+    return inPath;
+  }
+  final work = o.work;
+  if (work != null) {
+    final file = File('$work/results/${o.runId}.json');
+    if (file.existsSync()) return file.path;
+  }
+  final dir = Directory('${repo.root}/tool/measurements');
+  final found = dir.existsSync()
+      ? (dir
+            .listSync()
+            .whereType<File>()
+            .where((f) => f.path.endsWith('-${o.runId}.json'))
+            .map((f) => f.path)
+            .toList()
+          ..sort())
+      : <String>[];
+  if (found.length == 1) return found.single;
+  if (found.length > 1) {
+    throw UsageError(
+      'tool/measurements/ 에 ${o.runId} 의 결과가 ${found.length}개다 — --in 으로 하나를 준다',
+    );
+  }
+  throw UsageError(
+    '결과 JSON 을 찾지 못했다 (run id ${o.runId}) — --in 이나 --work 로 준다',
+  );
+}
+
+/// 결과 JSON 을 읽는다. 모양이 다르거나 `schema` 가 1 이 아니면 [FormatException] (70).
+Map<String, dynamic> loadResultsJson(String path) {
+  final decoded = jsonDecode(File(path).readAsStringSync());
+  if (decoded is! Map<String, dynamic>) {
+    throw const FormatException('결과 JSON 의 맨 위가 객체가 아니다');
+  }
+  if (decoded['schema'] != schemaVersion) {
+    throw FormatException(
+      '결과 JSON 의 schema 가 $schemaVersion 이 아니다 (${decoded['schema']})',
+    );
+  }
+  if (decoded['conditions'] is! Map<String, dynamic> ||
+      decoded['runs'] is! List ||
+      decoded['rows'] is! Map<String, dynamic>) {
+    throw const FormatException('결과 JSON 에 conditions · runs · rows 가 없다');
+  }
+  return decoded;
+}
+
+/// [value] 가 JSON 객체면 그것, 아니면 null.
+Map<String, dynamic>? asMap(Object? value) =>
+    value is Map<String, dynamic> ? value : null;
+
+/// 회차 id → 회차.
+Map<String, Map<String, dynamic>> runsByIdOf(Map<String, dynamic> data) => {
+  for (final r in (data['runs'] as List).whereType<Map<String, dynamic>>())
+    '${r['id']}': r,
+};
+
+/// 행이 참조하는 회차 가운데 결과에 없거나 유효하지 않은 것 (RULES-05).
+List<String> invalidReferences(
+  Map<String, dynamic> row,
+  Map<String, Map<String, dynamic>> runsById,
+) => [
+  for (final id in ((row['runs'] as List?) ?? const []).map((e) => '$e'))
+    if (runsById[id]?['valid'] != true) id,
+];
+
+/// 자리별 수 `lib·test·bin`.
+String areaTriple(Map<String, dynamic> counts) =>
+    projectAreas.map((a) => '${counts[a] ?? 0}').join('·');
+
+/// 자리별 수의 칸 — 합계 > 0 이면 `N (l·t·b)`, 0 이면 `0 (<zeroNote>)` (null 이면 `0`), 값이
+/// 없으면 `—`.
+String countCell(Map<String, dynamic>? counts, String? zeroNote) {
+  if (counts == null) return '—';
+  final n = total(counts);
+  if (n > 0) return '$n (${areaTriple(counts)})';
+  return zeroNote == null ? '0' : '0 ($zeroNote)';
+}
+
+/// 0줄의 뜻 (D-03) — 표식이 걸렸는지로 가른다.
+String zeroNote(String name, Object? detected) {
+  if (noFileProbe.containsKey(name)) return '표식 불가';
+  return switch (detected) {
+    true => '표식 1',
+    false => '표식 미검출',
+    _ => '표식 없음',
+  };
+}
+
+/// 언어 버전 3.13 전용 규칙의 지금 하한 0줄의 뜻 — G1 marker 실행의 3.11 판 표식 (D-15).
+String currentBoundNote(Object? detected) => switch (detected) {
+  true => '표식 1',
+  false => '돌지 않음',
+  _ => '표식 없음',
+};
+
+/// 경고 칸 — 합계 (lib·test·bin) 와 0줄의 뜻. G4 는 지금 하한과 3.13 하한의 값 둘,
+/// `unnecessary_ignore` 는 재측정 값(`countsUI`)을 덧붙이고, `strict-inference` 는 강도를 붙인다.
+/// 행이 참조하는 회차에 무효가 있으면 수치 대신 `회차 무효` (RULES-05).
+String warningCell(
+  String name,
+  Map<String, dynamic> row,
+  Map<String, Map<String, dynamic>> runsById,
+) {
+  if (invalidReferences(row, runsById).isNotEmpty) return '회차 무효';
+  final counts = asMap(row['counts']);
+  if (row['group'] == 'G4') {
+    final now = countCell(
+      counts,
+      currentBoundNote(row['markerDetectedCurrent']),
+    );
+    final at313 = countCell(
+      asMap(row['counts313']),
+      zeroNote(name, row['markerDetected']),
+    );
+    return '$now / 3.13 하한 $at313';
+  }
+  var cell = countCell(counts, zeroNote(name, row['markerDetected']));
+  final ui = asMap(row['countsUI']);
+  if (ui != null) cell = '$cell / UI ${countCell(ui, null)}';
+  if (name == strictInference && row['severity'] != null) {
+    cell = '$cell · ${row['severity']}';
+  }
+  return cell;
+}
+
+/// 행의 값 칸 (G4 는 하한 3.13 의 값이 `dart fix` 의 기준이다).
+Map<String, dynamic>? valueCounts(Map<String, dynamic> row) =>
+    asMap(row[row['group'] == 'G4' ? 'counts313' : 'counts']);
+
+/// `dart fix` 칸 — 사라진 줄 (`fixRemoved`). 0줄이면 `해당 없음`, 단독 dry 가 0 이면 `0 (dry 0)`.
+String fixCell(Map<String, dynamic> row) {
+  if (row['group'] == 'option') return '해당 없음';
+  final counts = valueCounts(row);
+  if (counts == null) return '—';
+  if (total(counts) == 0) return '해당 없음';
+  if (row['aloneDry'] == 0) return '0 (dry 0)';
+  final removed = row['fixRemoved'];
+  return removed is int ? '$removed' : '재지 않음';
+}
+
+/// 고친 뒤 새로 생긴 error 칸.
+String errorCell(Map<String, dynamic> row) {
+  final n = row['newErrors'];
+  return n is int ? '$n' : '—';
+}
+
+/// 손으로 고칠 줄 = 경고 합계 − `dart fix` 로 사라진 줄 (D-05).
+int manualLines(Map<String, dynamic> row) =>
+    total(valueCounts(row)) - ((row['fixRemoved'] as int?) ?? 0);
+
+/// 권고와 이유 — D-05 의 기계적 잣대. 위에서부터 첫 번째로 맞는 것.
+(String, String) recommend(
+  String name,
+  Map<String, dynamic> row,
+  Map<String, Map<String, dynamic>> runsById,
+) {
+  final deferredTo = row['deferredTo'];
+  if (deferredTo != null) return ('v2 ($deferredTo)', '결정하지 않음 — 숫자만');
+  final counts = valueCounts(row);
+  if (counts == null) return ('결정 안 함', '값이 없다 — 재지 않음');
+  final invalid = invalidReferences(row, runsById);
+  if (invalid.isNotEmpty) return ('결정 안 함', '회차 무효 — ${invalid.join(', ')}');
+  if (total(counts) == 0 && row['markerDetected'] != true) {
+    final reason = noFileProbe[name];
+    if (reason != null) return ('결정 안 함', '표식 불가 — $reason');
+    return row['markerDetected'] == false
+        ? ('결정 안 함', '표식 미검출 — 규칙이 돌지 않음')
+        : ('결정 안 함', '표식 없음 — 0줄의 뜻을 가르지 못한다');
+  }
+  final messages = asMap(row['state'])?['messages'];
+  if (messages == 'experimental' || messages == 'testing') {
+    final note = name == 'unnecessary_ignore'
+        ? ' — 출처마다 다름: messages.yaml experimental / rules.json · dart.dev stable'
+        : '';
+    return ('안 켬', '$messages (messages.yaml)$note');
+  }
+  final clashes = [
+    for (final other in ((row['incompatible'] as List?) ?? const []))
+      if (currentRules.contains(other)) '$other',
+  ];
+  if (clashes.isNotEmpty) {
+    return ('안 켬', '비호환 — ${clashes.join(', ')} 과 함께 쓸 수 없다');
+  }
+  final newErrors = row['newErrors'];
+  if (newErrors is int && newErrors > 0) {
+    return ('안 켬', 'dart fix 가 error $newErrors건을 남긴다');
+  }
+  final bundle = row['bundle'];
+  if (bundle == 'perf' || bundle == 'style') {
+    final manual = manualLines(row);
+    return manual <= manualFixLimit
+        ? ('켬', '손으로 고칠 줄 $manual (≤ $manualFixLimit)')
+        : ('안 켬', '손으로 고칠 줄 $manual (> $manualFixLimit)');
+  }
+  return ('검토', '실제 문제를 가리키는가 — 사람이 본다');
+}
+
+/// 터미널에서 [text] 가 차지하는 칸 수 (한글 등 전각 문자는 2칸) — `tool/verify.dart` 의
+/// `measureWidth` 와 같은 셈법이다 (import 하지 않고 옮겼다).
+int measureWidth(String text) {
+  var width = 0;
+  for (final rune in text.runes) {
+    final wide =
+        (rune >= 0x1100 && rune <= 0x115F) ||
+        (rune >= 0x2E80 && rune <= 0xA4CF) ||
+        (rune >= 0xAC00 && rune <= 0xD7A3) ||
+        (rune >= 0xF900 && rune <= 0xFAFF) ||
+        (rune >= 0xFF00 && rune <= 0xFF60);
+    width += wide ? 2 : 1;
+  }
+  return width;
+}
+
+/// 칸 너비를 맞춘 Markdown 표 (머리 · 구분선 · 행).
+List<String> renderTable(List<String> header, List<List<String>> rows) {
+  final widths = <int>[];
+  for (var i = 0; i < header.length; i++) {
+    var w = measureWidth(header[i]);
+    for (final r in rows) {
+      final cw = measureWidth(r[i]);
+      if (cw > w) w = cw;
+    }
+    widths.add(w);
+  }
+  String line(List<String> cells) {
+    final padded = [
+      for (var i = 0; i < cells.length; i++)
+        '${cells[i]}${' ' * (widths[i] - measureWidth(cells[i]))}',
+    ];
+    return '| ${padded.join(' | ')} |';
+  }
+
+  return [
+    line(header),
+    '|${widths.map((w) => '-' * (w + 2)).join('|')}|',
+    ...rows.map(line),
+  ];
+}
+
+/// `conditions.dartFiles` 의 합 (표식 제외, 생성 파일 포함), 없으면 `?`.
+String dartFileTotal(Map<String, dynamic> conditions) {
+  final files = asMap(conditions['dartFiles']);
+  if (files == null) return '?';
+  return '${files.values.whereType<int>().fold<int>(0, (s, v) => s + v)}';
+}
+
+/// `--summary <묶음>` 의 줄 (D-06) — 머리 줄, 표, 굵은 `권고:` 줄, 선택지.
+List<String> summaryLines(Map<String, dynamic> data, String bundleId) {
+  final conditions = data['conditions'] as Map<String, dynamic>;
+  final rows = data['rows'] as Map<String, dynamic>;
+  final runsById = runsByIdOf(data);
+  final picked = <(String, Map<String, dynamic>)>[
+    for (final e in rows.entries)
+      if (asMap(e.value)?['bundle'] == bundleId) (e.key, e.value),
+  ];
+  final tally = {'켬': 0, '안 켬': 0, '검토': 0, '결정 안 함': 0};
+  final table = <(String, Map<String, dynamic>, List<String>)>[];
+  for (final (name, row) in picked) {
+    final (rec, reason) = recommend(name, row, runsById);
+    final key = tally.containsKey(rec)
+        ? rec
+        : '결정 안 함'; // v2 (RULES-NN) 는 결정 안 함
+    tally[key] = tally[key]! + 1;
+    // 무효 회차를 참조하는 행은 수치를 쓰지 않는다 (RULES-05).
+    final invalid = invalidReferences(row, runsById).isNotEmpty;
+    table.add((
+      name,
+      row,
+      [
+        name,
+        warningCell(name, row, runsById),
+        invalid ? '—' : fixCell(row),
+        invalid ? '—' : errorCell(row),
+        rec,
+        reason,
+      ],
+    ));
+  }
+  final estimated = bundleId == 'perf' || bundleId == 'style'
+      ? ' ($manualFixLimit 은 추정)'
+      : '';
+  final lines = <String>[
+    '[${bundles[bundleId]}] ${picked.length}개 — 권고: 켬 ${tally['켬']} · '
+        '안 켬 ${tally['안 켬']} · 검토 ${tally['검토']} · 결정 안 함 ${tally['결정 안 함']}'
+        '$estimated        실측 ${data['runId']} (${conditions['date']}, '
+        'Flutter ${conditions['flutter']}, flutter_starter_kit Dart 파일 '
+        '${dartFileTotal(conditions)}개)',
+    '',
+  ];
+  const header = [
+    '규칙',
+    '경고 (lib·test·bin)',
+    'dart fix',
+    '고친 뒤 error',
+    '권고',
+    '이유',
+  ];
+  if (table.length > 25) {
+    // 행이 많은 묶음은 셋으로 나눈다 (D-06 의 재량).
+    String part(Map<String, dynamic> row) {
+      final n = total(valueCounts(row));
+      final removed = row['fixRemoved'];
+      if (n > 0 && removed is int && removed >= n) return 'dart fix 가 다 고치는 것';
+      if (manualLines(row) <= manualFixLimit) {
+        return '손으로 고칠 줄 $manualFixLimit 이하';
+      }
+      return '그 밖';
+    }
+
+    for (final title in [
+      'dart fix 가 다 고치는 것',
+      '손으로 고칠 줄 $manualFixLimit 이하',
+      '그 밖',
+    ]) {
+      final members = [
+        for (final (_, row, cells) in table)
+          if (part(row) == title) cells,
+      ];
+      lines.add('#### $title (${members.length}개)');
+      lines.add('');
+      lines.addAll(members.isEmpty ? ['(없음)'] : renderTable(header, members));
+      lines.add('');
+    }
+  } else {
+    lines.addAll(
+      renderTable(header, [for (final (_, _, cells) in table) cells]),
+    );
+    if (table.isEmpty) lines.add('(이 묶음의 후보 행이 없다)');
+    lines.add('');
+  }
+  lines.add(
+    '**권고:** 표의 권고 열대로 — 켬 ${tally['켬']}개, 안 켬 ${tally['안 켬']}개 '
+    '(검토 ${tally['검토']}개는 사람이 정한다).',
+  );
+  lines.add('선택지: (1) 권고대로  (2) 바꿀 규칙을 짚는다 (이름만 적으면 된다)  (3) 이 묶음은 보류');
+  return lines;
+}
+
+/// `--summary <묶음>` — 소유자 검토용 터미널 요약을 stdout 으로 (D-06).
+void printSummary(Map<String, dynamic> data, String bundleId) {
+  for (final line in summaryLines(data, bundleId)) {
+    stdout.writeln(line);
+  }
+}
+
+/// `--report` 의 결과 — 단언이 어긋난 것([problems]) 또는 Markdown.
+class Report {
+  /// [problems] 가 비어 있을 때만 [markdown] 이 있다.
+  Report(this.problems, this.markdown);
+
+  /// 어긋난 단언 (한 줄씩).
+  final List<String> problems;
+
+  /// `RULES.md` § 실측 기록 에 들어갈 Markdown, 또는 null.
+  final String? markdown;
+}
+
+/// 기반 세트 버전 맵([baseSetVersions] — 이름 → pub cache 폴더 이름 `<패키지>-<버전>`)을
+/// `lints-6.1.0 · flutter_lints-6.0.0` 꼴로.
+String baseSetText(Object? versions) {
+  final m = asMap(versions);
+  if (m == null || m.isEmpty) return '?';
+  return [
+    for (final k in ['lints', 'flutter_lints'])
+      if (m.containsKey(k)) '${m[k]}',
+  ].join(' · ');
+}
+
+/// 행의 상태 칸 — 분석이 deprecated / removed / 없음을 내면 그것, 아니면 `messages.yaml` 의 값.
+/// 출처가 갈리는 넷은 다른 출처의 값을 덧붙인다 (D-02).
+String stateCell(String name, Map<String, dynamic> row) {
+  final state = asMap(row['state']);
+  if (state == null) return '—';
+  if (state['kind'] == 'option') return 'analyzer 옵션';
+  final analysis = state['analysis'];
+  if (analysis != null && analysis != 'ok') {
+    return analysis == 'undefined' ? '없음' : '$analysis';
+  }
+  final note = stateSourceNotes[name];
+  final messages = '${state['messages']} (messages.yaml)';
+  return note == null ? messages : '$messages · $note';
+}
+
+/// `--report` — 단언 (1) ~ (6) 을 모두 보고, 통과하면 `RULES.md` § 실측 기록 의 Markdown
+/// (회차 표 + 전체 평가표)을 만든다 (RULES-03 · RULES-04 · RULES-05).
+Report buildReport(Map<String, dynamic> data) {
+  final problems = <String>[];
+  final conditions = data['conditions'] as Map<String, dynamic>;
+  final rows = data['rows'] as Map<String, dynamic>;
+  final runsById = runsByIdOf(data);
+  final listedUnprobeable = conditions['noFileProbe'];
+  final unprobeable = <String>{
+    for (final e
+        in listedUnprobeable is List
+            ? listedUnprobeable
+            : noFileProbe.keys.toList())
+      '$e',
+  };
+
+  // (1) 행 133 이 후보와 같다.
+  final expected = candidates.map((c) => c.name).toSet();
+  final missingNames = expected.where((n) => !rows.containsKey(n)).toList()
+    ..sort();
+  final extraNames = rows.keys.where((n) => !expected.contains(n)).toList()
+    ..sort();
+  if (rows.length != candidates.length ||
+      missingNames.isNotEmpty ||
+      extraNames.isNotEmpty) {
+    problems.add(
+      '행이 후보 ${candidates.length}개와 다르다 — 행 ${rows.length}개, '
+      '빠진 이름 ${missingNames.length}개: ${missingNames.join(', ')}; '
+      '후보가 아닌 이름 ${extraNames.length}개: ${extraNames.join(', ')}',
+    );
+  }
+
+  // (2) 결정 대상 121 행의 빈 칸.
+  final lacking = <String, List<String>>{};
+  final excepted = <String>[];
+  for (final c in candidates) {
+    if (c.deferredTo != null) continue;
+    final row = asMap(rows[c.name]);
+    if (row == null) continue; // (1) 이 잡는다
+    final lack = <String>[
+      for (final key in ['state', 'counts', 'ignored'])
+        if (row[key] == null) key,
+      if (((row['runs'] as List?) ?? const []).isEmpty) 'runs',
+    ];
+    final counts = asMap(row['counts']);
+    if (counts != null && total(counts) > 0) {
+      if (row['severity'] == null) lack.add('severity');
+      // analyzer 옵션은 dart fix 단계가 돌지 않는다 — 두 칸은 "해당 없음" 이다.
+      if (!c.isOption) {
+        if (row['fixRemoved'] == null) lack.add('fixRemoved');
+        if (row['newErrors'] == null) lack.add('newErrors');
+      }
+    } else if (counts != null && row['markerDetected'] == null) {
+      if (unprobeable.contains(c.name)) {
+        excepted.add(c.name);
+      } else {
+        lack.add('markerDetected');
+      }
+    }
+    if (lack.isNotEmpty) lacking[c.name] = lack;
+  }
+  if (lacking.isNotEmpty) {
+    final byField = <String, int>{};
+    for (final lack in lacking.values) {
+      for (final key in lack) {
+        byField.update(key, (v) => v + 1, ifAbsent: () => 1);
+      }
+    }
+    problems.add(
+      '값이 없는 행 ${lacking.length}개: ${lacking.keys.join(', ')} '
+      '(빠진 칸: ${byField.entries.map((e) => '${e.key} ${e.value}').join(' · ')})',
+    );
+  }
+  if (excepted.isNotEmpty && problems.isNotEmpty) {
+    problems.add('(표식 불가라 0줄의 표식 칸을 묻지 않은 행: ${excepted.join(', ')})');
+  }
+
+  // (3) strict 계열 셋의 행, strict-inference 는 warning (또는 0줄).
+  for (final name in ['no_dynamic_casts', 'no_raw_types', strictInference]) {
+    if (!rows.containsKey(name)) problems.add('$name 행이 없다');
+  }
+  final strict = asMap(rows[strictInference]);
+  if (strict != null &&
+      total(asMap(strict['counts'])) > 0 &&
+      strict['severity'] != 'warning') {
+    problems.add(
+      'strict-inference 의 강도가 warning 이 아니다 (${strict['severity']})',
+    );
+  }
+
+  // (4) 언어 버전 3.13 전용 7개의 하한 3.13 값.
+  final no313 = [
+    for (final name in g4Rules)
+      if (asMap(rows[name])?['counts313'] == null) name,
+  ];
+  if (no313.isNotEmpty) {
+    problems.add('counts313 이 없는 G4 행 ${no313.length}개: ${no313.join(', ')}');
+  }
+
+  // (5) 행이 참조하는 회차가 모두 있고 유효하다.
+  final badRefs = <String>[
+    for (final e in rows.entries)
+      if (asMap(e.value) != null &&
+          invalidReferences(
+            e.value as Map<String, dynamic>,
+            runsById,
+          ).isNotEmpty)
+        '${e.key} (${invalidReferences(e.value as Map<String, dynamic>, runsById).join(', ')})',
+  ];
+  if (badRefs.isNotEmpty) {
+    problems.add(
+      '없거나 유효하지 않은 회차를 참조한 행 ${badRefs.length}개: ${badRefs.join(', ')}',
+    );
+  }
+
+  // (6) 회차마다의 조건.
+  const runKeys = [
+    'dart',
+    'flutter',
+    'baseSet',
+    'plugin',
+    'languageVersion',
+    'sdkConstraint',
+    'dartFiles',
+  ];
+  final badRuns = <String>[
+    for (final r in runsById.values)
+      if (runKeys.any((k) => r[k] == null))
+        '${r['id']} (${runKeys.where((k) => r[k] == null).join('·')})',
+  ];
+  if (badRuns.isNotEmpty) {
+    problems.add('조건이 빈 회차 ${badRuns.length}개: ${badRuns.join(', ')}');
+  }
+
+  if (problems.isNotEmpty) return Report(problems, null);
+
+  final runId = data['runId'];
+  final out = <String>['### 회차', ''];
+  out.addAll(
+    renderTable(
+      [
+        '회차',
+        '날짜',
+        'Dart',
+        'Flutter',
+        '기반 세트 (저장소 / 복사본)',
+        'riverpod_lint',
+        '언어 버전',
+        'SDK 제약',
+        'Dart 파일 (lib·test·bin, 생성)',
+        '유효',
+      ],
+      [
+        for (final r in runsById.values)
+          [
+            '$runId-${r['id']}',
+            '${r['date']}',
+            '${r['dart']}',
+            '${r['flutter']}',
+            '${baseSetText(asMap(r['baseSet'])?['repo'])} / '
+                '${baseSetText(asMap(r['baseSet'])?['consumer'])}',
+            '${r['plugin']}',
+            '${r['languageVersion']}',
+            '${r['sdkConstraint']}',
+            '${areaTriple(asMap(r['dartFiles'])!)}, '
+                '생성 ${asMap(r['dartFiles'])!['generated'] ?? 0}',
+            r['valid'] == true ? '예' : '아니오',
+          ],
+      ],
+    ),
+  );
+  final pairs = ((conditions['incompatiblePairs'] as List?) ?? const [])
+      .whereType<Map<String, dynamic>>()
+      .toList();
+  final confirmed = pairs.where((p) => p['confirmed'] == true).length;
+  out
+    ..add('')
+    ..add(
+      '상태 출처: ${conditions['stateSource'] ?? '?'} · 비호환 쌍: 쌍마다 둘만 켠 분석에서 '
+      '${pairs.length}개 가운데 $confirmed개 확인',
+    )
+    ..add('')
+    ..add('### 평가표')
+    ..add('');
+  final names = rows.keys.toList()..sort();
+  out.addAll(
+    renderTable(
+      [
+        '규칙',
+        '분류',
+        '상태',
+        '강도',
+        '실측 (lib·test·bin)',
+        '3.13 하한',
+        'dart fix',
+        '고친 뒤 error',
+        '가린 줄',
+        '상류 세트',
+        '함께 쓸 수 없는 규칙',
+        '회차',
+      ],
+      [
+        for (final name in names)
+          () {
+            final row = rows[name] as Map<String, dynamic>;
+            final isG4 = row['group'] == 'G4';
+            var measured = isG4
+                ? countCell(
+                    asMap(row['counts']),
+                    currentBoundNote(row['markerDetectedCurrent']),
+                  )
+                : countCell(
+                    asMap(row['counts']),
+                    zeroNote(name, row['markerDetected']),
+                  );
+            final ui = asMap(row['countsUI']);
+            if (ui != null) measured = '$measured / ${countCell(ui, null)}';
+            return [
+              '`$name`',
+              bundles[row['bundle']] ?? '${row['bundle']}',
+              stateCell(name, row),
+              '${row['severity'] ?? '—'}',
+              measured,
+              isG4
+                  ? countCell(
+                      asMap(row['counts313']),
+                      zeroNote(name, row['markerDetected']),
+                    )
+                  : '—',
+              fixCell(row),
+              errorCell(row),
+              countCell(asMap(row['ignored']), null),
+              '${row['upstream'] ?? '—'}',
+              ((row['incompatible'] as List?) ?? const []).isEmpty
+                  ? '—'
+                  : (row['incompatible'] as List).join(', '),
+              ((row['runs'] as List?) ?? const [])
+                  .map((id) => '$runId-$id')
+                  .join(', '),
+            ];
+          }(),
+      ],
+    ),
+  );
+  final unprobedZero = [
+    for (final name in names)
+      if (unprobeable.contains(name) &&
+          asMap(rows[name])?['markerDetected'] == null &&
+          total(asMap(asMap(rows[name])?['counts'])) == 0)
+        name,
+  ];
+  out.add('');
+  if (unprobedZero.isNotEmpty) {
+    out
+      ..add(
+        '표식을 둘 수 없어 0줄의 뜻을 가르지 못한 규칙: ${unprobedZero.join(', ')} '
+        '(이유는 tool/measure_rules.dart 의 noFileProbe)',
+      )
+      ..add('');
+  }
+  out
+    ..add(
+      '실측: flutter_starter_kit (Dart 파일 ${dartFileTotal(conditions)}개), '
+      'Flutter ${conditions['flutter']}, ${conditions['date']} — 자리별 건수는 무시 주석을 둔 채 잰 값',
+    )
+    ..add('')
+    ..add('이 절은 tool/measure_rules.dart --report --write 가 생성한다. 손으로 고치지 않는다.');
+  return Report(const [], '${out.join('\n')}\n');
+}
+
+/// `RULES.md` 의 `woody:measurements` 마커 사이를 [markdown] 으로 바꿔 쓴다 (마커는 남긴다).
+/// 마커가 없으면 [FormatException] (70) — 파일을 건드리지 않는다.
+void writeReport(String repoRoot, String markdown) {
+  final file = File('$repoRoot/RULES.md');
+  if (!file.existsSync()) throw const FormatException('RULES.md 가 없다');
+  final lines = file.readAsLinesSync();
+  final start = lines.indexOf(measurementsStart);
+  final end = lines.indexOf(measurementsEnd);
+  if (start < 0 || end < 0 || end < start) {
+    throw const FormatException('RULES.md 에 woody:measurements 마커가 없다');
+  }
+  final next = [
+    ...lines.sublist(0, start + 1),
+    ...markdown.trimRight().split('\n'),
+    ...lines.sublist(end),
+  ];
+  file.writeAsStringSync('${next.join('\n')}\n');
+}
+
+/// `RULES.md` 표의 행 하나 — 첫 칸의 이름과 칸 전부.
+class RulesTableRow {
+  /// [cells] 는 앞뒤 공백을 뗀 칸이다.
+  RulesTableRow(this.name, this.cells);
+
+  /// 첫 칸의 backtick 이름.
+  final String name;
+
+  /// 칸 전부 (첫 칸 포함).
+  final List<String> cells;
+}
+
+/// `RULES.md` 의 마커 구역 [block] 의 표 — `tool/verify.dart` 의 `readRulesMdBlock` 과 같은
+/// 규약: `|` 로 시작하는 줄의 첫 칸에서 backtick 하나로 감싼 `[a-z0-9_-]+` 를 이름으로 읽고,
+/// 없으면 건너뛰고(헤더 · 구분선 · 평문), 둘 이상이면 형식 오류 줄로 모은다. 마커가 없으면 null.
+(List<RulesTableRow>, List<String>)? readRulesTable(
+  List<String> lines,
+  String block,
+) {
+  final start = lines.indexOf('<!-- woody:$block:start -->');
+  final end = lines.indexOf('<!-- woody:$block:end -->');
+  if (start < 0 || end < 0 || end < start) return null;
+  final rows = <RulesTableRow>[];
+  final malformed = <String>[];
+  final namePattern = RegExp(r'`([a-z0-9_-]+)`');
+  for (final line in lines.sublist(start + 1, end)) {
+    final trimmed = line.trim();
+    if (!trimmed.startsWith('|')) continue;
+    var body = trimmed.substring(1);
+    if (body.endsWith('|')) body = body.substring(0, body.length - 1);
+    final cells = body.split('|').map((c) => c.trim()).toList();
+    final found = namePattern
+        .allMatches(cells.first)
+        .map((m) => m.group(1)!)
+        .toList();
+    if (found.isEmpty) continue;
+    if (found.length > 1) {
+      malformed.add(trimmed);
+    } else {
+      rows.add(RulesTableRow(found.single, cells));
+    }
+  }
+  return (rows, malformed);
+}
+
+/// `--audit` — 후보 133 과 B-7 31 이 `RULES.md` 의 세 표에 모두 있는지, 켜지 않은 규칙의 이유가
+/// 접두사로 시작하는지, 켠 규칙 행에 빈 칸이 없는지 본다 (RULES-08 · DOCS-11). 종료 코드를 돌려준다.
+int audit(String repoRoot) {
+  final file = File('$repoRoot/RULES.md');
+  if (!file.existsSync()) throw const FormatException('RULES.md 가 없다');
+  final lines = file.readAsLinesSync();
+  const blocks = ['enabled-rules', 'enabled-options', 'disabled-rules'];
+  final tables = <String, List<RulesTableRow>>{};
+  final problems = <String>[];
+  for (final block in blocks) {
+    final table = readRulesTable(lines, block);
+    if (table == null) {
+      throw FormatException('RULES.md 에 마커 구역 woody:$block 이 없다');
+    }
+    tables[block] = table.$1;
+    if (table.$2.isNotEmpty) {
+      problems.add(
+        '첫 칸에 이름이 둘 이상인 줄 ${table.$2.length}개 ($block): ${table.$2.join(' / ')}',
+      );
+    }
+  }
+  final enabled = tables['enabled-rules']!;
+  final options = tables['enabled-options']!;
+  final disabled = tables['disabled-rules']!;
+
+  // (a) 후보 133 ∪ B-7 31 이 세 표 가운데 하나에 있다.
+  final listed = {
+    for (final t in tables.values)
+      for (final r in t) r.name,
+  };
+  final universe = [...candidates.map((c) => c.name), ...b7Rules.keys];
+  final missing = universe.where((n) => !listed.contains(n)).toList()..sort();
+  if (missing.isNotEmpty) {
+    problems.add('RULES.md 에 없는 후보 ${missing.length}개: ${missing.join(', ')}');
+  }
+
+  // (b) 한 이름이 두 번(두 표에, 또는 한 표에 두 번) 적히지 않았다.
+  final seen = <String, int>{};
+  for (final t in tables.values) {
+    for (final r in t) {
+      seen.update(r.name, (v) => v + 1, ifAbsent: () => 1);
+    }
+  }
+  final twice = [
+    for (final e in seen.entries)
+      if (e.value > 1) e.key,
+  ]..sort();
+  if (twice.isNotEmpty) {
+    problems.add('두 번 적힌 이름 ${twice.length}개: ${twice.join(', ')}');
+  }
+
+  // (c) 켜지 않은 규칙의 이유는 접두사로 시작한다.
+  String reasonOf(RulesTableRow r) => r.cells.length > 1 ? r.cells[1] : '';
+  final badReasons = [
+    for (final r in disabled)
+      if (!disabledReasonPrefixes.any(reasonOf(r).startsWith)) r.name,
+  ];
+  if (badReasons.isNotEmpty) {
+    problems.add('이유 접두사가 아니다: ${badReasons.join(', ')}');
+  }
+
+  // (d) 켠 규칙 행의 칸 여섯이 모두 차 있다 (DOCS-11).
+  final emptyCells = [
+    for (final r in enabled)
+      if (r.cells.length != 6 ||
+          r.cells.any((c) => c.isEmpty || c.startsWith('(실측 전')))
+        r.name,
+  ];
+  if (emptyCells.isNotEmpty) {
+    problems.add(
+      '빈 칸이 있는 켠 규칙 ${emptyCells.length}개: ${emptyCells.join(', ')}',
+    );
+  }
+
+  // (e) B-7 은 켜지 않았다.
+  final enabledB7 = [
+    for (final r in [...enabled, ...options])
+      if (b7Rules.containsKey(r.name)) r.name,
+  ];
+  if (enabledB7.isNotEmpty) {
+    problems.add('켜진 B-7 규칙 ${enabledB7.length}개: ${enabledB7.join(', ')}');
+  }
+
+  if (problems.isNotEmpty) {
+    stdout.writeln('감사 실패 — RULES.md (RULES-08 · DOCS-11)');
+    for (final p in problems) {
+      stdout.writeln('  $p');
+    }
+    return 1;
+  }
+  final held = [
+    for (final r in disabled)
+      if (reasonOf(r).startsWith('보류')) r.name,
+  ];
+  stdout.writeln(
+    '감사 통과 — 켠 ${enabled.length} · 옵션 ${options.length} · '
+    '켜지 않음 ${disabled.length} · 보류 ${held.length}',
+  );
+  if (held.isNotEmpty) stdout.writeln('보류 ${held.length}개: ${held.join(', ')}');
+  return 0;
+}
+
+/// 출력 모드 하나를 돌리고 종료 코드를 돌려준다 — 0 통과 / 1 단언 · 감사 실패 / 64 사용법
+/// (결과 JSON 없음 포함) / 70 파일 모양 (`schema` 가 1 이 아님 · 마커 없음).
+int runOutputMode(OutputOptions o, Repo repo) {
+  if (o.mode == '--audit') return audit(repo.root);
+  final data = loadResultsJson(locateResults(o, repo));
+  if (o.mode == '--summary') {
+    printSummary(data, o.bundle!);
+    return 0;
+  }
+  final report = buildReport(data);
+  final markdown = report.markdown;
+  if (markdown == null) {
+    for (final p in report.problems) {
+      stderr.writeln('실측 기록을 만들 수 없다 — $p');
+    }
+    return 1;
+  }
+  if (o.write) {
+    writeReport(repo.root, markdown);
+    stderr.writeln('RULES.md 의 실측 기록을 바꿔 썼다 (woody:measurements)');
+  } else {
+    stdout.write(markdown);
+  }
+  return 0;
+}
+
 /// 도구의 입구.
 Future<void> main(List<String> args) async {
   // tool/ 의 부모가 저장소 루트다 (`tool/verify.dart` 와 같은 셈법).
@@ -3721,6 +4812,14 @@ Future<void> main(List<String> args) async {
     }
     final Options opts;
     try {
+      final raw = readRawArgs(args);
+      if (raw.outputModesGiven.isNotEmpty) {
+        // 출력 모드 — 분석을 돌리지 않고, 저장소에는 `--report --write` 의 RULES.md 말고 쓰지 않는다.
+        final code = runOutputMode(parseOutputArgs(raw), repo);
+        await stdout.flush();
+        await stderr.flush();
+        exit(code);
+      }
       opts = parseArgs(args, repo);
       // 앞 단계의 회차가 필요한 단계 — 결과 파일은 읽기만 한다 (아직 아무것도 만들지 않는다).
       checkStageInputs(opts, existingRunIds(opts));
