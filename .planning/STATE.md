@@ -4,16 +4,16 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 04
 current_phase_name: Rule Reselection
-status: Phase 04 gap 수정 뒤 재검증 gaps_found (10/11) — WR-10 ([3/10] 이 따옴표 규칙 이름을 읽지 못함) 하나 남음
-stopped_at: Completed 04-12-PLAN.md
-last_updated: "2026-10-13T09:27:14.503Z"
+status: Phase 04 gap 수정 계획 04-13 완료 — 실행 대기 (/gsd-execute-phase 04 --gaps-only)
+stopped_at: Phase 04 gap 수정 계획 완료 (04-13)
+last_updated: "2026-10-13T12:17:18.085Z"
 last_activity: 2026-10-13
-last_activity_desc: Phase 04 execution started
-state_head: 33155216d5bf38256d31fe4fe01644921ad86ff9
+last_activity_desc: Phase 04 gap 수정 계획 04-13 작성, plan checker 통과
+state_head: 5aeeb4c7fb735c680c422ef00e35d7e48946d9dd
 progress:
   total_phases: 6
   completed_phases: 3
-  total_plans: 25
+  total_plans: 26
   completed_plans: 25
   percent: 50
 ---
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-10-12)
 
 ## Current Position
 
-Phase: 04 (Rule Reselection) — EXECUTING
-Plan: 12 of 12
-Status: Phase 04 gap 수정 뒤 재검증 gaps_found (10/11) — WR-10 ([3/10] 이 따옴표 규칙 이름을 읽지 못함) 하나 남음
-Last activity: 2026-10-13 — Phase 04 execution started
+Phase: 04 (Rule Reselection) — READY TO EXECUTE
+Plan: 12 of 13
+Status: Phase 04 gap 수정 계획 04-13 완료 — 실행 대기 (/gsd-execute-phase 04 --gaps-only)
+Last activity: 2026-10-13 — Phase 04 gap 수정 계획 04-13 작성, plan checker 통과
 
 Progress: [█████░░░░░] 50%
 
@@ -192,6 +192,8 @@ Recent decisions affecting current work:
 - [Phase 04]: 04-12: sort_pub_dependencies 를 켰다 (소유자 재결정 2026-10-13 의 반영, 6d64bee) — lib/base.yaml 81개 == RULES.md 켠 규칙 81 == 결정 표 켬 81, --audit 켠 81 · 옵션 0 · 켜지 않음 90 · 보류 0
 - [Phase 04]: 04-12: 샘플은 연습용 프로젝트 여섯의 pubspec.yaml 에서 dependencies 의 flutter_riverpod 를 flutter 앞에 둔 것이고 정답지 다섯에 pubspec.yaml:11  info  sort_pub_dependencies 한 줄씩 생겼다 (exit 줄 · 다른 줄 · pubspec.lock 그대로). example/pubspec.yaml 만 되돌리면 [5/10] · [6/10] 이 실패한다
 - [Phase 04]: 04-12: CR-03 은 코드를 고치지 않고 REQUIREMENTS.md RULES-13 아래 메모와 처리 기록 deferred 로 남겼다 (소유자 결정 2026-10-13). example/README.md 의 줄 수는 정답지와 같다 (합계 93, WR-05)
+- [Phase 04]: gap 수정 2회차 계획 전 소유자 결정 (2026-10-13, 모두 권고대로) — WR-10 (`[3/10]` 이 따옴표 규칙 이름을 읽지 못함)은 고친다: 따옴표 이름을 읽고, `linter:` 블록 안에서 읽지 못하는 줄은 조용히 건너뛰지 않고 검증을 멈춘다 (입력 하나가 아니라 결함의 꼴을 닫음). IN-08 (`RULES.md` 의 `sort_pub_dependencies` 칸) · IN-10 (`example/README.md` 의 "규칙 6개" 문장)은 문장만 고치고 샘플 머리 주석은 그대로 둔다. WR-09 는 코드를 고치지 않고 RULES-13 메모 한 줄과 처리 기록 deferred. 화면(UI) 설계 검사는 "회차 UI" 오탐이라 건너뜀
+- [Phase 04]: gap 수정 계획 04-13 (wave 12) — Task 1 `declaredRuleNames` (M27 ~ M31: 따옴표 둘은 `[3/10]` 만 실패, 맵 항목 · 이름 없는 `-` · 대시 없는 맵 줄은 종료 코드 70), Task 2 IN-08 · IN-10, Task 3 WR-09 메모 · DISPOSITION. plan checker 2회차 통과 (a0322ac, 5aeeb4c)
 
 ### Pending Todos
 
@@ -218,5 +220,5 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-10-13T08:47:58.359Z
-Stopped at: Completed 04-12-PLAN.md
-Resume file: None
+Stopped at: Phase 04 gap 수정 계획 완료 (04-13)
+Resume file: .planning/phases/04-rule-reselection/04-13-PLAN.md
