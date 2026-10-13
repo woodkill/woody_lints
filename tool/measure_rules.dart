@@ -10,6 +10,7 @@
 //   markers             프로젝트 줄이 0 인 후보에 표식을 넣어 "진짜 0" 인지 가른다 (D-03)
 //   ignore              무시 주석을 걷어낸 실행과의 차이로 주석이 가린 줄을 잰다
 //   fix                 규칙 하나씩 `dart fix --apply --code=<규칙>` 한 뒤 사라진 줄을 잰다
+//                       (`strict-inference` 는 그 회차의 `inference_failure_on_*` 코드를 모두 준다)
 //   unnecessary-ignore  결정을 반영한 뒤 `unnecessary_ignore` 를 따로 잰다 (D-17 — `all` 에 들지 않는다)
 //
 // 실행: fvm dart run tool/measure_rules.dart --work <저장소 밖 작업 폴더> [--source <사용 프로젝트>]
@@ -3186,7 +3187,7 @@ void checkStageInputs(Options opts, Set<String> existing) {
       case 'fix':
         need({
           for (final c in candidates)
-            if (!c.isOption && opts.inScope(c.name)) primaryRunId(c),
+            if (opts.inScope(c.name)) primaryRunId(c),
         }, stage);
     }
   }
@@ -3691,14 +3692,32 @@ class FixRun {
 
   /// [code] 의 수정 수.
   int countOf(String code) => byCode[code] ?? 0;
+
+  /// 후보 [rule] 의 수정 수 — `strict-inference` 는 `inference_failure_on_*` 코드의 합이다.
+  int countForRule(String rule) => byCode.entries
+      .where((e) => codeMatchesRule(e.key, rule))
+      .fold<int>(0, (s, e) => s + e.value);
 }
 
-/// 복사본에서 `dart fix --dry-run|--apply --code=<code>` 를 한 번 (빈 상태 폴더).
+/// 회차 JSON 에서 후보 [rule] 에 드는 프로젝트 진단 코드 (표식 자리를 뺀다, 이름 순).
+/// 규칙은 그 이름 하나, `strict-inference` 는 그 회차에 나온 `inference_failure_on_*` 들이다.
+List<String> ruleCodesIn(Map<String, dynamic> run, String rule) {
+  final byArea = run['countByAreaCode'] as Map<String, dynamic>;
+  final codes = <String>{
+    for (final a in projectAreas)
+      for (final e
+          in ((byArea[a] as Map<String, dynamic>?) ?? const {}).entries)
+        if (codeMatchesRule(e.key, rule) && (e.value as int) > 0) e.key,
+  };
+  return codes.toList()..sort();
+}
+
+/// 복사본에서 `dart fix --dry-run|--apply --code=<code> …` 를 한 번 (빈 상태 폴더).
 /// 출력의 `  <코드> - N fix(es)` 줄을 센다 (spike 022 의 정규식).
 Future<FixRun> dryRun(
   Context ctx,
   String id,
-  String code, {
+  List<String> codes, {
   bool apply = false,
 }) async {
   final c = ctx.consumer;
@@ -3713,7 +3732,7 @@ Future<FixRun> dryRun(
       '--suppress-analytics',
       'fix',
       apply ? '--apply' : '--dry-run',
-      '--code=$code',
+      for (final code in codes) '--code=$code',
     ],
     workingDirectory: c.dir,
     environment: {'ANALYZER_STATE_LOCATION_OVERRIDE': state.path},
@@ -3741,18 +3760,19 @@ Future<FixRun> dryRun(
   return result;
 }
 
-/// [rule] 하나를 apply 하고 다시 분석해 `fixRemoved` · `newErrors` · `otherDelta` 를 적는다.
-/// `dart fix` 는 표식 폴더의 사본도 고쳐 정답지 줄을 지우므로 표식은 apply **뒤에** 넣는다.
+/// 후보 하나를 [codes] 로 apply 하고 다시 분석해 `fixRemoved` · `newErrors` · `otherDelta` 를
+/// 적는다. `dart fix` 는 표식 폴더의 사본도 고쳐 정답지 줄을 지우므로 표식은 apply **뒤에** 넣는다.
 Future<void> applyRule(
   Context ctx,
   Candidate cand,
   GroupRun g,
   Map<String, dynamic> before,
   int projectLines,
+  List<String> codes,
 ) async {
   final c = ctx.consumer;
   final row = ctx.results.row(cand.name);
-  await dryRun(ctx, 'fix-apply-${cand.name}', cand.name, apply: true);
+  await dryRun(ctx, 'fix-apply-${cand.name}', codes, apply: true);
   c.addExampleMarkers();
   c.addMarkers(probesFor(g, groups[g.id] ?? const []));
   final id = 'apply-${cand.name}';
@@ -3771,7 +3791,7 @@ Future<void> applyRule(
   final errorsBefore = errorsOf(before);
   final errorsAfter = errorsOf(after);
   row['newErrors'] = errorsAfter.entries
-      .where((e) => e.key != cand.name)
+      .where((e) => !codeMatchesRule(e.key, cand.name))
       .map((e) => e.value - (errorsBefore[e.key] ?? 0))
       .where((d) => d > 0)
       .fold<int>(0, (s, d) => s + d);
@@ -3780,7 +3800,7 @@ Future<void> applyRule(
   final a = nonMarkerByCode(after);
   final delta = <String, int>{};
   for (final code in {...a.keys, ...b.keys}) {
-    if (code == cand.name) continue;
+    if (codeMatchesRule(code, cand.name)) continue;
     final d = (a[code] ?? 0) - (b[code] ?? 0);
     if (d != 0) delta[code] = d;
   }
@@ -3793,11 +3813,13 @@ Future<void> applyRule(
 /// `fix` — 프로젝트 줄 > 0 인 후보마다 원본 소스(표식 없음)에서 단독 dry 를 돌려 `aloneDry` 를
 /// 적고, 0 이 아니면 apply 해 사라진 그 규칙의 줄을 잰다 (D-02, spike 022). `current` 는 B0 를
 /// before 로 원본 옵션으로 돈다. 단독 dry 의 수는 apply 할 규칙을 고르는 데만 쓴다.
+/// analyzer 옵션 `strict-inference` 는 G1 에 나온 `inference_failure_on_*` 코드를 모두 `--code=`
+/// 로 한 번에 준다 (옵션은 코드 이름이 아니라 `dart fix` 가 받지 못한다).
 Future<void> measureFix(Context ctx) async {
   final c = ctx.consumer;
   final r = ctx.results;
   for (final cand in candidates) {
-    if (cand.isOption || !ctx.opts.inScope(cand.name)) continue;
+    if (!ctx.opts.inScope(cand.name)) continue;
     final row = r.row(cand.name);
     final beforeId = primaryRunId(cand);
     final before = requireRun(ctx, beforeId);
@@ -3818,16 +3840,21 @@ Future<void> measureFix(Context ctx) async {
     c.refreshSources();
     await c.useSdk(g.sdk);
     c.setOptions(groupOptions(c, g));
-    final dry = await dryRun(ctx, 'fix-${cand.name}', cand.name);
-    row['aloneDry'] = dry.countOf(cand.name);
-    if (dry.countOf(cand.name) == 0) {
+    final codes = ruleCodesIn(before, cand.name);
+    if (codes.isEmpty) {
+      // 줄이 있는데 코드가 없을 수 없다 — `--code=` 없이 돌면 모든 진단을 고치므로 막는다.
+      throw StateError('fix: ${cand.name} 의 진단 코드를 $beforeId 에서 찾지 못했다');
+    }
+    final dry = await dryRun(ctx, 'fix-${cand.name}', codes);
+    row['aloneDry'] = dry.countForRule(cand.name);
+    if (dry.countForRule(cand.name) == 0) {
       // 0 (dry 0) — apply 하지 않는다. 고친 것이 없으니 새로 생긴 error 도 0 이다 (`--report` 의
       // 단언 (2) 는 줄이 있는 행에 `newErrors` 가 있기를 요구한다).
       row['fixRemoved'] = 0;
       row['newErrors'] = 0;
       row['otherDelta'] = <String, int>{};
     } else {
-      await applyRule(ctx, cand, g, before, projectLines);
+      await applyRule(ctx, cand, g, before, projectLines, codes);
     }
     r.save(); // 규칙 하나마다 작업 폴더에 — 중간에 죽어도 앞의 규칙은 남는다
   }
@@ -4078,7 +4105,6 @@ Map<String, dynamic>? valueCounts(Map<String, dynamic> row) =>
 
 /// `dart fix` 칸 — 사라진 줄 (`fixRemoved`). 0줄이면 `해당 없음`, 단독 dry 가 0 이면 `0 (dry 0)`.
 String fixCell(Map<String, dynamic> row) {
-  if (row['group'] == 'option') return '해당 없음';
   final counts = valueCounts(row);
   if (counts == null) return '—';
   if (total(counts) == 0) return '해당 없음';
@@ -4377,11 +4403,9 @@ Report buildReport(Map<String, dynamic> data) {
     final counts = asMap(row['counts']);
     if (counts != null && total(counts) > 0) {
       if (row['severity'] == null) lack.add('severity');
-      // analyzer 옵션은 dart fix 단계가 돌지 않는다 — 두 칸은 "해당 없음" 이다.
-      if (!c.isOption) {
-        if (row['fixRemoved'] == null) lack.add('fixRemoved');
-        if (row['newErrors'] == null) lack.add('newErrors');
-      }
+      // analyzer 옵션(`strict-inference`)도 그 진단 코드로 dart fix 단계를 돈다.
+      if (row['fixRemoved'] == null) lack.add('fixRemoved');
+      if (row['newErrors'] == null) lack.add('newErrors');
     } else if (counts != null && row['markerDetected'] == null) {
       if (unprobeable.contains(c.name)) {
         excepted.add(c.name);

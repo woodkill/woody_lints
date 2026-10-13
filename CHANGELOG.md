@@ -16,6 +16,7 @@
 - `riverpod_lint` plugin 의 하한을 `^3.1.3` → `^3.1.9` 로 올림 (같은 major 안이라 minor). 2026-10-12 에 두 선언 모두 3.1.9 로 풀려 경고가 달라지지 않았다 — 정답지 다섯 그대로. 3.1.9 는 Dart 3.13 이상을 요구하고 이 패키지의 SDK 하한과 맞는다.
 - 기반 세트와 겹치는 선언 6개(`sized_box_for_whitespace`, `sort_child_properties_last`, `slash_for_doc_comments`, `use_build_context_synchronously`, `avoid_print`, `control_flow_in_finally`)와 주석 처리된 설정 3개(`require_trailing_commas`, `public_member_api_docs`, `formatter: trailing_commas`)를 배포 파일에서 지움. 기반 세트가 여전히 켜므로 사용하는 프로젝트에는 영향 없음 (정답지 다섯 그대로, 2026-10-13).
 - 규칙 근거 문서 `RULES.md` 를 추가하고 검증 명령에 `[3/10]` 배포 파일의 구성 단계를 더함 — 기반 세트와의 겹침, `RULES.md` 와의 일치, 묶음 · 별칭이 include 만 담는지. 사용하는 프로젝트에는 영향 없음.
+- 규칙 실측 도구 `tool/measure_rules.dart` 와 회차 기록 `tool/measurements/` 를 추가 — 비공개 사용 프로젝트의 복사본이 있어야 돌므로 CI 에서는 돌지 않는다. 사용하는 프로젝트에는 영향 없음.
 
 ### 새로 생기는 경고
 
