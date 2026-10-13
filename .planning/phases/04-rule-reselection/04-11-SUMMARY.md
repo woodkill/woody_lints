@@ -200,3 +200,7 @@ None - no external service configuration required.
 ---
 *Phase: 04-rule-reselection*
 *Completed: 2026-10-13*
+
+## Self-Check: PASSED
+
+- 수정한 파일 다섯 모두 있음, task 커밋 `b567100` · `c06d8d5` 가 HEAD 의 조상, SUMMARY 에 절대 경로 꼴 0줄.
