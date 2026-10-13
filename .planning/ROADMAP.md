@@ -178,7 +178,7 @@ Plans:
   4. 배포 파일에 기반 세트와 중복되는 선언과 주석 처리된 설정(`require_trailing_commas`, `public_member_api_docs`, `formatter: trailing_commas`)이 없고, 남은 규칙의 사유 주석이 사실과 일치한다
   5. 켠 규칙마다 이유와 실측 건수를 적은 근거 문서와, 채택하지 않은 규칙과 그 사유의 목록이 저장소에 있다
 
-**Plans**: 6/10 plans executed
+**Plans**: 7/10 plans executed
 
 Plans:
 **Wave 1** *(04-02 의 smoke 는 저장소 지문을 견주므로 04-01 과 같은 worktree 에서 동시에 돌리지 않는다 — worktree 가 다르면 병렬, 같으면 04-01 뒤)*
@@ -198,7 +198,7 @@ Plans:
 - [x] 04-06-PLAN.md — 반영 A: 지금 켜 둔 6개 (D-18 사유 문구) · 버그 방지 + import + fire-and-forget · strict — 묶음별 커밋, 샘플 6벌, 정답지 다섯, `RULES.md`, CHANGELOG (RULES-06, RULES-07, DOCS-11; D-10, D-20)
 
 **Wave 6** *(blocked on Wave 5)*
-- [ ] 04-07-PLAN.md — 반영 B: 성능 · 가독성·스타일 · 켜지 않은 규칙 표 완성 (제외 권장 · 쌍 · v2 12 · B-7 31) — `--audit` 보류 1 (RULES-06, RULES-08, DOCS-11)
+- [x] 04-07-PLAN.md — 반영 B: 성능 · 가독성·스타일 · 켜지 않은 규칙 표 완성 (제외 권장 · 쌍 · v2 12 · B-7 31) — `--audit` 보류 1 (RULES-06, RULES-08, DOCS-11)
 
 **Wave 7** *(blocked on Wave 6 — 소유자 checkpoint 둘)*
 - [ ] 04-08-PLAN.md — `unnecessary_ignore` 재측정 (회차 UI · UI-base) → 질문 → 반영, `--audit` 보류 0 (RULES-06, RULES-08; D-17)
@@ -287,7 +287,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Baseline and Toolchain | 4/4 | Complete    | 2026-10-11 |
 | 2. Verification Harness | 5/5 | Complete    | 2026-10-12 |
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
-| 4. Rule Reselection | 6/10 | In Progress | - |
+| 4. Rule Reselection | 7/10 | In Progress | - |
 | 5. Documentation | 0/TBD | Not started | - |
 | 6. Release | 0/TBD | Not started | - |
 

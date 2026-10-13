@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 04
 current_phase_name: Rule Reselection
 status: executing
-stopped_at: Completed 04-06-PLAN.md
-last_updated: "2026-10-13T02:51:00.390Z"
+stopped_at: Completed 04-07-PLAN.md
+last_updated: "2026-10-13T04:14:54.518Z"
 last_activity: 2026-10-13
 last_activity_desc: Phase 04 execution started
-state_head: 25d5dd212488435963f8b0960a843e518ebbf8e8
+state_head: 8366bce7bd00d338d8a91e9caec6dacf29b427f6
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 23
-  completed_plans: 19
+  completed_plans: 20
   percent: 50
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-12)
 ## Current Position
 
 Phase: 04 (Rule Reselection) — EXECUTING
-Plan: 6 of 10
+Plan: 7 of 10
 Status: Ready to execute
 Last activity: 2026-10-13 — Phase 04 execution started
 
@@ -79,6 +79,7 @@ Progress: [█████░░░░░] 50%
 | Phase 04 P04 | 40min | 3 tasks | 3 files |
 | Phase 04 P05 | 21min | 3 tasks | 1 files |
 | Phase 04 P06 | 16min | 3 tasks | 26 files |
+| Phase 04 P07 | 17min | 3 tasks | 26 files |
 
 ## Accumulated Context
 
@@ -167,6 +168,11 @@ Recent decisions affecting current work:
 - [Phase 04]: 반영 A 커밋 셋(B1 9cff42e · B2 354959c · B3 52402df): 지금 켜 둔 6개 모두 남기고 사유 주석 셋을 D-18 문구로 고쳤으며, 새로 켠 규칙은 27개(버그 방지 23 · prefer_relative_imports · discarded_futures · no_dynamic_casts · no_raw_types)이고 뺀 규칙 0 · strict-inference 안 켬이라 base_codegen 의 exit 0 그대로다 (04-06)
 - [Phase 04]: prefer_relative_imports 샘플은 example/lib/relative_imports_rule.dart 하나에 두고 그 파일만 프로젝트마다 자기 패키지 이름이 다르다 — 다른 샘플은 글자 그대로 복사한다. 04-07 이후의 diff -rq example/lib fixtures/*/lib 확인은 이 파일을 빼거나 패키지 이름을 맞춰 견준다 (04-06)
 - [Phase 04]: 04-06 계획의 검증 명령은 세 곳이 쓰인 그대로 통과하지 않는다 — 사유 주석 수정을 규칙 추가로 읽는 단언, diff 문맥 줄의 exit 를 세는 단언, relative_imports_rule.dart 때문에 실패하는 diff -rq. 고친 판으로 세 task 모두 rc 0 (04-06-SUMMARY Deviations)
+- [Phase 04]: 반영 B 커밋 셋(B4 6c0bc83 · B5 944ca1c · B6 ba58060): 성능 8 · 가독성·스타일 39 를 켜 켠 규칙 80, 뺀 규칙 0 — 정답지 +lib/ 는 B4 8줄, B5 41줄(overrides 50줄), exit 변화 없음 (04-07)
+- [Phase 04]: RULES.md 켜지 않은 규칙 표 완성 — tool/measure_rules.dart --audit 이 감사 통과 (켠 80 · 옵션 0 · 켜지 않음 91 · 보류 1, 보류는 unnecessary_ignore) (04-07)
+- [Phase 04]: 기존 샘플에 새 규칙이 걸린 줄은 받아들였다 (Pitfall 5) — 다섯 정답지 모두 join_return_with_assignment · specify_nonobvious_property_types 각 1줄, overrides 는 suppress 의 document_ignores 6 · specify_nonobvious_property_types 3 더 (04-07)
+- [Phase 04]: avoid_final_parameters 샘플은 언어 버전 3.11 로 둔 lib/final_parameters_rule.dart 한 파일에 있다 — 연습용 프로젝트가 sdk ^3.13.0 이라 다른 파일에서는 규칙이 돌지 않고 final 매개변수가 error 다 (04-07)
+- [Phase 04]: 04-07 계획의 Task 1 · 2 검증 명령은 relative_imports_rule.dart 때문에 복사본 diff -rq 에서 쓰인 그대로 실패한다 (04-06 과 같은 결함) — 고친 판으로 rc 0, Task 3 은 쓰인 그대로 rc 0 (04-07-SUMMARY)
 
 ### Pending Todos
 
@@ -192,6 +198,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-13T02:51:00.358Z
-Stopped at: Completed 04-06-PLAN.md
+Last session: 2026-10-13T04:14:54.486Z
+Stopped at: Completed 04-07-PLAN.md
 Resume file: None
