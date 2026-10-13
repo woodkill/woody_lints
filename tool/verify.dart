@@ -3,7 +3,7 @@
 //
 //   [1/N] lib/ 에 .dart 파일이 없는지
 //   [2/N] 조각 파일 셋(lib/base.yaml · codegen.yaml · riverpod.yaml)의 복사본을 분석해 진단이 하나도 없는지 (deprecated / removed / 없는 규칙, 겹친 규칙 · 모르는 키 같은 옵션 경고, 깨진 YAML)
-//   [3/N] 배포 파일의 구성 — 묶음 · 별칭은 include 만 담는지, lib/base.yaml 의 규칙이 기반 세트와 겹치지 않는지, RULES.md 의 켠 규칙 표와 같은지
+//   [3/N] 배포 파일의 구성 — 묶음 · 별칭은 include 만 담는지, lib/base.yaml 의 규칙이 기반 세트와 겹치지 않는지, RULES.md 의 켠 규칙 표와 같은지, 다른 조각에 규칙이 없는지
 //   [4/N] 연습용 프로젝트 전부의 analysis_options.yaml 이 정해진 내용인지 (주석 · 빈 줄을 뺀 내용을 통째로 견준다)
 //   [5/N] ~ [N/N] 연습용 프로젝트마다 `dart analyze` 로 분석한 결과가 정답지와 같은지
 //         (`fixtures` 표의 순서. recommended 는 자기 정답지 없이 같은 실행의 example 결과와 견준다)
@@ -117,7 +117,7 @@ const shippedCompositionLabel = '배포 파일의 구성';
 /// 규칙을 담으면 안 되는 배포 파일 — include 줄만 (03-REVIEW.md WR-01).
 ///
 /// 저장소 루트 기준 경로 → 주석 · 빈 줄을 뺀 뒤 `trim()` 한 줄의 정해진 목록이다.
-/// 규칙은 `lib/base.yaml` 에만 적는다. 묶음이나 별칭에 적힌 규칙은 `[2/N]` 의 규칙 검사
+/// 규칙은 `lib/base.yaml` 에만 적는다 (조각 쪽은 [3/N] (b′) 가 본다). 묶음이나 별칭에 적힌 규칙은 `[2/N]` 의 규칙 검사
 /// 대상([ruleCheckTargets])이 아니라서 다른 단계가 잡지 못한다.
 const includeOnlyFiles = <String, List<String>>{
   'lib/analysis_options.yaml': [
@@ -880,8 +880,11 @@ String? readRuleNameAt(String line, List<String> copyLines) {
 
 /// 옵션 파일 본문([options])의 최상위 `linter:` 블록에 적힌 규칙의 수를 센다.
 ///
-/// [declaredRuleNames] 의 길이다. 블록이 없으면 0 이다.
-int countDeclaredRules(String options) => declaredRuleNames(options).length;
+/// [declaredRuleNames] 의 길이다. 블록이 없으면 0 이다. 읽지 못하는 줄이 있으면
+/// [FormatException] — main 이 종료 코드 70 으로 끝낸다 (문구에 [shownAs] 의 파일 이름이
+/// 들어간다).
+int countDeclaredRules(String options, {required String shownAs}) =>
+    declaredRuleNames(options, shownAs: shownAs).length;
 
 /// 옵션 파일 본문([options])의 최상위 `linter:` 블록에 적힌 규칙 이름을 적힌 순서대로 돌려준다.
 ///
@@ -892,11 +895,12 @@ int countDeclaredRules(String options) => declaredRuleNames(options).length;
 ///
 /// 블록 안의 그 밖의 줄(이름 없는 `-`, `- 이름: true`, 맵 형식 `이름: true`, 이름 뒤에 다른
 /// 것이 붙은 줄)은 건너뛰지 않고 [FormatException] 을 던진다 — main 이 종료 코드 70 으로
-/// 끝낸다 (04-REVIEW.md WR-10). `linter:` 줄 자체에 붙은 flow 표기(`linter: {rules: [...]}`)는
+/// 끝낸다 (04-REVIEW.md WR-10). 문구의 머리에 [shownAs] (문구에 쓸 원본 경로)가 들어가
+/// 어느 조각의 줄인지 알린다 (04-REVIEW.md IN-14). `linter:` 줄 자체에 붙은 flow 표기(`linter: {rules: [...]}`)는
 /// 블록 안의 줄이 아니라 읽지 않는다 — 그러면 규칙 0개라 `[2/N]` 이 잡는다.
 /// 블록이 없으면 빈 목록이다. 같은 이름이 두 번 적혀 있으면 두 번 들어간다 (`[3/N]` 이 중복을
 /// 잡는다).
-List<String> declaredRuleNames(String options) {
+List<String> declaredRuleNames(String options, {required String shownAs}) {
   // 목록 항목 — 여는 따옴표와 닫는 따옴표가 같아야 하고(없어도 된다), 이름 뒤에는 공백 하나
   // 이상과 `# 주석` 만 올 수 있다. 그 밖의 꼴은 아래에서 멈춘다 (04-REVIEW.md WR-10)
   final rulePattern = RegExp(
@@ -924,9 +928,9 @@ List<String> declaredRuleNames(String options) {
       // `RULES.md` 일치 검사 (c) 가 그 규칙을 보지 못한 채 통과한다 (04-REVIEW.md WR-10)
       if (match == null) {
         throw FormatException(
-          '`linter:` 블록의 ${i + 1}행을 읽지 못했다 — '
+          '$shownAs 의 `linter:` 블록의 ${i + 1}행을 읽지 못했다 — '
           '목록 항목(`- 이름` · `- \'이름\'` · `- "이름"`, 뒤에 `# 주석` 가능)과 '
-          '`rules:` 만 받는다 (04-REVIEW.md WR-10): $trimmed',
+          '`rules:` 만 받는다 (04-REVIEW-DISPOSITION.md WR-10): $trimmed',
         );
       }
       names.add(match.group(2)!);
@@ -994,7 +998,9 @@ Future<List<String>> readParseErrorLines(String repoRoot) async {
 /// 복사본을 만들기 전에 실패한다.
 ///
 /// [rulesFile] 에서 규칙을 하나도 읽지 못하면([countDeclaredRules] 가 0) 실패다 — 검사가
-/// 본 것이 없는데 "문제 없음" 으로 넘기지 않는다.
+/// 본 것이 없는데 "문제 없음" 으로 넘기지 않는다. 그 `linter:` 블록에 읽지 못하는 줄이
+/// 있으면 [FormatException] — main 이 종료 코드 70 으로 끝낸다 (문구에 [rulesFile] 의 파일
+/// 이름이 들어간다).
 ///
 /// 통과는 복사본의 `dart analyze` 가 exit 0 이고 진단 0건일 때 하나다. 깨진 YAML 은
 /// exit 3 에 진단 0건으로 나오므로 형식 인자 없이 한 번 더 돌려 원인 줄을 보여 준다 (spike 013).
@@ -1100,7 +1106,7 @@ Future<StepResult> checkRuleNames(String repoRoot) async {
 
     // 규칙을 하나도 읽지 못했으면 아래의 "문제 0건" 은 본 것이 없다는 뜻이다 —
     // `linter:` 키의 오타, 규칙을 include 뒤의 다른 파일로 옮긴 경우.
-    if (countDeclaredRules(rulesCopy) == 0) {
+    if (countDeclaredRules(rulesCopy, shownAs: rulesFile) == 0) {
       return StepResult(
         label: label,
         passed: false,
@@ -1358,9 +1364,12 @@ RulesMdBlock? readRulesMdBlock(File rulesMd, String name) {
 
 /// [3/N] 배포 파일의 구성 — 저장소 안의 파일끼리 어긋나지 않는지 한 단계로 본다 (D-11, D-12).
 ///
-/// 확인 셋을 모두 돌리고 실패를 모아 한 [StepResult] 로 돌려준다. analyzer 는 돌리지 않는다.
+/// 확인을 모두 돌리고 실패를 모아 한 [StepResult] 로 돌려준다. analyzer 는 돌리지 않는다.
 ///
 /// - (a) 묶음 · 별칭([includeOnlyFiles])은 include 줄만 담는다 (03-REVIEW.md WR-01).
+/// - (b′) `lib/base.yaml` 밖 조각([ruleCheckTargets] 에서 [rulesFile] 을 뺀 것)의 `linter:`
+///   블록에 규칙이 없다 — "규칙은 `lib/base.yaml` 에만" 을 검사로 굳힌다 (04-REVIEW.md WR-11).
+///   (b) · (c) 가 `lib/base.yaml` 하나만 읽어도 빈자리가 없다.
 /// - (b) `lib/base.yaml` 의 규칙이 기반 세트([readUpstreamRules])와 겹치지 않는다 — 겹친
 ///   규칙은 정답지가 잡지 못한다 (기반 세트가 여전히 켜므로 진단이 그대로다).
 /// - (c) `RULES.md` 의 켠 규칙 표 == `lib/base.yaml` 의 규칙 목록 (둘 다 정렬해 견준다 —
@@ -1396,9 +1405,28 @@ StepResult checkShippedComposition(String repoRoot) {
     ]);
   }
 
+  // (b′) rulesFile 밖의 조각은 규칙을 담지 않는다 — 03-REVIEW.md WR-01 의 관례를 검사로
+  // (04-REVIEW.md WR-11). 그래야 (b) · (c) 가 rulesFile 하나만 읽어도 빈자리가 없다.
+  // riverpod.yaml 의 plugins: 는 declaredRuleNames 가 linter: 블록만 보므로 그대로 넘긴다.
+  for (final target in ruleCheckTargets.where((t) => t != rulesFile)) {
+    final extra = declaredRuleNames(
+      File('$repoRoot/$target').readAsStringSync(),
+      shownAs: target,
+    );
+    if (extra.isNotEmpty) {
+      addBlock([
+        '`$target` 에 규칙이 있다 (${extra.length}) — 규칙은 `$rulesFile` 에만 적는다.',
+        ...extra.map((r) => '  $r'),
+        '',
+        '그 규칙을 `$rulesFile` 로 옮기고 `$rulesMdFile` 의 켠 규칙 표에 적는다 '
+            '(03-REVIEW.md WR-01 의 관례, 04-REVIEW.md WR-11).',
+      ]);
+    }
+  }
+
   // (b) 기반 세트와의 겹침.
   final baseText = File('$repoRoot/$rulesFile').readAsStringSync();
-  final declared = declaredRuleNames(baseText);
+  final declared = declaredRuleNames(baseText, shownAs: rulesFile);
   final upstream = readUpstreamRules(repoRoot);
   final overlapping = [
     for (final rule in declared)
