@@ -98,7 +98,86 @@
 
 ### 새로 생기는 경고
 
-(Phase 4 실측 후 채움)
+| 규칙 | 강도 | 실측 | dart fix |
+|---|---|---|---|
+| `prefer_relative_imports` | info | 9건 | 9건 |
+| `async_return_with_no_await` | info | 30건 | 0건 |
+| `avoid_catching_errors` | info | 3건 | 0건 |
+| `avoid_double_and_int_checks` | info | 0건 | 해당 없음 |
+| `avoid_dynamic_calls` | info | 28건 | 0건 |
+| `avoid_js_rounded_ints` | info | 0건 | 해당 없음 |
+| `avoid_type_to_string` | info | 0건 | 해당 없음 |
+| `avoid_unused_constructor_parameters` | info | 0건 | 해당 없음 |
+| `avoid_void_async` | info | 0건 | 해당 없음 |
+| `cancel_subscriptions` | info | 0건 | 해당 없음 |
+| `cast_nullable_to_non_nullable` | info | 5건 | 5건 |
+| `conditional_uri_does_not_exist` | info | 0건 | 해당 없음 |
+| `deprecated_member_use_from_same_package` | info | 0건 | 해당 없음 |
+| `discarded_futures` | info | 11건 | 0건 |
+| `literal_only_boolean_expressions` | info | 0건 | 해당 없음 |
+| `matching_super_parameters` | info | 0건 | 해당 없음 |
+| `missing_whitespace_between_adjacent_strings` | info | 13건 | 0건 |
+| `no_adjacent_strings_in_list` | info | 9건 | 0건 |
+| `no_self_assignments` | info | 0건 | 해당 없음 |
+| `only_throw_errors` | info | 4건 | 0건 |
+| `parameter_assignments` | info | 0건 | 해당 없음 |
+| `switch_on_type` | info | 0건 | 해당 없음 |
+| `test_types_in_equals` | info | 0건 | 해당 없음 |
+| `throw_in_finally` | info | 0건 | 해당 없음 |
+| `unnecessary_statements` | info | 0건 | 해당 없음 |
+| `no_dynamic_casts` | info | 0건 | 해당 없음 |
+| `no_raw_types` | info | 0건 | 해당 없음 |
+| `avoid_slow_async_io` | info | 0건 | 해당 없음 |
+| `no_runtimetype_tostring` | info | 1건 | 0건 |
+| `noop_primitive_operations` | info | 0건 | 해당 없음 |
+| `prefer_const_declarations` | info | 5건 | 5건 |
+| `sized_box_shrink_expand` | info | 0건 | 해당 없음 |
+| `use_colored_box` | info | 0건 | 해당 없음 |
+| `use_string_buffers` | info | 0건 | 해당 없음 |
+| `use_truncating_division` | info | 0건 | 해당 없음 |
+| `avoid_bool_literals_in_conditional_expressions` | info | 1건 | 1건 |
+| `avoid_escaping_inner_quotes` | info | 1건 | 1건 |
+| `avoid_final_parameters` | info | 0건 | 해당 없음 |
+| `avoid_multiple_declarations_per_line` | info | 0건 | 해당 없음 |
+| `avoid_redundant_argument_values` | info | 124건 | 124건 |
+| `avoid_setters_without_getters` | info | 0건 | 해당 없음 |
+| `combinators_ordering` | info | 0건 | 해당 없음 |
+| `directives_ordering` | info | 166건 | 166건 |
+| `document_ignores` | info | 48건 | 0건 |
+| `flutter_style_todos` | info | 0건 | 해당 없음 |
+| `join_return_with_assignment` | info | 1건 | 0건 |
+| `leading_newlines_in_multiline_strings` | info | 0건 | 해당 없음 |
+| `no_literal_bool_comparisons` | info | 0건 | 해당 없음 |
+| `omit_obvious_local_variable_types` | info | 236건 | 236건 |
+| `prefer_asserts_in_initializer_lists` | info | 0건 | 해당 없음 |
+| `prefer_constructors_over_static_methods` | info | 1건 | 0건 |
+| `prefer_final_in_for_each` | info | 0건 | 해당 없음 |
+| `prefer_if_elements_to_conditional_expressions` | info | 3건 | 1건 |
+| `prefer_int_literals` | info | 17건 | 17건 |
+| `prefer_null_aware_method_calls` | info | 0건 | 해당 없음 |
+| `simple_directive_paths` | info | 0건 | 해당 없음 |
+| `simplify_variable_pattern` | info | 0건 | 해당 없음 |
+| `sort_constructors_first` | info | 0건 | 해당 없음 |
+| `sort_unnamed_constructors_first` | info | 0건 | 해당 없음 |
+| `specify_nonobvious_property_types` | info | 0건 | 해당 없음 |
+| `tighten_type_of_initializing_formals` | info | 0건 | 해당 없음 |
+| `type_annotate_public_apis` | info | 0건 | 해당 없음 |
+| `unnecessary_breaks` | info | 0건 | 해당 없음 |
+| `unnecessary_lambdas` | info | 197건 | 197건 |
+| `unnecessary_library_directive` | info | 0건 | 해당 없음 |
+| `unnecessary_null_aware_operator_on_extension_on_nullable` | info | 0건 | 해당 없음 |
+| `unnecessary_null_checks` | info | 1건 | 1건 |
+| `unnecessary_parenthesis` | info | 1건 | 1건 |
+| `unnecessary_raw_strings` | info | 33건 | 33건 |
+| `use_enums` | info | 0건 | 해당 없음 |
+| `use_is_even_rather_than_modulo` | info | 0건 | 해당 없음 |
+| `use_named_constants` | info | 0건 | 해당 없음 |
+| `use_raw_strings` | info | 9건 | 9건 |
+| `use_setters_to_change_properties` | info | 3건 | 0건 |
+
+실측: flutter_starter_kit (Dart 파일 474개), Flutter 3.47.5, 2026-10-13
+
+자리별 건수(lib · test · bin)와 회차는 RULES.md 의 실측 기록에 있다.
 
 ## 1.3.0
 
