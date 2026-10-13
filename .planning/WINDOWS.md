@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 4
+open_count: 2
 waived_count: 0
-fixed_count: 0
+fixed_count: 2
 total_count: 4
-last_updated: 2026-10-12T23:58:15.620Z
+last_updated: 2026-10-13T00:54:33.747Z
 ---
 
 # Broken Windows Ledger
@@ -17,8 +17,8 @@ last_updated: 2026-10-12T23:58:15.620Z
 |----|-------|------|------|------|-------------|--------|--------|-------------|-------------|
 | 1 | 01 | stub | CHANGELOG.md | 11 | CHANGELOG 2.0.0 항목의 "새로 생기는 경고" 칸이 자리 표시 "(Phase 4 실측 후 채움)" 이다 — 의도된 자리(D-14), Phase 4 실측 표로 채운다 | open |  | 2026-10-11T04:55:25.101Z |  |
 | 2 | 04 | stub | RULES.md |  | RULES.md 켠 규칙 표의 실측 · dart fix · 회차 칸이 '(실측 전 — 04-06 이 채운다)' 자리 표시 — 04-06 이 채운다 | open |  | 2026-10-12T23:21:26.735Z |  |
-| 3 | 04 | stub | tool/measure_rules.dart |  | ruleProbes 셋 · ruleProbes313 빈 맵 — 규칙별 표식 약 60개는 04-03 이 더한다 | open |  | 2026-10-12T23:58:07.924Z |  |
-| 4 | 04 | stub | tool/measure_rules.dart |  | 출력 모드 summary · report · write · audit 는 '아직 구현되지 않았다' 와 64 — 04-03 이 구현한다 | open |  | 2026-10-12T23:58:15.620Z |  |
+| 3 | 04 | stub | tool/measure_rules.dart |  | ruleProbes 셋 · ruleProbes313 빈 맵 — 규칙별 표식 약 60개는 04-03 이 더한다 | fixed |  | 2026-10-12T23:58:07.924Z | 2026-10-13T00:54:33.671Z |
+| 4 | 04 | stub | tool/measure_rules.dart |  | 출력 모드 summary · report · write · audit 는 '아직 구현되지 않았다' 와 64 — 04-03 이 구현한다 | fixed |  | 2026-10-12T23:58:15.620Z | 2026-10-13T00:54:33.747Z |
 
 ````json
 [
@@ -55,10 +55,10 @@ last_updated: 2026-10-12T23:58:15.620Z
     "file": "tool/measure_rules.dart",
     "line": null,
     "description": "ruleProbes 셋 · ruleProbes313 빈 맵 — 규칙별 표식 약 60개는 04-03 이 더한다",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-12T23:58:07.924Z",
-    "resolved_at": null,
+    "resolved_at": "2026-10-13T00:54:33.671Z",
     "milestone": "v2.0"
   },
   {
@@ -68,10 +68,10 @@ last_updated: 2026-10-12T23:58:15.620Z
     "file": "tool/measure_rules.dart",
     "line": null,
     "description": "출력 모드 summary · report · write · audit 는 '아직 구현되지 않았다' 와 64 — 04-03 이 구현한다",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-10-12T23:58:15.620Z",
-    "resolved_at": null,
+    "resolved_at": "2026-10-13T00:54:33.747Z",
     "milestone": "v2.0"
   }
 ]

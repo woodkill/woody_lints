@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 04
 current_phase_name: Rule Reselection
 status: executing
-stopped_at: Completed 04-02-PLAN.md
-last_updated: "2026-10-12T23:58:00.157Z"
+stopped_at: Completed 04-03-PLAN.md
+last_updated: "2026-10-13T00:54:52.500Z"
 last_activity: 2026-10-13
 last_activity_desc: Phase 04 execution started
-state_head: ca79db752aa561a4538c00bc5a4920003e1ff9b3
+state_head: cd1dc56bdde8ff23c5f228a7d207a3063ddfe97a
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 23
-  completed_plans: 15
+  completed_plans: 16
   percent: 50
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-12)
 ## Current Position
 
 Phase: 04 (Rule Reselection) — EXECUTING
-Plan: 3 of 10
+Plan: 4 of 10
 Status: Ready to execute
 Last activity: 2026-10-13 — Phase 04 execution started
 
@@ -75,6 +75,7 @@ Progress: [█████░░░░░] 50%
 | Phase 03 P04 | 18 min | 3 tasks | 4 files |
 | Phase 04 P01 | 15min | 2 tasks | 11 files |
 | Phase 04 P02 | 27min | 2 tasks | 1 files |
+| Phase 04 P03 | 27min | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -149,6 +150,10 @@ Recent decisions affecting current work:
 - [Phase 04]: readRulesMdBlock 은 이름과 형식 오류 행을 함께 돌려주는 RulesMdBlock 을 돌려준다 — 첫 칸 이름이 둘인 행을 예외가 아닌 단계 실패로 알리기 위해 (04-01)
 - [Phase 04]: 실측 도구 tool/measure_rules.dart 의 결과 JSON(schema 1)은 회차마다 options(켠 규칙 이름 · 언어 옵션 · sdk)와 projectBySeverity 를 담는다 — fix 단계가 다른 실행에서 before 회차의 옵션을 되살리고 새 error 를 센다. 경로 · 메시지는 없다 (04-02)
 - [Phase 04]: 실측 도구의 회차는 네트워크가 끊기면 plugin 준비 실패로 valid: false 가 되고 종료 코드 1 이다 (04-02 smoke 의 G1-strip, 2026-10-13 실측). 같은 run id 로 그 단계만 다시 돌리면 같은 id 의 회차를 바꿔 쓴다 (04-02)
+- [Phase 04]: 실측 도구의 표식은 ruleProbes 73 · ruleProbes313 7 이고, Dart 파일 하나로 어길 수 없는 넷(sort_pub_dependencies · use_test_throws_matchers · require_trailing_commas · package_prefixed_library_names)은 noFileProbe 에 이유와 함께 둔다 — markers 단계는 이들을 표식 불가로 따로 알리고 conditions.noFileProbe 에 적는다. example/ 복사본에서 표식이 있는 규칙 82개 모두 검출 (04-03)
+- [Phase 04]: avoid_final_parameters 는 언어 버전 3.13 에서 꺼진다(Feature.primary_constructors, 보통 매개변수의 final 은 error) — 표식은 그 파일만 // @dart=3.11 이고, 하한을 3.13 으로 올리면(RULES-10) 이 규칙은 돌지 않는다. avoid_type_to_string 은 tag 3.13.4 의 SDK 에서 x.runtimeType.toString() 에 걸리지 않는다 (04-03)
+- [Phase 04]: 실측 도구의 출력 모드는 --summary <묶음> · --report [--write] · --audit 이다. --report 는 단언 여섯이 모두 맞을 때만 Markdown 을 내고 --write 는 그때만 RULES.md 의 woody:measurements 를 바꿔 쓴다. --audit 은 후보 133 ∪ B-7 31 이 RULES.md 의 세 표에 있는지 본다 — 04-01 뼈대에서는 빠짐 158 · 빈 칸 6 으로 종료 코드 1 (04-03)
+- [Phase 04]: bundles 상수는 묶음 id → 한국어 이름 12개이고 하나씩 묻는 묶음의 규칙 표는 bundleRules 다. dart fix 단계는 단독 dry 0 인 행의 newErrors 를 0 으로 적는다 — --report 단언 (2) 를 실제 데이터에서 넘기 위해서다 (04-03)
 
 ### Pending Todos
 
@@ -174,6 +179,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-12T23:58:00.124Z
-Stopped at: Completed 04-02-PLAN.md
+Last session: 2026-10-13T00:54:52.469Z
+Stopped at: Completed 04-03-PLAN.md
 Resume file: None
