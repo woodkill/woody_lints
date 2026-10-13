@@ -113,6 +113,8 @@
 - `규칙이 돌지 않음` — 켜도 보고하지 않는다 (일부러 넣은 위반까지 0줄)
 - `소유자 결정` — 실측을 보고 소유자가 켜지 않기로 했다
 
+결정을 미룬 규칙은 접두사 대신 `보류` 로 시작하고, 언제 다시 정하는지 적는다.
+
 <!-- woody:disabled-rules:start -->
 | 규칙 | 이유 |
 |---|---|
@@ -130,6 +132,83 @@
 | `strict-inference` | 소유자 결정 — analyzer 옵션(`analyzer: language:`)이고 진단이 warning 이라 받는 쪽 `dart analyze` 가 바로 실패한다 (106줄 모두 test, dart fix 0) |
 | `sort_pub_dependencies` | 소유자 결정 — 실제 프로젝트 0줄이고 `lib/` 샘플로 걸리는 것을 보일 수 없어 이번에는 켜지 않는다 (04-07 실행 전 질문) |
 | `use_test_throws_matchers` | 소유자 결정 — 실제 프로젝트 0줄이고 `lib/` 샘플로 걸리는 것을 보일 수 없어 이번에는 켜지 않는다 (04-07 실행 전 질문) |
+| `always_put_control_body_on_new_line` | 소유자 결정 — formatter 와 어긋날 수 있다 — 398줄, dart fix 0 |
+| `always_put_required_named_parameters_first` | 소유자 결정 — Flutter 의 `super.key` 를 앞에 두는 관례와 어긋난다 — 32줄 |
+| `always_specify_types` | 소유자 결정 — dart fix 가 error 6건을 남긴다 (R1) — 켠 `omit_obvious_local_variable_types` 와도 함께 쓸 수 없다 |
+| `avoid_annotating_with_dynamic` | 소유자 결정 — `dynamic` 을 적는 것은 의도 표시이기도 하다 — 1줄, 채택 0/7 |
+| `avoid_catches_without_on_clauses` | 소유자 결정 — 모든 catch 에 `on` 을 요구하는 매우 엄격한 규칙 — 지금 0줄이지만 앞으로의 코드에 부담 (lint 가 뺀다) |
+| `avoid_classes_with_only_static_members` | 소유자 결정 — 상수 모음 클래스가 흔하다 — 4줄 손으로 |
+| `avoid_field_initializers_in_const_classes` | 소유자 결정 — API 설계 취향 규칙 — 0줄 |
+| `avoid_positional_boolean_parameters` | 소유자 결정 — `void Function(bool)` 콜백에서 오탐 — 5줄 손으로 |
+| `avoid_returning_this` | 소유자 결정 — API 설계 취향 규칙 — 0줄, 앱 코드에서 실익이 작다 |
+| `avoid_types_on_closure_parameters` | 소유자 결정 — 취향 규칙 — dart fix 가 237줄 모두 고치지만 closure 매개변수의 타입을 지우는 쪽으로 강제할 근거가 약하다 (채택 3/7) |
+| `cascade_invocations` | 소유자 결정 — "더 빽빽한 코드" 를 강제한다 — 60줄, dart fix 0 |
+| `close_sinks` | 소유자 결정 — 풀리지 않은 오탐 (very_good_analysis · lint 가 뺀다) — 0줄 |
+| `diagnostic_describe_all_properties` | 소유자 결정 — dart fix 가 error 148건을 남긴다 (R1) |
+| `do_not_use_environment` | 소유자 결정 — `--dart-define` 을 쓰는 앱은 모두 걸린다 — 17줄 (lib 13) |
+| `eol_at_end_of_file` | 소유자 결정 — `dart format` 이 이미 보장한다 — 0줄 |
+| `library_names` | 소유자 결정 — 기반 세트의 `unnecessary_library_name` 이 대신한다 — 0줄 |
+| `lines_longer_than_80_chars` | 소유자 결정 — 줄바꿈은 formatter 의 몫 — 107줄, dart fix 0 |
+| `omit_local_variable_types` | 소유자 결정 — dart fix 가 error 4건을 남긴다 (R1) |
+| `omit_obvious_property_types` | 비호환 — 켠 `type_annotate_public_apis` 와 함께 쓸 수 없다 (소유자 결정 2026-10-13, 사용 프로젝트에서 켜면 716줄) |
+| `package_prefixed_library_names` | 규칙이 돌지 않음 — 규칙 소스(tag 3.13.4)의 visitLibraryDirective 가 곧바로 return 한다 — 아무것도 보고하지 않는다 (dart-lang/linter#3395) (표식 불가, R1) |
+| `prefer_asserts_with_message` | 소유자 결정 — API 설계 취향 규칙 — 5줄 손으로 |
+| `prefer_expression_function_bodies` | 소유자 결정 — "더 빽빽한 코드" 를 강제한다 — 128줄 중 121 dart fix (very_good_analysis 가 10.1.0 에서 뺐다) |
+| `prefer_foreach` | 소유자 결정 — "더 빽빽한 코드" 를 강제한다 — 3줄 손으로 (lint 가 뺀다) |
+| `prefer_mixin` | 소유자 결정 — API 설계 취향 규칙 — 0줄 |
+| `prefer_void_to_null` | 소유자 결정 — 풀리지 않은 오탐 (very_good_analysis 가 뺀다) — 0줄 |
+| `remove_deprecations_in_breaking_versions` | 소유자 결정 — 사용 프로젝트의 version 이 x.0.0 일 때만 경고하고, 실측 0줄 · 표식 미검출이다 (04-07 실행 전 질문) |
+| `require_trailing_commas` | 규칙이 돌지 않음 — 언어 버전 3.7 이상의 라이브러리에서는 돌지 않는다 (규칙 소스의 language37 조건) — 사용 프로젝트의 하한에서 걸리는 파일이 없다 (표식 불가, R1) |
+| `specify_nonobvious_local_variable_types` | 소유자 결정 — dart fix 가 error 4건을 남긴다 (R1) |
+| `unreachable_from_main` | 소유자 결정 — very_good_analysis 가 10.3.0 에서 기본으로 껐다 — 2줄 |
+| `use_decorated_box` | 소유자 결정 — 상류에 알려진 오동작이 있다 (very_good_analysis · lint 가 뺀다) — 1줄 |
+| `use_to_and_as_if_applicable` | 소유자 결정 — API 설계 취향 규칙 — 0줄 |
+| `prefer_double_quotes` | 비호환 — 켠 `prefer_single_quotes` 와 함께 쓸 수 없다 (incompatible_lint) — 소유자 결정 2026-10-13, 사용 프로젝트에서 켜면 20332줄 (lib · test · bin 2241 · 17901 · 190) |
+| `unnecessary_final` | 비호환 — 켠 `prefer_final_locals` · `prefer_final_in_for_each` 와 함께 쓸 수 없다 (incompatible_lint) — 소유자 결정 2026-10-13, 사용 프로젝트에서 켜면 6724줄 (lib · test · bin 1008 · 5632 · 84) |
+| `comment_references` | v2 로 미룸 (RULES-09) — 실측 196줄 (lib · test · bin 178 · 18 · 0) |
+| `deprecated_consistency` | v2 로 미룸 (RULES-09) — 실측 0줄 (lib · test · bin 0 · 0 · 0, 표식 검출) |
+| `empty_container_bodies` | v2 로 미룸 (RULES-10) — 실측 0줄 (사용 프로젝트의 지금 하한 3.11, 돌지 않음 — 표식까지 0줄) · 3.13 하한 432줄 (0 · 432 · 0) |
+| `initialize_in_field_declaration` | v2 로 미룸 (RULES-10) — 실측 0줄 (사용 프로젝트의 지금 하한 3.11, 표식 없음 — 3.13 문법이라 지금 하한에 넣지 않았다) · 3.13 하한 0줄 (0 · 0 · 0, 표식 검출) |
+| `migrate_design_widgets` | v2 로 미룸 (RULES-11) — 실측 157줄 (lib · test · bin 62 · 95 · 0) · 상태 testing (`messages.yaml`) |
+| `missing_code_block_language_in_doc_comment` | v2 로 미룸 (RULES-09) — 실측 0줄 (lib · test · bin 0 · 0 · 0, 표식 검출) |
+| `public_member_api_docs` | v2 로 미룸 (RULES-09) — 실측 0줄 (lib · test · bin 0 · 0 · 0, 표식 검출) |
+| `unnecessary_const_in_enum_constructor` | v2 로 미룸 (RULES-10) — 실측 0줄 (사용 프로젝트의 지금 하한 3.11, 돌지 않음 — 표식까지 0줄) · 3.13 하한 2줄 (2 · 0 · 0) |
+| `unnecessary_primary_constructor_body` | v2 로 미룸 (RULES-10) — 실측 0줄 (사용 프로젝트의 지금 하한 3.11, 표식 없음 — 3.13 문법이라 지금 하한에 넣지 않았다) · 3.13 하한 0줄 (0 · 0 · 0, 표식 검출) |
+| `unnecessary_type_name_in_constructor` | v2 로 미룸 (RULES-10) — 실측 0줄 (사용 프로젝트의 지금 하한 3.11, 돌지 않음 — 표식까지 0줄) · 3.13 하한 281줄 (220 · 59 · 2) |
+| `use_declaring_parameters` | v2 로 미룸 (RULES-10) — 실측 0줄 (사용 프로젝트의 지금 하한 3.11, 표식 없음 — 3.13 문법이라 지금 하한에 넣지 않았다) · 3.13 하한 0줄 (0 · 0 · 0, 표식 검출) |
+| `use_primary_constructors` | v2 로 미룸 (RULES-10) — 실측 0줄 (사용 프로젝트의 지금 하한 3.11, 돌지 않음 — 표식까지 0줄) · 3.13 하한 785줄 (258 · 524 · 3) · 상태 testing (`messages.yaml`) |
+| `avoid_null_checks_in_equality_operators` | deprecated (Dart 3.13) — 재지 않음 |
+| `avoid_private_typedef_functions` | deprecated (Dart 3.13) — 재지 않음 |
+| `one_member_abstracts` | deprecated (Dart 3.13) — 재지 않음 |
+| `prefer_final_parameters` | deprecated (Dart 3.13) — 재지 않음 |
+| `unnecessary_await_in_return` | deprecated (Dart 3.13) — 재지 않음 |
+| `use_if_null_to_convert_nulls_to_bools` | deprecated (Dart 3.13) — 재지 않음 |
+| `always_require_non_null_named_parameters` | removed — 재지 않음 |
+| `avoid_as` | removed — 재지 않음 |
+| `avoid_returning_null` | removed — 재지 않음 |
+| `avoid_returning_null_for_future` | removed — 재지 않음 |
+| `avoid_unstable_final_fields` | removed — 재지 않음 |
+| `enable_null_safety` | removed — 재지 않음 |
+| `invariant_booleans` | removed — 재지 않음 |
+| `iterable_contains_unrelated_type` | removed — 재지 않음 |
+| `list_remove_unrelated_type` | removed — 재지 않음 |
+| `package_api_docs` | removed — 재지 않음 |
+| `prefer_bool_in_asserts` | removed — 재지 않음 |
+| `prefer_equal_for_default_values` | removed — 재지 않음 |
+| `super_goes_last` | removed — 재지 않음 |
+| `unsafe_html` | removed — 재지 않음 |
+| `future_sync_value` | 없음 (Dart 3.14 도입) — 재지 않음 |
+| `unnecessary_this_alias` | 없음 (Dart 3.14 도입) — 재지 않음 |
+| `annotate_redeclares` | experimental — 재지 않음 (stable 이 될 때까지 보류) |
+| `avoid_futureor_void` | experimental — 재지 않음 (stable 이 될 때까지 보류) |
+| `implicit_reopen` | experimental — 재지 않음 (stable 이 될 때까지 보류) |
+| `invalid_case_patterns` | experimental — 재지 않음 (stable 이 될 때까지 보류) |
+| `no_default_cases` | experimental — 재지 않음 (stable 이 될 때까지 보류) |
+| `unnecessary_async` | experimental — 재지 않음 (stable 이 될 때까지 보류) |
+| `unsafe_variance` | experimental — 재지 않음 (stable 이 될 때까지 보류) |
+| `use_late_for_private_fields_and_variables` | experimental — 재지 않음 (stable 이 될 때까지 보류) |
+| `var_with_no_type_annotation` | experimental — 재지 않음 (stable 이 될 때까지 보류) |
+| `unnecessary_ignore` | 보류 — D-17 에 따라 다른 후보의 반영 뒤 다시 재서 묻는다 (04-08) |
 <!-- woody:disabled-rules:end -->
 
 formatter: 설정은 기본 프리셋에 넣지 않는다 (04-CONTEXT.md D-13, REQUIREMENTS.md Out of Scope)
