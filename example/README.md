@@ -69,7 +69,7 @@ fvm dart run tool/verify.dart --update
 | **Riverpod 받음** | 1 (옛 주소) · 2 (묶음) | 5 (기본 + Riverpod) |
 | **Riverpod 안 받음** | 6 (기본 + codegen) | 3 (기본만) |
 
-- 폴더마다 `pubspec.yaml` 은 저장소 루트를 `path: ../..` 로 받고, `lib/` 는 이 폴더 `lib/` 의 글자 그대로 복사본이다 (줄 번호가 같아야 정답지를 견줄 수 있다). `overrides` 만 끄는 방법의 샘플 `lib/suppress/` 5파일을 더 둔다. `pubspec.lock` 은 이 폴더의 것에서 `path` 줄만 `"../.."` 로 바꾼 복사본이고 커밋한다. 이 폴더의 샘플을 고치면 다섯 복사본도 함께 고친다.
+- 폴더마다 `pubspec.yaml` 은 저장소 루트를 `path: ../..` 로 받고, `lib/` 는 이 폴더 `lib/` 의 글자 그대로 복사본이다 (줄 번호가 같아야 정답지를 견줄 수 있다). 예외는 `lib/relative_imports_rule.dart` 하나다 — `prefer_relative_imports` 는 자기 패키지를 `package:` 주소로 import 할 때만 걸리므로, 3행 import 의 패키지 이름이 그 폴더 `pubspec.yaml` 의 `name:` 이다 (나머지 줄은 같다). 이 파일은 `cp` 로 덮어쓰지 말고 3행의 이름을 맞춘다. `overrides` 만 끄는 방법의 샘플 `lib/suppress/` 5파일을 더 둔다. `pubspec.lock` 은 이 폴더의 것에서 `path` 줄만 `"../.."` 로 바꾼 복사본이고 커밋한다. 이 폴더의 샘플을 고치면 다섯 복사본도 함께 고친다.
 - 상태 폴더는 `.dart_tool/woody_verify/<폴더>/` 로 연습용 프로젝트마다 따로다 — 합치면 plugin 폴더가 여럿이 되어 화면의 `plugin` 줄이 버전을 읽지 못한다. plugin 을 쓰지 않는 둘(3 · 6)은 plugin 폴더가 0개인 것이 정상이고, 정답지 머리 주석에 `riverpod_lint 해당 없음` 이 적힌다.
 - 생성 파일 제외(`codegen.yaml` 의 `analyzer.exclude`)는 이 SDK(Dart 3.13.4)에서 규칙 진단에만 통하고 plugin 진단에는 통하지 않는다 (2026-10-12, spike 012). 그래서 생성 파일 샘플(`lib/generated/`)에는 plugin 위반을 두지 않는다. 다음 SDK 에서는 규칙 진단에도 통하지 않을 수 있다 (spike 016).
 - `overrides` 의 `plugins:` 에 적은 `version:` 은 `lib/riverpod.yaml` 의 선언과 같아야 한다 — 다르면 `[4/10]` 가 실패한다. `version` 없이 `diagnostics:` 만 적으면 끄기가 경고 없이 무시된다 (아래 M19).
