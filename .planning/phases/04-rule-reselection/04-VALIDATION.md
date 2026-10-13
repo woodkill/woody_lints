@@ -64,9 +64,9 @@ Task ID / Plan / Wave / Threat Ref 는 계획(`04-01` ~ `04-10-PLAN.md`, 2026-10
 | 04-12-T1 | 04-12 (gap) | 11 | RULES-06 · RULES-08 · DOCS-11 | T-04-32 · T-04-33 | pubspec 순서 변경이 lock · 다른 진단을 바꾸지 않는다 | 정답지 비교 (CI) + 단계 검사 | `lib/base.yaml` 81개(`sort_pub_dependencies` 가 `sort_constructors_first` 바로 다음), `RULES.md` 켠 81 · 켜지 않음 90, 사유 문장이 두 파일에서 같음; pubspec 여섯 10행 `flutter_riverpod` → 11행 `flutter:`; 정답지 다섯 `+pubspec.yaml:11  info  sort_pub_dependencies` 한 줄뿐(`944ca1c` 와 diff), lock 여섯 불변; `--audit` 81 · 0 · 90 · 0; `--report` 출력 == 실측 기록; verify 10/10 · `--update` `바뀐 정답지가 없다`; `example/pubspec.yaml` 만 되돌리면 `[5/10]` · `[6/10]` 실패 (헛통과 아님) | ✅ | ✅ green |
 | 04-12-T2 | 04-12 (gap) | 11 | RULES-03 · RULES-07 · RULES-08 | T-04-33 · T-04-34 | 결정 표 · CHANGELOG 가 같은 사유 · 같은 값 | grep (커밋 전) | CHANGELOG `### 추가한 규칙` 75 (사유 == `lib/base.yaml`) · `### 새로 생기는 경고` 75 (`| info | 2건 | 재지 않음 |`) · 각주 · 도구 수정 불릿, 1.3.0 아래 == `90a2736`; `04-DECISIONS.md` 의 `sort_pub_dependencies` 행 `… | 결정 안 함 (표식 불가) | 켬 | 권고 이유 승인 (재결정 …` 하나, `켬` 81 · `안 켬` 38, 다른 행 · 패널(184 ~ 280행) · 245행 == `479ad21`; 비공개 점검 (1) · (3) 0 | ✅ | ✅ green |
 | 04-12-T3 | 04-12 (gap) | 11 | (WR-05 · CR-03) | T-04-34 | N/A | grep + 합계 (커밋 전) | README `expected_diagnostics.txt` 행의 줄 수 · 여섯 표의 줄 수 여섯 · 파일 표 각 행의 줄 수가 정답지에서 센 값과 같고 파일 표 합계 == 정답지 진단 줄 수; REQUIREMENTS.md RULES-13 바로 아래 `재측정 전에 먼저 고칠 것` 한 줄(그 밖은 `f5962c3` — 적힌 그대로는 04-11 의 RULES-01 · 05 완료 표시 4줄 때문에 실패, 기준을 `548e3e1` 로 바꾼 판으로 판정); DISPOSITION CR-03 `deferred` (frontmatter · 표); verify 10/10 | ✅ | ✅ green |
-| 04-13-T1 | 04-13 (gap 2회차) | 12 | RULES-01 · RULES-06 | T-04-35 · T-04-36 · T-04-38 | `declaredRuleNames` 가 `linter:` 블록 안의 읽지 못하는 줄을 건너뛰지 않고 `FormatException` (70) 으로 멈춘다; 실험이 바꾼 `lib/base.yaml` 은 되돌려진다 | 단계 검사 (CI) + 깨기 실험 | M27 (`- 'avoid_print'`) · M28 (`- "prefer_mixin"`) → `[3/10]` 만 실패 rc 1 (`+ avoid_print` 겹침 1 · `+ prefer_mixin`); M29 (`- avoid_print: true`) · M30 (이름 없는 `-`) · M31 (`-` 없는 맵 형식 줄 `avoid_print: true`) → rc 70, stdout 비어 있음, stderr `` `linter:` 블록의 106행을 읽지 못했다 `` (문구는 stderr 로만 본다 — 소스 리터럴을 나눠 적어도 된다); `declaredRuleNames` 본문에 `rulesKeyPattern` · `throw FormatException(`; 옛 패턴은 `readRuleNameAt` 에만 1회이고 그 본문은 `c06d8d5` 와 같음, `tool/measure_rules.dart` == `c06d8d5`; README 04-13 소절 · M27 ~ M31 · 70 행 · `[3/10]` 설명 (`9eb8ee5` 에서 지워진 줄 2); 비공개 점검은 `git grep -q` 종료 코드 1; 되돌린 `lib/base.yaml` == `6d64bee`; 보통 실행 10/10 · `--audit` 81 · 0 · 90 · 0. 실패 방향: 고치기 전 코드에서 M27 rc 0 (10/10), M29 rc 1; `-` 줄만 멈추는 구현에서 M31 rc 1 | ✅ | ⬜ pending |
-| 04-13-T2 | 04-13 (gap 2회차) | 12 | DOCS-11 (IN-08 · IN-10) | T-04-37 | N/A | grep + 감사 (커밋 전) | `RULES.md` `sort_pub_dependencies` 행의 실측 칸 `2 (pubspec.yaml 2 — lib · test · bin 은 0)`, 헤더 그대로, `6d64bee` 와의 diff 가 그 행 하나(`<` 1 · `>` 1), 켠 규칙 표 81행; README `lib/added_rules.dart` 행 `1.3.0 부터 켜 둔 규칙 6개 …`, 옛 범위 문구 0; `--audit` 81 · 0 · 90 · 0; `--report --in …` rc 0 이고 출력 == 실측 기록; verify 10/10 · `[3/10]` 통과 | ✅ | ⬜ pending |
-| 04-13-T3 | 04-13 (gap 2회차) | 12 | (WR-09) | T-04-37 | N/A | grep (커밋 전) | REQUIREMENTS.md RULES-13 바로 아래 `재측정 전에 먼저 고칠 것` 메모 둘(첫째 == `2c9c5a7` 의 CR-03 줄, 둘째에 `fixSkipped` · `measureFix` · `fixCell` · `04-REVIEW.md WR-09; 소유자 결정 2026-10-13`), 줄 수 `2c9c5a7` + 1 — 파일 전체 비교 없음(마무리가 체크박스를 고친다, 04-12-T3 의 교훈); DISPOSITION WR-09 `deferred` 세 곳(frontmatter · 표 행의 사유 · `open: 17` == `disposition: open` 수), `e89ad75` 와의 diff `<` 3 · `>` 3; verify 10/10 | ✅ | ⬜ pending |
+| 04-13-T1 | 04-13 (gap 2회차) | 12 | RULES-01 · RULES-06 | T-04-35 · T-04-36 · T-04-38 | `declaredRuleNames` 가 `linter:` 블록 안의 읽지 못하는 줄을 건너뛰지 않고 `FormatException` (70) 으로 멈춘다; 실험이 바꾼 `lib/base.yaml` 은 되돌려진다 | 단계 검사 (CI) + 깨기 실험 | M27 (`- 'avoid_print'`) · M28 (`- "prefer_mixin"`) → `[3/10]` 만 실패 rc 1 (`+ avoid_print` 겹침 1 · `+ prefer_mixin`); M29 (`- avoid_print: true`) · M30 (이름 없는 `-`) · M31 (`-` 없는 맵 형식 줄 `avoid_print: true`) → rc 70, stdout 비어 있음, stderr `` `linter:` 블록의 106행을 읽지 못했다 `` (문구는 stderr 로만 본다 — 소스 리터럴을 나눠 적어도 된다); `declaredRuleNames` 본문에 `rulesKeyPattern` · `throw FormatException(`; 옛 패턴은 `readRuleNameAt` 에만 1회이고 그 본문은 `c06d8d5` 와 같음, `tool/measure_rules.dart` == `c06d8d5`; README 04-13 소절 · M27 ~ M31 · 70 행 · `[3/10]` 설명 (`9eb8ee5` 에서 지워진 줄 2); 비공개 점검은 `git grep -q` 종료 코드 1; 되돌린 `lib/base.yaml` == `6d64bee`; 보통 실행 10/10 · `--audit` 81 · 0 · 90 · 0. 실패 방향: 고치기 전 코드에서 M27 rc 0 (10/10), M29 rc 1; `-` 줄만 멈추는 구현에서 M31 rc 1 | ✅ | ✅ green |
+| 04-13-T2 | 04-13 (gap 2회차) | 12 | DOCS-11 (IN-08 · IN-10) | T-04-37 | N/A | grep + 감사 (커밋 전) | `RULES.md` `sort_pub_dependencies` 행의 실측 칸 `2 (pubspec.yaml 2 — lib · test · bin 은 0)`, 헤더 그대로, `6d64bee` 와의 diff 가 그 행 하나(`<` 1 · `>` 1), 켠 규칙 표 81행; README `lib/added_rules.dart` 행 `1.3.0 부터 켜 둔 규칙 6개 …`, 옛 범위 문구 0; `--audit` 81 · 0 · 90 · 0; `--report --in …` rc 0 이고 출력 == 실측 기록; verify 10/10 · `[3/10]` 통과 | ✅ | ✅ green |
+| 04-13-T3 | 04-13 (gap 2회차) | 12 | (WR-09) | T-04-37 | N/A | grep (커밋 전) | REQUIREMENTS.md RULES-13 바로 아래 `재측정 전에 먼저 고칠 것` 메모 둘(첫째 == `2c9c5a7` 의 CR-03 줄, 둘째에 `fixSkipped` · `measureFix` · `fixCell` · `04-REVIEW.md WR-09; 소유자 결정 2026-10-13`), 줄 수 `2c9c5a7` + 1 — 파일 전체 비교 없음(마무리가 체크박스를 고친다, 04-12-T3 의 교훈); DISPOSITION WR-09 `deferred` 세 곳(frontmatter · 표 행의 사유 · `open: 17` == `disposition: open` 수), `e89ad75` 와의 diff `<` 3 · `>` 3; verify 10/10 | ✅ | ✅ green |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -159,6 +159,33 @@ gap 수정 plan 04-11 · 04-12 의 실행이 끝난 뒤(HEAD `f8dc71c`) 새 행 
 
 - 계획 파일은 고치지 않았다. 04-12-T3 의 결함은 "앞 gap plan 의 요구사항 완료 표시가 고정 커밋 비교를 깬다" 는 꼴이다. 뒤에 같은 꼴의 단언을 쓸 때는 기준 커밋을 dispatch 시점 HEAD 로 잡는다.
 
+## 감사 기록 (2026-10-13, gap 수정 2회차 실행 뒤)
+
+gap 수정 plan 04-13 의 실행이 끝난 뒤(HEAD `accee5a`) 새 행 셋을 감사했다. 앞 감사와 같은 방식이다. 로컬 복제본(`git clone --local`)에 루트 `fvm dart pub get` 을 먼저 한 뒤, task 마다 자기 커밋으로 되돌려(`git checkout --detach`) `<automated>` 를 적힌 그대로 `bash -x` 로 돌렸다. 복제본은 감사 뒤 지웠다.
+
+**task 별 `<automated>` (복제본, 적힌 그대로)**
+
+| Task | 커밋 | rc | 걸린 시간 | 비고 |
+|---|---|---|---|---|
+| 04-13-T1 | `67d1bc7` | 0 | 129초 | M27 ~ M31 다섯 실험을 다시 일으켜 같은 결과 (plugin 준비 포함) |
+| 04-13-T2 | `76dee2f` | 0 | 32초 | — |
+| 04-13-T3 | `8f4e257` | 0 | 33초 | — |
+
+- 셋 모두 실행 뒤 복제본의 `git status --porcelain` 이 0줄이다. 깨기 실험이 바꾼 `lib/base.yaml` 은 스스로 되돌려졌다.
+- **실패 방향 (복제본, `67d1bc7`):** `tool/verify.dart` 만 고치기 전(`c06d8d5`)으로 되돌리고 M27 줄(`- 'avoid_print'`)을 더하면 rc 0 · `점검 통과 (10개 중 10개)` 다 — gap 의 재현이다. 고친 코드에 대시 없는 맵 형식 줄을 더하면 rc 70 이다. 둘 다 되돌린 뒤 작업 트리 변경 0.
+- **HEAD 에서는 04-13-T1 이 적힌 그대로 rc 1 이다 (설계대로).** 상태를 고정해 보는 단언 둘이 뒤 task 의 계획된 변경에 걸린다. README 의 `9eb8ee5` 와의 지워진 줄 수는 Task 2 가 39행을 고쳐 2 → 3 이 되고, `git diff --quiet 6d64bee -- lib/base.yaml RULES.md` 는 Task 2 의 `RULES.md` 한 칸에서 걸린다. 이 둘만 바꾼 판 — 지워진 줄 3, `RULES.md` 의 기준을 `76dee2f` 로 — 은 HEAD 에서 rc 0 이다 (68초, orchestrator 재실행). 계획 문서 279행이 적은 대로 감사는 task 커밋 복제본에서 한다.
+
+**지금 상태 (HEAD `accee5a`) — 모두 통과**
+
+| 돌린 것 | 결과 |
+|---|---|
+| 04-13-T2 · T3 `<automated>` (HEAD, 적힌 그대로) | 둘 다 rc 0 (22초 · 19초) |
+| 04-13-T1 `<automated>` 의 위 두 단언만 바꾼 판 (HEAD) | rc 0 — 그 안에서 `fvm dart analyze` `No issues found`, M27 ~ M31, 보통 실행 `점검 통과 (10개 중 10개)`, `--audit` `감사 통과 — 켠 81 · 옵션 0 · 켜지 않음 90 · 보류 0` |
+
+- 계획 파일은 고치지 않았다.
+
+---
+
 ---
 
 ## Validation Sign-Off
@@ -173,6 +200,8 @@ gap 수정 plan 04-11 · 04-12 의 실행이 끝난 뒤(HEAD `f8dc71c`) 새 행 
 **Approval:** validated 2026-10-13 (phase 실행 뒤 감사 — gap 0)
 
 **Approval (gap 수정 뒤):** validated 2026-10-13 (04-11 · 04-12 의 task 다섯 감사 — gap 0, 04-12-T3 은 단언 결함 하나를 고친 판으로 판정)
+
+**Approval (gap 수정 2회차 뒤):** validated 2026-10-13 (04-13 의 task 셋 감사 — gap 0, 셋 모두 task 커밋 복제본에서 적힌 그대로 rc 0)
 
 ## Validation Audit 2026-10-13
 
