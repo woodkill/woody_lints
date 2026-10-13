@@ -208,7 +208,7 @@
 | `unsafe_variance` | experimental — 재지 않음 (stable 이 될 때까지 보류) |
 | `use_late_for_private_fields_and_variables` | experimental — 재지 않음 (stable 이 될 때까지 보류) |
 | `var_with_no_type_annotation` | experimental — 재지 않음 (stable 이 될 때까지 보류) |
-| `unnecessary_ignore` | 보류 — D-17 에 따라 다른 후보의 반영 뒤 다시 재서 묻는다 (04-08) |
+| `unnecessary_ignore` | 소유자 결정 — experimental 규칙은 켜지 않는다 (D-05 · Out of Scope); 36줄 중 30줄은 켜지 않은 `lines_longer_than_80_chars` 의 파일 단위 주석이다; stable 이 되면 RULES-12 (v2) 에서 다시 잰다 (상태: messages.yaml experimental / rules.json · dart.dev stable; 재측정 UI 36줄) |
 <!-- woody:disabled-rules:end -->
 
 formatter: 설정은 기본 프리셋에 넣지 않는다 (04-CONTEXT.md D-13, REQUIREMENTS.md Out of Scope)

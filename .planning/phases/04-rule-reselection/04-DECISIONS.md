@@ -781,7 +781,7 @@
 
 ## 결정
 
-결정 표 — 후보 133개, 이름 순. `묶음` 칸은 `tool/measure_rules.dart` 의 `bundles` id 다. `권고` 는 위 패널의 것(도구 판정 포함)이고, `결정` · `사유` 는 소유자의 응답으로만 채운다. `결정` 칸의 `켬` / `안 켬` 118행은 2026-10-13 의 소유자 응답으로 채웠다 — 115행은 묶음 5 · 개별 질문 7, 3행(`sort_pub_dependencies` · `use_test_throws_matchers` · `remove_deprecations_in_breaking_versions`, 모두 `안 켬`)은 04-07 실행 전의 질문이다. 나머지 15행은 v2 12 · `unnecessary_ignore` 보류 1 · 규칙이 아무것도 보고하지 않아 도구가 0줄의 뜻을 가르지 못한 2(`require_trailing_commas` · `package_prefixed_library_names`, `RULES.md` 에는 `규칙이 돌지 않음` 으로 적는다) 다 (초안 그대로).
+결정 표 — 후보 133개, 이름 순. `묶음` 칸은 `tool/measure_rules.dart` 의 `bundles` id 다. `권고` 는 위 패널의 것(도구 판정 포함)이고, `결정` · `사유` 는 소유자의 응답으로만 채운다. `결정` 칸의 `켬` / `안 켬` 119행은 2026-10-13 의 소유자 응답으로 채웠다 — 115행은 묶음 5 · 개별 질문 7, 3행(`sort_pub_dependencies` · `use_test_throws_matchers` · `remove_deprecations_in_breaking_versions`, 모두 `안 켬`)은 04-07 실행 전의 질문, 1행(`unnecessary_ignore`, `안 켬`)은 04-08 의 질문 9 (재측정) 이다. 나머지 14행은 v2 12 · 규칙이 아무것도 보고하지 않아 도구가 0줄의 뜻을 가르지 못한 2(`require_trailing_commas` · `package_prefixed_library_names`, `RULES.md` 에는 `규칙이 돌지 않음` 으로 적는다) 다 (초안 그대로).
 
 | 규칙 | 묶음 | 권고 | 결정 | 사유 |
 |---|---|---|---|---|
@@ -893,7 +893,7 @@
 | `unnecessary_breaks` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
 | `unnecessary_const_in_enum_constructor` | v2 | v2 (RULES-10) | 결정 안 함 (v2, RULES-10) |  |
 | `unnecessary_final` | pairs | 안 켬 | 안 켬 | 권고 이유 승인 — 질문 6 — 지금 켜 둔 prefer_final_locals 와 함께 쓸 수 없다 (도구 판정) |
-| `unnecessary_ignore` | ui | 보류 (도구: 안 켬 — experimental) | 보류 (04-08) |  |
+| `unnecessary_ignore` | ui | 안 켬 (질문 9 (재측정) — 도구: 안 켬, experimental) | 안 켬 | 권고 이유 승인 — 질문 9 (재측정) — `messages.yaml` 기준 experimental 이라 D-05 공통 잣대 · Out of Scope 에 걸리고, 선례(`use_super_parameters` · `unnecessary_underscores`)는 기반 세트가 켠 것을 받은 경우다. 재측정 UI 36줄 중 30줄은 켜지 않은 `lines_longer_than_80_chars` 의 주석이다. stable 이 되면 RULES-12 (v2) 에서 다시 잰다 |
 | `unnecessary_lambdas` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
 | `unnecessary_library_directive` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
 | `unnecessary_null_aware_operator_on_extension_on_nullable` | style | 켬 | 켬 | 권고 이유 승인 — 도구 판정: 손으로 고칠 줄 0 (≤ 50) |
@@ -929,3 +929,4 @@
   - prefer_final_locals · prefer_single_quotes — 지금 사유 그대로
 - **질문 7 (`unnecessary_underscores`): 그대로 둔다** — 기반 세트(`lints` 6.1.0 recommended)가 켜는 그대로 받고 `lib/base.yaml` 에서 끄지 않는다. 후보가 아니라 이 표에 행이 없다.
 - 질문 8 (v2 12개)은 묻지 않았고, 질문 9 (`unnecessary_ignore`)는 보류 (04-08) 를 알렸다.
+- **질문 9 (재측정, 04-08): 안 켬** — orchestrator 가 `## 질문 9 (재측정)` 절을 원문 그대로 보인 뒤 받은 응답이다 (2026-10-13). 권고대로 골랐고 소유자는 사유를 덧붙이지 않았다 — 결정 표 `사유` 칸의 `권고 이유 승인 — …` 는 패널의 권고 이유를 소유자가 승인했다는 뜻이고 소유자가 쓴 말이 아니다.
