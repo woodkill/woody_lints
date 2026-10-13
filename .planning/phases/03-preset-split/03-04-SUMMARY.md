@@ -280,7 +280,7 @@ d8c2869 docs(spike-018): VALIDATED — 다음 runner 이미지(Ubuntu 26.04)에�
 - 소유자는 orchestrator 가 직접 물은 질문에 답했다. 질문은 "작업 브랜치 gsd/v2.0-package-rework 의 커밋 24개를 GitHub 에 올릴까요? (되돌릴 수 없음, main 은 건드리지 않음)" 였고, 소유자가 고른 것은 "push (Recommended)" 다.
 - 그 선택지의 설명은 다음과 같았다: "git push origin gsd/v2.0-package-rework 한 줄로 올리고, GitHub 자동 점검이 여섯 프로젝트에서 통과하는지와 걸린 시간을 잰다. workflow 주석을 고친 두 번째 push 는 묻지 않고 한다."
 - 시각: 응답 메시지를 받은 시각이 2026-10-12T12:12:19Z 다. 메시지에 시각이 따로 적혀 있지 않아 실행자가 받은 직후 `date -u` 로 기록했다.
-- orchestrator 는 묻기 전에 다시 확인했다고 전했다. 확인한 것은 넷이다: fetch 성공, `0d20c10` 가 HEAD 의 조상, 24커밋 · HEAD `166d0be`, 추가된 줄에서 `/Users/woody` · `/private/tmp` · `admin@` 가 0건.
+- orchestrator 는 묻기 전에 다시 확인했다고 전했다. 확인한 것은 넷이다: fetch 성공, `0d20c10` 가 HEAD 의 조상, 24커밋 · HEAD `166d0be`, 추가된 줄에서 실제 홈 폴더 경로 · 임시 폴더 경로 · 소유자 이메일의 앞부분이 0건. (검색한 문자열을 글자 그대로 적었던 것을 04-10 의 push 전 점검에서 말로 바꿨다 — 2026-10-13)
 
 ## Task 3 — push 둘과 GitHub run 둘
 
