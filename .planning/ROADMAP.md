@@ -209,7 +209,7 @@ Plans:
 **Wave 9** *(blocked on Wave 8 — 소유자 확인(D-22 첫 push))*
 - [ ] 04-10-PLAN.md — push 전 점검 → 첫 push 확인 → push 와 GitHub `verify` 10단계 통과 확인 (RULES-01, RULES-06; D-22)
 
-**Spike first** (실측을 돌리기 전에 실행으로 확인한다):
+**Spike first** (실측을 돌리기 전에 실행으로 확인한다 — **2026-10-12 완료**: spike 020 ~ 023 이 네 항목에 답했다. 멈춤 조건에 해당한 것 없음. 로드맵 문구 가운데 그대로 쓸 수 없게 된 것은 Notes 에 반영했다. `04-RESEARCH.md` 와 skill `spike-findings-woody-lints` 참조):
 - Dart 3.13 신규 규칙이 language version 3.11 프로젝트에서 보고되는지 (`flutter_starter_kit` 의 SDK 제약은 `^3.11.1`). 0건이 "깨끗하다"인지 "규칙이 동작하지 않는다"인지가 여기서 갈린다.
 - `flutter_starter_kit` 에 이미 있는 `// ignore` 주석(`cast_nullable_to_non_nullable` 56건, `discarded_futures` 2건 등)의 경위와, 프로젝트 자체 옵션이 기준선에 섞이는지.
 - 복사본의 `woody_lints` 의존성이 작업 중인 파일을 가리키는지. lockfile 이 1.3.0 커밋을 가리키면 엉뚱한 것을 잰다 (`path:` 로 덮어쓴다).
@@ -221,8 +221,8 @@ Plans:
 
 **Notes**:
 - 실측은 `flutter_starter_kit` 복사본에서만 한다. 원본 프로젝트는 수정하지 않는다.
-- 평가표의 열을 고정한다: `state` / 심각도 / `fixStatus` / 실측 건수 / `dart fix` 가능 건수 / 상류 세트 포함 여부. 하나라도 비면 그 규칙은 결정하지 않는다. 규칙 메타데이터는 SDK tag 고정 `rules.json` 을 기준으로 삼는다.
-- 패키지 루트에서 인자 없이 `dart analyze --format=json` 을 돌리고, 기준선(1.3.0) 대비 차이만 규칙의 값으로 쓴다. `lib/` 과 `test/` 를 나눠 집계하고, 양립 불가 쌍은 한쪽씩 나눠 돌린다.
+- 평가표의 칸은 상태(저장소 하한 분석 + `messages.yaml`) / 강도(실측 JSON) / 실측 건수(무시 주석을 둔 채, `lib` · `test` · `bin`) / `dart fix` 로 사라진 줄 / 고친 뒤 새 error / 무시 주석이 가린 줄 / 상류 세트 / 함께 쓸 수 없는 규칙이다. `rules.json` 은 쓰지 않는다 (spike 020 · 022). 칸이 하나라도 비면 그 규칙은 결정하지 않는다 (04-CONTEXT.md D-02).
+- 패키지 루트에서 인자 없이 `dart analyze --format=json` 을 돌리고, 기준선(1.3.0) 대비 차이만 규칙의 값으로 쓴다. `lib/` 과 `test/` 를 나눠 집계하고, 함께 쓸 수 없는 쌍은 쌍마다 둘만 켜서 확인한다 (spike 020).
 - strict 계열은 lint 형태(`no_dynamic_casts`, `no_raw_types`)로 잰다. `strict-casts` 옵션은 error 를 내 사용 프로젝트의 `dart analyze` 를 즉시 실패시킨다.
 - 규칙이 바뀌면 `example/` 기대 진단도 바뀐다. 이 phase 에서 바뀌는 기대 진단은 규칙 결정과 하나씩 대응해야 한다.
 - DOCS-11(근거 문서)은 결정과 수치가 나오는 이 phase 에 둔다. 미채택 목록(RULES-08)과 한 쌍이다.
@@ -245,6 +245,7 @@ Plans:
 - **D10** — README 의 규칙 목록을 어떻게 유지할지: 생성 스크립트 / YAML 로 링크만 / 사람이 맞춤 / 마커 구역과 비교 스크립트. VERIFY-06 이 "다르면 실패"를 요구하므로 비교 검사 하나는 있어야 한다. 조사 권고는 생성까지 가지 않는 비교 검사다.
 
 **Notes**:
+- **가장 먼저 할 일 (04-CONTEXT.md D-12):** `tool/verify.dart` 의 WR-02 (거짓 실패 — `lib/riverpod.yaml` 의 plugin 줄 끝 주석 · 마지막 줄바꿈 없음에서 `stripPlugins` · `readShippedPluginConstraint` 가 종료 코드 70) 를 YAML 머리 주석(DOCS-10)을 고치기 전에 닫는다 (`03-REVIEW.md` WR-02).
 - README 는 묶음의 정식 이름 `package:woody_lints/recommended.yaml` 을 안내하고, 옛 이름은 "예전 이름"으로만 적는다.
 - 도구 동작은 fixture 로 뒷받침되는 것만 단정형으로 쓴다. `riverpod_lint` 심각도가 Phase 2 에서 확정되기 전에는 "프리셋을 include 하면 종료 코드 2" 같은 문장을 쓰지 않는다.
 - 빠지기 쉬운 내용: exclude 는 사용 프로젝트에서 되돌릴 수 없다, plugin 진단 재정의에는 `version` 이 필수다, `dev_dependencies` 의 `riverpod_lint` 제거, plugin 변경 뒤 Analysis Server 재시작, 버전 올리기는 `pub upgrade` 가 아니라 `ref:` 수정과 `pub get` 이다 (현재 README 는 `pub upgrade` 를 안내한다), tag 를 고정해도 plugin 버전은 바뀔 수 있다, `ref: main` 프로젝트가 받는 영향.

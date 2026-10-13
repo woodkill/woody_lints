@@ -5,16 +5,19 @@ titles: json
 findings:
   - id: WR-01
     severity: warning
-    disposition: open
+    disposition: fixed
     title: "`[2/N]` 이 묶음과 별칭을 검사하지 않아, 거기 넣은 deprecated 규칙이 아홉 단계를 모두 통과한다 (재현함)"
+    note: "04-01: tool/verify.dart [3/10] 배포 파일의 구성이 묶음 · 별칭은 include 만 담는지 본다 (example/README.md M23 · M24)"
   - id: WR-02
     severity: warning
-    disposition: open
+    disposition: deferred
     title: "`lib/riverpod.yaml` 을 YAML 로 문제없게 고쳐도 검증이 종료 코드 70 으로 멈춘다 (재현함)"
+    note: "Phase 5 의 첫 일 — YAML 머리 주석(DOCS-10)을 고치기 전에 닫는다 (04-CONTEXT.md D-12, ROADMAP Phase 5 Notes)"
   - id: WR-03
     severity: warning
     disposition: open
     title: "규칙 세기와 규칙 이름 읽기가 목록 형식만 알아, 같은 뜻의 맵 형식이 `[2/N]` 거짓 실패가 된다 (재현함)"
+    note: "목록 형식 관례로 회피 — 맵 형식을 쓰게 되면 닫는다 (04-CONTEXT.md D-12)"
   - id: WR-04
     severity: warning
     disposition: open
@@ -59,7 +62,7 @@ findings:
     severity: info
     disposition: open
     title: "`lib/` 의 YAML 집합 확인이 최상위 `.yaml` 만 본다"
-open: 14
+open: 12
 total: 14
 recorded: 2026-10-12T13:04:38.618Z
 ---
@@ -68,8 +71,8 @@ recorded: 2026-10-12T13:04:38.618Z
 
 | Finding | Severity | Disposition | Source |
 |---------|----------|-------------|--------|
-| WR-01 | warning | open | - |
-| WR-02 | warning | open | - |
+| WR-01 | warning | fixed | 04-01 tool/verify.dart [3/10] (example/README.md M23 · M24) |
+| WR-02 | warning | deferred | Phase 5 의 첫 일 — DOCS-10 전에 닫는다 (04-CONTEXT.md D-12) |
 | WR-03 | warning | open | - |
 | WR-04 | warning | open | - |
 | WR-05 | warning | open | - |
