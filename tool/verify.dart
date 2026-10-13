@@ -3,7 +3,7 @@
 //
 //   [1/N] lib/ 에 .dart 파일이 없는지
 //   [2/N] 조각 파일 셋(lib/base.yaml · codegen.yaml · riverpod.yaml)의 복사본을 분석해 진단이 하나도 없는지 (deprecated / removed / 없는 규칙, 겹친 규칙 · 모르는 키 같은 옵션 경고, 깨진 YAML)
-//   [3/N] 배포 파일의 구성 — 묶음 · 별칭은 include 만 담는지, lib/base.yaml 의 규칙이 기반 세트와 겹치지 않는지, RULES.md 의 켠 규칙 표와 같은지, 다른 조각에 규칙이 없는지
+//   [3/N] 배포 파일의 구성 — 묶음 · 별칭은 include 만 담는지, lib/base.yaml 의 규칙이 기반 세트와 겹치지 않는지, RULES.md 의 켠 규칙 표와 같은지, 다른 조각에 규칙이 없는지, README 의 규칙 목록 · 프리셋 주소 · plugin 버전 · ref 가 배포 파일 · pubspec 과 같은지
 //   [4/N] 연습용 프로젝트 전부의 analysis_options.yaml 이 정해진 내용인지 (주석 · 빈 줄을 뺀 내용을 통째로 견준다)
 //   [5/N] ~ [N/N] 연습용 프로젝트마다 `dart analyze` 로 분석한 결과가 정답지와 같은지
 //         (`fixtures` 표의 순서. recommended 는 자기 정답지 없이 같은 실행의 example 결과와 견준다)
@@ -133,6 +133,12 @@ const includeOnlyFiles = <String, List<String>>{
 
 /// 규칙 근거 문서 (저장소 루트 기준). `[3/N]` 이 켠 규칙 표를 `lib/base.yaml` 과 견준다.
 const rulesMdFile = 'RULES.md';
+
+/// 사용 안내 문서 (저장소 루트 기준). `[3/N]` 이 규칙 목록 · 프리셋 주소 · plugin 버전 · `ref:` 를 배포 파일 · `pubspec.yaml` 과 견준다 (VERIFY-06, 05-CONTEXT.md D-01 · D-02).
+const readmeFile = 'README.md';
+
+/// README 의 규칙 이름 목록을 감싸는 표시 구역 이름 — `RULES.md` 의 `enabled-rules` 와 다르게 두어 grep 이 갈린다.
+const readmeRulesBlock = 'readme-rules';
 
 /// 규칙 검사의 대상 — 규칙이 적힐 수 있는 조각 셋 (저장소 루트 기준). 읽기만 한다.
 ///
@@ -1260,6 +1266,40 @@ List<String>? significantLines(File file) {
       .toList();
 }
 
+/// [lines] 가운데 ``` 코드 블록 안의 줄만 돌려준다 (펜스 줄 자체는 뺀다).
+///
+/// `trimLeft()` 가 ``` 로 시작하는 줄에서 블록이 열리고 닫힌다. `[3/N]` 의 README 검사
+/// (f) · (g) 가 쓴다 — 복사해 쓰는 값은 블록 안에 있고, 산문은 옛 값(`ref: v1.3.0` 등)을
+/// 인용할 수 있어서다 (05-RESEARCH.md Pattern 2). 블록이 없으면 빈 목록이다.
+List<String> fencedLines(List<String> lines) {
+  final out = <String>[];
+  var inFence = false;
+  for (final line in lines) {
+    if (line.trimLeft().startsWith('```')) {
+      inFence = !inFence;
+      continue;
+    }
+    if (inFence) out.add(line);
+  }
+  return out;
+}
+
+/// `pubspec.yaml` 의 `version:` 에서 `major.minor.patch` 만 돌려준다 (`2.0.0-dev` → `2.0.0`).
+///
+/// `-pre` · `+build` 꼬리는 떨어진다. `[3/N]` 의 README 검사 (g) 가 README 코드 블록의
+/// `ref: vX.Y.Z` 와 견준다. 읽지 못하면 [FormatException] (main 이 종료 코드 70 으로 끝낸다).
+String pubspecReleaseVersion(String repoRoot) {
+  final text = File('$repoRoot/pubspec.yaml').readAsStringSync();
+  final match = RegExp(
+    r'^version:\s*(\d+\.\d+\.\d+)',
+    multiLine: true,
+  ).firstMatch(text);
+  if (match == null) {
+    throw const FormatException('pubspec.yaml 에서 version: 을 읽지 못했다');
+  }
+  return match.group(1)!;
+}
+
 /// 저장소 루트가 받은 기반 세트(`lints` · `flutter_lints`)가 켜는 규칙을 읽는다.
 ///
 /// 돌려주는 맵은 소문자로 바꾼 규칙 이름 → `<패키지 폴더 이름> <파일 이름>`
@@ -1362,6 +1402,39 @@ RulesMdBlock? readRulesMdBlock(File rulesMd, String name) {
   return RulesMdBlock(names, malformed);
 }
 
+/// [file] 의 마커 구역 [name] (`readme-rules`) 에서 불릿 줄의 이름을 읽는다.
+///
+/// 마커 처리는 [readRulesMdBlock] 과 같다 (`<!-- woody:<name>:start -->` · `:end -->` 를
+/// 글자 그대로 찾는다). 마커 사이의 줄 가운데 `trim()` 한 줄이 `- ` 로 시작하는 줄만 보고,
+/// 그 줄 전체에서 backtick 으로 감싼 `[a-z0-9_-]+` 를 모두 읽는다 — 0개면 건너뛰고, 둘
+/// 이상이면 [RulesMdBlock.malformed] 에, 하나면 [RulesMdBlock.names] 에 담는다. 마커 밖의
+/// 줄은 보지 않는다. `[3/N]` 의 README 검사 (d) 가 쓴다. 파일이나 마커가 없으면 null 이다.
+RulesMdBlock? readBulletBlock(File file, String name) {
+  if (!file.existsSync()) return null;
+  final lines = file.readAsLinesSync();
+  final start = lines.indexOf('<!-- woody:$name:start -->');
+  final end = lines.indexOf('<!-- woody:$name:end -->');
+  if (start < 0 || end < 0 || end < start) return null;
+  final names = <String>[];
+  final malformed = <String>[];
+  final namePattern = RegExp(r'`([a-z0-9_-]+)`');
+  for (final line in lines.sublist(start + 1, end)) {
+    final trimmed = line.trim();
+    if (!trimmed.startsWith('- ')) continue;
+    final found = namePattern
+        .allMatches(trimmed)
+        .map((m) => m.group(1)!)
+        .toList();
+    if (found.isEmpty) continue;
+    if (found.length > 1) {
+      malformed.add(trimmed);
+    } else {
+      names.add(found.single);
+    }
+  }
+  return RulesMdBlock(names, malformed);
+}
+
 /// [3/N] 배포 파일의 구성 — 저장소 안의 파일끼리 어긋나지 않는지 한 단계로 본다 (D-11, D-12).
 ///
 /// 확인을 모두 돌리고 실패를 모아 한 [StepResult] 로 돌려준다. analyzer 는 돌리지 않는다.
@@ -1375,6 +1448,10 @@ RulesMdBlock? readRulesMdBlock(File rulesMd, String name) {
 /// - (c) `RULES.md` 의 켠 규칙 표 == `lib/base.yaml` 의 규칙 목록 (둘 다 정렬해 견준다 —
 ///   같은 이름이 두 번 적혀도 잡는다), 켠 analyzer 옵션 표 == `analyzer: language:` 의
 ///   `true` 키 (RULES-06).
+/// - (d) README 의 표시 구역 `woody:readme-rules` 의 규칙 이름 == `lib/base.yaml` (D-01)
+/// - (e) README 의 `package:woody_lints/<이름>.yaml` 주소가 모두 [expectedLibYamls] 에 있다
+/// - (f) README 코드 블록의 `version:` · `riverpod_lint:` 값 == [readShippedPluginConstraint]
+/// - (g) README 코드 블록의 `ref: vX.Y.Z` == [pubspecReleaseVersion] — 읽은 값이 0개면 실패 (VERIFY-06, D-02)
 StepResult checkShippedComposition(String repoRoot) {
   final details = <String>[];
   void addBlock(List<String> lines) {
@@ -1489,6 +1566,108 @@ StepResult checkShippedComposition(String repoRoot) {
     mismatchLine:
         '`$rulesMdFile` 의 켠 analyzer 옵션 표와 `$rulesFile` 의 `analyzer: language:` 가 다르다.',
   );
+
+  // (d) ~ (g) README 가 가리키는 값 — 규칙 목록 · 프리셋 주소 · plugin 버전 · ref (VERIFY-06,
+  // 05-CONTEXT.md D-01 · D-02). README 가 없으면 FileSystemException → main 이 70.
+  final readme = File('$repoRoot/$readmeFile');
+  final readmeLines = readme.readAsLinesSync();
+
+  // (d) 표시 구역의 규칙 이름 == lib/base.yaml.
+  final readmeListed = readBulletBlock(readme, readmeRulesBlock);
+  if (readmeListed == null) {
+    addBlock([
+      '`$readmeFile` 의 `woody:$readmeRulesBlock` 구역이 없다 — 05-CONTEXT.md D-01',
+      '',
+      '`<!-- woody:$readmeRulesBlock:start -->` 와 `<!-- woody:$readmeRulesBlock:end -->` '
+          '사이에 `- `규칙이름`` 불릿을 둔다.',
+    ]);
+  } else {
+    if (readmeListed.malformed.isNotEmpty) {
+      addBlock([
+        '`$readmeFile` 의 `woody:$readmeRulesBlock` 구역에 이름이 둘 이상인 불릿이 있다 (${readmeListed.malformed.length}):',
+        ...readmeListed.malformed.map((l) => '  $l'),
+        '',
+        '불릿마다 backtick 으로 감싼 이름 하나만 적는다.',
+      ]);
+    }
+    final a = [...declared]..sort();
+    final b = [...readmeListed.names]..sort();
+    if (!sameLines(a, b)) {
+      addBlock([
+        '`$readmeFile` 의 규칙 목록과 `$rulesFile` 의 규칙 목록이 다르다.',
+        ...subtractLines(a, b).map((r) => '  + $r  (base.yaml 에만)'),
+        ...subtractLines(b, a).map((r) => '  - $r  (README.md 에만)'),
+        '',
+        '`$readmeFile` 의 목록 · `$rulesMdFile` 의 표 · `$rulesFile` 을 같은 커밋에서 고친다.',
+      ]);
+    }
+  }
+
+  // (e) README 의 프리셋 주소가 모두 lib/ 에 있다 — 파일 전체에서 모든 주소를 모은다.
+  final addresses = RegExp(r'package:woody_lints/([A-Za-z0-9_]+\.yaml)')
+      .allMatches(readmeLines.join('\n'))
+      .map((m) => m.group(1)!)
+      .toSet();
+  if (addresses.isEmpty) {
+    addBlock(['`$readmeFile` 에 `package:woody_lints/<이름>.yaml` 주소가 하나도 없다.']);
+  } else {
+    final missing = addresses.difference(expectedLibYamls).toList()..sort();
+    if (missing.isNotEmpty) {
+      addBlock([
+        '`$readmeFile` 가 가리키는 프리셋 주소가 `lib/` 에 없다 (${missing.length}):',
+        ...missing.map((n) => '  package:woody_lints/$n'),
+        '',
+        '`lib/` 의 파일 이름과 `$readmeFile` 의 주소를 같은 커밋에서 고친다.',
+      ]);
+    }
+  }
+
+  // (f) · (g) 는 코드 블록 안의 줄만 본다 — 산문의 옛 값은 세지 않는다.
+  final fenced = fencedLines(readmeLines);
+
+  // (f) 코드 블록의 plugin 버전 == lib/riverpod.yaml.
+  final shipped = readShippedPluginConstraint(repoRoot);
+  final versionPattern = RegExp(
+    r'^\s*(?:version|riverpod_lint):\s*(\^?\d+\.\d+\.\d+)\s*(?:#.*)?$',
+  );
+  final versions = [
+    for (final line in fenced) ?versionPattern.firstMatch(line)?.group(1),
+  ];
+  if (versions.isEmpty) {
+    addBlock([
+      '`$readmeFile` 의 코드 블록에 `version:` · `riverpod_lint:` 줄이 하나도 없다.',
+    ]);
+  } else {
+    final wrong = versions.where((v) => v != shipped).toSet().toList()..sort();
+    if (wrong.isNotEmpty) {
+      addBlock([
+        '`$readmeFile` 의 코드 블록에 적힌 riverpod_lint 버전이 `lib/riverpod.yaml` 의 선언($shipped)과 다르다:',
+        ...wrong.map((v) => '  $v'),
+        '',
+        '`$readmeFile` 의 끄기 예시 · `lib/riverpod.yaml` · `fixtures/overrides/analysis_options.yaml` 을 같은 커밋에서 고친다.',
+      ]);
+    }
+  }
+
+  // (g) 코드 블록의 `ref: vX.Y.Z` == pubspec.yaml 의 version (꼬리를 뗀 값). `ref: main` 은 세지 않는다.
+  final release = pubspecReleaseVersion(repoRoot);
+  final refPattern = RegExp(r'^\s*ref:\s*v(\d+\.\d+\.\d+)\s*$');
+  final refs = [
+    for (final line in fenced) ?refPattern.firstMatch(line)?.group(1),
+  ];
+  if (refs.isEmpty) {
+    addBlock(['`$readmeFile` 의 코드 블록에 `ref: vX.Y.Z` 줄이 하나도 없다.']);
+  } else {
+    final wrong = refs.where((v) => v != release).toSet().toList()..sort();
+    if (wrong.isNotEmpty) {
+      addBlock([
+        '`$readmeFile` 의 `ref: vX.Y.Z` 예시가 `pubspec.yaml` 의 version ($release) 과 다르다:',
+        ...wrong.map((v) => '  ref: v$v'),
+        '',
+        '릴리스 버전을 올릴 때 `$readmeFile` 의 `ref:` 예시도 같은 커밋에서 고친다.',
+      ]);
+    }
+  }
 
   return StepResult(
     label: shippedCompositionLabel,
