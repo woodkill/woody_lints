@@ -245,3 +245,10 @@ None - no external service configuration required.
 ---
 *Phase: 05-documentation*
 *Completed: 2026-10-14*
+
+## Self-Check: PASSED
+
+- 고친 파일 셋(`tool/verify.dart`, `README.md`, `example/README.md`)과 이 SUMMARY 가 디스크에 있다
+- 커밋 `02966c4` · `204e401` · `d2d74c4` 가 HEAD 의 조상이다 (`git merge-base --is-ancestor`)
+- 세 task 의 `<automated>` 가 각 커밋 직후 적힌 그대로 종료 코드 0 이었다
+- 이 SUMMARY · STATE · ROADMAP 에 실제 홈 폴더 경로 · 임시 폴더 경로 꼴 0줄
