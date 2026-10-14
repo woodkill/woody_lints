@@ -3,7 +3,7 @@
 //
 //   [1/N] lib/ 에 .dart 파일이 없는지
 //   [2/N] 조각 파일 셋(lib/base.yaml · codegen.yaml · riverpod.yaml)의 복사본을 분석해 진단이 하나도 없는지 (deprecated / removed / 없는 규칙, 겹친 규칙 · 모르는 키 같은 옵션 경고, 깨진 YAML)
-//   [3/N] 배포 파일의 구성 — 묶음 · 별칭은 include 만 담는지, lib/base.yaml 의 규칙이 기반 세트와 겹치지 않는지, RULES.md 의 켠 규칙 표와 같은지, 다른 조각에 규칙이 없는지, README 의 규칙 목록 · 프리셋 주소 · plugin 버전 · ref 가 배포 파일 · pubspec 과 같은지
+//   [3/N] 배포 파일의 구성 — 묶음 · 별칭은 include 만 담는지, lib/base.yaml 의 규칙이 기반 세트와 겹치지 않는지, RULES.md 의 켠 규칙 표와 같은지, 다른 조각에 규칙이 없는지, 조각 셋의 최상위 키(와 그 바로 아래 키 — lib/codegen.yaml 의 analyzer:, lib/riverpod.yaml 의 plugins:)가 정해진 목록 안인지, README 의 규칙 목록 · 프리셋 주소 · plugin 버전 · ref 가 배포 파일 · pubspec 과 같은지
 //   [4/N] 연습용 프로젝트 전부의 analysis_options.yaml 이 정해진 내용인지 (주석 · 빈 줄을 뺀 내용을 통째로 견준다)
 //   [5/N] ~ [N/N] 연습용 프로젝트마다 `dart analyze` 로 분석한 결과가 정답지와 같은지
 //         (`fixtures` 표의 순서. recommended 는 자기 정답지 없이 같은 실행의 example 결과와 견준다)
@@ -144,7 +144,7 @@ const readmeRulesBlock = 'readme-rules';
 ///
 /// 묶음(`lib/recommended.yaml`)과 별칭(`lib/analysis_options.yaml`)은 넣지 않는다 —
 /// 폴더를 인자로 준 분석에서는 include 를 거쳐 plugin 까지 준비한다 (spike 013).
-/// 새 조각이 생기면 [expectedLibYamls] 와 함께 고친다.
+/// 새 조각이 생기면 [expectedLibYamls] · [allowedTopLevelKeys] 와 함께 고친다.
 const ruleCheckTargets = [
   'lib/base.yaml',
   'lib/codegen.yaml',
@@ -158,7 +158,7 @@ const rulesFile = 'lib/base.yaml';
 
 /// `lib/` 에 있어야 하는 YAML 의 전부 (파일 이름).
 ///
-/// 조각 셋 + 묶음 + 별칭이다. 새 조각이 생기면 이 집합과 [ruleCheckTargets] 를 함께 고친다 —
+/// 조각 셋 + 묶음 + 별칭이다. 새 조각이 생기면 이 집합과 [ruleCheckTargets] · [allowedTopLevelKeys] 를 함께 고친다 —
 /// 규칙 검사 대상에서 빠진 조각에 숨은 문제 규칙은 어느 단계도 잡지 못한다 (spike 013).
 const expectedLibYamls = {
   'analysis_options.yaml',
@@ -166,6 +166,36 @@ const expectedLibYamls = {
   'codegen.yaml',
   'recommended.yaml',
   'riverpod.yaml',
+};
+
+/// 조각마다 받는 최상위 키의 닫힌 목록 (저장소 루트 기준 경로 → 키 이름).
+///
+/// 그 밖의 최상위 줄(다른 키, 철자가 다른 키 `linter :` · `"linter":`, 열 0 에서 시작하지
+/// 않는 최상위 키)은 `[3/N]` (a′) 가 실패로 알린다 — 검사가 모르는 키는 검증 없이 사용
+/// 프로젝트에 닿는다. `lib/base.yaml` 은 지금 검사가 읽는 키를 모두 받는다 (`include` 는
+/// 기반 세트, `linter` 는 (b) · (c) · (d), `analyzer` 는 (c) 의 [enabledLanguageOptions] 가
+/// 읽는 `language:`). 새 조각이 생기면 [ruleCheckTargets] · [expectedLibYamls] 와 함께 고친다
+/// (05-REVIEW.md WR-10, 소유자 결정 G2-Q1).
+const allowedTopLevelKeys = <String, Set<String>>{
+  'lib/base.yaml': {'include', 'linter', 'analyzer'},
+  'lib/codegen.yaml': {'analyzer'},
+  'lib/riverpod.yaml': {'plugins'},
+};
+
+/// 최상위 키 바로 아래에서 받는 키의 닫힌 목록 (저장소 루트 기준 경로 → 최상위 키 → 키 이름).
+///
+/// `lib/codegen.yaml` 의 `analyzer:` 아래는 `errors` · `exclude` 뿐이다 (소유자 결정 G2-Q1 —
+/// `language:` 같은 다른 analyzer 옵션은 실패). `lib/riverpod.yaml` 의 `plugins:` 아래는
+/// `riverpod_lint` 하나다 (소유자 결정 G2-Q4 — 다른 plugin 키는 사용 프로젝트가 그 plugin 을
+/// 받는다). `lib/base.yaml` 의 `analyzer:` 아래는 목록을 두지 않는다 (소유자 결정 G2-Q1 의
+/// 범위 밖 — [enabledLanguageOptions] 가 `language:` 만 읽는 지금 그대로).
+const allowedChildKeys = <String, Map<String, Set<String>>>{
+  'lib/codegen.yaml': {
+    'analyzer': {'errors', 'exclude'},
+  },
+  'lib/riverpod.yaml': {
+    'plugins': {'riverpod_lint'},
+  },
 };
 
 /// `[2/N]` 단계의 화면 이름.
@@ -906,7 +936,8 @@ int countDeclaredRules(String options, {required String shownAs}) =>
 /// 있으면(flow 표기 `linter: {rules: [...]}`) 건너뛰지 않고 [FormatException] — 다른 조각에서는
 /// (b′) 가 0개로 읽어 통과시켰던 입력이다 (05-REVIEW.md WR-04, 05-VERIFICATION.md gaps 2).
 /// 블록이 없으면 빈 목록이다. 같은 이름이 두 번 적혀 있으면 두 번 들어간다 (`[3/N]` 이 중복을
-/// 잡는다).
+/// 잡는다). 철자가 다른 `linter` 키(`linter :` · `"linter":`)의 블록은 이 함수가 읽지 않고
+/// (a′) 가 받지 않는 최상위 줄로 실패시킨다 (소유자 결정 G2-Q1).
 List<String> declaredRuleNames(String options, {required String shownAs}) {
   // 목록 항목 — 여는 따옴표와 닫는 따옴표가 같아야 하고(없어도 된다), 이름 뒤에는 공백 하나
   // 이상과 `# 주석` 만 올 수 있다. 그 밖의 꼴은 아래에서 멈춘다 (04-REVIEW.md WR-10)
@@ -953,6 +984,90 @@ List<String> declaredRuleNames(String options, {required String shownAs}) {
     }
   }
   return names;
+}
+
+/// 옵션 파일 본문([options])에서 닫힌 목록 밖의 줄을 찾는다 — `[3/N]` (a′) 가 쓴다.
+///
+/// [allowed] 는 그 조각이 받는 최상위 키([allowedTopLevelKeys]), [childKeys] 는 최상위 키
+/// 바로 아래에서 받는 키([allowedChildKeys])다. 돌려주는 항목은 `<줄 번호>행: <원문>` (뒤
+/// 공백만 뗀다 — 들여쓰기는 살린다)이고, `topLevel` 은 받지 않는 최상위 줄, `nested` 는
+/// 최상위 키마다 그 바로 아래에서 받지 않는 줄이다. 빈 줄과 `#` 줄은 건너뛴다.
+///
+/// 줄 규칙:
+/// - 키 줄은 열 0 에서 `<이름>:` 뒤에 공백 · 탭이나 줄 끝이 오는 줄이고(이름은
+///   `[A-Za-z_][A-Za-z0-9_-]*`), 이름이 [allowed] 안이어야 한다. 이 꼴이 아닌 열 0 의 비주석 줄
+///   — 콜론 앞 공백(`linter :`), 따옴표 키(`"linter":`), `? ` 키, 앵커 · 병합 키, `- ` 항목,
+///   `---`, flow 맵 — 은 모두 받지 않는 줄이다 ("명단에 없으면 모두 막는다").
+/// - [childKeys] 에 있는 키는 그 줄에 값이 붙으면(`# 주석` 만은 된다) 아래 키를 읽을 수 없으므로
+///   받지 않는 줄이다. [childKeys] 에 없는 키의 값(`include: …`)은 보지 않는다 — 값을 읽는
+///   검사([declaredRuleNames] · [enabledLanguageOptions] · [readShippedPluginConstraint])의
+///   몫이고, 그 검사들의 종료 코드 70 은 그대로 남는다.
+/// - 첫 비주석 줄이 들여 쓴 줄이면(최상위 키가 열 0 에서 시작하지 않는 파일 — YAML 로는 같은
+///   최상위 맵이다) 그 줄 하나를 `topLevel` 에 담고, 같은 들여쓴 최상위의 나머지 줄은 그 아래로
+///   보아 다시 담지 않는다.
+/// - [childKeys] 에 있는 키 아래에서는 그 키 다음 첫 비주석 줄의 들여쓰기를 "바로 아래" 로
+///   기억한다. 같은 들여쓰기에서 이름을 읽지 못했거나 목록 밖인 줄과 그보다 얕은 줄은
+///   `nested` 에 담고, 더 깊은 줄(`errors:` 의 진단 이름, `exclude:` 의 glob, `riverpod_lint:`
+///   맵 꼴의 `diagnostics:` · `version:`)은 보지 않는다.
+/// - 여러 줄에 걸친 flow 표기는 받지 않는다 — 조각은 블록 꼴로 적는다.
+///
+/// 예외를 던지지 않는다. 받지 않는 키는 YAML 로 올바르고 analyzer 도 받는, 읽을 수 있는 정책
+/// 위반이라 종료 코드 70 ("파일 모양을 읽지 못했다") 이 아니라 `[3/N]` 실패로 알린다 — 그래야
+/// 뒤의 (b′) · (b) · (c) 가 지금처럼 돌아 앞 기록의 70 (flow `linter: {…}`, 읽지 못하는 블록 줄)
+/// 과 `[3/N]` 실패가 그대로 남고, 나머지 단계도 끝까지 돈다 (05-VERIFICATION.md 2회차 gap,
+/// 05-REVIEW.md WR-10, 소유자 결정 G2-Q1).
+({List<String> topLevel, Map<String, List<String>> nested}) findUnexpectedKeys(
+  String options, {
+  required Set<String> allowed,
+  Map<String, Set<String>> childKeys = const {},
+}) {
+  final keyPattern = RegExp(r'^([A-Za-z_][A-Za-z0-9_-]*):(?:[ \t]|$)');
+  final topLevel = <String>[];
+  final nested = <String, List<String>>{};
+  final lines = options.replaceAll('\r\n', '\n').split('\n');
+  // 열 0 의 비주석 줄을 이미 봤는지 — 못 본 채 들여쓴 줄이 오면 최상위가 열 0 밖이다.
+  var seenTopLevel = false;
+  // 아래 키를 보는 최상위 키 — null 이면 그 아래 줄은 보지 않는다.
+  String? currentKey;
+  // currentKey 의 "바로 아래" 들여쓰기 — 그 키 다음 첫 비주석 줄에서 정한다.
+  int? childIndent;
+  for (var i = 0; i < lines.length; i++) {
+    final line = lines[i];
+    final trimmed = line.trim();
+    if (trimmed.isEmpty || trimmed.startsWith('#')) continue;
+    final shown = '${i + 1}행: ${line.trimRight()}';
+    final indent = line.length - line.trimLeft().length;
+    if (indent == 0) {
+      seenTopLevel = true;
+      childIndent = null;
+      currentKey = null;
+      final key = keyPattern.firstMatch(line)?.group(1);
+      if (key == null || !allowed.contains(key)) {
+        topLevel.add(shown);
+      } else if (childKeys.containsKey(key) &&
+          !RegExp('^${RegExp.escape(key)}:[ \\t]*(?:#.*)?\$').hasMatch(line)) {
+        // 아래 키 목록이 있는 키에 값이 붙으면 아래 키를 읽을 수 없다.
+        topLevel.add(shown);
+      } else {
+        currentKey = key;
+      }
+      continue;
+    }
+    if (!seenTopLevel) {
+      topLevel.add(shown);
+      seenTopLevel = true;
+      continue;
+    }
+    final children = currentKey == null ? null : childKeys[currentKey];
+    if (children == null) continue;
+    childIndent ??= indent;
+    if (indent > childIndent) continue;
+    final key = keyPattern.firstMatch(trimmed)?.group(1);
+    if (indent < childIndent || key == null || !children.contains(key)) {
+      nested.putIfAbsent(currentKey!, () => []).add(shown);
+    }
+  }
+  return (topLevel: topLevel, nested: nested);
 }
 
 /// 옵션 파일 본문([options])의 최상위 `analyzer:` → `language:` 아래 `<이름>: true|false` 를 읽는다.
@@ -1622,6 +1737,10 @@ MarkerBlock? readBulletBlock(File file, String name) {
 /// 확인을 모두 돌리고 실패를 모아 한 [StepResult] 로 돌려준다. analyzer 는 돌리지 않는다.
 ///
 /// - (a) 묶음 · 별칭([includeOnlyFiles])은 include 줄만 담는다 (03-REVIEW.md WR-01).
+/// - (a′) 조각([ruleCheckTargets])마다 최상위 키가 [allowedTopLevelKeys] 안이고, 그 바로 아래
+///   키가 [allowedChildKeys] 안이다 ([findUnexpectedKeys]) — 철자가 다른 `linter` 키 ·
+///   `formatter:` · `lib/codegen.yaml` 의 `analyzer: language:` · `lib/riverpod.yaml` 의 다른
+///   plugin 도 실패. 예외를 던지지 않는다 (05-REVIEW.md WR-10, 소유자 결정 G2-Q1 · G2-Q4).
 /// - (b′) `lib/base.yaml` 밖 조각([ruleCheckTargets] 에서 [rulesFile] 을 뺀 것)의 `linter:`
 ///   블록에 규칙이 없다 — "규칙은 `lib/base.yaml` 에만" 을 검사로 굳힌다 (04-REVIEW.md WR-11).
 ///   (b) · (c) 가 `lib/base.yaml` 하나만 읽어도 빈자리가 없다.
@@ -1666,6 +1785,45 @@ StepResult checkShippedComposition(String repoRoot) {
       '',
       '규칙은 `lib/base.yaml` 에만 적는다 (03-REVIEW.md WR-01).',
     ]);
+  }
+
+  // (a′) 조각마다 받는 최상위 키(와 그 바로 아래 키)의 닫힌 목록 — 목록 밖의 줄은 블록으로
+  // 알리고, 예외를 던지지 않으며 뒤의 (b′) 이하를 건너뛰게 하지 않는다 (05-VERIFICATION.md
+  // 2회차 gap, 05-REVIEW.md WR-10, 소유자 결정 G2-Q1 · G2-Q4).
+  const allowedKeysHint =
+      '조각마다 받는 키는 tool/verify.dart 의 allowedTopLevelKeys · allowedChildKeys 가 정한다 — '
+      '키는 열 0 에서 따옴표 · 콜론 앞 공백 없이 적고, 규칙은 `lib/base.yaml` 에만 적는다 '
+      '(05-REVIEW.md WR-10, 소유자 결정 G2-Q1).';
+  for (final target in ruleCheckTargets) {
+    final allowed = allowedTopLevelKeys[target];
+    if (allowed == null) {
+      addBlock([
+        '`$target` 이 받는 최상위 키가 정해져 있지 않다 — tool/verify.dart 의 allowedTopLevelKeys 에 적는다.',
+      ]);
+      continue;
+    }
+    final childKeys = allowedChildKeys[target] ?? const {};
+    final unexpected = findUnexpectedKeys(
+      File('$repoRoot/$target').readAsStringSync(),
+      allowed: allowed,
+      childKeys: childKeys,
+    );
+    if (unexpected.topLevel.isNotEmpty) {
+      addBlock([
+        '`$target` 의 최상위에 받지 않는 줄이 있다 (${unexpected.topLevel.length}) — 받는 키: ${allowed.join(' · ')}',
+        ...unexpected.topLevel.map((l) => '  $l'),
+        '',
+        allowedKeysHint,
+      ]);
+    }
+    for (final MapEntry(key: key, value: lines) in unexpected.nested.entries) {
+      addBlock([
+        '`$target` 의 `$key:` 바로 아래에 받지 않는 줄이 있다 (${lines.length}) — 받는 키: ${childKeys[key]!.join(' · ')}',
+        ...lines.map((l) => '  $l'),
+        '',
+        allowedKeysHint,
+      ]);
+    }
   }
 
   // (b′) rulesFile 밖의 조각은 규칙을 담지 않는다 — 03-REVIEW.md WR-01 의 관례를 검사로
