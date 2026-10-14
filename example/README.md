@@ -113,7 +113,7 @@ lib/added_rules.dart:18  info  always_declare_return_types
 | 70 | 스크립트가 예외로 끝남 (파일 형식 · 파일 작업 · 프로세스 실행 실패 — 기반 세트 YAML 에서 규칙을 하나도 읽지 못한 경우, 조각(`lib/base.yaml` · `lib/codegen.yaml` · `lib/riverpod.yaml`)의 `linter:` 블록에 읽지 못하는 줄이 있는 경우 — 문구에 파일 이름이 들어간다 —, `pubspec.yaml` 에서 `version:` 을 읽지 못한 경우 포함) |
 | 78 | 실행 중인 SDK 가 `.fvmrc` 와 다름 — 검증을 시작하지 않음 |
 
-단계는 열 개다: `[1/10]` `lib/` 에 `.dart` 파일 없음, `[2/10]` 배포 파일(조각 셋)의 규칙 이름, `[3/10]` 배포 파일의 구성 (묶음 `recommended.yaml` 과 별칭 `analysis_options.yaml` 이 `include:` 만 담는지, `lib/base.yaml` 의 규칙이 기반 세트 — 저장소 루트가 받은 `lints` · `flutter_lints` 의 YAML — 와 겹치지 않는지, `RULES.md` 의 켠 규칙 표와 `lib/base.yaml` 의 규칙 목록이 같은지. analyzer 를 돌리지 않고 파일끼리 견준다. 규칙 목록은 열 0 주석 뒤의 줄도 읽고 (2026-10-13 에 고침, 아래 M26), 따옴표로 감싼 이름도 읽으며, 블록 안에서 읽지 못하는 꼴의 줄을 만나면 종료 코드 70 으로 멈춘다 (2026-10-13 에 고침, 아래 M27 ~ M31), `lib/codegen.yaml` · `lib/riverpod.yaml` 의 `linter:` 블록에 규칙이 없는지 (규칙은 `lib/base.yaml` 에만 — 2026-10-14 에 더함, 아래 M35), README 의 표시 구역 `woody:readme-rules` 의 규칙 이름이 `lib/base.yaml` 과 같은지 · README 의 `package:woody_lints/<이름>.yaml` 주소가 모두 `lib/` 에 있는지 · README 코드 블록의 `version:` (과 `riverpod_lint:`) 값이 `lib/riverpod.yaml` 의 선언과, `ref: vX.Y.Z` 가 `pubspec.yaml` 의 version 과 같은지 (읽은 값이 0개면 실패 — 2026-10-14 에 더함, 아래 M38 ~ M42)), `[4/10]` 연습용 프로젝트 여섯의 옵션 파일 (주석 · 빈 줄을 뺀 내용을 통째로 견준다 — `overrides` 의 `version:` 은 `lib/riverpod.yaml` 의 선언과 같아야 한다), `[5/10]` ~ `[10/10]` 연습용 프로젝트마다 정답지 비교 (위 표의 순서. `recommended` 는 같은 실행의 `example` 결과와). 하나가 실패해도 나머지를 모두 돌린다. `[2/10]` 는 배포 파일을 `plugins:` 없이 복사한 폴더를 `dart analyze` 로 분석해, 종료 코드가 0 이 아니거나 진단이 하나라도 있으면 실패한다 — deprecated / removed / 없는 규칙뿐 아니라 겹친 규칙 · 모르는 키 · 없는 진단 코드 같은 옵션 경고도 실패다. 깨진 YAML 은 종료 코드 3 에 진단 0건으로 나오므로 같은 폴더를 형식 인자 없이 한 번 더 돌려 `parse_error` 줄을 보여 준다. 배포 파일의 최상위 `linter:` 블록에서 `- 규칙이름` 줄을 하나도 세지 못해도 실패한다 — 규칙을 다른 파일로 옮길 때 경로를 잘못 잡은 것이 통과로 보이지 않게 (2026-10-12, 아래 M13 ~ M17).
+단계는 열 개다: `[1/10]` `lib/` 에 `.dart` 파일 없음, `[2/10]` 배포 파일(조각 셋)의 규칙 이름, `[3/10]` 배포 파일의 구성 (묶음 `recommended.yaml` 과 별칭 `analysis_options.yaml` 이 `include:` 만 담는지, `lib/base.yaml` 의 규칙이 기반 세트 — 저장소 루트가 받은 `lints` · `flutter_lints` 의 YAML — 와 겹치지 않는지, `RULES.md` 의 켠 규칙 표와 `lib/base.yaml` 의 규칙 목록이 같은지. analyzer 를 돌리지 않고 파일끼리 견준다. 규칙 목록은 열 0 주석 뒤의 줄도 읽고 (2026-10-13 에 고침, 아래 M26), 따옴표로 감싼 이름도 읽으며, 블록 안에서 읽지 못하는 꼴의 줄을 만나면 종료 코드 70 으로 멈춘다 (2026-10-13 에 고침, 아래 M27 ~ M31), `lib/codegen.yaml` · `lib/riverpod.yaml` 의 `linter:` 블록에 규칙이 없는지 (규칙은 `lib/base.yaml` 에만 — 2026-10-14 에 더함, 아래 M35), README 의 표시 구역 `woody:readme-rules` 의 규칙 이름이 `lib/base.yaml` 과 같은지 · README 의 `package:woody_lints/<이름>.yaml` 주소가 모두 `lib/` 에 있는지 · README 코드 블록의 `version:` (과 `riverpod_lint:`) 값이 `lib/riverpod.yaml` 의 선언과, `ref: vX.Y.Z` 가 `pubspec.yaml` 의 version 과 같은지 (읽은 값이 0개면 실패 — 2026-10-14 에 더함, 아래 M38 ~ M42), 표시 구역 안의 줄이 빈 줄 · `**분류**` 소제목 · `- `이름`` 불릿 밖의 꼴이면 실패 (2026-10-14 에 더함, 아래 M43 · M44)), `[4/10]` 연습용 프로젝트 여섯의 옵션 파일 (주석 · 빈 줄을 뺀 내용을 통째로 견준다 — `overrides` 의 `version:` 은 `lib/riverpod.yaml` 의 선언과 같아야 한다), `[5/10]` ~ `[10/10]` 연습용 프로젝트마다 정답지 비교 (위 표의 순서. `recommended` 는 같은 실행의 `example` 결과와). 하나가 실패해도 나머지를 모두 돌린다. `[2/10]` 는 배포 파일을 `plugins:` 없이 복사한 폴더를 `dart analyze` 로 분석해, 종료 코드가 0 이 아니거나 진단이 하나라도 있으면 실패한다 — deprecated / removed / 없는 규칙뿐 아니라 겹친 규칙 · 모르는 키 · 없는 진단 코드 같은 옵션 경고도 실패다. 깨진 YAML 은 종료 코드 3 에 진단 0건으로 나오므로 같은 폴더를 형식 인자 없이 한 번 더 돌려 `parse_error` 줄을 보여 준다. 배포 파일의 최상위 `linter:` 블록에서 `- 규칙이름` 줄을 하나도 세지 못해도 실패한다 — 규칙을 다른 파일로 옮길 때 경로를 잘못 잡은 것이 통과로 보이지 않게 (2026-10-12, 아래 M13 ~ M17).
 
 ## 검증이 실제로 잡아내는지 확인한 기록
 
@@ -362,5 +362,29 @@ lib/added_rules.dart:18  info  always_declare_return_types
 - **읽은 값이 0개면 실패다 — M42 가 "일치" 가 아니라 실패인 까닭.** start 마커가 없으면 (d) 는 표시 구역을 찾지 못해 이름을 하나도 읽지 못한다. 그때 비교를 건너뛰어 통과로 두지 않고 `구역이 없다` 로 실패하며, 이름 비교의 블록(`… 규칙 목록이 다르다.`)은 찍히지 않았다. 05-03 Task 2 의 검증이 같은 변형을 한 번 봤고, 여기서 기록한다. (e) · (f) · (g) 도 읽은 값이 0개면 `… 하나도 없다` 로 실패한다 — 이 세 경로는 코드에서 읽은 것이고 돌려 보지 않았다.
 
 변경은 모두 커밋하지 않고 되돌렸다 (`git status` 와 `README.md` 를 HEAD 와 견준 `git diff` 로 확인). 끝에 검증 명령이 다시 종료 코드 0, `점검 통과 (10개 중 10개)` 인 것을 봤다.
+
+### 추가 실측 — README 목록 · flow 표기 · 코드 블록 값의 읽지 못하는 줄 (05-07)
+
+실측 (05-07): Flutter 3.47.5 / Dart 3.13.4, riverpod_lint 3.1.9, 2026-10-14
+
+실행한 명령: `fvm dart run tool/verify.dart` (연습용 프로젝트 여섯 · 단계 10개). 이 소절의 변경은 작업 트리가 아니라 **복제본(`git clone --local`)에서** 했다 — 저장소를 임시 폴더에 복제하고, 아직 커밋하지 않은 이 plan 의 `tool/verify.dart` · 문서 변경을 `git diff HEAD` 로 떠서 복제본에 적용해 복제본 안에서만 커밋한 뒤, 복제본에서 `fvm dart pub get --no-example` 을 돌리고 변형 · 실행 · 되돌림을 했다. 변경은 한 번에 하나씩, 줄 번호가 아니라 내용을 기준으로 했다 — M43 · M44 는 `README.md` 의 표시 구역에서 `` - `prefer_single_quotes` `` 줄 앞에 줄을 끼웠다 (`perl -pi -e 'print "…\n" if /^- `prefer_single_quotes`$/'`). 변경마다 의도한 줄이 들어갔는지(새 줄이 README 에 있는지, `git diff --numstat` 이 M43 `1/0` · M44 `2/0`)를 먼저 보고, 검증 명령을 돌린 직후 복제본에서 `git checkout -- README.md` 로 되돌린 뒤에 판정했다.
+
+| # | 변경 | 실패한 단계 | 정답지와의 차이 | 종료 코드 | 항목 |
+|---|------|-------------|-----------------|-----------|------|
+| M43 | `README.md` 의 표시 구역에 옛 README(1.0.0 ~ 1.3.0) 꼴의 줄 `- require_trailing_commas: 자동 코드 정렬 최적화` 를 더함 (`` - `prefer_single_quotes` `` 앞) | `[3/10]` 만. `[1/10]` · `[2/10]` · `[4/10]` ~ `[10/10]` 은 통과 | 차이 없음. `[3/10]` 이 낸 줄:<br>`` `README.md` 의 `woody:readme-rules` 구역에 읽지 못하는 줄이 있다 (1): ``<br>`- require_trailing_commas: 자동 코드 정렬 최적화`<br>``` 구역 안에는 빈 줄 · `**분류**` 소제목 · `- `규칙이름`` 불릿만 둔다 (05-VERIFICATION.md gaps 1). ``` | 1 | VERIFY-06 · D-01 — 05-VERIFICATION.md gaps 1 |
+| M44 | 같은 자리에 두 줄 `` * `extra` `` (불릿 기호가 다름) 와 `` - `Extra_Rule` `` (backtick 은 있지만 이름 꼴이 아님 — 대문자) 를 함께 더함 | `[3/10]` 만. `[1/10]` · `[2/10]` · `[4/10]` ~ `[10/10]` 은 통과 | 차이 없음. `[3/10]` 이 낸 줄:<br>`` `README.md` 의 `woody:readme-rules` 구역에 읽지 못하는 줄이 있다 (2): ``<br>`` * `extra` ``<br>`` - `Extra_Rule` ``<br>``` 구역 안에는 빈 줄 · `**분류**` 소제목 · `- `규칙이름`` 불릿만 둔다 (05-VERIFICATION.md gaps 1). ``` | 1 | VERIFY-06 · D-01 — gaps 1 (느슨한 구현 가르기) |
+
+두 변경 모두 화면의 요약은 `점검 실패 (10개 중 1개)` 였고, 이름 비교의 블록(`… 규칙 목록이 다르다.`)은 찍히지 않았다 — 읽지 못한 줄의 이름은 목록에 들어가지 않는다. 표의 `[3/10]` 줄은 화면 줄에서 앞의 공백 두 칸(원문 줄)을 뗀 것이다. plugin 표시줄은 모두 `riverpod_lint 3.1.9` 였다.
+
+읽는 법은 다음과 같다.
+
+- **M43 은 05-VERIFICATION.md gaps 1 의 재현 입력이다.** 고치기 전에는 같은 줄을 더해도 전체 실행이 종료 코드 0 · `점검 통과 (10개 중 10개)` 였다 (05-VERIFICATION.md 의 실행, 2026-10-14 — 이번에 고치기 전 스크립트로 다시 재지는 않았다). 그때의 reader 는 `- ` 로 시작하지 않는 줄과 backtick 이름이 0개인 줄을 건너뛰었다.
+- **두 변경이 함께 느슨한 구현을 가른다.** M43 은 `- ` 로 시작하지만 backtick 이 없는 줄, M44 의 `` * `extra` `` 는 `- ` 로 시작하지 않는 줄이다 — `- ` 줄만 거르고 나머지를 건너뛰는 구현은 둘 중 하나를 지나친다. M44 의 `` - `Extra_Rule` `` 은 backtick 은 있지만 이름 꼴(`[a-z0-9_-]+`)이 아니다 — backtick 이 있으면 이름 꼴이 아니어도 건너뛰는 구현은 `(2)` 대신 `(1)` 을 낸다.
+- **구역 안에서 받는 줄은 셋뿐이다** — 빈 줄, `**분류**` 소제목 (backtick 없는 굵은 글씨 한 줄), `` - `이름` `` 불릿 (정확히 `- ` + backtick 이름 하나). 그 밖의 줄은 모두 실패다. Phase 4 WR-10 이 `linter:` 블록의 reader 에서 닫은 "블록 안에서 읽지 못하는 줄은 건너뛰지 않는다" 를 README reader 에도 적용한 것이다. 지금 README 의 구역(빈 줄 · 소제목 넷 · 불릿 81개)은 모두 받는 줄이라 보통 실행은 그대로 통과한다.
+- **마커 처리는 `readMarkerBlock` 하나로 합쳤다** (05-REVIEW.md IN-06). `RULES.md` 의 표 reader 와 README 의 불릿 reader 가 같은 함수로 마커 사이의 줄을 받고, 각자의 줄 규칙만 적용한다.
+
+걸린 시간: 복제본의 첫 실행(plugin 준비 포함) 68초, M43 24초, M44 23초, 되돌린 뒤의 보통 실행 22초.
+
+변경은 모두 커밋하지 않고 복제본에서 되돌렸다 (복제본의 `git status` 와 HEAD 와 견준 `git diff` 로 확인). 끝에 복제본에서 검증 명령이 다시 종료 코드 0, `점검 통과 (10개 중 10개)` 인 것을 봤다. 작업 트리는 건드리지 않았고, 복제본은 끝에 지웠다.
 
 항목의 `VERIFY-NN` · `PRESET-NN` · `RULES-NN` 은 `.planning/REQUIREMENTS.md` 의 요구사항 번호, `D-NN` 은 `.planning/phases/02-verification-harness/02-CONTEXT.md` 의 결정 번호다. 03-NN 소절의 `D-NN` 은 `.planning/phases/03-preset-split/03-CONTEXT.md` 의 결정 번호다. 04-NN 소절의 `D-NN` 은 `.planning/phases/04-rule-reselection/04-CONTEXT.md` 의 결정 번호다. 05-NN 소절의 `D-NN` 은 `.planning/phases/05-documentation/05-CONTEXT.md` 의 결정 번호다.

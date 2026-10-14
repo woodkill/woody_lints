@@ -1356,35 +1356,49 @@ Map<String, String> readUpstreamRules(String repoRoot) {
   return rules;
 }
 
-/// [rulesMd] 의 `<!-- woody:<name>:start -->` 와 `<!-- woody:<name>:end -->` 사이 표에서
-/// 첫 칸의 이름을 읽은 결과.
-class RulesMdBlock {
-  /// [names] 는 읽은 이름, [malformed] 는 첫 칸에 이름이 둘 이상인 줄이다.
-  RulesMdBlock(this.names, this.malformed);
+/// 마커 구역 하나에서 읽은 결과 — 이름과 읽지 못한 줄.
+///
+/// [readRulesMdBlock] (표) 과 [readBulletBlock] (불릿) 이 돌려준다.
+class MarkerBlock {
+  /// [names] 는 구역에서 읽은 이름, [malformed] 는 읽지 못한 줄(원문)이다.
+  MarkerBlock(this.names, this.malformed);
 
-  /// 표의 행 순서대로 읽은 이름 (backtick 을 뗀 것).
+  /// 구역의 줄 순서대로 읽은 이름 (backtick 을 뗀 것).
   final List<String> names;
 
-  /// 첫 칸에 backtick 이름이 둘 이상이라 읽지 못한 줄 (원문 그대로).
+  /// 그 reader 의 줄 규칙에 맞지 않아 읽지 못한 줄 (`trim()` 한 원문).
   final List<String> malformed;
+}
+
+/// [file] 에서 `<!-- woody:<name>:start -->` 와 `<!-- woody:<name>:end -->` 사이의 줄
+/// 목록(마커 줄 제외)을 돌려준다.
+///
+/// 마커는 글자 그대로 — 들여쓰기 · 뒤 공백도 안 된다. 파일이 없거나 마커 둘 중 하나를
+/// 찾지 못하거나 end 가 start 앞이면 null 이다. [readRulesMdBlock] (표) · [readBulletBlock]
+/// (불릿) 이 이 줄 목록에 각자의 줄 규칙을 적용한다 (05-REVIEW.md IN-06).
+List<String>? readMarkerBlock(File file, String name) {
+  if (!file.existsSync()) return null;
+  final lines = file.readAsLinesSync();
+  final start = lines.indexOf('<!-- woody:$name:start -->');
+  final end = lines.indexOf('<!-- woody:$name:end -->');
+  if (start < 0 || end < 0 || end < start) return null;
+  return lines.sublist(start + 1, end);
 }
 
 /// [rulesMd] 의 마커 구역 [name] (`enabled-rules` 등) 에서 표 첫 칸의 이름을 읽는다.
 ///
-/// 마커 사이의 줄 가운데 `|` 로 시작하는 줄의 첫 칸(두 번째 `|` 앞)에서 backtick 하나로
-/// 감싼 `[a-z0-9_-]+` 를 읽는다. 첫 칸에 backtick 쌍이 없는 줄(헤더 · 구분선 · 평문)은
-/// 건너뛰고, 둘 이상이면 그 줄을 [RulesMdBlock.malformed] 에 담는다 — 예외가 아니라
-/// 단계 실패로 알린다 (사람이 고칠 수 있는 문구로). 파일이나 마커가 없으면 null 이다.
-RulesMdBlock? readRulesMdBlock(File rulesMd, String name) {
-  if (!rulesMd.existsSync()) return null;
-  final lines = rulesMd.readAsLinesSync();
-  final start = lines.indexOf('<!-- woody:$name:start -->');
-  final end = lines.indexOf('<!-- woody:$name:end -->');
-  if (start < 0 || end < 0 || end < start) return null;
+/// 구역의 줄은 [readMarkerBlock] 으로 받는다. 그 가운데 `|` 로 시작하는 줄의 첫 칸(두 번째
+/// `|` 앞)에서 backtick 하나로 감싼 `[a-z0-9_-]+` 를 읽는다. 첫 칸에 backtick 쌍이 없는
+/// 줄(헤더 · 구분선 · 평문)은 건너뛰고, 둘 이상이면 그 줄을 [MarkerBlock.malformed] 에
+/// 담는다 — 예외가 아니라 단계 실패로 알린다 (사람이 고칠 수 있는 문구로). 파일이나 마커가
+/// 없으면 null 이다.
+MarkerBlock? readRulesMdBlock(File rulesMd, String name) {
+  final lines = readMarkerBlock(rulesMd, name);
+  if (lines == null) return null;
   final names = <String>[];
   final malformed = <String>[];
   final namePattern = RegExp(r'`([a-z0-9_-]+)`');
-  for (final line in lines.sublist(start + 1, end)) {
+  for (final line in lines) {
     final trimmed = line.trim();
     if (!trimmed.startsWith('|')) continue;
     final cellEnd = trimmed.indexOf('|', 1);
@@ -1399,40 +1413,40 @@ RulesMdBlock? readRulesMdBlock(File rulesMd, String name) {
       names.add(found.single);
     }
   }
-  return RulesMdBlock(names, malformed);
+  return MarkerBlock(names, malformed);
 }
 
 /// [file] 의 마커 구역 [name] (`readme-rules`) 에서 불릿 줄의 이름을 읽는다.
 ///
-/// 마커 처리는 [readRulesMdBlock] 과 같다 (`<!-- woody:<name>:start -->` · `:end -->` 를
-/// 글자 그대로 찾는다). 마커 사이의 줄 가운데 `trim()` 한 줄이 `- ` 로 시작하는 줄만 보고,
-/// 그 줄 전체에서 backtick 으로 감싼 `[a-z0-9_-]+` 를 모두 읽는다 — 0개면 건너뛰고, 둘
-/// 이상이면 [RulesMdBlock.malformed] 에, 하나면 [RulesMdBlock.names] 에 담는다. 마커 밖의
-/// 줄은 보지 않는다. `[3/N]` 의 README 검사 (d) 가 쓴다. 파일이나 마커가 없으면 null 이다.
-RulesMdBlock? readBulletBlock(File file, String name) {
-  if (!file.existsSync()) return null;
-  final lines = file.readAsLinesSync();
-  final start = lines.indexOf('<!-- woody:$name:start -->');
-  final end = lines.indexOf('<!-- woody:$name:end -->');
-  if (start < 0 || end < 0 || end < start) return null;
+/// 구역의 줄은 [readMarkerBlock] 으로 받고, 줄마다 `trim()` 한 값으로 다음 셋만 받는다.
+///
+/// - 빈 줄 — 건너뛴다.
+/// - 분류 소제목 `**…**` (backtick 없는 굵은 글씨 한 줄) — 건너뛴다.
+/// - 불릿 `- `이름`` (정확히 `- ` + backtick 으로 감싼 `[a-z0-9_-]+` 하나, 뒤에 아무것도
+///   없음) — 이름을 [MarkerBlock.names] 에 담는다.
+///
+/// 그 밖의 줄(backtick 없는 불릿, 대문자 이름, 이름이 둘인 불릿, `*` · `+` · `1.` 불릿,
+/// 평문)은 건너뛰지 않고 [MarkerBlock.malformed] 에 담아 `[3/N]` (d) 가 실패로 알린다
+/// (05-VERIFICATION.md gaps 1 — Phase 4 WR-10 의 원칙을 README reader 에도). 마커 밖의
+/// 줄은 보지 않는다. 파일이나 마커가 없으면 null 이다.
+MarkerBlock? readBulletBlock(File file, String name) {
+  final lines = readMarkerBlock(file, name);
+  if (lines == null) return null;
   final names = <String>[];
   final malformed = <String>[];
-  final namePattern = RegExp(r'`([a-z0-9_-]+)`');
-  for (final line in lines.sublist(start + 1, end)) {
+  final headingPattern = RegExp(r'^\*\*[^`]+\*\*$');
+  final bulletPattern = RegExp(r'^- `([a-z0-9_-]+)`$');
+  for (final line in lines) {
     final trimmed = line.trim();
-    if (!trimmed.startsWith('- ')) continue;
-    final found = namePattern
-        .allMatches(trimmed)
-        .map((m) => m.group(1)!)
-        .toList();
-    if (found.isEmpty) continue;
-    if (found.length > 1) {
-      malformed.add(trimmed);
+    if (trimmed.isEmpty || headingPattern.hasMatch(trimmed)) continue;
+    final bullet = bulletPattern.firstMatch(trimmed);
+    if (bullet != null) {
+      names.add(bullet.group(1)!);
     } else {
-      names.add(found.single);
+      malformed.add(trimmed);
     }
   }
-  return RulesMdBlock(names, malformed);
+  return MarkerBlock(names, malformed);
 }
 
 /// [3/N] 배포 파일의 구성 — 저장소 안의 파일끼리 어긋나지 않는지 한 단계로 본다 (D-11, D-12).
@@ -1449,6 +1463,7 @@ RulesMdBlock? readBulletBlock(File file, String name) {
 ///   같은 이름이 두 번 적혀도 잡는다), 켠 analyzer 옵션 표 == `analyzer: language:` 의
 ///   `true` 키 (RULES-06).
 /// - (d) README 의 표시 구역 `woody:readme-rules` 의 규칙 이름 == `lib/base.yaml` (D-01)
+///   — 구역 안의 읽지 못하는 줄도 실패
 /// - (e) README 의 `package:woody_lints/<이름>.yaml` 주소가 모두 [expectedLibYamls] 에 있다
 /// - (f) README 코드 블록의 `version:` · `riverpod_lint:` 값 == [readShippedPluginConstraint]
 /// - (g) README 코드 블록의 `ref: vX.Y.Z` == [pubspecReleaseVersion] — 읽은 값이 0개면 실패 (VERIFY-06, D-02)
@@ -1584,10 +1599,10 @@ StepResult checkShippedComposition(String repoRoot) {
   } else {
     if (readmeListed.malformed.isNotEmpty) {
       addBlock([
-        '`$readmeFile` 의 `woody:$readmeRulesBlock` 구역에 이름이 둘 이상인 불릿이 있다 (${readmeListed.malformed.length}):',
+        '`$readmeFile` 의 `woody:$readmeRulesBlock` 구역에 읽지 못하는 줄이 있다 (${readmeListed.malformed.length}):',
         ...readmeListed.malformed.map((l) => '  $l'),
         '',
-        '불릿마다 backtick 으로 감싼 이름 하나만 적는다.',
+        '구역 안에는 빈 줄 · `**분류**` 소제목 · `- `규칙이름`` 불릿만 둔다 (05-VERIFICATION.md gaps 1).',
       ]);
     }
     final a = [...declared]..sort();
