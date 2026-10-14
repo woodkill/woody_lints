@@ -73,11 +73,11 @@ Task ID / Plan / Wave / Threat Ref 는 계획(`05-NN-PLAN.md`)이 확정된 뒤 
 | 05-09 Task 1 | 05-09 | 8 | VERIFY-06 (WR-05 · R2-Q1 · IN-01 · IN-05) | T-05-31 · T-05-36 | N/A | 지워 보기 (복제본) | `riverpod_lint: "^3.1.9"` (M63) · `pubspec.yaml` 따옴표 version (M67) → 10/10; 고정 버전 `3.1.9` 를 네 자리에 (M64) · 키 줄에 주석 · 맵 안에서 `version:` 이 뒤 (M65) → `[3/10]` · `[4/10]` 통과 · 70 아님; 범위 제약 (M66) → 70 · 원인 문구; 분모 4 인 단계 번호 0줄 | ✅ | ✅ green |
 | 05-09 Task 2 | 05-09 | 8 | DOCS-06 · DOCS-07 (W4 · IN-02 · IN-03 · IN-04 · IN-07) | T-05-32 | 배포 YAML 의 선언 값이 바뀌지 않는다 | grep + 실행 | README 의 `^3.1.9` 는 코드 블록 두 줄에만; 382행이 함께 고칠 자리 셋; 45 · 91행 · CHANGELOG 92행 새 문장; `lib/riverpod.yaml` 비주석 내용 불변 · 정답지 불변; 검증 10/10 | ✅ | ✅ green |
 | 05-09 Task 3 | 05-09 | 8 | (Q4 처리 기록 · D-20 · D-21) | T-05-33 · T-05-34 · T-05-35 · T-05-37 | 비공개 정보가 공개 저장소에 올라가지 않는다; workflow 는 읽기 권한만 | grep (push 범위 전체) + e2e (GitHub) | 처리 기록 fixed 12 · deferred 1 · open 0 (해시가 실제 수정 커밋); 범위 `92d478a..HEAD` 비공개 점검 셋 + 이력(`git log -p`) 0 — push 전에 첫째 자동 검증 명령으로 돌려 0 일 때만; `git push origin gsd/v2.0-package-rework` → `verify` success · 로그 두 줄 | ✅ | ✅ green |
-| 05-10 Task 1 | 05-10 | 9 | VERIFY-06 · DOCS-06 (2회차 gap · WR-10 — 소유자 결정 G2-Q1 · G2-Q4) | T-05-40 · T-05-41 · T-05-42 · T-05-43 · T-05-46 · T-05-47 · T-05-54 | N/A | 지워 보기 (복제본) | `lib/codegen.yaml` 끝 `linter :` (M68) · `"linter":` (M69), `lib/riverpod.yaml` 끝 `linter :` (M70), codegen `analyzer:` 아래 `language:` (M71), 끝 `formatter:` (M72), 열 0 밖의 최상위 (M73) → 종료 코드 1 · `[3/10]` 실패 · `최상위에 받지 않는 줄이 있다` / `바로 아래에 받지 않는 줄이 있다` · 10개 중 1개, M68 ~ M70 에 `에 규칙이 있다` 없음; `lib/riverpod.yaml` 의 `plugins:` 아래 `custom_lint` · 따옴표 키 (M78) → 종료 코드 1 · `plugins:` 바로 아래 블록 `(2)`; 회귀 M45 · M36 · M34 · M59 · M60 · M61 · M66 → 70, M46 · M62 → 실패, M65 · M63 → 10/10; `declaredRuleNames` · (e) ~ (g) · `fencedLines` 의 코드 줄 `644897f` 그대로; README 378행 | ✅ | ⬜ pending |
-| 05-10 Task 2 | 05-10 | 9 | VERIFY-06 (표시 구역 밖 목록 줄 — 소유자 결정 G2-Q3) | T-05-43 · T-05-44 · T-05-46 · T-05-47 | N/A | 지워 보기 (복제본) | end 마커 뒤 `- `bogus_after_marker`` (M74) → `(1)`; `*` · `+` · `1.` · `1)` · `> -` (M75) → `(5)`; 앞 · 다음 절의 불릿 (M76) → 10/10; 펜스 뒤 불릿 (M77) → `(1)` · 펜스 안 줄 제외; start 마커 삭제 · 구역 안 옛 꼴 → 각자의 블록만 | ✅ | ⬜ pending |
-| 05-10 Task 3 | 05-10 | 9 | DOCS-06 (WR-07 · WR-08 · WR-09 · IN-08 — 소유자 결정 G2-Q2 · G2-Q5) | T-05-45 | 검사는 넓히지 않는다 | grep + 실행 | README 382행 · `example/README.md` 116 · 358 · 395 · 436행의 새 구절 있음 · 옛 구절 0; `tool/verify.dart` 의 (e) ~ (g) 주석 새 조각 15 · 옛 조각 0, 코드 줄(주석 줄을 뺀 줄)은 Task 2 커밋과 같고 여덟 구간은 `644897f` 와 같음 (코드 한 글자 변경 · 주석 미변경은 실패); `example/README.md` 변경 `4/4`; 작업 트리 검증 10/10 | ✅ | ⬜ pending |
-| 05-11 Task 1 | 05-11 | 10 | (처리 기록 — G2-Q1 · G2-Q2) | T-05-48 | N/A | grep | 처리 기록 fixed 13 · skipped 4 · deferred 1 · open 0 (WR-10 → 05-10 Task 1, 넷 → 05-10 Task 3 의 실제 커밋, skipped 이유 G2-Q2); 앞 회차 행 · 제목 · `recorded:` 불변; CHANGELOG 불변 | ✅ | ⬜ pending |
-| 05-11 Task 2 | 05-11 | 10 | VERIFY-06 (CI) · (D-20 · D-21) | T-05-49 · T-05-50 · T-05-51 · T-05-52 · T-05-53 | 비공개 정보가 공개 저장소에 올라가지 않는다; workflow 는 읽기 권한만 | grep (push 범위 전체) + e2e (GitHub) | 범위 `8789cfe..HEAD` 비공개 점검 + 이력 0, 심은 경로는 `LEAK?` 로 잡힘 — push 전에 첫째 자동 검증으로 돌려 0 일 때만; `git push origin gsd/v2.0-package-rework` → origin 머리의 `verify` success · 로그 두 줄; `main` · tag · PR 불변 | ✅ | ⬜ pending |
+| 05-10 Task 1 | 05-10 | 9 | VERIFY-06 · DOCS-06 (2회차 gap · WR-10 — 소유자 결정 G2-Q1 · G2-Q4) | T-05-40 · T-05-41 · T-05-42 · T-05-43 · T-05-46 · T-05-47 · T-05-54 | N/A | 지워 보기 (복제본) | `lib/codegen.yaml` 끝 `linter :` (M68) · `"linter":` (M69), `lib/riverpod.yaml` 끝 `linter :` (M70), codegen `analyzer:` 아래 `language:` (M71), 끝 `formatter:` (M72), 열 0 밖의 최상위 (M73) → 종료 코드 1 · `[3/10]` 실패 · `최상위에 받지 않는 줄이 있다` / `바로 아래에 받지 않는 줄이 있다` · 10개 중 1개, M68 ~ M70 에 `에 규칙이 있다` 없음; `lib/riverpod.yaml` 의 `plugins:` 아래 `custom_lint` · 따옴표 키 (M78) → 종료 코드 1 · `plugins:` 바로 아래 블록 `(2)`; 회귀 M45 · M36 · M34 · M59 · M60 · M61 · M66 → 70, M46 · M62 → 실패, M65 · M63 → 10/10; `declaredRuleNames` · (e) ~ (g) · `fencedLines` 의 코드 줄 `644897f` 그대로; README 378행 | ✅ | ✅ green |
+| 05-10 Task 2 | 05-10 | 9 | VERIFY-06 (표시 구역 밖 목록 줄 — 소유자 결정 G2-Q3) | T-05-43 · T-05-44 · T-05-46 · T-05-47 | N/A | 지워 보기 (복제본) | end 마커 뒤 `- `bogus_after_marker`` (M74) → `(1)`; `*` · `+` · `1.` · `1)` · `> -` (M75) → `(5)`; 앞 · 다음 절의 불릿 (M76) → 10/10; 펜스 뒤 불릿 (M77) → `(1)` · 펜스 안 줄 제외; start 마커 삭제 · 구역 안 옛 꼴 → 각자의 블록만 | ✅ | ✅ green |
+| 05-10 Task 3 | 05-10 | 9 | DOCS-06 (WR-07 · WR-08 · WR-09 · IN-08 — 소유자 결정 G2-Q2 · G2-Q5) | T-05-45 | 검사는 넓히지 않는다 | grep + 실행 | README 382행 · `example/README.md` 116 · 358 · 395 · 436행의 새 구절 있음 · 옛 구절 0; `tool/verify.dart` 의 (e) ~ (g) 주석 새 조각 15 · 옛 조각 0, 코드 줄(주석 줄을 뺀 줄)은 Task 2 커밋과 같고 여덟 구간은 `644897f` 와 같음 (코드 한 글자 변경 · 주석 미변경은 실패); `example/README.md` 변경 `4/4`; 작업 트리 검증 10/10 | ✅ | ✅ green |
+| 05-11 Task 1 | 05-11 | 10 | (처리 기록 — G2-Q1 · G2-Q2) | T-05-48 | N/A | grep | 처리 기록 fixed 13 · skipped 4 · deferred 1 · open 0 (WR-10 → 05-10 Task 1, 넷 → 05-10 Task 3 의 실제 커밋, skipped 이유 G2-Q2); 앞 회차 행 · 제목 · `recorded:` 불변; CHANGELOG 불변 | ✅ | ✅ green |
+| 05-11 Task 2 | 05-11 | 10 | VERIFY-06 (CI) · (D-20 · D-21) | T-05-49 · T-05-50 · T-05-51 · T-05-52 · T-05-53 | 비공개 정보가 공개 저장소에 올라가지 않는다; workflow 는 읽기 권한만 | grep (push 범위 전체) + e2e (GitHub) | 범위 `8789cfe..HEAD` 비공개 점검 + 이력 0, 심은 경로는 `LEAK?` 로 잡힘 — push 전에 첫째 자동 검증으로 돌려 0 일 때만; `git push origin gsd/v2.0-package-rework` → origin 머리의 `verify` success · 로그 두 줄; `main` · tag · PR 불변 | ✅ | ✅ green |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -112,7 +112,7 @@ Task ID / Plan / Wave / Threat Ref 는 계획(`05-NN-PLAN.md`)이 확정된 뒤 
 - [ ] Feedback latency < 30s — 로컬 `verify.dart` 한 번은 약 19 ~ 25초로 맞지만, 지워 보기를 담은 `<automated>` 는 45 ~ 126초 (아래 표). 지워 보기 수만큼 `verify.dart` 를 다시 돌리기 때문이다
 - [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** validated 2026-10-14 (orchestrator 감사 — 아래 표 둘; gap 수정 05-07 ~ 05-09 포함)
+**Approval:** validated 2026-10-14 (orchestrator 감사 — 아래 표 셋; gap 수정 05-07 ~ 05-09 · 2회차 gap 수정 05-10 · 05-11 포함)
 
 ---
 
@@ -157,6 +157,30 @@ Task ID / Plan / Wave / Threat Ref 는 계획(`05-NN-PLAN.md`)이 확정된 뒤 
 | 05-09 T3 (둘째) | `8789cfe` 고정 (본 작업 폴더) | 1 | 0 | 11초 | 적힌 그대로는 HEAD 단언 — 로컬 마무리 커밋(`c42dc33` · `c401d82` · `445ce22`)이 origin 보다 앞서 `origin == HEAD` 가 거짓 (상태 고정). `git rev-parse HEAD` 두 자리를 push 한 `8789cfe` 로 바꾼 판 rc 0 — origin 작업 브랜치 == `8789cfe`, head 둘, tag `v1.3.0` 하나, PR 0, run 38502214557 `success`, 로그 두 줄. executor 는 push · CI 직후(마무리 커밋 전)에 적힌 그대로 rc 0 (`05-09-SUMMARY.md`) |
 
 독립 확인 (orchestrator, 2026-10-14): GitHub run 38502214557 은 `completed` · `success` (headSha `8789cfe`, job 02:39:59Z ~ 02:44:13Z), 로그에 `[3/10] 배포 파일의 구성 ................ 통과` 와 `점검 통과 (10개 중 10개)`. push 범위 `92d478a..8789cfe` (25커밋) 의 추가된 줄에서 절대 경로 꼴 0줄, 이메일 꼴 0줄, 비공개 사용 프로젝트는 이미 있던 "실측: … (Dart 파일 474개)" 줄의 인용 3줄뿐(경로 꼴 0).
+
+## 감사 결과 — 2회차 gap 수정 05-10 · 05-11 (2026-10-14)
+
+방법은 위와 같다: `git clone --local` 복제본 하나에서 task 마다 그 task 의 커밋으로 `git checkout --detach` → 루트 `fvm dart pub get --no-example` → 계획의 `<automated>` 를 적힌 그대로 `bash -x` → `git checkout -- . && git clean -fdq -e .dart_tool`. 매 실행 뒤 복제본의 `git status --porcelain` 은 0줄이었다. 원격을 보는 05-11 Task 2 의 둘째 `<automated>` 는 본 작업 폴더에서 돌렸다. 이번에는 **실패 방향**도 봤다 — 그럴듯한 틀린 구현을 복제본에만 만들어 같은 `<automated>` 가 검사 동작의 자리에서 실패하는지 확인했다.
+
+| Task | 기준 커밋 | 적힌 그대로 rc | 고친 판 rc | 시간 | 메모 |
+|------|-----------|----------------|------------|------|------|
+| 05-10 T1 | `02966c4` | 0 | — | 335초 | M68 ~ M73 · M78 `[3/10]` 실패와 정해진 블록, 회귀 입력 11개 앞 기록과 같음, 복제본 기준 실행 10/10 |
+| 05-10 T2 | `204e401` | 0 | — | 214초 | M74 `(1)` · M75 `(5)` · M77 `(1)`, M76 10/10, 마커 없음 · 구역 안 옛 꼴은 각자의 블록만 |
+| 05-10 T3 | `d2d74c4` | 0 | — | 72초 | 새 문장 · 주석 조각 있음 · 옛 조각 0, 코드 줄(주석 줄을 뺀 줄)이 Task 2 커밋과 같음 |
+| 05-11 T1 | `b8519d4` | 0 | — | 1초 | fixed 13 · skipped 4 · deferred 1 · `open: 0`, WR-10 → `02966c4`, 넷 → `d2d74c4` |
+| 05-11 T2 (첫째) | `b8519d4` | 0 | — | 24초 | 범위 `8789cfe..b8519d4` 비공개 점검 0, 심은 경로는 `LEAK?` 로 잡힘, 검증 10/10 |
+| 05-11 T2 (둘째) | 본 작업 폴더, HEAD `b7d8215` | 0 | — | — | 메타데이터 커밋 뒤에도 적힌 그대로 통과 — "처리 기록 커밋 ⊆ origin 머리 ⊆ HEAD" 꼴이라 상태 고정이 아니다. origin 작업 브랜치 == `b8519d4`, head 둘, tag `v1.3.0` 하나, PR 0, run 38522962086 `success`, 로그 두 줄 |
+
+실패 방향 (복제본에서만 고친 판, 작업 트리는 그대로):
+
+| 틀린 구현 | 기준 커밋 | `<automated>` | rc | 걸린 자리 |
+|-----------|-----------|---------------|----|-----------|
+| A — 아래 키 목록을 늘 비게 함 (`allowedChildKeys` 를 읽지 않음) | `02966c4` | 05-10 T1 | 1 (166초) | M71 (`analyzer:` 아래 `language:`) 이 10/10 으로 빠져나가 `test "$R71" = 1` 에서 실패 |
+| B2 — 구역 밖 검사가 빈 줄 목록을 받음 (늘 빠짐, 줄 길이 같음) | `204e401` | 05-10 T2 | 1 (98초) | M74 (end 마커 뒤 불릿) 가 10/10 으로 빠져나가 `test "$R74" = 1` 에서 실패 |
+| 문장을 고치기 전 | `204e401` | 05-10 T3 | 1 (0초) | 첫 grep (새 README 382행 구절 없음) |
+
+- 처음 만든 B 판(`findListLinesOutsideMarkers(const <String>[], …)`)은 줄이 80자를 넘어 `dart format` 단언에서 2초 만에 걸렸다 — 검사 동작을 보지 못한 무효 실험이라 줄 길이가 같은 B2 로 다시 돌렸다.
+- 05-11 T1 의 실패 방향은 실행자가 고치기 전 파일로 본 rc 1 을 근거로 둔다 (`05-11-SUMMARY.md`).
 
 ## Validation Audit 2026-10-13
 
