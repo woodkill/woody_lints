@@ -78,10 +78,10 @@ Task ID / Plan / Wave / Threat Ref 는 계획(`05-NN-PLAN.md`)이 확정된 뒤 
 | 05-10 Task 3 | 05-10 | 9 | DOCS-06 (WR-07 · WR-08 · WR-09 · IN-08 — 소유자 결정 G2-Q2 · G2-Q5) | T-05-45 | 검사는 넓히지 않는다 | grep + 실행 | README 382행 · `example/README.md` 116 · 358 · 395 · 436행의 새 구절 있음 · 옛 구절 0; `tool/verify.dart` 의 (e) ~ (g) 주석 새 조각 15 · 옛 조각 0, 코드 줄(주석 줄을 뺀 줄)은 Task 2 커밋과 같고 여덟 구간은 `644897f` 와 같음 (코드 한 글자 변경 · 주석 미변경은 실패); `example/README.md` 변경 `4/4`; 작업 트리 검증 10/10 | ✅ | ✅ green |
 | 05-11 Task 1 | 05-11 | 10 | (처리 기록 — G2-Q1 · G2-Q2) | T-05-48 | N/A | grep | 처리 기록 fixed 13 · skipped 4 · deferred 1 · open 0 (WR-10 → 05-10 Task 1, 넷 → 05-10 Task 3 의 실제 커밋, skipped 이유 G2-Q2); 앞 회차 행 · 제목 · `recorded:` 불변; CHANGELOG 불변 | ✅ | ✅ green |
 | 05-11 Task 2 | 05-11 | 10 | VERIFY-06 (CI) · (D-20 · D-21) | T-05-49 · T-05-50 · T-05-51 · T-05-52 · T-05-53 | 비공개 정보가 공개 저장소에 올라가지 않는다; workflow 는 읽기 권한만 | grep (push 범위 전체) + e2e (GitHub) | 범위 `8789cfe..HEAD` 비공개 점검 + 이력 0, 심은 경로는 `LEAK?` 로 잡힘 — push 전에 첫째 자동 검증으로 돌려 0 일 때만; `git push origin gsd/v2.0-package-rework` → origin 머리의 `verify` success · 로그 두 줄; `main` · tag · PR 불변 | ✅ | ✅ green |
-| 05-12 Task 1 | 05-12 | 11 | VERIFY-06 (3회차 gap 1 · WR-11 — 소유자 결정 G3-Q1 · G3-R2-Q1) | T-05-55 · T-05-56 · T-05-57 · T-05-59 · T-05-60 | N/A | 지워 보기 (복제본) + 함수 단위 | 자리 여섯과 `pubspecReleaseVersion` 이 `splitYamlLines` (`LineSplitter`) 를 쓰고(주석 밖 8개) `pubspecReleaseVersion` 본문 밖의 `d2d74c4` 대비 코드 줄 변경은 줄 나누기뿐, 그 본문에 여러 줄 정규식 · 글자 치환 · 다시 잇기 없음; 함수 직접 호출 일곱 (`declared=[a]` · `options={strict-casts: true}` · `keys=[2행: formatter:]` · `crlf=[2행: formatter:]` · `strip=false` · `plugin=^3.1.9` · `pubspec=2.0.0` — U+2028 로 숨긴 `version:` 이 아니라 진짜 값); 주석 줄 끝 CR 뒤 규칙 (M79 · M80) · codegen 의 `language:` · `formatter:` (M81 · M82) → `[3/10]` 실패, M80 의 `[2/10]` 줄 끝 이름 `(always_specify_types)`; 함수 단위 M83 ~ M85 → `passed=false`; 회귀 M37 · M33 · M45 · M61 · 기준 10/10; README · M1 ~ M78 행 불변 | ✅ | ⬜ pending |
-| 05-12 Task 2 | 05-12 | 11 | DOCS-06 (gap 2 · WR-12 · WR-13 · WR-14 · IN-08 · IN-09 — 소유자 결정 G3-Q2 · G3-Q3) | T-05-56 · T-05-58 · T-05-59 | 검사는 넓히지 않는다 | grep + 실행 | README 382행 · `example/README.md` 116 · 395행의 키 글자 구절, 116 · 549행의 제목 · 펜스 판정 정의, 116행 (e) 의 `.yaml` · `.yml` 다른 패키지 주소, 518행 M35 · M37 · M46; `tool/verify.dart` 의 (e) · (f) · (g) 주석 새 조각 있음 · 옛 조각 0; 코드 줄이 Task 1 커밋과 같고 아홉 구간이 `d2d74c4` 와 같음; `example/README.md` 변경 `4/4`; 작업 트리 검증 10/10 | ✅ | ⬜ pending |
-| 05-13 Task 1 | 05-13 | 12 | (처리 기록 — G3-Q1 ~ G3-Q3) | T-05-61 | N/A | grep | 처리 기록 fixed 15 · skipped 7 · deferred 1 · open 0 (WR-11 → 05-12 Task 1, WR-12 · WR-13 · WR-14 · IN-09 → 05-12 Task 2 의 실제 커밋, skipped 이유 G3-Q2 · G3-Q3); 앞 회차 18행 · 제목 · `recorded:` 불변; CHANGELOG 불변 | ✅ | ⬜ pending |
-| 05-13 Task 2 | 05-13 | 12 | VERIFY-06 (CI) · (D-20 · D-21) | T-05-62 · T-05-63 · T-05-64 · T-05-65 · T-05-66 | 비공개 정보가 공개 저장소에 올라가지 않는다; workflow 는 읽기 권한만 | grep (push 범위 전체) + e2e (GitHub) | 범위 `b8519d4..HEAD` 비공개 점검 + 이력 0, 심은 경로는 `LEAK?` 로 잡힘 — push 전에 첫째 자동 검증으로 돌려 0 일 때만; `git push origin gsd/v2.0-package-rework` → origin 머리의 `verify` success · 로그 두 줄; `main` · tag · PR 불변 | ✅ | ⬜ pending |
+| 05-12 Task 1 | 05-12 | 11 | VERIFY-06 (3회차 gap 1 · WR-11 — 소유자 결정 G3-Q1 · G3-R2-Q1) | T-05-55 · T-05-56 · T-05-57 · T-05-59 · T-05-60 | N/A | 지워 보기 (복제본) + 함수 단위 | 자리 여섯과 `pubspecReleaseVersion` 이 `splitYamlLines` (`LineSplitter`) 를 쓰고(주석 밖 8개) `pubspecReleaseVersion` 본문 밖의 `d2d74c4` 대비 코드 줄 변경은 줄 나누기뿐, 그 본문에 여러 줄 정규식 · 글자 치환 · 다시 잇기 없음; 함수 직접 호출 일곱 (`declared=[a]` · `options={strict-casts: true}` · `keys=[2행: formatter:]` · `crlf=[2행: formatter:]` · `strip=false` · `plugin=^3.1.9` · `pubspec=2.0.0` — U+2028 로 숨긴 `version:` 이 아니라 진짜 값); 주석 줄 끝 CR 뒤 규칙 (M79 · M80) · codegen 의 `language:` · `formatter:` (M81 · M82) → `[3/10]` 실패, M80 의 `[2/10]` 줄 끝 이름 `(always_specify_types)`; 함수 단위 M83 ~ M85 → `passed=false`; 회귀 M37 · M33 · M45 · M61 · 기준 10/10; README · M1 ~ M78 행 불변 | ✅ | ✅ green |
+| 05-12 Task 2 | 05-12 | 11 | DOCS-06 (gap 2 · WR-12 · WR-13 · WR-14 · IN-08 · IN-09 — 소유자 결정 G3-Q2 · G3-Q3) | T-05-56 · T-05-58 · T-05-59 | 검사는 넓히지 않는다 | grep + 실행 | README 382행 · `example/README.md` 116 · 395행의 키 글자 구절, 116 · 549행의 제목 · 펜스 판정 정의, 116행 (e) 의 `.yaml` · `.yml` 다른 패키지 주소, 518행 M35 · M37 · M46; `tool/verify.dart` 의 (e) · (f) · (g) 주석 새 조각 있음 · 옛 조각 0; 코드 줄이 Task 1 커밋과 같고 아홉 구간이 `d2d74c4` 와 같음; `example/README.md` 변경 `4/4`; 작업 트리 검증 10/10 | ✅ | ✅ green |
+| 05-13 Task 1 | 05-13 | 12 | (처리 기록 — G3-Q1 ~ G3-Q3) | T-05-61 | N/A | grep | 처리 기록 fixed 15 · skipped 7 · deferred 1 · open 0 (WR-11 → 05-12 Task 1, WR-12 · WR-13 · WR-14 · IN-09 → 05-12 Task 2 의 실제 커밋, skipped 이유 G3-Q2 · G3-Q3); 앞 회차 18행 · 제목 · `recorded:` 불변; CHANGELOG 불변 | ✅ | ✅ green |
+| 05-13 Task 2 | 05-13 | 12 | VERIFY-06 (CI) · (D-20 · D-21) | T-05-62 · T-05-63 · T-05-64 · T-05-65 · T-05-66 | 비공개 정보가 공개 저장소에 올라가지 않는다; workflow 는 읽기 권한만 | grep (push 범위 전체) + e2e (GitHub) | 범위 `b8519d4..HEAD` 비공개 점검 + 이력 0, 심은 경로는 `LEAK?` 로 잡힘 — push 전에 첫째 자동 검증으로 돌려 0 일 때만; `git push origin gsd/v2.0-package-rework` → origin 머리의 `verify` success · 로그 두 줄; `main` · tag · PR 불변 | ✅ | ✅ green |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -113,10 +113,10 @@ Task ID / Plan / Wave / Threat Ref 는 계획(`05-NN-PLAN.md`)이 확정된 뒤 
 - [x] Sampling continuity: no 3 consecutive tasks without automated verify
 - [x] Wave 0 covers all MISSING references
 - [x] No watch-mode flags
-- [ ] Feedback latency < 30s — 로컬 `verify.dart` 한 번은 약 19 ~ 25초로 맞지만, 지워 보기를 담은 `<automated>` 는 45 ~ 126초 (아래 표). 지워 보기 수만큼 `verify.dart` 를 다시 돌리기 때문이다
+- [ ] Feedback latency < 30s — 로컬 `verify.dart` 한 번은 약 19 ~ 25초로 맞지만, 지워 보기를 담은 `<automated>` 는 45 ~ 335초 (아래 표들). 지워 보기 수만큼 `verify.dart` 를 다시 돌리기 때문이다
 - [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** validated 2026-10-14 (orchestrator 감사 — 아래 표 셋; gap 수정 05-07 ~ 05-09 · 2회차 gap 수정 05-10 · 05-11 포함)
+**Approval:** validated 2026-10-14 (orchestrator 감사 — 아래 표 넷; gap 수정 05-07 ~ 05-09 · 2회차 gap 수정 05-10 · 05-11 · 3회차 gap 수정 05-12 · 05-13 포함)
 
 ---
 
@@ -185,6 +185,27 @@ Task ID / Plan / Wave / Threat Ref 는 계획(`05-NN-PLAN.md`)이 확정된 뒤 
 
 - 처음 만든 B 판(`findListLinesOutsideMarkers(const <String>[], …)`)은 줄이 80자를 넘어 `dart format` 단언에서 2초 만에 걸렸다 — 검사 동작을 보지 못한 무효 실험이라 줄 길이가 같은 B2 로 다시 돌렸다.
 - 05-11 T1 의 실패 방향은 실행자가 고치기 전 파일로 본 rc 1 을 근거로 둔다 (`05-11-SUMMARY.md`).
+
+## 감사 결과 — 3회차 gap 수정 05-12 · 05-13 (2026-10-14)
+
+방법은 위와 같다: `git clone --local` 복제본 하나에서 task 마다 그 task 의 커밋으로 `git checkout --detach` → 루트 `fvm dart pub get --no-example` → 계획의 `<automated>` 를 적힌 그대로 `bash -x` → `git checkout -- . && git clean -fdq -e .dart_tool`. 매 실행 뒤 복제본의 `git status --porcelain` 은 0줄이었다. 원격을 보는 05-13 Task 2 의 둘째 `<automated>` 는 본 작업 폴더에서 돌렸다.
+
+| Task | 기준 커밋 | 적힌 그대로 rc | 고친 판 rc | 시간 | 메모 |
+|------|-----------|----------------|------------|------|------|
+| 05-12 T1 | `d771c0c` | 0 | — | 239초 | `splitYamlLines` 주석 밖 8개 · 코드 줄 변경은 줄 나누기뿐; 함수 직접 호출 일곱 기대값; M79 ~ M82 `[3/10]` 실패 (M80 `[2/10]` 줄 끝 `(always_specify_types)`), M83 ~ M85 `passed=false`; 회귀 M37 · M33 · M45 · M61 앞 기록 그대로, 복제본 기준 실행 10/10 |
+| 05-12 T2 | `d8b61b0` | 0 | — | 74초 | 새 구절 있음 · 옛 조각 0, 코드 줄이 Task 1 커밋과 같고 아홉 구간이 `d2d74c4` 와 같음, `example/README.md` 변경 `4/4`, 검증 10/10 |
+| 05-13 T1 | `c2f275a` | 0 | — | 0초 | fixed 15 · skipped 7 · deferred 1 · `open: 0`, WR-11 → `d771c0c`, WR-12 · WR-13 · WR-14 · IN-09 → `d8b61b0`, 앞 회차 18행 불변 |
+| 05-13 T2 (첫째) | `c2f275a` | 0 | — | 27초 | 범위 `b8519d4..c2f275a` 비공개 점검 0, 심은 경로는 `LEAK?` 로 잡힘, 검증 10/10 |
+| 05-13 T2 (둘째) | 본 작업 폴더, HEAD `85164b0` | 0 | — | — | 메타데이터 커밋 뒤에도 적힌 그대로 통과 ("처리 기록 커밋 ⊆ origin 머리 ⊆ HEAD" 꼴). origin 작업 브랜치 == `c2f275a`, head 둘, tag `v1.3.0` 하나, PR 0, run 38568654401 `success`, 로그 두 줄 |
+
+실패 방향 (복제본에서만, 05-12 T1 `<automated>` 의 동작 부분 — 복제본 · 하네스 · 지워 보기 — 만 떼어 돌림. 정적 단언은 도우미 줄을 글자 그대로 고정하므로 틀린 구현은 동작 단언 전에 걸린다):
+
+| 판 | 기준 커밋 | rc | 걸린 자리 | 함수 직접 호출 |
+|----|-----------|----|-----------|----------------|
+| 고치기 전 코드 | `3d5bd97` | 1 (74초) | `declared=[a]` | `declared=[]` · `options={}` · `keys=[]` · `crlf=[2행: formatter:]` · `strip=FormatException` · `plugin=FormatException` · `pubspec=9.9.9` — 일곱 가운데 여섯이 기대값과 다르다 (CRLF 는 고치기 전에도 맞았다) |
+| 막힌 셋만 고친 판 (`stripPlugins` · `readShippedPluginConstraint` · `copyLines` 를 옛 줄 나누기로 되돌림) | `d771c0c` + 변경 | 1 (74초) | `strip=false` | `declared` · `options` · `keys` · `crlf` · `pubspec` 는 기대값, `strip` · `plugin` 이 `FormatException` |
+
+- 실패 방향 두 판은 판정이 실패에서 멈춰 `<automated>` 끝의 임시 폴더 지우기에 닿지 않았다 — 감사 뒤 두 폴더를 직접 지웠다.
 
 ## Validation Audit 2026-10-13
 
