@@ -4,17 +4,17 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 05
 current_phase_name: Documentation
-status: Phase 05 3회차 gap 수정 계획 05-12 · 05-13 완료 — 실행 대기 (/gsd-execute-phase 05 --gaps-only)
-stopped_at: Phase 05 3회차 gap 수정 계획 완료 (05-12 · 05-13)
-last_updated: "2026-10-14T09:46:56.918Z"
+status: executing
+stopped_at: Completed 05-12-PLAN.md
+last_updated: "2026-10-14T12:57:34.345Z"
 last_activity: 2026-10-14
-last_activity_desc: Phase 05 3회차 gap 수정 계획 05-12 · 05-13 작성, plan checker 1회차 통과 (info 2)
-state_head: 207ef2d2040e1da968fa46105f3d6c20aff353b7
+last_activity_desc: Phase 05 execution started
+state_head: d8b61b0bb12b02f3dd3574652fd4d13d87e1a98b
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 39
-  completed_plans: 36
+  completed_plans: 38
   percent: 67
 ---
 
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-10-13)
 
 ## Current Position
 
-Phase: 05 (Documentation) — READY TO EXECUTE
-Plan: 11 of 13
-Status: Phase 05 3회차 gap 수정 계획 05-12 · 05-13 완료 — 실행 대기 (/gsd-execute-phase 05 --gaps-only)
-Last activity: 2026-10-14 — Phase 05 3회차 gap 수정 계획 05-12 · 05-13 작성, plan checker 1회차 통과 (info 2)
+Phase: 05 (Documentation) — EXECUTING
+Plan: 12 of 13
+Status: Ready to execute
+Last activity: 2026-10-14 — Phase 05 execution started
 
 Progress: [███████░░░] 67%
 
@@ -98,6 +98,7 @@ Progress: [███████░░░] 67%
 | Phase 05 P09 | 20min | 3 tasks | 6 files |
 | Phase 05 P10 | 27 min | 3 tasks | 3 files |
 | Phase 05 P11 | 7 min | 2 tasks | 1 files |
+| Phase 05 P12 | 20 min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -249,6 +250,8 @@ Recent decisions affecting current work:
 - [Phase 05]: 3회차 gap 수정 계획 전 소유자 결정 (2026-10-14, 모두 권고대로) — gap 1(WR-11, 주석 줄 끝 CR 뒤에 숨긴 규칙 · 키)은 `tool/verify.dart` 에서 YAML 을 줄로 나누는 자리를 모두 `LineSplitter` 하나로 맞춘다 (G3-Q1 — 막힌 셋 + `stripPlugins` · `readShippedPluginConstraint` · 진단 줄 번호로 규칙 이름을 읽는 곳). gap 2(WR-13 · WR-14)와 IN-08 의 남은 주석은 검사를 넓히지 않고 문장만 코드에 맞춘다 (G3-Q2). WR-12 는 문장에 정의를 적고 IN-09 는 읽는 법 한 줄을 넓힌다 — 코드는 바꾸지 않는다 (G3-Q3)
 - [Phase 05]: 3회차 gap 계획 중 소유자 결정 (2026-10-14, 모두 권고대로) — `pubspecReleaseVersion` 도 같은 도우미로 줄을 나눠 한 줄씩 읽는다 (G3-R2-Q1, 재현: 지금 정규식은 주석 안 U+2028 뒤의 `version: 9.9.9` 를 읽음), 측정 도구 `tool/measure_rules.dart` 의 줄 나누기는 둔다 (G3-R2-Q2)
 - [Phase 05]: 3회차 gap 수정 계획 05-12 (wave 11, `splitYamlLines` 도우미로 YAML 줄 나누기 일곱 자리 · 지워 보기 M79 ~ M85 · 문장 맞춤) · 05-13 (wave 12, 처리 기록 fixed 15 · skipped 7 · deferred 1 · open 0, push). Fable 크레딧 소진으로 planner · checker 를 Opus 로 돌렸다 (소유자 결정 G3-Q4). plan checker 1회차 통과 — info 2 (M80 의 교정 근거는 `stripPlugins`, Task 1 단언은 Task 1 커밋 시점에서 감사) (b986fc5, 207ef2d)
+- [Phase 05]: 05-12: 옵션 YAML 과 pubspec 을 줄로 나누는 자리는 모두 splitYamlLines (LineSplitter) 하나를 쓴다 — CR 하나도 줄을 나눈다 (소유자 결정 G3-Q1 · G3-R2-Q1)
+- [Phase 05]: 05-12: WR-12 · WR-13 · WR-14 · IN-08 은 문장 · 주석만 고치고 검사 코드는 그대로 둔다 (소유자 결정 G3-Q2 · G3-Q3)
 
 ### Pending Todos
 
@@ -275,6 +278,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-14T06:39:28.341Z
-Stopped at: Phase 05 3회차 gap 수정 계획 완료 (05-12 · 05-13)
-Resume file: .planning/phases/05-documentation/05-12-PLAN.md
+Last session: 2026-10-14T12:57:34.299Z
+Stopped at: Completed 05-12-PLAN.md
+Resume file: None
