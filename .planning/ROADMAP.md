@@ -248,7 +248,7 @@ Plans:
   4. CHANGELOG 최상단에 새 릴리스 항목이 Phase 1 에서 정한 형식으로 있고(추가·삭제 규칙, 지원 SDK 변경, 규칙별 실측 건수와 `dart fix` 가능 여부), 1.0.0 과 1.3.0 사이 항목이 git 이력으로 확인되는 범위에서 채워져 있다
   5. 배포 YAML 의 머리 주석이 실제 구성(조각 파일, 묶음, 옛 이름 별칭)을 설명하고, README 와 YAML 에 템플릿 보일러플레이트가 남아 있지 않다
 
-**Plans**: 11/11 plans executed (검증 gaps_found 23/25, 2026-10-14 — README 규칙 목록 reader 와 (b′) 가 읽지 못하는 줄을 건너뛰는 gap 2건, `05-VERIFICATION.md`; gap 수정 plan 05-07 ~ 05-09 실행 완료 2026-10-14, push `92d478a..8789cfe` · verify run 38502214557 success — 재검증 gaps_found 50/53: 지난 gap 둘은 닫힘, `declaredRuleNames` 가 `linter :` · `"linter":` 철자의 조각 규칙을 건너뛰는 새 gap 1건 (재리뷰 WR-07 ~ WR-10 · IN-08 은 경고 · 정보) — 2회차 gap 수정 계획됨 (05-10 · 05-11, 2026-10-14) — 소유자 결정 2026-10-14: gap 둘 + 같은 모양의 reader 넷(Q1) · 문장 넷(Q2) · 맞는 값에서 실패하는 곳과 코드 정리(Q3) · WR-06 은 D-09 대로 미룸(Q4); 2차 결정 2026-10-14: 고정 버전은 받기(R2-Q1) · 옵션 reader(R2-Q2) · 다른 패키지 주소(R2-Q3) · measure 주석만(R2-Q4); 2회차 소유자 결정 2026-10-14: 조각마다의 닫힌 목록으로 gap 과 WR-10 을 함께(G2-Q1) · WR-07 ~ WR-09 · IN-08 은 문장 좁히기(G2-Q2) · 표시 구역 밖 목록 줄 검사 더함(G2-Q3); Round 2: riverpod 의 plugins: 아래 명단(G2-Q4) · tool/verify.dart 의 (e) ~ (g) 주석 좁히기(G2-Q5); 05-10 실행 완료 2026-10-14 — 닫힌 목록 · 표시 구역 밖 목록 줄 · 문장 좁히기, 커밋 02966c4 · 204e401 · d2d74c4; 05-11 실행 완료 2026-10-14 — 처리 기록 open 0 (b8519d4), push `8789cfe..b8519d4` · verify run 38522962086 success — 재검증 gaps_found 62/66 (2026-10-14): 지난 gap 은 닫힘, 주석 줄 끝의 CR 뒤에 숨긴 규칙 · 옵션을 (a′) · `declaredRuleNames` 가 건너뛰는 새 gap 1건(WR-11)과 좁힌 문장 둘이 아직 넓은 gap 1건(WR-13 · WR-14) — 3회차 gap 수정 계획 대기)
+**Plans**: 11/13 plans executed (검증 gaps_found 23/25, 2026-10-14 — README 규칙 목록 reader 와 (b′) 가 읽지 못하는 줄을 건너뛰는 gap 2건, `05-VERIFICATION.md`; gap 수정 plan 05-07 ~ 05-09 실행 완료 2026-10-14, push `92d478a..8789cfe` · verify run 38502214557 success — 재검증 gaps_found 50/53: 지난 gap 둘은 닫힘, `declaredRuleNames` 가 `linter :` · `"linter":` 철자의 조각 규칙을 건너뛰는 새 gap 1건 (재리뷰 WR-07 ~ WR-10 · IN-08 은 경고 · 정보) — 2회차 gap 수정 계획됨 (05-10 · 05-11, 2026-10-14) — 소유자 결정 2026-10-14: gap 둘 + 같은 모양의 reader 넷(Q1) · 문장 넷(Q2) · 맞는 값에서 실패하는 곳과 코드 정리(Q3) · WR-06 은 D-09 대로 미룸(Q4); 2차 결정 2026-10-14: 고정 버전은 받기(R2-Q1) · 옵션 reader(R2-Q2) · 다른 패키지 주소(R2-Q3) · measure 주석만(R2-Q4); 2회차 소유자 결정 2026-10-14: 조각마다의 닫힌 목록으로 gap 과 WR-10 을 함께(G2-Q1) · WR-07 ~ WR-09 · IN-08 은 문장 좁히기(G2-Q2) · 표시 구역 밖 목록 줄 검사 더함(G2-Q3); Round 2: riverpod 의 plugins: 아래 명단(G2-Q4) · tool/verify.dart 의 (e) ~ (g) 주석 좁히기(G2-Q5); 05-10 실행 완료 2026-10-14 — 닫힌 목록 · 표시 구역 밖 목록 줄 · 문장 좁히기, 커밋 02966c4 · 204e401 · d2d74c4; 05-11 실행 완료 2026-10-14 — 처리 기록 open 0 (b8519d4), push `8789cfe..b8519d4` · verify run 38522962086 success — 재검증 gaps_found 62/66 (2026-10-14): 지난 gap 은 닫힘, 주석 줄 끝의 CR 뒤에 숨긴 규칙 · 옵션을 (a′) · `declaredRuleNames` 가 건너뛰는 새 gap 1건(WR-11)과 좁힌 문장 둘이 아직 넓은 gap 1건(WR-13 · WR-14) — 3회차 gap 수정 계획됨 (05-12 · 05-13, 2026-10-14) — 3회차 소유자 결정 2026-10-14: YAML 을 줄로 나누는 자리를 모두 LineSplitter 하나로(G3-Q1) · WR-13 · WR-14 는 문장만 코드에 맞춤(G3-Q2) · WR-12 · IN-09 는 문장으로(G3-Q3))
 
 Plans:
 
@@ -282,6 +282,12 @@ Plans:
 
 **Wave 10** *(blocked on Wave 9 — 같은 브랜치 push 는 D-21 대로 실행 뒤 보고)*
 - [x] 05-11-PLAN.md — 처리 기록 WR-10 fixed · WR-07 ~ WR-09 · IN-08 skipped (open 0), CHANGELOG 는 그대로 (VERSIONING.md — 저장소 안쪽); push 전 범위 `8789cfe..HEAD` 비공개 점검 → `git push origin gsd/v2.0-package-rework` → GitHub `verify` (VERIFY-06; D-07, D-09, D-20, D-21)
+
+**Wave 11** *(gap 수정 3회차 — 05-VERIFICATION.md 의 gap 둘(CR 하나로 나뉜 줄 · 아직 넓은 문장 둘)과 05-REVIEW.md 재리뷰 WR-11 ~ WR-14 · IN-08 · IN-09, 소유자 결정 2026-10-14 G3-Q1 ~ G3-Q3; blocked on Wave 10)*
+- [ ] 05-12-PLAN.md — (tracer) `tool/verify.dart` 에서 YAML 을 줄로 나누는 자리 여섯(`stripPlugins` · `declaredRuleNames` · `findUnexpectedKeys` · `enabledLanguageOptions` · `readShippedPluginConstraint` · `copyLines`)을 도우미 `splitYamlLines` (`LineSplitter` — CR · LF · CRLF) 하나로, CR 뒤에 숨긴 규칙 · 옵션 · 키 · plugin 을 `[3/10]` 실패로 (gap 1 · WR-11, 전체 실행 M79 ~ M82 · 함수 단위 M83 ~ M85, 회귀 M33 · M37 · M45 · M61, G3-Q1); README 382행 · `example/README.md` 116 · 395 · 518 · 549행 · `tool/verify.dart` 의 (e) · (f) · (g) 주석을 실제 범위로, 코드 줄은 그대로 (gap 2 · WR-12 · WR-13 · WR-14 · IN-08 · IN-09, G3-Q2 · G3-Q3) — 지워 보기는 복제본에서 (VERIFY-06, DOCS-06; D-01, D-02, D-20)
+
+**Wave 12** *(blocked on Wave 11 — 같은 브랜치 push 는 D-21 대로 실행 뒤 보고)*
+- [ ] 05-13-PLAN.md — 처리 기록 WR-11 · IN-09 fixed · WR-12 · WR-13 · WR-14 skipped (open 0), CHANGELOG 는 그대로 (VERSIONING.md — 저장소 안쪽); push 전 범위 `b8519d4..HEAD` 비공개 점검 → `git push origin gsd/v2.0-package-rework` → GitHub `verify` (VERIFY-06, DOCS-06; D-07, D-09, D-20, D-21)
 
 **Decision points** (이 phase 안에서 소유자가 정한다):
 - **D10** — README 의 규칙 목록을 어떻게 유지할지: 생성 스크립트 / YAML 로 링크만 / 사람이 맞춤 / 마커 구역과 비교 스크립트. VERIFY-06 이 "다르면 실패"를 요구하므로 비교 검사 하나는 있어야 한다. 조사 권고는 생성까지 가지 않는 비교 검사다.
@@ -332,7 +338,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Verification Harness | 5/5 | Complete    | 2026-10-12 |
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
 | 4. Rule Reselection | 13/13 | Complete    | 2026-10-13 |
-| 5. Documentation | 11/11 | 재검증 gaps_found 62/66 — 3회차 gap 수정 계획 대기 | - |
+| 5. Documentation | 11/13 | 재검증 gaps_found 62/66 — 3회차 gap 수정 계획됨 (05-12 · 05-13) | - |
 | 6. Release | 0/TBD | Not started | - |
 
 ## Backlog
