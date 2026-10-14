@@ -4,16 +4,16 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 05
 current_phase_name: Documentation
-status: Phase 05 재검증 gaps_found 74/78 — 4회차 gap 수정 계획 대기 (/gsd-plan-phase 05 --gaps)
-stopped_at: Completed 05-13-PLAN.md
-last_updated: "2026-10-14T14:07:19.500Z"
-last_activity: 2026-10-14
-last_activity_desc: "Phase 05 3회차 gap 수정 뒤 재검증 gaps_found 74/78: 지난 gap 둘은 닫힘, 여러 줄 스칼라 · 중복 키를 줄 단위 reader 가 YAML 과 다르게 읽는 새 gap(WR-15 · WR-16), IN-10 문장"
-state_head: b31e8a5ea621471d9a3160a6768f5a1cbab31e4b
+status: Phase 05 4회차 gap 수정 계획 완료 — 실행 대기 (/gsd-execute-phase 05 --gaps-only)
+stopped_at: Phase 05 4회차 gap 수정 계획 완료 (05-14 · 05-15)
+last_updated: "2026-10-14T18:50:58.002Z"
+last_activity: 2026-10-15
+last_activity_desc: "Phase 05 4회차 gap 수정 계획 05-14 · 05-15 완료 (plan checker 2회차 통과 — info 2): 줄 단위 reader 의 값을 package:yaml 해석 결과와 견주는 (h), IN-10 · IN-11 문장 · 주석, skill 세 줄 · README 380행"
+state_head: e170e641b38ff3697aeb89cb5eb3510a737bbf7e
 progress:
   total_phases: 6
   completed_phases: 4
-  total_plans: 39
+  total_plans: 41
   completed_plans: 39
   percent: 67
 ---
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-10-13)
 
 ## Current Position
 
-Phase: 05 (Documentation) — EXECUTING
-Plan: 13 of 13
-Status: Phase 05 재검증 gaps_found 74/78 — 4회차 gap 수정 계획 대기 (/gsd-plan-phase 05 --gaps)
-Last activity: 2026-10-14 — Phase 05 3회차 gap 수정 뒤 재검증 gaps_found 74/78: 지난 gap 둘은 닫힘, 여러 줄 스칼라 · 중복 키를 줄 단위 reader 가 YAML 과 다르게 읽는 새 gap(WR-15 · WR-16), IN-10 문장
+Phase: 05 (Documentation) — READY TO EXECUTE
+Plan: 13 of 15
+Status: Phase 05 4회차 gap 수정 계획 완료 — 실행 대기 (/gsd-execute-phase 05 --gaps-only)
+Last activity: 2026-10-15 — Phase 05 4회차 gap 수정 계획 05-14 · 05-15 완료 (plan checker 2회차 통과 — info 2): 줄 단위 reader 의 값을 package:yaml 해석 결과와 견주는 (h), IN-10 · IN-11 문장 · 주석, skill 세 줄 · README 380행
 
 Progress: [███████░░░] 67%
 
@@ -255,6 +255,9 @@ Recent decisions affecting current work:
 - [Phase 05]: 05-12: WR-12 · WR-13 · WR-14 · IN-08 은 문장 · 주석만 고치고 검사 코드는 그대로 둔다 (소유자 결정 G3-Q2 · G3-Q3)
 - [Phase 05]: 05-13: 05 리뷰 처리 기록은 fixed 15 · skipped 7 · deferred 1 · open 0 이다 — WR-11 은 05-12 Task 1 (d771c0c) 로 fixed (G3-Q1 · G3-R2-Q1), IN-09 는 05-12 Task 2 (d8b61b0) 로 fixed (G3-Q3), WR-12 는 정의만 적어 skipped (G3-Q3), WR-13 · WR-14 는 문장을 검사 범위에 맞춰 skipped (G3-Q2), WR-06 은 deferred 그대로 (c2f275a). CHANGELOG 는 저장소 안쪽 변경이라 그대로
 - [Phase 05]: 05-13: 3회차 gap 수정을 git push origin gsd/v2.0-package-rework 한 줄로 올렸다 (2026-10-14T13:03:22Z, b8519d4..c2f275a, 14커밋, fast-forward, 둘째 push 없음, D-21 — 실행 뒤 보고). GitHub verify run 38568654401 success, job 2분 54초 (ubuntu-24.04 20261012.334.1 — 이미지가 바뀌었고 통과), 로그에 [3/10] 통과와 점검 통과 (10개 중 10개) — splitYamlLines 줄 나누기가 runner 에서도 통과. main 90a2736 · tag v1.3.0 하나 · PR 0 그대로이고 05-13 의 SUMMARY · 메타데이터 커밋은 origin 에 없다
+- [Phase 05]: 4회차 gap 수정 계획 전 소유자 결정 (2026-10-14 ~ 15, 모두 권고대로) — gap 1(WR-15 · WR-16 · 검증자 R1 ~ R3, 여러 줄 스칼라 · 중복 키를 줄 단위 reader 가 YAML 과 다르게 읽음)은 길 B: 루트 `pubspec.yaml` 의 `dev_dependencies` 에 `yaml` 을 두고, 줄 단위 reader 가 읽은 규칙 · 옵션 · 키 · plugin · version 을 `package:yaml` 해석 결과와 견줘 다르면 실패 — 줄 단위 reader 는 그대로 둔다. Phase 2 의 D-11(`dart:io` · `dart:convert` 만)을 이 목적에 한해 다시 정함 (G4-Q1). IN-10 은 문장만, IN-11 은 주석만 (G4-Q2). 모델은 Fable 로 시작해 크레딧 소진으로 Opus (G4-Q3)
+- [Phase 05]: 4회차 gap 계획 중 소유자 결정 (2026-10-15, 모두 권고대로) — skill `spike-findings-woody-lints` 의 "`dart:io` · `dart:convert` 만 쓴다 (D-11)" 세 줄(SKILL.md 52 · analyze-run-and-verdict.md 13 · rule-status-check.md 14)을 제자리에서 고침 (G4-R2-Q1 · G4-R3-Q1), README 380행 · `example/README.md` 11행에 "`pubspec.yaml` 이 바뀐 뒤에는 `fvm dart pub get` 먼저" 를 더함 (G4-R2-Q2, 재현: 받아 둔 트리에서 그대로 돌리면 종료 코드 254 컴파일 오류). `.claude/CLAUDE.md` 261행(pubspec 설명에 `dev_dependencies` 없음)은 WR-06 과 함께 D-09 로 미룸
+- [Phase 05]: 4회차 gap 수정 계획 05-14 (wave 13, `pubspec.yaml` dev_dependencies `yaml` · `[3/10]` 의 확인 (h) `compareLineReadersWithYaml` · 지워 보기 M86 ~ M91 · IN-10 · IN-11 문장 · skill 세 줄 · README 380 / `example/README.md` 11행) · 05-15 (wave 14, 처리 기록 WR-15 · WR-16 · IN-11 fixed · IN-10 skipped · open 0, push). planner · checker 는 Opus. plan checker 1회차 warning 4 (W1 아래 키 단언 · 더한 코드 줄 한정 · skill 셋째 줄 · 낡은 줄 번호) → 수정 1회 → 2회차 통과 — info 2 (05-15 push 앞 확인 없음은 D-21 그대로, 05-14 추정이 예산과 같음) (f52a920, c9ea115, e170e64)
 
 ### Pending Todos
 
@@ -269,7 +272,7 @@ None yet.
 - [Phase 4] 리뷰 지적 18건이 열려 있다 (`04-REVIEW-DISPOSITION.md`, 합계 28 — open 18 · deferred 3 · fixed 7). deferred 셋: WR-11 (`[3/10]` 의 겹침 · `RULES.md` 일치가 `lib/base.yaml` 만 읽음) 은 Phase 5 의 VERIFY-06 과 함께 (ROADMAP Phase 5 Notes), CR-03 · WR-09 (측정 도구) 는 다음 재측정(RULES-13) 전에
 - [Phase 6] `main` 병합은 `ref: main` 사용 프로젝트 5개에 새 버전을 배포하는 일이다. tag 와 병합의 순서를 계획 때 정한다
 - [Phase 6] Phase 2 에서 미룬 확인 둘 — PR 에서 `verify` 가 도는지, 수동 실행 버튼 (ROADMAP 의 Phase 6 Notes)
-- [Phase 5] `.claude/CLAUDE.md` 70 · 173 · 313행이 이미 걷어낸 루트 `analysis_options.yaml` exclude 를 "유지해야 한다" 고 지시한다 (05-REVIEW WR-06, D-09 로 deferred — 마일스톤 끝 `/gsd-map-codebase`). 그 전에 루트 exclude 를 건드리는 작업이 오면 그 지시를 따르지 않는다. `tool/measure_rules.dart` 의 `readRulesTable` · `tool/verify.dart` 의 `readUpstreamRules.readSet` 은 읽지 못하는 줄을 건너뛰는 꼴로 열어 둠 (소유자 결정 2026-10-14)
+- [Phase 5] `.claude/CLAUDE.md` 70 · 173 · 313행이 이미 걷어낸 루트 `analysis_options.yaml` exclude 를 "유지해야 한다" 고 지시한다 (05-REVIEW WR-06, D-09 로 deferred — 마일스톤 끝 `/gsd-map-codebase`). 그 전에 루트 exclude 를 건드리는 작업이 오면 그 지시를 따르지 않는다. `tool/measure_rules.dart` 의 `readRulesTable` · `tool/verify.dart` 의 `readUpstreamRules.readSet` 은 읽지 못하는 줄을 건너뛰는 꼴로 열어 둠 (소유자 결정 2026-10-14). 같은 파일 261행의 pubspec 설명에 4회차 gap 이 더할 `dev_dependencies` 가 없다 — 같은 D-09 로 미룸 (2026-10-15)
 
 ## Deferred Items
 
@@ -281,6 +284,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-14T13:08:56.239Z
-Stopped at: Completed 05-13-PLAN.md
-Resume file: None
+Last session: 2026-10-14T18:51:28.000Z
+Stopped at: Phase 05 4회차 gap 수정 계획 완료 (05-14 · 05-15) — 다음은 /gsd-execute-phase 05 --gaps-only
+Resume file: .planning/phases/05-documentation/05-14-PLAN.md
