@@ -248,7 +248,7 @@ Plans:
   4. CHANGELOG 최상단에 새 릴리스 항목이 Phase 1 에서 정한 형식으로 있고(추가·삭제 규칙, 지원 SDK 변경, 규칙별 실측 건수와 `dart fix` 가능 여부), 1.0.0 과 1.3.0 사이 항목이 git 이력으로 확인되는 범위에서 채워져 있다
   5. 배포 YAML 의 머리 주석이 실제 구성(조각 파일, 묶음, 옛 이름 별칭)을 설명하고, README 와 YAML 에 템플릿 보일러플레이트가 남아 있지 않다
 
-**Plans**: 11/11 plans executed (검증 gaps_found 23/25, 2026-10-14 — README 규칙 목록 reader 와 (b′) 가 읽지 못하는 줄을 건너뛰는 gap 2건, `05-VERIFICATION.md`; gap 수정 plan 05-07 ~ 05-09 실행 완료 2026-10-14, push `92d478a..8789cfe` · verify run 38502214557 success — 재검증 gaps_found 50/53: 지난 gap 둘은 닫힘, `declaredRuleNames` 가 `linter :` · `"linter":` 철자의 조각 규칙을 건너뛰는 새 gap 1건 (재리뷰 WR-07 ~ WR-10 · IN-08 은 경고 · 정보) — 2회차 gap 수정 계획됨 (05-10 · 05-11, 2026-10-14) — 소유자 결정 2026-10-14: gap 둘 + 같은 모양의 reader 넷(Q1) · 문장 넷(Q2) · 맞는 값에서 실패하는 곳과 코드 정리(Q3) · WR-06 은 D-09 대로 미룸(Q4); 2차 결정 2026-10-14: 고정 버전은 받기(R2-Q1) · 옵션 reader(R2-Q2) · 다른 패키지 주소(R2-Q3) · measure 주석만(R2-Q4); 2회차 소유자 결정 2026-10-14: 조각마다의 닫힌 목록으로 gap 과 WR-10 을 함께(G2-Q1) · WR-07 ~ WR-09 · IN-08 은 문장 좁히기(G2-Q2) · 표시 구역 밖 목록 줄 검사 더함(G2-Q3); Round 2: riverpod 의 plugins: 아래 명단(G2-Q4) · tool/verify.dart 의 (e) ~ (g) 주석 좁히기(G2-Q5); 05-10 실행 완료 2026-10-14 — 닫힌 목록 · 표시 구역 밖 목록 줄 · 문장 좁히기, 커밋 02966c4 · 204e401 · d2d74c4; 05-11 실행 완료 2026-10-14 — 처리 기록 open 0 (b8519d4), push `8789cfe..b8519d4` · verify run 38522962086 success — 재검증 대기)
+**Plans**: 11/11 plans executed (검증 gaps_found 23/25, 2026-10-14 — README 규칙 목록 reader 와 (b′) 가 읽지 못하는 줄을 건너뛰는 gap 2건, `05-VERIFICATION.md`; gap 수정 plan 05-07 ~ 05-09 실행 완료 2026-10-14, push `92d478a..8789cfe` · verify run 38502214557 success — 재검증 gaps_found 50/53: 지난 gap 둘은 닫힘, `declaredRuleNames` 가 `linter :` · `"linter":` 철자의 조각 규칙을 건너뛰는 새 gap 1건 (재리뷰 WR-07 ~ WR-10 · IN-08 은 경고 · 정보) — 2회차 gap 수정 계획됨 (05-10 · 05-11, 2026-10-14) — 소유자 결정 2026-10-14: gap 둘 + 같은 모양의 reader 넷(Q1) · 문장 넷(Q2) · 맞는 값에서 실패하는 곳과 코드 정리(Q3) · WR-06 은 D-09 대로 미룸(Q4); 2차 결정 2026-10-14: 고정 버전은 받기(R2-Q1) · 옵션 reader(R2-Q2) · 다른 패키지 주소(R2-Q3) · measure 주석만(R2-Q4); 2회차 소유자 결정 2026-10-14: 조각마다의 닫힌 목록으로 gap 과 WR-10 을 함께(G2-Q1) · WR-07 ~ WR-09 · IN-08 은 문장 좁히기(G2-Q2) · 표시 구역 밖 목록 줄 검사 더함(G2-Q3); Round 2: riverpod 의 plugins: 아래 명단(G2-Q4) · tool/verify.dart 의 (e) ~ (g) 주석 좁히기(G2-Q5); 05-10 실행 완료 2026-10-14 — 닫힌 목록 · 표시 구역 밖 목록 줄 · 문장 좁히기, 커밋 02966c4 · 204e401 · d2d74c4; 05-11 실행 완료 2026-10-14 — 처리 기록 open 0 (b8519d4), push `8789cfe..b8519d4` · verify run 38522962086 success — 재검증 gaps_found 62/66 (2026-10-14): 지난 gap 은 닫힘, 주석 줄 끝의 CR 뒤에 숨긴 규칙 · 옵션을 (a′) · `declaredRuleNames` 가 건너뛰는 새 gap 1건(WR-11)과 좁힌 문장 둘이 아직 넓은 gap 1건(WR-13 · WR-14) — 3회차 gap 수정 계획 대기)
 
 Plans:
 
@@ -332,7 +332,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Verification Harness | 5/5 | Complete    | 2026-10-12 |
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
 | 4. Rule Reselection | 13/13 | Complete    | 2026-10-13 |
-| 5. Documentation | 11/11 | 2회차 gap 수정 실행 완료 (05-10 · 05-11) — 재검증 대기 | - |
+| 5. Documentation | 11/11 | 재검증 gaps_found 62/66 — 3회차 gap 수정 계획 대기 | - |
 | 6. Release | 0/TBD | Not started | - |
 
 ## Backlog
