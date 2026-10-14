@@ -82,10 +82,10 @@ Task ID / Plan / Wave / Threat Ref 는 계획(`05-NN-PLAN.md`)이 확정된 뒤 
 | 05-12 Task 2 | 05-12 | 11 | DOCS-06 (gap 2 · WR-12 · WR-13 · WR-14 · IN-08 · IN-09 — 소유자 결정 G3-Q2 · G3-Q3) | T-05-56 · T-05-58 · T-05-59 | 검사는 넓히지 않는다 | grep + 실행 | README 382행 · `example/README.md` 116 · 395행의 키 글자 구절, 116 · 549행의 제목 · 펜스 판정 정의, 116행 (e) 의 `.yaml` · `.yml` 다른 패키지 주소, 518행 M35 · M37 · M46; `tool/verify.dart` 의 (e) · (f) · (g) 주석 새 조각 있음 · 옛 조각 0; 코드 줄이 Task 1 커밋과 같고 아홉 구간이 `d2d74c4` 와 같음; `example/README.md` 변경 `4/4`; 작업 트리 검증 10/10 | ✅ | ✅ green |
 | 05-13 Task 1 | 05-13 | 12 | (처리 기록 — G3-Q1 ~ G3-Q3) | T-05-61 | N/A | grep | 처리 기록 fixed 15 · skipped 7 · deferred 1 · open 0 (WR-11 → 05-12 Task 1, WR-12 · WR-13 · WR-14 · IN-09 → 05-12 Task 2 의 실제 커밋, skipped 이유 G3-Q2 · G3-Q3); 앞 회차 18행 · 제목 · `recorded:` 불변; CHANGELOG 불변 | ✅ | ✅ green |
 | 05-13 Task 2 | 05-13 | 12 | VERIFY-06 (CI) · (D-20 · D-21) | T-05-62 · T-05-63 · T-05-64 · T-05-65 · T-05-66 | 비공개 정보가 공개 저장소에 올라가지 않는다; workflow 는 읽기 권한만 | grep (push 범위 전체) + e2e (GitHub) | 범위 `b8519d4..HEAD` 비공개 점검 + 이력 0, 심은 경로는 `LEAK?` 로 잡힘 — push 전에 첫째 자동 검증으로 돌려 0 일 때만; `git push origin gsd/v2.0-package-rework` → origin 머리의 `verify` success · 로그 두 줄; `main` · tag · PR 불변 | ✅ | ✅ green |
-| 05-14 Task 1 | 05-14 | 13 | VERIFY-06 (4회차 gap 1 · WR-15 · WR-16 — 소유자 결정 G4-Q1) · DOCS-06 (실행 안내 · skill — G4-R2-Q1 · G4-R2-Q2 · G4-R3-Q1) | T-05-67 · T-05-68 · T-05-69 · T-05-70 · T-05-71 · T-05-72 · T-05-74 · T-05-82 | 개발용 의존성 `yaml` 은 받는 쪽 의존성 그래프에 들어가지 않는다 | 지워 보기 (복제본) + 함수 단위 | `pubspec.yaml` = `968a5bb` + 빈 줄 · 주석 · `dev_dependencies:` · `  yaml: ^3.1.4`; import 셋, `d8b61b0` 대비 지운 코드 줄 0 · reader 열셋 그대로 · `checkShippedComposition` 에 (h) 호출 한 줄; 새 복제본 `pub get` 없는 첫 실행 10/10 · `pubspec.lock` 의 `yaml` direct dev · 받는 쪽 lock 불변; M86 ~ M89 → `[3/10]` 만 · 10개 중 1개와 정해진 (h) 블록; M90 · M91 · 선언만 다른 입력 · 같은 키 두 번 → `passed=false` 와 정해진 블록; CRLF · CR 변형 `passed=true`; M86 의 `linter:` · M89 의 `analyzer:` 바로 아래 키 블록; 더한 코드 줄은 import · 새 선언 블록 · (h) 호출 안에만; M68 · M69 · M70 · M73 · M78 에 (h) 블록; 회귀 M79 · M37 · M45 · M61 · M66 앞 기록 그대로; skill 세 줄(`SKILL.md` 52 · `references/analyze-run-and-verdict.md` 13 · `references/rule-status-check.md` 14) 정해진 줄 · 파일마다 `de8900c` 대비 `1/1` · 바뀐 skill 파일 셋, README 는 380행 하나(정해진 줄), `example/README.md` 는 11행 하나만 고침(116 · 395행 자리 그대로); 복제본의 `yaml` 없는 package config 로 `--bogus` 254 → `pub get` 뒤 64; M1 ~ M85 행 불변 | ✅ | ⬜ pending |
-| 05-14 Task 2 | 05-14 | 13 | DOCS-06 (gap 2 · IN-10 · IN-11 — 소유자 결정 G4-Q2) | T-05-72 · T-05-73 | 검사는 고치지 않는다 | grep + 실행 | README 382행 · `example/README.md` 116 · 395행 · `fencedLines` · `checkShippedComposition` 문서 주석의 `그 펜스를 닫는 것으로 보아` (1 · 2 · 2), `stripPlugins` 주석의 IN-11 문장 · 옛 문장 0; 코드 줄이 Task 1 커밋과 같음; Task 1 커밋 대비 README 바뀐 줄 382행 하나 · skill 불변, `example/README.md` `2/2`, M1 ~ M91 행 불변; 작업 트리 검증 10/10 | ✅ | ⬜ pending |
-| 05-15 Task 1 | 05-15 | 14 | (처리 기록 — G4-Q1 · G4-Q2) | T-05-75 | N/A | grep | 처리 기록 fixed 18 · skipped 8 · deferred 1 · open 0 (WR-15 · WR-16 → 05-14 Task 1, IN-10 · IN-11 → 05-14 Task 2 의 실제 커밋, IN-10 skipped 이유 G4-Q2); 앞 회차 23행 · 제목 · `recorded:` 불변; CHANGELOG 불변 | ✅ | ⬜ pending |
-| 05-15 Task 2 | 05-15 | 14 | VERIFY-06 (CI) · (D-20 · D-21) | T-05-76 · T-05-77 · T-05-78 · T-05-79 · T-05-80 · T-05-81 | 비공개 정보가 공개 저장소에 올라가지 않는다; workflow 는 읽기 권한만 · 바꾸지 않는다 | grep (push 범위 전체) + e2e (GitHub) | 범위 `c2f275a..HEAD` 비공개 점검 + 이력 0 (`.claude/skills/` 는 세 파일 `1/1` 이고 더한 줄 셋이 05-14 의 새 글자 — (1) · (1′) 도 보고 (2) 대상에서는 뺌), 심은 경로는 `LEAK?` 로 잡힘 — push 전에 첫째 자동 검증으로 돌려 0 일 때만; `git push origin gsd/v2.0-package-rework` → origin 머리의 `verify` success (새 checkout 이 `yaml` 을 받음) · 로그 두 줄; `main` · tag · PR 불변 | ✅ | ⬜ pending |
+| 05-14 Task 1 | 05-14 | 13 | VERIFY-06 (4회차 gap 1 · WR-15 · WR-16 — 소유자 결정 G4-Q1) · DOCS-06 (실행 안내 · skill — G4-R2-Q1 · G4-R2-Q2 · G4-R3-Q1) | T-05-67 · T-05-68 · T-05-69 · T-05-70 · T-05-71 · T-05-72 · T-05-74 · T-05-82 | 개발용 의존성 `yaml` 은 받는 쪽 의존성 그래프에 들어가지 않는다 | 지워 보기 (복제본) + 함수 단위 | `pubspec.yaml` = `968a5bb` + 빈 줄 · 주석 · `dev_dependencies:` · `  yaml: ^3.1.4`; import 셋, `d8b61b0` 대비 지운 코드 줄 0 · reader 열셋 그대로 · `checkShippedComposition` 에 (h) 호출 한 줄; 새 복제본 `pub get` 없는 첫 실행 10/10 · `pubspec.lock` 의 `yaml` direct dev · 받는 쪽 lock 불변; M86 ~ M89 → `[3/10]` 만 · 10개 중 1개와 정해진 (h) 블록; M90 · M91 · 선언만 다른 입력 · 같은 키 두 번 → `passed=false` 와 정해진 블록; CRLF · CR 변형 `passed=true`; M86 의 `linter:` · M89 의 `analyzer:` 바로 아래 키 블록; 더한 코드 줄은 import · 새 선언 블록 · (h) 호출 안에만; M68 · M69 · M70 · M73 · M78 에 (h) 블록; 회귀 M79 · M37 · M45 · M61 · M66 앞 기록 그대로; skill 세 줄(`SKILL.md` 52 · `references/analyze-run-and-verdict.md` 13 · `references/rule-status-check.md` 14) 정해진 줄 · 파일마다 `de8900c` 대비 `1/1` · 바뀐 skill 파일 셋, README 는 380행 하나(정해진 줄), `example/README.md` 는 11행 하나만 고침(116 · 395행 자리 그대로); 복제본의 `yaml` 없는 package config 로 `--bogus` 254 → `pub get` 뒤 64; M1 ~ M85 행 불변 | ✅ | ✅ green |
+| 05-14 Task 2 | 05-14 | 13 | DOCS-06 (gap 2 · IN-10 · IN-11 — 소유자 결정 G4-Q2) | T-05-72 · T-05-73 | 검사는 고치지 않는다 | grep + 실행 | README 382행 · `example/README.md` 116 · 395행 · `fencedLines` · `checkShippedComposition` 문서 주석의 `그 펜스를 닫는 것으로 보아` (1 · 2 · 2), `stripPlugins` 주석의 IN-11 문장 · 옛 문장 0; 코드 줄이 Task 1 커밋과 같음; Task 1 커밋 대비 README 바뀐 줄 382행 하나 · skill 불변, `example/README.md` `2/2`, M1 ~ M91 행 불변; 작업 트리 검증 10/10 | ✅ | ✅ green |
+| 05-15 Task 1 | 05-15 | 14 | (처리 기록 — G4-Q1 · G4-Q2) | T-05-75 | N/A | grep | 처리 기록 fixed 18 · skipped 8 · deferred 1 · open 0 (WR-15 · WR-16 → 05-14 Task 1, IN-10 · IN-11 → 05-14 Task 2 의 실제 커밋, IN-10 skipped 이유 G4-Q2); 앞 회차 23행 · 제목 · `recorded:` 불변; CHANGELOG 불변 | ✅ | ✅ green |
+| 05-15 Task 2 | 05-15 | 14 | VERIFY-06 (CI) · (D-20 · D-21) | T-05-76 · T-05-77 · T-05-78 · T-05-79 · T-05-80 · T-05-81 | 비공개 정보가 공개 저장소에 올라가지 않는다; workflow 는 읽기 권한만 · 바꾸지 않는다 | grep (push 범위 전체) + e2e (GitHub) | 범위 `c2f275a..HEAD` 비공개 점검 + 이력 0 (`.claude/skills/` 는 세 파일 `1/1` 이고 더한 줄 셋이 05-14 의 새 글자 — (1) · (1′) 도 보고 (2) 대상에서는 뺌), 심은 경로는 `LEAK?` 로 잡힘 — push 전에 첫째 자동 검증으로 돌려 0 일 때만; `git push origin gsd/v2.0-package-rework` → origin 머리의 `verify` success (새 checkout 이 `yaml` 을 받음) · 로그 두 줄; `main` · tag · PR 불변 | ✅ | ✅ green |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -120,7 +120,7 @@ Task ID / Plan / Wave / Threat Ref 는 계획(`05-NN-PLAN.md`)이 확정된 뒤 
 - [ ] Feedback latency < 30s — 로컬 `verify.dart` 한 번은 약 19 ~ 25초로 맞지만, 지워 보기를 담은 `<automated>` 는 45 ~ 335초 (아래 표들). 지워 보기 수만큼 `verify.dart` 를 다시 돌리기 때문이다
 - [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** validated 2026-10-14 (orchestrator 감사 — 아래 표 넷; gap 수정 05-07 ~ 05-09 · 2회차 gap 수정 05-10 · 05-11 · 3회차 gap 수정 05-12 · 05-13 포함)
+**Approval:** validated 2026-10-15 (orchestrator 감사 — 아래 표 다섯; gap 수정 05-07 ~ 05-09 · 2회차 gap 수정 05-10 · 05-11 · 3회차 gap 수정 05-12 · 05-13 · 4회차 gap 수정 05-14 · 05-15 포함)
 
 ---
 
@@ -210,6 +210,27 @@ Task ID / Plan / Wave / Threat Ref 는 계획(`05-NN-PLAN.md`)이 확정된 뒤 
 | 막힌 셋만 고친 판 (`stripPlugins` · `readShippedPluginConstraint` · `copyLines` 를 옛 줄 나누기로 되돌림) | `d771c0c` + 변경 | 1 (74초) | `strip=false` | `declared` · `options` · `keys` · `crlf` · `pubspec` 는 기대값, `strip` · `plugin` 이 `FormatException` |
 
 - 실패 방향 두 판은 판정이 실패에서 멈춰 `<automated>` 끝의 임시 폴더 지우기에 닿지 않았다 — 감사 뒤 두 폴더를 직접 지웠다.
+
+## 감사 결과 — 4회차 gap 수정 05-14 · 05-15 (2026-10-15)
+
+방법은 위와 같다: `git clone --local` 복제본 하나에서 task 마다 그 task 의 커밋으로 `git checkout --detach` → 루트 `fvm dart pub get --no-example` (05-14 부터 `yaml` 이 개발용 의존성이다) → 계획의 `<automated>` 를 적힌 그대로 `bash -x` → `git checkout -- . && git clean -fdq`. 매 실행 뒤 복제본의 `git status --porcelain` 은 0줄이었다. 원격을 보는 05-15 Task 2 의 둘째 `<automated>` 는 본 작업 폴더에서 돌렸다.
+
+| Task | 기준 커밋 | 적힌 그대로 rc | 고친 판 rc | 시간 | 메모 |
+|------|-----------|----------------|------------|------|------|
+| 05-14 T1 | `77e0b88` | 0 | — | 249초 | `pubspec.yaml` = `968a5bb` + 빈 줄 · 주석 · `dev_dependencies:` · `  yaml: ^3.1.4`; import 셋 · 지운 코드 줄 0 · reader 열셋 그대로 · (h) 호출 한 줄; 안쪽 새 복제본의 `pub get` 없는 첫 실행 10/10 · `yaml` direct dev; M86 ~ M89 `[3/10]` 만 실패, M90 · M91 · 선언만 다른 입력 · 같은 키 두 번 `passed=false`, CRLF · CR `passed=true`; M68 · M69 · M70 · M73 · M78 에 (h) 블록; 회귀 M79 · M37 · M45 · M61 · M66 그대로; skill 세 줄 · README 380행 · `example/README.md` 11행; `yaml` 없는 package config 254 → `pub get` 뒤 64 |
+| 05-14 T2 | `0f62057` | 0 | — | 71초 | 새 구절 README 1 · `example/README.md` 2 · `verify.dart` 2, IN-11 문장 · 옛 조각 0, 코드 줄이 Task 1 커밋과 같음, README 바뀐 줄 382행 하나 · skill 불변, `example/README.md` `2/2`, M1 ~ M91 행 불변, 검증 10/10 |
+| 05-15 T1 | `2336ba0` | 0 | — | 0초 | fixed 18 · skipped 8 · deferred 1 · `open: 0`, WR-15 · WR-16 → `77e0b88`, IN-10 · IN-11 → `0f62057` (IN-10 은 G4-Q2 이유로 시작), 앞 회차 23행 · 제목 · `recorded:` 불변, CHANGELOG 불변 |
+| 05-15 T2 (첫째) | `2336ba0` | 0 | — | 24초 | 범위 `c2f275a..2336ba0` 비공개 점검 0, `.claude/skills/` 세 파일 `1/1` · 더한 줄 셋이 05-14 의 새 글자, 심은 경로는 `LEAK?` 로 잡힘, 검증 10/10 |
+| 05-15 T2 (둘째) | 본 작업 폴더, HEAD `1a8cdbe` | 0 | — | 11초 | 메타데이터 커밋 뒤에도 적힌 그대로 통과 ("처리 기록 커밋 ⊆ origin 머리 ⊆ HEAD" 꼴). origin 작업 브랜치 == `2336ba0`, head 둘, tag `v1.3.0` 하나, PR 0, run 38639587080 `success`, 로그 두 줄 |
+
+실패 방향 (복제본에서만, 05-14 T1 `<automated>`):
+
+| 판 | 기준 커밋 | rc | 걸린 자리 |
+|----|-----------|----|-----------|
+| 고치기 전 코드 — `tool/verify.dart` 만 `d8b61b0` 으로 되돌림 (`pubspec.yaml` 은 `yaml` 을 둔 채), 동작 부분(`T=$(mktemp -d) && git clone …` 부터)만 | `77e0b88` + 변경 | 1 (73초) | M90 의 `passed=false` — 고치기 전에는 `passed=true` (4회차 gap 그대로 재현; 앞의 기준 실행 · `yaml` lock · CRLF · CR 은 통과) |
+| 그럴듯하게 틀린 구현 — riverpod_lint 선언을 길이로만 견줌 (`lineReader != yaml` → `lineReader.length != yaml.length`, 치환 1건), 명령 전체 | `77e0b88` + 변경 | 1 (77초) | 선언만 다른 입력의 `passed=false` — 정적 단언 · M90 · M91 은 통과하고 `^3.1.9` ↔ `^3.2.0` (같은 길이) 에서 `passed=true` (T-05-68 의 "키만 보고 선언은 안 봄" 꼴을 이 입력이 가른다) |
+
+- 실패 방향 두 판은 판정이 실패에서 멈춰 `<automated>` 끝의 임시 폴더 지우기에 닿지 않았다 — 감사 뒤 두 폴더(안의 `repo/.git` · `h/probe.dart` 를 확인)를 직접 지웠다.
 
 ## Validation Audit 2026-10-13
 
