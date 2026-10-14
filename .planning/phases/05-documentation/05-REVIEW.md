@@ -1,6 +1,6 @@
 ---
 phase: 05-documentation
-reviewed: 2026-10-14T07:30:00Z
+reviewed: 2026-10-14T13:41:37Z
 depth: standard
 files_reviewed: 4
 files_reviewed_list:
@@ -10,82 +10,105 @@ files_reviewed_list:
   - .claude/CLAUDE.md
 findings:
   critical: 0
-  warning: 8
-  info: 2
-  total: 10
+  warning: 9
+  info: 3
+  total: 12
 status: issues_found
 ---
 
 # Phase 5: Code Review Report
 
-**Reviewed:** 2026-10-14T07:30:00Z
+**Reviewed:** 2026-10-14T13:41:37Z
 **Depth:** standard
 **Files Reviewed:** 4
 **Status:** issues_found
 
 ## Summary
 
-2회차 gap 수정 05-10 (커밋 `02966c4` · `204e401` · `d2d74c4`, diff base `ddfb852`) 뒤의 재리뷰다. 범위 파일 셋(`README.md` · `example/README.md` · `tool/verify.dart`)을 읽었다. `.claude/CLAUDE.md` 는 지난 WR-06 이 아직 해당하는지 보려고 해당 줄만 대조했다.
+3회차 gap 수정 05-12 (커밋 `d771c0c` · `d8b61b0`, diff base `de2b191`) 뒤의 재리뷰다. 범위 파일 셋(`README.md` · `example/README.md` · `tool/verify.dart`)을 읽었다. `.claude/CLAUDE.md` 는 지난 WR-06 이 아직 해당하는지 보려고 해당 줄만 대조했다.
 
-새 코드 둘을 봤다.
+**기준 실행 (복제본):**
 
-- **(a′)** `allowedTopLevelKeys` · `allowedChildKeys` · `findUnexpectedKeys` — 지난 WR-10 의 입력(M71 · M72)과 gap 입력(M68 ~ M70 · M78)을 막는다. 앞 기록의 회귀 입력(M45 · M36 · M60 · M66 의 종료 코드 70, M35 · M46 의 `[3/10]` 실패)도 그대로다. 함수 단위로 다시 돌려 확인했다.
-- **(d′)** `findMarkerRange` · `markFencedLines` · `findListLinesOutsideMarkers` — M74 꼴(end 마커 바로 뒤 불릿)을 막는다. 함수 단위로 확인했다.
+- `fvm dart run tool/verify.dart` — 종료 코드 0, `점검 통과 (10개 중 10개)`, 71초 (plugin 준비 포함). Flutter 3.47.5 / Dart 3.13.4, riverpod_lint 3.1.9.
+- `fvm dart analyze tool` — `No issues found!`.
+- `fvm dart format --output=none --set-exit-if-changed tool` — 종료 코드 0 (`Formatted 2 files (0 changed)`).
 
-지금 파일로 돌린 기준 실행은 종료 코드 0, `점검 통과 (10개 중 10개)` 였다. 새 검사 둘은 지금 파일에서 거짓 실패를 내지 않는다. `fvm dart analyze tool` 은 `No issues found!`, `fvm dart format --output=none --set-exit-if-changed tool` 은 종료 코드 0 이었다.
+**바뀐 줄 나누기가 맞는 파일에서 거짓 실패를 내는지 — 내지 않는다.** 다음을 확인했다.
 
-그러나 "같은 모양, 다른 입력" 이 다시 네 군데에서 나왔다. 넷 다 reader 가 보는 줄 · 키 · 제목이 YAML 이나 CommonMark 가 보는 것과 다르다.
+- 대상 파일: `lib/` 의 YAML 다섯 · `pubspec.yaml` · `README.md` · `RULES.md`.
+- 변형: 모두 CRLF, 모두 CR 하나, 모두 마지막 줄바꿈 없음.
+- 확인 방법: 함수 단위(`checkShippedComposition` · `stripPlugins`)는 셋 다 `passed=true` 였다. 전체 실행은 CR 하나 · CRLF 두 변형을 돌렸고 둘 다 종료 코드 0 · `점검 통과 (10개 중 10개)` 였다.
 
-- **WR-11** — (a′) 와 `declaredRuleNames` 는 `\n` 으로만 줄을 나눈다. YAML 은 CR 하나(`\r`)도 줄바꿈으로 읽는다. 주석 줄 끝에 `\r` 을 넣고 키를 붙이면, reader 에게는 주석 줄이고 analyzer 에게는 새 키 줄이다. `lib/codegen.yaml` 의 `formatter:` · `language:`, `lib/base.yaml` 의 숨은 규칙이 10개 중 10개로 통과한다.
-- **WR-12** — (d′) 의 절 경계는 HTML 주석 안의 `#` 줄을 제목으로 본다. 4칸 들여 쓴 ```` ``` ```` 는 펜스로 본다. 둘 다 GitHub 는 그렇게 그리지 않는다. 그 뒤의 불릿은 「받는 규칙」 목록 바로 아래에 보이는데 검사는 통과한다.
-- **WR-13** — (f) · (g) 는 따옴표로 감싼 키(`"ref":`, `'riverpod_lint':`)와 콜론 앞 공백(`ref :`)을 후보로 보지 않는다. pub 은 둘 다 `ref` 로 읽는다. 05-10 이 (a′) 에서 닫은 "철자가 다른 키" 의 모양이 README 쪽에 남아 있다. 좁힌 문장("키가 줄 머리에 오는 줄을 모두 후보로")도 이 꼴을 빼지 않는다.
-- **WR-14** — (e) 의 다른 패키지 주소 검사는 `.yaml` · `.yml` 로 끝나는 주소만 본다. 그런데 좁힌 문장(`example/README.md:116`)과 문서 주석(`tool/verify.dart:1857-1858`)은 "`package:` 로 정확히 시작하는 주소가 꼴이 아니면 실패" 라고 넓게 적는다.
+**WR-11 은 닫혔다.** M79 · M82 ~ M85 의 입력을 함수 단위로 다시 넣었고, 다섯 모두 `passed=false` 이며 블록 줄은 05-12 기록과 같다.
 
-지난 리뷰의 발견 18건 가운데 남은 것은 다섯 건이다.
+**YAML 과 다르게 읽히는 다른 입력도 찾아봤다.** 결과는 두 갈래다.
 
-- WR-07 · WR-08 · WR-09 · IN-08 — 소유자 결정 G2-Q2 로 `skipped` 이고 코드는 그대로다. 같은 입력이 지금도 통과한다. 좁힌 문장은 그 입력을 맞게 적는다. 예외는 IN-08 의 `tool/verify.dart:1864` 주석 하나다(IN-08 본문).
-- WR-06 — `deferred` (D-09) 그대로다.
+- **파일 머리의 BOM — 발견 아님.** `File.readAsStringSync()` 가 BOM 을 벗긴다(첫 글자 `0x23`). 조각 셋 머리에 BOM 을 붙여도 `passed=true` 였다.
+- **줄 머리의 BOM (파일 중간) — 발견 아님.** 함수가 보는 줄과 analyzer 가 보는 줄은 다르다. 그런데 analyzer 가 `parse_error` 로 거부한다. `$T/p` 의 작은 프로젝트에서 두 꼴을 돌렸다:
+  - `linter:` 블록 뒤의 `U+FEFF + analyzer:` → `Expected a key while parsing a block mapping`
+  - 주석 줄 뒤의 `U+FEFF + analyzer:` → `Only expected one document`
+  - 그래서 `[2/10]` 이 잡는다. 헛통과가 아니다.
+- **여러 줄 스칼라 (따옴표 · 블록) — 발견.** 줄 단위 reader 는 스칼라를 모른다. 여러 줄 따옴표 스칼라나 블록 스칼라 안의 줄을 키 · 규칙 · 옵션 · `version:` 으로 읽는다. YAML · pub · analyzer 는 그 줄을 글자 값으로 읽는다. 둘 다 전체 실행에서 10개 중 10개였다.
+  - `pubspecReleaseVersion` → **WR-15**
+  - `declaredRuleNames` · `enabledLanguageOptions` → **WR-16**
+  - 줄 나누기를 맞춘 뒤에도 "reader 가 보는 줄 ≠ YAML 이 보는 값" 이라는 같은 모양이 남아 있다.
+- **(f) · (g) 의 펜스 판정 (Markdown) — 발견.** 진짜 펜스 안에 네 칸 들여 쓴 ```` ``` ```` 줄이 있으면 `fencedLines` 가 그 펜스를 닫는다. GitHub 는 그 줄을 내용으로 그린다. 그 뒤의 낡은 `ref:` 는 함수 단위에서 통과한다. 고친 문장(`README.md:382`)은 이 꼴을 적지 않는다 → **IN-10**.
 
-이 다섯은 원래 ID 와 제목으로 남겼다. 나머지 13건은 지금 해당하지 않는다(아래 표). 그 밖에 05-10 이 만든 기록의 낡은 행 하나를 IN-09 로 적었다.
+**지난 발견 23건 가운데 지금도 해당하는 것은 여덟 건이다** (아래 표).
 
-재현은 모두 리뷰어의 사본에서만 했다. `git archive HEAD` 를 임시 폴더에 풀고 `fvm dart pub get` 을 돌린 사본이다. 작업 트리는 건드리지 않았고(끝의 `git status --short` 가 시작과 같다), 사본은 끝에 지웠다. 재현 방법은 두 가지다.
+- WR-06 — `deferred` 그대로다.
+- WR-07 · WR-08 · WR-09 · WR-12 · WR-13 · WR-14 · IN-08 — 같은 입력이 지금도 같은 결과를 낸다. 소유자 결정(G2-Q2 · G3-Q2 · G3-Q3)대로 코드는 그대로다. WR-12 · WR-13 · WR-14 · IN-08 의 문장 쪽 어긋남은 `d8b61b0` 으로 닫혔다. 남은 것은 동작뿐이고, 고친 문장은 그 동작을 맞게 적는다.
 
-- **전체 실행:** `fvm dart run tool/verify.dart` 를 끝까지 돌렸다. 첫 실행은 68초, 그 뒤는 약 25초였다.
-- **함수 단위:** `tool/verify.dart` 를 import 한 작은 하네스로 `checkShippedComposition` 을 직접 불러 `passed` 와 블록을 봤다.
+WR-11 · IN-09 를 포함한 나머지 15건은 지금 해당하지 않는다.
 
-Markdown 렌더링은 GitHub 의 Markdown API(`gh api -X POST /markdown`, `mode=gfm`)로 합성한 짧은 조각만 그려 확인했다. README 본문은 보내지 않았다.
+**재현 방법.** 모두 `T=$(mktemp -d)` 아래에서만 했다. 복제본은 `git clone --local --quiet . "$T/repo"` 로 만들고 `fvm dart pub get --no-example` 을 돌렸다.
 
-## 지난 리뷰의 발견 18건 — 지금 상태
+- **함수 단위:** 복제본 밖 `$T/h` 의 Dart 파일 하나가 `import '../repo/tool/verify.dart' as v;` 로 함수를 불렀다.
+- **YAML · pub · analyzer 대조:** `$T/p` · `$T/q` 의 작은 프로젝트에서 했다.
+- **렌더링 확인:** 합성한 짧은 조각 하나만 GitHub Markdown API(`gh api -X POST /markdown`, `mode=gfm`)로 그렸다. README 본문은 보내지 않았다.
+- 변형마다 `git diff --numstat` 으로 의도한 줄 수를 확인했고, 실행 뒤 `git checkout -- .` 으로 되돌렸다.
+- 끝에 `$T` 를 지웠다. 작업 트리의 `git status --porcelain` 은 시작과 같다 (GSD 도구 상태 넷).
+
+## 지난 리뷰의 발견 23건 — 지금 상태
 
 | ID | 제목 | 처리 기록 | 지금 해당하는가 | 근거 |
 |----|------|-----------|-----------------|------|
-| WR-01 | README 검사 (e) 가 모양이 틀린 프리셋 주소를 조용히 건너뛴다 — 오타 주소로 통과 | fixed | 아니오 | 함수 단위로 README 68행을 `  - package:woody_lints/presets/riverpod.yaml` 로 → `passed=false`. (e) 의 코드 줄은 지난 리뷰 뒤 바뀌지 않았다 — `git diff ddfb852 HEAD -- tool/verify.dart` 에서 지운 코드 줄은 `readMarkerBlock` 의 `return lines.sublist(start + 1, end);` 하나뿐이다 |
-| WR-02 | README 검사 (f) · (g) 가 따옴표 · 줄 끝 주석 · 두 자리 버전 값을 조용히 건너뛴다 — 낡은 값으로 통과 | fixed | 아니오 | 함수 단위로 18행을 `      ref: 'v1.9.0'` 으로 → `passed=false`. 따옴표 **키**는 WR-13 (다른 입력) |
-| WR-03 | `fencedLines` 가 ``` 펜스만 안다 — `~~~` 코드 블록의 값은 (f) · (g) 가 보지 않는다 | fixed | 아니오 | 함수 단위로 「`ref: main` 에서 tag 로 옮기기」 블록(328 · 334행)을 `~~~` 로, 333행을 `v1.9.0` 으로 → `passed=false` |
-| WR-04 | (b′) 가 flow 표기 `linter: {rules: [...]}` 로 다른 조각에 적은 규칙을 보지 못한다 — 사용 프로젝트는 받는데 검증은 10개 중 10개 | fixed | 아니오 | 함수 단위로 `lib/codegen.yaml` 끝에 `linter: {rules: [prefer_mixin]}` → `FormatException: lib/codegen.yaml 의 10행: `linter:` 줄에 값이 붙어 있다 …` (M45 그대로) |
-| WR-05 | `readShippedPluginConstraint` 가 YAML 토큰을 그대로 돌려주고 올바른 꼴 셋을 거부한다 — 70 이나 통과할 수 없는 `[3/N]` · `[4/N]` | fixed | 아니오 | 함수 단위로 `lib/riverpod.yaml` 의 `^3.1.9` 를 `"^3.1.9"` 로 → `passed=true`. `">=3.1.9 <4.0.0"` 은 `… 꼴만 받는다 (범위 제약은 받지 않는다, …)` 의 `FormatException` (M66 그대로) |
-| WR-06 | `.claude/CLAUDE.md` 의 고친 두 줄 옆에 저장소와 어긋나는 지시가 남아 있다 | deferred | 예 | `.claude/CLAUDE.md` 를 마지막으로 바꾼 커밋은 여전히 `403c584` 다. 69 · 70 · 73 · 173 · 182 · 183 · 313행이 지난 리뷰 때 글자 그대로다 (아래 WR-06) |
-| WR-07 | README 검사 (e) 가 `package:` 로 정확히 시작하지 않는 include 주소를 보지 않는다 — scheme 오타로 10개 중 10개 | skipped | 예 | 함수 단위로 68행을 `  - packages:woody_lints/riverpod.yaml` 로 → `passed=true`. 좁힌 문장(`example/README.md:116` · `:436`, `tool/verify.dart:1864`)은 이 입력을 범위 밖으로 맞게 적는다 |
-| WR-08 | README 검사 (f) · (g) 가 flow 표기에 적힌 plugin 버전 · `ref:` 를 보지 않는다 — 낡은 값으로 10개 중 10개 | skipped | 예 | 함수 단위로 196 ~ 199행 블록을 `plugins: {riverpod_lint: ^3.1.3}` 한 줄로 → `passed=true`. 좁힌 문장(`README.md:382`, `example/README.md:116` · `:395`, `tool/verify.dart:2133` · `:2178`)은 flow 표기를 범위 밖으로 맞게 적는다 |
-| WR-09 | `fencedLines` 가 펜스가 아닌 코드 블록을 보지 않는다 — 들여쓴 코드 블록의 낡은 `ref:` 로 10개 중 10개 | skipped | 예 | 함수 단위로 328 ~ 334행 블록의 펜스를 빼고 네 칸 들여 쓴 블록으로, 값은 `ref: v1.9.0` → `passed=true`. 좁힌 문장(`README.md:382`, `example/README.md:116` · `:395`, `tool/verify.dart:1493` · `:2126`)은 맞게 적는다 |
-| WR-10 | `[3/10]` 이 조각의 `linter:` 밖 키를 보지 않는다 — `lib/codegen.yaml` 의 `language:` 옵션 · `formatter:` 가 사용 프로젝트에 닿는데 10개 중 10개 | fixed | 아니오 | 함수 단위로 M71 (`analyzer:` 바로 뒤 `  language:` / `    strict-inference: true`) → `passed=false`, `` `lib/codegen.yaml` 의 `analyzer:` 바로 아래에 받지 않는 줄이 있다 (1) `` · `5행:   language:`. M72 (끝에 `formatter:`) → `passed=false`, `10행: formatter:`. 같은 키를 CR 줄바꿈 뒤에 둔 꼴은 WR-11 (다른 입력) |
-| IN-01 | `pubspecReleaseVersion` 이 따옴표로 감싼 `version:` 에서 종료 코드 70 | fixed | 아니오 | 함수 단위로 `pubspec.yaml` 을 `version: "2.0.0-dev"` 로 → `passed=true` |
-| IN-02 | CHANGELOG 2.0.0 의 "내용은 1.3.0 과 같다" 가 같은 절의 다른 항목과 어긋난다 | fixed | 아니오 | `git diff --stat ddfb852 HEAD -- CHANGELOG.md` 가 빈 출력 — 지난 리뷰가 고쳐진 것으로 본 글자 그대로다 |
-| IN-03 | README 「프리셋 고르기」 의 "그 연습용 프로젝트의 정답지로 확인" 이 묶음에는 맞지 않는다 | fixed | 아니오 | `README.md:45` 가 "묶음(`recommended`)에는 자기 정답지가 없다 — … 같은 실행의 `example/` …" 그대로다 |
-| IN-04 | plugin 하한을 올릴 때 함께 고칠 자리가 두 문서에 반씩 적혀 있다 | fixed | 아니오 | `README.md:382` 가 여전히 네 자리(`lib/riverpod.yaml` · `fixtures/overrides` 의 `version:` · README 예시 둘)를 한 곳에 적는다. `lib/riverpod.yaml:5` 주석도 그대로다 |
+| WR-01 | README 검사 (e) 가 모양이 틀린 프리셋 주소를 조용히 건너뛴다 — 오타 주소로 통과 | fixed | 아니오 | 함수 단위로 README 68행을 `  - package:woody_lints/presets/riverpod.yaml` 로 → `passed=false`, `` `<이름>.yaml` 꼴이 아닌 것이 있다 (1) `` |
+| WR-02 | README 검사 (f) · (g) 가 따옴표 · 줄 끝 주석 · 두 자리 버전 값을 조용히 건너뛴다 — 낡은 값으로 통과 | fixed | 아니오 | 18행을 `      ref: 'v1.9.0'` 으로 → `passed=false` (`ref: v1.9.0` 이 다르다) |
+| WR-03 | `fencedLines` 가 ``` 펜스만 안다 — `~~~` 코드 블록의 값은 (f) · (g) 가 보지 않는다 | fixed | 아니오 | 328 · 334행 펜스를 `~~~` 로, 333행을 `v1.9.0` 으로 → `passed=false` |
+| WR-04 | (b′) 가 flow 표기 `linter: {rules: [...]}` 로 다른 조각에 적은 규칙을 보지 못한다 — 사용 프로젝트는 받는데 검증은 10개 중 10개 | fixed | 아니오 | `lib/codegen.yaml` 끝에 `linter: {rules: [prefer_mixin]}` → `FormatException: lib/codegen.yaml 의 10행: `linter:` 줄에 값이 붙어 있다 …` |
+| WR-05 | `readShippedPluginConstraint` 가 YAML 토큰을 그대로 돌려주고 올바른 꼴 셋을 거부한다 — 70 이나 통과할 수 없는 `[3/N]` · `[4/N]` | fixed | 아니오 | `"^3.1.9"` → `passed=true`. `">=3.1.9 <4.0.0"` → `… 꼴만 받는다 (범위 제약은 받지 않는다, …)` 의 `FormatException` |
+| WR-06 | `.claude/CLAUDE.md` 의 고친 두 줄 옆에 저장소와 어긋나는 지시가 남아 있다 | deferred | 예 | 마지막 커밋은 여전히 `403c584`. 69 · 70 · 73 · 173 · 182 · 183 · 313행이 그대로다 (아래 WR-06) |
+| WR-07 | README 검사 (e) 가 `package:` 로 정확히 시작하지 않는 include 주소를 보지 않는다 — scheme 오타로 10개 중 10개 | skipped | 예 | 68행 `  - packages:woody_lints/riverpod.yaml` → `passed=true`. 문장(`example/README.md:116`, `tool/verify.dart:1877`)은 맞게 적는다 |
+| WR-08 | README 검사 (f) · (g) 가 flow 표기에 적힌 plugin 버전 · `ref:` 를 보지 않는다 — 낡은 값으로 10개 중 10개 | skipped | 예 | 196 ~ 199행 블록을 `plugins: {riverpod_lint: ^3.1.3}` 로 → `passed=true`. 문장은 맞게 적는다 |
+| WR-09 | `fencedLines` 가 펜스가 아닌 코드 블록을 보지 않는다 — 들여쓴 코드 블록의 낡은 `ref:` 로 10개 중 10개 | skipped | 예 | 328 ~ 334행을 펜스 없이 네 칸 들여 쓴 블록으로, `ref: v1.9.0` → `passed=true`. 문장은 맞게 적는다 |
+| WR-10 | `[3/10]` 이 조각의 `linter:` 밖 키를 보지 않는다 — `lib/codegen.yaml` 의 `language:` 옵션 · `formatter:` 가 사용 프로젝트에 닿는데 10개 중 10개 | fixed | 아니오 | M71 → `passed=false` · `5행:   language:`. M72 → `passed=false` · `10행: formatter:` |
+| WR-11 | (a′) · `declaredRuleNames` 가 `\n` 으로만 줄을 나눈다 — 주석 줄 끝의 CR(`\r`) 뒤에 둔 키 · 규칙이 사용 프로젝트에 닿는데 10개 중 10개 | fixed | 아니오 — `d771c0c` | M79 · M82 · M83 · M84 · M85 의 입력을 함수 단위로 → 모두 `passed=false`, 블록은 `example/README.md` 05-12 소절 그대로다. CRLF · CR 하나 · 마지막 줄바꿈 없음은 거짓 실패 없음 (Summary) |
+| WR-12 | (d′) 의 절 경계가 HTML 주석 안의 `#` 줄 · 4칸 들여 쓴 ```` ``` ```` 를 제목 · 펜스로 본다 — 렌더링된 「받는 규칙」 목록 바로 아래의 불릿으로 10개 중 10개 | skipped | 예 (동작) | 지난 세 입력(188행 뒤 HTML 주석, 91행 뒤 start 마커 앞, 188행 뒤 4칸 펜스) → 셋 다 `passed=true`. 대조(마커 바로 뒤 불릿)는 `passed=false` · `189행`. 정의 문장은 `d8b61b0` 으로 `example/README.md:116` · `:549` 에 들어갔다 |
+| WR-13 | README 검사 (f) · (g) 가 따옴표로 감싼 키 · 콜론 앞 공백(`"ref":` · `'riverpod_lint':` · `ref :`)을 후보로 보지 않는다 — 낡은 값으로 10개 중 10개, 좁힌 문장은 "모두 후보로" | skipped | 예 (동작) | 18행 `"ref": v1.9.0` · `ref : v1.9.0`, 198행 `'riverpod_lint': ^3.1.3`, 234행 `"version": ^3.1.3` → 넷 다 `passed=true`. "모두 후보로" 의 어긋남은 `d8b61b0` 으로 닫혔다 (`README.md:382`, `example/README.md:116` · `:395`, `tool/verify.dart:1873` · `:1875` · `:1877` · `:2147` · `:2193`) |
+| WR-14 | (e) 의 다른 패키지 주소 검사는 `.yaml` · `.yml` 로 끝나는 주소만 보는데, 좁힌 문장과 문서 주석은 "`package:` 로 정확히 시작하는 주소가 꼴이 아니면 실패" 라고 적는다 — `package:woody-lints/riverpod` 로 10개 중 10개 | skipped | 예 (동작) | 68행 `package:woody-lints/riverpod` · `package:woody_lint/riverpod.yam` → 둘 다 `passed=true`. 대조 `package:woody-lints/riverpod.yaml` → `passed=false`. 문장 쪽 어긋남은 `d8b61b0` 으로 닫혔다 (`example/README.md:116`, `tool/verify.dart:1871` · `:1877`) |
+| IN-01 | `pubspecReleaseVersion` 이 따옴표로 감싼 `version:` 에서 종료 코드 70 | fixed | 아니오 | `version: "2.0.0-dev"` → `passed=true` |
+| IN-02 | CHANGELOG 2.0.0 의 "내용은 1.3.0 과 같다" 가 같은 절의 다른 항목과 어긋난다 | fixed | 아니오 | `git diff --stat ddfb852 HEAD -- CHANGELOG.md lib RULES.md` 가 빈 출력 |
+| IN-03 | README 「프리셋 고르기」 의 "그 연습용 프로젝트의 정답지로 확인" 이 묶음에는 맞지 않는다 | fixed | 아니오 | `README.md:45` 의 "묶음(`recommended`)에는 자기 정답지가 없다 — …" 그대로 |
+| IN-04 | plugin 하한을 올릴 때 함께 고칠 자리가 두 문서에 반씩 적혀 있다 | fixed | 아니오 | `README.md:382` 가 네 자리를 한 곳에 적는다 |
 | IN-05 | `tool/verify.dart` 문서 주석의 단계 번호가 `[2/4]` · `[1/4]` 로 남아 있다 | fixed | 아니오 | `grep -c '\[2/4\]\|\[1/4\]' tool/verify.dart` → 0 |
-| IN-06 | `readBulletBlock` 이 `readRulesMdBlock` 의 마커 처리를 복제하고, 결과 타입 이름이 README 에 맞지 않는다 | fixed | 아니오 | `tool/verify.dart:1670` `readMarkerBlock` 이 `:1685` `findMarkerRange` 를 부른다. 마커 문자열은 그 함수 한 곳에만 있다 |
-| IN-07 | README 「받는 규칙」 의 분류는 검사되지 않는다 | fixed | 아니오 | `README.md:91` 에 "검증 명령은 이름만 견주고 분류는 보지 않는다" 가 그대로다 |
-| IN-08 | (e) 의 주소 끝 판정이 문장 부호를 모른다 — 맞는 주소의 거짓 실패와 다른 패키지 주소의 누락이 한 줄에서 함께 난다 | skipped | 예 | 함수 단위로 85행 끝에 ` 예: package:woody_lints/recommended.yaml, package:woody-lints/base.yaml.` → `passed=false`. 블록은 `package:woody_lints/recommended.yaml,` 하나뿐이고 다른 패키지 블록은 없다 (아래 IN-08) |
+| IN-06 | `readBulletBlock` 이 `readRulesMdBlock` 의 마커 처리를 복제하고, 결과 타입 이름이 README 에 맞지 않는다 | fixed | 아니오 | `tool/verify.dart:1683` `readMarkerBlock` 이 `:1698` `findMarkerRange` 를 부른다 |
+| IN-07 | README 「받는 규칙」 의 분류는 검사되지 않는다 | fixed | 아니오 | `README.md:91` 의 "검증 명령은 이름만 견주고 분류는 보지 않는다" 그대로 |
+| IN-08 | (e) 의 주소 끝 판정이 문장 부호를 모른다 — 맞는 주소의 거짓 실패와 다른 패키지 주소의 누락이 한 줄에서 함께 난다 | skipped | 예 (동작) | 85행 끝에 ` 예: package:woody_lints/recommended.yaml, package:woody-lints/base.yaml.` → `passed=false`. 블록은 `package:woody_lints/recommended.yaml,` 하나, 다른 패키지 블록 0개. `tool/verify.dart:1864` 주석의 어긋남은 `d8b61b0` 으로 닫혔다 (지금 `:1877`) |
+| IN-09 | (a′) 가 들어온 뒤 M35 · M37 의 `[3/10]` 출력이 바뀌었는데, 05-10 소절은 M46 만 짚는다 | fixed | 아니오 — `d8b61b0` | `example/README.md:518` 이 "M35 · M37 · M46 은 이제 `[3/10]` 에 블록 둘(최상위 · 규칙)을 찍는다. 05-01 · 05-07 소절의 그 행은 그때의 기록이다" |
 
 ## 소유자가 이번 범위 밖으로 둔 것
 
-ID 를 주지 않는다. 이번에 확인한 그대로 적는다(모두 함수 단위, `passed=true`).
+ID 를 주지 않는다. 이번에 확인한 그대로 적는다.
 
-- `lib/base.yaml` 의 `analyzer:` 아래 키 — 끝에 `analyzer:` / `  errors:` / `    unused_import: ignore` 를 덧붙여도 통과한다 (`allowedChildKeys` 에 `lib/base.yaml` 이 없다, `tool/verify.dart:192-199`).
-- codegen `errors:` 의 심각도 재정의 — `    invalid_annotation_target: ignore` 뒤에 `    unused_import: ignore` 를 더해도 통과한다 (`errors:` 아래는 보지 않는다).
-- `lib/base.yaml` 의 `include:` 값 — 5행을 `include:` / `  - package:flutter_lints/flutter.yaml` / `  - package:woody_lints/codegen.yaml` 로 바꿔도 통과한다.
-- 「받는 규칙」 절에 표 · 산문 · HTML 로 적은 규칙 이름 — (d′) 의 `listPattern` (`tool/verify.dart:1809-1811`) 은 목록 줄만 본다 (코드에서 읽은 것, 돌리지 않았다).
+- **`tool/measure_rules.dart` 의 줄 나누기** (G3-R2-Q2 "두기"). `split('\n')` 이 6곳 그대로다 (`grep -c`). 측정 도구라 배포 · 검증 명령에 들지 않는다.
+- **`stripPlugins` 끝의 `^plugins:` 여러 줄 확인** (U+2028 에서 거짓 실패 쪽 — G3-R2 NOT approved). 그대로다.
+  - 재현(함수 단위): `lib/riverpod.yaml` 1행 끝에 ` ` + U+2028 + `plugins: memo` 를 붙였다.
+  - 결과: `FormatException: lib/riverpod.yaml 의 `plugins:` 섹션을 빼지 못했다`, 곧 종료 코드 70 경로다.
+- **(e) 의 여러 줄 정규식** (G2-Q2 · G3-Q2). `tool/verify.dart:2088` · `:2110` 의 `multiLine: true` 가 그대로다 (코드에서 읽은 것, 따로 돌리지 않았다).
+- **(d′) · (e) · (f) · (g) 의 검사 코드를 넓히는 수정** (G3-Q2 · G3-Q3). WR-07 · WR-08 · WR-09 · WR-12 · WR-13 · WR-14 · IN-08 의 동작이 그대로 남은 까닭이다 (위 표).
+  - 이번에 고친 문장은 그 동작을 맞게 적는다.
+  - 예외가 하나 있다. `README.md:382` 는 펜스 안의 4칸 ```` ``` ```` 줄을 적지 않는다 → IN-10.
 
 ## Narrative Findings (AI reviewer)
 
@@ -104,7 +127,7 @@ ID 를 주지 않는다. 이번에 확인한 그대로 적는다(모두 함수 �
 | 173 · 313 | 루트 exclude 가 "반드시 유지되어야 한다" | 위와 같다 |
 | 182 · 183 | 예시로 `lib/analysis_options.yaml` 49-56행 · 55-56행을 든다 | 그 파일은 지금 4줄이다 |
 
-이 파일은 에이전트 지시문이다. 이번 재리뷰도 그 지시를 컨텍스트로 받았다. 미룬 그대로이므로 남긴다.
+이번 재리뷰도 이 지시를 컨텍스트로 받았다.
 
 **재현:** 해당 없음(읽어서 대조한 것).
 
@@ -112,258 +135,252 @@ ID 를 주지 않는다. 이번에 확인한 그대로 적는다(모두 함수 �
 
 ### WR-07: README 검사 (e) 가 `package:` 로 정확히 시작하지 않는 include 주소를 보지 않는다 — scheme 오타로 10개 중 10개
 
-**File:** `tool/verify.dart:2073-2076`, `tool/verify.dart:2094-2103`
-**Issue:** 지난 리뷰와 같은 입력이 지금도 통과한다. 소유자 결정 G2-Q2 로 `skipped` 이고, 코드는 일부러 그대로 뒀다(`d2d74c4` 는 주석 줄만 바꿨다).
-
-좁힌 문장은 이 입력을 맞게 적는다.
-
-- `example/README.md:116` — "`packages:` 같은 scheme 오타 · `package:` 뒤의 공백은 보지 않고"
-- `example/README.md:436` — "`package:` 로 시작하지 않는 scheme 오타(`packages:`), `package:` 뒤의 공백 … 은 보지 않는다"
-- `tool/verify.dart:1864` — "(e) 는 `package:` 로 시작하지 않는 scheme 오타 · `package:` 뒤의 공백 … 을 보지 않고"
+**File:** `tool/verify.dart:2086-2089`, `tool/verify.dart:2107-2116`
+**Issue:** 지난 리뷰와 같은 입력이 지금도 통과한다. 소유자 결정 G2-Q2 로 `skipped` 이고 코드는 그대로다. 문장은 이 입력을 범위 밖으로 맞게 적는다 — `example/README.md:116` 의 "`packages:` 같은 scheme 오타 · `package:` 뒤의 공백은 보지 않고", `tool/verify.dart:1877` 의 "(e) 는 `package:` 로 시작하지 않는 scheme 오타 · … 를 보지 않고".
 
 **재현(함수 단위):** README 68행을 `  - packages:woody_lints/riverpod.yaml` 로 바꿨다. 결과는 `passed=true` 였다.
 
-**Fix:** 소유자 결정대로 둔다. 다시 넓히려면 지난 리뷰의 Fix 그대로다 — 코드 블록의 `include:` 값을 모두 후보로 잡고, 정확한 꼴이 아니면 실패시킨다.
+**Fix:** 소유자 결정대로 둔다. 다시 넓히려면 지난 리뷰의 Fix 그대로다.
 
 ### WR-08: README 검사 (f) · (g) 가 flow 표기에 적힌 plugin 버전 · `ref:` 를 보지 않는다 — 낡은 값으로 10개 중 10개
 
-**File:** `tool/verify.dart:2135-2137`, `tool/verify.dart:2180`
-**Issue:** 지난 리뷰와 같은 입력이 지금도 통과한다. G2-Q2 로 `skipped` 이고 코드는 그대로다.
-
-좁힌 문장은 flow 표기를 범위 밖으로 맞게 적는다: `README.md:382`, `example/README.md:116` · `:395`, `tool/verify.dart:2133` · `:2178`. 같은 줄 머리 정규식이 따옴표 키 · 콜론 앞 공백도 놓친다. 그것은 다른 입력이라 WR-13 에 적었다.
+**File:** `tool/verify.dart:2149-2151`, `tool/verify.dart:2195`
+**Issue:** 지난 리뷰와 같은 입력이 지금도 통과한다. G2-Q2 로 `skipped` 이고 코드는 그대로다. 문장(`README.md:382`, `example/README.md:116` · `:395`, `tool/verify.dart:1877` · `:2146` · `:2192`)은 flow 표기를 범위 밖으로 맞게 적는다.
 
 **재현(함수 단위):** 196 ~ 199행 블록을 `plugins: {riverpod_lint: ^3.1.3}` 한 줄로 바꿨다(234행은 `^3.1.9` 그대로). 결과는 `passed=true` 였다.
 
-**Fix:** 소유자 결정대로 둔다. 다시 넓히려면 지난 리뷰의 Fix 그대로다.
+**Fix:** 소유자 결정대로 둔다.
 
 ### WR-09: `fencedLines` 가 펜스가 아닌 코드 블록을 보지 않는다 — 들여쓴 코드 블록의 낡은 `ref:` 로 10개 중 10개
 
-**File:** `tool/verify.dart:1494-1520`
-**Issue:** 지난 리뷰와 같은 입력이 지금도 통과한다. G2-Q2 로 `skipped` 이고 코드는 그대로다.
+**File:** `tool/verify.dart:1503-1529`
+**Issue:** 지난 리뷰와 같은 입력이 지금도 통과한다. G2-Q2 로 `skipped` 이고 코드는 그대로다. 문장(`README.md:382`, `example/README.md:116` · `:395`, `tool/verify.dart:1502` · `:2139`)은 맞게 적는다.
 
-좁힌 문장은 맞게 적는다: `README.md:382`, `example/README.md:116` · `:395`, `tool/verify.dart:1493` · `:2126` — "네 칸 들여 쓴 코드 블록 · 인용 안의 펜스는 세지 않는다".
-
-반대쪽은 적지 않았다. 4칸 이상 들여 쓴 ```` ``` ```` 줄은 CommonMark 에서 펜스가 아닌데, `fencedLines` 는 그 줄을 펜스로 연다. 이 꼴이 새 (d′) 에서 낳는 헛통과는 WR-12 에 적었다.
+같은 함수의 반대쪽 꼴은 다른 입력이다. 펜스 안의 네 칸 들여 쓴 ```` ``` ```` 가 펜스를 일찍 닫는 꼴이고, IN-10 에 적었다.
 
 **재현(함수 단위):** 328 ~ 334행 블록의 펜스 두 줄을 빼고 나머지를 네 칸 들여 썼다. 값은 `ref: v1.9.0` 으로 바꿨다. 결과는 `passed=true` 였다.
 
 **Fix:** 소유자 결정대로 둔다.
 
-### WR-11: (a′) · `declaredRuleNames` 가 `\n` 으로만 줄을 나눈다 — 주석 줄 끝의 CR(`\r`) 뒤에 둔 키 · 규칙이 사용 프로젝트에 닿는데 10개 중 10개
-
-**File:** `tool/verify.dart:1027`, `tool/verify.dart:1037`, `tool/verify.dart:951`, `tool/verify.dart:956`, `tool/verify.dart:1101`, `README.md:378`, `example/README.md:116`, `example/README.md:515`
-**Issue:** 줄을 나누는 방식이 YAML 과 다르다.
-
-- `findUnexpectedKeys` 는 `options.replaceAll('\r\n', '\n').split('\n')` 로 줄을 나눈다(1027행).
-- `declaredRuleNames` (951행) · `enabledLanguageOptions` (1101행)는 `options.split('\n')` 으로 나눈다.
-- YAML 1.2 는 CR 하나도 줄바꿈으로 읽고, analyzer 도 그렇게 읽는다(아래 대조 실험).
-
-그래서 `# 주석\rformatter:` 같은 한 "줄" 이 두 쪽에서 다르게 읽힌다.
-
-- reader 셋 — `trimmed.startsWith('#')` 인 주석 줄이라 건너뛴다(956 · 1037행).
-- analyzer — 주석 줄 하나와 열 0 의 `formatter:` 키 줄 하나다.
-
-들여 쓴 줄 끝에 붙여도 같다. `findUnexpectedKeys` 는 그 줄을 "더 깊은 줄" 로 보아 건너뛴다(1064행 `if (indent > childIndent) continue;`).
-
-05-10 의 약속은 "명단에 없으면 모두 막는다"(G2-Q1) 다. `README.md:378` 은 "그 밖의 최상위 줄 … 과 그 바로 아래의 다른 키 … 는 `[3/10]` 단계가 실패" 라고 적는다. 그런데 이 꼴의 키는 어느 블록에도 들어가지 않는다. 지금까지 이 phase 에서 되풀이된 모양이다 — 읽지 못하는 줄을 reader 가 조용히 건너뛴다. 이번에는 그 줄이 주석으로 보인다.
-
-같은 뿌리가 `lib/base.yaml` 의 규칙 목록에도 닿는다. 주석 줄 끝의 `\r` 뒤에 `    - 규칙` 을 두면 `declaredRuleNames` 가 그 규칙을 세지 않는다. 그러면 (b) 겹침 · (c) `RULES.md` 일치 · (d) README 목록 일치가 모두 그 규칙 없이 통과한다.
-
-편집기나 복사 붙여넣기로 이런 줄바꿈이 들어올 가능성은 낮다. 그래도 YAML 로 올바른 입력이고, 문서가 말하는 검사 결과가 거짓이 된다.
-
-- **재현(전체 실행, 넷):**
-  - `lib/codegen.yaml` 9행 끝에 `\r  language:\r    strict-inference: true\rformatter:\r  trailing_commas: preserve` 를 붙였다. 종료 코드 0, `[3/10] 배포 파일의 구성 ... 통과`, `점검 통과 (10개 중 10개)` 였다. WR-10 의 입력 둘이 그대로 통과한 것이다.
-  - 대조 실험으로 같은 자리에 `strict-casts: true` 를 넣었다. `[3/10]` 은 통과하고 `[5/10]` · `[9/10]` · `[10/10]` 이 정답지에 없는 `invalid_assignment` 로 실패했다(`점검 실패 (10개 중 3개)`). 이것으로 analyzer 가 CR 뒤의 키를 읽고, 그 옵션이 사용 프로젝트까지 닿는 것이 확인된다.
-  - `lib/base.yaml` 93행(`    # strict — …` 주석) 끝에 `\r    - prefer_mixin` 을 붙였다. 종료 코드 0, `점검 통과 (10개 중 10개)` 였다. `RULES.md` · README 어디에도 없는 규칙이 배포된다.
-  - 같은 자리에 `\r    - always_specify_types` 를 붙인 대조 실험도 돌렸다. `[3/10]` 은 통과했다. 정답지 단계 다섯(`[5/10]` · `[7/10]` ~ `[10/10]`)은 샘플 코드의 새 `always_specify_types` 진단으로 실패했다. `[2/10]` 은 이 규칙과 `no_dynamic_casts` 의 `incompatible_lint` 로 실패했는데, 이번 규칙이 우연히 비호환 쌍이었기 때문이다. `[3/10]` 은 규칙 표 · README 목록과 다르다는 말을 하지 않았다.
-- **재현(함수 단위):**
-  - `lib/codegen.yaml` 3행 주석 끝에 `\rlinter:\r  rules:\r    - prefer_mixin` → `passed=true`.
-  - `lib/base.yaml` 4행 주석 끝에 `\rformatter:\r  trailing_commas: preserve\rplugins:\r  custom_lint: ^0.7.0` → `passed=true`.
-  - `lib/riverpod.yaml` 의 `plugins:` 아래에 주석 줄 `  # memo\r  custom_lint: ^0.7.0` → `passed=true`.
-  - 전체 실행에서 riverpod 꼴은 plugin 준비에 닿으므로 돌리지 않았다(M78 처럼 pub 서버에 따라 결과가 갈린다).
-- 참고로 탭 들여쓰기(`  \tlanguage:`)도 `findUnexpectedKeys` 는 "더 깊은 줄" 로 건너뛴다. 하지만 analyzer 가 `Tab characters are not allowed as indentation. - parse_error` 로 거부해서 `[2/10]` 이 실패했다(`점검 실패 (10개 중 4개)`). 헛통과는 아니다.
-
-**Fix:** 세 reader 가 YAML 과 같은 줄바꿈으로 나누게 한다. `dart:convert` 의 `LineSplitter` 는 `\r\n` · `\r` · `\n` 을 모두 줄바꿈으로 본다(import 는 이미 `dart:convert` · `dart:io` 둘이다).
-```dart
-// YAML 1.2 와 같은 줄바꿈 — CR 하나도 줄을 나눈다 (analyzer 가 그렇게 읽는다).
-List<String> splitYamlLines(String text) => const LineSplitter().convert(text);
-
-// findUnexpectedKeys (1027행), declaredRuleNames (951행), enabledLanguageOptions (1101행)
-final lines = splitYamlLines(options);
-```
-그러면 숨었던 키는 열 0 의 줄이 되어 (a′) 블록에 들어간다. 숨었던 규칙은 `linter:` 블록의 줄이 되어 (b) · (c) · (d) 가 견준다. 줄 번호도 analyzer(`[2/10]` 의 진단)와 같아진다. 고친 뒤 위 네 입력을 지워 보기 행으로 남긴다.
-
 ### WR-12: (d′) 의 절 경계가 HTML 주석 안의 `#` 줄 · 4칸 들여 쓴 ```` ``` ```` 를 제목 · 펜스로 본다 — 렌더링된 「받는 규칙」 목록 바로 아래의 불릿으로 10개 중 10개
 
-**File:** `tool/verify.dart:1530-1556`, `tool/verify.dart:1803-1834`, `example/README.md:116`, `example/README.md:549`
-**Issue:** `findListLinesOutsideMarkers` 는 end 마커 뒤의 첫 "제목 줄" 에서 절을 끊는다. 제목 줄은 `isHeading` 이다 — `markFencedLines` 가 펜스로 표시하지 않았고 `^ {0,3}#{1,6}(?:[ \t]|$)` 에 맞는 줄이다(1812행). 이 판정은 CommonMark 와 두 군데에서 어긋난다.
+**File:** `tool/verify.dart:1539-1564`, `tool/verify.dart:1816-1847`
+**Issue:** 동작은 지난 리뷰와 같다. 소유자 결정 G3-Q3 은 "정의를 문장에 적고 검사는 고치지 않는다" 였다. `d8b61b0` 이 그 정의를 넣었다.
 
-- **HTML 블록을 모른다.** `<!--` 로 여는 줄부터 `-->` 가 든 줄까지는 HTML 블록(CommonMark 의 type 2)이다. GitHub 는 그 안을 그리지 않는다. 그런데 그 안의 `# 메모` 줄은 `isHeading` 이 참이다. 그래서 절이 그 줄에서 끝나고, 주석 뒤의 목록 줄은 검사 밖이 된다. start 마커 앞에서도 같다. 실제 제목과 start 마커 사이에 그런 주석이 있으면, 그 위의 목록 줄이 검사 밖이 된다.
-- **펜스의 들여쓰기 한도를 모른다.** `markFencedLines` 는 `trimLeft()` 한 줄이 ```` ``` ```` 로 시작하면 펜스를 연다(1539행). CommonMark 의 펜스는 들여쓰기 3칸까지다. 4칸 들여 쓴 ```` ``` ```` 는 들여 쓴 코드 블록의 글자이거나 문단의 이어짐이다. 그런 줄 둘 사이의 목록 줄은 `fenced[i]` 가 참이라 세지 않는다. GitHub 는 그 줄을 목록 항목으로 그린다.
+- `example/README.md:116` — "제목 · 펜스 판정은 HTML 주석(`<!--` ~ `-->`) 안의 `#` 줄과 네 칸 이상 들여 쓴 `` ``` `` 줄을 가리지 않아 … 검사 밖이 될 수 있다"
+- `example/README.md:549` — 같은 정의
 
-05-10 이 이 검사를 넣은 까닭이 M74 다 — "렌더링된 README 에서는 목록의 마지막 항목처럼 보이지만 (d) 는 보지 못했다". 같은 줄이 다른 꼴로 다시 통과한다. `example/README.md:549` 는 "펜스 안의 `# …` 줄은 제목이 아니다" 까지 적고 HTML 주석은 말하지 않는다. `example/README.md:116` 은 "구역 밖에 목록 줄 … 이 있으면 실패" 라고 넓게 적는다.
+이제 문장은 동작과 맞는다. 렌더링된 절 안의 목록 줄이 검사 밖이 되는 동작은 남아 있다.
 
-승인 밖으로 둔 "HTML 로 적은 규칙 이름"(`<li>`)과는 다르다. 여기서 숨는 것은 Markdown 목록 줄(`- `bogus``)이고, (d′) 가 맡은 꼴이다.
+**재현(함수 단위):** 셋 모두 `passed=true` 였다.
+- 188행 뒤에 `<!--` / `# 메모` / `-->` / `` - `bogus_after_comment` `` 을 끼웠다.
+- 91행 뒤에 `` - `bogus_before` `` / `<!--` / `# 메모` / `-->` 를 끼웠다.
+- 188행 뒤에 빈 줄 / `    ```` / `` - `bogus_after_indented` `` / `    ```` 를 끼웠다.
 
-- **재현(전체 실행):** README 188행(end 마커) 뒤에 네 줄 `<!--` / `# 메모` / `-->` / `` - `bogus_after_comment` `` 을 끼웠다. 종료 코드 0, `[3/10] 배포 파일의 구성 ... 통과`, `점검 통과 (10개 중 10개)` 였다.
-- **대조(함수 단위):** 같은 자리에 `` - `bogus_after_marker` `` 한 줄만 끼우면 `passed=false`, `189행: - `bogus_after_marker`` 였다(M74 그대로).
-- **재현(함수 단위):**
-  - 91행 뒤에 `` - `bogus_before` `` 와 `<!--` / `# 메모` / `-->` 를 끼웠다(start 마커 앞). 결과는 `passed=true` 였다.
-  - 188행 뒤에 빈 줄, `    ```` (4칸), `` - `bogus_after_indented` ``, `    ```` 를 끼웠다. 결과는 `passed=true` 였다.
-- **렌더링 확인:** 같은 꼴의 합성 조각(`## 받는 규칙` · 마커 · 불릿 하나 · 위 두 꼴)을 GitHub Markdown API(`gfm`)로 그렸다.
-  - HTML 주석 꼴: `# 메모` 는 그려지지 않았다. `bogus_after_comment` 는 `<ul><li>` 로 같은 `<h2>` 아래에 나왔다.
-  - 4칸 꼴: 첫 줄은 ```` ``` ```` 글자를 담은 `<pre>` 로, `bogus_after_indented` 는 `<li>` 로 나왔다.
+**대조:** 188행 뒤에 `` - `bogus_after_marker` `` 한 줄만 끼웠다. `passed=false`, `189행: - `bogus_after_marker`` 였다.
 
-**Fix:** 제목 · 펜스 판정이 렌더러가 숨기는 줄을 보지 않게 한다. 방향은 "모르면 절을 길게" (헛통과 쪽으로 가지 않게) 다.
-```dart
-// HTML 주석 블록 안의 줄 — 제목도 펜스 여는 줄도 아니다 (CommonMark HTML block type 2).
-List<bool> markHtmlCommentLines(List<String> lines) {
-  final marks = List<bool>.filled(lines.length, false);
-  var open = false;
-  for (var i = 0; i < lines.length; i++) {
-    final line = lines[i];
-    if (!open && RegExp(r'^ {0,3}<!--').hasMatch(line)) open = true;
-    if (open) {
-      marks[i] = true;
-      if (line.contains('-->')) open = false;
-    }
-  }
-  return marks;
-}
-
-// markFencedLines: HTML 주석 안에서는 열지 않고, 4칸 이상 들여 쓴 줄로는 열지 않는다
-// (그 줄 뒤를 산문으로 보면 절 안의 줄을 더 볼 뿐이다).
-final open = hidden[i] || indentOf(line) > 3 ? null : openPattern.firstMatch(line.trimLeft());
-
-// findListLinesOutsideMarkers:
-bool isHeading(int i) => !fenced[i] && !hidden[i] && headingPattern.hasMatch(lines[i]);
-```
-마커 줄 둘은 한 줄짜리 주석이라 위 규칙으로도 그대로다. `markFencedLines` 를 고치면 "규칙은 [fencedLines] 와 같다"(1524 ~ 1529행)가 틀리게 된다. G2-Q2 로 `fencedLines` 는 바꾸지 않으므로, 그 주석을 "(d′) 는 HTML 주석과 4칸 들여쓰기를 더 가린다" 로 고친다. 고친 뒤 위 세 입력을 지워 보기 행으로 남긴다.
+**Fix:** 소유자 결정대로 둔다. 다시 고치려면 지난 리뷰의 Fix 그대로다.
 
 ### WR-13: README 검사 (f) · (g) 가 따옴표로 감싼 키 · 콜론 앞 공백(`"ref":` · `'riverpod_lint':` · `ref :`)을 후보로 보지 않는다 — 낡은 값으로 10개 중 10개, 좁힌 문장은 "모두 후보로"
 
-**File:** `tool/verify.dart:2135-2137`, `tool/verify.dart:2180`, `README.md:382`, `example/README.md:116`, `example/README.md:395`, `tool/verify.dart:1859-1861`
-**Issue:** 두 정규식은 키를 글자 그대로만 받는다. `versionKeyPattern` 은 `^\s*(?:version|riverpod_lint):…`, `refKeyPattern` 은 `^\s*ref:…` 다. 키를 따옴표로 감싸거나 콜론 앞에 공백을 두면 그 줄은 후보가 아니다. 그래서 다른 블록에 맞는 값이 하나라도 있으면 "0개" 경로도 타지 않는다.
+**File:** `tool/verify.dart:2149-2151`, `tool/verify.dart:2195`
+**Issue:** 동작은 지난 리뷰와 같다. 제목 끝의 "좁힌 문장은 '모두 후보로'" 쪽은 `d8b61b0` 으로 닫혔다 (G3-Q2). 키 글자 구절이 들어간 자리는 다음과 같다.
 
-YAML 에서 `"ref":` · `ref :` 는 `ref` 키다. pub 도 그렇게 읽는다(아래 대조 실험). 사용 프로젝트가 그 블록을 복사하면 낡은 값이 그대로 들어간다.
+- `README.md:382`
+- `example/README.md:116` · `:395`
+- `tool/verify.dart:1873` · `:1875` · `:1877` (문서 주석)
+- `tool/verify.dart:2147` · `:2193` (함수 안 주석)
 
-05-10 은 같은 모양을 `lib/` 쪽에서 막았다.
+새 구절은 "키는 따옴표 · 콜론 앞 공백 없이 … 글자 그대로인 줄만 후보" 다. 지금 문장은 동작과 맞는다. 남은 것은 YAML 로는 같은 키인 줄의 값을 견주지 않는 동작이다.
 
-- 05-VERIFICATION 의 `linter :` · `"linter":` (M68 · M69)
-- M78 의 `"zz_quoted_plugin":` — analyzer 가 따옴표 키를 plugin 이름으로 받았다
+**재현(함수 단위):** 각각 따로 돌렸고 넷 모두 `passed=true` 였다.
+- 18행 `      "ref": v1.9.0`
+- 18행 `      ref : v1.9.0`
+- 198행 `  'riverpod_lint': ^3.1.3`
+- 234행 `    "version": ^3.1.3`
 
-README 코드 블록의 reader 에는 그 꼴이 남아 있다. WR-08 (flow 표기)과는 입력이 다르다. 이 줄들은 블록 꼴이고, 키도 줄 머리에 있다.
-
-좁힌 문장이 이 꼴을 빼지 않는다. 다음 셋은 이 줄을 범위 안으로 적는다.
-
-- `example/README.md:395` — "(f) · (g) 는 펜스 코드 블록 안에서 키가 줄 머리에 오는 줄을 모두 후보로 잡고"
-- `README.md:382` — "키가 줄 머리에 오는 `ref:` · `version:` · `riverpod_lint:` 줄의 값을 견준다"
-- `example/README.md:116` — 같은 말
-
-범위 밖으로 드는 것은 flow 표기 · 들여 쓴 블록 · 인용 안 펜스뿐이다.
-
-- **재현(전체 실행):** README 18행을 `      "ref": v1.9.0` 으로, 198행을 `  'riverpod_lint': ^3.1.3` 으로 함께 바꿨다(333행 `v2.0.0` · 234행 `^3.1.9` 는 그대로). 종료 코드 0, `[3/10] 배포 파일의 구성 ... 통과`, `점검 통과 (10개 중 10개)` 였다.
-- **재현(함수 단위):** 각각 따로 돌렸고 넷 모두 `passed=true` 였다.
-  - 18행 `      "ref": v1.9.0`
-  - 18행 `      ref : v1.9.0`
-  - 198행 `  'riverpod_lint': ^3.1.3`
-  - 234행 `    "version": ^3.1.3`
-- **대조(pub):** 사본 안에 로컬 git 패키지(tag `v1.0.0`)와 그것을 git 의존성으로 받는 앱을 만들었다. `"ref": v9.9.9` 와 `ref : v9.9.9` 로 각각 `fvm dart pub get --offline` 을 돌렸다. 둘 다 `Could not find git ref 'v9.9.9'` 로 실패했다. pub 이 두 꼴을 모두 `ref` 로 읽는다.
-
-**Fix:** 둘 중 하나를 소유자가 고른다. G2-Q2 는 "(e) · (f) · (g) 의 코드 변경은 승인 밖" 이었으므로 코드 쪽은 새 승인이 필요하다.
-
-1. 검사를 닫는다 — 펜스 안에서 키 이름이 `ref` · `version` · `riverpod_lint` 로 읽히는데 엄격한 정규식에 맞지 않는 줄은 읽지 못하는 줄로 실패시킨다.
-```dart
-// 따옴표 키 · 콜론 앞 공백 · `? ` 명시 키 — YAML 로는 같은 키다 (M68 · M69 · M78 과 같은 모양).
-final looseRefKey = RegExp(r'''^\s*(?:\?\s+)?(['"]?)ref\1\s*:(?:\s|$)''');
-final looseVersionKey =
-    RegExp(r'''^\s*(?:\?\s+)?(['"]?)(?:version|riverpod_lint)\1\s*:(?:\s|$)''');
-for (final line in fenced) {
-  if (refKeyPattern.firstMatch(line) == null && looseRefKey.hasMatch(line)) {
-    unreadableRefs.add(line.trim()); // "키는 따옴표 · 콜론 앞 공백 없이 적는다"
-  }
-  if (versionKeyPattern.firstMatch(line) == null && looseVersionKey.hasMatch(line)) {
-    unreadableVersions.add(line.trim());
-  }
-}
-```
-2. 문장을 더 좁힌다(G2-Q2 와 같은 길) — `README.md:382` · `example/README.md:116` · `:395` 와 `tool/verify.dart:1859-1861` · `:2129` · `:2176` 에 "키는 따옴표 · 콜론 앞 공백 없이 `ref:` 글자 그대로인 줄만 후보" 를 적는다.
+**Fix:** 소유자 결정대로 둔다.
 
 ### WR-14: (e) 의 다른 패키지 주소 검사는 `.yaml` · `.yml` 로 끝나는 주소만 보는데, 좁힌 문장과 문서 주석은 "`package:` 로 정확히 시작하는 주소가 꼴이 아니면 실패" 라고 적는다 — `package:woody-lints/riverpod` 로 10개 중 10개
 
-**File:** `tool/verify.dart:2094-2103`, `example/README.md:116`, `tool/verify.dart:1857-1858`
-**Issue:** (e) 의 두 정규식이 함께 덮지 못하는 주소가 있다.
+**File:** `tool/verify.dart:2107-2116`
+**Issue:** 동작은 지난 리뷰와 같다. 제목의 문장 쪽 어긋남은 `d8b61b0` 으로 닫혔다 (G3-Q2).
 
-- `candidates` 는 `package:woody_lints/` 로 시작하는 글자만 모은다.
-- `otherPackages` 는 `package:([^/\s]+)/(\S+?\.ya?ml)` 이다. 그래서 확장자가 `.yaml` · `.yml` 이 아닌 다른 패키지 주소는 어느 쪽에도 들지 않는다.
+- `example/README.md:116` 은 이제 "`package:<이름>/` 뒤가 `.yaml` · `.yml` 로 끝나는 다른 패키지의 주소면 실패하고 (확장자가 `.yaml` · `.yml` 이 아닌 다른 패키지의 주소(`package:woody-lints/riverpod`) … 는 보지 않고" 라고 적는다.
+- `tool/verify.dart:1871` · `:1877` 도 같은 범위를 적는다.
 
-패키지 이름 오타와 확장자 누락이 함께 난 주소가 그 예다. `package:woody-lints/riverpod` 나 `package:woody_lint/riverpod.yam` 은 조용히 지나간다.
+남은 것은 그 주소를 보지 않는 동작이다.
 
-문서는 이 주소를 실패로 적는다.
+**재현(함수 단위):** 68행을 `  - package:woody-lints/riverpod` 로, 또 `  - package:woody_lint/riverpod.yam` 로 바꿨다. 둘 다 `passed=true` 였다.
 
-- `example/README.md:116` 은 G2-Q2 로 좁힌 뒤에도 "README 에서 `package:` 로 정확히 시작하는 주소가 `woody_lints` 의 `<이름>.yaml` 꼴이 아니면 실패하고" 라고 적는다. 위 두 주소는 `package:` 로 정확히 시작하고, 문장 부호도 붙지 않았고, `woody_lints` 의 꼴도 아니다. 그런데 통과한다.
-- `tool/verify.dart:1857-1858` 의 문서 주석도 "— 꼴이 아닌 주소 · `woody_lints` 가 아닌 패키지의 주소도 실패" 라고 넓게 적는다.
+**대조:** 68행 `  - package:woody-lints/riverpod.yaml` → `passed=false`, `` `README.md` 에 `woody_lints` 가 아닌 패키지의 `.yaml` 주소가 있다 (1) ``.
 
-`example/README.md:436` 만 "`package:<이름>/` 뒤가 `.yaml` · `.yml` 로 끝나고 …" 라고 정확히 적는다. 같은 파일 안에서 두 문장이 다른 범위를 말하는 셈이다.
+**Fix:** 소유자 결정대로 둔다.
 
-WR-07 (scheme 오타)과 IN-08 (뒤에 붙은 문장 부호)과는 입력이 다르다. 사용 프로젝트가 그 블록을 복사하면 include 가 풀리지 않는 것은 같다.
+### WR-15: `pubspecReleaseVersion` 이 여러 줄 따옴표 스칼라 안의 `version:` 줄을 읽는다 — pub 은 진짜 `version:` 을 읽는데 README 의 낡은 `ref:` 로 10개 중 10개
 
-- **재현(전체 실행):** README 68행을 `  - package:woody-lints/riverpod` 로 바꿨다. 종료 코드 0, `[3/10] 배포 파일의 구성 ... 통과`, `점검 통과 (10개 중 10개)` 였다.
-- **재현(함수 단위):** 68행 `  - package:woody_lint/riverpod.yam` → `passed=true`.
-- **대조:** 68행 `  - package:woody-lints/riverpod.yaml` → `passed=false`, `` `README.md` 에 `woody_lints` 가 아닌 패키지의 `.yaml` 주소가 있다 (1) ``.
+**File:** `tool/verify.dart:1587-1604` (줄 찾기 `:1592-1596`), `tool/verify.dart:1584-1585`, `example/README.md:588`
+**Issue:** 05-12 는 `pubspecReleaseVersion` 을 줄 단위로 바꿨다 (G3-R2-Q1, "숨긴 값이 아니라 진짜 값을 읽는다"). 여러 줄 정규식이 U+2028 뒤에 숨긴 `version:` 을 읽던 꼴은 닫혔다. 그런데 줄 단위 reader 는 YAML 스칼라를 모른다.
 
-**Fix:** 둘 중 하나를 소유자가 고른다(코드 쪽은 G2-Q2 밖이라 새 승인이 필요하다).
+- 앞의 키 값이 여러 줄 따옴표 스칼라면, 그 다음 줄의 열 0 `version: …` 은 YAML 로는 그 문자열의 일부다.
+- reader 는 열 0 의 첫 `^version:` 줄을 그대로 돌려준다.
 
-1. 문장을 코드에 맞춘다. `example/README.md:116` 의 그 구절을 다음처럼 고친다: "`package:woody_lints/` 뒤의 주소가 `<이름>.yaml` 꼴이 아니면, `package:<이름>/` 뒤가 `.yaml` · `.yml` 로 끝나는 다른 패키지의 주소면 실패하고". `tool/verify.dart:1858` 도 "`.yaml` · `.yml` 로 끝나는 다른 패키지의 주소도 실패" 로 고친다.
-2. 검사를 닫는다. 다른 패키지 쪽도 확장자를 가리지 않고 모은다. 이 README 의 `package:` 주소는 모두 `woody_lints` 이므로(`example/README.md:436`) 지금 파일에서 거짓 실패는 없다.
+pub (package:yaml) 은 따옴표 스칼라의 이어지는 줄이 열 0 이어도 받는다 (아래 대조). 그래서 `description:` 을 여러 줄 따옴표 값으로 적고 그 안에 `version: 1.9.0` 줄이 끼면 두 쪽이 갈린다.
+
+- pub 은 `2.0.0-dev` 로 읽는다. 사용 프로젝트가 받는 버전 · tag 의 기준이다.
+- `[3/10]` (g) 는 `1.9.0` 과 README 의 `ref:` 를 견준다.
+
+같은 모양이 U+2028 꼴과 다른 입력으로 다시 나온 것이다. `tool/verify.dart:1584-1585` 의 문서 주석과 `example/README.md:588` 은 "이제 진짜 값을 읽는다" 고 읽힌다. 이 입력에서는 그렇지 않다.
+
+- **재현(전체 실행, 복제본):**
+  - `pubspec.yaml` 2행을 세 줄로 바꿨다: `description: "Woody's custom lint rules for Flutter projects.` / `version: 1.9.0` / `"`.
+  - README 18 · 333행을 `      ref: v1.9.0` 으로 바꿨다.
+  - `git diff --numstat` 은 `pubspec.yaml 3/1`, `README.md 2/2` 였다.
+  - 결과는 종료 코드 0, `[3/10] 배포 파일의 구성 ... 통과`, `점검 통과 (10개 중 10개)` 였다.
+  - 같은 복제본에서 `fvm dart pub deps` 의 머리 셋째 줄은 `woody_lints 2.0.0-dev` 였다.
+- **함수 단위:** 같은 변형에서 `pubspecReleaseVersion` → `1.9.0`.
+- **대조:**
+  - `pubspec.yaml` 만 되돌리고 README 의 `v1.9.0` 은 둔 채 돌렸다. `passed=false`, `` `ref: vX.Y.Z` 예시가 `pubspec.yaml` 의 version (2.0.0) 과 다르다 `` · `ref: v1.9.0` 이었다.
+  - `$T/q` 에 따로 만든 패키지(`name: q` / `description: "foo bar.` / `version: 1.9.0` / `"` / `version: 2.0.0-dev` / `environment: …`)에서도 확인했다. `fvm dart pub get --offline` 은 성공했고, `pub deps` 는 `q 2.0.0-dev`, `pubspecReleaseVersion` 은 `1.9.0` 이었다.
+
+**Fix:** 숨은 값을 고르지 말고 읽지 못하는 꼴로 멈춘다 (종료 코드 70 — 지금 "version: 을 읽지 못했다" 와 같은 길).
+
+1. YAML 은 같은 키를 두 번 받지 않는다. 그러므로 열 0 의 `version:` 줄이 둘 이상이면 하나는 스칼라 안의 줄이다.
+2. 여러 줄 스칼라를 여는 줄(값이 따옴표로 열리고 그 줄에서 닫히지 않거나, 값이 `|` · `>`)이 있으면 멈춘다.
+
 ```dart
-final otherPackages = RegExp(r'''package:([^/\s]+)/(\S+?)(?=[`\s)"']|$)''', multiLine: true)
-    .allMatches(readmeText)
-    .where((m) => m.group(1) != 'woody_lints')
-    .map((m) => 'package:${m.group(1)}/${m.group(2)}')
-    .toSet()
-    .toList()
-  ..sort();
+// 열 0 의 `version:` 줄은 정확히 하나여야 한다 — 둘 이상이면 하나는 여러 줄 스칼라 안의 줄이다 (WR-15).
+final found = [
+  for (final line in lines)
+    if (versionLine.firstMatch(line) case final m?) m.group(1)!,
+];
+if (found.length != 1 || lines.any(opensMultilineScalar)) {
+  throw FormatException(
+    'pubspec.yaml 에서 version: 을 하나로 읽지 못했다 — 열 0 의 `version:` 줄 ${found.length}개, '
+    '여러 줄 스칼라(따옴표 값이 다음 줄로 이어지거나 `|` · `>`)는 받지 않는다',
+  );
+}
+final raw = found.single;
 ```
+`opensMultilineScalar` 는 WR-16 의 Fix 와 같은 도우미다. 고친 뒤 위 입력을 지워 보기 행으로 남긴다.
+
+### WR-16: `declaredRuleNames` · `enabledLanguageOptions` 가 여러 줄 스칼라(따옴표 · 블록) 안의 줄을 규칙 · 옵션으로 읽는다 — 사용 프로젝트에 닿지 않는 규칙 · 옵션을 `RULES.md` · README 가 켰다고 적는데 10개 중 10개
+
+**File:** `tool/verify.dart:951-997` (`:966` 주석 줄 건너뛰기, `:967` `linter:` 줄), `tool/verify.dart:1101-1159` (`:1145` 깊이를 보지 않는 `language:` 판정), `tool/verify.dart:1029-1081`, `README.md:379`, `example/README.md:116`
+**Issue:** WR-15 와 같은 뿌리다. `lib/base.yaml` 의 줄 단위 reader 둘이, YAML 로는 글자 값의 일부인 줄을 키 · 규칙 · 옵션으로 읽는다. 자유 글자 값을 받는 자리는 `lib/base.yaml` 의 `analyzer:` 아래 `exclude:` glob 이다. 그 아래 키는 닫힌 목록이 없다 (G2-Q1 범위 밖). 거기에 여러 줄 값을 두면 둘이 갈린다.
+
+- **따옴표 꼴:** `    - "build/**` 로 연 값이 다음 줄들로 이어지고, `    # "` 로 닫힌다.
+  - reader 는 그 사이의 열 0 `linter:` · `  rules:` · `    - 규칙` 줄을 둘째 `linter:` 블록으로 읽는다.
+  - 닫는 줄은 reader 에게는 주석이고, YAML 에게는 문자열 안의 `# ` 뒤 닫는 따옴표다.
+  - `findUnexpectedKeys` 는 같은 최상위 키가 두 번 나와도 막지 않는다 (`:1050-1064`). YAML 은 두 번째 `linter:` 를 받지 않는 파일인데도 그렇다.
+  - `enabledLanguageOptions` 도 같은 따옴표 값 안의 `  language:` / `    strict-casts: true` 를 켠 옵션으로 읽는다.
+- **블록 스칼라 꼴:** `    - |` 아래 `      language:` / `        strict-casts: true`.
+  - `enabledLanguageOptions` 는 `analyzer:` 블록 안 어느 깊이의 `language:` 든 받는다 (`:1145`).
+  - YAML 로는 glob 문자열 한 개다.
+
+결과는 이렇다.
+
+- `RULES.md` 의 켠 규칙 표 · 켠 analyzer 옵션 표와 README 의 「받는 규칙」 목록이, 사용 프로젝트가 받지 않는 규칙 · 옵션을 적는다.
+- 그런데 (c) · (d) 는 같다고 본다.
+- `README.md:379` 의 "어긋나면 검증이 실패한다" 와 프로젝트의 Core Value(받는 규칙이 문서에 적힌 그대로)가 이 입력에서 거짓이 된다.
+
+`[2/10]` 도, 정답지도 잡지 못한다. analyzer 에게는 그 규칙 · 옵션이 없기 때문이다.
+
+- **재현(전체 실행, 셋 — 모두 종료 코드 0, `[3/10] 통과`, `점검 통과 (10개 중 10개)`):**
+  - (규칙) `lib/base.yaml` 끝에 일곱 줄 `analyzer:` / `  exclude:` / `    - "build/**` / `linter:` / `  rules:` / `    - always_specify_types` / `    # "` 를 붙였다. `RULES.md` 92행 뒤에 `` | `always_specify_types` | 버그 방지 | x | 0 · 0 · 0 | 해당 없음 | x | `` 를 더했다. README 186행 뒤에 `` - `always_specify_types` `` 를 더했다. 같은 규칙을 진짜 규칙 줄로 넣은 M80 (`example/README.md` 05-12 소절)은 `[2/10]` 과 정답지 단계 다섯이 실패했다. 이번에는 analyzer 가 그 규칙을 켜지 않았다.
+  - (규칙, 같은 꼴) 위에서 규칙만 `prefer_mixin` 으로 바꿨다. 결과는 같다.
+  - (옵션, 따옴표) `lib/base.yaml` 끝에 `analyzer:` / `  exclude:` / `    - "build/**` / `  language:` / `    strict-casts: true` / `    # "` 를 붙였다. `RULES.md` 102행 `없음 — …` 을 `` | `strict-casts` | x | 0 | x | `` 로 바꿨다.
+- **재현(전체 실행, 블록 스칼라):** `lib/base.yaml` 끝에 `analyzer:` / `  exclude:` / `    - |` / `      language:` / `        strict-casts: true` 를 붙였다. `RULES.md` 는 위와 같이 바꿨다. 결과는 종료 코드 0, `점검 통과 (10개 중 10개)` 였다.
+- **대조(전체 실행):** 같은 `RULES.md` 에서 `lib/base.yaml` 끝을 진짜 옵션(`analyzer:` / `  exclude:` / `    - "build/**"` / `  language:` / `    strict-casts: true`)으로 바꿨다.
+  - 결과는 종료 코드 1, `점검 실패 (10개 중 5개)` 였다.
+  - `[5/10]` · `[7/10]` ~ `[10/10]` 이 `invalid_assignment` error 로 실패했다. 옵션이 진짜로 켜지면 사용 프로젝트에 닿는다는 뜻이다.
+- **대조(analyzer):** `$T/p` 의 작은 프로젝트(`print(1);` 한 줄)에서 돌렸다.
+  - 옵션 파일 `linter:` / `  rules:` / `    - prefer_single_quotes` / `analyzer:` / `  exclude:` / `    - "build/**` / `linter:` / `  rules:` / `    - avoid_print` / `    # "` → `No issues found!`.
+  - 같은 `avoid_print` 를 진짜 규칙 줄로 둔 대조 → `avoid_print` info 한 줄.
+
+**Fix:** 둘 중 하나 (또는 둘 다). 어느 쪽이든 새 승인이 필요하다 — G2-Q1 은 `lib/base.yaml` 의 `analyzer:` 아래를 범위 밖으로 뒀다.
+
+1. **줄 단위 reader 가 읽지 못하는 꼴로 멈춘다** (WR-15 와 같은 도우미). 대상은 `lib/` 조각 셋과 `pubspec.yaml` 이다. 다음이 있으면 `[3/10]` 실패(또는 70)로 멈춘다.
+   - 여러 줄 스칼라를 여는 줄
+   - 같은 최상위 키가 두 번 나온 줄 (`findUnexpectedKeys`)
+```dart
+/// [line] 이 여러 줄 스칼라를 여는지 — 값이 따옴표로 열리고 그 줄에서 닫히지 않거나, `|` · `>` 블록 스칼라다.
+/// 줄 단위 reader 는 그 아래 줄을 키 · 규칙으로 읽으므로 받지 않는다 (WR-15 · WR-16).
+bool opensMultilineScalar(String line) {
+  final value = RegExp(r'^\s*(?:-\s+|[^\s#][^:#]*:\s+)(.+?)\s*$')
+      .firstMatch(line)
+      ?.group(1);
+  if (value == null) return false;
+  if (RegExp(r'^[|>][-+0-9]*(?:\s+#.*)?$').hasMatch(value)) return true;
+  final quote = value[0];
+  if (quote != '"' && quote != "'") return false;
+  // 같은 줄 안에서 닫는 따옴표 뒤에는 `# 주석` 만 온다 — 아니면 다음 줄로 이어진다.
+  return !RegExp('^$quote.*$quote(?:\\s+#.*)?\$').hasMatch(value);
+}
+
+// findUnexpectedKeys: 같은 최상위 키가 두 번이면 받지 않는 줄 — YAML 은 중복 키를 받지 않는다.
+final seenKeys = <String>{};
+// … indent == 0 이고 key 를 읽은 곳에서
+if (!seenKeys.add(key)) topLevel.add(shown);
+```
+   이 꼴은 따옴표 안에 따옴표를 겹쳐 쓴 값(`"a \" b"`)을 여는 줄로 볼 수 있다. 그러면 거짓 실패 쪽이다 — 지금 조각에는 그런 값이 없다.
+2. **자유 글자 값을 받는 자리를 닫는다.** `allowedChildKeys` 에 `'lib/base.yaml': {'analyzer': {'language'}}` 를 둔다. 그러면 `lib/base.yaml` 에는 여러 줄 값을 둘 자리가 `include:` 값 하나만 남는다. 그 값을 여러 줄로 쓰면 include 가 풀리지 않아 `[2/10]` 이 잡는다. 다만 `pubspec.yaml` (WR-15) 은 이 길로 닫히지 않는다.
+
+`enabledLanguageOptions` 의 `language:` 판정은 따로 좁힌다. `analyzer:` 바로 아래(첫 자식 줄의 들여쓰기)만 받게 한다. 블록 스칼라 꼴은 1 이 없어도 이것으로 닫힌다. 고친 뒤 위 네 입력을 지워 보기 행으로 남긴다.
 
 ## Info
 
 ### IN-08: (e) 의 주소 끝 판정이 문장 부호를 모른다 — 맞는 주소의 거짓 실패와 다른 패키지 주소의 누락이 한 줄에서 함께 난다
 
-**File:** `tool/verify.dart:2073-2076`, `tool/verify.dart:2094-2097`, `tool/verify.dart:1864`
-**Issue:** 지난 리뷰와 같은 입력이 지금도 같은 결과를 낸다. G2-Q2 로 `skipped` 이고 코드는 그대로다.
+**File:** `tool/verify.dart:2086-2089`, `tool/verify.dart:2107-2110`
+**Issue:** 동작은 지난 리뷰와 같다 (G2-Q2 `skipped`). 지난 리뷰가 짚은 `tool/verify.dart:1864` 주석은 `d8b61b0` 으로 고쳐졌다. 지금 `:1877` 은 "주소 바로 뒤에 `,` · `.` 같은 문장 부호가 붙으면 `woody_lints` 주소는 꼴이 아닌 것으로 실패하고 다른 패키지의 주소는 후보가 되지 않는다" 라고 적는다. 문장은 이제 동작과 맞는다.
 
-좁힌 문장 대부분은 결과를 맞게 적는다.
+**재현(함수 단위):** README 85행 끝에 ` 예: package:woody_lints/recommended.yaml, package:woody-lints/base.yaml.` 를 덧붙였다. 결과는 `passed=false` 였다.
+- 블록은 `` `<이름>.yaml` 꼴이 아닌 것이 있다 (1): `` · `package:woody_lints/recommended.yaml,` 하나였다.
+- "아닌 패키지" 블록은 0개였다.
 
-- `example/README.md:116` · `:436` — "그 문장 부호가 붙으면 `woody_lints` 주소는 꼴이 아닌 것으로 실패하고, 다른 패키지의 주소는 후보가 되지 않는다"
-- `tool/verify.dart:2093` — 다른 패키지 쪽
+**Fix:** 소유자 결정대로 둔다.
 
-한 곳은 맞지 않는다. `tool/verify.dart:1864` 의 문서 주석은 "(e) 는 … 주소 바로 뒤에 붙은 `,` · `.` 같은 문장 부호를 보지 않고" 라고 적는다. 하지만 `woody_lints` 쪽은 그 문장 부호를 후보에 넣어 거짓 실패한다. "보지 않는다" 는 다른 패키지 쪽에만 맞다.
+### IN-10: (f) · (g) 의 범위 문장이 펜스 안의 네 칸 들여 쓴 ```` ``` ```` 줄을 적지 않는다 — 그 줄이 `fencedLines` 의 펜스를 닫아 진짜 펜스 안의 낡은 `ref:` 로 통과
 
-**재현(함수 단위):** README 85행 끝에 ` 예: package:woody_lints/recommended.yaml, package:woody-lints/base.yaml.` 를 덧붙였다. 결과는 `passed=false` 였다. 블록은 `` `<이름>.yaml` 꼴이 아닌 것이 있다 (1): `` · `package:woody_lints/recommended.yaml,` 하나뿐이었고, 다른 패키지 블록은 나지 않았다.
+**File:** `tool/verify.dart:1518-1525`, `tool/verify.dart:1489-1502`, `README.md:382`, `example/README.md:116`, `example/README.md:395`
+**Issue:** `fencedLines` 는 블록 안에서 `trim()` 한 줄이 펜스 문자만이면 블록을 닫는다 (`:1518-1525`). 들여쓰기는 보지 않는다. CommonMark 의 닫는 펜스는 들여쓰기 3칸까지다. 네 칸 이상 들여 쓴 ```` ``` ```` 줄은 펜스 안의 내용이다. 그래서 그런 줄 뒤의 같은 블록 줄은 (f) · (g) 의 후보가 아니다.
 
-**Fix:** 소유자 결정대로 코드는 둔다. `tool/verify.dart:1864` 의 그 구절만 `example/README.md:436` 과 같게 고친다: "주소 바로 뒤에 붙은 `,` · `.` 같은 문장 부호(붙으면 `woody_lints` 주소는 꼴이 아닌 것으로 실패하고, 다른 패키지의 주소는 후보가 되지 않는다)".
+`d8b61b0` 이 고친 `README.md:382` 는 견주지 않는 꼴을 나열한다. 따옴표 키 · 콜론 앞 공백, flow 표기, 네 칸 들여 쓴 코드 블록, 인용 안의 펜스다. 이 꼴은 그 목록에 없다. 이 꼴의 값은 렌더링된 README 에서 펜스 코드 블록 안에 보인다. 그러니 문장대로라면 "견준다" 쪽이다. `example/README.md:116` · `:395` 도 같다.
 
-### IN-09: (a′) 가 들어온 뒤 M35 · M37 의 `[3/10]` 출력이 바뀌었는데, 05-10 소절은 M46 만 짚는다
+(d′) 쪽은 같은 규칙(`markFencedLines`)을 `example/README.md:549` 가 "네 칸 이상 들여 쓴 ```` ``` ```` 줄도 펜스 여는 줄로 본다" 라고 적는다. (f) · (g) 의 문장에만 빠져 있다. WR-09 (펜스가 아닌 코드 블록)와는 입력이 다르다. 낡은 값이 진짜 펜스 안에 있다.
 
-**File:** `example/README.md:323`, `example/README.md:325`, `example/README.md:518`
-**Issue:** 같은 입력에서 지금 `[3/10]` 이 내는 것과 기록이 다르다.
+입력 가능성은 낮다 — YAML 예시 안에 그런 줄을 둘 까닭이 드물다. 그래서 Info 로 둔다.
 
-- `example/README.md:323` (M35 행)과 `:325` (M37 행)는 `[3/10]` 이 낸 줄을 `` `lib/<조각>.yaml` 에 규칙이 있다 `` 블록 하나로 적는다.
-- 05-10 뒤에는 그 앞에 `` `lib/<조각>.yaml` 의 최상위에 받지 않는 줄이 있다 (1) — 받는 키: … `` 블록이 먼저 나온다. 다른 조각의 열 0 `linter:` 는 (a′) 의 목록 밖이기 때문이다.
+- **재현(함수 단위):** README 330행(`  woody_lints:`) 뒤에 `    ```` 한 줄을 끼우고, 333행(이제 334행)을 `      ref: v1.9.0` 으로 바꿨다. `git diff --numstat` 은 `2/1` 이었다. 결과는 `passed=true` 였다.
+- **대조:** `    ```` 줄 없이 333행만 `v1.9.0` 으로 바꿨다. `passed=false`, `ref: v1.9.0` 블록이 나왔다.
+- **렌더링 확인:** 합성 조각 ```` ```yaml ```` / `a:` / `  b:` / `    ```` / `    ref: v1.9.0` / ```` ``` ```` 을 GitHub Markdown API(`gfm`)로 그렸다. `<pre>` 하나 안에 ```` ``` ```` 글자와 `ref: v1.9.0` 이 함께 나왔다.
 
-05-10 소절 518행은 "M46 은 이제 `[3/10]` 에 블록 둘(최상위 · 규칙)을 찍는다. 05-07 소절의 M46 행은 그때의 기록이다" 라고 M46 만 짚는다. 116행은 M35 를 "`linter:` 블록에 규칙이 없는지" 의 근거 행으로 든다. 행을 다시 돌려 보는 사람은 기록과 다른 화면을 보게 된다.
+**Fix:** G2-Q2 · G3-Q2 와 같은 길이면 문장만 고친다. `README.md:382` · `example/README.md:116` · `:395` 와 `fencedLines` 문서 주석(`:1502`)의 범위 밖 목록에 다음을 더한다: "펜스 안에서 네 칸 이상 들여 쓴 `` ``` `` · `~~~` 줄은 그 펜스를 닫는 것으로 보아, 그 뒤의 같은 블록 값은 견주지 않는다". 코드로 닫으려면 닫는 줄의 들여쓰기를 3칸까지로 제한한다. `markFencedLines` 와 함께 고쳐야 한다(`:1536-1537`). 이쪽은 새 승인이 필요하다.
 
-M1 ~ M67 행은 고치지 않는 것이 이번 계획의 금지(P-03 · P-04)라, 행이 아니라 05-10 의 읽는 법이 짚어야 한다.
+### IN-11: `stripPlugins` 문서 주석의 "복사본의 줄 수 … 가 원본과 같다" 가 `plugins:` 섹션이 파일 끝일 때 맞지 않는다
 
-**재현(함수 단위):**
-- M35 의 네 줄(`linter:` / `  rules:` / `    - avoid_print # 기반 세트와 겹침` / `    - prefer_mixin # RULES.md 에 없음`)을 `lib/codegen.yaml` 끝에 덧붙였다. 블록이 둘 나왔다: `` `lib/codegen.yaml` 의 최상위에 받지 않는 줄이 있다 (1) — 받는 키: analyzer `` 와 `` `lib/codegen.yaml` 에 규칙이 있다 (2) ``.
-- M37 의 세 줄을 `lib/riverpod.yaml` 끝에 덧붙였다. 이것도 둘이었다: `… 받는 키: plugins` 와 `… 규칙이 있다 (1)`.
+**File:** `tool/verify.dart:832`, `tool/verify.dart:857`
+**Issue:** 05-12 뒤 `stripPlugins` 의 흐름은 이렇다.
 
-**Fix:** 518행을 "M35 · M37 · M46 은 이제 `[3/10]` 에 블록 둘(최상위 · 규칙)을 찍는다. 05-01 · 05-07 소절의 그 행은 그때의 기록이다" 로 넓힌다.
+- `splitYamlLines` (`LineSplitter`) 는 끝 줄바꿈 뒤의 빈 조각을 만들지 않는다.
+- 비운 줄을 `join('\n')` 하면 마지막 빈 줄의 줄바꿈이 사라진다.
+
+`lib/riverpod.yaml` 은 5줄이고 `plugins:` 섹션(4 · 5행)이 끝에 있다. 그 복사본은 `splitYamlLines` 로 4줄이다. 고치기 전 코드(`split('\n')`)는 5줄이었다. 줄 번호는 내용이 있는 줄에서 원본과 같으므로 진단과 `readRuleNameAt` 에는 영향이 없다.
+
+다만 `:832` 의 "복사본의 줄 수와 줄 번호가 원본과 같다" 는 이제 줄 수에서 틀리다. 05-12 계획의 설계 절은 "마지막 줄바꿈은 복사본에서 빠질 수 있다" 고 적었지만, 문서 주석에는 옮겨지지 않았다.
+
+**재현(함수 단위):** 지금 `lib/riverpod.yaml` 에 `stripPlugins` 를 불렀다. `splitYamlLines(결과).length` → 4 였다 (원본 5).
+
+**Fix:** 둘 중 하나.
+- 문서 주석을 "줄 번호가 원본과 같다 (끝의 빈 줄은 빠질 수 있다)" 로 고친다.
+- 줄 수까지 맞춘다:
+```dart
+final stripped = lines.isEmpty ? '' : '${lines.join('\n')}\n';
+```
 
 ---
 
-_Reviewed: 2026-10-14T07:30:00Z_
+_Reviewed: 2026-10-14T13:41:37Z_
 _Reviewer: Claude (gsd-code-reviewer)_
 _Depth: standard_
