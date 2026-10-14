@@ -1,8 +1,8 @@
 ---
 phase: 05-documentation
-verified: 2026-10-14T03:38:00Z
+verified: 2026-10-14T07:42:21Z
 status: gaps_found
-score: 50/53 must-haves verified
+score: 62/66 must-haves verified
 covered_files:
   - ".claude/CLAUDE.md"
   - ".planning/phases/05-documentation/05-01-PLAN.md"
@@ -23,6 +23,10 @@ covered_files:
   - ".planning/phases/05-documentation/05-08-SUMMARY.md"
   - ".planning/phases/05-documentation/05-09-PLAN.md"
   - ".planning/phases/05-documentation/05-09-SUMMARY.md"
+  - ".planning/phases/05-documentation/05-10-PLAN.md"
+  - ".planning/phases/05-documentation/05-10-SUMMARY.md"
+  - ".planning/phases/05-documentation/05-11-PLAN.md"
+  - ".planning/phases/05-documentation/05-11-SUMMARY.md"
   - "CHANGELOG.md"
   - "README.md"
   - "RULES.md"
@@ -36,32 +40,46 @@ covered_files:
   - "pubspec.yaml"
   - "tool/measure_rules.dart"
   - "tool/verify.dart"
-covered_digest: "v3:sha256:99374fb51b6b2d77b3cbc9a20f979de3c152aedb14899f7cb85033b72f27748a"
+covered_digest: "v3:sha256:746718cece72d61e4245e977efbc6de74d1014037230e3aefcf24e24add8fcc1"
 behavior_unverified: 0
 overrides_applied: 0
 re_verification:
   previous_status: gaps_found
-  previous_score: 23/25
+  previous_score: 50/53
   gaps_closed:
-    - "gaps 1 — README 표시 구역 안의 옛 README 꼴 `- require_trailing_commas: 자동 코드 정렬 최적화` · `* `x`` · `+ `x`` · `1. `x`` · `- x` · `- `Extra_Rule`` 이 `[3/10]` 실패 (전체 실행 M43 rc 1 · 10개 중 1개 실패, 함수 단위 다섯 줄 `(5)`)"
-    - "gaps 2 — `lib/codegen.yaml` · `lib/riverpod.yaml` 끝의 flow 표기 `linter: {rules: […]}` 가 종료 코드 70 · 빈 stdout (전체 실행 M45 rc 70)"
+    - "지난 gaps 1 의 입력 — `lib/codegen.yaml` 끝의 `linter :` 블록 목록 (M68 전체 실행 rc 1 · `[3/10]` 만 실패 · `점검 실패 (10개 중 1개)` · `10행: linter :`, 다른 조각의 규칙 블록 없음), `\"linter\":` (M69) · `lib/riverpod.yaml` 의 `linter :` (M70) 은 함수 단위 `passed=false`. 검증자가 더 넣은 철자 넷(`'linter':` · `? linter` · `&a linter:` · `!!str linter:`)도 모두 최상위 블록으로 실패"
   gaps_remaining: []
   regressions: []
   new_gaps:
-    - "같은 모양의 다른 입력 — 다른 조각의 `linter` 키를 다른 철자(`linter :` · `\"linter\":`)로 적으면 (b′) 가 그 블록을 통째로 지나쳐 10개 중 10개 (아래 gaps)"
+    - "같은 모양의 다른 입력 — 줄을 `\\n` 으로만 나누는 reader 셋이 CR 하나(`\\r`) 뒤의 키 · 규칙을 주석 줄로 본다. YAML (package:yaml) 과 analyzer 는 CR 을 줄바꿈으로 읽는다 (05-REVIEW WR-11 재현)"
+    - "05-10 이 좁힌 (e) · (f) · (g) 문장 가운데 둘이 아직 코드보다 넓다 (05-REVIEW WR-14 · WR-13 재현)"
 gaps:
-  - truth: "규칙 목록을 YAML 과 다르게 고치면 검증 명령이 실패한다 — `lib/codegen.yaml` · `lib/riverpod.yaml` 에 규칙을 적으면 검증 명령이 잡고, README 비교가 `lib/base.yaml` 하나만 봐도 빈자리가 없다 (성공 기준 3 · VERIFY-06 · 05-01 truth 3 · 05-07 truth 7 · README 378행)"
+  - truth: "규칙 목록을 YAML 과 다르게 고치면 검증 명령이 실패한다 — 조각마다 받는 키는 닫힌 목록이고 그 밖의 최상위 줄 · 그 바로 아래의 다른 키는 `[3/10]` 실패 (성공 기준 3 · VERIFY-06 · 05-01 truth 3 · 05-07 truth 7 · 05-10 truth 8 의 README 378 · 379행 부분)"
     status: failed
-    reason: "`declaredRuleNames` 는 열 0 의 글자 `^linter:` 로만 linter 블록을 찾고, 그 밖의 최상위 키 아래 들여쓴 줄은 모두 조용히 건너뛴다. YAML 에서 같은 키인 `linter :` (콜론 앞 공백) 이나 `\"linter\":` (따옴표 키) 로 블록 목록을 적으면 (b′) 가 규칙 0개로 읽는다. 검증자 복제본 전체 실행: `lib/codegen.yaml` 끝에 `linter :` / `  rules:` / `    - prefer_mixin` → 종료 코드 0 · `점검 통과 (10개 중 10개)`; 같은 꼴의 `\"linter\":` → 0 · 10/10; `lib/riverpod.yaml` 끝에 `linter :` 꼴 → 0 · 10/10. 사용 프로젝트에 닿는다 — 같은 자리에 `always_specify_types` 를 두면 `fixtures/base_codegen` 의 `fvm dart analyze` 에 그 진단 25건 (`linter :` · `\"linter\":` 모두). 정답지는 샘플이 그 규칙에 걸릴 때만 잡는다 (`always_specify_types` 는 `[5/10]` · `[9/10]` · `[10/10]` 실패, `prefer_mixin` 은 통과). 05-VERIFICATION gaps 2 와 같은 모양(블록을 찾지 못한 입력을 0개로 통과)이고 고친 자리(`linter:` 줄의 값) 바로 옆의 다른 입력이다. 개연성은 낮다 — 두 철자 모두 이 저장소의 YAML 관례 밖이다. 그러나 README 378행은 '다른 조각에 규칙을 적으면 검증 명령이 잡는다 — 블록 목록이면 `[3/10]` 단계가 실패' 라고 단정하고, 이 입력은 블록 목록이다."
+    reason: "`findUnexpectedKeys` (1027행) 는 CRLF 만 LF 로 바꾼 뒤 `\\n` 으로, `declaredRuleNames` (951행) · `enabledLanguageOptions` (1101행) 는 `\\n` 으로만 줄을 나눈다. package:yaml 3.1.4 의 `_isBreakAt` 은 CR 하나도 줄바꿈으로 본다(소스와 `loadYaml` 로 확인: `# c\\rformatter:\\r  x: 1` → `{formatter: {x: 1}, …}`, `    # s\\r    - hidden` → `rules: [a, hidden]`). 그래서 주석 줄 끝의 `\\r` 뒤에 둔 키 · 규칙은 reader 셋에게는 주석이고 analyzer 에게는 새 줄이다. 검증자 복제본 전체 실행: `lib/base.yaml` 93행(주석) 끝에 `\\r    - prefer_mixin` → 종료 코드 0 · `점검 통과 (10개 중 10개)` (RULES.md · README 어디에도 없는 규칙이 배포된다); 같은 자리 `\\r    - always_specify_types` → `[3/10]` 통과, 정답지 단계 다섯이 그 규칙의 새 진단으로 실패하고 `[2/10]` 이 `analysis_options.yaml:94  incompatible_lint` 를 낸다(analyzer 가 그 줄을 94행으로 센다 — 사용 프로젝트에 닿는다); `lib/codegen.yaml` 9행 끝에 `\\r  language:\\r    strict-casts: true` → `[3/10]` 통과, `[5/10]` · `[9/10]` · `[10/10]` 이 `invalid_assignment` 로 실패(옵션이 사용 프로젝트에 닿는다); 같은 자리 `\\r  language:\\r    strict-inference: true\\rformatter:\\r  trailing_commas: preserve` → 0 · 10/10. 함수 단위: `lib/codegen.yaml` 3행 끝 `\\rlinter:\\r  rules:\\r    - prefer_mixin`, `lib/base.yaml` 4행 끝 `\\rformatter:… \\rplugins:\\r  custom_lint: ^0.7.0`, `lib/riverpod.yaml` 의 `plugins:` 아래 `  # memo\\r  custom_lint: ^0.7.0` 모두 `passed=true`. 같은 파일의 `significantLines` 는 `readAsLinesSync()` (CR 도 나눔) 라 `lib/recommended.yaml` 의 같은 꼴은 `(a)` 가 잡는다(`passed=false`) — 한 파일 안에서 줄을 나누는 방식이 둘이다. 지난 두 gap 과 같은 모양(reader 가 analyzer 와 다르게 읽는 줄을 조용히 건너뜀)이고 개연성은 낮다(편집기 · 붙여넣기로 CR 하나가 들어오는 경우). 그러나 README 378행 '그 밖의 최상위 줄 … 은 `[3/10]` 단계가 실패' · 379행 '어긋나면 검증이 실패한다' 와 성공 기준 3 이 이 입력에서 거짓이다 — 지난 회차와 같은 기준을 적용했다."
     artifacts:
       - path: "tool/verify.dart"
-        issue: "declaredRuleNames (910 ~ 956행): `RegExp(r'^linter:')` 에 맞지 않는 열 0 줄은 `inLinter = false` 로 처리되어 그 아래 줄을 읽지 않는다 — 다른 조각에서는 '모르는 최상위 키' 와 '다른 철자의 linter 키' 를 가르지 못한다; (b′) (1674 ~ 1688행) 가 그 0개를 통과로 본다"
+        issue: "1027행 `options.replaceAll('\\r\\n', '\\n').split('\\n')`, 951행 · 1101행 `options.split('\\n')` — CR 하나를 줄바꿈으로 보지 않는다 (stripPlugins 832행 · readShippedPluginConstraint 1408행도 같은 꼴)"
       - path: "README.md"
-        issue: "378행 '블록 목록이면 `[3/10]` 단계가 실패하고' 가 `linter :` · `\"linter\":` 블록 목록에서 거짓"
+        issue: "378 · 379행의 단정이 CR 입력에서 거짓"
+      - path: "example/README.md"
+        issue: "116행 '조각 셋의 최상위 키가 정해진 목록 안인지 (… 철자가 다른 키 · 열 0 에서 시작하지 않는 키도 실패' 가 CR 입력에서 거짓"
     missing:
-      - "`lib/base.yaml` 밖 조각의 최상위 키를 닫힌 목록으로 본다 — `lib/codegen.yaml` 은 `analyzer`, `lib/riverpod.yaml` 은 `plugins` 만 받고, 열 0 의 그 밖의 줄(키 이름을 읽지 못하는 줄 포함)은 `[3/10]` 실패나 70 으로 알린다 (05-REVIEW.md WR-10 의 Fix 와 같은 장치 — 이 gap 과 WR-10 을 함께 닫는다). 철자를 하나씩 더 받는 정규식 수정은 같은 모양을 다시 남긴다"
-      - "지워 보기 기록(example/README.md): `lib/codegen.yaml` 끝의 `linter :` 블록 목록 · `\"linter\":` 블록 목록이 각각 `[3/10]` 실패(또는 70)임을 실제로 돌려 적는다; 기준 실행 10개 중 10개 유지"
-      - "README 378행 문장이 고친 동작과 같은지 다시 본다"
+      - "옵션 YAML 을 읽는 reader 가 YAML 과 같은 줄바꿈으로 나눈다 — `const LineSplitter().convert(text)` (`dart:convert`, 이미 import 됨; 같은 파일의 `significantLines` 가 쓰는 `readAsLinesSync` 와 같은 규칙). 최소 `findUnexpectedKeys` · `declaredRuleNames` · `enabledLanguageOptions`, 같은 꼴의 `stripPlugins` · `readShippedPluginConstraint` 도 함께 보기를 권한다. 줄 번호가 analyzer 의 `[2/10]` 진단과 같아진다"
+      - "지워 보기 기록: 위 전체 실행 넷(base 숨은 규칙 · codegen 의 `language:` + `formatter:`)과 함수 단위 셋(codegen 숨은 `linter:`, base 숨은 `formatter:` · `plugins:`, riverpod 숨은 plugin)이 `[3/10]` 실패가 되는지 복제본에서 돌려 적는다; 기준 실행 10개 중 10개 유지"
+      - "철자나 문자 하나를 더 받는 정규식 수정이 아니라 줄 나누기 자체를 YAML 과 맞춘다 (같은 모양이 세 번째다)"
+  - truth: "README 382행 · `example/README.md` 116 · 358 · 395 · 436행 · `tool/verify.dart` 의 (e) · (f) · (g) 주석이 실제 검사 범위를 말한다 (05-10 truth 8, 소유자 결정 G2-Q2 '정확히 말하게' · G2-Q5)"
+    status: partial
+    reason: "WR-07 · WR-08 · WR-09 의 꼴(scheme 오타 · flow · 들여 쓴 블록 · 인용 안 펜스)은 좁힌 문장이 맞게 범위 밖으로 적는다. 그러나 둘이 아직 넓다. (1) WR-14 — `example/README.md` 116행 'README 에서 `package:` 로 정확히 시작하는 주소가 `woody_lints` 의 `<이름>.yaml` 꼴이 아니면 실패' 와 `tool/verify.dart` 1857 ~ 1858행 '꼴이 아닌 주소 · `woody_lints` 가 아닌 패키지의 주소도 실패': 다른 패키지 쪽은 `.yaml` · `.yml` 로 끝나는 주소만 본다(436행만 정확). 전체 실행: README 68행 `  - package:woody-lints/riverpod` → 0 · 10/10 (대조 `package:woody-lints/riverpod.yaml` → 함수 단위 `passed=false`). (2) WR-13 — README 382행 · `example/README.md` 116 · 395행은 범위 밖을 'flow 표기 · 네 칸 들여 쓴 블록 · 인용 안 펜스' 로만 적는데, 따옴표 키 · 콜론 앞 공백 줄도 후보가 아니다. 전체 실행: 18행 `      \"ref\": v1.9.0` + 198행 `  'riverpod_lint': ^3.1.3` → 0 · 10/10; 18행 `      ref : v1.9.0` → 0 · 10/10 (대조 `      ref: v1.9.0` → `passed=false`). 문장의 '`ref:` 줄' 을 글자 그대로 읽으면 맞다고 볼 여지가 있어 (2) 는 (1) 보다 약하다. 그 밖에 1864행 주석의 '문장 부호를 보지 않고' 는 다른 패키지 쪽에만 맞다(IN-08 의 남은 한 곳, 정보)."
+    artifacts:
+      - path: "example/README.md"
+        issue: "116행 (e) 구절이 `.yaml` · `.yml` 로 끝나지 않는 다른 패키지 주소까지 실패한다고 적음; 116 · 395행 (f) · (g) 구절이 따옴표 키 · 콜론 앞 공백을 범위 밖으로 적지 않음"
+      - path: "README.md"
+        issue: "382행 (f) · (g) 구절 — 위와 같음"
+      - path: "tool/verify.dart"
+        issue: "1857 ~ 1858행 (e) 문서 주석, 1864행 문장 부호 구절"
+    missing:
+      - "소유자가 고른다 (G2-Q2 와 같은 길이면 문장만): 116행 · 1858행을 436행처럼 '`.yaml` · `.yml` 로 끝나는 다른 패키지의 주소' 로, 382 · 116 · 395행에 '키는 따옴표 · 콜론 앞 공백 없이 `ref:` · `version:` · `riverpod_lint:` 글자 그대로인 줄만' 을 더한다. 검사를 닫는 쪽(리뷰의 Fix)은 G2-Q2 밖이라 새 승인이 필요하다"
 deferred:
   - truth: "README 의 설치 블록(`ref: v2.0.0`)을 새 프로젝트에 그대로 복사해 실제로 받을 수 있다 (tag v2.0.0 이 아직 없다)"
     addressed_in: "Phase 6"
@@ -72,102 +90,88 @@ human_verification:
     why_human: "'몇 달 뒤 README 만 보고 따라 할 수 있다' 는 grep 으로 가를 수 없다 (성공 기준 1 · 2, 05-VALIDATION Manual-Only)"
   - test: "README 의 「규칙 · plugin 진단 끄기」 · 「생성 파일 제외」 · 「버전 올리기」 · 「문제 해결」 의 단정형 문장마다 spike · fixture 출처, SDK 따라 다른 동작의 SDK 버전 · 날짜, 읽은 것 · 추론 · 추정 표시를 본다"
     expected: "출처 없는 단정이 없다"
-    why_human: "문장 단위의 단정 / 출처 구분은 사람이 판단한다 (05-VALIDATION Manual-Only)"
+    why_human: "문장 단위의 단정 / 출처 구분은 사람이 판단한다 (05-VALIDATION Manual-Only, 05-03 의 human-check)"
   - test: "CHANGELOG 1.1.0 ~ 1.2.5 복원 일곱 항목마다 적힌 커밋을 `git show` 로 열어 적힌 변경과 대조한다"
-    expected: "항목의 문장이 diff 의 변경만 말하고 커밋 메시지를 옮기지 않았다 (이 검증의 첫 회차가 일곱 항목과 부수 커밋을 대조해 일치를 기록했다 — 이번 gap 수정은 CHANGELOG 의 92행 한 줄만 바꿨다)"
-    why_human: "문장의 사실 여부는 grep 으로 가를 수 없다 (05-VALIDATION Manual-Only)"
+    expected: "항목의 문장이 diff 의 변경만 말하고 커밋 메시지를 옮기지 않았다 (CHANGELOG 는 `e46cff4` 뒤로 바뀌지 않았다)"
+    why_human: "문장의 사실 여부는 grep 으로 가를 수 없다 (05-VALIDATION Manual-Only, 05-04 의 human-check)"
   - test: "README 의 외부 링크 넷을 브라우저로 연다 — flutter#191151 (googlesource 커밋), dart-lang/sdk#64549, dart.dev/tools/pub/workspaces (인용문), pub.dev 의 riverpod_lint 설치 안내"
     expected: "링크가 열리고, 인용문과 요약이 페이지 내용과 같다"
     why_human: "외부 페이지는 검증 명령이 보지 않는다"
+  - test: "05-10 이 고친 문장(README 378 · 382행, `example/README.md` 116 · 358 · 395 · 436행)을 읽고, 검사가 실제로 보는 범위를 오해 없이 전하는지 본다 (위 gaps 2 를 고친 뒤)"
+    expected: "문장이 말하는 범위와 지워 보기 기록이 같고, 읽는 사람이 받지 않는 보호를 기대하지 않는다"
+    why_human: "05-10-SUMMARY coverage D6 (human_judgment: true) — 자동 검증은 글자의 있고 없음만 본다"
 ---
 
-# Phase 5: Documentation 검증 보고서 (재검증)
+# Phase 5: Documentation 검증 보고서 (2회차 gap 수정 뒤 재검증)
 
 **Phase 목표:** 소유자가 몇 달 뒤 README 만 보고 설치, 프리셋 선택, 규칙 재정의, 버전 올리기를 그대로 따라 할 수 있고, README / CHANGELOG / YAML 주석이 실제 설정과 일치하며 그 일치가 검증으로 지켜진다
-**검증 시각:** 2026-10-14
+**검증 시각:** 2026-10-14T07:42:21Z
 **상태:** gaps_found
-**재검증:** 예 — gap 수정 05-07 · 05-08 · 05-09 뒤 (이전 gaps_found 23/25)
+**재검증:** 예 — 2회차 gap 수정 05-10 · 05-11 뒤 (이전 gaps_found 50/53)
 
-방법: 저장소를 `git clone --local` 로 두 번 복제했다 (scratchpad 아래 검증자 폴더, 작업 트리는 건드리지 않음). 복제본마다 루트 `fvm dart pub get --no-example` 뒤 기준 실행 `fvm dart run tool/verify.dart` 가 종료 코드 0 · `점검 통과 (10개 중 10개)` 였다 (첫 실행 69초). 입력을 바꾼 실험은 두 가지다 — 전체 실행 19회, 그리고 `tool/verify.dart` 를 import 해 `checkShippedComposition` 을 직접 부르는 하네스(복제본 밖) 30여 회. 변형마다 `git checkout -- .` 로 되돌리고 `git status --porcelain` 0줄을 확인했다. 작업 트리는 끝까지 GSD 도구 상태 넷(`.planning/config.json` 수정 등) 밖의 변경이 없었다.
+방법: 저장소를 `git clone --local` 로 검증자 임시 폴더에 복제하고 루트에서 `fvm dart pub get` 을 돌렸다 (Flutter 3.47.5, `riverpod_lint` 3.1.9). 기준 실행 `fvm dart run tool/verify.dart` 는 종료 코드 0 · `점검 통과 (10개 중 10개)` (68초). 입력을 바꾼 실험은 두 가지다 — 전체 실행 11회, 그리고 `tool/verify.dart` 를 import 해 `checkShippedComposition` 을 직접 부르는 하네스(복제본 밖) 40여 회. 변형마다 `git checkout -- .` 로 되돌리고 `git status --porcelain` 0줄을 확인했다. YAML 해석은 analyzer 가 쓰는 package:yaml 3.1.4 의 소스와 `loadYaml` 로 따로 확인했다. 원격 확인은 작업 트리에서 읽기 전용 명령만 썼다. 작업 트리는 끝까지 GSD 도구 상태 넷 밖의 변경이 없었다 (이 보고서 제외).
 
 ## 목표 달성
 
 ### 관찰 가능한 참 (Observable Truths)
 
-ROADMAP 성공 기준 5개, 첫 회차의 plan truth 20개(회귀 확인), gap plan 05-07 · 05-08 · 05-09 의 truth 28개.
+ROADMAP 성공 기준 5개, 첫 회차 plan truth 20개, gap plan 05-07 (9) · 05-08 (8) · 05-09 (11) · 05-10 (9) · 05-11 (4) — 모두 66개.
 
 **성공 기준 (ROADMAP)**
 
 | # | 참 | 상태 | 근거 |
 |---|----|------|------|
-| SC1 | README 의 설치 안내와 유형별 include 블록을 그대로 복사해 `ref: vX.Y.Z` 로 추가할 수 있다 | ✓ VERIFIED | 회귀: 「설치」 블록(13 ~ 19행) `ref: v2.0.0`, include 블록 넷이 `fixtures/{recommended,base_only,base_riverpod,base_codegen}/analysis_options.yaml` 의 비주석 줄과 같다(직접 대조). gap 수정은 README 의 이 절을 바꾸지 않았다. 실제 tag 설치는 Phase 6 (Deferred) |
-| SC2 | 끄기 · 버전 올리기 · `ref: main` → tag · 문제 해결 절, 재정의가 Phase 3 fixture 와 같다 | ✓ VERIFIED | 회귀: 절 제목 그대로(216 · 304 · 324 · 345행), 끄기 블록(224 ~ 237행)의 `version: ^3.1.9` 가 `fixtures/overrides` 와 같고 `[4/10]` 통과 |
-| SC3 | README 의 규칙 · 설정 설명이 실제 YAML 과 일치하고, 규칙 목록을 YAML 과 다르게 고치면 검증 명령이 실패한다 | ✗ FAILED | **앞 절반은 참:** 표시 구역 81개 == `lib/base.yaml` (기준 실행 `[3/10]` 통과), `require_trailing_commas` · `trailing_commas` 0줄. **지난 gap 둘은 닫혔다:** 옛 README 꼴 M43 전체 실행 rc 1 · `[3/10]` 실패 · `구역에 읽지 못하는 줄이 있다 (1)`; flow 표기 M45 rc 70 · 빈 stdout. **뒤 절반은 새 입력에서 거짓:** `lib/codegen.yaml` 에 `linter :` 블록 목록 → rc 0 · 10/10, `"linter":` → 0 · 10/10, `lib/riverpod.yaml` 에 `linter :` → 0 · 10/10; 같은 꼴의 규칙이 사용 프로젝트에 닿는다(`always_specify_types` 25건). gaps 1번 |
-| SC4 | CHANGELOG 최상단 새 항목(Phase 1 형식), 1.0.0 ~ 1.3.0 사이 보완 | ✓ VERIFIED | 회귀: 1행 `## 2.0.0 - 미출시`, 3행 `지원 SDK:`, 제목 순서 2.0.0 · 1.3.0 · 1.2.5 … 1.1.0 · 1.0.0. gap 수정의 변경은 92행 한 줄(IN-02 — 아래 09-9) |
-| SC5 | 배포 YAML 머리 주석이 실제 구성을 설명, 보일러플레이트 없음 | ✓ VERIFIED | 회귀: `git diff 209e3af HEAD -- lib` 는 `lib/riverpod.yaml` 5행의 줄 끝 주석 한 줄뿐(선언 `^3.1.9` 불변) |
+| SC1 | README 의 설치 안내와 유형별 include 블록을 그대로 복사해 `ref: vX.Y.Z` 로 추가할 수 있다 | ✓ VERIFIED | 회귀: README 는 05-10 에서 378 · 382행만 바뀌었다; 설치 블록(13 ~ 19행) `ref: v2.0.0`, include 블록 넷 그대로. 실제 tag 설치는 Phase 6 (Deferred) |
+| SC2 | 끄기 · 버전 올리기 · `ref: main` → tag · 문제 해결 절, 재정의가 Phase 3 fixture 와 같다 | ✓ VERIFIED | 회귀: 절 제목 그대로(216 · 304 · 324 · 345행), `fixtures` 는 `6d64bee` 와 같고 기준 실행 `[4/10]` · `[10/10]` 통과 |
+| SC3 | README 의 규칙 · 설정 설명이 실제 YAML 과 일치하고, 규칙 목록을 YAML 과 다르게 고치면 검증 명령이 실패한다 | ✗ FAILED | **앞 절반은 참:** 기준 실행 `[3/10]` 통과(표시 구역 == `lib/base.yaml`). **지난 gap 은 닫혔다:** M68 전체 실행 rc 1 · 1/10, M69 · M70 과 검증자의 철자 넷 모두 실패. **뒤 절반은 새 입력에서 거짓:** `lib/base.yaml` 의 주석 줄 끝 `\r` 뒤에 `    - prefer_mixin` → 전체 실행 rc 0 · 10/10 (README · RULES.md 에 없는 규칙이 배포됨). 같은 자리의 `always_specify_types` 는 사용 프로젝트에 닿는다(정답지 다섯 실패, `[3/10]` 은 통과). gaps 1번 |
+| SC4 | CHANGELOG 최상단 새 항목(Phase 1 형식), 1.0.0 ~ 1.3.0 사이 보완 | ✓ VERIFIED | 회귀: `git diff --quiet e46cff4 HEAD -- CHANGELOG.md` |
+| SC5 | 배포 YAML 머리 주석이 실제 구성을 설명, 보일러플레이트 없음 | ✓ VERIFIED | 회귀: `git diff --quiet e46cff4 HEAD -- lib` |
 
-**첫 회차 plan truth — 회귀 확인**
-
-| # | 참 | 상태 | 근거 |
-|---|----|------|------|
-| 01-1 | plugin 줄 끝 주석 · 마지막 줄바꿈 없음에서 통과 | ✓ VERIFIED | HEAD 의 `lib/riverpod.yaml` 5행이 긴 줄 끝 주석을 단 채 기준 실행 10/10 |
-| 01-2 | `riverpod_lint:` 선언을 지우면 70 · `선언을 찾지 못했다` | ✓ VERIFIED | 소스 1332행 문구 그대로; M66 은 다른 문구(아래 09-4) |
-| 01-3 | `lib/codegen.yaml` · `lib/riverpod.yaml` 에 규칙을 적으면 실패 — README 비교가 `lib/base.yaml` 하나만 봐도 빈자리가 없다 | ✗ FAILED | 블록 꼴 `linter:` (M35) · flow 꼴 (M45) 은 잡는다. `linter :` · `"linter":` 블록 목록은 `[3/10]` 통과 · 10/10 (gaps 1번) |
-| 01-4 | 다른 조각의 읽지 못하는 줄 → 70 문구에 파일 이름 | ✓ VERIFIED | 함수 단위: `lib/codegen.yaml` 의 `prefer_single_quotes: false` → `lib/codegen.yaml 의 `linter:` 블록의 12행을 읽지 못했다` |
-| 01-5 | `stripPlugins` 가 섹션을 빈 줄로 | ✓ VERIFIED | 815행 그대로 (gap 수정이 건드리지 않음) |
-| 01-6 | M32 ~ M37 기록 · 처리 기록 fixed | ✓ VERIFIED | `example/README.md` 의 `| M3[2-7] |` 행 6개 그대로 |
-| 02-1 ~ 02-4 | 머리 주석 다섯, 템플릿 없음, 규칙 81줄 불변, riverpod 주석, codegen 머리 주석 | ✓ VERIFIED | `lib/` 의 비주석 내용은 `209e3af` 와 같다(riverpod 5행은 줄 끝 주석만) |
-| 02-5 | `.claude/CLAUDE.md` 는 71 · 181행만 | ✓ VERIFIED | 마지막 변경 커밋 `403c584` 그대로 |
-| 04-4 ~ 04-6 | CHANGELOG `### 올리기 전에` · `### 그 밖의 변경` · 01 WR-05 fixed | ✓ VERIFIED | gap 수정이 바꾼 CHANGELOG 줄은 92행 하나 |
-| 05-1 ~ 05-3 | 첫 push, 비공개 점검, GitHub verify | ✓ VERIFIED | `git ls-remote origin`: `main` `90a2736`, tag `v1.3.0` 만, 작업 브랜치 `8789cfe`; `gh pr list --state all` → `[]` |
-| 06-1 ~ 06-3 | M38 ~ M42, 기록 소절, 지워 보기 미커밋 | ✓ VERIFIED | `| M(3[89]|4[0-2]) |` 행 5개 그대로; `1d28346..HEAD` 에서 지운 줄은 70 행 · 단계 설명의 덧붙임 자리 둘뿐 |
-
-(02-1 ~ 02-4, 04-4 ~ 04-6, 05-1 ~ 05-3, 06-1 ~ 06-3 은 묶어 적었다 — 개수는 20개 그대로 센다.)
-
-**gap plan 05-07**
+**첫 회차 plan truth (20) — 회귀 확인**
 
 | # | 참 | 상태 | 근거 |
 |---|----|------|------|
-| 07-1 | 옛 README 꼴 한 줄 → rc 1 · `[3/10]` 실패 · `구역에 읽지 못하는 줄이 있다 (1)` (M43) | ✓ VERIFIED | 전체 실행: rc 1, `[3/10] … 실패`, `[4/10] … 통과`, `점검 실패 (10개 중 1개)`, 그 줄 원문 |
-| 07-2 | `* `extra`` · `- `Extra_Rule`` → `(2)`, 이름 비교 블록 없음 (M44) | ✓ VERIFIED | 함수 단위: 다섯 줄(`*` · `+` · `1.` · `- d_x` · `` `Extra_Rule` ``)을 함께 넣어 `(5)`, `규칙 목록이 다르다` 블록 없음 |
-| 07-3 | `lib/codegen.yaml` 끝 flow `linter: {rules: [prefer_mixin]}` → 70 · 빈 stdout · `10행: `linter:` 줄에 값이 붙어 있다` (M45) | ✓ VERIFIED | 전체 실행: rc 70, stdout 0 바이트, stderr `파일 모양이 예상과 다르다: lib/codegen.yaml 의 10행: …`. `lib/riverpod.yaml` 의 맵 flow 도 70 (함수 단위) |
-| 07-4 | 줄 끝 주석 단 블록 꼴은 `[3/10]` 실패 (M46) | ✓ VERIFIED | 05-VALIDATION 감사 rc 0 (task 커밋 `057bef2`); 같은 코드 경로를 블록 꼴 M35 로 확인 |
-| 07-5 | 지금 README · RULES.md · lib 로 기준 실행 10/10 | ✓ VERIFIED | 복제본 둘 모두 rc 0 · 10/10 |
-| 07-6 | 마커 처리는 `readMarkerBlock` 하나, 타입 `MarkerBlock` | ✓ VERIFIED | 1500 · 1517행, 두 reader 첫 줄이 `readMarkerBlock`; `indexOf` 마커 두 줄은 1520 · 1521행에만 |
-| 07-7 | README 378행 불릿이 블록 목록(`[3/10]` 실패)과 flow(70)를 구분해 말하고 단정이 참이 된다 | ✗ FAILED | 문장은 그대로 고쳐졌으나 `linter :` · `"linter":` 블록 목록에서 '`[3/10]` 단계가 실패' 가 거짓 (gaps 1번) |
-| 07-8 | 코드 블록 값 M47 ~ M50 | ✓ VERIFIED | 함수 단위: M47 `^3.1.3` 다른 버전 블록, M48 `ref: v1.9.0` 블록, M49 `읽지 못하는 … (1)`, M50 (따옴표 맞는 값 · 주석만 붙은 맵 키) `passed=true` |
-| 07-9 | M43 ~ M50 기록, M1 ~ M42 불변 | ✓ VERIFIED | `| M(4[3-9]|50) |` 8행, 앞 행 수 그대로 |
+| 01-1 · 01-2 · 01-4 ~ 01-6 | plugin 줄 끝 주석 통과, 선언 삭제 70, 다른 조각의 읽지 못하는 줄 70, `stripPlugins`, M32 ~ M37 기록 | ✓ VERIFIED | 기준 실행 10/10; M34 함수 단위 `riverpod_lint 선언을 찾지 못했다`; M36 `lib/codegen.yaml 의 `linter:` 블록의 12행을 읽지 못했다` |
+| 01-3 | `lib/codegen.yaml` · `lib/riverpod.yaml` 에 규칙을 적으면 실패 — README 비교가 `lib/base.yaml` 하나만 봐도 빈자리가 없다 | ✗ FAILED | 블록 꼴(M35 · M46) · flow(M45) · 다른 철자(M68 ~ M70)는 잡는다. `lib/codegen.yaml` 3행 주석 끝 `\rlinter:\r  rules:\r    - prefer_mixin` → 함수 단위 `passed=true` (analyzer 가 CR 뒤를 읽는 것은 아래 F3 로 확인). gaps 1번 |
+| 02-1 ~ 02-5 | 머리 주석 다섯, 템플릿 없음, 규칙 81줄, riverpod 주석, `.claude/CLAUDE.md` 71 · 181행 | ✓ VERIFIED | `lib` · `.claude/CLAUDE.md` 가 고정 커밋(`e46cff4` · `403c584`)과 같다 |
+| 03-x · 04-4 ~ 04-6 | README 절 · 표시 구역, CHANGELOG `### 올리기 전에` · `### 그 밖의 변경`, 01 WR-05 fixed | ✓ VERIFIED | CHANGELOG 불변, README 는 378 · 382행만 바뀜 |
+| 05-1 ~ 05-3 · 06-1 ~ 06-3 | 첫 push, 비공개 점검, GitHub verify, M38 ~ M42 기록 | ✓ VERIFIED | M42 꼴(start 마커 삭제) 함수 단위 `구역이 없다` 만; `example/README.md` 의 M1 ~ M67 행은 05-10 소절 밖에서 바뀌지 않음(05-10 truth 9) |
 
-**gap plan 05-08**
+(묶은 행도 20개로 센다 — 실패는 01-3 하나.)
+
+**gap plan 05-07 · 05-08 · 05-09 (28) — 회귀 확인**
 
 | # | 참 | 상태 | 근거 |
 |---|----|------|------|
-| 08-1 | RULES.md 표 구역 M51 ~ M53 | ✓ VERIFIED | 함수 단위: M51 · M52 `(1)`, M53 `(2)`, 표 비교 블록 없음 |
-| 08-2 | 지금 RULES.md 두 구역(`없음 — …` 포함)으로 10/10 | ✓ VERIFIED | 기준 실행 |
-| 08-3 | `readRulesTable` 문서 주석만, 코드 불변 | ✓ VERIFIED | `git diff c06d8d5 HEAD -- tool/measure_rules.dart` 의 바뀐 줄은 모두 `///` (코드 줄 0); 4778행 `보다 느슨한 옛 규약` |
-| 08-4 | 주소 M54 · M55 | ✓ VERIFIED | 함수 단위: M54 `꼴이 아닌 것이 있다 (1)`, M55 `woody_lints 가 아닌 패키지 … (2)` |
-| 08-5 | 펜스 M56 ~ M58 | ✓ VERIFIED | 함수 단위: 셋 모두 `ref: v1.9.0` 블록 |
-| 08-6 | 옵션 flow · 읽지 못하는 옵션 줄 → 70 (M59 ~ M61) | ✓ VERIFIED | 함수 단위: `97행: `language:` 줄에 값이 붙어 있다`, `96행: `analyzer:` 줄에 값이 붙어 있다`, `98행을 읽지 못했다` |
-| 08-7 | 주석 단 블록 꼴 옵션은 `+ strict-casts` 실패 (M62) | ✓ VERIFIED | 함수 단위 `passed=false` · `+ strict-casts  (base.yaml 에만)` |
-| 08-8 | M51 ~ M62 기록, 앞 행 불변 | ✓ VERIFIED | `| M(5[1-9]|6[0-2]) |` 12행 |
+| 07-1 ~ 07-6 · 07-8 · 07-9 | 옛 README 꼴 `(1)`, 구역 안 다섯 꼴, flow 70, 주석 단 블록 꼴 실패, 기준 10/10, `readMarkerBlock`, M47 ~ M50 | ✓ VERIFIED | 함수 단위: M43 꼴 `구역에 읽지 못하는 줄이 있다 (1)`, M45 `10행: `linter:` 줄에 값이 붙어 있다` (FormatException → 70), M46 은 이제 블록 둘(최상위 · 규칙)로 실패 |
+| 07-7 | README 378행 불릿이 블록 목록(`[3/10]` 실패)과 flow(70)를 구분해 말하고 단정이 참이 된다 | ✗ FAILED | 378행은 05-10 이 닫힌 목록 문장으로 바꿨고 적은 철자 · 키는 모두 잡힌다. 그러나 CR 뒤의 `formatter:` · `language:` (전체 실행 F4 rc 0 · 10/10) 에서 '그 밖의 최상위 줄 … 은 `[3/10]` 단계가 실패' 가 거짓. gaps 1번 |
+| 08-1 ~ 08-8 | RULES.md 표 · 주소 · 펜스 · 옵션 reader, M51 ~ M62 | ✓ VERIFIED | 함수 단위: M60 `6행: `analyzer:` 줄에 값이 붙어 있다`, M59 `7행: `language:` 줄에 …`, M61 `8행을 읽지 못했다`, M62 `+ strict-casts  (base.yaml 에만)` 이고 닫힌 목록 블록 없음; `RULES.md` 는 `76dee2f` 와 같다 |
+| 09-1 ~ 09-11 | plugin 선언 · pubspec reader, 문장, 처리 기록, push | ✓ VERIFIED | 함수 단위: M63 (따옴표 선언) · M65 (맵 꼴) `passed=true`, M66 `… 꼴만 받는다 (범위 제약은 받지 않는다 …)`; `pubspec.yaml` 은 `968a5bb` 와 같다 |
 
-**gap plan 05-09**
+**gap plan 05-10 (9)**
 
 | # | 참 | 상태 | 근거 |
 |---|----|------|------|
-| 09-1 | 따옴표 선언 `"^3.1.9"` → 10/10 (M63) | ✓ VERIFIED | 함수 단위 `[3/N]` `passed=true`; 05-VALIDATION 감사(전체 실행) rc 0 |
-| 09-2 | 고정 버전 `3.1.9` 넷 → `[3/10]` · `[4/10]` 통과, 70 아님 (M64) | ✓ VERIFIED | 전체 실행: `lib/riverpod.yaml` · README 198 · 234행 · `fixtures/overrides` 10행을 `3.1.9` 로 → rc 0, `[3/10]` · `[4/10]` 통과, `점검 통과 (10개 중 10개)`, stderr 에 `파일 모양이 예상과 다르다` 없음 |
-| 09-3 | 키 줄 주석 · `diagnostics:` 먼저인 맵 → 통과, 70 아님 (M65) | ✓ VERIFIED | 전체 실행: 5행을 `  riverpod_lint: # 맵 꼴` / `    diagnostics:` / `      missing_provider_scope: true` / `    version: ^3.1.9` 로 → rc 0, 10/10, 70 머리말 없음 |
-| 09-4 | 범위 제약 → 70 · 원인 문구, `찾지 못했다` 없음 (M66) | ✓ VERIFIED | 함수 단위: `` riverpod_lint 선언 `>=3.1.9 <4.0.0` 을 읽지 못했다 — `^X.Y.Z` 나 `X.Y.Z` 꼴만 받는다 `` |
-| 09-5 | pubspec `version: "2.0.0-dev"` → 10/10 (M67) | ✓ VERIFIED | 함수 단위 `passed=true`; 감사 rc 0 |
-| 09-6 | `[1/4]` · `[2/4]` 없음 | ✓ VERIFIED | grep 0줄 |
-| 09-7 | README 산문에 지금 plugin 버전 숫자 없음 | ✓ VERIFIED | `^3.1.9` 는 198 · 234행 코드 블록뿐; 342 · 372행의 `3.1.9` 는 날짜 붙은 실측 기록(spike 010) |
-| 09-8 | 함께 고칠 자리 셋이 README 382행 한 곳, `lib/riverpod.yaml` 5행 주석이 같은 셋 | ✓ VERIFIED | 382행 · riverpod 5행 원문 대조 |
-| 09-9 | README 45 · 91행, CHANGELOG 92행 문장 | ✓ VERIFIED | 45행 묶음은 `example/` 결과와 견준다, 91행 '이름만 견주고 분류는 보지 않는다', CHANGELOG 92행 '나누는 변경 자체는 …' |
-| 09-10 | 처리 기록 fixed 12 · deferred 1 · open 0 | ✓ VERIFIED | `git show 8789cfe:…/05-REVIEW-DISPOSITION.md` → `open: 0` · `total: 13`. 지금 파일의 `open: 5` 는 그 뒤 재리뷰(`ddfb852`)가 더한 새 발견이다 — 판정은 아래 「05-REVIEW 재리뷰 발견의 판정」 |
-| 09-11 | push · GitHub verify 성공, `main` · tag · PR 불변 | ✓ VERIFIED | `gh run view 38502214557`: `completed` · `success` · push · headSha `8789cfe…`, 로그에 `[3/10] 배포 파일의 구성 … 통과` · `점검 통과 (10개 중 10개)`; `8789cfe..HEAD` 는 README · lib · tool · CHANGELOG · example · fixtures · RULES · pubspec · `.claude` 를 바꾸지 않았다(diff 0) |
+| 10-1 | M68 · M69 · M70 → rc 1 · `[3/10]` 만 · 최상위 블록과 그 줄, 규칙 블록 없음 | ✓ VERIFIED | 전체 실행 M68: rc 1, `[3/10] … 실패`, `` `lib/codegen.yaml` 의 최상위에 받지 않는 줄이 있다 (1) — 받는 키: analyzer `` · `  10행: linter :`, `점검 실패 (10개 중 1개)`, `에 규칙이 있다` 없음. M69 (`10행: "linter":`) · M70 (`6행: linter :`, 받는 키: plugins) 함수 단위 같은 꼴 |
+| 10-2 | M78 (`custom_lint` · 따옴표 plugin 키) → `plugins:` 바로 아래 블록 `(2)`, M63 · M65 는 10/10 | ✓ VERIFIED | 함수 단위: `6행:   custom_lint: ^0.7.0` · `7행:   "zz_quoted_plugin": ^0.1.0`, 최상위 블록 없음 |
+| 10-3 | M71 (`analyzer:` 아래 `language:`) · M72 (`formatter:`) → 각 블록과 줄 | ✓ VERIFIED | 함수 단위: `5행:   language:` (받는 키: errors · exclude), `10행: formatter:`. 적힌 입력에서 참 — CR 뒤에 둔 같은 키는 gaps 1번 |
+| 10-4 | M73 (조각 전체를 두 칸 들여 씀) → `4행:   analyzer:` | ✓ VERIFIED | 함수 단위 그대로 |
+| 10-5 | 회귀 입력 11개의 70 · 실패 · 통과가 그대로 | ✓ VERIFIED | 함수 단위로 M45 · M36 · M34 · M60 · M59 · M61 · M66 (FormatException 문구 그대로), M46 (블록 둘), M62 (닫힌 목록 블록 없음), M65 · M63 (`passed=true`) |
+| 10-6 | 표시 구역이 든 절의 구역 밖 목록 줄 (M74 ~ M77) | ✓ VERIFIED | 전체 실행 M74: rc 1 · `189행: - `bogus_after_marker`` · 1/10. 함수 단위 M75 `(5)` (93 · 190 ~ 193행), M76 `passed=true`, M77 `(1)` 이고 펜스 안 `- in_fence` 는 세지 않음. truth 가 정한 '제목' (펜스 밖의 `#` 줄) 그대로다 — 렌더링과 다른 꼴은 WR-12 (경고, 아래) |
+| 10-7 | 새 절 검사는 구역 안을 다시 세지 않고 마커가 없으면 빠진다 | ✓ VERIFIED | M42 꼴 `구역이 없다` 만, M43 꼴 `읽지 못하는 줄이 있다 (1)` 만 |
+| 10-8 | README 378 · 382행, `example/README.md` 116 · 358 · 395 · 436행, `tool/verify.dart` 의 (e) ~ (g) 주석이 실제 동작 · 범위를 말하고, 코드 줄은 `644897f` 와 같다 | ✗ FAILED | **코드 줄 단언은 참:** `declaredRuleNames` (38줄), (e) ~ (g) 구간 (134줄), `fencedLines` · `unquotedScalar` (31줄) 의 주석이 아닌 줄이 `644897f` 와 같다. **문장은 일부 거짓:** 378 · 379행은 CR 입력에서 (gaps 1번), `example/README.md` 116행 · `tool/verify.dart` 1857 ~ 1858행의 (e) 구절은 `package:woody-lints/riverpod` 에서 (전체 실행 F8 rc 0 · 10/10), 382 · 116 · 395행의 (f) · (g) 구절은 따옴표 키 · 콜론 앞 공백에서 (F7 · F7b rc 0 · 10/10) 넓다 (gaps 2번) |
+| 10-9 | 기준 실행 10/10, 고정 커밋 불변, M1 ~ M67 행 불변 | ✓ VERIFIED | 기준 실행 rc 0 · 10/10; `lib` · `CHANGELOG.md` (`e46cff4`) · `RULES.md` (`76dee2f`) · `fixtures` (`6d64bee`) · `pubspec.yaml` (`968a5bb`) · `.claude/CLAUDE.md` (`403c584`) 모두 diff 0 |
 
-**점수:** 50/53 참 확인 (present · behavior-unverified 0). 실패 셋(SC3 · 01-3 · 07-7)은 뿌리가 하나다 — gaps 1번.
+**gap plan 05-11 (4)**
+
+| # | 참 | 상태 | 근거 |
+|---|----|------|------|
+| 11-1 | 처리 기록 fixed 13 · skipped 4 · deferred 1 · open 0 · total 18 | ✓ VERIFIED | `git show b8519d4:…/05-REVIEW-DISPOSITION.md` frontmatter 그대로. 지금 파일의 `open: 5` · `total: 23` 은 그 뒤 재리뷰(`d60b709`)가 더한 새 발견이다 — 판정은 아래 표 |
+| 11-2 | CHANGELOG 불변 | ✓ VERIFIED | `git diff --quiet e46cff4 b8519d4 -- CHANGELOG.md` |
+| 11-3 | push 전 범위 비공개 점검 0 | ✓ VERIFIED | `git diff 8789cfe b8519d4` 의 더한 줄에 절대 경로 꼴 0 (계획의 정규식 원문 줄만 걸림); 공개 파일(README · example · tool · lib · RULES · CHANGELOG · fixtures)의 절대 경로 꼴 0 |
+| 11-4 | fast-forward push, `main` · tag · PR 불변, GitHub verify 성공 | ✓ VERIFIED | `git ls-remote origin`: 작업 브랜치 `b8519d4`, `main` `90a2736`, tag `v1.3.0` 하나; `8789cfe` 는 `b8519d4` 의 조상; `gh pr list --state all` → `[]`; `gh run view 38522962086`: `completed` · `success` · push · headSha `b8519d4…`, 로그에 `[3/10] 배포 파일의 구성 … 통과` · `점검 통과 (10개 중 10개)`. 로컬의 그 뒤 커밋 5개는 `.planning` 만 바꾼다(README · lib · tool 등 diff 0) |
+
+**점수:** 62/66 참 확인 (present · behavior-unverified 0). 실패 넷 가운데 SC3 · 01-3 · 07-7 과 10-8 의 378 · 379행 부분은 뿌리가 하나다 (gaps 1번 — 줄 나누기). 10-8 의 나머지는 문장 둘 (gaps 2번).
 
 ### Deferred Items
 
@@ -175,70 +179,72 @@ ROADMAP 성공 기준 5개, 첫 회차의 plan truth 20개(회귀 확인), gap p
 |---|------|-----------|------|
 | 1 | README 의 `ref: v2.0.0` 블록으로 실제로 받는 것 (tag 가 아직 없다) | Phase 6 | 성공 기준 3 |
 
-새 gap 은 Phase 6 (tag · 릴리스 smoke test) 의 범위에 들지 않는다 — 미루지 않았다.
+gaps 1 · 2 는 Phase 6 (tag · 릴리스 smoke test) 의 범위에 들지 않는다 — 미루지 않았다.
 
-### 05-REVIEW 재리뷰 발견의 판정 (orchestrator 요청)
+### 닫힌 목록 (a′) 가 지난 gap 을 YAML 기준으로 닫는가 (orchestrator 요청)
 
-판정 기준: 이 phase 가 말한 참(ROADMAP 성공 기준, plan must_haves, README · CLAUDE.md 의 "검사가 지킨다" 문장)이 그 입력에서 거짓이 되고, 그 참이 **VERIFY-06 의 약속 — README 의 규칙 목록과 사용 프로젝트가 받는 규칙이 다르면 검증이 실패한다** 에 속하면 gap. (e) ~ (g) 같은 D-02 보조 검사의 꼴 문제는 첫 회차의 W1 ~ W3 와 같은 등급(경고)으로 둔다 — 그 plan truth 들은 입력을 하나하나 적었고 모두 참이다. 모두 복제본에서 재현했다.
+| 입력 (다른 조각 끝 또는 지정 자리) | YAML 에서 | 결과 | 판정 |
+|------|-----------|------|------|
+| `linter :` · `"linter":` · `'linter':` | `linter` 키 | 최상위 블록 `(1)` | ✓ 닫힘 |
+| `? linter` / `:` (명시 키) | `linter` 키 | 최상위 블록 `(2)` | ✓ |
+| `&a linter:` · `!!str linter:` (앵커 · 태그) | `linter` 키 | 최상위 블록 `(1)` | ✓ |
+| 조각 전체를 두 칸 들여 씀 (M73) | 같은 최상위 맵 | 최상위 블록 | ✓ |
+| `analyzer:` · `plugins:` 줄에 값 · 앵커 · 태그 | 아래 키를 읽을 수 없음 | 최상위 블록 | ✓ |
+| BOM (`\uFEFF`) 으로 시작하는 키 줄 | package:yaml 은 열 0 의 BOM 을 건너뛰지만 이 자리는 `Expected a key while parsing a block mapping` (파싱 오류) | codegen 끝: `analyzer:` 아래 블록으로 실패. base 의 `include:` 뒤: `passed=true` 이나 YAML 이 깨져 사용 프로젝트에 닿지 않는다 | ✓ (헛통과 아님) |
+| NBSP (`\u00A0`) 로 시작하는 키 줄 | 키 이름이 `\u00A0plugins` — `plugins` 가 아닌 다른 키 (`loadYaml` 확인) | base 의 `include:` 뒤: `passed=true` 이나 analyzer 가 받는 `plugins:` 가 아니다 | ✓ (헛통과 아님) |
+| 주석 줄 끝 CR 뒤의 키 · 규칙 | 새 줄 (CR 은 YAML 줄바꿈) | `passed=true`, 전체 실행 10/10 | ✗ gaps 1번 |
+
+결론: 닫힌 목록은 **한 줄 안의 철자**에 대해서는 YAML 기준으로 닫혔다 — 키 줄을 정규식 하나로 받고 나머지를 모두 막는 설계라, 철자를 하나씩 더하는 수정과 달리 따옴표 · 명시 키 · 앵커 · 태그를 따로 다루지 않아도 막힌다. 남은 구멍은 **줄의 경계**다: reader 셋이 줄을 `\n` 으로만 나눠, YAML 이 줄로 보는 CR 뒤를 주석의 일부로 본다. 같은 파일의 `significantLines` (`readAsLinesSync`) 는 CR 을 나누므로 묶음 · 별칭의 같은 꼴은 `(a)` 가 잡는다(`lib/recommended.yaml` 함수 단위 `passed=false`) — 고칠 방법이 이미 파일 안에 있다.
+
+### 05-REVIEW 2회차 재리뷰 발견의 판정 (orchestrator 요청)
+
+판정 기준: 이 phase 가 말한 참(성공 기준, plan must_haves, README · `example/README.md` 의 "검사가 지킨다" 문장)이 그 입력에서 거짓이 되는가. 규칙 · 옵션 · plugin 이 사용 프로젝트에 닿는데 10/10 이면 VERIFY-06 의 약속이 깨진 것이라 gap. 소유자가 G2-Q2 로 "문장을 실제 범위대로" 고르고 코드를 두기로 한 보조 검사 (e) ~ (g) 는, 문장이 코드보다 넓으면 그 문장의 truth (10-8) 가 거짓이다. 모두 복제본에서 재현했다 (리뷰의 기록은 증거로 쓰지 않았다).
 
 | 발견 | 재현 (검증자) | 판정 | 이유 |
 |------|---------------|------|------|
-| WR-07 (e) 가 `package:` 로 시작하지 않는 주소를 안 봄 | 전체 실행: README 68행 `- packages:woody_lints/riverpod.yaml` → rc 0 · 10/10. 함수 단위: 58행 `include: package: woody_lints/base.yaml` → `passed=true` | ⚠️ 경고 | 성공 기준 · VERIFY-06 은 주소 검사를 약속하지 않는다 (SC1 은 지금 README 가 복사 가능한가 — 참). `example/README.md` 116행은 "`package:` 주소가 … 꼴이 아니면 실패" 라고 적는데 `packages:` 는 그 낱말에 들지 않는다. `package: woody…` (콜론 뒤 공백) 은 그 문장이 덮는다고 읽을 수 있어 문장이 구현보다 넓다 |
-| WR-08 (f) · (g) 가 flow 표기 키를 안 봄 | 전체 실행: 196 ~ 199행을 `plugins: {riverpod_lint: ^3.1.3}` → rc 0 · 10/10; 「설치」 를 `woody_lints: {git: {url: …, ref: v1.9.0}}` → rc 0 · 10/10 | ⚠️ 경고 (문장 과장) | VERIFY-06 밖. 다만 README 382행 "`ref:` 예시 둘 … plugin 버전 예시 둘 … 검증 명령이 모두 견준다" 는 그 예시를 flow 로 고쳐 쓰면 거짓이 된다. 문장이 가리키는 "버전을 올리며 예시를 빠뜨리는" 경우는 지금 꼴의 블록에서 잡힌다(M40 · M41 · M47 · M48). 예시의 꼴을 바꾸면서 낡은 값을 남기는 입력이다 |
-| WR-09 펜스가 아닌 코드 블록 | 전체 실행: 「tag 로 옮기기」 블록을 네 칸 들여쓴 블록 + `ref: v1.9.0` → rc 0 · 10/10; **인용 안의 펜스**(`> ```yaml` … `>       ref: v1.9.0`, 리뷰어는 돌리지 않음) → rc 0 · 10/10 | ⚠️ 경고 (문장 과장) | VERIFY-06 밖. `example/README.md` 116행은 "코드 블록은 ``` 와 `~~~` 펜스를 문자 · 길이로 가린다" 로 범위를 펜스로 적었다 — 그 문장과는 맞다. README 382행의 "모두 견준다" 와는 WR-08 과 같은 방식으로 어긋난다 |
-| WR-10 `[3/10]` 이 조각의 `linter:` 밖 키를 안 봄 | 전체 실행: `lib/codegen.yaml` 의 `analyzer:` 아래 `language: strict-inference: true` → rc 0 · 10/10; 끝에 `formatter: trailing_commas: preserve` → rc 0 · 10/10 | ⚠️ 경고 — **단, 같은 뿌리가 gap 을 낸다** | 규칙이 아닌 키라 VERIFY-06 밖이다. `RULES.md` 의 켠 옵션 표는 "`lib/base.yaml` 의 `analyzer: language:`" 로 범위를 적었고, README 214행 "`formatter:` 설정은 어느 프리셋에도 넣지 않는다" 는 정책 문장이지 검사가 지킨다는 문장이 아니다. 그러나 같은 뿌리 — 조각이 받을 최상위 키를 검사가 모른다 — 가 **다른 철자의 `linter` 키로 규칙을 들이는 입력**을 통과시킨다 (gaps 1번). 리뷰의 Fix(조각마다 최상위 키를 닫힌 목록으로)가 둘을 함께 닫는다 |
-| IN-08 주소 끝 문장 부호 | 함수 단위: 산문 끝 `package:woody-lints/base.yaml.` → `passed=true` (다른 패키지 주소 누락); `package:woody_lints/recommended.yaml,` → `꼴이 아닌 것이 있다 (1)` (거짓 실패, 큰 소리) | ℹ️ 정보 | 산문 주소이고 지금 README 의 주소는 모두 backtick 안이다. `example/README.md` 436행 "`package:<이름>/….yaml` · `….yml` 를 모두 모아" 는 이 입력에서 넓다 |
+| WR-11 CR 뒤의 키 · 규칙 | 전체 실행 넷 — F1 base 숨은 `prefer_mixin` rc 0 · 10/10; F2 base 숨은 `always_specify_types` rc 1 이나 `[3/10]` 통과 · `[2/10]` 의 `analysis_options.yaml:94  incompatible_lint` · 정답지 다섯 실패; F3 codegen 숨은 `strict-casts` `[3/10]` 통과 · `invalid_assignment` 로 정답지 셋 실패; F4 codegen 숨은 `language:` + `formatter:` rc 0 · 10/10. 함수 단위 셋(codegen 숨은 `linter:`, base 숨은 `formatter:` · `plugins:`, riverpod 숨은 plugin) `passed=true`. package:yaml 3.1.4 소스 `_isBreakAt` → `char == CR \|\| char == LF` | 🛑 gap (gaps 1번) | 숨은 규칙 · 옵션이 사용 프로젝트에 닿고 10/10 이다 (F1 · F2 · F3). SC3 · README 378 · 379행 · `example/README.md` 116행이 거짓. 개연성은 낮지만 지난 두 회차와 같은 모양 · 같은 기준이다 |
+| WR-12 HTML 주석 안 `#` 줄 · 4칸 들여 쓴 ``` | 전체 실행 F5 (end 마커 뒤 `<!--` / `# memo` / `-->` / 불릿) rc 0 · 10/10; F6 (빈 줄, 4칸 ```, 불릿, 4칸 ```) rc 0 · 10/10. 대조: 불릿만이면 rc 1 (M74), 3칸 들여 쓴 펜스는 CommonMark 에서도 펜스라 `passed=true` 가 맞다 | ⚠️ 경고 | truth 10-6 은 '제목' 을 펜스 밖의 `#` 줄로 정했고 코드는 그대로 한다. 검사하는 규칙 목록은 D-01 대로 표시 구역이고 그 구역 == YAML 은 지켜진다 — SC3 의 '규칙 목록' 은 깨지지 않는다. 다만 렌더링된 절에 규칙처럼 보이는 줄이 남고, `example/README.md` 116행 '구역 앞의 제목부터 … 다음 제목 앞까지' 는 렌더링 기준으로 읽힌다. gaps 1번을 고치는 plan 에서 리뷰의 Fix(HTML 주석 · 4칸 펜스를 가림)를 함께 넣거나 문장에 정의를 적기를 권한다 |
+| WR-13 따옴표 키 · 콜론 앞 공백 | 전체 실행 F7 (18행 `"ref": v1.9.0` + 198행 `'riverpod_lint': ^3.1.3`) rc 0 · 10/10; F7b (18행 `ref : v1.9.0`) rc 0 · 10/10; 대조 `ref: v1.9.0` → `passed=false` | ⚠️ 경고 — gaps 2번의 일부 | 코드를 넓히지 않는 것은 G2-Q2 의 결정이고 받아들인 단점과 같은 종류다. 그러나 좁힌 문장은 범위 밖을 'flow · 들여 쓴 블록 · 인용 안 펜스' 로만 적는다. '`ref:` 줄' 을 글자 그대로 읽으면 맞다는 해석이 가능해 WR-14 보다 약하다 |
+| WR-14 확장자 없는 다른 패키지 주소 | 전체 실행 F8 (68행 `- package:woody-lints/riverpod`) rc 0 · 10/10; 대조 `.yaml` 을 붙이면 `woody_lints 가 아닌 패키지의 .yaml 주소가 있다 (1)` | ⚠️ — gaps 2번 (10-8 거짓) | `example/README.md` 116행과 `tool/verify.dart` 1857 ~ 1858행이 이 주소를 실패로 적는다 — G2-Q2 가 요구한 '정확히' 가 아니다. 436행은 정확하다. 문장 하나 · 주석 하나를 436행에 맞추면 닫힌다 |
+| IN-09 M35 · M37 기록이 지금 두 블록 | 함수 단위: M35 의 네 줄 → 최상위 블록 `(1)` 과 `에 규칙이 있다 (2)` 둘 | ℹ️ 정보 | 기록 행은 그때의 결과이고 고치지 않는 것이 금지(P-03 · P-04)다. 518행의 읽는 법이 M46 만 짚는다 — 같은 plan 에서 한 줄 넓히면 된다 |
+| WR-07 · WR-08 · WR-09 · IN-08 (skipped, G2-Q2) | 코드 줄이 `644897f` 와 같음을 확인 (위 10-8) | 범위 한계로 받아들임 | 좁힌 문장(README 382, `example/README.md` 116 · 395 · 436, `tool/verify.dart` 2126 · 2133 · 2178)이 scheme 오타 · `package:` 뒤 공백 · 문장 부호 · flow · 들여 쓴 블록 · 인용 안 펜스를 범위 밖으로 맞게 적는다. 예외는 1864행 주석의 '문장 부호를 보지 않고' — `woody_lints` 쪽은 그 문장 부호로 거짓 실패한다(코드 읽음, 정보) |
+| WR-06 (deferred, D-09) | `.claude/CLAUDE.md` 가 `403c584` 그대로 | 미룸 그대로 | 마일스톤 끝 `/gsd-map-codebase` |
 
-검증자가 더 돌린 같은 모양의 입력:
-
-| 입력 | 결과 | 판정 |
-|------|------|------|
-| `lib/codegen.yaml` 끝 `linter :` / `  rules:` / `    - prefer_mixin` | 전체 실행 rc 0 · 10/10 | 🛑 gap (gaps 1번) |
-| 같은 꼴 `"linter":` | 전체 실행 rc 0 · 10/10 | 🛑 gap |
-| `lib/riverpod.yaml` 끝 `linter :` 꼴 | 전체 실행 rc 0 · 10/10 | 🛑 gap |
-| `linter :` 꼴로 `always_specify_types` | `fixtures/base_codegen` 분석 25건 (사용 프로젝트에 닿음); 전체 실행 rc 1 — `[3/10]` 은 통과, `[5/10]` · `[9/10]` · `[10/10]` 정답지 차이로만 실패 | 정답지는 샘플이 걸리는 규칙만 잡는다 |
-| `lib/codegen.yaml` 의 `analyzer: errors:` 에 `prefer_single_quotes: ignore` | `[3/10]` 통과, 정답지 셋 실패 (rc 1) | ℹ️ 정보 — 규칙 목록이 아니라 심각도 재정의이고 정답지가 잡았다 |
-| README 표시 구역 end 마커 바로 뒤에 `- `bogus_after_marker`` | 전체 실행 rc 0 · 10/10. 렌더링된 README 에서는 「받는 규칙」 마지막 목록에 붙어 보인다 | ⚠️ 경고 — 검사 대상을 마커 구역으로 정한 것은 D-01 (README 379행도 "표시 구역" 이라 적는다). 같은 절 안 마커 밖의 불릿을 실패로 돌리는 것은 다음 gap plan 에서 값싸게 더할 수 있다 |
-
-**"같은 모양, 다른 입력" 에 대한 답:** 이번에도 나왔다. 05-07 이 `linter:` 줄에 붙은 값(flow)을 닫았지만, reader 가 **블록을 찾는 방법** 자체(열 0 의 글자 `linter:`)는 그대로라 다른 철자의 키 아래 블록이 통째로 빠진다. 정규식에 철자를 하나 더 받는 수정은 같은 모양을 다시 남긴다 — 조각마다 받는 최상위 키를 닫힌 목록으로 두는 수정(WR-10 의 Fix)이 이 모양을 구조적으로 닫는다. (e) ~ (g) 쪽 WR-07 ~ WR-09 · IN-08 은 문서화된 보장(성공 기준 · VERIFY-06)에는 들지 않지만, README 382행과 `example/README.md` 116 · 436행의 문장이 구현보다 넓다 — 다음 gap plan 에서 문장을 구현에 맞게 좁히거나 검사를 넓히기를 권한다.
+**소유자가 Round 2 에서 범위 밖으로 둔 것** — 「받는 규칙」 절의 표 · 산문 · HTML 규칙 이름, `lib/base.yaml` 의 `include:` 값, 둘째 마커 쌍, `lib/base.yaml` 의 `analyzer:` 아래 키, codegen `errors:` 의 심각도 재정의, CHANGELOG 98행, README 214행은 승인된 범위 한계로 적고 gap 으로 세지 않았다. 이 가운데 승인한 must_have 와 부딪치는 것은 찾지 못했다 — `allowedChildKeys` 에 `lib/base.yaml` 이 없는 것은 05-10 의 금지(base 의 analyzer 아래를 목록으로 묶지 않음) 그대로다. gaps 1번의 CR 입력은 이 목록 밖이다: base 의 `analyzer:` 아래가 아니라 **최상위**(`formatter:` · `plugins:`)와 **`linter:` 규칙 목록**에 숨는다.
 
 ### Required Artifacts
 
 | Artifact | 기대 | 상태 | 세부 |
 |----------|------|------|------|
-| `tool/verify.dart` | `readMarkerBlock` · 엄격한 `readBulletBlock` · `readRulesMdBlock`, flow 거부 `declaredRuleNames` · `enabledLanguageOptions`, `unquotedScalar`, (e) ~ (g) 강화, plugin · pubspec reader | ⚠️ 있음 · 연결됨 · 일부 fail-open | (b′) 가 다른 철자의 `linter` 키를 건너뛴다 (gaps 1번); (e) ~ (g) 의 꼴 경고 |
-| `README.md` | 378 · 45 · 91 · 239 · 372 · 382행 | ⚠️ | 378행 단정이 gap 입력에서 거짓, 382행 "모두 견준다" 가 넓음(경고) |
-| `CHANGELOG.md` | 92행 | ✓ VERIFIED | |
-| `lib/riverpod.yaml` | 5행 줄 끝 주석만 | ✓ VERIFIED | |
-| `tool/measure_rules.dart` | `///` 만 | ✓ VERIFIED | |
-| `example/README.md` | M43 ~ M67 소절 셋, 앞 행 불변 | ✓ VERIFIED | |
-| `05-REVIEW-DISPOSITION.md` | 05-09 시점 fixed 12 · deferred 1 · open 0 | ✓ VERIFIED | 지금 open 5 는 재리뷰 발견 — 판정은 위 표 |
+| `tool/verify.dart` | `allowedTopLevelKeys` · `allowedChildKeys` · `findUnexpectedKeys` (a′), `findMarkerRange` · `markFencedLines` · `findListLinesOutsideMarkers` (d′), (e) ~ (g) 주석 | ⚠️ 있음 · 연결됨 · 일부 fail-open | (a′) 는 `[3/10]` 에 연결되고 적힌 입력을 모두 잡는다; 줄 나누기가 YAML 과 달라 CR 뒤를 놓친다 (gaps 1번); 1857 ~ 1858 · 1864행 주석이 넓다 (gaps 2번) |
+| `README.md` | 378 · 382행 | ⚠️ | 378 · 379행의 단정이 CR 입력에서 거짓, 382행 (f) · (g) 구절이 따옴표 키 · 콜론 앞 공백을 말하지 않음 |
+| `example/README.md` | M68 ~ M78 소절 둘, 116 · 358 · 395 · 436행 | ⚠️ | 소절 둘 있음(`### 추가 실측 — 조각의 최상위 키와 `analyzer:` 아래 키의 닫힌 목록 (05-10)`); 116행의 (e) 구절이 넓음 |
+| `05-REVIEW-DISPOSITION.md` | 05-11 시점 open 0 | ✓ VERIFIED | `b8519d4` 시점 그대로; 지금 open 5 는 재리뷰 발견 |
 
 ### Key Link Verification
 
 | From | To | Via | 상태 | 세부 |
 |------|----|-----|------|------|
-| `tool/verify.dart` | `README.md` | `readBulletBlock` → (d) | ✓ WIRED | 구역 안의 모르는 줄이 실패 (M43 전체 실행) |
-| `tool/verify.dart` | `lib/codegen.yaml` · `lib/riverpod.yaml` | (b′) `declaredRuleNames` | ⚠️ PARTIAL | `linter:` 블록 · flow 는 잡고, 다른 철자의 키는 건너뜀 |
-| `tool/verify.dart` | `RULES.md` | `readRulesMdBlock` → (c) | ✓ WIRED | M51 ~ M53 |
-| `tool/verify.dart` | `lib/base.yaml` | `enabledLanguageOptions` | ✓ WIRED | M59 ~ M62 |
-| `tool/verify.dart` | `README.md` | (e) · (f) · (g) | ✓ WIRED (경고 있음) | 블록 꼴 · 펜스 안의 값만 |
-| `tool/verify.dart` | `lib/riverpod.yaml` · `pubspec.yaml` | `readShippedPluginConstraint` · `pubspecReleaseVersion` | ✓ WIRED | M63 ~ M67 |
-| 로컬 브랜치 | origin | `git push origin gsd/v2.0-package-rework` | ✓ WIRED | origin `8789cfe`; 로컬은 그 뒤 메타데이터 커밋 7개 |
+| `tool/verify.dart` | 조각 셋 | (a′) `findUnexpectedKeys` | ⚠️ PARTIAL | 한 줄 안의 철자 · 들여쓰기는 모두 잡고, CR 로 나뉜 줄은 놓친다 |
+| `tool/verify.dart` | `lib/base.yaml` | (b) · (c) · (d) `declaredRuleNames` | ⚠️ PARTIAL | CR 뒤의 규칙을 세지 않는다 (F1) |
+| `tool/verify.dart` | `README.md` | (d′) `findListLinesOutsideMarkers` | ✓ WIRED (경고 있음) | M74 · M75 · M77 실패, WR-12 꼴은 통과 |
+| `tool/verify.dart` | `example/README.md` | M68 ~ M78 기록 | ✓ WIRED | 검증자 실행 결과가 기록과 같다 (M68 · M74 전체 실행, 나머지 함수 단위) |
+| 로컬 브랜치 | origin | `git push origin gsd/v2.0-package-rework` | ✓ WIRED | origin `b8519d4`, verify run 38522962086 success |
 
 ### Behavioral Spot-Checks (전체 실행)
 
 | 동작 | 결과 | 상태 |
 |------|------|------|
-| 기준 실행 (복제본 둘) | rc 0 · `점검 통과 (10개 중 10개)` | ✓ PASS |
-| M43 옛 README 꼴 | rc 1 · `[3/10]` 만 실패 · `(1)` | ✓ PASS (지난 gaps 1 닫힘) |
-| M45 codegen flow | rc 70 · stdout 0 바이트 · `10행: `linter:` 줄에 값이 붙어 있다` | ✓ PASS (지난 gaps 2 닫힘) |
-| M64 고정 버전 넷 | rc 0 · `[3/10]` · `[4/10]` 통과 · 10/10 · 70 없음 | ✓ PASS |
-| M65 맵 꼴 · 키 순서 | rc 0 · 10/10 · 70 없음 | ✓ PASS |
-| codegen `linter :` 블록 목록 | rc 0 · 10/10 | ✗ FAIL (gaps 1) |
-| codegen `"linter":` 블록 목록 | rc 0 · 10/10 | ✗ FAIL (gaps 1) |
-| riverpod `linter :` 블록 목록 | rc 0 · 10/10 | ✗ FAIL (gaps 1) |
-| WR-07 · WR-08 (둘) · WR-09 (둘) · WR-10 (둘) · 마커 뒤 불릿 | 모두 rc 0 · 10/10 | ⚠️ 경고 |
+| 기준 실행 | rc 0 · `점검 통과 (10개 중 10개)` | ✓ PASS |
+| M68 codegen `linter :` | rc 1 · `[3/10]` 만 · 1/10 · 규칙 블록 없음 | ✓ PASS (지난 gap 닫힘) |
+| M74 end 마커 뒤 불릿 | rc 1 · `189행` · 1/10 | ✓ PASS |
+| F1 base 주석 끝 CR + `- prefer_mixin` | rc 0 · 10/10 | ✗ FAIL (gaps 1) |
+| F2 base 주석 끝 CR + `- always_specify_types` | rc 1, `[3/10]` 통과, 사용 프로젝트에 진단 | ✗ FAIL (gaps 1 — `[3/10]` 이 잡지 못함) |
+| F3 codegen CR + `language: strict-casts` | rc 1, `[3/10]` 통과, `invalid_assignment` | ✗ FAIL (gaps 1) |
+| F4 codegen CR + `language:` · `formatter:` | rc 0 · 10/10 | ✗ FAIL (gaps 1) |
+| F5 · F6 WR-12 | rc 0 · 10/10 | ⚠️ 경고 |
+| F7 · F7b WR-13 | rc 0 · 10/10 | ⚠️ (gaps 2) |
+| F8 WR-14 | rc 0 · 10/10 | ⚠️ (gaps 2) |
 
 ### Probe Execution
 
@@ -253,49 +259,64 @@ ROADMAP 성공 기준 5개, 첫 회차의 plan truth 20개(회귀 확인), gap p
 | DOCS-03 | 05-03 | ✓ SATISFIED | SC2 |
 | DOCS-04 | 05-03 | ✓ SATISFIED | SC2 |
 | DOCS-05 | 05-03 | ✓ SATISFIED | 「문제 해결」 네 소절 |
-| DOCS-06 | 05-03 · 05-07 · 05-09 | ✓ SATISFIED (지금 상태) | 표시 구역 · 코드 블록 값이 YAML 과 같다. 378행의 검사 설명 문장은 gaps 1번과 함께 고친다 |
-| DOCS-07 | 05-04 · 05-09 | ✓ SATISFIED | SC4, 92행 |
-| DOCS-08 | 05-04 | ✓ SATISFIED | 첫 회차 diff 대조, 이번 회차 변경 없음 (사람 확인 3번) |
+| DOCS-06 | 05-03 · 05-07 · 05-09 · 05-10 | ✓ SATISFIED (지금 상태) | 지금 README 의 규칙 · 설정 설명은 YAML 과 같다(기준 실행 `[3/10]`). 검사를 설명하는 문장의 넓음은 gaps 1 · 2 와 함께 고친다 |
+| DOCS-07 | 05-04 · 05-09 | ✓ SATISFIED | SC4 |
+| DOCS-08 | 05-04 | ✓ SATISFIED | 변경 없음 (사람 확인 3번) |
 | DOCS-09 | 05-04 | ✓ SATISFIED | 변경 없음 |
 | DOCS-10 | 05-01 · 05-02 | ✓ SATISFIED | SC5 |
-| VERIFY-06 | 05-01 · 05-03 · 05-05 ~ 05-09 | ✗ BLOCKED | gaps 1번 — 다른 철자의 `linter` 키로 다른 조각에 적은 규칙이 사용 프로젝트에 닿는데 10/10 |
+| VERIFY-06 | 05-01 · 05-03 · 05-05 ~ 05-11 | ✗ BLOCKED | gaps 1번 — CR 뒤에 둔 규칙이 `lib/base.yaml` 의 목록 · RULES.md · README 와 다르게 배포되는데 10/10 |
 
-ORPHANED 없음 — REQUIREMENTS.md 가 Phase 5 에 매긴 11개가 모두 plan 의 `requirements` 에 있다. REQUIREMENTS.md 의 체크 표시(VERIFY-06 · DOCS-06 · DOCS-07 `[x]`, 나머지 여덟 `Gaps Found`)는 증거와 다르다 — VERIFY-06 은 BLOCKED, 여덟은 SATISFIED 다.
+ORPHANED 없음 — REQUIREMENTS.md 가 Phase 5 에 매긴 11개가 모두 plan 의 `requirements` 에 있다. REQUIREMENTS.md 의 표시(VERIFY-06 · DOCS-06 `Complete`, 나머지 아홉 `Gaps Found`)는 이 증거와 다르다 — VERIFY-06 은 BLOCKED, 나머지 열은 SATISFIED 다.
 
 ### Anti-Patterns
 
 | 파일 | 줄 | 패턴 | 심각도 | 영향 |
 |------|----|------|--------|------|
-| `tool/verify.dart` | 926 · 937 | 열 0 의 `^linter:` 글자가 아니면 블록 밖으로 보고 그 아래 줄을 읽지 않음 | 🛑 Blocker | gaps 1번 |
-| `tool/verify.dart` | 1797 · 1820 · 1859 · 1904 · 1377 | `package:` 글자 · 줄 머리 키 · 펜스에만 맞추는 후보 수집 | ⚠️ Warning | WR-07 ~ WR-09 · IN-08 |
-| `tool/verify.dart` | 1674 · 1746 | 조각의 `linter:` 밖 키와 `lib/base.yaml` 밖의 `language:` 를 보지 않음 | ⚠️ Warning | WR-10 (gaps 1 과 같은 뿌리) |
+| `tool/verify.dart` | 951 · 1027 · 1101 | YAML 옵션을 `\n` 으로만 나눔 (CR 하나를 줄바꿈으로 보지 않음) — 같은 파일의 `significantLines` 는 `readAsLinesSync` | 🛑 Blocker | gaps 1번 (전체 실행 F1 · F4 가 증거) |
+| `tool/verify.dart` | 832 · 1408 | 같은 꼴 (`stripPlugins` · `readShippedPluginConstraint`) | ⚠️ Warning | 직접 헛통과는 재현하지 않음 — 같은 수정에 함께 넣기를 권함 |
+| `tool/verify.dart` | 1530 ~ 1556 · 1812 | HTML 주석 · 4칸 들여 쓴 ``` 를 제목 · 펜스로 봄 | ⚠️ Warning | WR-12 |
+| `tool/verify.dart` · `example/README.md` | 1857 ~ 1858 · 116 | (e) 문장이 코드보다 넓음 | ⚠️ Warning | gaps 2번 |
 
-`TBD` · `FIXME` · `XXX` 표식: 바뀐 파일에 0개. 공개 파일의 절대 경로 꼴 0줄.
+`TBD` · `FIXME` · `XXX` 표식: `tool/verify.dart` · `README.md` · `example/README.md` 에 0개. 공개 파일의 절대 경로 꼴 0줄. 재검증 증거 gate: gaps 1번은 이번에 바뀐 `tool/verify.dart` 의 새 검사에 걸리고 전체 실행 결과(F1 · F4)라는 재현 가능한 증거가 있어 blocker 로 둔다. 증거 없는 새 범위 발견은 없다 (Advisory 없음).
 
-### 금지 사항(prohibitions) 확인
+### 금지 사항(prohibitions) 확인 (판단 등급 — 검증자의 비권위 판정)
 
-판단 등급 항목 가운데 기계로 가를 수 있는 것은 직접 확인했다 — 배포 설정 내용 불변(`lib` 의 변경은 riverpod 5행 줄 끝 주석뿐, `RULES.md` · `pubspec.yaml` · `fixtures` 는 고정 커밋과 같음), M1 ~ M42 행 수 · 문구 불변(`example/README.md` 에서 지운 줄은 덧붙임 자리 둘), `.claude/CLAUDE.md` 불변(WR-06 deferred), `tool/measure_rules.dart` 는 `///` 줄만, `readUpstreamRules` (`readSet` 포함) 는 `e69470e` 와 글자가 같음, (d) 에 분류 검사 없음, 원격 `main` `90a2736` · tag `v1.3.0` 하나 · PR 0, 공개 파일의 절대 경로 꼴 0줄. "지워 보기는 복제본에서 했다" 는 작업 트리와 이력에 변형 흔적이 없다는 것까지만 확인할 수 있다.
+기계로 가를 수 있는 것은 직접 확인했고 어긴 것은 없다.
+
+- 05-10: `declaredRuleNames` 본문은 `644897f` 와 주석이 아닌 줄이 같다(철자 정규식을 더하지 않음); (e) ~ (g) · `fencedLines` · `unquotedScalar` 의 코드 줄도 같다; `allowedChildKeys` 에 `lib/base.yaml` 이 없다; `lib` · `RULES.md` · CHANGELOG · `pubspec.yaml` · `fixtures` · `.claude/CLAUDE.md` 가 고정 커밋과 같다; 공개 파일 · 범위 이력에 절대 경로 꼴 0. "지워 보기는 복제본에서" 는 작업 트리와 이력에 변형 흔적이 없다는 것까지만 확인할 수 있다.
+- 05-11: push 는 fast-forward (`8789cfe` → `b8519d4`), 원격 `main` `90a2736` · tag `v1.3.0` 하나 · PR 0; 처리 기록의 앞 회차 행 그대로(`b8519d4` 시점); WR-06 `deferred`; 05-11 이 CHANGELOG · 배포 YAML · README · `tool/verify.dart` 를 바꾸지 않았다.
 
 ### Human Verification Required
 
-gap 을 닫은 뒤에도 남는 사람 확인 넷이다 (frontmatter `human_verification`).
+gap 을 닫은 뒤에도 남는 사람 확인 다섯이다 (frontmatter `human_verification`).
 
 1. **README 를 처음부터 따라 하기** — 설치 → 프리셋 고르기 → 끄기 세 층 → 버전 올리기 세 갈래.
 2. **단정 / 출처 문장 단위 확인** — 끄기 · 생성 파일 제외 · 버전 올리기 · 문제 해결.
-3. **CHANGELOG 복원 일곱 항목과 `git show` diff 대조** — 첫 회차 검증이 대조해 일치를 기록했고 이번 회차는 CHANGELOG 92행만 바뀌었다.
+3. **CHANGELOG 복원 일곱 항목과 `git show` diff 대조** — 첫 회차 검증이 대조해 일치를 기록했고 그 뒤 CHANGELOG 는 92행 한 줄만 바뀌었다(`e46cff4` 뒤로 불변).
 4. **외부 링크 넷 열기.**
+5. **05-10 이 고친 검사 설명 문장의 읽힘** — gaps 2번을 고친 뒤, 문장이 말하는 범위가 지워 보기 기록과 같은지 (05-10-SUMMARY D6).
 
 ### Gaps 요약
 
-지난 gap 둘은 닫혔다 — 옛 README 꼴은 `[3/10]` 실패, flow 표기는 종료 코드 70 (둘 다 전체 실행으로 확인). 05-08 · 05-09 의 truth 도 모두 돌린 대로다.
+**지난 gap 은 닫혔다.** 다른 철자의 `linter` 키(M68 · M69 · M70)는 `[3/10]` 실패이고, 검증자가 더 넣은 철자 넷(작은따옴표 · 명시 키 · 앵커 · 태그)도 막힌다. 05-10 · 05-11 의 truth 는 적힌 입력에서 모두 돌린 대로이고, 회귀 입력 11개와 앞 기록의 결과도 그대로다. GitHub verify 도 새 검사 둘로 10/10 이다.
 
-**새 gap 하나 (뿌리 하나, 실패 truth 셋 — SC3 뒤 절반 · 05-01 truth 3 · 05-07 truth 7):** (b′) 가 다른 조각에서 linter 블록을 열 0 의 글자 `linter:` 로만 찾는다. YAML 에서 같은 키인 `linter :` · `"linter":` 로 블록 목록을 적으면 블록이 통째로 빠져 규칙 0개 · 10개 중 10개이고, 그 규칙은 사용 프로젝트에 닿는다. 개연성은 낮다(두 철자 모두 이 저장소의 관례 밖). 그러나 README 378행은 "블록 목록이면 `[3/10]` 단계가 실패" 라고 단정하고, 지난 gaps 2 도 개연성 낮음으로 적은 채 gap 으로 닫았다 — 같은 기준을 적용했다.
+**새 gap 하나 (blocker, 뿌리 하나):** 닫힌 목록이 한 줄 안의 철자는 YAML 기준으로 닫았지만 **줄의 경계**는 YAML 과 다르다. `findUnexpectedKeys` · `declaredRuleNames` · `enabledLanguageOptions` 가 줄을 `\n` 으로만 나누는데, YAML 과 analyzer 는 CR 하나도 줄바꿈으로 읽는다. 주석 줄 끝의 `\r` 뒤에 둔 규칙 · 옵션 · plugin 은 reader 에게 주석이고 analyzer 에게는 새 줄이다 — `lib/base.yaml` 에 숨긴 규칙은 10개 중 10개로 배포되고(F1), 같은 꼴의 규칙 · 옵션은 사용 프로젝트에 진단을 낸다(F2 · F3). 같은 모양(reader 가 analyzer 와 다르게 읽는 줄을 조용히 건너뜀)이 세 번째로 나왔다. 수정은 작다 — `const LineSplitter().convert(…)` 로 나누면 된다 (같은 파일의 `significantLines` 가 이미 그렇게 나눠 묶음의 같은 꼴을 잡는다). 개연성은 낮다(CR 하나만 든 파일). 소유자가 이 입력을 받아들이기로 하면 아래 override 로 적을 수 있다 — 다만 고치는 비용이 override 를 적는 비용과 비슷하다.
 
-권하는 수정은 철자를 더 받는 정규식이 아니라 **조각마다 받는 최상위 키를 닫힌 목록으로 두는 것**이다 (05-REVIEW WR-10 의 Fix). 그러면 이 gap 과 WR-10 (`language:` · `formatter:`) 이 함께 닫히고, "블록을 찾지 못하면 0개로 통과" 라는 모양이 키 단위에서 사라진다. 같은 gap plan 에서 README 382행 · `example/README.md` 116 · 436행의 검사 설명을 구현에 맞게 좁히거나 (e) ~ (g) 를 넓히는 일(WR-07 ~ WR-09 · IN-08), 마커 뒤 불릿 검사를 함께 다루기를 권한다 — 이것들은 경고이고 소유자가 범위를 정한다.
+```yaml
+overrides:
+  - must_have: "규칙 목록을 YAML 과 다르게 고치면 검증 명령이 실패한다 — 조각마다 받는 키는 닫힌 목록이고 그 밖의 최상위 줄 · 그 바로 아래의 다른 키는 `[3/10]` 실패"
+    reason: "{CR 하나(\\r)로만 나뉜 줄은 이 저장소의 편집 경로에서 생기지 않는다고 보고 받아들인다 — 그 경우 README 378 · 379행과 example/README.md 116행에 'CR 하나로 나뉜 줄은 보지 않는다' 를 적는다}"
+    accepted_by: "{name}"
+    accepted_at: "{ISO timestamp}"
+```
 
-현재 상태의 README · CHANGELOG · YAML 주석은 실제 설정과 일치한다 — 실패한 것은 "그 일치가 검증으로 지켜진다" 의 한 입력이다.
+**문장 둘 (gaps 2번, partial):** G2-Q2 로 좁힌 문장 가운데 `example/README.md` 116행 · `tool/verify.dart` 1857 ~ 1858행의 (e) 구절은 확장자 없는 다른 패키지 주소(`package:woody-lints/riverpod`)까지 실패한다고 적고(10/10 으로 통과), README 382 · `example/README.md` 116 · 395행의 (f) · (g) 구절은 따옴표 키 · 콜론 앞 공백을 범위 밖으로 적지 않는다. 코드는 그대로 두고 문장만 436행처럼 정확히 맞추면 G2-Q2 안에서 닫힌다.
+
+**경고 · 정보:** WR-12 (HTML 주석 · 4칸 펜스가 (d′) 의 절 경계를 옮김 — 표시 구역 == YAML 은 지켜짐), IN-09 (M35 · M37 의 지금 출력이 두 블록), 1864행 주석. gaps 1번을 고치는 plan 에 함께 넣기를 권하지만 소유자가 범위를 정한다.
+
+지금 상태의 README · CHANGELOG · YAML 주석은 실제 설정과 일치한다 — 실패한 것은 "그 일치가 검증으로 지켜진다" 의 한 입력(CR 로 나뉜 줄)과, 검사 범위를 말하는 문장 둘이다.
 
 ---
 
-_Verified: 2026-10-14_
+_Verified: 2026-10-14T07:42:21Z_
 _Verifier: Claude (gsd-verifier)_
