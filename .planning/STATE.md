@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 05
 current_phase_name: Documentation
 status: executing
-stopped_at: Completed 05-07-PLAN.md
-last_updated: "2026-10-14T01:44:00.016Z"
+stopped_at: Completed 05-08-PLAN.md
+last_updated: "2026-10-14T02:20:55.705Z"
 last_activity: 2026-10-14
 last_activity_desc: Phase 05 execution started
-state_head: 6f7606fba94f6a1bc017bd01d64bcfeae9263ed6
+state_head: 55627e13eed8b5e54e705e1c1c5a8a7f339676ec
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 35
-  completed_plans: 33
+  completed_plans: 34
   percent: 67
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-13)
 ## Current Position
 
 Phase: 05 (Documentation) — EXECUTING
-Plan: 7 of 9
+Plan: 8 of 9
 Status: Ready to execute
 Last activity: 2026-10-14 — Phase 05 execution started
 
@@ -94,6 +94,7 @@ Progress: [███████░░░] 67%
 | Phase 05 P06 | 9min | 1 tasks | 1 files |
 | Phase 05 P05 | 2h 16m | 3 tasks | 0 files |
 | Phase 05 P07 | 23min | 3 tasks | 3 files |
+| Phase 05 P08 | 30min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -226,6 +227,9 @@ Recent decisions affecting current work:
 - [Phase 05]: 05-07: README 표시 구역 woody:readme-rules 안에서 받는 줄은 빈 줄 · **분류** 소제목 · `- `이름`` 불릿 셋뿐이고 그 밖의 줄은 [3/10] 실패다 (gaps 1, M43 · M44). 마커 처리는 readMarkerBlock 하나, 결과 타입은 MarkerBlock (IN-06; 5f43726)
 - [Phase 05]: 05-07: linter: 줄에 # 주석 밖의 값이 붙은 flow 표기는 종료 코드 70 으로 멈추고 줄 끝 주석만 붙은 블록 꼴은 그대로 받는다 (gaps 2, M45 70 · M46 [3/10] 실패 1). README 378행은 블록 목록 · flow 표기를 가른다 (DOCS-06; 057bef2)
 - [Phase 05]: 05-07: README 코드 블록의 (f) · (g) 는 키 줄을 모두 후보로 잡아 unquotedScalar 와 줄 끝 주석 벗기기 뒤 꼴을 보고, 꼴이 틀린 값은 읽지 못하는 줄 (N) 로 실패한다. 값 없는 맵 키 줄은 후보가 아니다 (WR-02, M47 ~ M49 실패 · M50 10/10; 73f1c66)
+- [Phase 05]: 05-08: RULES.md 표 구역 안에서 받는 줄은 0번째 줄의 머리 줄 · 1번째 줄의 구분 줄 · 첫 칸이 backtick 이름 하나인 데이터 행 · 데이터 행이 없는 구역의 '없음 — …' 한 줄뿐이고 그 밖의 줄은 [3/10] 실패다 (M51 ~ M53; 812c477). measure_rules.dart 의 readRulesTable 은 문서 주석만 고쳤다
+- [Phase 05]: 05-08: README (e) 는 package:woody_lints/ 뒤의 후보 가운데 <이름>.yaml 꼴이 아닌 것과 이름이 woody_lints 가 아닌 패키지의 .yaml · .yml 주소를 실패시키고, fencedLines 는 펜스의 문자 · 길이를 기억해 같은 문자만으로 된 · 같거나 긴 줄에서만 닫는다 (M54 ~ M58; 63fe3d9)
+- [Phase 05]: 05-08: lib/base.yaml 의 analyzer: · language: 줄에 값이 붙었거나 language: 블록에 <이름>: true|false 가 아닌 줄이 있으면 종료 코드 70, 줄 끝 주석을 단 블록 꼴은 받아 [3/10] 비교로 간다 (M59 ~ M61 70 · M62 1; a14be4f)
 
 ### Pending Todos
 
@@ -252,6 +256,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-14T01:43:59.971Z
-Stopped at: Completed 05-07-PLAN.md
+Last session: 2026-10-14T02:20:55.659Z
+Stopped at: Completed 05-08-PLAN.md
 Resume file: None

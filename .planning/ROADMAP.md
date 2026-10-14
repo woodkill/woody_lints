@@ -248,7 +248,7 @@ Plans:
   4. CHANGELOG 최상단에 새 릴리스 항목이 Phase 1 에서 정한 형식으로 있고(추가·삭제 규칙, 지원 SDK 변경, 규칙별 실측 건수와 `dart fix` 가능 여부), 1.0.0 과 1.3.0 사이 항목이 git 이력으로 확인되는 범위에서 채워져 있다
   5. 배포 YAML 의 머리 주석이 실제 구성(조각 파일, 묶음, 옛 이름 별칭)을 설명하고, README 와 YAML 에 템플릿 보일러플레이트가 남아 있지 않다
 
-**Plans**: 7/9 plans executed (검증 gaps_found 23/25, 2026-10-14 — README 규칙 목록 reader 와 (b′) 가 읽지 못하는 줄을 건너뛰는 gap 2건, `05-VERIFICATION.md`; gap 수정 plan 05-07 ~ 05-09 대기 — 소유자 결정 2026-10-14: gap 둘 + 같은 모양의 reader 넷(Q1) · 문장 넷(Q2) · 맞는 값에서 실패하는 곳과 코드 정리(Q3) · WR-06 은 D-09 대로 미룸(Q4); 2차 결정 2026-10-14: 고정 버전은 받기(R2-Q1) · 옵션 reader(R2-Q2) · 다른 패키지 주소(R2-Q3) · measure 주석만(R2-Q4))
+**Plans**: 8/9 plans executed (검증 gaps_found 23/25, 2026-10-14 — README 규칙 목록 reader 와 (b′) 가 읽지 못하는 줄을 건너뛰는 gap 2건, `05-VERIFICATION.md`; gap 수정 plan 05-07 ~ 05-09 대기 — 소유자 결정 2026-10-14: gap 둘 + 같은 모양의 reader 넷(Q1) · 문장 넷(Q2) · 맞는 값에서 실패하는 곳과 코드 정리(Q3) · WR-06 은 D-09 대로 미룸(Q4); 2차 결정 2026-10-14: 고정 버전은 받기(R2-Q1) · 옵션 reader(R2-Q2) · 다른 패키지 주소(R2-Q3) · measure 주석만(R2-Q4))
 
 Plans:
 
@@ -272,7 +272,7 @@ Plans:
 - [x] 05-07-PLAN.md — (tracer) README 표시 구역 reader 가 빈 줄 · `**분류**` · `- `이름`` 밖의 줄을 `[3/10]` 실패로 (gaps 1, M43 · M44) · 마커 처리를 `readMarkerBlock` · `MarkerBlock` 하나로 (IN-06) · `linter:` 줄의 flow 표기를 종료 코드 70 으로 (gaps 2 · WR-04, M45 · M46) · README 378행 문장 · 코드 블록 값 (f) · (g) 의 따옴표 · 줄 끝 주석 · 꼴, `unquotedScalar` (WR-02, M47 ~ M50) — 지워 보기는 `git clone --local` 복제본에서 (VERIFY-06, DOCS-06; D-01, D-02, D-20)
 
 **Wave 7** *(blocked on Wave 6 — 같은 모양의 reader, 소유자 승인 2026-10-14 Q1 · 2차 R2-Q2 ~ Q4)*
-- [ ] 05-08-PLAN.md — `RULES.md` 표 reader 가 머리 줄 · 구분 줄 · backtick 이름 행 밖의 줄을 실패로 (M51 ~ M53, `없음 — …` 빈 표 줄은 행이 없을 때만) · `tool/measure_rules.dart` 의 `readRulesTable` 문서 주석만 (R2-Q4) · README 주소의 꼴 (WR-01) · `woody_lints` 가 아닌 패키지 주소 (R2-Q3) · `~~~` 와 펜스 길이 (WR-03) (M54 ~ M58) · `analyzer:` · `language:` 의 flow 표기와 읽지 못하는 옵션 줄을 70 으로 (R2-Q2, M59 ~ M62) (VERIFY-06; D-01, D-02, D-20)
+- [x] 05-08-PLAN.md — `RULES.md` 표 reader 가 머리 줄 · 구분 줄 · backtick 이름 행 밖의 줄을 실패로 (M51 ~ M53, `없음 — …` 빈 표 줄은 행이 없을 때만) · `tool/measure_rules.dart` 의 `readRulesTable` 문서 주석만 (R2-Q4) · README 주소의 꼴 (WR-01) · `woody_lints` 가 아닌 패키지 주소 (R2-Q3) · `~~~` 와 펜스 길이 (WR-03) (M54 ~ M58) · `analyzer:` · `language:` 의 flow 표기와 읽지 못하는 옵션 줄을 70 으로 (R2-Q2, M59 ~ M62) (VERIFY-06; D-01, D-02, D-20)
 
 **Wave 8** *(blocked on Wave 7 — 소유자 승인 Q2 · Q3 · Q4; 같은 브랜치 push 는 D-21 대로 실행 뒤 보고)*
 - [ ] 05-09-PLAN.md — plugin 선언 reader 의 따옴표 · 고정 버전(R2-Q1) · 맵 안의 키 순서 · 범위 제약은 원인을 말하는 70 (WR-05) · pubspec 따옴표 (IN-01) · 주석 단계 번호 (IN-05) (M63 ~ M67); README 45 · 91 · 239 · 372 · 382행 · `lib/riverpod.yaml` 줄 끝 주석 · CHANGELOG 92행 (W4 · IN-02 · IN-03 · IN-04 · IN-07); 처리 기록 fixed 12 · deferred 1 (WR-06 — D-09); push 전 범위 비공개 점검 → push → GitHub `verify` (VERIFY-06, DOCS-06, DOCS-07; D-09, D-16, D-20, D-21)
@@ -326,7 +326,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Verification Harness | 5/5 | Complete    | 2026-10-12 |
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
 | 4. Rule Reselection | 13/13 | Complete    | 2026-10-13 |
-| 5. Documentation | 7/9 | gap 수정 대기 | - |
+| 5. Documentation | 8/9 | gap 수정 대기 | - |
 | 6. Release | 0/TBD | Not started | - |
 
 ## Backlog
