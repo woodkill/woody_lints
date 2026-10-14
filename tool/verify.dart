@@ -838,7 +838,7 @@ List<String> splitYamlLines(String text) => const LineSplitter().convert(text);
 /// 옵션 파일 내용에서 최상위 `plugins:` 섹션이 있으면 뺀다 (spike 007, 013).
 ///
 /// 줄 단위로 걸으며 `plugins:` 줄부터 다음 최상위 키(들여쓰기 없는 비주석 줄) 앞까지를
-/// 지우지 않고 빈 줄로 바꾼다 (줄 번호 보존) — 복사본의 줄 수와 줄 번호가 원본과 같다.
+/// 지우지 않고 빈 줄로 바꾼다 (줄 번호 보존) — 복사본의 줄 번호가 원본과 같다 (끝의 빈 줄은 빠질 수 있다 — 05-REVIEW.md IN-11, 소유자 결정 G4-Q2).
 /// 없으면 그대로 돌려준다 — 조각 셋 가운데 `plugins:` 가 있는 것은 `riverpod.yaml` 뿐이다.
 /// 받는 꼴: 줄 끝 주석, `plugins:` 뒤의 주석 · 공백, 섹션 안의 빈 줄 · 열 0 주석,
 /// CR 하나 · CRLF 줄바꿈 ([splitYamlLines] — YAML 과 같다), 마지막 줄바꿈 없음
@@ -1509,6 +1509,7 @@ List<String>? significantLines(File file) {
 /// 목록이다.
 ///
 /// 펜스가 아닌 코드 블록(네 칸 들여 쓴 블록 · 인용(`>`) 안의 펜스)은 보지 않는다 (05-REVIEW.md WR-09 — 소유자 결정 G2-Q2 · G2-Q5, 검사는 넓히지 않았다).
+/// 닫는 줄의 들여쓰기는 보지 않는다 — 펜스 안에서 네 칸 이상 들여 쓴 펜스 문자 줄(백틱 셋 이상 · `~~~`)도 그 펜스를 닫는 것으로 보아 그 뒤의 같은 블록 줄은 돌려주지 않는다 (CommonMark 의 닫는 펜스는 세 칸까지다 — 05-REVIEW.md IN-10, 소유자 결정 G4-Q2 로 검사는 고치지 않았다).
 List<String> fencedLines(List<String> lines) {
   final out = <String>[];
   final openPattern = RegExp(r'^(`{3,}|~{3,})');
@@ -2140,7 +2141,7 @@ List<List<String>> compareLineReadersWithYaml(String repoRoot) {
 ///   — 값의 따옴표 · 줄 끝 주석을 벗겨 읽고, 꼴이 틀린 값도 실패 (키는 따옴표 · 콜론 앞 공백 없이 글자 그대로인 줄만 후보 — 05-REVIEW.md WR-13)
 /// - (h) 줄 단위 reader 가 읽은 값 == YAML (package:yaml) 이 같은 파일에서 읽은 값 ([compareLineReadersWithYaml]) — 조각 셋의 규칙과 최상위 키 · 그 바로 아래 키, `lib/base.yaml` 의 analyzer 옵션, `lib/riverpod.yaml` 의 riverpod_lint 선언, `pubspec.yaml` 의 version. YAML 로 읽지 못하는 파일(같은 키 두 번 · 깨진 YAML)도 실패 (05-VERIFICATION.md 4회차 gap, 소유자 결정 G4-Q1)
 ///
-/// (e) 는 `package:` 로 시작하지 않는 scheme 오타 · `package:` 뒤의 공백 · `.yaml` · `.yml` 로 끝나지 않는 다른 패키지의 주소를 보지 않고, 주소 바로 뒤에 `,` · `.` 같은 문장 부호가 붙으면 `woody_lints` 주소는 꼴이 아닌 것으로 실패하고 다른 패키지의 주소는 후보가 되지 않는다. (f) · (g) 는 따옴표로 감싼 키 · 콜론 앞에 공백이 든 키(`"ref":` · `ref :`), flow 표기(`{…}`) 안의 키와 펜스가 아닌 코드 블록(네 칸 들여 쓴 블록 · 인용 안의 펜스)을 보지 않는다 (05-REVIEW.md WR-07 ~ WR-09 · WR-13 · WR-14 · IN-08 — 소유자 결정 G2-Q2 · G2-Q5 · G3-Q2, 검사는 넓히지 않았다).
+/// (e) 는 `package:` 로 시작하지 않는 scheme 오타 · `package:` 뒤의 공백 · `.yaml` · `.yml` 로 끝나지 않는 다른 패키지의 주소를 보지 않고, 주소 바로 뒤에 `,` · `.` 같은 문장 부호가 붙으면 `woody_lints` 주소는 꼴이 아닌 것으로 실패하고 다른 패키지의 주소는 후보가 되지 않는다. (f) · (g) 는 따옴표로 감싼 키 · 콜론 앞에 공백이 든 키(`"ref":` · `ref :`), flow 표기(`{…}`) 안의 키와 펜스가 아닌 코드 블록(네 칸 들여 쓴 블록 · 인용 안의 펜스)을 보지 않고, 펜스 안에서 네 칸 이상 들여 쓴 펜스 문자 줄(백틱 셋 이상 · `~~~`)은 그 펜스를 닫는 것으로 보아 그 뒤의 같은 블록 값은 견주지 않는다 (05-REVIEW.md WR-07 ~ WR-09 · WR-13 · WR-14 · IN-08 · IN-10 — 소유자 결정 G2-Q2 · G2-Q5 · G3-Q2 · G4-Q2, 검사는 넓히지 않았다).
 StepResult checkShippedComposition(String repoRoot) {
   final details = <String>[];
   void addBlock(List<String> lines) {
