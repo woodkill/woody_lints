@@ -64,15 +64,15 @@ Task ID / Plan / Wave / Threat Ref 는 계획(`05-NN-PLAN.md`)이 확정된 뒤 
 | 05-04 Task 2 | 05-04 | 3 | (D-19 — 01 WR-05) | T-05-15 | N/A | grep | `01-REVIEW-DISPOSITION.md` WR-05 행이 `fixed` 와 05-04 의 CHANGELOG 커밋 해시로 바뀜, `open: 13` → `12` | ✅ | ✅ green |
 | 05-01 ~ 05-04 · 05-06 각 task · 05-05 Task 1 | 05-05 | 5 | (D-20) | T-05-04 · T-05-07 · T-05-13 · T-05-16 · T-05-17 | 비공개 사용 프로젝트의 경로 · 메시지 · 코드가 저장소와 `.planning/` 에 없다 | grep (커밋 전 · push 전 범위 전체) | 각 task 의 `<automated>` 에 절대 경로 grep; 05-05 Task 1 이 올릴 범위 전체에 `05-RESEARCH.md` § 6 의 (1) · (2) · (3) 을 돌려 모두 0줄 | ✅ | ✅ green |
 | 05-05 Task 2 · 3 | 05-05 | 5 | (D-21) | T-05-18 · T-05-20 | workflow 가 읽기 권한만 가진다 | e2e (GitHub, 읽기 전용 조회) | 소유자 확인 뒤 첫 push → `gh run list --workflow verify.yml --limit 1` → `completed success` | ✅ | ✅ green |
-| 05-07 Task 1 | 05-07 | 6 | VERIFY-06 (gap 1 · IN-06) | T-05-24 · T-05-25 · T-05-26 | N/A | 지워 보기 (복제본) | README 표시 구역에 옛 꼴 `- require_trailing_commas: 자동 코드 정렬 최적화` (M43) → `(1)`, `* `extra`` 와 `- `Extra_Rule`` (M44) → `(2)` — 종료 코드 1 · `[3/10]` 실패 · `구역에 읽지 못하는 줄이 있다` · 이름 비교 블록 없음; 낱말 `RulesMdBlock` 0 (`grep -wF`); 복제본 기준 실행 10/10; 마커 처리는 `readMarkerBlock` 하나 | ✅ | ⬜ pending |
-| 05-07 Task 2 | 05-07 | 6 | VERIFY-06 · DOCS-06 (gap 2 · WR-04) | T-05-24 · T-05-25 · T-05-26 | N/A | 지워 보기 (복제본) | `lib/codegen.yaml` 끝 `linter: {rules: [prefer_mixin]}` (M45) → 70 · 빈 stdout · stderr 의 파일 이름 · 행; 줄 끝 주석을 단 블록 꼴 (M46) → `[3/10]` 실패 1 (과잉 수정 아님); README 378행 문장 | ✅ | ⬜ pending |
-| 05-07 Task 3 | 05-07 | 6 | VERIFY-06 (WR-02) | T-05-26 · T-05-29 | N/A | 지워 보기 (복제본) | `version: "^3.1.3"` (M47) · `ref: v1.9.0 # 예시` (M48) → 벗긴 값 줄; `riverpod_lint: ^3.1` (M49) → 읽지 못하는 줄 `(1)`; 맞는 값에 따옴표 · 주석만 붙은 맵 키 줄 (M50) → 10/10 | ✅ | ⬜ pending |
-| 05-08 Task 1 | 05-08 | 7 | VERIFY-06 (`RULES.md` 표 reader — 소유자 승인 Q1; measure 주석 — R2-Q4) | T-05-27 · T-05-30 · T-05-39 | N/A | 지워 보기 (복제본) + diff | `RULES.md` 켠 규칙 구역에 backtick 없는 행 (M51) · 대문자 이름 행 (M52) → `(1)`, 불릿과 행이 있는 구역의 `없음 — …` (M53) → `(2)` — `[3/10]` 실패 · `구역에 읽지 못하는 줄이 있다` · 표 비교 블록 없음; `없음 — …` 빈 표 줄로 기준 실행 10/10; `tool/measure_rules.dart` 는 `c06d8d5` 대비 `///` 줄만 바뀜 | ✅ | ⬜ pending |
-| 05-08 Task 2 | 05-08 | 7 | VERIFY-06 (WR-01 · W1 둘째 입력 R2-Q3 · WR-03) | T-05-28 · T-05-30 | N/A | 지워 보기 (복제본) | 주소 `codegen.yml` (M54) → `꼴이 아닌 것이 있다 (1)`; `package:woody_lint/riverpod.yaml` 과 `package:woody-lints/base.yaml` (M55) → 다른 패키지의 주소 `(2)`; `~~~` 펜스 (M56) · 긴 펜스 안의 짧은 펜스 짝 (M57) · `~~~` 안의 백틱 펜스 짝 (M58) → 값 줄 `  ref: v1.9.0` | ✅ | ⬜ pending |
-| 05-08 Task 3 | 05-08 | 7 | VERIFY-06 (`enabledLanguageOptions` — R2-Q2) | T-05-30 · T-05-38 | N/A | 지워 보기 (복제본) | `lib/base.yaml` 끝 `language: {…}` (M59) · `analyzer: {language: {…}}` (M60) · `strict-casts: yes` (M61) → 70 · 파일 이름 · 행 · 원인; 줄 끝 주석을 단 블록 꼴 (M62) → 종료 코드 1 · `+ strict-casts` (과잉 수정 아님) | ✅ | ⬜ pending |
-| 05-09 Task 1 | 05-09 | 8 | VERIFY-06 (WR-05 · R2-Q1 · IN-01 · IN-05) | T-05-31 · T-05-36 | N/A | 지워 보기 (복제본) | `riverpod_lint: "^3.1.9"` (M63) · `pubspec.yaml` 따옴표 version (M67) → 10/10; 고정 버전 `3.1.9` 를 네 자리에 (M64) · 키 줄에 주석 · 맵 안에서 `version:` 이 뒤 (M65) → `[3/10]` · `[4/10]` 통과 · 70 아님; 범위 제약 (M66) → 70 · 원인 문구; 분모 4 인 단계 번호 0줄 | ✅ | ⬜ pending |
-| 05-09 Task 2 | 05-09 | 8 | DOCS-06 · DOCS-07 (W4 · IN-02 · IN-03 · IN-04 · IN-07) | T-05-32 | 배포 YAML 의 선언 값이 바뀌지 않는다 | grep + 실행 | README 의 `^3.1.9` 는 코드 블록 두 줄에만; 382행이 함께 고칠 자리 셋; 45 · 91행 · CHANGELOG 92행 새 문장; `lib/riverpod.yaml` 비주석 내용 불변 · 정답지 불변; 검증 10/10 | ✅ | ⬜ pending |
-| 05-09 Task 3 | 05-09 | 8 | (Q4 처리 기록 · D-20 · D-21) | T-05-33 · T-05-34 · T-05-35 · T-05-37 | 비공개 정보가 공개 저장소에 올라가지 않는다; workflow 는 읽기 권한만 | grep (push 범위 전체) + e2e (GitHub) | 처리 기록 fixed 12 · deferred 1 · open 0 (해시가 실제 수정 커밋); 범위 `92d478a..HEAD` 비공개 점검 셋 + 이력(`git log -p`) 0 — push 전에 첫째 자동 검증 명령으로 돌려 0 일 때만; `git push origin gsd/v2.0-package-rework` → `verify` success · 로그 두 줄 | ✅ | ⬜ pending |
+| 05-07 Task 1 | 05-07 | 6 | VERIFY-06 (gap 1 · IN-06) | T-05-24 · T-05-25 · T-05-26 | N/A | 지워 보기 (복제본) | README 표시 구역에 옛 꼴 `- require_trailing_commas: 자동 코드 정렬 최적화` (M43) → `(1)`, `* `extra`` 와 `- `Extra_Rule`` (M44) → `(2)` — 종료 코드 1 · `[3/10]` 실패 · `구역에 읽지 못하는 줄이 있다` · 이름 비교 블록 없음; 낱말 `RulesMdBlock` 0 (`grep -wF`); 복제본 기준 실행 10/10; 마커 처리는 `readMarkerBlock` 하나 | ✅ | ✅ green |
+| 05-07 Task 2 | 05-07 | 6 | VERIFY-06 · DOCS-06 (gap 2 · WR-04) | T-05-24 · T-05-25 · T-05-26 | N/A | 지워 보기 (복제본) | `lib/codegen.yaml` 끝 `linter: {rules: [prefer_mixin]}` (M45) → 70 · 빈 stdout · stderr 의 파일 이름 · 행; 줄 끝 주석을 단 블록 꼴 (M46) → `[3/10]` 실패 1 (과잉 수정 아님); README 378행 문장 | ✅ | ✅ green |
+| 05-07 Task 3 | 05-07 | 6 | VERIFY-06 (WR-02) | T-05-26 · T-05-29 | N/A | 지워 보기 (복제본) | `version: "^3.1.3"` (M47) · `ref: v1.9.0 # 예시` (M48) → 벗긴 값 줄; `riverpod_lint: ^3.1` (M49) → 읽지 못하는 줄 `(1)`; 맞는 값에 따옴표 · 주석만 붙은 맵 키 줄 (M50) → 10/10 | ✅ | ✅ green |
+| 05-08 Task 1 | 05-08 | 7 | VERIFY-06 (`RULES.md` 표 reader — 소유자 승인 Q1; measure 주석 — R2-Q4) | T-05-27 · T-05-30 · T-05-39 | N/A | 지워 보기 (복제본) + diff | `RULES.md` 켠 규칙 구역에 backtick 없는 행 (M51) · 대문자 이름 행 (M52) → `(1)`, 불릿과 행이 있는 구역의 `없음 — …` (M53) → `(2)` — `[3/10]` 실패 · `구역에 읽지 못하는 줄이 있다` · 표 비교 블록 없음; `없음 — …` 빈 표 줄로 기준 실행 10/10; `tool/measure_rules.dart` 는 `c06d8d5` 대비 `///` 줄만 바뀜 | ✅ | ✅ green |
+| 05-08 Task 2 | 05-08 | 7 | VERIFY-06 (WR-01 · W1 둘째 입력 R2-Q3 · WR-03) | T-05-28 · T-05-30 | N/A | 지워 보기 (복제본) | 주소 `codegen.yml` (M54) → `꼴이 아닌 것이 있다 (1)`; `package:woody_lint/riverpod.yaml` 과 `package:woody-lints/base.yaml` (M55) → 다른 패키지의 주소 `(2)`; `~~~` 펜스 (M56) · 긴 펜스 안의 짧은 펜스 짝 (M57) · `~~~` 안의 백틱 펜스 짝 (M58) → 값 줄 `  ref: v1.9.0` | ✅ | ✅ green |
+| 05-08 Task 3 | 05-08 | 7 | VERIFY-06 (`enabledLanguageOptions` — R2-Q2) | T-05-30 · T-05-38 | N/A | 지워 보기 (복제본) | `lib/base.yaml` 끝 `language: {…}` (M59) · `analyzer: {language: {…}}` (M60) · `strict-casts: yes` (M61) → 70 · 파일 이름 · 행 · 원인; 줄 끝 주석을 단 블록 꼴 (M62) → 종료 코드 1 · `+ strict-casts` (과잉 수정 아님) | ✅ | ✅ green |
+| 05-09 Task 1 | 05-09 | 8 | VERIFY-06 (WR-05 · R2-Q1 · IN-01 · IN-05) | T-05-31 · T-05-36 | N/A | 지워 보기 (복제본) | `riverpod_lint: "^3.1.9"` (M63) · `pubspec.yaml` 따옴표 version (M67) → 10/10; 고정 버전 `3.1.9` 를 네 자리에 (M64) · 키 줄에 주석 · 맵 안에서 `version:` 이 뒤 (M65) → `[3/10]` · `[4/10]` 통과 · 70 아님; 범위 제약 (M66) → 70 · 원인 문구; 분모 4 인 단계 번호 0줄 | ✅ | ✅ green |
+| 05-09 Task 2 | 05-09 | 8 | DOCS-06 · DOCS-07 (W4 · IN-02 · IN-03 · IN-04 · IN-07) | T-05-32 | 배포 YAML 의 선언 값이 바뀌지 않는다 | grep + 실행 | README 의 `^3.1.9` 는 코드 블록 두 줄에만; 382행이 함께 고칠 자리 셋; 45 · 91행 · CHANGELOG 92행 새 문장; `lib/riverpod.yaml` 비주석 내용 불변 · 정답지 불변; 검증 10/10 | ✅ | ✅ green |
+| 05-09 Task 3 | 05-09 | 8 | (Q4 처리 기록 · D-20 · D-21) | T-05-33 · T-05-34 · T-05-35 · T-05-37 | 비공개 정보가 공개 저장소에 올라가지 않는다; workflow 는 읽기 권한만 | grep (push 범위 전체) + e2e (GitHub) | 처리 기록 fixed 12 · deferred 1 · open 0 (해시가 실제 수정 커밋); 범위 `92d478a..HEAD` 비공개 점검 셋 + 이력(`git log -p`) 0 — push 전에 첫째 자동 검증 명령으로 돌려 0 일 때만; `git push origin gsd/v2.0-package-rework` → `verify` success · 로그 두 줄 | ✅ | ✅ green |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -107,7 +107,7 @@ Task ID / Plan / Wave / Threat Ref 는 계획(`05-NN-PLAN.md`)이 확정된 뒤 
 - [ ] Feedback latency < 30s — 로컬 `verify.dart` 한 번은 약 19 ~ 25초로 맞지만, 지워 보기를 담은 `<automated>` 는 45 ~ 126초 (아래 표). 지워 보기 수만큼 `verify.dart` 를 다시 돌리기 때문이다
 - [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** validated 2026-10-14 (orchestrator 감사 — 아래 표)
+**Approval:** validated 2026-10-14 (orchestrator 감사 — 아래 표 둘; gap 수정 05-07 ~ 05-09 포함)
 
 ---
 
@@ -133,6 +133,25 @@ Task ID / Plan / Wave / Threat Ref 는 계획(`05-NN-PLAN.md`)이 확정된 뒤 
 독립 확인 (orchestrator, 2026-10-14): GitHub run 38460138720 은 `completed` · `success` (push 이벤트, headSha `92d478a`), 로그에 `[3/10] 배포 파일의 구성 ................ 통과` 와 `점검 통과 (10개 중 10개)`. push 범위 `0db0fdd..92d478a` (65커밋, 59파일) 의 추가된 줄 전체에서 절대 경로 꼴 0줄, 이메일 꼴 0개, 커밋 메시지 65개 0줄, 비공개 사용 프로젝트는 이름만 35줄(경로 꼴 0).
 
 남은 수동 확인은 위 Manual-Only 넷이다 — `/gsd-verify-work 5` 에서 소유자가 본다.
+
+## 감사 결과 — gap 수정 05-07 · 05-08 · 05-09 (2026-10-14)
+
+방법은 위와 같다: `git clone --local` 복제본 하나에서 task 마다 그 task 의 커밋으로 `git checkout --detach` → 루트 `fvm dart pub get --no-example` → 계획의 `<automated>` 를 적힌 그대로 `bash -x` → `git checkout -- . && git clean -fdq -e .dart_tool`. 끝난 뒤 복제본의 `git status --porcelain` 은 0줄이었다. 원격을 보는 05-09 Task 3 의 둘째 `<automated>` 는 본 작업 폴더에서 돌렸다.
+
+| Task | 기준 커밋 | 적힌 그대로 rc | 고친 판 rc | 시간 | 메모 |
+|------|-----------|----------------|------------|------|------|
+| 05-07 T1 | `5f43726` | 0 | — | 119초 | M43 `(1)` · M44 `(2)`, 복제본 기준 실행 10/10 |
+| 05-07 T2 | `057bef2` | 0 | — | 99초 | M45 rc 70 · 빈 stdout, M46 rc 1 (`lib/codegen.yaml` 에 규칙이 있다) |
+| 05-07 T3 | `73f1c66` | 0 | — | 165초 | M47 · M48 벗긴 값 줄, M49 읽지 못하는 줄 `(1)`, M50 10/10 |
+| 05-08 T1 | `812c477` | 0 | — | 142초 | M51 · M52 `(1)`, M53 `(2)`; `tool/measure_rules.dart` 는 `c06d8d5` 대비 `///` 줄만 |
+| 05-08 T2 | `63fe3d9` | 0 | — | 193초 | M54 꼴이 아닌 주소, M55 다른 패키지 주소 `(2)`, M56 ~ M58 값 줄 `ref: v1.9.0` |
+| 05-08 T3 | `a14be4f` | 0 | — | 107초 | M59 ~ M61 rc 70, M62 rc 1 (`+ strict-casts`) |
+| 05-09 T1 | `644897f` | 0 | — | 242초 | M63 · M67 10/10, M64 · M65 70 아님, M66 rc 70 · 원인 문구 |
+| 05-09 T2 | `e46cff4` | 0 | — | 70초 | README 의 `^3.1.9` 는 코드 블록 두 줄, `057bef2` 대비 README 5 · 5, 검증 10/10 |
+| 05-09 T3 (첫째) | `8789cfe` | 0 | — | 25초 | 처리 기록 fixed 12 · deferred 1 · open 0, 범위 `92d478a..8789cfe` 비공개 점검 0 |
+| 05-09 T3 (둘째) | `8789cfe` 고정 (본 작업 폴더) | 1 | 0 | 11초 | 적힌 그대로는 HEAD 단언 — 로컬 마무리 커밋(`c42dc33` · `c401d82` · `445ce22`)이 origin 보다 앞서 `origin == HEAD` 가 거짓 (상태 고정). `git rev-parse HEAD` 두 자리를 push 한 `8789cfe` 로 바꾼 판 rc 0 — origin 작업 브랜치 == `8789cfe`, head 둘, tag `v1.3.0` 하나, PR 0, run 38502214557 `success`, 로그 두 줄. executor 는 push · CI 직후(마무리 커밋 전)에 적힌 그대로 rc 0 (`05-09-SUMMARY.md`) |
+
+독립 확인 (orchestrator, 2026-10-14): GitHub run 38502214557 은 `completed` · `success` (headSha `8789cfe`, job 02:39:59Z ~ 02:44:13Z), 로그에 `[3/10] 배포 파일의 구성 ................ 통과` 와 `점검 통과 (10개 중 10개)`. push 범위 `92d478a..8789cfe` (25커밋) 의 추가된 줄에서 절대 경로 꼴 0줄, 이메일 꼴 0줄, 비공개 사용 프로젝트는 이미 있던 "실측: … (Dart 파일 474개)" 줄의 인용 3줄뿐(경로 꼴 0).
 
 ## Validation Audit 2026-10-13
 
