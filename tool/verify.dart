@@ -1276,20 +1276,42 @@ List<String>? significantLines(File file) {
       .toList();
 }
 
-/// [lines] 가운데 ``` 코드 블록 안의 줄만 돌려준다 (펜스 줄 자체는 뺀다).
+/// [lines] 가운데 코드 블록(펜스 블록) 안의 줄만 돌려준다 (펜스 줄 자체는 뺀다).
 ///
-/// `trimLeft()` 가 ``` 로 시작하는 줄에서 블록이 열리고 닫힌다. `[3/N]` 의 README 검사
-/// (f) · (g) 가 쓴다 — 복사해 쓰는 값은 블록 안에 있고, 산문은 옛 값(`ref: v1.3.0` 등)을
-/// 인용할 수 있어서다 (05-RESEARCH.md Pattern 2). 블록이 없으면 빈 목록이다.
+/// 블록 밖에서 `trimLeft()` 한 줄이 백틱 셋 이상 또는 `~` 셋 이상의 연속으로 시작하면 블록이
+/// 열린다 — 그 문자와 연속 길이를 기억한다 (뒤의 info string, 예 `yaml`, 은 보지 않는다).
+/// 블록 안에서는 `trim()` 한 줄이 기억한 문자만으로 이루어지고 길이가 기억한 길이 이상일
+/// 때만 닫힌다 — 다른 문자의 펜스, 더 짧은 펜스, 펜스 뒤에 글자가 붙은 줄은 블록 안의 줄이다
+/// (CommonMark 의 `~~~` 펜스와 닫는 펜스 규칙, 05-REVIEW.md WR-03). 닫히지 않은 블록은 파일
+/// 끝까지다. 들여쓰기는 `trimLeft()` 로 받는다 (목록 안 블록을 놓치지 않게).
+///
+/// `[3/N]` 의 README 검사 (f) · (g) 가 쓴다 — 복사해 쓰는 값은 블록 안에 있고, 산문은 옛
+/// 값(`ref: v1.3.0` 등)을 인용할 수 있어서다 (05-RESEARCH.md Pattern 2). 블록이 없으면 빈
+/// 목록이다.
 List<String> fencedLines(List<String> lines) {
   final out = <String>[];
-  var inFence = false;
+  final openPattern = RegExp(r'^(`{3,}|~{3,})');
+  // 열린 블록의 펜스 문자 — null 이면 블록 밖이다.
+  String? fenceChar;
+  var fenceLength = 0;
   for (final line in lines) {
-    if (line.trimLeft().startsWith('```')) {
-      inFence = !inFence;
+    if (fenceChar == null) {
+      final open = openPattern.firstMatch(line.trimLeft());
+      if (open != null) {
+        fenceChar = open.group(1)![0];
+        fenceLength = open.group(1)!.length;
+      }
       continue;
     }
-    if (inFence) out.add(line);
+    final trimmed = line.trim();
+    final closes =
+        trimmed.length >= fenceLength &&
+        trimmed.split('').every((c) => c == fenceChar);
+    if (closes) {
+      fenceChar = null;
+      continue;
+    }
+    out.add(line);
   }
   return out;
 }
@@ -1518,6 +1540,7 @@ MarkerBlock? readBulletBlock(File file, String name) {
 /// - (d) README 의 표시 구역 `woody:readme-rules` 의 규칙 이름 == `lib/base.yaml` (D-01)
 ///   — 구역 안의 읽지 못하는 줄도 실패
 /// - (e) README 의 `package:woody_lints/<이름>.yaml` 주소가 모두 [expectedLibYamls] 에 있다
+///   — 꼴이 아닌 주소 · `woody_lints` 가 아닌 패키지의 주소도 실패
 /// - (f) README 코드 블록의 `version:` · `riverpod_lint:` 값 == [readShippedPluginConstraint]
 ///   — 따옴표 · 줄 끝 주석을 벗겨 읽고, 꼴이 틀린 값도 실패
 /// - (g) README 코드 블록의 `ref: vX.Y.Z` == [pubspecReleaseVersion] — 읽은 값이 0개면 실패 (VERIFY-06, D-02)
@@ -1673,12 +1696,50 @@ StepResult checkShippedComposition(String repoRoot) {
     }
   }
 
-  // (e) README 의 프리셋 주소가 모두 lib/ 에 있다 — 파일 전체에서 모든 주소를 모은다.
-  final addresses = RegExp(r'package:woody_lints/([A-Za-z0-9_]+\.yaml)')
-      .allMatches(readmeLines.join('\n'))
-      .map((m) => m.group(1)!)
-      .toSet();
-  if (addresses.isEmpty) {
+  // (e) README 의 프리셋 주소가 모두 lib/ 에 있다 — 파일 전체에서 `package:woody_lints/` 뒤의
+  // 후보를 모두 모으고, `<이름>.yaml` 꼴이 아닌 것은 건너뛰지 않고 실패한다 (05-REVIEW.md
+  // WR-01). 꼴이 맞는 후보만 lib/ 와 견준다.
+  final readmeText = readmeLines.join('\n');
+  final candidates = RegExp(
+    r'''package:woody_lints/(\S+?)(?=[`\s)"']|$)''',
+    multiLine: true,
+  ).allMatches(readmeText).map((m) => m.group(1)!).toSet();
+  final addressPattern = RegExp(r'^[A-Za-z0-9_]+\.yaml$');
+  final malformedAddresses = [
+    for (final c in candidates)
+      if (!addressPattern.hasMatch(c)) c,
+  ]..sort();
+  final addresses = candidates.where(addressPattern.hasMatch).toSet();
+  if (malformedAddresses.isNotEmpty) {
+    addBlock([
+      '`$readmeFile` 의 `package:woody_lints/` 주소 가운데 `<이름>.yaml` 꼴이 아닌 것이 있다 (${malformedAddresses.length}):',
+      ...malformedAddresses.map((c) => '  package:woody_lints/$c'),
+      '',
+      '주소는 `package:woody_lints/<이름>.yaml` 로 적는다 — 이름은 영문 · 숫자 · `_`, 하위 폴더 없이, 확장자는 `.yaml` (05-REVIEW.md WR-01).',
+    ]);
+  }
+  // (e) 다른 패키지의 `.yaml` 주소 — 이름 자리는 `/` · 공백이 아닌 글자 전부라 hyphen 이 든
+  // 오타(`woody-lints`)도 후보다. 이 README 의 include 주소는 모두 woody_lints 다
+  // (05-VERIFICATION.md W1, 소유자 결정 2026-10-14 R2-Q3).
+  final otherPackages = [
+    ...RegExp(
+          r'''package:([^/\s]+)/(\S+?\.ya?ml)(?=[`\s)"']|$)''',
+          multiLine: true,
+        )
+        .allMatches(readmeText)
+        .where((m) => m.group(1) != 'woody_lints')
+        .map((m) => 'package:${m.group(1)}/${m.group(2)}')
+        .toSet(),
+  ]..sort();
+  if (otherPackages.isNotEmpty) {
+    addBlock([
+      '`$readmeFile` 에 `woody_lints` 가 아닌 패키지의 `.yaml` 주소가 있다 (${otherPackages.length}):',
+      ...otherPackages.map((a) => '  $a'),
+      '',
+      '이 README 의 include 주소는 모두 `package:woody_lints/<이름>.yaml` 이다 — 패키지 이름을 고친다 (05-VERIFICATION.md W1).',
+    ]);
+  }
+  if (candidates.isEmpty) {
     addBlock(['`$readmeFile` 에 `package:woody_lints/<이름>.yaml` 주소가 하나도 없다.']);
   } else {
     final missing = addresses.difference(expectedLibYamls).toList()..sort();
