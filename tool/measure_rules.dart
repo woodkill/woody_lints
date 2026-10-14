@@ -4774,9 +4774,11 @@ class RulesTableRow {
   final List<String> cells;
 }
 
-/// `RULES.md` 의 마커 구역 [block] 의 표 — `tool/verify.dart` 의 `readRulesMdBlock` 과 같은
-/// 규약: `|` 로 시작하는 줄의 첫 칸에서 backtick 하나로 감싼 `[a-z0-9_-]+` 를 이름으로 읽고,
-/// 없으면 건너뛰고(헤더 · 구분선 · 평문), 둘 이상이면 형식 오류 줄로 모은다. 마커가 없으면 null.
+/// `RULES.md` 의 마커 구역 [block] 의 표를 읽는다 — `tool/verify.dart` 의 `readRulesMdBlock`
+/// 보다 느슨한 옛 규약(2026-10-14 이전)이다: `|` 로 시작하는 줄의 첫 칸에서 backtick 하나로
+/// 감싼 `[a-z0-9_-]+` 를 이름으로 읽고, 없으면 건너뛰고(헤더 · 구분선 · 평문 — `|` 밖의
+/// 줄도), 둘 이상이면 형식 오류 줄로 모은다. 마커가 없으면 null. `--audit` 이 쓴다.
+/// 엄격하게 만드는 것은 소유자 결정 2026-10-14 로 미뤘다 (05-08 SUMMARY 의 열린 항목).
 (List<RulesTableRow>, List<String>)? readRulesTable(
   List<String> lines,
   String block,

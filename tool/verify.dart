@@ -1410,33 +1410,63 @@ List<String>? readMarkerBlock(File file, String name) {
 
 /// [rulesMd] 의 마커 구역 [name] (`enabled-rules` 등) 에서 표 첫 칸의 이름을 읽는다.
 ///
-/// 구역의 줄은 [readMarkerBlock] 으로 받는다. 그 가운데 `|` 로 시작하는 줄의 첫 칸(두 번째
-/// `|` 앞)에서 backtick 하나로 감싼 `[a-z0-9_-]+` 를 읽는다. 첫 칸에 backtick 쌍이 없는
-/// 줄(헤더 · 구분선 · 평문)은 건너뛰고, 둘 이상이면 그 줄을 [MarkerBlock.malformed] 에
-/// 담는다 — 예외가 아니라 단계 실패로 알린다 (사람이 고칠 수 있는 문구로). 파일이나 마커가
-/// 없으면 null 이다.
+/// 구역의 줄은 [readMarkerBlock] 으로 받고, 줄마다 `trim()` 한 값과 구역 안의 자리(0 부터)로
+/// 다음 넷만 받는다. 첫 칸은 첫 `|` 와 두 번째 `|` 사이를 `trim()` 한 값이다.
+///
+/// - 머리 줄 — 0번째 줄이고 `|` 로 시작하며 첫 칸에 backtick 이 없다. 건너뛴다.
+/// - 구분 줄 — 1번째 줄이고 0번째 줄이 머리 줄로 받아졌으며 `|---|---|` 꼴이다. 건너뛴다.
+/// - 데이터 행 — `|` 로 시작하고 첫 칸이 backtick 으로 감싼 `[a-z0-9_-]+` 하나다. 이름을
+///   [MarkerBlock.names] 에 담는다.
+/// - 행이 없는 표의 줄 — `없음 — ` 으로 시작하는 줄. 구역에 데이터 행이 하나도 없고 이런
+///   줄이 하나뿐일 때만 받는다 (지금 `woody:enabled-options` 의 꼴).
+///
+/// 그 밖의 줄(0번째가 아닌 backtick 없는 행, 대문자 이름, 첫 칸에 이름이 둘, 불릿, 평문,
+/// 빈 줄, 1번째가 아닌 구분 줄, 데이터 행과 함께 있는 `없음 — …`)은 건너뛰지 않고
+/// [MarkerBlock.malformed] 에 담아 `[3/N]` (c) 가 실패로 알린다 (05-REVIEW.md 와 같은 모양 —
+/// 05-VERIFICATION.md gaps 1 의 원칙을 `RULES.md` 표에도, 소유자 결정 2026-10-14).
+/// 파일이나 마커가 없으면 null 이다.
 MarkerBlock? readRulesMdBlock(File rulesMd, String name) {
   final lines = readMarkerBlock(rulesMd, name);
   if (lines == null) return null;
   final names = <String>[];
-  final malformed = <String>[];
-  final namePattern = RegExp(r'`([a-z0-9_-]+)`');
-  for (final line in lines) {
-    final trimmed = line.trim();
-    if (!trimmed.startsWith('|')) continue;
-    final cellEnd = trimmed.indexOf('|', 1);
-    final cell = cellEnd < 0
-        ? trimmed.substring(1)
-        : trimmed.substring(1, cellEnd);
-    final found = namePattern.allMatches(cell).map((m) => m.group(1)!).toList();
-    if (found.isEmpty) continue;
-    if (found.length > 1) {
-      malformed.add(trimmed);
-    } else {
-      names.add(found.single);
+  // 읽지 못한 줄은 구역 안의 자리와 함께 모아, 끝에 줄 순서대로 돌려준다.
+  final rejected = <(int, String)>[];
+  final emptyTableLines = <(int, String)>[];
+  final separatorPattern = RegExp(r'^\|(?:[ \t]*:?-{3,}:?[ \t]*\|)+$');
+  final namePattern = RegExp(r'^`([a-z0-9_-]+)`$');
+  var headerAccepted = false;
+  for (var i = 0; i < lines.length; i++) {
+    final trimmed = lines[i].trim();
+    if (trimmed.startsWith('|')) {
+      final cellEnd = trimmed.indexOf('|', 1);
+      final cell =
+          (cellEnd < 0 ? trimmed.substring(1) : trimmed.substring(1, cellEnd))
+              .trim();
+      if (i == 0 && !cell.contains('`')) {
+        headerAccepted = true;
+        continue;
+      }
+      if (i == 1 && headerAccepted && separatorPattern.hasMatch(trimmed)) {
+        continue;
+      }
+      final match = namePattern.firstMatch(cell);
+      if (match != null) {
+        names.add(match.group(1)!);
+        continue;
+      }
+    } else if (trimmed.startsWith('없음 — ')) {
+      emptyTableLines.add((i, trimmed));
+      continue;
     }
+    rejected.add((i, trimmed.isEmpty ? '(빈 줄)' : trimmed));
   }
-  return MarkerBlock(names, malformed);
+  // `없음 — …` 은 행이 없는 표를 말하는 줄 하나일 때만 받는다 — 행과 함께 있거나 둘 이상이면
+  // 읽지 못하는 줄이다.
+  if (names.isNotEmpty || emptyTableLines.length > 1) {
+    rejected.addAll(emptyTableLines);
+  }
+  rejected.sort((a, b) => a.$1.compareTo(b.$1));
+  return MarkerBlock(names, [for (final r in rejected) r.$2]);
 }
 
 /// [file] 의 마커 구역 [name] (`readme-rules`) 에서 불릿 줄의 이름을 읽는다.
@@ -1484,7 +1514,7 @@ MarkerBlock? readBulletBlock(File file, String name) {
 ///   규칙은 정답지가 잡지 못한다 (기반 세트가 여전히 켜므로 진단이 그대로다).
 /// - (c) `RULES.md` 의 켠 규칙 표 == `lib/base.yaml` 의 규칙 목록 (둘 다 정렬해 견준다 —
 ///   같은 이름이 두 번 적혀도 잡는다), 켠 analyzer 옵션 표 == `analyzer: language:` 의
-///   `true` 키 (RULES-06).
+///   `true` 키 (RULES-06) — 표 구역 안의 읽지 못하는 줄도 실패
 /// - (d) README 의 표시 구역 `woody:readme-rules` 의 규칙 이름 == `lib/base.yaml` (D-01)
 ///   — 구역 안의 읽지 못하는 줄도 실패
 /// - (e) README 의 `package:woody_lints/<이름>.yaml` 주소가 모두 [expectedLibYamls] 에 있다
@@ -1574,10 +1604,10 @@ StepResult checkShippedComposition(String repoRoot) {
     }
     if (listed.malformed.isNotEmpty) {
       addBlock([
-        '`$rulesMdFile` 의 `woody:$block` 표에 첫 칸의 이름이 둘 이상인 행이 있다 (${listed.malformed.length}):',
+        '`$rulesMdFile` 의 `woody:$block` 구역에 읽지 못하는 줄이 있다 (${listed.malformed.length}):',
         ...listed.malformed.map((l) => '  $l'),
         '',
-        '행마다 첫 칸에 backtick 으로 감싼 이름 하나만 적는다.',
+        '구역 안에는 표 머리 줄 · 구분 줄 · 첫 칸이 backtick 이름 하나인 행만 둔다 (행이 없는 표는 `없음 — …` 한 줄).',
       ]);
     }
     final a = [...shipped]..sort();
