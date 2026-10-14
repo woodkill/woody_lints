@@ -1294,6 +1294,19 @@ List<String> fencedLines(List<String> lines) {
   return out;
 }
 
+/// YAML 스칼라 값 [raw] 에서 바깥 따옴표 한 쌍을 벗긴다.
+///
+/// `trim()` 한 값이 같은 문자의 따옴표(`'…'` 또는 `"…"`)로 열리고 닫히면 그 안을, 아니면
+/// `trim()` 한 값을 그대로 돌려준다. 한쪽만 있거나 짝이 다른 따옴표는 벗기지 않는다 — 그
+/// 값은 부르는 쪽의 꼴 검사에서 실패한다. YAML 에서 `"^3.1.9"` 와 `^3.1.9` 는 같은 값이라
+/// analyzer 에게 같은 선언이므로, 검사도 같은 값으로 읽는다 (05-REVIEW.md WR-02 · WR-05).
+/// `[3/N]` 의 README 검사 (f) · (g) 가 쓴다.
+String unquotedScalar(String raw) {
+  final trimmed = raw.trim();
+  final quoted = RegExp(r'''^(['"])(.*)\1$''').firstMatch(trimmed);
+  return quoted == null ? trimmed : quoted.group(2)!;
+}
+
 /// `pubspec.yaml` 의 `version:` 에서 `major.minor.patch` 만 돌려준다 (`2.0.0-dev` → `2.0.0`).
 ///
 /// `-pre` · `+build` 꼬리는 떨어진다. `[3/N]` 의 README 검사 (g) 가 README 코드 블록의
@@ -1476,7 +1489,9 @@ MarkerBlock? readBulletBlock(File file, String name) {
 ///   — 구역 안의 읽지 못하는 줄도 실패
 /// - (e) README 의 `package:woody_lints/<이름>.yaml` 주소가 모두 [expectedLibYamls] 에 있다
 /// - (f) README 코드 블록의 `version:` · `riverpod_lint:` 값 == [readShippedPluginConstraint]
+///   — 따옴표 · 줄 끝 주석을 벗겨 읽고, 꼴이 틀린 값도 실패
 /// - (g) README 코드 블록의 `ref: vX.Y.Z` == [pubspecReleaseVersion] — 읽은 값이 0개면 실패 (VERIFY-06, D-02)
+///   — 따옴표 · 줄 끝 주석을 벗겨 읽고, 꼴이 틀린 값도 실패
 StepResult checkShippedComposition(String repoRoot) {
   final details = <String>[];
   void addBlock(List<String> lines) {
@@ -1650,15 +1665,38 @@ StepResult checkShippedComposition(String repoRoot) {
   // (f) · (g) 는 코드 블록 안의 줄만 본다 — 산문의 옛 값은 세지 않는다.
   final fenced = fencedLines(readmeLines);
 
-  // (f) 코드 블록의 plugin 버전 == lib/riverpod.yaml.
+  // (f) 코드 블록의 plugin 버전 == lib/riverpod.yaml. `version:` · `riverpod_lint:` 키 줄을 모두
+  // 후보로 잡고, 따옴표와 줄 끝 `# 주석` 을 벗긴 값의 꼴을 본다 — 꼴이 틀린 값은 건너뛰지 않고
+  // 실패한다 (05-REVIEW.md WR-02). 값 없는 맵 키 줄(`  riverpod_lint:`)과 주석만 붙은 키 줄은
+  // 후보가 아니다. `version:` 은 `riverpod_lint:` 맵 아래로 좁히지 않는다 — README 에 pubspec
+  // 예시 블록을 넣으면 그 `version:` 도 후보가 된다.
   final shipped = readShippedPluginConstraint(repoRoot);
-  final versionPattern = RegExp(
-    r'^\s*(?:version|riverpod_lint):\s*(\^?\d+\.\d+\.\d+)\s*(?:#.*)?$',
+  final versionKeyPattern = RegExp(
+    r'^\s*(?:version|riverpod_lint):[ \t]*(.*?)(?:[ \t]+#.*)?[ \t]*$',
   );
-  final versions = [
-    for (final line in fenced) ?versionPattern.firstMatch(line)?.group(1),
-  ];
-  if (versions.isEmpty) {
+  final versionValuePattern = RegExp(r'^\^?\d+\.\d+\.\d+$');
+  final versions = <String>[];
+  final unreadableVersions = <String>[];
+  for (final line in fenced) {
+    final value = versionKeyPattern.firstMatch(line)?.group(1);
+    // 게으른 그룹은 키 뒤에 주석만 있으면 `# 주석` 을 값으로 잡는다 — 그 줄도 값이 없는 줄이다.
+    if (value == null || value.isEmpty || value.startsWith('#')) continue;
+    final unquoted = unquotedScalar(value);
+    if (versionValuePattern.hasMatch(unquoted)) {
+      versions.add(unquoted);
+    } else {
+      unreadableVersions.add(line.trim());
+    }
+  }
+  if (unreadableVersions.isNotEmpty) {
+    addBlock([
+      '`$readmeFile` 의 코드 블록에 읽지 못하는 `version:` · `riverpod_lint:` 줄이 있다 (${unreadableVersions.length}):',
+      ...unreadableVersions.map((l) => '  $l'),
+      '',
+      '값은 `^X.Y.Z` 로 적는다 — 따옴표와 줄 끝 `# 주석` 은 받는다 (05-REVIEW.md WR-02).',
+    ]);
+  }
+  if (versions.isEmpty && unreadableVersions.isEmpty) {
     addBlock([
       '`$readmeFile` 의 코드 블록에 `version:` · `riverpod_lint:` 줄이 하나도 없다.',
     ]);
@@ -1674,13 +1712,35 @@ StepResult checkShippedComposition(String repoRoot) {
     }
   }
 
-  // (g) 코드 블록의 `ref: vX.Y.Z` == pubspec.yaml 의 version (꼬리를 뗀 값). `ref: main` 은 세지 않는다.
+  // (g) 코드 블록의 `ref: vX.Y.Z` == pubspec.yaml 의 version (꼬리를 뗀 값). `ref:` 키 줄을 모두
+  // 후보로 잡고 (f) 와 같이 따옴표와 줄 끝 `# 주석` 을 벗긴다. `ref: main` 은 세지 않고, 그 밖의
+  // 꼴(값 없음 포함)은 실패한다 (05-REVIEW.md WR-02).
   final release = pubspecReleaseVersion(repoRoot);
-  final refPattern = RegExp(r'^\s*ref:\s*v(\d+\.\d+\.\d+)\s*$');
-  final refs = [
-    for (final line in fenced) ?refPattern.firstMatch(line)?.group(1),
-  ];
-  if (refs.isEmpty) {
+  final refKeyPattern = RegExp(r'^\s*ref:[ \t]*(.*?)(?:[ \t]+#.*)?[ \t]*$');
+  final refValuePattern = RegExp(r'^v(\d+\.\d+\.\d+)$');
+  final refs = <String>[];
+  final unreadableRefs = <String>[];
+  for (final line in fenced) {
+    final value = refKeyPattern.firstMatch(line)?.group(1);
+    if (value == null) continue;
+    final unquoted = unquotedScalar(value.startsWith('#') ? '' : value);
+    if (unquoted == 'main') continue;
+    final match = refValuePattern.firstMatch(unquoted);
+    if (match != null) {
+      refs.add(match.group(1)!);
+    } else {
+      unreadableRefs.add(line.trim());
+    }
+  }
+  if (unreadableRefs.isNotEmpty) {
+    addBlock([
+      '`$readmeFile` 의 코드 블록에 읽지 못하는 `ref:` 줄이 있다 (${unreadableRefs.length}):',
+      ...unreadableRefs.map((l) => '  $l'),
+      '',
+      '`ref:` 는 `vX.Y.Z` 나 `main` 으로 적는다 — 따옴표와 줄 끝 `# 주석` 은 받는다 (05-REVIEW.md WR-02).',
+    ]);
+  }
+  if (refs.isEmpty && unreadableRefs.isEmpty) {
     addBlock(['`$readmeFile` 의 코드 블록에 `ref: vX.Y.Z` 줄이 하나도 없다.']);
   } else {
     final wrong = refs.where((v) => v != release).toSet().toList()..sort();
