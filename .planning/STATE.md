@@ -4,17 +4,17 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 05
 current_phase_name: Documentation
-status: Phase 05 gap 수정 계획 05-07 · 05-08 · 05-09 완료 — 실행 대기 (/gsd-execute-phase 05 --gaps-only)
-stopped_at: Phase 05 gap 수정 계획 완료 (05-07 · 05-08 · 05-09)
-last_updated: "2026-10-14T01:07:12.759Z"
+status: executing
+stopped_at: Completed 05-07-PLAN.md
+last_updated: "2026-10-14T01:44:00.016Z"
 last_activity: 2026-10-14
-last_activity_desc: Phase 05 gap 수정 계획 05-07 · 05-08 · 05-09 작성, plan checker 2회차 통과
-state_head: 303d55984f787c8e82fa9f287edeb5c01c8d6ccc
+last_activity_desc: Phase 05 execution started
+state_head: 6f7606fba94f6a1bc017bd01d64bcfeae9263ed6
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 35
-  completed_plans: 32
+  completed_plans: 33
   percent: 67
 ---
 
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-10-13)
 
 ## Current Position
 
-Phase: 05 (Documentation) — READY TO EXECUTE
-Plan: 6 of 9
-Status: Phase 05 gap 수정 계획 05-07 · 05-08 · 05-09 완료 — 실행 대기 (/gsd-execute-phase 05 --gaps-only)
-Last activity: 2026-10-14 — Phase 05 gap 수정 계획 05-07 · 05-08 · 05-09 작성, plan checker 2회차 통과
+Phase: 05 (Documentation) — EXECUTING
+Plan: 7 of 9
+Status: Ready to execute
+Last activity: 2026-10-14 — Phase 05 execution started
 
 Progress: [███████░░░] 67%
 
@@ -93,6 +93,7 @@ Progress: [███████░░░] 67%
 | Phase 05 P04 | 3min | 2 tasks | 2 files |
 | Phase 05 P06 | 9min | 1 tasks | 1 files |
 | Phase 05 P05 | 2h 16m | 3 tasks | 0 files |
+| Phase 05 P07 | 23min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -222,6 +223,9 @@ Recent decisions affecting current work:
 - [Phase 05]: gap 수정 계획 전 소유자 결정 (2026-10-14, 모두 권고대로) — gap 둘(README 표시 구역 reader · `linter:` flow 표기)에 더해, 같은 모양(읽지 못하는 줄을 건너뜀) 넷(WR-01 · WR-02 · WR-03 · RULES.md 표 reader), 문장 넷(W4 · IN-04 · IN-02 · IN-03 · IN-07, IN-07 은 문장만 낮춤), 거짓 실패 · 정리 넷(WR-05 · IN-01 · IN-05 · IN-06)을 함께 고친다. WR-06 (`.claude/CLAUDE.md` 의 낡은 지시)은 D-09 대로 deferred
 - [Phase 05]: gap 수정 계획 2회차 소유자 결정 (2026-10-14, 모두 권고대로) — plugin 선언은 `^X.Y.Z` 와 고정 버전 `X.Y.Z` 를 받고 범위 제약만 원인을 말하며 멈춘다, `enabledLanguageOptions` 의 flow 표기 · 읽지 못하는 줄도 멈춘다(05-08), README 의 `package:` 이름이 `woody_lints` 가 아니면 실패(05-08), `measure_rules.dart` 의 `readRulesTable` · `readUpstreamRules.readSet` 은 그대로 두고 주석 한 줄만 고친다
 - [Phase 05]: gap 수정 계획 05-07 (wave 6, gap 둘 · README 코드 블록 값, M43 ~ M50) · 05-08 (wave 7, RULES.md 표 · 주소 · 펜스 · 옵션 reader, M51 ~ M62) · 05-09 (wave 8, plugin 선언 · 문장 · 처리 기록 · push, M63 ~ M67). Fable 크레딧 소진으로 planner · checker 를 Opus 로 돌렸다 (소유자 결정). plan checker 2회차 통과 (6f91b2c, ea65d2e, 303d559)
+- [Phase 05]: 05-07: README 표시 구역 woody:readme-rules 안에서 받는 줄은 빈 줄 · **분류** 소제목 · `- `이름`` 불릿 셋뿐이고 그 밖의 줄은 [3/10] 실패다 (gaps 1, M43 · M44). 마커 처리는 readMarkerBlock 하나, 결과 타입은 MarkerBlock (IN-06; 5f43726)
+- [Phase 05]: 05-07: linter: 줄에 # 주석 밖의 값이 붙은 flow 표기는 종료 코드 70 으로 멈추고 줄 끝 주석만 붙은 블록 꼴은 그대로 받는다 (gaps 2, M45 70 · M46 [3/10] 실패 1). README 378행은 블록 목록 · flow 표기를 가른다 (DOCS-06; 057bef2)
+- [Phase 05]: 05-07: README 코드 블록의 (f) · (g) 는 키 줄을 모두 후보로 잡아 unquotedScalar 와 줄 끝 주석 벗기기 뒤 꼴을 보고, 꼴이 틀린 값은 읽지 못하는 줄 (N) 로 실패한다. 값 없는 맵 키 줄은 후보가 아니다 (WR-02, M47 ~ M49 실패 · M50 10/10; 73f1c66)
 
 ### Pending Todos
 
@@ -248,6 +252,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-13T20:12:12.357Z
-Stopped at: Phase 05 gap 수정 계획 완료 (05-07 · 05-08 · 05-09)
-Resume file: .planning/phases/05-documentation/05-07-PLAN.md
+Last session: 2026-10-14T01:43:59.971Z
+Stopped at: Completed 05-07-PLAN.md
+Resume file: None
