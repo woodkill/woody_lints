@@ -1868,13 +1868,13 @@ List<String>? findListLinesOutsideMarkers(List<String> lines, String name) {
 /// - (d′) 그 표시 구역이 든 절(구역 앞의 제목부터 구역 뒤의 다음 제목 앞까지, 펜스 밖)에
 ///   구역 밖의 목록 줄이 없다 ([findListLinesOutsideMarkers], 소유자 결정 G2-Q3)
 /// - (e) README 에서 `package:woody_lints/` 로 정확히 시작하는 주소가 모두 [expectedLibYamls] 에 있다
-///   — 꼴이 아닌 주소 · `woody_lints` 가 아닌 패키지의 주소도 실패
+///   — `<이름>.yaml` 꼴이 아닌 `woody_lints` 주소, `.yaml` · `.yml` 로 끝나는 다른 패키지의 주소도 실패 (확장자가 `.yaml` · `.yml` 이 아닌 다른 패키지의 주소는 보지 않는다 — 05-REVIEW.md WR-14)
 /// - (f) README 의 펜스 코드 블록 안에서 키가 줄 머리에 오는 `version:` · `riverpod_lint:` 줄의 값 == [readShippedPluginConstraint]
-///   — 따옴표 · 줄 끝 주석을 벗겨 읽고, 꼴이 틀린 값도 실패
+///   — 값의 따옴표 · 줄 끝 주석을 벗겨 읽고, 꼴이 틀린 값도 실패 (키는 따옴표 · 콜론 앞 공백 없이 글자 그대로인 줄만 후보 — 05-REVIEW.md WR-13)
 /// - (g) README 의 펜스 코드 블록 안에서 키가 줄 머리에 오는 `ref: vX.Y.Z` 줄의 값 == [pubspecReleaseVersion] — 읽은 값이 0개면 실패 (VERIFY-06, D-02)
-///   — 따옴표 · 줄 끝 주석을 벗겨 읽고, 꼴이 틀린 값도 실패
+///   — 값의 따옴표 · 줄 끝 주석을 벗겨 읽고, 꼴이 틀린 값도 실패 (키는 따옴표 · 콜론 앞 공백 없이 글자 그대로인 줄만 후보 — 05-REVIEW.md WR-13)
 ///
-/// (e) 는 `package:` 로 시작하지 않는 scheme 오타 · `package:` 뒤의 공백 · 주소 바로 뒤에 붙은 `,` · `.` 같은 문장 부호를 보지 않고, (f) · (g) 는 flow 표기(`{…}`) 안의 키와 펜스가 아닌 코드 블록(네 칸 들여 쓴 블록 · 인용 안의 펜스)을 보지 않는다 (05-REVIEW.md WR-07 ~ WR-09 · IN-08 — 소유자 결정 G2-Q2 · G2-Q5, 검사는 넓히지 않았다).
+/// (e) 는 `package:` 로 시작하지 않는 scheme 오타 · `package:` 뒤의 공백 · `.yaml` · `.yml` 로 끝나지 않는 다른 패키지의 주소를 보지 않고, 주소 바로 뒤에 `,` · `.` 같은 문장 부호가 붙으면 `woody_lints` 주소는 꼴이 아닌 것으로 실패하고 다른 패키지의 주소는 후보가 되지 않는다. (f) · (g) 는 따옴표로 감싼 키 · 콜론 앞에 공백이 든 키(`"ref":` · `ref :`), flow 표기(`{…}`) 안의 키와 펜스가 아닌 코드 블록(네 칸 들여 쓴 블록 · 인용 안의 펜스)을 보지 않는다 (05-REVIEW.md WR-07 ~ WR-09 · WR-13 · WR-14 · IN-08 — 소유자 결정 G2-Q2 · G2-Q5 · G3-Q2, 검사는 넓히지 않았다).
 StepResult checkShippedComposition(String repoRoot) {
   final details = <String>[];
   void addBlock(List<String> lines) {
@@ -2144,6 +2144,7 @@ StepResult checkShippedComposition(String repoRoot) {
   // 실패한다 (05-REVIEW.md WR-02). 값 없는 맵 키 줄(`  riverpod_lint:`)과 주석만 붙은 키 줄은
   // 후보가 아니다. `version:` 은 `riverpod_lint:` 맵 아래로 좁히지 않는다 — README 에 pubspec
   // 예시 블록을 넣으면 그 `version:` 도 후보가 된다. flow 표기(`{…}`) 안의 키는 후보가 아니다 (05-REVIEW.md WR-08).
+  // 키는 따옴표 · 콜론 앞 공백 없이 `version:` · `riverpod_lint:` 글자 그대로인 줄만 후보다 — `"version":` · `'riverpod_lint':` · `version :` 꼴은 후보가 아니다 (05-REVIEW.md WR-13 — 소유자 결정 G3-Q2).
   final shipped = readShippedPluginConstraint(repoRoot);
   final versionKeyPattern = RegExp(
     r'^\s*(?:version|riverpod_lint):[ \t]*(.*?)(?:[ \t]+#.*)?[ \t]*$',
@@ -2189,6 +2190,7 @@ StepResult checkShippedComposition(String repoRoot) {
   // (g) 코드 블록의 `ref: vX.Y.Z` == pubspec.yaml 의 version (꼬리를 뗀 값). 줄 머리에 `ref:` 키가 오는 줄을 모두
   // 후보로 잡고 (f) 와 같이 따옴표와 줄 끝 `# 주석` 을 벗긴다. `ref: main` 은 세지 않고, 그 밖의
   // 꼴(값 없음 포함)은 실패한다 (05-REVIEW.md WR-02). flow 표기(`{…}`) 안의 키는 후보가 아니다 (05-REVIEW.md WR-08).
+  // 키는 따옴표 · 콜론 앞 공백 없이 `ref:` 글자 그대로인 줄만 후보다 — `"ref":` · `ref :` 꼴은 후보가 아니다 (05-REVIEW.md WR-13 — 소유자 결정 G3-Q2).
   final release = pubspecReleaseVersion(repoRoot);
   final refKeyPattern = RegExp(r'^\s*ref:[ \t]*(.*?)(?:[ \t]+#.*)?[ \t]*$');
   final refValuePattern = RegExp(r'^v(\d+\.\d+\.\d+)$');
