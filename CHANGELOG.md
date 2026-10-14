@@ -89,7 +89,7 @@
 
 ### 그 밖의 변경
 
-- 프리셋을 조각 셋과 묶음으로 나눔 — `package:woody_lints/base.yaml` (기본 규칙), `riverpod.yaml` (`riverpod_lint` plugin), `codegen.yaml` (생성 파일 제외와 `invalid_annotation_target: ignore`), `recommended.yaml` (셋을 한 번에). 규칙 · 주석 · 설정은 옮기기만 했고 내용은 1.3.0 과 같다 (minor — 새 프리셋 파일 추가).
+- 프리셋을 조각 셋과 묶음으로 나눔 — `package:woody_lints/base.yaml` (기본 규칙), `riverpod.yaml` (`riverpod_lint` plugin), `codegen.yaml` (생성 파일 제외와 `invalid_annotation_target: ignore`), `recommended.yaml` (셋을 한 번에). 나누는 변경 자체는 규칙 · 주석 · 설정을 옮기기만 했다 — 같은 2.0.0 의 다른 변경(「추가한 규칙」 의 75개, 아래의 겹친 선언 삭제 · 사유 주석 · 머리 주석)은 각 항목에 적었다 (minor — 새 프리셋 파일 추가).
 - 옛 주소 `package:woody_lints/analysis_options.yaml` 은 `recommended.yaml` 을 include 하는 별칭으로 남긴다 — 그 한 줄을 쓰는 프로젝트가 받는 구성(기본 + Riverpod + codegen)은 같다. 사용하는 프로젝트에는 영향 없음.
 - `riverpod_lint` plugin 의 하한을 `^3.1.3` → `^3.1.9` 로 올림 (같은 major 안이라 minor). 2026-10-12 에 두 선언 모두 3.1.9 로 풀려 경고가 달라지지 않았다 — 정답지 다섯 그대로. 3.1.9 는 Dart 3.13 이상을 요구하고 이 패키지의 SDK 하한과 맞는다.
 - 기반 세트와 겹치는 선언 6개(`sized_box_for_whitespace`, `sort_child_properties_last`, `slash_for_doc_comments`, `use_build_context_synchronously`, `avoid_print`, `control_flow_in_finally`)와 주석 처리된 설정 3개(`require_trailing_commas`, `public_member_api_docs`, `formatter: trailing_commas`)를 배포 파일에서 지움. 기반 세트가 여전히 켜므로 사용하는 프로젝트에는 영향 없음 (정답지 다섯 그대로, 2026-10-13).

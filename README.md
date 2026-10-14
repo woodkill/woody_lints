@@ -42,7 +42,7 @@ flutter pub get
 | **Riverpod 을 쓴다** | `recommended.yaml` (묶음) | `base.yaml` + `riverpod.yaml` |
 | **Riverpod 을 쓰지 않는다** | `base.yaml` + `codegen.yaml` | `base.yaml` |
 
-사용 프로젝트 루트의 `analysis_options.yaml` 에 아래 블록 가운데 하나를 적는다. 블록은 이 저장소의 연습용 프로젝트(`fixtures/`)가 쓰는 옵션 파일과 글자가 같다. 블록 아래에 적은 "받는 것" 은 그 연습용 프로젝트의 정답지로 확인한 것이다 (Dart 3.13.4).
+사용 프로젝트 루트의 `analysis_options.yaml` 에 아래 블록 가운데 하나를 적는다. 블록은 이 저장소의 연습용 프로젝트(`fixtures/`)가 쓰는 옵션 파일과 글자가 같다. 블록 아래에 적은 "받는 것" 은 그 연습용 프로젝트의 정답지로 확인한 것이다 (Dart 3.13.4). 묶음(`recommended`)에는 자기 정답지가 없다 — 검증 명령이 그 결과를 같은 실행의 `example/` (옛 주소로 같은 구성을 받는 연습용 프로젝트) 결과와 견주고, `example/` 은 자기 정답지와 견준다.
 
 ### 묶음 — Riverpod 과 코드 생성을 모두 쓴다
 
@@ -88,7 +88,7 @@ include:
 
 ## 받는 규칙
 
-아래는 `lib/base.yaml` 의 `linter: rules:` 에 적힌 규칙 이름이다. `flutter_lints` 의 기반 세트에 더해 켜진다. 규칙마다 켠 이유와 실측 건수는 [`RULES.md`](RULES.md) 의 「켠 규칙」에, 켜지 않은 규칙과 그 이유는 「켜지 않은 규칙」에 있다. 분류는 `lib/base.yaml` 의 분류 주석을 따른다.
+아래는 `lib/base.yaml` 의 `linter: rules:` 에 적힌 규칙 이름이다. `flutter_lints` 의 기반 세트에 더해 켜진다. 규칙마다 켠 이유와 실측 건수는 [`RULES.md`](RULES.md) 의 「켠 규칙」에, 켜지 않은 규칙과 그 이유는 「켜지 않은 규칙」에 있다. 분류는 `lib/base.yaml` 의 분류 주석을 따른다 — 검증 명령은 이름만 견주고 분류는 보지 않는다.
 
 <!-- woody:readme-rules:start -->
 
@@ -236,7 +236,7 @@ plugins:
       missing_provider_scope: false
 ```
 
-`version:` 에는 프리셋과 같은 값(`^3.1.9`)을 적는다. 사용 프로젝트가 적은 `riverpod_lint` 선언이 프리셋의 선언을 통째로 대신하므로, 여기 적은 값이 그 프로젝트의 plugin 버전 선언이 된다 (spike 012).
+`version:` 에는 프리셋의 선언(`lib/riverpod.yaml` 의 `riverpod_lint:` 값 — 위 「조각마다의 설정」 블록의 값)과 같은 값을 적는다. 사용 프로젝트가 적은 `riverpod_lint` 선언이 프리셋의 선언을 통째로 대신하므로, 여기 적은 값이 그 프로젝트의 plugin 버전 선언이 된다 (spike 012).
 
 ### 파일 하나
 
@@ -369,7 +369,7 @@ plugin 은 Analysis Server 의 상태 폴더 아래 `.plugin_manager/<hash>/` �
 
 `ref:` 를 tag 로 고정해도 다음은 그대로 머물지 않는다.
 
-- `riverpod_lint` plugin — 분석할 때마다 pub.dev 에서 프리셋의 범위(`^3.1.9`) 안의 최신으로 풀린다. 사용 프로젝트의 `pubspec.lock` 이 묶지 못한다 (2026-10-12 에는 `^3.1.3` 선언도 3.1.9 로 풀렸다 — spike 010).
+- `riverpod_lint` plugin — 분석할 때마다 pub.dev 에서 프리셋이 선언한 범위(`lib/riverpod.yaml` 의 `riverpod_lint:` 값) 안의 최신으로 풀린다. 사용 프로젝트의 `pubspec.lock` 이 묶지 못한다 (2026-10-12 에는 `^3.1.3` 선언도 3.1.9 로 풀렸다 — spike 010).
 - 기반 세트 — 이 패키지의 `pubspec.yaml` 은 `flutter_lints: ^6.0.0` 으로 caret 범위다. 그 범위 안의 새 릴리스는 사용 프로젝트가 lock 을 갱신할 때 들어올 수 있다.
 - 생성 파일 제외의 plugin 쪽 — plugin 이 쓰는 `analyzer` 의 릴리스로 위 「생성 파일 제외」의 plugin 칸이 바뀔 수 있다 (추정).
 
@@ -379,4 +379,4 @@ plugin 은 Analysis Server 의 상태 폴더 아래 `.plugin_manager/<hash>/` �
 - 규칙을 더하거나 빼면 `lib/base.yaml`, `RULES.md` 의 켠 규칙 표, 이 README 의 표시 구역(「받는 규칙」의 목록) 세 곳을 같은 커밋에서 고친다. 어긋나면 검증이 실패한다.
 - 검증은 `fvm dart run tool/verify.dart` 로 돌린다. 단계와 종료 코드, 지워 보기 기록은 [`example/README.md`](example/README.md) 에 있다.
 - 버전 등급과 CHANGELOG 항목 형식은 [`VERSIONING.md`](VERSIONING.md) 를 따른다.
-- 릴리스 버전(`pubspec.yaml` 의 `version:`)을 올릴 때는 이 README 의 `ref:` 예시를, `lib/riverpod.yaml` 의 plugin 하한을 올릴 때는 이 README 의 plugin 버전 예시를 같은 커밋에서 고친다. 검증 명령이 둘을 견준다.
+- 릴리스 버전(`pubspec.yaml` 의 `version:`)을 올릴 때는 이 README 의 `ref:` 예시 둘(「설치」 · 「`ref: main` 에서 tag 로 옮기기」)을 같은 커밋에서 고친다. `lib/riverpod.yaml` 의 plugin 하한을 올릴 때는 `lib/riverpod.yaml` 의 선언, `fixtures/overrides/analysis_options.yaml` 의 `version:`, 이 README 의 plugin 버전 예시 둘(「조각마다의 설정」 · 「규칙 · plugin 진단 끄기」)을 같은 커밋에서 고친다. 검증 명령이 모두 견준다 (`[3/10]` · `[4/10]`).
