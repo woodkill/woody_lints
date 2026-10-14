@@ -12,7 +12,7 @@ created: "2026-10-14"
 
 > Per-phase security contract: threat register, accepted risks, and audit trail.
 >
-> 출처: `05-01-PLAN.md` ~ `05-06-PLAN.md` 의 `<threat_model>` (계획 단계에서 작성됨). ASVS level 1, block on `high`.
+> 출처: `05-01-PLAN.md` ~ `05-09-PLAN.md` 의 `<threat_model>` (계획 단계에서 작성됨 — 05-07 ~ 05-09 는 gap 수정 계획). ASVS level 1, block on `high`.
 > 이 phase 가 바꾼 실행 코드는 로컬 검증 스크립트 `tool/verify.dart` 하나다 (reader 둘 고침, `[3/10]` 에 (b′) · (d) ~ (g) 추가). 배포 산출물 `lib/*.yaml` 다섯은 주석만 바뀌었다. 나머지는 문서(README · CHANGELOG · `example/README.md` · `.claude/CLAUDE.md` · 처리 기록)다. 사용자 입력 · 인증 · 저장 데이터가 없다. 해당 범주는 공개 저장소로 비공개 정보가 새는 것, 배포 설정이 주석 정리 중에 바뀌는 것, 검증 명령의 reader 가 거짓 실패 · 거짓 통과를 내는 것, 문서가 실측되지 않은 동작을 단정하는 것, 원격 쓰기다.
 > 아래 "확인" 은 2026-10-14 phase 실행 뒤(HEAD `85ae036`) 이 저장소에서 명령을 다시 돌리거나 파일을 직접 읽어 얻은 결과다. "복제본 rc 0" 은 `05-VALIDATION.md` 「감사 결과 (2026-10-14)」 의 실행 — task 마다 자기 커밋으로 되돌린 로컬 복제본에서 계획의 `<automated>` 를 적힌 그대로 돌린 결과 — 를 가리킨다.
 
@@ -22,7 +22,7 @@ created: "2026-10-14"
 
 | Boundary | Description | Data Crossing |
 |----------|-------------|---------------|
-| 로컬 저장소 → 공개 원격 (GitHub) | 이 phase 의 모든 파일과 `.planning/` 이 05-05 에서 공개 저장소에 올라갔다 — `0db0fdd..92d478a` (65커밋, Phase 4 의 38 + Phase 5 의 27). 되돌릴 수 없다 (D-20 · D-21) | 문서 · 검증 스크립트 · 배포 YAML 주석 |
+| 로컬 저장소 → 공개 원격 (GitHub) | 이 phase 의 모든 파일과 `.planning/` 이 05-05 에서 공개 저장소에 올라갔다 — `0db0fdd..92d478a` (65커밋, Phase 4 의 38 + Phase 5 의 27), gap 수정 뒤 05-09 에서 `92d478a..8789cfe` (25커밋). 되돌릴 수 없다 (D-20 · D-21) | 문서 · 검증 스크립트 · 배포 YAML 주석 |
 | 로컬 → GitHub Actions | push 가 `verify` workflow 를 돌린다 — 권한은 `contents: read` 뿐 | 저장소 내용 (읽기) |
 | 배포 파일 → 검증 명령 | `tool/verify.dart` 가 `lib/*.yaml` · `README.md` · `pubspec.yaml` 을 읽어 판정한다 — reader 가 틀리면 거짓 실패(70) 또는 거짓 통과 | YAML · Markdown 문자열 |
 | 검증 명령 → 네트워크 | `[2/10]` 복사본에 `plugins:` 가 남으면 분석이 plugin 을 준비한다 (pub 서버) | plugin 패키지 |
@@ -57,6 +57,22 @@ created: "2026-10-14"
 | T-05-21 | Tampering | 변형한 `README.md` 가 커밋되거나 더러운 채 남는다 | medium | mitigate | 되돌린 뒤 판정. 확인: 05-06-T1 복제본 rc 0 · 실행 뒤 복제본 `git status` 0줄; 커밋 `1d28346` 은 `example/README.md` 하나만 담음 | closed |
 | T-05-22 | Repudiation | 틀린 (e)(첫 주소만) · 틀린 (f)(g)(파일 전체) 가 지워 보기를 지나친다 | medium | mitigate | M39 는 뒤쪽 주소를 바꿈; 블록 한정은 코드를 읽은 것으로 적음. 확인: README 의 `codegen.yaml` 주소는 78행(첫 주소는 50행), M39 실패 기록; `example/README.md` 가 `fencedLines` 를 코드에서 읽은 것으로 적음 (P-02) | closed |
 | T-05-23 | Information disclosure | 기록 · SUMMARY 에 절대 경로가 섞인다 | high | mitigate | 절대 경로 grep. 확인: 05-06-T1 복제본 rc 0 (grep 포함); push 범위 점검 0 | closed |
+| T-05-24 | Tampering | 변형한 `README.md` · `lib/codegen.yaml` 이 작업 트리에 남거나 커밋된다 (05-07) | medium | mitigate | 지워 보기는 `git clone --local` 복제본에서만, 되돌린 뒤 판정. 확인: 05-07-T1 ~ T3 복제본(`5f43726` · `057bef2` · `73f1c66`) rc 0 — 각 단언이 `git diff --quiet HEAD -- README.md lib RULES.md` · `test ! -e build/woody_rule_check`; 본 작업 폴더에 `build/woody_rule_check` 없음, `git status` 는 GSD 상태 넷뿐 | closed |
+| T-05-25 | Repudiation | README 표시 구역 reader 가 `- ` 줄만 거르고 backtick 없는 줄 · 이름 꼴이 아닌 불릿을 건너뛴다 | medium | mitigate | 받는 줄을 닫힌 목록으로, 그 밖은 `[3/10]` 실패. 확인: 05-07-T1 복제본(`5f43726`) rc 0 — M43 `(1)` · M44 `(2)`, 이름 비교 블록 없음 | closed |
+| T-05-26 | Information disclosure | 복제본의 임시 폴더 절대 경로가 `example/README.md` · SUMMARY 에 섞인다 (05-07) | high | mitigate | 절대 경로 grep. 확인: 05-07-T1 ~ T3 복제본 rc 0 (grep 포함); `example/README.md` · 05-07-SUMMARY 절대 경로 0줄; push 범위 점검 0 (T-05-33) | closed |
+| T-05-27 | Repudiation | `RULES.md` 표 reader 가 backtick 없는 행을 머리 줄로 받거나 표 행이 아닌 줄을 건너뛰거나 대소문자를 무시한다 | medium | mitigate | 머리 줄 · 구분 줄 · backtick 이름 행 밖은 `[3/10]` 실패. 확인: 05-08-T1 복제본(`812c477`) rc 0 — M51 · M52 `(1)`, M53 `(2)`, 표 비교 블록 없음 | closed |
+| T-05-28 | Repudiation | README 주소 검사 (e) 가 확장자만 넓히거나 패키지 이름을 보지 않는다 | medium | mitigate | 후보를 모두 모아 꼴 · 패키지 이름을 따로 판정. 확인: 05-08-T2 복제본(`63fe3d9`) rc 0 — M54 `꼴이 아닌 것이 있다 (1)`, M55 다른 패키지 주소 `(2)` | closed |
+| T-05-29 | Tampering | 코드 블록 값 (f) · (g) 가 한쪽 따옴표만 벗기거나 맞는 값의 따옴표 · 주석까지 거부한다 | medium | mitigate | `unquotedScalar` 와 꼴 판정. 확인: 05-07-T3 복제본(`73f1c66`) rc 0 — M47 · M48 벗긴 값 줄, M49 읽지 못하는 줄 `(1)`, M50 (맞는 값에 따옴표 · 주석) 10/10 | closed |
+| T-05-30 | Information disclosure | 복제본의 임시 폴더 절대 경로가 `example/README.md` · SUMMARY 에 섞인다 (05-08) | high | mitigate | 절대 경로 grep. 확인: 05-08-T1 ~ T3 복제본 rc 0 (grep 포함); 05-08-SUMMARY 절대 경로 0줄; push 범위 점검 0 | closed |
+| T-05-31 | Repudiation | plugin 선언 reader 가 범위 제약을 조용히 받거나 따옴표 · 맵 순서에서 거짓 실패한다 | medium | mitigate | `^X.Y.Z` · `X.Y.Z` 만 받고 범위 제약은 원인을 말하는 70. 확인: 05-09-T1 복제본(`644897f`) rc 0 — M63 · M67 10/10, M64 · M65 70 아님, M66 rc 70 · `꼴만 받는다` · `선언을 찾지 못했다` 없음 | closed |
+| T-05-32 | Tampering | `lib/riverpod.yaml` 5행 주석을 고치다 선언 값이 바뀌어 사용 프로젝트의 plugin 버전이 바뀐다 | medium | mitigate | 비주석 내용 고정. 확인: `lib/riverpod.yaml` 의 비주석 내용이 `209e3af` 와 같다(diff 1 · 1, 주석만); 나머지 배포 YAML 넷은 `209e3af` 와, 정답지 · fixtures 는 `e69470e` 와 같다; 05-09-T2 복제본(`e46cff4`) rc 0 | closed |
+| T-05-33 | Information disclosure | push 범위(`92d478a..HEAD`)에 비공개 경로 · 이메일 · 사용 프로젝트 정보가 섞인다 | high | mitigate | push 전 범위 전체 점검이 0 일 때만 push. 확인: executor 가 push 전에 05-09-T3 첫째 `<automated>` rc 0 (`05-09-SUMMARY.md`); 복제본(`8789cfe`) rc 0; orchestrator 가 dispatch 전 · 뒤 `92d478a..8789cfe` 의 추가된 줄 전체를 다시 훑음 — 절대 경로 꼴 0줄, 이메일 꼴 0줄, 비공개 프로젝트는 이미 있던 "실측: …" 줄의 인용 3줄(경로 꼴 0) | closed |
+| T-05-34 | Tampering | `main` · tag 를 건드리거나 덮어쓰는 push (05-09) | high | mitigate | 브랜치 이름 하나만 준 push. 확인: push `92d478a..8789cfe` fast-forward (25커밋); 지금 원격 head 둘 — `main` `90a2736b8d99…`, 작업 브랜치 `8789cfe`; tag `v1.3.0` 하나; PR 0; 05-09-T3 둘째를 `8789cfe` 로 고정한 판 rc 0 | closed |
+| T-05-35 | Repudiation | 처리 기록이 커밋 없이 `fixed` 를 적거나 다른 커밋을 가리킨다 | low | mitigate | 해시마다 조상 · 파일 확인 (`chk`). 확인: 05-09-T3 첫째 복제본(`8789cfe`) rc 0 — fixed 12 행 모두 `e69470e` 뒤의 커밋이고 정해진 파일을 바꿈, WR-06 deferred (D-09) | closed |
+| T-05-36 | Information disclosure | 복제본의 임시 폴더 절대 경로가 `example/README.md` · SUMMARY 에 섞인다 (05-09) | high | mitigate | 절대 경로 grep. 확인: 05-09-T1 · T2 복제본 rc 0 (grep 포함); 05-09-SUMMARY · `05-REVIEW-DISPOSITION.md` 절대 경로 0줄; push 범위 점검 0 | closed |
+| T-05-37 | Elevation of privilege | workflow 가 쓰기 권한을 얻어 저장소를 바꾼다 (05-09 push) | low | accept | 아래 Accepted Risks Log (AR-05-02). 확인: `.github/workflows/verify.yml` 14 ~ 15행 `permissions:` / `contents: read`; `e69470e..HEAD` 에서 `.github` 변경 0 | closed |
+| T-05-38 | Repudiation | `enabledLanguageOptions` 가 `language:` 의 flow 표기나 읽지 못하는 옵션 줄을 건너뛴다 | medium | mitigate | `analyzer:` · `language:` 줄에 붙은 값과 읽지 못하는 줄은 70. 확인: 05-08-T3 복제본(`a14be4f`) rc 0 — M59 ~ M61 rc 70 · 파일 이름 · 행, M62 (블록 꼴 + 줄 끝 주석) rc 1 `+ strict-casts` (과잉 수정 아님) | closed |
+| T-05-39 | Tampering | `tool/measure_rules.dart` 의 문서 주석을 고치다 `readRulesTable` 코드가 바뀐다 | low | mitigate | `///` 줄만. 확인: `git diff -U0 c06d8d5 -- tool/measure_rules.dart` 의 바뀐 줄이 모두 `///` (비주석 0줄); 05-08-T1 복제본 rc 0 | closed |
 | T-05-SC | Tampering | npm/pip/cargo installs (공급망) | high | mitigate | 이 phase 는 pub 의존성을 더하지 않는다. 확인: `2c026dd..HEAD` 에서 `pubspec.yaml` · `example/pubspec.yaml` · `fixtures/*/pubspec.yaml` 변경 0; `tool/verify.dart` 의 import 는 `dart:convert` · `dart:io` 둘뿐 (05-01 · 05-03 의 `<automated>` 단언) | closed |
 
 *Status: open · closed*
@@ -68,6 +84,7 @@ created: "2026-10-14"
 
 | Risk ID | Threat Ref | Rationale | Accepted By | Date |
 |---------|------------|-----------|-------------|------|
+| AR-05-02 | T-05-37 | gap 수정 push(05-09)도 같은 `verify` workflow 를 돌린다 — 권한은 `contents: read` 그대로이고 `.github` 는 바뀌지 않았다. 런타임 자체의 권한 문제는 AR-05-01 과 같은 범위다 (low) | 계획 단계 결정 (`05-09-PLAN.md` threat register, disposition accept) | 2026-10-14 |
 | AR-05-01 | T-05-19 | `verify` workflow 의 권한은 Phase 2 가 정한 `contents: read` 뿐이고 이 phase 는 `.github` 를 바꾸지 않았다. GitHub Actions 런타임 자체가 권한을 넘는 경우는 이 저장소가 막을 수 없는 범위다 (low) | 계획 단계 결정 (`05-05-PLAN.md` threat register, disposition accept) | 2026-10-14 |
 
 ---
@@ -77,12 +94,19 @@ created: "2026-10-14"
 | Audit Date | Threats Total | Closed | Open | Run By |
 |------------|---------------|--------|------|--------|
 | 2026-10-14 | 24 | 24 | 0 | orchestrator (secure-phase State B, ASVS L1 — 계획 위협 목록, 감사 에이전트 생략) |
+| 2026-10-14 (gap 수정 뒤) | 40 | 40 | 0 | orchestrator (secure-phase State A, ASVS L1 — 05-07 ~ 05-09 의 위협 목록 16개 추가, 감사 에이전트 생략) |
 
 감사 메모 (2026-10-14):
 
 - **실제로 올라간 범위.** `0db0fdd..92d478a`, 65커밋, 59개 파일 (+9,236 / −714줄, 삭제 0). 폴더별로 `.planning/phases` 31 (01 · 03 처리 기록 각 1, 04 13, 05 16), `.planning/` 최상위 4, `fixtures/` 9, `lib/` 5, `example/` 3, `tool/` 3, `README.md` · `CHANGELOG.md` · `RULES.md` · `.claude/CLAUDE.md`. 계획 문장(Phase 5 파일)보다 넓다 — Phase 4 의 gap 수정 04-11 ~ 04-13 과 재검증 문서가 지난 push(`0db0fdd`) 뒤에 쌓여 함께 올라갔다. 그래서 점검은 범위 전체의 추가된 줄로 했다 (T-05-17).
 - **마무리 커밋은 원격에 없다.** `ce245a5` · `72d7015` (05-05 SUMMARY · 메타데이터) 와 그 뒤의 검증 문서 커밋들이다. 다음 push 는 D-21 대로 소유자에게 다시 묻는다.
 - **수동 확인으로 남긴 것.** README 문장마다의 단정 / 출처 구분(T-05-12), 복구 안내 문장(T-05-10), CHANGELOG 복원 항목 여섯의 diff 대조(T-05-14)는 grep 깊이(ASVS L1)로는 가를 수 없다 — `05-VALIDATION.md` Manual-Only 와 `/gsd-verify-work 5` 로 넘긴다. 완화책 자체(날짜 · 범위를 좁힌 안내 · 커밋 번호)는 있다.
+
+감사 메모 (2026-10-14, gap 수정 05-07 ~ 05-09 뒤):
+
+- **둘째로 올라간 범위.** `92d478a..8789cfe`, 25커밋, 20개 파일 (+2,851 / −211줄). 폴더별로 `.planning/phases/05-documentation` 11, `.planning/` 최상위 3, `tool/` 2, `README.md` · `CHANGELOG.md` · `example/README.md` · `lib/riverpod.yaml` 각 1. 05-05 의 마무리 커밋 · 검증 문서 · gap 계획 문서가 함께 올라갔다 — 점검은 범위 전체의 추가된 줄과 `git log -p` 로 했다 (T-05-33). push 는 D-21 대로 실행한 뒤 보고했다 (소유자 결정).
+- **원격에 없는 커밋.** `c42dc33` · `c401d82` (05-09 SUMMARY · 메타데이터), `445ce22` (ROADMAP · STATE), `d3ef67c` (검증 감사)와 그 뒤의 검증 문서 커밋들이다.
+- 이 등록부의 "확인" 은 HEAD `d3ef67c` 시점이다. 뒤따르는 code review 가 처리 기록을 다시 만들면 T-05-35 의 근거(처리 기록의 행)는 그 커밋 시점(`8789cfe`)으로 읽는다.
 
 ---
 
@@ -101,4 +125,12 @@ created: "2026-10-14"
 |---|---|
 | Threats found | 24 |
 | Closed | 24 |
+| Open | 0 |
+
+## Security Audit 2026-10-14
+
+| Metric | Count |
+|---|---|
+| Threats found | 40 |
+| Closed | 40 |
 | Open | 0 |
