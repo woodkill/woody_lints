@@ -168,10 +168,10 @@ const expectedLibYamls = {
   'riverpod.yaml',
 };
 
-/// [2/4] 단계의 화면 이름.
+/// `[2/N]` 단계의 화면 이름.
 const ruleCheckLabel = '배포 파일의 규칙 이름';
 
-/// [2/4] 실패 문구의 마지막 안내 — 진단 줄에서 고칠 파일과 줄을 찾는 법.
+/// `[2/N]` 실패 문구의 마지막 안내 — 진단 줄에서 고칠 파일과 줄을 찾는 법.
 const fragmentLineHint =
     '진단 줄의 폴더 이름이 조각 이름이다 — `lib/<이름>.yaml` 에서 그 줄을 고친다. '
     '복사본의 줄 번호는 원본과 같다 (`plugins:` 섹션은 빈 줄로 바꿔 복사한다).';
@@ -759,7 +759,7 @@ void writeExpected(
   );
 }
 
-/// [1/4] `lib/` 아래에 `.dart` 파일이 없는지 본다 (VERIFY-07).
+/// `[1/N]` `lib/` 아래에 `.dart` 파일이 없는지 본다 (VERIFY-07).
 ///
 /// 모든 깊이를 본다. `lib/` 가 없으면 통과다 — 배포 파일이 없는 상태는 규칙 검사가 잡는다.
 StepResult checkLibHasNoDart(String repoRoot) {
@@ -836,7 +836,7 @@ String? fragmentNameOfLine(String line) =>
         .firstMatch(line)
         ?.group(1);
 
-/// `lib/` 의 YAML 이 정확히 [expectedLibYamls] 인지 본다 ([2/4] 의 첫 확인).
+/// `lib/` 의 YAML 이 정확히 [expectedLibYamls] 인지 본다 (`[2/N]` 의 첫 확인).
 ///
 /// 같으면 null, 다르면 실패한 [StepResult] 를 돌려준다. 더 있는 파일은 규칙 검사 대상
 /// ([ruleCheckTargets])에서 빠졌을 수 있는 새 조각이고, 없는 파일은 지웠거나 이름을 바꾼
@@ -1054,7 +1054,7 @@ Future<List<String>> readParseErrorLines(String repoRoot) async {
   ];
 }
 
-/// [2/4] 조각 셋([ruleCheckTargets])의 복사본을 분석해 진단이 하나도 없는지 본다 (VERIFY-02).
+/// `[2/N]` 조각 셋([ruleCheckTargets])의 복사본을 분석해 진단이 하나도 없는지 본다 (VERIFY-02).
 ///
 /// 첫 확인은 `lib/` 의 YAML 집합이다 ([checkLibYamlSet]) — 대상에서 빠진 새 조각이 있으면
 /// 복사본을 만들기 전에 실패한다.
@@ -1268,36 +1268,76 @@ StepResult checkFixtureOptions(String repoRoot, List<Fixture> fixtures) {
 
 /// `lib/riverpod.yaml` 의 `riverpod_lint:` 선언(예: `^3.1.9`)을 읽는다.
 ///
-/// 받는 꼴은 둘이다 — 들여쓴 스칼라 줄 `riverpod_lint: <값>` (줄 끝 `# 주석` 가능)과,
-/// 맵 형식 `riverpod_lint:` 줄 다음의 첫 비주석 줄 `version: <값>` (끄는 설정의 모양 —
-/// `fixtures/overrides/analysis_options.yaml`). 돌려주는 값은 `^3.1.9` 꼴 그대로다.
-/// `[4/N]` 이 쓰고, `[3/N]` 의 README 검사도 같은 값을 쓴다.
-/// 없으면 [FormatException] — 조각의 모양이 바뀐 것이라 견줄 기준이 없다 (main 이 종료 코드
-/// 70 으로 끝낸다. 03-REVIEW.md WR-02 로 줄 끝 주석 · 맵 형식을 받게 고쳤다).
+/// 받는 꼴:
+/// - 스칼라 — 들여쓴 줄 `riverpod_lint: <값>` (줄 끝 `# 주석` 가능).
+/// - 맵 — 값 없는 키 줄 `riverpod_lint:` (줄 끝 `# 주석` 가능 — 주석은 값이 아니다) 아래에서,
+///   키 줄보다 깊이 들여쓴 줄이 이어지는 동안 그 가운데 `version: <값>` 줄 (끄는 설정의 모양 —
+///   `fixtures/overrides/analysis_options.yaml`). 맵 안의 키 순서는 가리지 않는다 —
+///   `diagnostics:` 가 먼저 와도 된다. 키 줄과 같거나 얕은 줄에서 맵이 끝난다.
+/// - 값은 [unquotedScalar] 로 바깥 따옴표를 벗긴다 (`"^3.1.9"` 와 `^3.1.9` 는 analyzer 에게
+///   같은 선언이다). 벗긴 값이 `^X.Y.Z` 나 고정 버전 `X.Y.Z` 이면 그 글자를 돌려준다.
+///
+/// 받지 않는 꼴: 범위 제약(`">=3.1.9 <4.0.0"`) 등 그 밖의 값 — `꼴만 받는다` 를 담은 문구로
+/// [FormatException] 을 던진다 (선언은 있으나 읽지 못한 것이라 원인과 값을 말한다). 키 줄이
+/// 없거나 맵에서 `version:` 을 찾지 못하면 `선언을 찾지 못했다` 다 (05-01 의 M34).
+/// 어느 쪽이든 조각의 모양이 바뀐 것이라 견줄 기준이 없다 — main 이 종료 코드 70 으로 끝낸다.
+///
+/// 경위: 03-REVIEW.md WR-02 로 줄 끝 주석 · 맵 형식을 받게 고쳤고, 05-REVIEW.md WR-05 로
+/// 따옴표를 벗기고 맵 안의 키 순서를 보지 않으며 범위 제약은 원인을 말하고 멈추게 고쳤다
+/// (고정 버전을 받는 것은 소유자 결정 R2-Q1 — 지금의 동작 유지).
+/// `[4/N]` 이 쓰고, `[3/N]` 의 README 검사 (f) 도 같은 값을 쓴다.
 String readShippedPluginConstraint(String repoRoot) {
   const shownAs = 'lib/riverpod.yaml';
   final lines = File('$repoRoot/$shownAs')
       .readAsStringSync()
       .replaceAll('\r\n', '\n')
       .split('\n');
-  final scalar = RegExp(r'^[ \t]+riverpod_lint:[ \t]*([^\s#]+)[ \t]*(?:#.*)?$');
-  final mapKey = RegExp(r'^[ \t]+riverpod_lint:[ \t]*(?:#.*)?$');
-  final version = RegExp(r'^[ \t]+version:[ \t]*([^\s#]+)[ \t]*(?:#.*)?$');
-  for (var i = 0; i < lines.length; i++) {
-    final scalarMatch = scalar.firstMatch(lines[i]);
-    if (scalarMatch != null) return scalarMatch.group(1)!;
-    if (mapKey.hasMatch(lines[i])) {
-      // 맵 형식 — 빈 줄 · 주석 줄을 건너뛴 첫 줄이 `version:` 이어야 한다. 아니면 여기서 끊는다.
-      for (var j = i + 1; j < lines.length; j++) {
-        final trimmed = lines[j].trim();
-        if (trimmed.isEmpty || trimmed.startsWith('#')) continue;
-        final versionMatch = version.firstMatch(lines[j]);
-        if (versionMatch != null) return versionMatch.group(1)!;
+  final keyLine = RegExp(
+    r'^([ \t]+)riverpod_lint:[ \t]*(.*?)(?:[ \t]+#.*)?[ \t]*$',
+  );
+  final versionLine = RegExp(
+    r'^[ \t]+version:[ \t]*(.*?)(?:[ \t]+#.*)?[ \t]*$',
+  );
+  final acceptedValue = RegExp(r'^\^?\d+\.\d+\.\d+$');
+  // 게으른 값 그룹은 키 뒤에 주석만 있으면 `# 주석` 을 값으로 잡는다 — 그 값은 빈 값이다.
+  String valueOf(String raw) => raw.startsWith('#') ? '' : raw;
+  // 줄 앞의 공백 · 탭 수 — 맵 안의 줄인지 가른다.
+  int indentOf(String line) => line.length - line.trimLeft().length;
+
+  String? declared;
+  for (var i = 0; i < lines.length && declared == null; i++) {
+    final key = keyLine.firstMatch(lines[i]);
+    if (key == null) continue;
+    final scalarValue = valueOf(key.group(2)!);
+    if (scalarValue.isNotEmpty) {
+      declared = scalarValue;
+      break;
+    }
+    // 맵 꼴 — 키 줄보다 깊은 줄이 이어지는 동안 `version:` 을 찾는다.
+    final keyIndent = key.group(1)!.length;
+    for (var j = i + 1; j < lines.length; j++) {
+      final trimmed = lines[j].trim();
+      if (trimmed.isEmpty || trimmed.startsWith('#')) continue;
+      if (indentOf(lines[j]) <= keyIndent) break;
+      final version = versionLine.firstMatch(lines[j]);
+      if (version == null) continue;
+      final versionValue = valueOf(version.group(1)!);
+      if (versionValue.isNotEmpty) {
+        declared = versionValue;
         break;
       }
     }
   }
-  throw const FormatException('$shownAs 에서 riverpod_lint 선언을 찾지 못했다');
+  if (declared == null) {
+    throw const FormatException('$shownAs 에서 riverpod_lint 선언을 찾지 못했다');
+  }
+  final value = unquotedScalar(declared);
+  if (!acceptedValue.hasMatch(value)) {
+    throw FormatException(
+      '$shownAs 의 riverpod_lint 선언 `$value` 을 읽지 못했다 — `^X.Y.Z` 나 `X.Y.Z` 꼴만 받는다 (범위 제약은 받지 않는다, 05-REVIEW.md WR-05)',
+    );
+  }
+  return value;
 }
 
 /// 두 줄 목록이 순서와 내용까지 같은지 본다.
@@ -1377,14 +1417,21 @@ String unquotedScalar(String raw) {
 
 /// `pubspec.yaml` 의 `version:` 에서 `major.minor.patch` 만 돌려준다 (`2.0.0-dev` → `2.0.0`).
 ///
-/// `-pre` · `+build` 꼬리는 떨어진다. `[3/N]` 의 README 검사 (g) 가 README 코드 블록의
-/// `ref: vX.Y.Z` 와 견준다. 읽지 못하면 [FormatException] (main 이 종료 코드 70 으로 끝낸다).
+/// `-pre` · `+build` 꼬리는 떨어진다. 값의 바깥 따옴표(`version: "2.0.0-dev"`)와 줄 끝
+/// `# 주석` 은 벗겨 읽는다 — YAML 에서 따옴표 값은 같은 값이다 (05-REVIEW.md IN-01,
+/// [unquotedScalar]). `[3/N]` 의 README 검사 (g) 가 README 코드 블록의 `ref: vX.Y.Z` 와 견준다.
+/// 읽지 못하면 [FormatException] (main 이 종료 코드 70 으로 끝낸다).
 String pubspecReleaseVersion(String repoRoot) {
-  final text = File('$repoRoot/pubspec.yaml').readAsStringSync();
-  final match = RegExp(
-    r'^version:\s*(\d+\.\d+\.\d+)',
+  final text = File('$repoRoot/pubspec.yaml')
+      .readAsStringSync()
+      .replaceAll('\r\n', '\n');
+  final raw = RegExp(
+    r'^version:[ \t]*(.*?)(?:[ \t]+#.*)?[ \t]*$',
     multiLine: true,
-  ).firstMatch(text);
+  ).firstMatch(text)?.group(1);
+  final match = raw == null
+      ? null
+      : RegExp(r'^(\d+\.\d+\.\d+)(?:[-+].*)?$').firstMatch(unquotedScalar(raw));
   if (match == null) {
     throw const FormatException('pubspec.yaml 에서 version: 을 읽지 못했다');
   }
