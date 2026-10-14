@@ -4,16 +4,16 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 05
 current_phase_name: Documentation
-status: Phase 05 재검증 gaps_found 62/66 — 3회차 gap 수정 계획 대기 (/gsd-plan-phase 05 --gaps)
-stopped_at: Completed 05-11-PLAN.md
-last_updated: "2026-10-14T07:48:48.189Z"
+status: Phase 05 3회차 gap 수정 계획 05-12 · 05-13 완료 — 실행 대기 (/gsd-execute-phase 05 --gaps-only)
+stopped_at: Phase 05 3회차 gap 수정 계획 완료 (05-12 · 05-13)
+last_updated: "2026-10-14T09:46:56.918Z"
 last_activity: 2026-10-14
-last_activity_desc: "Phase 05 2회차 gap 수정 뒤 재검증 gaps_found 62/66: 지난 gap 은 닫힘, CR 줄바꿈(WR-11)에서 새 gap, 좁힌 문장 둘(WR-13 · WR-14)"
-state_head: 621e10b57ab18b1f768a126385e2c70628d2cfff
+last_activity_desc: Phase 05 3회차 gap 수정 계획 05-12 · 05-13 작성, plan checker 1회차 통과 (info 2)
+state_head: 207ef2d2040e1da968fa46105f3d6c20aff353b7
 progress:
   total_phases: 6
   completed_phases: 4
-  total_plans: 37
+  total_plans: 39
   completed_plans: 36
   percent: 67
 ---
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-10-13)
 
 ## Current Position
 
-Phase: 05 (Documentation) — EXECUTING
-Plan: 11 of 11
-Status: Phase 05 재검증 gaps_found 62/66 — 3회차 gap 수정 계획 대기 (/gsd-plan-phase 05 --gaps)
-Last activity: 2026-10-14 — Phase 05 2회차 gap 수정 뒤 재검증 gaps_found 62/66: 지난 gap 은 닫힘, CR 줄바꿈(WR-11)에서 새 gap, 좁힌 문장 둘(WR-13 · WR-14)
+Phase: 05 (Documentation) — READY TO EXECUTE
+Plan: 11 of 13
+Status: Phase 05 3회차 gap 수정 계획 05-12 · 05-13 완료 — 실행 대기 (/gsd-execute-phase 05 --gaps-only)
+Last activity: 2026-10-14 — Phase 05 3회차 gap 수정 계획 05-12 · 05-13 작성, plan checker 1회차 통과 (info 2)
 
 Progress: [███████░░░] 67%
 
@@ -246,6 +246,9 @@ Recent decisions affecting current work:
 - [Phase 05]: 05-10: (e) · (f) · (g) 는 코드를 넓히지 않고 README 382행 · example/README 116 · 358 · 395 · 436행 · tool/verify.dart 주석 줄만 실제 범위로 좁혔다 (G2-Q2 · G2-Q5 — 코드 줄은 Task 2 커밋과 같다)
 - [Phase 05]: 05-11: 05 리뷰 처리 기록은 fixed 13 · skipped 4 (WR-07 · WR-08 · WR-09 · IN-08 — G2-Q2, 문장을 검사 범위에 맞춤, 05-10 Task 3 d2d74c4) · deferred 1 (WR-06, D-09) · open 0 이다 — WR-10 은 05-10 Task 1 (02966c4) 의 닫힌 목록으로 fixed (G2-Q1, b8519d4). CHANGELOG 는 저장소 안쪽 변경이라 그대로
 - [Phase 05]: 05-11: 2회차 gap 수정을 git push origin gsd/v2.0-package-rework 한 줄로 올렸다 (2026-10-14T06:33:56Z, 8789cfe..b8519d4, 19커밋, fast-forward, 둘째 push 없음, D-21 — 실행 뒤 보고). GitHub verify run 38522962086 success, job 4분 11초 (ubuntu-24.04 20261004.327.1), 로그에 [3/10] 통과와 점검 통과 (10개 중 10개) — 닫힌 목록 (a′) · 구역 밖 목록 줄 (d′) 이 runner 에서도 통과. main 90a2736 · tag v1.3.0 하나 · PR 0 그대로이고 05-11 의 메타데이터 커밋은 origin 에 없다
+- [Phase 05]: 3회차 gap 수정 계획 전 소유자 결정 (2026-10-14, 모두 권고대로) — gap 1(WR-11, 주석 줄 끝 CR 뒤에 숨긴 규칙 · 키)은 `tool/verify.dart` 에서 YAML 을 줄로 나누는 자리를 모두 `LineSplitter` 하나로 맞춘다 (G3-Q1 — 막힌 셋 + `stripPlugins` · `readShippedPluginConstraint` · 진단 줄 번호로 규칙 이름을 읽는 곳). gap 2(WR-13 · WR-14)와 IN-08 의 남은 주석은 검사를 넓히지 않고 문장만 코드에 맞춘다 (G3-Q2). WR-12 는 문장에 정의를 적고 IN-09 는 읽는 법 한 줄을 넓힌다 — 코드는 바꾸지 않는다 (G3-Q3)
+- [Phase 05]: 3회차 gap 계획 중 소유자 결정 (2026-10-14, 모두 권고대로) — `pubspecReleaseVersion` 도 같은 도우미로 줄을 나눠 한 줄씩 읽는다 (G3-R2-Q1, 재현: 지금 정규식은 주석 안 U+2028 뒤의 `version: 9.9.9` 를 읽음), 측정 도구 `tool/measure_rules.dart` 의 줄 나누기는 둔다 (G3-R2-Q2)
+- [Phase 05]: 3회차 gap 수정 계획 05-12 (wave 11, `splitYamlLines` 도우미로 YAML 줄 나누기 일곱 자리 · 지워 보기 M79 ~ M85 · 문장 맞춤) · 05-13 (wave 12, 처리 기록 fixed 15 · skipped 7 · deferred 1 · open 0, push). Fable 크레딧 소진으로 planner · checker 를 Opus 로 돌렸다 (소유자 결정 G3-Q4). plan checker 1회차 통과 — info 2 (M80 의 교정 근거는 `stripPlugins`, Task 1 단언은 Task 1 커밋 시점에서 감사) (b986fc5, 207ef2d)
 
 ### Pending Todos
 
@@ -273,5 +276,5 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-10-14T06:39:28.341Z
-Stopped at: Completed 05-11-PLAN.md
-Resume file: None
+Stopped at: Phase 05 3회차 gap 수정 계획 완료 (05-12 · 05-13)
+Resume file: .planning/phases/05-documentation/05-12-PLAN.md
