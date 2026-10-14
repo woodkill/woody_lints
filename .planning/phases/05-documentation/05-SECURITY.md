@@ -12,7 +12,7 @@ created: "2026-10-14"
 
 > Per-phase security contract: threat register, accepted risks, and audit trail.
 >
-> 출처: `05-01-PLAN.md` ~ `05-11-PLAN.md` 의 `<threat_model>` (계획 단계에서 작성됨 — 05-07 ~ 05-09 는 gap 수정 계획, 05-10 · 05-11 은 2회차 gap 수정 계획). ASVS level 1, block on `high`.
+> 출처: `05-01-PLAN.md` ~ `05-13-PLAN.md` 의 `<threat_model>` (계획 단계에서 작성됨 — 05-07 ~ 05-09 는 gap 수정 계획, 05-10 · 05-11 은 2회차, 05-12 · 05-13 은 3회차 gap 수정 계획). ASVS level 1, block on `high`.
 > 이 phase 가 바꾼 실행 코드는 로컬 검증 스크립트 `tool/verify.dart` 하나다 (reader 둘 고침, `[3/10]` 에 (b′) · (d) ~ (g) 추가). 배포 산출물 `lib/*.yaml` 다섯은 주석만 바뀌었다. 나머지는 문서(README · CHANGELOG · `example/README.md` · `.claude/CLAUDE.md` · 처리 기록)다. 사용자 입력 · 인증 · 저장 데이터가 없다. 해당 범주는 공개 저장소로 비공개 정보가 새는 것, 배포 설정이 주석 정리 중에 바뀌는 것, 검증 명령의 reader 가 거짓 실패 · 거짓 통과를 내는 것, 문서가 실측되지 않은 동작을 단정하는 것, 원격 쓰기다.
 > 아래 "확인" 은 2026-10-14 phase 실행 뒤(HEAD `85ae036`) 이 저장소에서 명령을 다시 돌리거나 파일을 직접 읽어 얻은 결과다. "복제본 rc 0" 은 `05-VALIDATION.md` 「감사 결과 (2026-10-14)」 의 실행 — task 마다 자기 커밋으로 되돌린 로컬 복제본에서 계획의 `<automated>` 를 적힌 그대로 돌린 결과 — 를 가리킨다.
 
@@ -88,7 +88,19 @@ created: "2026-10-14"
 | T-05-51 | Tampering | `main` · tag 를 건드리거나 덮어쓰는 push (05-11) | high | mitigate | `git push origin gsd/v2.0-package-rework` 한 줄. 확인: 05-11-T2 둘째 작업 트리 rc 0 (메타데이터 커밋 뒤) — origin 작업 브랜치 `b8519d4` 는 `8789cfe` 의 자손, head 둘(`main` = `90a2736`), tag `v1.3.0` 하나, PR 0 | closed |
 | T-05-52 | Repudiation | push 뒤 단언이 HEAD 에 묶여 메타데이터 커밋 뒤 사후 감사에서 거짓 실패한다 | low | mitigate | "처리 기록 커밋 ⊆ origin 머리 ⊆ HEAD" 로 단언. 확인: 메타데이터 커밋 `b7d8215` 뒤 작업 트리에서 05-11-T2 둘째를 적힌 그대로 돌려 rc 0 | closed |
 | T-05-53 | Elevation of privilege | workflow 가 쓰기 권한을 얻어 저장소를 바꾼다 (05-11 push) | low | accept | 아래 Accepted Risks Log (AR-05-03). 확인: `.github/workflows/verify.yml` `permissions:` / `contents: read`; `8789cfe..b8519d4` 에서 `.github` 변경 0 | closed |
-| T-05-SC | Tampering | npm/pip/cargo installs (공급망) | high | mitigate | 이 phase 는 pub 의존성을 더하지 않는다. 확인: `8789cfe..b8519d4` 에서도 `pubspec.yaml` · `example/pubspec.yaml` · `fixtures` 변경 0; `2c026dd..HEAD` 에서 `pubspec.yaml` · `example/pubspec.yaml` · `fixtures/*/pubspec.yaml` 변경 0; `tool/verify.dart` 의 import 는 `dart:convert` · `dart:io` 둘뿐 (05-01 · 05-03 의 `<automated>` 단언) | closed |
+| T-05-55 | Tampering | `tool/verify.dart` 의 YAML reader 여섯이 줄을 `\n` 으로만 나눠 주석 줄 끝 CR 뒤의 규칙 · 키 · 옵션 · plugin 을 건너뛰고, `pubspecReleaseVersion` 이 U+2028 뒤에 숨긴 `version:` 을 읽는다 (3회차 gap 1) | high | mitigate | `splitYamlLines` (`LineSplitter`) 하나로 나눔. 확인: 05-12-T1 복제본(`d771c0c`) rc 0 — 함수 직접 호출 일곱 기대값(`pubspec=2.0.0` 포함), M79 ~ M82 `[3/10]` 실패, M83 ~ M85 `passed=false`; 고치기 전 코드(`3d5bd97`) 판 rc 1 (`declared=[]` · `pubspec=9.9.9`), 막힌 셋만 고친 판 rc 1 (`strip=false`) | closed |
+| T-05-56 | Tampering | 줄 나누기 수정이 승인 밖 코드((d′) · (e) ~ (g) · 펜스 판정 · `stripPlugins` 끝의 `^plugins:` 확인)를 함께 바꾼다 | medium | mitigate | 코드 줄 diff 허용 목록 + `same` 아홉 구간. 확인: 05-12-T1 복제본 rc 0 (`d2d74c4` 대비 지운 코드 줄은 줄 나누기 줄, 더한 줄은 `splitYamlLines` 줄), 05-12-T2 복제본(`d8b61b0`) rc 0 (코드 줄이 Task 1 커밋과 같고 아홉 구간이 `d2d74c4` 와 같음) | closed |
+| T-05-57 | Denial of service | 줄 나누기를 바꾼 뒤 맞는 파일에서 거짓 실패가 난다 (마지막 줄바꿈 · CRLF · 복사본 줄 번호) | medium | mitigate | 회귀 입력 넷 + CRLF 줄 번호. 확인: 05-12-T1 복제본 rc 0 — 기준 실행 10/10, M37 (`:8` 줄 번호) · M33 10/10 · M45 · M61 70, `crlf=[2행: formatter:]`; 작업 트리 `verify.dart` 10/10; GitHub runner run 38568654401 `success` (`[3/10]` 통과) | closed |
+| T-05-58 | Repudiation | 좁힌 문장이 여전히 검사보다 넓거나 고친 문장이 한 자리에만 들어간다 (gap 2) | low | mitigate | 자리마다 새 구절 개수 · 옛 조각 0 단언. 확인: 05-12-T2 복제본 rc 0 · 작업 트리 재실행 rc 0 | closed |
+| T-05-59 | Information disclosure | 복제본 · 하네스의 임시 경로나 비공개 사용 프로젝트 정보가 기록 · 커밋에 들어간다 (05-12) | medium | mitigate | 경로는 변수로만, 절대 경로 grep 단언. 확인: 05-12 두 task 복제본 rc 0 (절대 경로 grep 포함); `b8519d4..c2f275a` 의 추가된 줄 · 커밋 메시지에 절대 경로 · 이메일 · 비공개 사용 프로젝트 이름 0 | closed |
+| T-05-60 | Tampering | 실험이 작업 트리의 배포 YAML 을 바꾼 채 남는다 | medium | mitigate | 변형은 복제본에서만, 판정 전 되돌림. 확인: 05-12-T1 복제본 rc 0 (안쪽 복제본의 `README.md` · `lib` · `RULES.md` · `pubspec.yaml` · `fixtures` 가 HEAD 와 같음, 작업 트리의 고정 커밋 비교); 실행 뒤 작업 트리의 변경은 GSD 도구 상태 넷뿐 | closed |
+| T-05-61 | Repudiation | 처리 기록이 커밋 없이 `fixed` 를 적거나, 이유 없이 `skipped` 를 적거나, 세 자리 가운데 하나만 고친다 (05-13) | low | mitigate | `dsp` · `hs` 단언. 확인: 05-13-T1 복제본(`c2f275a`) rc 0 — fixed 15 · skipped 7 · deferred 1 · `open: 0`, WR-11 → `d771c0c`, WR-12 · WR-13 · WR-14 · IN-09 → `d8b61b0` | closed |
+| T-05-62 | Information disclosure | push 범위(`b8519d4..HEAD`)에 비공개 사용 프로젝트의 경로 · 절대 경로가 들어가 공개된다 (05-13, 되돌릴 수 없음) | high | mitigate | push 전 범위 전체 점검. 확인: 05-13-T2 첫째 — dispatch 전 작업 트리(`561903d`) rc 0, 실행자의 push 직전 rc 0, 복제본(`c2f275a`) rc 0; 실제로 올라간 `b8519d4..c2f275a` 의 추가된 줄 · 커밋 메시지에 절대 경로 · 이메일 · 비공개 사용 프로젝트 이름 0 | closed |
+| T-05-63 | Information disclosure | 누출 점검이 거짓 양성으로 늘 멈추거나 아무것도 보지 않아 헛통과한다 (05-13) | medium | mitigate | `.claude/CLAUDE.md` 불변 단언 + 심은 경로를 `LEAK?` 로 잡는 단언. 확인: 05-13-T2 첫째 rc 0 (같은 명령 안에서 심은 경로가 잡힘) | closed |
+| T-05-64 | Tampering | `main` · tag 를 건드리거나 덮어쓰는 push (05-13) | high | mitigate | `git push origin gsd/v2.0-package-rework` 한 줄. 확인: 05-13-T2 둘째 작업 트리 rc 0 (메타데이터 커밋 뒤) — origin 작업 브랜치 `c2f275a` 는 `b8519d4` 의 자손, head 둘(`main` = `90a2736`), tag `v1.3.0` 하나, PR 0 | closed |
+| T-05-65 | Repudiation | push 뒤 단언이 HEAD 에 묶여 메타데이터 커밋 뒤 사후 감사에서 거짓 실패한다 (05-13) | low | mitigate | "처리 기록 커밋 ⊆ origin 머리 ⊆ HEAD" 로 단언. 확인: 메타데이터 커밋 `85164b0` 뒤 작업 트리에서 05-13-T2 둘째를 적힌 그대로 돌려 rc 0 | closed |
+| T-05-66 | Elevation of privilege | workflow 가 쓰기 권한을 얻어 저장소를 바꾼다 (05-13 push) | low | accept | 아래 Accepted Risks Log (AR-05-04). 확인: `.github/workflows/verify.yml` `permissions:` / `contents: read`; `b8519d4..c2f275a` 에서 `.github` 변경 0 | closed |
+| T-05-SC | Tampering | npm/pip/cargo installs (공급망) | high | mitigate | 이 phase 는 pub 의존성을 더하지 않는다. 확인: `8789cfe..b8519d4` · `b8519d4..c2f275a` 에서도 `pubspec.yaml` · `example/pubspec.yaml` · `fixtures` 변경 0; `2c026dd..HEAD` 에서 `pubspec.yaml` · `example/pubspec.yaml` · `fixtures/*/pubspec.yaml` 변경 0; `tool/verify.dart` 의 import 는 `dart:convert` · `dart:io` 둘뿐 (05-01 · 05-03 의 `<automated>` 단언) | closed |
 
 *Status: open · closed*
 *Disposition: mitigate (implementation required) · accept (documented risk) · transfer (third-party)*
@@ -99,6 +111,7 @@ created: "2026-10-14"
 
 | Risk ID | Threat Ref | Rationale | Accepted By | Date |
 |---------|------------|-----------|-------------|------|
+| AR-05-04 | T-05-66 | 3회차 gap 수정 push(05-13)도 같은 `verify` workflow 를 돌린다 — 권한은 `contents: read` 그대로이고 `.github` 는 바뀌지 않았다. 런타임 자체의 권한 문제는 AR-05-01 과 같은 범위다 (low) | 계획 단계 결정 (`05-13-PLAN.md` threat register, disposition accept) | 2026-10-14 |
 | AR-05-03 | T-05-53 | 2회차 gap 수정 push(05-11)도 같은 `verify` workflow 를 돌린다 — 권한은 `contents: read` 그대로이고 `.github` 는 바뀌지 않았다. 런타임 자체의 권한 문제는 AR-05-01 과 같은 범위다 (low) | 계획 단계 결정 (`05-11-PLAN.md` threat register, disposition accept) | 2026-10-14 |
 | AR-05-02 | T-05-37 | gap 수정 push(05-09)도 같은 `verify` workflow 를 돌린다 — 권한은 `contents: read` 그대로이고 `.github` 는 바뀌지 않았다. 런타임 자체의 권한 문제는 AR-05-01 과 같은 범위다 (low) | 계획 단계 결정 (`05-09-PLAN.md` threat register, disposition accept) | 2026-10-14 |
 | AR-05-01 | T-05-19 | `verify` workflow 의 권한은 Phase 2 가 정한 `contents: read` 뿐이고 이 phase 는 `.github` 를 바꾸지 않았다. GitHub Actions 런타임 자체가 권한을 넘는 경우는 이 저장소가 막을 수 없는 범위다 (low) | 계획 단계 결정 (`05-05-PLAN.md` threat register, disposition accept) | 2026-10-14 |
@@ -112,6 +125,7 @@ created: "2026-10-14"
 | 2026-10-14 | 24 | 24 | 0 | orchestrator (secure-phase State B, ASVS L1 — 계획 위협 목록, 감사 에이전트 생략) |
 | 2026-10-14 (gap 수정 뒤) | 40 | 40 | 0 | orchestrator (secure-phase State A, ASVS L1 — 05-07 ~ 05-09 의 위협 목록 16개 추가, 감사 에이전트 생략) |
 | 2026-10-14 (2회차 gap 수정 뒤) | 55 | 55 | 0 | orchestrator (secure-phase State A, ASVS L1 — 05-10 · 05-11 의 위협 목록 15개 추가, 감사 에이전트 생략) |
+| 2026-10-14 (3회차 gap 수정 뒤) | 67 | 67 | 0 | orchestrator (secure-phase State A, ASVS L1 — 05-12 · 05-13 의 위협 목록 12개 추가, 감사 에이전트 생략) |
 
 감사 메모 (2026-10-14):
 
@@ -130,6 +144,12 @@ created: "2026-10-14"
 - **셋째로 올라간 범위.** `8789cfe..b8519d4`, 19커밋, 15개 파일 (+2,040 / −375줄, 삭제 0). 폴더별로 `.planning/phases/05-documentation` 9, `.planning/` 최상위 3, `tool/` · `example/` · `README.md` 각 1. 앞 회차의 검증 문서 · 2회차 gap 계획 문서가 함께 올라갔다 — 점검은 범위 전체의 추가된 줄 · 커밋 메시지로 했다 (T-05-49). `.github` · `pubspec.yaml` · `fixtures` · `lib` 은 범위에서 바뀌지 않았다. push 는 D-21 대로 실행한 뒤 보고했다.
 - **원격에 없는 커밋.** `b7d8215` (05-11 SUMMARY · 메타데이터)와 그 뒤의 검증 문서 커밋들이다.
 - 이 회차 행의 "복제본 rc" 는 `05-VALIDATION.md` 「감사 결과 — 2회차 gap 수정 05-10 · 05-11」 의 실행이다. 뒤따르는 code review 가 처리 기록을 다시 만들면 T-05-48 의 근거는 그 커밋 시점(`b8519d4`)으로 읽는다.
+
+감사 메모 (2026-10-14, 3회차 gap 수정 05-12 · 05-13 뒤):
+
+- **넷째로 올라간 범위.** `b8519d4..c2f275a`, 14커밋, 15개 파일 (+1,618 / −342줄, 삭제 0). 폴더별로 `.planning/phases/05-documentation` 9, `.planning/` 최상위 3, `tool/` · `example/` · `README.md` 각 1. 앞 회차의 검증 문서 · 3회차 gap 계획 문서가 함께 올라갔다 — 점검은 범위 전체의 추가된 줄 · 커밋 메시지로 했다 (T-05-62). `.github` · `pubspec.yaml` · `fixtures` · `lib` 은 범위에서 바뀌지 않았다. push 는 D-21 대로 실행한 뒤 보고했다. 실행자가 범위에서 찾은 GitHub 계정 이름 1줄은 이미 공개된 원격 저장소 주소(소유자/저장소)다.
+- **원격에 없는 커밋.** `552fb26` · `85164b0` (05-13 SUMMARY · 메타데이터)와 그 뒤의 검증 문서 커밋들이다.
+- 이 회차 행의 "복제본 rc" 는 `05-VALIDATION.md` 「감사 결과 — 3회차 gap 수정 05-12 · 05-13」 의 실행이다. 뒤따르는 code review 가 처리 기록을 다시 만들면 T-05-61 의 근거는 그 커밋 시점(`c2f275a`)으로 읽는다.
 
 ---
 
@@ -164,4 +184,12 @@ created: "2026-10-14"
 |---|---|
 | Threats found | 55 |
 | Closed | 55 |
+| Open | 0 |
+
+## Security Audit 2026-10-14
+
+| Metric | Count |
+|---|---|
+| Threats found | 67 |
+| Closed | 67 |
 | Open | 0 |
