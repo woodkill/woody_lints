@@ -23,7 +23,7 @@
 - [x] **VERIFY-03**: 소유자는 로컬에서 명령 하나로 전체 검증을 실행할 수 있다
 - [x] **VERIFY-04**: GitHub Actions 가 push 와 PR 마다 로컬과 같은 검증을 실행하며, 시간 제한이 걸려 있다
 - [x] **VERIFY-05**: `base.yaml` 만 include 한 대조군 fixture 에서 Riverpod / codegen 설정이 적용되지 않음을 확인한다
-- [ ] **VERIFY-06**: README 의 규칙 목록이 실제 YAML 과 다르면 검증이 실패한다
+- [x] **VERIFY-06**: README 의 규칙 목록이 실제 YAML 과 다르면 검증이 실패한다
 - [x] **VERIFY-07**: `lib/` 에 `.dart` 파일이 있으면 검증이 실패한다
 - [x] **VERIFY-08**: 검증이 실제로 문제를 잡아냄이 확인되어 있다 — 규칙 하나를 지운 변경과 include 줄을 지운 변경이 각각 검증에서 실패한다
 
@@ -120,7 +120,7 @@
 | VERIFY-03 | Phase 2 | Complete |
 | VERIFY-04 | Phase 2 | Complete |
 | VERIFY-05 | Phase 3 | Complete |
-| VERIFY-06 | Phase 5 | Gaps Found |
+| VERIFY-06 | Phase 5 | Complete |
 | VERIFY-07 | Phase 2 | Complete |
 | VERIFY-08 | Phase 2 | Complete |
 | PRESET-01 | Phase 3 | Complete |

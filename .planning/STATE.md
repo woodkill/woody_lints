@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 05
 current_phase_name: Documentation
 status: executing
-stopped_at: Completed 05-10-PLAN.md
-last_updated: "2026-10-14T06:26:47.684Z"
+stopped_at: Completed 05-11-PLAN.md
+last_updated: "2026-10-14T06:39:28.386Z"
 last_activity: 2026-10-14
-last_activity_desc: 05-10 완료 — 닫힌 목록 · 구역 밖 목록 줄 · 문장 좁히기, 05-11 실행 대기
-state_head: d2d74c49b983c141b51eb82ca9232d8f38d90341
+last_activity_desc: 05-11 완료 — 처리 기록 open 0, push · GitHub verify success, Phase 5 재검증 대기
+state_head: b8519d45958ff6d0824654dcdb806367238fae1e
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 37
-  completed_plans: 35
+  completed_plans: 36
   percent: 67
 ---
 
@@ -30,9 +30,9 @@ See: .planning/PROJECT.md (updated 2026-10-13)
 ## Current Position
 
 Phase: 05 (Documentation) — EXECUTING
-Plan: 10 of 11
-Status: 2회차 gap 수정 05-10 완료 (닫힌 목록 · 구역 밖 목록 줄 · 문장 좁히기) — 05-11 (처리 기록 · push) 실행 대기
-Last activity: 2026-10-14 — 05-10 완료: 커밋 02966c4 · 204e401 · d2d74c4, 지워 보기 M68 ~ M78 과 회귀 입력 13개를 복제본에서
+Plan: 11 of 11
+Status: Phase 5 의 plan 11개를 모두 실행했다 (2회차 gap 수정 05-10 · 05-11 완료) — 재검증 대기
+Last activity: 2026-10-14 — 05-11 완료: 처리 기록 open 0 (b8519d4), push 8789cfe..b8519d4, GitHub verify run 38522962086 success (10개 중 10개)
 
 Progress: [███████░░░] 67%
 
@@ -97,6 +97,7 @@ Progress: [███████░░░] 67%
 | Phase 05 P08 | 30min | 3 tasks | 3 files |
 | Phase 05 P09 | 20min | 3 tasks | 6 files |
 | Phase 05 P10 | 27 min | 3 tasks | 3 files |
+| Phase 05 P11 | 7 min | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -243,6 +244,8 @@ Recent decisions affecting current work:
 - [Phase 05]: 05-10: lib/riverpod.yaml 의 plugins: 바로 아래는 riverpod_lint 하나만 받는다 — 다른 plugin 키는 [3/10] 실패 (G2-Q4; M78 전체 실행에서는 따옴표 키 zz_quoted_plugin 을 pub.dev 에서 찾지 못해 plugin 을 쓰는 정답지 단계 넷도 함께 실패)
 - [Phase 05]: 05-10: README 표시 구역이 든 절은 start 마커 앞의 가장 가까운 제목 다음 줄부터 end 마커 뒤의 첫 제목 앞까지이고(펜스 안의 # 줄은 제목이 아니다), 그 절의 구역 밖 목록 줄은 [3/10] 실패다 (G2-Q3; M74 ~ M77)
 - [Phase 05]: 05-10: (e) · (f) · (g) 는 코드를 넓히지 않고 README 382행 · example/README 116 · 358 · 395 · 436행 · tool/verify.dart 주석 줄만 실제 범위로 좁혔다 (G2-Q2 · G2-Q5 — 코드 줄은 Task 2 커밋과 같다)
+- [Phase 05]: 05-11: 05 리뷰 처리 기록은 fixed 13 · skipped 4 (WR-07 · WR-08 · WR-09 · IN-08 — G2-Q2, 문장을 검사 범위에 맞춤, 05-10 Task 3 d2d74c4) · deferred 1 (WR-06, D-09) · open 0 이다 — WR-10 은 05-10 Task 1 (02966c4) 의 닫힌 목록으로 fixed (G2-Q1, b8519d4). CHANGELOG 는 저장소 안쪽 변경이라 그대로
+- [Phase 05]: 05-11: 2회차 gap 수정을 git push origin gsd/v2.0-package-rework 한 줄로 올렸다 (2026-10-14T06:33:56Z, 8789cfe..b8519d4, 19커밋, fast-forward, 둘째 push 없음, D-21 — 실행 뒤 보고). GitHub verify run 38522962086 success, job 4분 11초 (ubuntu-24.04 20261004.327.1), 로그에 [3/10] 통과와 점검 통과 (10개 중 10개) — 닫힌 목록 (a′) · 구역 밖 목록 줄 (d′) 이 runner 에서도 통과. main 90a2736 · tag v1.3.0 하나 · PR 0 그대로이고 05-11 의 메타데이터 커밋은 origin 에 없다
 
 ### Pending Todos
 
@@ -269,6 +272,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-14T06:26:47.639Z
-Stopped at: Completed 05-10-PLAN.md
+Last session: 2026-10-14T06:39:28.341Z
+Stopped at: Completed 05-11-PLAN.md
 Resume file: None
