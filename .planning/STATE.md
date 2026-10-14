@@ -4,16 +4,16 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 05
 current_phase_name: Documentation
-status: Phase 05 재검증 gaps_found 50/53 — 2회차 gap 수정 계획 대기 (/gsd-plan-phase 05 --gaps)
-stopped_at: Phase 05 gap 수정 05-07 ~ 05-09 실행 · 재검증 gaps_found 50/53
-last_updated: "2026-10-14T03:39:23.218Z"
+status: Phase 05 2회차 gap 수정 계획 05-10 · 05-11 완료 — 실행 대기 (/gsd-execute-phase 05 --gaps-only)
+stopped_at: Phase 05 2회차 gap 수정 계획 완료 (05-10 · 05-11)
+last_updated: "2026-10-14T05:53:33.465Z"
 last_activity: 2026-10-14
-last_activity_desc: Phase 05 execution started
-state_head: 66ae79f381d39f7267d7acbe210e5922ca7a1519
+last_activity_desc: Phase 05 2회차 gap 수정 계획 05-10 · 05-11 작성, plan checker 2회차 통과
+state_head: d691a6f9d42a55e4c741141ac8ed7e1f9726673b
 progress:
   total_phases: 6
   completed_phases: 4
-  total_plans: 35
+  total_plans: 37
   completed_plans: 35
   percent: 67
 ---
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-10-13)
 
 ## Current Position
 
-Phase: 05 (Documentation) — EXECUTING
-Plan: 9 of 9
-Status: Phase 05 재검증 gaps_found 50/53 — 2회차 gap 수정 계획 대기 (/gsd-plan-phase 05 --gaps)
-Last activity: 2026-10-14 — Phase 05 execution started
+Phase: 05 (Documentation) — READY TO EXECUTE
+Plan: 9 of 11
+Status: Phase 05 2회차 gap 수정 계획 05-10 · 05-11 완료 — 실행 대기 (/gsd-execute-phase 05 --gaps-only)
+Last activity: 2026-10-14 — Phase 05 2회차 gap 수정 계획 05-10 · 05-11 작성, plan checker 2회차 통과
 
 Progress: [███████░░░] 67%
 
@@ -235,6 +235,9 @@ Recent decisions affecting current work:
 - [Phase 05]: 05-09: 05 리뷰 처리 기록은 fixed 12 · deferred 1 (WR-06 — D-09, 마일스톤 끝 /gsd-map-codebase) · open 0 이다 (8789cfe). README 의 산문은 plugin 버전 숫자 대신 lib/riverpod.yaml 의 선언을 가리키고, plugin 하한을 올릴 때 함께 고칠 자리 셋은 README 「이 저장소를 고치는 사람에게」 한 곳에 있다 (e46cff4)
 - [Phase 05]: 05-09: gap 수정 05-07 ~ 05-09 를 git push origin gsd/v2.0-package-rework 한 줄로 올렸다 (2026-10-14T02:39:51Z, 92d478a..8789cfe, 25커밋, fast-forward, 둘째 push 없음, D-21 — 실행 뒤 보고). GitHub verify run 38502214557 success, job 4분 14초 (ubuntu-24.04 20261004.327.1), 로그에 [3/10] 통과와 점검 통과 (10개 중 10개). main 90a2736 · tag v1.3.0 하나 · PR 0 그대로이고 05-09 의 메타데이터 커밋은 origin 에 없다
 - [Phase 05]: gap 수정 05-07 · 05-08 · 05-09 뒤 재검증 gaps_found 50/53 (2026-10-14) — 지난 gap 둘은 닫혔고, declaredRuleNames 가 열 0 의 linter: 글자로만 블록을 찾아 linter : · "linter": 철자로 적은 조각의 규칙을 건너뛰는 새 gap 1건 (VERIFY-06). 재리뷰 WR-07 ~ WR-10 · IN-08 은 verifier 판정 경고 · 정보, 처리 기록 open 5
+- [Phase 05]: 2회차 gap 수정 계획 전 소유자 결정 (2026-10-14, 모두 권고대로) — gap(다른 철자의 `linter` 키)은 조각마다 받는 키를 닫힌 목록으로 막는다 (최상위 키 + `lib/codegen.yaml` 의 `analyzer:` 아래 `errors` · `exclude`, G2-Q1 — WR-10 도 함께 닫음). README 코드 블록 보조 검사 지적 넷(WR-07 · WR-08 · WR-09 · IN-08)은 검사를 넓히지 않고 README · `example/README.md` 문장을 실제 범위로 좁혀 skipped 로 둔다 (G2-Q2). 「받는 규칙」 표시 구역 밖(같은 절)의 목록 줄은 `[3/10]` 실패로 더한다 (G2-Q3)
+- [Phase 05]: 2회차 gap 계획 중 소유자 결정 (2026-10-14, 모두 권고대로) — `lib/riverpod.yaml` 의 `plugins:` 아래 키도 `riverpod_lint` 만 받는다 (G2-Q4, 재현: 다른 plugin 키를 더해도 `[3/N]` passed=true), `tool/verify.dart` 의 (e) ~ (g) 문서 주석도 같은 범위로 좁힌다 (G2-Q5, 주석만)
+- [Phase 05]: 2회차 gap 수정 계획 05-10 (wave 9, 닫힌 목록 · 표시 구역 밖 목록 줄 · 문장 좁히기, M68 ~ M78) · 05-11 (wave 10, 처리 기록 · push). 닫힌 목록 밖의 키는 종료 코드 70 이 아니라 `[3/10]` 실패다 — 70 이면 M45 · M35 · M46 의 확인된 결과가 바뀐다 (planner 판단). Fable 크레딧 소진으로 planner · checker 를 Opus 로 돌렸다 (소유자 결정). plan checker 2회차 통과 (6784f30, de44389, d691a6f)
 
 ### Pending Todos
 
@@ -262,5 +265,5 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-10-14T02:47:19.020Z
-Stopped at: Phase 05 gap 수정 05-07 ~ 05-09 실행 · 재검증 gaps_found 50/53
-Resume file: .planning/phases/05-documentation/05-VERIFICATION.md
+Stopped at: Phase 05 2회차 gap 수정 계획 완료 (05-10 · 05-11)
+Resume file: .planning/phases/05-documentation/05-10-PLAN.md
