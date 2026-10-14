@@ -337,6 +337,12 @@ Plans:
   - IN-13: `pubspec.yaml` 13 ~ 15행의 `dependencies` 주석이 기반 세트를 include 하는 파일을 `lib/analysis_options.yaml` 로 적는다 (지금은 `lib/base.yaml`) — 이 phase 가 version 을 바꿀 때 함께 고친다.
   - IN-14: `loadYaml` 이 `!!float` 한 글자 값에서 `RangeError` 를 던져 main 을 지나 종료 코드 255 — `compareLineReadersWithYaml` 문서 주석과 머리 주석의 종료 코드 목록이 이를 적지 않는다.
   - `tool/verify.dart` · `pubspec.yaml` 을 고치면 그 뒤의 검증(`fvm dart run tool/verify.dart` 10/10, 실패 방향)을 다시 본다.
+- **Phase 5 UAT 에서 미룬 문서 손질 넷 (`05-UAT.md` 1 · 2 · 4 · 5번, 소유자 결정 2026-10-15)** — 넷 다 통과로 적고 넘겼다. 릴리스 tag 전의 README 커밋에서 함께 고친다.
+  - 1번: smoke test 에서 `flutter create` 로 만든 빈 프로젝트에 README 를 그대로 따라 한다. Flutter 3.47.5 앱 템플릿의 옵션 파일에는 이미 `include: package:flutter_lints/flutter.yaml` · `analyzer: exclude:` · `linter: rules:` 가 있다 (템플릿 파일에서 읽음) — README 「설치」 · 「생성 파일 제외」 · 「프로젝트 전체」 에 "기존 `include` 줄은 바꾸고, 같은 키는 합친다" 한 문장을 넣을지 본다. `base.yaml` 만 받는 사람이 「프로젝트 전체」 의 `plugins:` 블록을 붙이면 plugin 이 켜지는지도 본다 (추론).
+  - 2번: README 355행 "`plugins:` 를 바꾼 뒤 … Analysis Server 를 재시작해야 반영된다" 에 출처 표시를 단다 — 1.3.0 의 주석에서 옮긴 문장이고 spike 에 재시작 실측이 없다.
+  - 4번: README 34행을 사실대로 고친다 — flutter#191151 은 2026-08-19 에 병합됐고 stable 판 #191530 이 Flutter 3.47.2 부터 들어 있다 (3.47.5 의 동작이 이미 이것). 바뀐 것은 "있는 플랫폼 폴더만 제외 · Flutter 가 아닌 패키지는 건너뜀" 이고 `build/**` 는 그대로 덧붙이며 끄는 옵션은 없다 — "고치는 변경이 있다 (병합 여부는 확인하지 않았다)" 구절을 뺀다.
+  - 5번: `example/README.md` (05-14) 소절 읽는 법의 "YAML (package:yaml — analyzer · pub 과 같은 해석기)" 에 "(판이 같은지는 재지 않았다)" 를 덧붙인다. 같은 읽는 법의 "깨진 YAML 도 블록 하나로 실패한다" 는 IN-14 와 함께 고친다.
+  - README · `example/README.md` 를 고치면 `fvm dart run tool/verify.dart` 10/10 을 다시 본다 (`[3/10]` 이 README 를 견준다).
 
 ## Progress
 
