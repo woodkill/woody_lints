@@ -3,7 +3,7 @@
 //
 //   [1/N] lib/ 에 .dart 파일이 없는지
 //   [2/N] 조각 파일 셋(lib/base.yaml · codegen.yaml · riverpod.yaml)의 복사본을 분석해 진단이 하나도 없는지 (deprecated / removed / 없는 규칙, 겹친 규칙 · 모르는 키 같은 옵션 경고, 깨진 YAML)
-//   [3/N] 배포 파일의 구성 — 묶음 · 별칭은 include 만 담는지, lib/base.yaml 의 규칙이 기반 세트와 겹치지 않는지, RULES.md 의 켠 규칙 표와 같은지, 다른 조각에 규칙이 없는지, 조각 셋의 최상위 키(와 그 바로 아래 키 — lib/codegen.yaml 의 analyzer:, lib/riverpod.yaml 의 plugins:)가 정해진 목록 안인지, README 의 규칙 목록 · 프리셋 주소 · plugin 버전 · ref 가 배포 파일 · pubspec 과 같은지
+//   [3/N] 배포 파일의 구성 — 묶음 · 별칭은 include 만 담는지, lib/base.yaml 의 규칙이 기반 세트와 겹치지 않는지, RULES.md 의 켠 규칙 표와 같은지, 다른 조각에 규칙이 없는지, 조각 셋의 최상위 키(와 그 바로 아래 키 — lib/codegen.yaml 의 analyzer:, lib/riverpod.yaml 의 plugins:)가 정해진 목록 안인지, README 의 표시 구역이 든 절에 구역 밖 목록 줄이 없는지, README 의 규칙 목록 · 프리셋 주소 · plugin 버전 · ref 가 배포 파일 · pubspec 과 같은지
 //   [4/N] 연습용 프로젝트 전부의 analysis_options.yaml 이 정해진 내용인지 (주석 · 빈 줄을 뺀 내용을 통째로 견준다)
 //   [5/N] ~ [N/N] 연습용 프로젝트마다 `dart analyze` 로 분석한 결과가 정답지와 같은지
 //         (`fixtures` 표의 순서. recommended 는 자기 정답지 없이 같은 실행의 example 결과와 견준다)
@@ -1517,6 +1517,41 @@ List<String> fencedLines(List<String> lines) {
   return out;
 }
 
+/// [lines] 의 줄마다 펜스 코드 블록 안인지(여는 줄 · 닫는 줄 포함) 표시한다.
+///
+/// 규칙은 [fencedLines] 와 같다 — 블록 밖에서 `trimLeft()` 한 줄이 백틱 셋 이상 또는 `~` 셋
+/// 이상의 연속으로 시작하면 열리고 그 문자와 길이를 기억하며, 블록 안에서는 `trim()` 한 줄이
+/// 기억한 문자만으로 되고 길이가 같거나 길 때 닫힌다. 닫히지 않으면 파일 끝까지다.
+/// 같은 규칙을 줄 번호로 쓰려고 따로 둔다 — [fencedLines] 는 소유자 결정 G2-Q2 로 이번에 바꾸지
+/// 않았다. 펜스 규칙을 고칠 때는 둘을 함께 고친다. `[3/N]` (d′) 의
+/// [findListLinesOutsideMarkers] 가 쓴다.
+List<bool> markFencedLines(List<String> lines) {
+  final marks = List<bool>.filled(lines.length, false);
+  final openPattern = RegExp(r'^(`{3,}|~{3,})');
+  // 열린 블록의 펜스 문자 — null 이면 블록 밖이다.
+  String? fenceChar;
+  var fenceLength = 0;
+  for (var i = 0; i < lines.length; i++) {
+    final line = lines[i];
+    if (fenceChar == null) {
+      final open = openPattern.firstMatch(line.trimLeft());
+      if (open != null) {
+        fenceChar = open.group(1)![0];
+        fenceLength = open.group(1)!.length;
+        marks[i] = true;
+      }
+      continue;
+    }
+    marks[i] = true;
+    final trimmed = line.trim();
+    if (trimmed.length >= fenceLength &&
+        trimmed.split('').every((c) => c == fenceChar)) {
+      fenceChar = null;
+    }
+  }
+  return marks;
+}
+
 /// YAML 스칼라 값 [raw] 에서 바깥 따옴표 한 쌍을 벗긴다.
 ///
 /// `trim()` 한 값이 같은 문자의 따옴표(`'…'` 또는 `"…"`)로 열리고 닫히면 그 안을, 아니면
@@ -1628,14 +1663,28 @@ class MarkerBlock {
 ///
 /// 마커는 글자 그대로 — 들여쓰기 · 뒤 공백도 안 된다. 파일이 없거나 마커 둘 중 하나를
 /// 찾지 못하거나 end 가 start 앞이면 null 이다. [readRulesMdBlock] (표) · [readBulletBlock]
-/// (불릿) 이 이 줄 목록에 각자의 줄 규칙을 적용한다 (05-REVIEW.md IN-06).
+/// (불릿) 이 이 줄 목록에 각자의 줄 규칙을 적용한다 (05-REVIEW.md IN-06). 마커의 자리는
+/// [findMarkerRange] 로 찾는다.
 List<String>? readMarkerBlock(File file, String name) {
   if (!file.existsSync()) return null;
   final lines = file.readAsLinesSync();
+  final range = findMarkerRange(lines, name);
+  if (range == null) return null;
+  final (start, end) = range;
+  return lines.sublist(start + 1, end);
+}
+
+/// [lines] 에서 `<!-- woody:<name>:start -->` 와 `<!-- woody:<name>:end -->` 의 자리(0 부터)를
+/// 찾는다.
+///
+/// 마커는 글자 그대로 — 들여쓰기 · 뒤 공백도 안 된다. 마커 둘 중 하나를 찾지 못하거나 end 가
+/// start 앞이면 null 이다. 마커 문자열은 이 함수 한 곳에만 둔다 — [readMarkerBlock] 과
+/// [findListLinesOutsideMarkers] 가 쓴다.
+(int, int)? findMarkerRange(List<String> lines, String name) {
   final start = lines.indexOf('<!-- woody:$name:start -->');
   final end = lines.indexOf('<!-- woody:$name:end -->');
   if (start < 0 || end < 0 || end < start) return null;
-  return lines.sublist(start + 1, end);
+  return (start, end);
 }
 
 /// [rulesMd] 의 마커 구역 [name] (`enabled-rules` 등) 에서 표 첫 칸의 이름을 읽는다.
@@ -1711,7 +1760,8 @@ MarkerBlock? readRulesMdBlock(File rulesMd, String name) {
 /// 그 밖의 줄(backtick 없는 불릿, 대문자 이름, 이름이 둘인 불릿, `*` · `+` · `1.` 불릿,
 /// 평문)은 건너뛰지 않고 [MarkerBlock.malformed] 에 담아 `[3/N]` (d) 가 실패로 알린다
 /// (05-VERIFICATION.md gaps 1 — Phase 4 WR-10 의 원칙을 README reader 에도). 마커 밖의
-/// 줄은 보지 않는다. 파일이나 마커가 없으면 null 이다.
+/// 줄은 보지 않는다 — 같은 절의 구역 밖 목록 줄은 [findListLinesOutsideMarkers] 가 본다 ((d′)).
+/// 파일이나 마커가 없으면 null 이다.
 MarkerBlock? readBulletBlock(File file, String name) {
   final lines = readMarkerBlock(file, name);
   if (lines == null) return null;
@@ -1730,6 +1780,55 @@ MarkerBlock? readBulletBlock(File file, String name) {
     }
   }
   return MarkerBlock(names, malformed);
+}
+
+/// [lines] (README 의 줄) 에서 표시 구역 [name] 이 든 절의, 구역 밖 목록 줄을 찾는다 — `[3/N]`
+/// (d′) 가 쓴다.
+///
+/// - 절은 마커로 찾는다 — start 마커 앞에서 가장 가까운 제목 줄의 다음 줄(없으면 파일 처음)부터,
+///   end 마커 뒤의 첫 제목 줄 앞(없으면 파일 끝)까지. 제목 이름에 기대지 않아 제목을 바꿔도
+///   같은 절을 본다.
+/// - 제목 줄은 펜스 코드 블록 밖에서 `^ {0,3}#{1,6}(?:[ \t]|$)` 에 맞는 줄이다 — 수준을 가리지
+///   않는다. 펜스 안의 `# …` 줄(YAML 주석)은 제목이 아니다 ([markFencedLines]). setext 제목
+///   (`===` · `---` 밑줄)은 제목으로 보지 않는다 — 절이 길어져 더 많은 줄을 볼 뿐이다.
+/// - 목록 줄은 펜스 밖에서 `^[ \t]*(?:>[ \t]*)*(?:[-*+]|\d{1,9}[.)])(?:[ \t]|$)` 에 맞는 줄
+///   이다 — `-` · `*` · `+` · `1.` · `1)` 과 인용(`>`) 안의 목록. `**굵은 글씨**` · `---`
+///   구분선은 기호 뒤가 공백이 아니라 걸리지 않는다.
+/// - 마커 둘 사이(마커 줄 포함)는 보지 않는다 — 구역 안은 (d) 의 [readBulletBlock] 몫이다.
+///
+/// 돌려주는 항목은 `<줄 번호>행: <trim 한 원문>` 이고 줄 순서대로다. 마커가 하나라도 없으면
+/// null 이다 — (d) 가 `구역이 없다` 로 이미 실패한다 (소유자 결정 G2-Q3).
+List<String>? findListLinesOutsideMarkers(List<String> lines, String name) {
+  final range = findMarkerRange(lines, name);
+  if (range == null) return null;
+  final (start, end) = range;
+  final fenced = markFencedLines(lines);
+  final headingPattern = RegExp(r'^ {0,3}#{1,6}(?:[ \t]|$)');
+  final listPattern = RegExp(
+    r'^[ \t]*(?:>[ \t]*)*(?:[-*+]|\d{1,9}[.)])(?:[ \t]|$)',
+  );
+  bool isHeading(int i) => !fenced[i] && headingPattern.hasMatch(lines[i]);
+  var from = 0;
+  for (var i = start - 1; i >= 0; i--) {
+    if (isHeading(i)) {
+      from = i + 1;
+      break;
+    }
+  }
+  var to = lines.length;
+  for (var i = end + 1; i < lines.length; i++) {
+    if (isHeading(i)) {
+      to = i;
+      break;
+    }
+  }
+  return [
+    for (var i = from; i < to; i++)
+      if ((i < start || i > end) &&
+          !fenced[i] &&
+          listPattern.hasMatch(lines[i]))
+        '${i + 1}행: ${lines[i].trim()}',
+  ];
 }
 
 /// [3/N] 배포 파일의 구성 — 저장소 안의 파일끼리 어긋나지 않는지 한 단계로 본다 (D-11, D-12).
@@ -1751,6 +1850,8 @@ MarkerBlock? readBulletBlock(File file, String name) {
 ///   `true` 키 (RULES-06) — 표 구역 안의 읽지 못하는 줄도 실패
 /// - (d) README 의 표시 구역 `woody:readme-rules` 의 규칙 이름 == `lib/base.yaml` (D-01)
 ///   — 구역 안의 읽지 못하는 줄도 실패
+/// - (d′) 그 표시 구역이 든 절(구역 앞의 제목부터 구역 뒤의 다음 제목 앞까지, 펜스 밖)에
+///   구역 밖의 목록 줄이 없다 ([findListLinesOutsideMarkers], 소유자 결정 G2-Q3)
 /// - (e) README 의 `package:woody_lints/<이름>.yaml` 주소가 모두 [expectedLibYamls] 에 있다
 ///   — 꼴이 아닌 주소 · `woody_lints` 가 아닌 패키지의 주소도 실패
 /// - (f) README 코드 블록의 `version:` · `riverpod_lint:` 값 == [readShippedPluginConstraint]
@@ -1944,6 +2045,19 @@ StepResult checkShippedComposition(String repoRoot) {
         ...subtractLines(b, a).map((r) => '  - $r  (README.md 에만)'),
         '',
         '`$readmeFile` 의 목록 · `$rulesMdFile` 의 표 · `$rulesFile` 을 같은 커밋에서 고친다.',
+      ]);
+    }
+
+    // (d′) 표시 구역이 든 절의 구역 밖 목록 줄 — 렌더링된 README 에서는 목록의 항목처럼 보이지만
+    // (d) 는 구역 안만 읽는다 (소유자 결정 G2-Q3).
+    final outside = findListLinesOutsideMarkers(readmeLines, readmeRulesBlock);
+    if (outside != null && outside.isNotEmpty) {
+      addBlock([
+        '`$readmeFile` 의 `woody:$readmeRulesBlock` 표시 구역이 든 절에 구역 밖의 목록 줄이 있다 (${outside.length}):',
+        ...outside.map((l) => '  $l'),
+        '',
+        '규칙 이름의 목록은 표시 구역 안에만 둔다 — 그 절(구역 앞의 제목부터 구역 뒤의 다음 제목 앞까지, '
+            '펜스 코드 블록 밖)에는 목록 줄(`-` · `*` · `+` · `1.` · `1)`)을 두지 않는다 (소유자 결정 G2-Q3).',
       ]);
     }
   }
