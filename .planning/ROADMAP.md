@@ -332,6 +332,11 @@ Plans:
   - PR 에서 `verify` 가 도는가: `main` 병합을 PR 로 한다면, PR 을 연 직후 Actions 탭에 `pull_request` event 의 `verify` 실행이 생기고 단계 4개가 통과하는지 본다. `.github/workflows/verify.yml` 에 `pull_request:` 가 조건 없이 선언되어 있지만 PR 이 열린 적이 없다 (2026-10-12 기준 0건). PR 없이 합치기로 정하면 이 확인은 "해당 없음" 으로 닫는다.
   - 수동 실행 버튼: workflow 파일이 `main` 에 들어간 뒤 Actions → verify 화면에 `Run workflow` 버튼이 보이는지, 누르면 `workflow_dispatch` event 의 실행이 생겨 통과하는지 본다 (02-CONTEXT.md D-06).
 - 사용 프로젝트에 새 버전을 적용하고 경고를 정리하는 일은 이 마일스톤의 범위 밖이다.
+- **Phase 5 에서 미룬 리뷰 경고 셋 (`05-REVIEW.md` IN-12 · IN-13 · IN-14, 소유자 결정 2026-10-15)** — 05-VERIFICATION 4회차 재검증이 gap 아닌 경고로 판정했다. 셋 다 막는 쪽(통과로 끝나지 않음)이다.
+  - IN-12: `lib/base.yaml` 의 `include:` 값을 다음 줄에 쓰면 `[3/10]` (h) 만 거짓 실패 — `tool/verify.dart` 의 `keysSeenByLineReader` 가 값 없는 최상위 키 아래의 스칼라 값 줄을 "아래 키" 로 담는다.
+  - IN-13: `pubspec.yaml` 13 ~ 15행의 `dependencies` 주석이 기반 세트를 include 하는 파일을 `lib/analysis_options.yaml` 로 적는다 (지금은 `lib/base.yaml`) — 이 phase 가 version 을 바꿀 때 함께 고친다.
+  - IN-14: `loadYaml` 이 `!!float` 한 글자 값에서 `RangeError` 를 던져 main 을 지나 종료 코드 255 — `compareLineReadersWithYaml` 문서 주석과 머리 주석의 종료 코드 목록이 이를 적지 않는다.
+  - `tool/verify.dart` · `pubspec.yaml` 을 고치면 그 뒤의 검증(`fvm dart run tool/verify.dart` 10/10, 실패 방향)을 다시 본다.
 
 ## Progress
 

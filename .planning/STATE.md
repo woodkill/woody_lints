@@ -6,10 +6,10 @@ current_phase: 05
 current_phase_name: Documentation
 status: Phase 05 재검증 human_needed 92/92 — 사람 확인 6건 대기 (/gsd-verify-work 05)
 stopped_at: Completed 05-15-PLAN.md
-last_updated: "2026-10-14T22:34:37.163Z"
+last_updated: "2026-10-14T22:40:12.054Z"
 last_activity: 2026-10-15
 last_activity_desc: Phase 05 4회차 gap 수정 실행 · 재검증 human_needed 92/92 (경고 셋 IN-12 · IN-13 · IN-14)
-state_head: 0ac4d6e55fbe7dfa4959209d89658640db18fafb
+state_head: 6ed2f9886ebbf4617fe0c05e915d7e3bb7ff05f5
 progress:
   total_phases: 6
   completed_phases: 4
@@ -263,6 +263,7 @@ Recent decisions affecting current work:
 - [Phase 05]: 05-14: [3/10] (h) compareLineReadersWithYaml 이 줄 단위 reader 다섯의 값을 package:yaml (dev_dependencies) 의 loadYaml 결과와 견주고, 다르거나 YAML 로 읽지 못하면 [3/10] 실패 블록 (G4-Q1)
 - [Phase 05]: 05 리뷰 처리 기록은 fixed 18 · skipped 8 · deferred 1 · open 0 이다 — WR-15 · WR-16 fixed (77e0b88, G4-Q1), IN-11 fixed (0f62057, G4-Q2), IN-10 skipped (G4-Q2 문장을 실제 범위에 맞춤), WR-06 은 deferred 그대로
 - [Phase 05]: 4회차 gap 수정을 git push origin gsd/v2.0-package-rework 한 줄로 올렸다 (c2f275a..2336ba0, 16커밋, fast-forward, D-21) — verify run 38639587080 success, job 4분 13초, CHANGELOG 는 그대로
+- [Phase 05]: Phase 05 재리뷰 경고 IN-12 · IN-13 · IN-14 는 Phase 6 (Release) 로 미룸 (소유자 결정 2026-10-15, 권고안) — 셋 다 막는 쪽이고 Phase 6 이 pubspec.yaml version 을 바꿀 때 함께 고침; 처리 기록 deferred · ROADMAP Phase 6 Notes
 
 ### Pending Todos
 
