@@ -4,12 +4,12 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 05
 current_phase_name: Documentation
-status: Phase 05 gap 수정 05-07 · 05-08 · 05-09 실행 완료 — 재검증(검증 꼬리) 진행
-stopped_at: Completed 05-09-PLAN.md
-last_updated: "2026-10-14T02:49:34.990Z"
+status: Phase 05 재검증 gaps_found 50/53 — 2회차 gap 수정 계획 대기 (/gsd-plan-phase 05 --gaps)
+stopped_at: Phase 05 gap 수정 05-07 ~ 05-09 실행 · 재검증 gaps_found 50/53
+last_updated: "2026-10-14T03:39:23.218Z"
 last_activity: 2026-10-14
 last_activity_desc: Phase 05 execution started
-state_head: c401d826b1bd02fbfb3b29a1312a2a803217ba33
+state_head: 66ae79f381d39f7267d7acbe210e5922ca7a1519
 progress:
   total_phases: 6
   completed_phases: 4
@@ -31,7 +31,7 @@ See: .planning/PROJECT.md (updated 2026-10-13)
 
 Phase: 05 (Documentation) — EXECUTING
 Plan: 9 of 9
-Status: Phase 05 gap 수정 05-07 · 05-08 · 05-09 실행 완료 — 재검증(검증 꼬리) 진행
+Status: Phase 05 재검증 gaps_found 50/53 — 2회차 gap 수정 계획 대기 (/gsd-plan-phase 05 --gaps)
 Last activity: 2026-10-14 — Phase 05 execution started
 
 Progress: [███████░░░] 67%
@@ -234,6 +234,7 @@ Recent decisions affecting current work:
 - [Phase 05]: 05-09: lib/riverpod.yaml 의 riverpod_lint 선언은 따옴표를 벗겨 ^X.Y.Z 와 고정 버전 X.Y.Z 를 받고, 맵 꼴에서는 키 줄보다 깊은 줄 가운데서 version: 을 찾으며(키 순서 무관, 키 줄의 # 주석은 값이 아님), 범위 제약 등 그 밖의 꼴은 '꼴만 받는다' 와 읽은 값을 담은 문구로 종료 코드 70 이다 (05-REVIEW WR-05, 소유자 결정 R2-Q1 — M63 ~ M66). pubspecReleaseVersion 도 따옴표 version 을 받는다 (IN-01, M67; 644897f)
 - [Phase 05]: 05-09: 05 리뷰 처리 기록은 fixed 12 · deferred 1 (WR-06 — D-09, 마일스톤 끝 /gsd-map-codebase) · open 0 이다 (8789cfe). README 의 산문은 plugin 버전 숫자 대신 lib/riverpod.yaml 의 선언을 가리키고, plugin 하한을 올릴 때 함께 고칠 자리 셋은 README 「이 저장소를 고치는 사람에게」 한 곳에 있다 (e46cff4)
 - [Phase 05]: 05-09: gap 수정 05-07 ~ 05-09 를 git push origin gsd/v2.0-package-rework 한 줄로 올렸다 (2026-10-14T02:39:51Z, 92d478a..8789cfe, 25커밋, fast-forward, 둘째 push 없음, D-21 — 실행 뒤 보고). GitHub verify run 38502214557 success, job 4분 14초 (ubuntu-24.04 20261004.327.1), 로그에 [3/10] 통과와 점검 통과 (10개 중 10개). main 90a2736 · tag v1.3.0 하나 · PR 0 그대로이고 05-09 의 메타데이터 커밋은 origin 에 없다
+- [Phase 05]: gap 수정 05-07 · 05-08 · 05-09 뒤 재검증 gaps_found 50/53 (2026-10-14) — 지난 gap 둘은 닫혔고, declaredRuleNames 가 열 0 의 linter: 글자로만 블록을 찾아 linter : · "linter": 철자로 적은 조각의 규칙을 건너뛰는 새 gap 1건 (VERIFY-06). 재리뷰 WR-07 ~ WR-10 · IN-08 은 verifier 판정 경고 · 정보, 처리 기록 open 5
 
 ### Pending Todos
 
@@ -261,5 +262,5 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-10-14T02:47:19.020Z
-Stopped at: Completed 05-09-PLAN.md
-Resume file: None
+Stopped at: Phase 05 gap 수정 05-07 ~ 05-09 실행 · 재검증 gaps_found 50/53
+Resume file: .planning/phases/05-documentation/05-VERIFICATION.md
