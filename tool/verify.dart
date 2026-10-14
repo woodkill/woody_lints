@@ -3,7 +3,7 @@
 //
 //   [1/N] lib/ 에 .dart 파일이 없는지
 //   [2/N] 조각 파일 셋(lib/base.yaml · codegen.yaml · riverpod.yaml)의 복사본을 분석해 진단이 하나도 없는지 (deprecated / removed / 없는 규칙, 겹친 규칙 · 모르는 키 같은 옵션 경고, 깨진 YAML)
-//   [3/N] 배포 파일의 구성 — 묶음 · 별칭은 include 만 담는지, lib/base.yaml 의 규칙이 기반 세트와 겹치지 않는지, RULES.md 의 켠 규칙 표와 같은지, 다른 조각에 규칙이 없는지, 조각 셋의 최상위 키(와 그 바로 아래 키 — lib/codegen.yaml 의 analyzer:, lib/riverpod.yaml 의 plugins:)가 정해진 목록 안인지, README 의 표시 구역이 든 절에 구역 밖 목록 줄이 없는지, README 의 규칙 목록 · 프리셋 주소 · plugin 버전 · ref 가 배포 파일 · pubspec 과 같은지
+//   [3/N] 배포 파일의 구성 — 묶음 · 별칭은 include 만 담는지, lib/base.yaml 의 규칙이 기반 세트와 겹치지 않는지, RULES.md 의 켠 규칙 표와 같은지, 다른 조각에 규칙이 없는지, 조각 셋의 최상위 키(와 그 바로 아래 키 — lib/codegen.yaml 의 analyzer:, lib/riverpod.yaml 의 plugins:)가 정해진 목록 안인지, README 의 표시 구역이 든 절에 구역 밖 목록 줄이 없는지, README 의 규칙 목록(표시 구역) · package: 로 시작하는 프리셋 주소 · 펜스 코드 블록 안 블록 꼴의 plugin 버전 · ref 가 배포 파일 · pubspec 과 같은지
 //   [4/N] 연습용 프로젝트 전부의 analysis_options.yaml 이 정해진 내용인지 (주석 · 빈 줄을 뺀 내용을 통째로 견준다)
 //   [5/N] ~ [N/N] 연습용 프로젝트마다 `dart analyze` 로 분석한 결과가 정답지와 같은지
 //         (`fixtures` 표의 순서. recommended 는 자기 정답지 없이 같은 실행의 example 결과와 견준다)
@@ -134,7 +134,7 @@ const includeOnlyFiles = <String, List<String>>{
 /// 규칙 근거 문서 (저장소 루트 기준). `[3/N]` 이 켠 규칙 표를 `lib/base.yaml` 과 견준다.
 const rulesMdFile = 'RULES.md';
 
-/// 사용 안내 문서 (저장소 루트 기준). `[3/N]` 이 규칙 목록 · 프리셋 주소 · plugin 버전 · `ref:` 를 배포 파일 · `pubspec.yaml` 과 견준다 (VERIFY-06, 05-CONTEXT.md D-01 · D-02).
+/// 사용 안내 문서 (저장소 루트 기준). `[3/N]` 이 표시 구역의 규칙 목록, `package:` 로 시작하는 프리셋 주소, 펜스 코드 블록 안 블록 꼴의 plugin 버전 · `ref:` 를 배포 파일 · `pubspec.yaml` 과 견준다 (VERIFY-06, 05-CONTEXT.md D-01 · D-02).
 const readmeFile = 'README.md';
 
 /// README 의 규칙 이름 목록을 감싸는 표시 구역 이름 — `RULES.md` 의 `enabled-rules` 와 다르게 두어 grep 이 갈린다.
@@ -1489,6 +1489,8 @@ List<String>? significantLines(File file) {
 /// `[3/N]` 의 README 검사 (f) · (g) 가 쓴다 — 복사해 쓰는 값은 블록 안에 있고, 산문은 옛
 /// 값(`ref: v1.3.0` 등)을 인용할 수 있어서다 (05-RESEARCH.md Pattern 2). 블록이 없으면 빈
 /// 목록이다.
+///
+/// 펜스가 아닌 코드 블록(네 칸 들여 쓴 블록 · 인용(`>`) 안의 펜스)은 보지 않는다 (05-REVIEW.md WR-09 — 소유자 결정 G2-Q2 · G2-Q5, 검사는 넓히지 않았다).
 List<String> fencedLines(List<String> lines) {
   final out = <String>[];
   final openPattern = RegExp(r'^(`{3,}|~{3,})');
@@ -1558,7 +1560,7 @@ List<bool> markFencedLines(List<String> lines) {
 /// `trim()` 한 값을 그대로 돌려준다. 한쪽만 있거나 짝이 다른 따옴표는 벗기지 않는다 — 그
 /// 값은 부르는 쪽의 꼴 검사에서 실패한다. YAML 에서 `"^3.1.9"` 와 `^3.1.9` 는 같은 값이라
 /// analyzer 에게 같은 선언이므로, 검사도 같은 값으로 읽는다 (05-REVIEW.md WR-02 · WR-05).
-/// `[3/N]` 의 README 검사 (f) · (g) 가 쓴다.
+/// `[3/N]` 의 README 검사 (f) · (g) 가 펜스 코드 블록 안에서 키가 줄 머리에 오는 줄의 값을 읽을 때 쓴다 (plugin 선언 · pubspec reader 도 쓴다).
 String unquotedScalar(String raw) {
   final trimmed = raw.trim();
   final quoted = RegExp(r'''^(['"])(.*)\1$''').firstMatch(trimmed);
@@ -1569,7 +1571,7 @@ String unquotedScalar(String raw) {
 ///
 /// `-pre` · `+build` 꼬리는 떨어진다. 값의 바깥 따옴표(`version: "2.0.0-dev"`)와 줄 끝
 /// `# 주석` 은 벗겨 읽는다 — YAML 에서 따옴표 값은 같은 값이다 (05-REVIEW.md IN-01,
-/// [unquotedScalar]). `[3/N]` 의 README 검사 (g) 가 README 코드 블록의 `ref: vX.Y.Z` 와 견준다.
+/// [unquotedScalar]). `[3/N]` 의 README 검사 (g) 가 README 펜스 코드 블록 안에서 키가 줄 머리에 오는 `ref: vX.Y.Z` 줄의 값과 견준다.
 /// 읽지 못하면 [FormatException] (main 이 종료 코드 70 으로 끝낸다).
 String pubspecReleaseVersion(String repoRoot) {
   final text = File('$repoRoot/pubspec.yaml')
@@ -1852,12 +1854,14 @@ List<String>? findListLinesOutsideMarkers(List<String> lines, String name) {
 ///   — 구역 안의 읽지 못하는 줄도 실패
 /// - (d′) 그 표시 구역이 든 절(구역 앞의 제목부터 구역 뒤의 다음 제목 앞까지, 펜스 밖)에
 ///   구역 밖의 목록 줄이 없다 ([findListLinesOutsideMarkers], 소유자 결정 G2-Q3)
-/// - (e) README 의 `package:woody_lints/<이름>.yaml` 주소가 모두 [expectedLibYamls] 에 있다
+/// - (e) README 에서 `package:woody_lints/` 로 정확히 시작하는 주소가 모두 [expectedLibYamls] 에 있다
 ///   — 꼴이 아닌 주소 · `woody_lints` 가 아닌 패키지의 주소도 실패
-/// - (f) README 코드 블록의 `version:` · `riverpod_lint:` 값 == [readShippedPluginConstraint]
+/// - (f) README 의 펜스 코드 블록 안에서 키가 줄 머리에 오는 `version:` · `riverpod_lint:` 줄의 값 == [readShippedPluginConstraint]
 ///   — 따옴표 · 줄 끝 주석을 벗겨 읽고, 꼴이 틀린 값도 실패
-/// - (g) README 코드 블록의 `ref: vX.Y.Z` == [pubspecReleaseVersion] — 읽은 값이 0개면 실패 (VERIFY-06, D-02)
+/// - (g) README 의 펜스 코드 블록 안에서 키가 줄 머리에 오는 `ref: vX.Y.Z` 줄의 값 == [pubspecReleaseVersion] — 읽은 값이 0개면 실패 (VERIFY-06, D-02)
 ///   — 따옴표 · 줄 끝 주석을 벗겨 읽고, 꼴이 틀린 값도 실패
+///
+/// (e) 는 `package:` 로 시작하지 않는 scheme 오타 · `package:` 뒤의 공백 · 주소 바로 뒤에 붙은 `,` · `.` 같은 문장 부호를 보지 않고, (f) · (g) 는 flow 표기(`{…}`) 안의 키와 펜스가 아닌 코드 블록(네 칸 들여 쓴 블록 · 인용 안의 펜스)을 보지 않는다 (05-REVIEW.md WR-07 ~ WR-09 · IN-08 — 소유자 결정 G2-Q2 · G2-Q5, 검사는 넓히지 않았다).
 StepResult checkShippedComposition(String repoRoot) {
   final details = <String>[];
   void addBlock(List<String> lines) {
@@ -2013,7 +2017,7 @@ StepResult checkShippedComposition(String repoRoot) {
         '`$rulesMdFile` 의 켠 analyzer 옵션 표와 `$rulesFile` 의 `analyzer: language:` 가 다르다.',
   );
 
-  // (d) ~ (g) README 가 가리키는 값 — 규칙 목록 · 프리셋 주소 · plugin 버전 · ref (VERIFY-06,
+  // (d) ~ (g) README 가 가리키는 값 (각 검사가 보는 범위는 아래 주석) — 규칙 목록 · 프리셋 주소 · plugin 버전 · ref (VERIFY-06,
   // 05-CONTEXT.md D-01 · D-02). README 가 없으면 FileSystemException → main 이 70.
   final readme = File('$repoRoot/$readmeFile');
   final readmeLines = readme.readAsLinesSync();
@@ -2062,7 +2066,7 @@ StepResult checkShippedComposition(String repoRoot) {
     }
   }
 
-  // (e) README 의 프리셋 주소가 모두 lib/ 에 있다 — 파일 전체에서 `package:woody_lints/` 뒤의
+  // (e) README 에서 `package:woody_lints/` 로 정확히 시작하는 주소가 모두 lib/ 에 있다 — 파일 전체에서 `package:woody_lints/` 뒤의
   // 후보를 모두 모으고, `<이름>.yaml` 꼴이 아닌 것은 건너뛰지 않고 실패한다 (05-REVIEW.md
   // WR-01). 꼴이 맞는 후보만 lib/ 와 견준다.
   final readmeText = readmeLines.join('\n');
@@ -2086,7 +2090,7 @@ StepResult checkShippedComposition(String repoRoot) {
   }
   // (e) 다른 패키지의 `.yaml` 주소 — 이름 자리는 `/` · 공백이 아닌 글자 전부라 hyphen 이 든
   // 오타(`woody-lints`)도 후보다. 이 README 의 include 주소는 모두 woody_lints 다
-  // (05-VERIFICATION.md W1, 소유자 결정 2026-10-14 R2-Q3).
+  // (05-VERIFICATION.md W1, 소유자 결정 2026-10-14 R2-Q3). 주소 바로 뒤에 `,` · `.` 같은 문장 부호가 붙으면 후보가 되지 않는다 (05-REVIEW.md IN-08).
   final otherPackages = [
     ...RegExp(
           r'''package:([^/\s]+)/(\S+?\.ya?ml)(?=[`\s)"']|$)''',
@@ -2119,14 +2123,14 @@ StepResult checkShippedComposition(String repoRoot) {
     }
   }
 
-  // (f) · (g) 는 코드 블록 안의 줄만 본다 — 산문의 옛 값은 세지 않는다.
+  // (f) · (g) 는 펜스 코드 블록 안의 줄만 본다 — 산문의 옛 값, 네 칸 들여 쓴 코드 블록 · 인용 안의 펜스는 세지 않는다 (05-REVIEW.md WR-09).
   final fenced = fencedLines(readmeLines);
 
-  // (f) 코드 블록의 plugin 버전 == lib/riverpod.yaml. `version:` · `riverpod_lint:` 키 줄을 모두
+  // (f) 코드 블록의 plugin 버전 == lib/riverpod.yaml. 줄 머리에 `version:` · `riverpod_lint:` 키가 오는 줄을 모두
   // 후보로 잡고, 따옴표와 줄 끝 `# 주석` 을 벗긴 값의 꼴을 본다 — 꼴이 틀린 값은 건너뛰지 않고
   // 실패한다 (05-REVIEW.md WR-02). 값 없는 맵 키 줄(`  riverpod_lint:`)과 주석만 붙은 키 줄은
   // 후보가 아니다. `version:` 은 `riverpod_lint:` 맵 아래로 좁히지 않는다 — README 에 pubspec
-  // 예시 블록을 넣으면 그 `version:` 도 후보가 된다.
+  // 예시 블록을 넣으면 그 `version:` 도 후보가 된다. flow 표기(`{…}`) 안의 키는 후보가 아니다 (05-REVIEW.md WR-08).
   final shipped = readShippedPluginConstraint(repoRoot);
   final versionKeyPattern = RegExp(
     r'^\s*(?:version|riverpod_lint):[ \t]*(.*?)(?:[ \t]+#.*)?[ \t]*$',
@@ -2169,9 +2173,9 @@ StepResult checkShippedComposition(String repoRoot) {
     }
   }
 
-  // (g) 코드 블록의 `ref: vX.Y.Z` == pubspec.yaml 의 version (꼬리를 뗀 값). `ref:` 키 줄을 모두
+  // (g) 코드 블록의 `ref: vX.Y.Z` == pubspec.yaml 의 version (꼬리를 뗀 값). 줄 머리에 `ref:` 키가 오는 줄을 모두
   // 후보로 잡고 (f) 와 같이 따옴표와 줄 끝 `# 주석` 을 벗긴다. `ref: main` 은 세지 않고, 그 밖의
-  // 꼴(값 없음 포함)은 실패한다 (05-REVIEW.md WR-02).
+  // 꼴(값 없음 포함)은 실패한다 (05-REVIEW.md WR-02). flow 표기(`{…}`) 안의 키는 후보가 아니다 (05-REVIEW.md WR-08).
   final release = pubspecReleaseVersion(repoRoot);
   final refKeyPattern = RegExp(r'^\s*ref:[ \t]*(.*?)(?:[ \t]+#.*)?[ \t]*$');
   final refValuePattern = RegExp(r'^v(\d+\.\d+\.\d+)$');
