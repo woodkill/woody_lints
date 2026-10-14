@@ -817,19 +817,29 @@ StepResult checkLibHasNoDart(String repoRoot) {
   );
 }
 
+/// YAML 텍스트 [text] 를 줄로 나눈다 — CR 하나 · LF · CRLF 가 모두 줄을 나눈다.
+///
+/// YAML 1.2 와 같다 — analyzer 가 쓰는 package:yaml 은 CR 하나도 줄바꿈으로 읽는다.
+/// 같은 파일의 `readAsLinesSync()` 와 같은 규칙(`LineSplitter`)이다. 옵션 파일 · `pubspec.yaml`
+/// 을 줄로 나누는 자리는 모두 이것을 쓴다 — `split` 이나 `replaceAll` 로 줄을 나누지 않는다.
+/// `\n` 으로만 나누면 주석 줄 끝의 CR 뒤에 숨긴 규칙 · 키 · 옵션을 건너뛴다
+/// (05-VERIFICATION.md 3회차 gap · 05-REVIEW.md WR-11 · 소유자 결정 G3-Q1).
+List<String> splitYamlLines(String text) => const LineSplitter().convert(text);
+
 /// 옵션 파일 내용에서 최상위 `plugins:` 섹션이 있으면 뺀다 (spike 007, 013).
 ///
 /// 줄 단위로 걸으며 `plugins:` 줄부터 다음 최상위 키(들여쓰기 없는 비주석 줄) 앞까지를
 /// 지우지 않고 빈 줄로 바꾼다 (줄 번호 보존) — 복사본의 줄 수와 줄 번호가 원본과 같다.
 /// 없으면 그대로 돌려준다 — 조각 셋 가운데 `plugins:` 가 있는 것은 `riverpod.yaml` 뿐이다.
-/// 받는 꼴: 줄 끝 주석, `plugins:` 뒤의 주석 · 공백, 섹션 안의 빈 줄 · 열 0 주석, CRLF,
-/// 마지막 줄바꿈 없음 (03-REVIEW.md WR-02, 2026-10-13 복제본에서 입력 10가지 확인).
+/// 받는 꼴: 줄 끝 주석, `plugins:` 뒤의 주석 · 공백, 섹션 안의 빈 줄 · 열 0 주석,
+/// CR 하나 · CRLF 줄바꿈 ([splitYamlLines] — YAML 과 같다), 마지막 줄바꿈 없음
+/// (03-REVIEW.md WR-02, 2026-10-13 복제본에서 입력 10가지 확인).
 ///
 /// 바꾼 뒤에도 `plugins:` 줄이 남아 있으면 섹션을 놓친 것이라 [FormatException] 을
 /// 던진다 ([shownAs] 는 문구에 쓸 원본 경로). `plugins:` 를 담은 채 분석하면 plugin 을
 /// 준비한다 (10초 + 네트워크) — 조용히 넘기지 않는다.
 String stripPlugins(String options, {required String shownAs}) {
-  final lines = options.replaceAll('\r\n', '\n').split('\n');
+  final lines = splitYamlLines(options);
   var inPlugins = false;
   for (var i = 0; i < lines.length; i++) {
     final line = lines[i];
@@ -948,7 +958,7 @@ List<String> declaredRuleNames(String options, {required String shownAs}) {
   final rulesKeyPattern = RegExp(r'^\s+rules:\s*(?:#.*)?$');
   var inLinter = false;
   final names = <String>[];
-  final lines = options.split('\n');
+  final lines = splitYamlLines(options);
   for (var i = 0; i < lines.length; i++) {
     final line = lines[i];
     // 주석 줄과 빈 줄은 블록을 닫지 않는다 — YAML 에서 열 0 주석은 블록 밖이 아니다 (04-REVIEW.md CR-02)
@@ -1024,7 +1034,7 @@ List<String> declaredRuleNames(String options, {required String shownAs}) {
   final keyPattern = RegExp(r'^([A-Za-z_][A-Za-z0-9_-]*):(?:[ \t]|$)');
   final topLevel = <String>[];
   final nested = <String, List<String>>{};
-  final lines = options.replaceAll('\r\n', '\n').split('\n');
+  final lines = splitYamlLines(options);
   // 열 0 의 비주석 줄을 이미 봤는지 — 못 본 채 들여쓴 줄이 오면 최상위가 열 0 밖이다.
   var seenTopLevel = false;
   // 아래 키를 보는 최상위 키 — null 이면 그 아래 줄은 보지 않는다.
@@ -1098,7 +1108,7 @@ Map<String, bool> enabledLanguageOptions(
   );
   var inAnalyzer = false;
   int? languageIndent;
-  final lines = options.split('\n');
+  final lines = splitYamlLines(options);
   for (var i = 0; i < lines.length; i++) {
     final line = lines[i];
     final trimmed = line.trim();
@@ -1301,9 +1311,11 @@ Future<StepResult> checkRuleNames(String repoRoot) async {
     // 없는 진단 코드 등)도 사용 프로젝트에 `included_file_warning` 으로 나타난다.
     if (lines.isNotEmpty) {
       // 진단 줄마다 그 줄이 가리키는 조각의 복사본에서 규칙 이름을 읽는다.
+      // 복사본은 [stripPlugins] 가 [splitYamlLines] 로 나눠 LF 로 이은 것이라 analyzer 가
+      // 말하는 줄 번호와 같다.
       final copyLines = {
         for (final MapEntry(key: name, value: content) in copies.entries)
-          name: content.split('\n'),
+          name: splitYamlLines(content),
       };
       return StepResult(
         label: label,
@@ -1403,10 +1415,7 @@ StepResult checkFixtureOptions(String repoRoot, List<Fixture> fixtures) {
 /// `[4/N]` 이 쓰고, `[3/N]` 의 README 검사 (f) 도 같은 값을 쓴다.
 String readShippedPluginConstraint(String repoRoot) {
   const shownAs = 'lib/riverpod.yaml';
-  final lines = File('$repoRoot/$shownAs')
-      .readAsStringSync()
-      .replaceAll('\r\n', '\n')
-      .split('\n');
+  final lines = splitYamlLines(File('$repoRoot/$shownAs').readAsStringSync());
   final keyLine = RegExp(
     r'^([ \t]+)riverpod_lint:[ \t]*(.*?)(?:[ \t]+#.*)?[ \t]*$',
   );
@@ -1572,15 +1581,19 @@ String unquotedScalar(String raw) {
 /// `-pre` · `+build` 꼬리는 떨어진다. 값의 바깥 따옴표(`version: "2.0.0-dev"`)와 줄 끝
 /// `# 주석` 은 벗겨 읽는다 — YAML 에서 따옴표 값은 같은 값이다 (05-REVIEW.md IN-01,
 /// [unquotedScalar]). `[3/N]` 의 README 검사 (g) 가 README 펜스 코드 블록 안에서 키가 줄 머리에 오는 `ref: vX.Y.Z` 줄의 값과 견준다.
+/// 줄은 [splitYamlLines] 로 나눠 한 줄씩 본다 — 여러 줄 정규식은 U+2028 · U+2029 도 줄
+/// 경계로 보아 주석 줄 안에 숨긴 `version:` 을 읽을 수 있었다 (소유자 결정 G3-R2-Q1).
 /// 읽지 못하면 [FormatException] (main 이 종료 코드 70 으로 끝낸다).
 String pubspecReleaseVersion(String repoRoot) {
-  final text = File('$repoRoot/pubspec.yaml')
-      .readAsStringSync()
-      .replaceAll('\r\n', '\n');
-  final raw = RegExp(
-    r'^version:[ \t]*(.*?)(?:[ \t]+#.*)?[ \t]*$',
-    multiLine: true,
-  ).firstMatch(text)?.group(1);
+  final versionLine = RegExp(r'^version:[ \t]*(.*?)(?:[ \t]+#.*)?[ \t]*$');
+  final lines = splitYamlLines(
+    File('$repoRoot/pubspec.yaml').readAsStringSync(),
+  );
+  String? raw;
+  for (final line in lines) {
+    raw = versionLine.firstMatch(line)?.group(1);
+    if (raw != null) break;
+  }
   final match = raw == null
       ? null
       : RegExp(r'^(\d+\.\d+\.\d+)(?:[-+].*)?$').firstMatch(unquotedScalar(raw));
