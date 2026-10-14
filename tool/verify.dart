@@ -3,7 +3,7 @@
 //
 //   [1/N] lib/ 에 .dart 파일이 없는지
 //   [2/N] 조각 파일 셋(lib/base.yaml · codegen.yaml · riverpod.yaml)의 복사본을 분석해 진단이 하나도 없는지 (deprecated / removed / 없는 규칙, 겹친 규칙 · 모르는 키 같은 옵션 경고, 깨진 YAML)
-//   [3/N] 배포 파일의 구성 — 묶음 · 별칭은 include 만 담는지, lib/base.yaml 의 규칙이 기반 세트와 겹치지 않는지, RULES.md 의 켠 규칙 표와 같은지, 다른 조각에 규칙이 없는지, 조각 셋의 최상위 키(와 그 바로 아래 키 — lib/codegen.yaml 의 analyzer:, lib/riverpod.yaml 의 plugins:)가 정해진 목록 안인지, README 의 표시 구역이 든 절에 구역 밖 목록 줄이 없는지, README 의 규칙 목록(표시 구역) · package: 로 시작하는 프리셋 주소 · 펜스 코드 블록 안 블록 꼴의 plugin 버전 · ref 가 배포 파일 · pubspec 과 같은지
+//   [3/N] 배포 파일의 구성 — 묶음 · 별칭은 include 만 담는지, lib/base.yaml 의 규칙이 기반 세트와 겹치지 않는지, RULES.md 의 켠 규칙 표와 같은지, 다른 조각에 규칙이 없는지, 조각 셋의 최상위 키(와 그 바로 아래 키 — lib/codegen.yaml 의 analyzer:, lib/riverpod.yaml 의 plugins:)가 정해진 목록 안인지, README 의 표시 구역이 든 절에 구역 밖 목록 줄이 없는지, README 의 규칙 목록(표시 구역) · package: 로 시작하는 프리셋 주소 · 펜스 코드 블록 안 블록 꼴의 plugin 버전 · ref 가 배포 파일 · pubspec 과 같은지, 줄 단위로 읽은 규칙 · 키 · analyzer 옵션 · plugin 선언 · version 이 YAML (package:yaml) 이 같은 파일에서 읽은 값과 같은지
 //   [4/N] 연습용 프로젝트 전부의 analysis_options.yaml 이 정해진 내용인지 (주석 · 빈 줄을 뺀 내용을 통째로 견준다)
 //   [5/N] ~ [N/N] 연습용 프로젝트마다 `dart analyze` 로 분석한 결과가 정답지와 같은지
 //         (`fixtures` 표의 순서. recommended 는 자기 정답지 없이 같은 실행의 example 결과와 견준다)
@@ -24,8 +24,17 @@
 //
 // 종료 코드: 0 모두 통과 / 1 단계 실패 / 64 사용법 오류 / 69 pub get 실패 / 70 예외로 끝남
 //            / 78 실행 중인 SDK 가 .fvmrc 와 다름
+//
+// 의존성은 루트 pubspec.yaml 의 dev_dependencies 에 둔 yaml (package:yaml) 하나다 —
+// [3/N] 이 줄 단위로 읽은 값을 YAML 해석 결과와 견줄 때만 쓴다 (analyzer · pub 과 같은
+// 해석기). Phase 2 의 "dart:io · dart:convert 만" (02-CONTEXT.md D-11) 을 이 목적에 한해
+// 다시 정했다 (05-VERIFICATION.md 4회차 gap, 소유자 결정 G4-Q1). .dart_tool/ 이 없는 새
+// 복제본(CI)은 `dart run` 이 패키지를 먼저 받지만, 이미 받은 작업 트리는 pubspec.yaml 이
+// 바뀐 뒤 `fvm dart pub get` 을 한 번 돌려야 컴파일된다 (2026-10-15 실측, Dart 3.13.4).
 import 'dart:convert';
 import 'dart:io';
+
+import 'package:yaml/yaml.dart';
 
 /// plugin 준비가 실패했을 때 stderr 에 찍히는 머리말 (spike 002).
 ///
@@ -1846,6 +1855,262 @@ List<String>? findListLinesOutsideMarkers(List<String> lines, String name) {
   ];
 }
 
+/// `[3/N]` (h) 블록의 마지막 안내 줄 — 줄 단위 reader 와 YAML 이 다르게 읽었을 때 고칠 곳을 말한다.
+const yamlAgreementHint =
+    '줄 단위로 읽은 값과 YAML (package:yaml — analyzer · pub 과 같은 해석기) 이 읽은 값이 '
+    '다르면 검사는 그 값을 믿지 않는다 — 여러 줄 문자열(따옴표 · `|` · `>`) 안에 구조처럼 '
+    '보이는 줄, 같은 키 두 번, 철자가 다른 키를 두지 않는다 '
+    '(05-VERIFICATION.md 4회차 gap, 소유자 결정 G4-Q1).';
+
+/// 줄 단위 reader [findUnexpectedKeys] 가 옵션 파일 본문([options])에서 본 키를 돌려준다 — `[3/N]` (h) 가 YAML 과 견준다.
+///
+/// [findUnexpectedKeys] 의 본문을 바꾸지 않고, 받는 키를 비워 두 번 부른다. 먼저
+/// `allowed: const {}` 로 불러 모든 최상위 줄을 `topLevel` 로 받는다. 다음에는 그 이름을 모두
+/// 받고 값 없는 최상위 키마다 받는 아래 키를 빈 집합으로 두어, 그 바로 아래 줄(첫 자식 줄의
+/// 들여쓰기와 그보다 얕은 줄)을 모두 `nested` 로 받는다 — 그래서 결과는 reader 가 실제로 쓰는
+/// 들여쓰기 · 블록 경계 규칙 그대로다 (같은 규칙을 다시 짜지 않는다).
+///
+/// 줄이 키 꼴(`<이름>:`)이면 키 이름을, 아니면 원문(`topLevel` 은 들여쓰기를 살린 원문,
+/// `children` 은 trim 한 원문)을 담는다. 아래 줄의 목록 항목(`- …`)은 키가 아니라 담지 않는다.
+/// 같은 키가 두 번 보이면 두 번 담는다 — YAML 은 같은 키를 두 번 받지 않으므로 reader 쪽에만
+/// 두 번 보이는 키는 여러 줄 문자열 안의 줄이다 (05-VERIFICATION.md 4회차 gap, 소유자 결정 G4-Q1).
+({List<String> topLevel, Map<String, List<String>> children})
+keysSeenByLineReader(String options) {
+  final keyPattern = RegExp(r'^([A-Za-z_][A-Za-z0-9_-]*):(?:[ \t]|$)');
+  final valueLessKeyPattern = RegExp(
+    r'^([A-Za-z_][A-Za-z0-9_-]*):[ \t]*(?:#.*)?$',
+  );
+  final listItemPattern = RegExp(r'^-(?:[ \t]|$)');
+  // findUnexpectedKeys 가 돌려준 `<줄 번호>행: <원문>` 에서 원문만 뗀다.
+  String textOf(String shown) => shown.substring(shown.indexOf('행: ') + 3);
+
+  final topLevel = <String>[];
+  final valueLessKeys = <String>{};
+  for (final shown in findUnexpectedKeys(options, allowed: const {}).topLevel) {
+    final text = textOf(shown);
+    topLevel.add(keyPattern.firstMatch(text)?.group(1) ?? text);
+    final valueLess = valueLessKeyPattern.firstMatch(text)?.group(1);
+    if (valueLess != null) valueLessKeys.add(valueLess);
+  }
+  final nested = findUnexpectedKeys(
+    options,
+    allowed: topLevel.toSet(),
+    childKeys: {for (final key in valueLessKeys) key: const <String>{}},
+  ).nested;
+  final children = <String, List<String>>{};
+  for (final MapEntry(key: parent, value: lines) in nested.entries) {
+    for (final shown in lines) {
+      final text = textOf(shown).trim();
+      if (listItemPattern.hasMatch(text)) continue;
+      children
+          .putIfAbsent(parent, () => [])
+          .add(keyPattern.firstMatch(text)?.group(1) ?? text);
+    }
+  }
+  return (topLevel: topLevel, children: children);
+}
+
+/// YAML 해석 결과([root] — [loadYaml] 이 돌려준 값)의 최상위 맵 키와, 값이 맵인 키마다 그 아래 키를 돌려준다.
+///
+/// [keysSeenByLineReader] 와 견줄 값이다. [root] 가 null(빈 문서)이면 둘 다 비고, 맵이 아니면
+/// `topLevel` 에 `(맵이 아닌 문서)` 하나다. 키는 YAML 이 읽은 글자(따옴표를 벗긴 이름)다.
+({List<String> topLevel, Map<String, List<String>> children}) keysSeenByYaml(
+  Object? root,
+) {
+  if (root == null) return (topLevel: const [], children: const {});
+  if (root is! YamlMap) {
+    return (topLevel: const ['(맵이 아닌 문서)'], children: const {});
+  }
+  final children = <String, List<String>>{};
+  for (final MapEntry(:key, :value) in root.entries) {
+    if (value is YamlMap) children['$key'] = [for (final k in value.keys) '$k'];
+  }
+  return (topLevel: [for (final key in root.keys) '$key'], children: children);
+}
+
+/// YAML 해석 결과([root])의 `linter.rules` 를 글자로 돌려준다 — [declaredRuleNames] 와 견줄 값이다.
+///
+/// 목록이면 항목마다 그 글자, 맵이면 `<키>: <값>`, 그 밖의 값이면 그 글자 하나, 없으면 빈 목록이다.
+List<String> yamlRuleNames(Object? root) {
+  final linter = root is YamlMap ? root['linter'] : null;
+  final rules = linter is YamlMap ? linter['rules'] : null;
+  if (rules is YamlList) return [for (final rule in rules) '$rule'];
+  if (rules is YamlMap) {
+    return [for (final MapEntry(:key, :value) in rules.entries) '$key: $value'];
+  }
+  return rules == null ? const [] : ['$rules'];
+}
+
+/// YAML 해석 결과([root])의 `analyzer.language` 를 `<이름>: <값>` 글자로 돌려준다 — [enabledLanguageOptions] 와 견줄 값이다.
+///
+/// 켠 것만이 아니라 맵 전체다 (bool 은 `true` · `false`, 그 밖의 값은 그 글자라 다르게 나온다).
+/// 맵이 아닌 값이면 `language: <값>` 하나, 없으면 빈 목록이다.
+List<String> yamlLanguageOptions(Object? root) {
+  final analyzer = root is YamlMap ? root['analyzer'] : null;
+  final language = analyzer is YamlMap ? analyzer['language'] : null;
+  if (language is YamlMap) {
+    return [
+      for (final MapEntry(:key, :value) in language.entries) '$key: $value',
+    ];
+  }
+  return language == null ? const [] : ['language: $language'];
+}
+
+/// YAML 해석 결과([root])의 `plugins.riverpod_lint` 선언을 돌려준다 — [readShippedPluginConstraint] 와 견줄 값이다.
+///
+/// 스칼라면 그 값, 맵이면 그 `version` 의 값이다. 없으면 `(없음)` 이다.
+String yamlPluginConstraint(Object? root) {
+  final plugins = root is YamlMap ? root['plugins'] : null;
+  final declared = plugins is YamlMap ? plugins[pluginPackage] : null;
+  final value = declared is YamlMap ? declared['version'] : declared;
+  return value == null ? '(없음)' : '$value';
+}
+
+/// `[3/N]` (h) — 줄 단위 reader 가 읽은 값을 YAML (package:yaml) 이 같은 파일에서 읽은 값과 견주어, 다른 것마다 블록 하나(줄 목록)를 돌려준다.
+///
+/// 견주는 것은 다섯 가지다.
+/// - 조각 셋([ruleCheckTargets])의 규칙 — [declaredRuleNames] ↔ `linter.rules` ([yamlRuleNames]).
+///   다른 조각에 규칙이 없다는 (b′) 의 판정도 여기서 YAML 과 맞는지 본다.
+/// - 조각 셋의 최상위 키와 그 바로 아래 키 — [keysSeenByLineReader] ([findUnexpectedKeys]) ↔
+///   최상위 맵의 키와 값이 맵인 키마다 그 아래 키 ([keysSeenByYaml]). 아래 키는 값 없는 최상위
+///   키 모두에서 견준다.
+/// - `lib/base.yaml` 의 analyzer 옵션 — [enabledLanguageOptions] ↔ `analyzer.language` ([yamlLanguageOptions]).
+/// - `lib/riverpod.yaml` 의 riverpod_lint 선언 — [readShippedPluginConstraint] ↔ `plugins.riverpod_lint`
+///   ([yamlPluginConstraint]).
+/// - `pubspec.yaml` 의 version — [pubspecReleaseVersion] ↔ `version` 의 major.minor.patch
+///   (블록에는 YAML 쪽의 원래 글자를 보인다).
+///
+/// 목록은 순서 없이 건수까지 견준다 ([subtractLines] 를 양쪽으로). YAML 로 읽지 못하는 파일
+/// (같은 키 두 번, 깨진 YAML — [YamlException])은 블록 하나로 알리고 그 파일의 다른 비교는
+/// 건너뛴다. [YamlException] 만 잡는다 — 그 밖의 예외는 지금처럼 main 이 받는다.
+///
+/// reader 는 바꾸지 않고 다시 부른다 — 앞의 확인이 같은 reader 를 이미 불러 그 [FormatException]
+/// (종료 코드 70)은 여기까지 오지 않는다. 다른 것은 YAML 로 올바르고 analyzer 도 받는 파일에서
+/// 검사가 본 값이 YAML 과 다른 정책 위반이라 70 이 아니라 `[3/N]` 실패다 (05-VERIFICATION.md
+/// 4회차 gap, 05-REVIEW.md WR-15 · WR-16, 소유자 결정 G4-Q1).
+List<List<String>> compareLineReadersWithYaml(String repoRoot) {
+  const disagree = '줄 단위 reader 와 YAML 이 다르게 읽었다';
+  const pluginFragment = 'lib/riverpod.yaml';
+  final blocks = <List<String>>[];
+
+  // 목록 둘을 건수까지 견준다 (순서 무시) — 다르면 블록 하나.
+  void compareLists(String head, List<String> lineReader, List<String> yaml) {
+    final onlyLineReader = subtractLines(lineReader, yaml)..sort();
+    final onlyYaml = subtractLines(yaml, lineReader)..sort();
+    if (onlyLineReader.isEmpty && onlyYaml.isEmpty) return;
+    String joined(List<String> items) =>
+        items.isEmpty ? '(없음)' : items.join(' · ');
+    blocks.add([
+      head,
+      '  줄 단위 reader 에만: ${joined(onlyLineReader)}',
+      '  YAML 에만: ${joined(onlyYaml)}',
+      '',
+      yamlAgreementHint,
+    ]);
+  }
+
+  // 값 둘이 다를 때의 블록.
+  void addValueBlock(String head, String lineReader, String yaml) {
+    blocks.add([
+      head,
+      '  줄 단위 reader: $lineReader',
+      '  YAML: $yaml',
+      '',
+      yamlAgreementHint,
+    ]);
+  }
+
+  // 파일을 YAML 로 읽는다 — 읽지 못하면 블록 하나를 더하고 null 을 돌려준다.
+  ({String text, Object? root})? load(String path) {
+    final text = File('$repoRoot/$path').readAsStringSync();
+    try {
+      final Object? root = loadYaml(text, sourceUrl: Uri.file(path));
+      return (text: text, root: root);
+    } on YamlException catch (e) {
+      final span = e.span;
+      final at = span == null ? '' : '${span.start.line + 1}행: ';
+      blocks.add([
+        '`$path` 을 YAML 로 읽지 못했다 — $at${e.message}',
+        '',
+        yamlAgreementHint,
+      ]);
+      return null;
+    }
+  }
+
+  for (final path in ruleCheckTargets) {
+    final loaded = load(path);
+    if (loaded == null) continue;
+    final (:text, :root) = loaded;
+    compareLists(
+      '`$path` 의 규칙 — $disagree (declaredRuleNames ↔ linter.rules)',
+      declaredRuleNames(text, shownAs: path),
+      yamlRuleNames(root),
+    );
+    final lineReaderKeys = keysSeenByLineReader(text);
+    final yamlKeys = keysSeenByYaml(root);
+    compareLists(
+      '`$path` 의 최상위 키 — $disagree (findUnexpectedKeys ↔ 최상위 맵)',
+      lineReaderKeys.topLevel,
+      yamlKeys.topLevel,
+    );
+    // reader 쪽 키 먼저, 그다음 YAML 에만 있는 키.
+    for (final key in {
+      ...lineReaderKeys.children.keys,
+      ...yamlKeys.children.keys,
+    }) {
+      compareLists(
+        '`$path` 의 `$key:` 바로 아래 키 — $disagree (findUnexpectedKeys ↔ $key 맵)',
+        lineReaderKeys.children[key] ?? const [],
+        yamlKeys.children[key] ?? const [],
+      );
+    }
+    if (path == rulesFile) {
+      compareLists(
+        '`$path` 의 analyzer 옵션 — $disagree (enabledLanguageOptions ↔ analyzer.language)',
+        [
+          for (final MapEntry(:key, :value) in enabledLanguageOptions(
+            text,
+            shownAs: path,
+          ).entries)
+            '$key: $value',
+        ],
+        yamlLanguageOptions(root),
+      );
+    }
+    if (path == pluginFragment) {
+      final lineReader = readShippedPluginConstraint(repoRoot);
+      final yaml = yamlPluginConstraint(root);
+      if (lineReader != yaml) {
+        addValueBlock(
+          '`$path` 의 riverpod_lint 선언 — $disagree (readShippedPluginConstraint ↔ plugins.riverpod_lint)',
+          lineReader,
+          yaml,
+        );
+      }
+    }
+  }
+
+  final pubspec = load('pubspec.yaml');
+  if (pubspec != null) {
+    final lineReader = pubspecReleaseVersion(repoRoot);
+    final root = pubspec.root;
+    final version = root is YamlMap ? root['version'] : null;
+    final yaml = version == null ? '(없음)' : '$version';
+    final release = RegExp(r'^(\d+\.\d+\.\d+)(?:[-+].*)?$')
+        .firstMatch(yaml)
+        ?.group(1);
+    if (release != lineReader) {
+      addValueBlock(
+        '`pubspec.yaml` 의 version — $disagree (pubspecReleaseVersion ↔ version)',
+        lineReader,
+        yaml,
+      );
+    }
+  }
+  return blocks;
+}
+
 /// [3/N] 배포 파일의 구성 — 저장소 안의 파일끼리 어긋나지 않는지 한 단계로 본다 (D-11, D-12).
 ///
 /// 확인을 모두 돌리고 실패를 모아 한 [StepResult] 로 돌려준다. analyzer 는 돌리지 않는다.
@@ -1873,6 +2138,7 @@ List<String>? findListLinesOutsideMarkers(List<String> lines, String name) {
 ///   — 값의 따옴표 · 줄 끝 주석을 벗겨 읽고, 꼴이 틀린 값도 실패 (키는 따옴표 · 콜론 앞 공백 없이 글자 그대로인 줄만 후보 — 05-REVIEW.md WR-13)
 /// - (g) README 의 펜스 코드 블록 안에서 키가 줄 머리에 오는 `ref: vX.Y.Z` 줄의 값 == [pubspecReleaseVersion] — 읽은 값이 0개면 실패 (VERIFY-06, D-02)
 ///   — 값의 따옴표 · 줄 끝 주석을 벗겨 읽고, 꼴이 틀린 값도 실패 (키는 따옴표 · 콜론 앞 공백 없이 글자 그대로인 줄만 후보 — 05-REVIEW.md WR-13)
+/// - (h) 줄 단위 reader 가 읽은 값 == YAML (package:yaml) 이 같은 파일에서 읽은 값 ([compareLineReadersWithYaml]) — 조각 셋의 규칙과 최상위 키 · 그 바로 아래 키, `lib/base.yaml` 의 analyzer 옵션, `lib/riverpod.yaml` 의 riverpod_lint 선언, `pubspec.yaml` 의 version. YAML 로 읽지 못하는 파일(같은 키 두 번 · 깨진 YAML)도 실패 (05-VERIFICATION.md 4회차 gap, 소유자 결정 G4-Q1)
 ///
 /// (e) 는 `package:` 로 시작하지 않는 scheme 오타 · `package:` 뒤의 공백 · `.yaml` · `.yml` 로 끝나지 않는 다른 패키지의 주소를 보지 않고, 주소 바로 뒤에 `,` · `.` 같은 문장 부호가 붙으면 `woody_lints` 주소는 꼴이 아닌 것으로 실패하고 다른 패키지의 주소는 후보가 되지 않는다. (f) · (g) 는 따옴표로 감싼 키 · 콜론 앞에 공백이 든 키(`"ref":` · `ref :`), flow 표기(`{…}`) 안의 키와 펜스가 아닌 코드 블록(네 칸 들여 쓴 블록 · 인용 안의 펜스)을 보지 않는다 (05-REVIEW.md WR-07 ~ WR-09 · WR-13 · WR-14 · IN-08 — 소유자 결정 G2-Q2 · G2-Q5 · G3-Q2, 검사는 넓히지 않았다).
 StepResult checkShippedComposition(String repoRoot) {
@@ -2229,6 +2495,9 @@ StepResult checkShippedComposition(String repoRoot) {
       ]);
     }
   }
+
+  // (h) 줄 단위 reader 가 읽은 값 == YAML 이 읽은 값 (05-VERIFICATION.md 4회차 gap, 소유자 결정 G4-Q1).
+  compareLineReadersWithYaml(repoRoot).forEach(addBlock);
 
   return StepResult(
     label: shippedCompositionLabel,
