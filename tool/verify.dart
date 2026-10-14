@@ -902,8 +902,9 @@ int countDeclaredRules(String options, {required String shownAs}) =>
 /// 블록 안의 그 밖의 줄(이름 없는 `-`, `- 이름: true`, 맵 형식 `이름: true`, 이름 뒤에 다른
 /// 것이 붙은 줄)은 건너뛰지 않고 [FormatException] 을 던진다 — main 이 종료 코드 70 으로
 /// 끝낸다 (04-REVIEW.md WR-10). 문구의 머리에 [shownAs] (문구에 쓸 원본 경로)가 들어가
-/// 어느 조각의 줄인지 알린다 (04-REVIEW.md IN-14). `linter:` 줄 자체에 붙은 flow 표기(`linter: {rules: [...]}`)는
-/// 블록 안의 줄이 아니라 읽지 않는다 — 그러면 규칙 0개라 `[2/N]` 이 잡는다.
+/// 어느 조각의 줄인지 알린다 (04-REVIEW.md IN-14). `linter:` 줄에 `#` 주석 밖의 값이 붙어
+/// 있으면(flow 표기 `linter: {rules: [...]}`) 건너뛰지 않고 [FormatException] — 다른 조각에서는
+/// (b′) 가 0개로 읽어 통과시켰던 입력이다 (05-REVIEW.md WR-04, 05-VERIFICATION.md gaps 2).
 /// 블록이 없으면 빈 목록이다. 같은 이름이 두 번 적혀 있으면 두 번 들어간다 (`[3/N]` 이 중복을
 /// 잡는다).
 List<String> declaredRuleNames(String options, {required String shownAs}) {
@@ -923,6 +924,15 @@ List<String> declaredRuleNames(String options, {required String shownAs}) {
     final trimmed = line.trim();
     if (trimmed.isEmpty || trimmed.startsWith('#')) continue;
     if (RegExp(r'^linter:').hasMatch(line)) {
+      // `linter:` 줄에 값이 붙은 꼴(flow 표기)은 블록 줄이 없어 규칙 0개로 읽힌다 — 건너뛰지
+      // 않고 멈춘다. 줄 끝 `# 주석` 은 값이 아니다 (05-REVIEW.md WR-04)
+      if (!RegExp(r'^linter:[ \t]*(?:#.*)?$').hasMatch(line)) {
+        throw FormatException(
+          '$shownAs 의 ${i + 1}행: `linter:` 줄에 값이 붙어 있다 — '
+          'flow 표기(`linter: {rules: [...]}`)는 읽지 않는다. '
+          '블록 목록(`linter:` / `  rules:` / `    - 이름`)으로 적는다 (05-REVIEW.md WR-04): $trimmed',
+        );
+      }
       inLinter = true;
     } else if (RegExp(r'^\S').hasMatch(line)) {
       // 들여쓰기 없는 줄(다른 최상위 키)이 블록을 닫는다.

@@ -375,7 +375,7 @@ plugin 은 Analysis Server 의 상태 폴더 아래 `.plugin_manager/<hash>/` �
 
 ## 이 저장소를 고치는 사람에게
 
-- 규칙은 `lib/base.yaml` 에만 적는다. 검증 명령의 `[3/10]` 단계가 다른 조각에 적힌 규칙을 잡는다.
+- 규칙은 `lib/base.yaml` 에만 적는다. 다른 조각에 규칙을 적으면 검증 명령이 잡는다 — 블록 목록이면 `[3/10]` 단계가 실패하고, flow 표기(`linter: {rules: [...]}`)처럼 읽지 못하는 꼴이면 종료 코드 70 으로 멈춘다.
 - 규칙을 더하거나 빼면 `lib/base.yaml`, `RULES.md` 의 켠 규칙 표, 이 README 의 표시 구역(「받는 규칙」의 목록) 세 곳을 같은 커밋에서 고친다. 어긋나면 검증이 실패한다.
 - 검증은 `fvm dart run tool/verify.dart` 로 돌린다. 단계와 종료 코드, 지워 보기 기록은 [`example/README.md`](example/README.md) 에 있다.
 - 버전 등급과 CHANGELOG 항목 형식은 [`VERSIONING.md`](VERSIONING.md) 를 따른다.
