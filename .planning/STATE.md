@@ -4,16 +4,16 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 05
 current_phase_name: Documentation
-status: Phase 05 검증 gaps_found (23/25) — gap 수정 계획 대기 (/gsd-plan-phase 05 --gaps)
-stopped_at: Phase 05 검증 gaps_found — gap 2건 (VERIFY-06 README 목록 reader, (b′) flow 표기)
-last_updated: "2026-10-13T20:50:12.404Z"
+status: Phase 05 gap 수정 계획 05-07 · 05-08 · 05-09 완료 — 실행 대기 (/gsd-execute-phase 05 --gaps-only)
+stopped_at: Phase 05 gap 수정 계획 완료 (05-07 · 05-08 · 05-09)
+last_updated: "2026-10-14T01:07:12.759Z"
 last_activity: 2026-10-14
-last_activity_desc: 05-05 완료 — 첫 push 0db0fdd..92d478a (65커밋) · GitHub verify run 38460138720 단계 10개 통과
-state_head: 46bd8e7e560ca70c81f033ef3a330e4c8c262f55
+last_activity_desc: Phase 05 gap 수정 계획 05-07 · 05-08 · 05-09 작성, plan checker 2회차 통과
+state_head: 303d55984f787c8e82fa9f287edeb5c01c8d6ccc
 progress:
   total_phases: 6
   completed_phases: 4
-  total_plans: 32
+  total_plans: 35
   completed_plans: 32
   percent: 67
 ---
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-10-13)
 
 ## Current Position
 
-Phase: 05 (Documentation) — EXECUTING
-Plan: 6 of 6
-Status: Phase 05 검증 gaps_found (23/25) — gap 수정 계획 대기 (/gsd-plan-phase 05 --gaps)
-Last activity: 2026-10-14 — 05-05 완료 (소유자 결정 "push" 뒤 git push origin gsd/v2.0-package-rework 한 줄, 0db0fdd..92d478a 65커밋 fast-forward; GitHub verify run 38460138720 success · 점검 통과 (10개 중 10개)). Phase 5 의 plan 6개 모두 끝남 — 05-05 의 SUMMARY · 메타데이터 커밋은 origin 에 없다
+Phase: 05 (Documentation) — READY TO EXECUTE
+Plan: 6 of 9
+Status: Phase 05 gap 수정 계획 05-07 · 05-08 · 05-09 완료 — 실행 대기 (/gsd-execute-phase 05 --gaps-only)
+Last activity: 2026-10-14 — Phase 05 gap 수정 계획 05-07 · 05-08 · 05-09 작성, plan checker 2회차 통과
 
 Progress: [███████░░░] 67%
 
@@ -219,6 +219,9 @@ Recent decisions affecting current work:
 - [Phase 05]: 05-06: README 검사 (d) ~ (g) 의 지워 보기 M38 ~ M42 다섯 모두 종료 코드 1 · [3/10] 만 실패 · 점검 실패 (10개 중 1개), 각 19초 — (e) 는 첫 주소(50행)가 아닌 뒤쪽 주소(78행)의 오타를 잡았다. (f) · (g) 의 코드 블록 한정은 fencedLines 코드를 읽은 것이고 실행으로 가르지 않았다
 - [Phase 05]: 05-05: 소유자 결정 "push" (권고안 승인, 2026-10-14) — Phase 5 의 첫 push 는 git push origin gsd/v2.0-package-rework 한 줄로 했다 (2026-10-13T20:06:03Z UTC, 0db0fdd..92d478a, 65커밋 — Phase 4 gap 수정 38 · Phase 5 27, fast-forward, 둘째 push 없음). main 90a2736, tag v1.3.0 하나, PR 0건 그대로다. 05-05 의 SUMMARY · 메타데이터 커밋은 origin 에 없다
 - [Phase 05]: 05-05: GitHub verify run 38460138720 이 단계 10개로 성공했다 (job 3분 31초, 검증 148초, ubuntu-24.04 20261004.327.1) — README 검사 (d) ~ (g) 가 runner 에서도 통과해 고치지 않았다 (VERIFY-06 의 CI 쪽)
+- [Phase 05]: gap 수정 계획 전 소유자 결정 (2026-10-14, 모두 권고대로) — gap 둘(README 표시 구역 reader · `linter:` flow 표기)에 더해, 같은 모양(읽지 못하는 줄을 건너뜀) 넷(WR-01 · WR-02 · WR-03 · RULES.md 표 reader), 문장 넷(W4 · IN-04 · IN-02 · IN-03 · IN-07, IN-07 은 문장만 낮춤), 거짓 실패 · 정리 넷(WR-05 · IN-01 · IN-05 · IN-06)을 함께 고친다. WR-06 (`.claude/CLAUDE.md` 의 낡은 지시)은 D-09 대로 deferred
+- [Phase 05]: gap 수정 계획 2회차 소유자 결정 (2026-10-14, 모두 권고대로) — plugin 선언은 `^X.Y.Z` 와 고정 버전 `X.Y.Z` 를 받고 범위 제약만 원인을 말하며 멈춘다, `enabledLanguageOptions` 의 flow 표기 · 읽지 못하는 줄도 멈춘다(05-08), README 의 `package:` 이름이 `woody_lints` 가 아니면 실패(05-08), `measure_rules.dart` 의 `readRulesTable` · `readUpstreamRules.readSet` 은 그대로 두고 주석 한 줄만 고친다
+- [Phase 05]: gap 수정 계획 05-07 (wave 6, gap 둘 · README 코드 블록 값, M43 ~ M50) · 05-08 (wave 7, RULES.md 표 · 주소 · 펜스 · 옵션 reader, M51 ~ M62) · 05-09 (wave 8, plugin 선언 · 문장 · 처리 기록 · push, M63 ~ M67). Fable 크레딧 소진으로 planner · checker 를 Opus 로 돌렸다 (소유자 결정). plan checker 2회차 통과 (6f91b2c, ea65d2e, 303d559)
 
 ### Pending Todos
 
@@ -233,6 +236,7 @@ None yet.
 - [Phase 4] 리뷰 지적 18건이 열려 있다 (`04-REVIEW-DISPOSITION.md`, 합계 28 — open 18 · deferred 3 · fixed 7). deferred 셋: WR-11 (`[3/10]` 의 겹침 · `RULES.md` 일치가 `lib/base.yaml` 만 읽음) 은 Phase 5 의 VERIFY-06 과 함께 (ROADMAP Phase 5 Notes), CR-03 · WR-09 (측정 도구) 는 다음 재측정(RULES-13) 전에
 - [Phase 6] `main` 병합은 `ref: main` 사용 프로젝트 5개에 새 버전을 배포하는 일이다. tag 와 병합의 순서를 계획 때 정한다
 - [Phase 6] Phase 2 에서 미룬 확인 둘 — PR 에서 `verify` 가 도는지, 수동 실행 버튼 (ROADMAP 의 Phase 6 Notes)
+- [Phase 5] `.claude/CLAUDE.md` 70 · 173 · 313행이 이미 걷어낸 루트 `analysis_options.yaml` exclude 를 "유지해야 한다" 고 지시한다 (05-REVIEW WR-06, D-09 로 deferred — 마일스톤 끝 `/gsd-map-codebase`). 그 전에 루트 exclude 를 건드리는 작업이 오면 그 지시를 따르지 않는다. `tool/measure_rules.dart` 의 `readRulesTable` · `tool/verify.dart` 의 `readUpstreamRules.readSet` 은 읽지 못하는 줄을 건너뛰는 꼴로 열어 둠 (소유자 결정 2026-10-14)
 
 ## Deferred Items
 
@@ -245,5 +249,5 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-10-13T20:12:12.357Z
-Stopped at: Phase 05 검증 gaps_found — gap 2건 (VERIFY-06 README 목록 reader, (b′) flow 표기)
-Resume file: None
+Stopped at: Phase 05 gap 수정 계획 완료 (05-07 · 05-08 · 05-09)
+Resume file: .planning/phases/05-documentation/05-07-PLAN.md
