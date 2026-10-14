@@ -2,44 +2,44 @@
 gsd_state_version: "1.0"
 milestone: v2.0
 milestone_name: Package Rework
-current_phase: 05
-current_phase_name: Documentation
-status: Phase 05 재검증 human_needed 92/92 — 사람 확인 6건 대기 (/gsd-verify-work 05)
-stopped_at: Completed 05-15-PLAN.md
-last_updated: "2026-10-14T22:40:12.054Z"
+current_phase: 6
+current_phase_name: Release
+status: planning
+stopped_at: Phase 05 complete, ready to plan Phase 6
+last_updated: "2026-10-14T23:19:48.255Z"
 last_activity: 2026-10-15
-last_activity_desc: Phase 05 4회차 gap 수정 실행 · 재검증 human_needed 92/92 (경고 셋 IN-12 · IN-13 · IN-14)
-state_head: 6ed2f9886ebbf4617fe0c05e915d7e3bb7ff05f5
+last_activity_desc: Phase 05 complete, transitioned to Phase 6
+state_head: ce98310da1905b57f046b9125e9557ee54a80ad0
 progress:
   total_phases: 6
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 41
   completed_plans: 41
-  percent: 67
+  percent: 83
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-10-13)
+See: .planning/PROJECT.md (updated 2026-10-15)
 
 **Core value:** 사용 프로젝트가 `include` 한 줄로 받는 규칙이 문서에 적힌 그대로 적용되고, 각 규칙이 왜 켜져 있는지 근거가 남아 있다.
-**Current focus:** Phase 05 — Documentation
+**Current focus:** Phase 6 — Release
 
 ## Current Position
 
-Phase: 05 (Documentation) — EXECUTING
-Plan: 15 of 15
-Status: Phase 05 재검증 human_needed 92/92 — 사람 확인 6건 대기 (/gsd-verify-work 05)
-Last activity: 2026-10-15 — Phase 05 4회차 gap 수정 실행 · 재검증 human_needed 92/92 (경고 셋 IN-12 · IN-13 · IN-14)
+Phase: 6 — Release
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-10-15 — Phase 05 complete, transitioned to Phase 6
 
-Progress: [███████░░░] 67%
+Progress: [████████░░] 83%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 26
+- Total plans completed: 41
 - Average duration: - min
 - Total execution time: 0.0 hours
 
@@ -51,6 +51,7 @@ Progress: [███████░░░] 67%
 | 2 | 5 | - | - |
 | 3 | 4 | - | - |
 | 04 | 13 | - | - |
+| 05 | 15 | - | - |
 
 **Recent Trend:**
 - Last 5 plans: -
@@ -264,6 +265,7 @@ Recent decisions affecting current work:
 - [Phase 05]: 05 리뷰 처리 기록은 fixed 18 · skipped 8 · deferred 1 · open 0 이다 — WR-15 · WR-16 fixed (77e0b88, G4-Q1), IN-11 fixed (0f62057, G4-Q2), IN-10 skipped (G4-Q2 문장을 실제 범위에 맞춤), WR-06 은 deferred 그대로
 - [Phase 05]: 4회차 gap 수정을 git push origin gsd/v2.0-package-rework 한 줄로 올렸다 (c2f275a..2336ba0, 16커밋, fast-forward, D-21) — verify run 38639587080 success, job 4분 13초, CHANGELOG 는 그대로
 - [Phase 05]: Phase 05 재리뷰 경고 IN-12 · IN-13 · IN-14 는 Phase 6 (Release) 로 미룸 (소유자 결정 2026-10-15, 권고안) — 셋 다 막는 쪽이고 Phase 6 이 pubspec.yaml version 을 바꿀 때 함께 고침; 처리 기록 deferred · ROADMAP Phase 6 Notes
+- [Phase 05]: UAT 8건 통과 (2026-10-15) — 05-VERIFICATION 의 사람 확인 여섯과 SUMMARY coverage 에서 빠졌던 사람 판단 둘(배포 YAML 머리 주석, `example/README.md` 실측 기록). 1 · 2 · 4 · 5번은 통과로 적고 문서 손질 넷(README 설치 안내와 `flutter create` 템플릿의 기존 키, 355행 출처 표시, 34행 flutter#191151 의 사실 — stable 판이 3.47.2 부터 들어 있음, (05-14) 읽는 법의 판 표시)을 Phase 6 로 미룸 (ROADMAP Phase 6 Notes, ce98310). 05-VERIFICATION status passed
 
 ### Pending Todos
 
@@ -274,10 +276,11 @@ None yet.
 - [Phase 1] 리뷰 지적 12건이 열려 있다 (`01-REVIEW-DISPOSITION.md`, 합계 16 — WR-05 는 05-04 가 닫음). 그중 WR-03 의 남은 두 경우 — README/CHANGELOG 만 고친 변경, 새 프리셋 파일 추가 — 는 `VERSIONING.md` 의 판정 순서와 기준표가 다른 등급을 내며 D-05 를 건드리는 소유자 결정이 필요하다. 2.0.0 의 등급(major)에는 영향이 없다
 - [Phase 3] `riverpod_lint` 하한을 `^3.1.9` 로 올릴 때(PRESET-05): 3.1.9 는 Dart 3.13 이상을 요구한다. 지금은 `sdk: ^3.13.0` 이라 문제없지만 `VERSIONING.md` 에 이 전제가 적혀 있지 않다 (Backlog `Phase 999.1`)
 - [Phase 2] 리뷰 지적 15건이 열려 있다 (`02-REVIEW-DISPOSITION.md`, 합계 17 — WR-01 ~ WR-06 · WR-08 · IN-01 ~ IN-08). `02-VERIFICATION.md` 의 "다음 phase 가 알아야 할 것" 1 ~ 7 이 Phase 3 · 4 · 6 에 걸리는 것을 추렸다. WR-06 은 Phase 6 이 `version` 을 올릴 때 종료 코드 69 로 만난다
-- [Phase 3] 리뷰 지적 14건이 열려 있다 (`03-REVIEW-DISPOSITION.md`, warning 8 · info 6). 그중 검증 장치의 빈틈 셋은 Phase 4 · 5 가 배포 YAML 을 고칠 때 밟는 자리다 — WR-01 `[2/9]` 가 묶음 · 별칭을 보지 않아 거기 적은 규칙을 놓친다 (거짓 통과), WR-02 `riverpod_lint` 줄 끝 주석 · 마지막 줄바꿈 없음에서 종료 코드 70 (거짓 실패), WR-03 `base.yaml` 의 맵 형식 규칙(`rule: false`)에서 `[2/9]` 거짓 실패. Phase 4 계획 때 먼저 닫을지 정한다 (`03-VERIFICATION.md` Gaps Summary) — 정함 (2026-10-13, `04-CONTEXT.md` D-12): WR-01 은 plan 04-01 의 `[3/10]` 이 닫고, WR-02 는 Phase 5 의 첫 일, WR-03 은 목록 형식 관례로 피하고 열어 둔다. 04-13 뒤에는 `lib/base.yaml` 의 맵 형식 규칙 줄에서 `[3/10]` 이 거짓 통과 대신 종료 코드 70 으로 멈춘다 (README M31)
-- [Phase 4] 리뷰 지적 18건이 열려 있다 (`04-REVIEW-DISPOSITION.md`, 합계 28 — open 18 · deferred 3 · fixed 7). deferred 셋: WR-11 (`[3/10]` 의 겹침 · `RULES.md` 일치가 `lib/base.yaml` 만 읽음) 은 Phase 5 의 VERIFY-06 과 함께 (ROADMAP Phase 5 Notes), CR-03 · WR-09 (측정 도구) 는 다음 재측정(RULES-13) 전에
+- [Phase 3] 리뷰 지적 14건이 열려 있다 (`03-REVIEW-DISPOSITION.md`, warning 8 · info 6). 그중 검증 장치의 빈틈 셋은 Phase 4 · 5 가 배포 YAML 을 고칠 때 밟는 자리다 — WR-01 `[2/9]` 가 묶음 · 별칭을 보지 않아 거기 적은 규칙을 놓친다 (거짓 통과), WR-02 `riverpod_lint` 줄 끝 주석 · 마지막 줄바꿈 없음에서 종료 코드 70 (거짓 실패), WR-03 `base.yaml` 의 맵 형식 규칙(`rule: false`)에서 `[2/9]` 거짓 실패. Phase 4 계획 때 먼저 닫을지 정한다 (`03-VERIFICATION.md` Gaps Summary) — 정함 (2026-10-13, `04-CONTEXT.md` D-12): WR-01 은 plan 04-01 의 `[3/10]` 이 닫고, WR-02 는 Phase 5 의 첫 일, WR-03 은 목록 형식 관례로 피하고 열어 둔다. WR-02 는 05-01 이 닫음 (M32 · M33, `03-REVIEW-DISPOSITION.md` fixed). 04-13 뒤에는 `lib/base.yaml` 의 맵 형식 규칙 줄에서 `[3/10]` 이 거짓 통과 대신 종료 코드 70 으로 멈춘다 (README M31)
+- [Phase 4] 리뷰 지적 18건이 열려 있다 (`04-REVIEW-DISPOSITION.md`, 합계 28 — open 18 · deferred 3 · fixed 7). deferred 셋: WR-11 (`[3/10]` 의 겹침 · `RULES.md` 일치가 `lib/base.yaml` 만 읽음) 은 05-01 이 닫음 (M35, `04-REVIEW-DISPOSITION.md` fixed), CR-03 · WR-09 (측정 도구) 는 다음 재측정(RULES-13) 전에
 - [Phase 6] `main` 병합은 `ref: main` 사용 프로젝트 5개에 새 버전을 배포하는 일이다. tag 와 병합의 순서를 계획 때 정한다
 - [Phase 6] Phase 2 에서 미룬 확인 둘 — PR 에서 `verify` 가 도는지, 수동 실행 버튼 (ROADMAP 의 Phase 6 Notes)
+- [Phase 6] 릴리스 tag 전에 닫을 것: 05-REVIEW 경고 IN-12 · IN-13 · IN-14 와 05-UAT 의 문서 손질 넷 (ROADMAP 의 Phase 6 Notes). README · `example/README.md` · `tool/verify.dart` · `pubspec.yaml` 을 고친 뒤 `fvm dart run tool/verify.dart` 10/10 을 다시 본다
 - [Phase 5] `.claude/CLAUDE.md` 70 · 173 · 313행이 이미 걷어낸 루트 `analysis_options.yaml` exclude 를 "유지해야 한다" 고 지시한다 (05-REVIEW WR-06, D-09 로 deferred — 마일스톤 끝 `/gsd-map-codebase`). 그 전에 루트 exclude 를 건드리는 작업이 오면 그 지시를 따르지 않는다. `tool/measure_rules.dart` 의 `readRulesTable` · `tool/verify.dart` 의 `readUpstreamRules.readSet` 은 읽지 못하는 줄을 건너뛰는 꼴로 열어 둠 (소유자 결정 2026-10-14). 같은 파일 261행의 pubspec 설명에 4회차 gap 이 더할 `dev_dependencies` 가 없다 — 같은 D-09 로 미룸 (2026-10-15)
 
 ## Deferred Items
@@ -290,6 +293,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-14T21:27:54.701Z
-Stopped at: Completed 05-15-PLAN.md
+Last session: 2026-10-14T23:21:22Z
+Stopped at: Phase 05 complete, ready to plan Phase 6
 Resume file: None

@@ -28,18 +28,18 @@
 - ✓ `example/` 프로젝트와 검증 명령 하나(`fvm dart run tool/verify.dart`)로 배포 파일을 이 저장소 안에서 검증할 수 있다 — 정답지 비교(줄과 건수), 규칙 이름 검사, `lib/` 의 `.dart` 검사 — Phase 2
 - ✓ Riverpod / codegen 설정을 선택형 프리셋으로 분리해, 쓰지 않는 프로젝트가 받지 않을 수 있다 — 조각 셋 · 묶음 · 옛 주소 별칭, 옛 주소와 묶음의 진단이 분리 전과 줄 단위로 같다. 연습용 프로젝트 여섯 · 단계 9개로 검증 — Phase 3
 - ✓ `riverpod_lint` plugin 하한 `^3.1.9`, 루트 분석이 배포 파일을 제외하지 않고 경고 없이 통과 — Phase 3
-- ✓ 규칙 하나 · plugin 진단 하나를 끄는 방법(프로젝트 전체 · 파일 · 한 줄)이 fixture 로 확인되어 있다 — README 쪽은 Phase 5 — Phase 3
+- ✓ 규칙 하나 · plugin 진단 하나를 끄는 방법(프로젝트 전체 · 파일 · 한 줄)이 fixture 로 확인되어 있다 — README 「규칙 · plugin 진단 끄기」 는 Phase 5 — Phase 3
 - ✓ 규칙 세트 재선정: 후보 규칙을 `flutter_starter_kit` 복사본 실측(회차 R1, 52회 모두 유효)으로 재고 소유자가 하나씩 결정했다 — 켠 규칙 81개(1.3.0 의 6개 유지 + 새로 75개, 모두 info), 켜지 않은 규칙 90개와 사유가 `RULES.md` 에 있고 검증 명령 `[3/10]` 이 `lib/base.yaml` 과의 일치를 지킨다 — Phase 4
 - ✓ 기반 세트와 겹치는 선언 6개와 주석 처리된 설정 3개를 배포 파일에서 지웠다 — 정답지 다섯 그대로, 사유는 CHANGELOG 2.0.0 항목 — Phase 4
+- ✓ `README.md`, `CHANGELOG.md`, 배포 YAML 다섯의 머리 주석이 실제 설정과 일치한다 — 검증 명령 `[3/10]` 이 README 의 규칙 목록 · `package:` 주소 · plugin 버전 · `ref:` 와 `RULES.md` 를 배포 파일과 견주고, 마지막 확인 (h) 가 줄 단위 reader 의 값을 `package:yaml` 로 읽은 값과 견준다 (지워 보기 M32 ~ M91). CHANGELOG 1.1.0 ~ 1.2.5 를 git 이력으로 복원했다 — Phase 5
+- ✓ README 를 "몇 달 뒤의 내가 그대로 따라 하면 되는" 사용 안내로 다시 썼다 (설치, 프리셋 고르기, 규칙 · plugin 진단 끄기 세 층, 생성 파일 제외, 버전 올리기 세 갈래, 문제 해결) — 소유자 UAT 통과 (2026-10-15). 실제 tag 로 받는 확인과 UAT 에서 미룬 문서 손질 넷은 Phase 6 — Phase 5
 
 ### Active
 
 <!-- 이번 작업 범위. 릴리스되어 확인되기 전까지는 가설이다. -->
 
-- [ ] `README.md`, `CHANGELOG.md`, `lib/analysis_options.yaml` 머리 주석이 실제 설정과 일치한다
 - [ ] GitHub Actions 가 push 와 PR 마다 그 검증을 자동 실행한다 — push 쪽은 Phase 2 에서 확인했다 (성공한 실행 2건, 겹친 실행의 취소 1건, 2026-10-12). PR 에서 도는지와 수동 실행 버튼은 PR 이 처음 열리고 workflow 가 `main` 에 들어가는 Phase 6 에서 본다
 - [ ] git tag 로 릴리스하고, 사용 프로젝트가 `ref: vX.Y.Z` 로 버전을 고정할 수 있다
-- [ ] README 를 "몇 달 뒤의 내가 그대로 따라 하면 되는" 사용 안내로 다시 쓴다 (설치, 프리셋 선택, 규칙 재정의, 버전 올리기)
 
 ### Out of Scope
 
@@ -82,7 +82,7 @@
 - 최상위 `plugins:` 를 include 되는 프리셋 파일 안에 두었을 때의 동작. 이 저장소 안에서는 `plugins_in_inner_options` 경고가 난 전례가 있어, 프리셋 분리 구조를 정하기 전에 대상 Dart 버전에서 검증해야 한다 — 확인됨 (spike 009 · 011, Dart 3.13.4): include 로 받은 `plugins:` 가 로드되고, 나눈 뒤에는 루트 분석에서 그 경고가 나지 않는다
 - `flutter analyze` 가 Flutter 3.47.5 에서 plugin 진단을 표시하지 않는다는 기록(2026-09-20 실측). CI 검증 명령 선택에 영향을 준다
 - 3단 include (`analysis_options.yaml` → `recommended.yaml` → 조각 파일)에서 `riverpod_lint` plugin 이 로드되는지. 조사에서 실측한 것은 2단까지다. 로드되지 않으면 옛 이름의 별칭이 plugin 을 소리 없이 잃으므로, 옛 URI 를 쓰는 fixture 로 고정해야 한다 — 확인됨 (spike 010, Phase 3): 3단 include 로 plugin 이 로드되고 `example/` 의 정답지가 지킨다 (M18)
-- `codegen.yaml` 이 주는 생성 파일 제외는 Dart 3.13.x 의 규칙 진단에만 통하고 `riverpod_lint` 진단에는 통하지 않는다 (spike 012). 베타 SDK 에서는 규칙 진단에도 통하지 않았다 (spike 016). README 의 안내는 Phase 5
+- `codegen.yaml` 이 주는 생성 파일 제외는 Dart 3.13.x 의 규칙 진단에만 통하고 `riverpod_lint` 진단에는 통하지 않는다 (spike 012). 베타 SDK 에서는 규칙 진단에도 통하지 않았다 (spike 016). README 「생성 파일 제외」 가 SDK 별로 적고 사용 프로젝트에 직접 적는 방법을 안내한다 (Phase 5)
 
 ## Constraints
 
@@ -105,7 +105,7 @@
 | 근거에는 `flutter_starter_kit` 복사본 실측을 포함한다 | 규칙이 내 코드에 실제로 몇 건의 경고를 내는지가 판단 기준이다 | ✓ Phase 4 — `tool/measure_rules.dart` 의 회차 기록 `tool/measurements/2026-10-13-R1.json` (경로 · 메시지 없이 건수만), 원본은 바꾸지 않음. 재측정 전에 고칠 것 둘(CR-03 · WR-09)은 RULES-13 메모 |
 | Riverpod / codegen 설정을 선택형 프리셋으로 분리한다 | 지금은 모든 주요 프로젝트가 Riverpod + codegen 이지만, 앞으로 다른 구성의 프로젝트가 생길 것을 대비한다 | ✓ Phase 3 — 조각은 서로를 include 하지 않고, 묶음이 셋을 `package:` 주소 목록으로 include 한다 |
 | 검증은 `example/` 프로젝트 + GitHub Actions 로 자동화한다 | 유일한 산출물이 자체 분석에서 제외되어 있어 검증 수단이 없다 | ✓ Phase 2 — `tool/verify.dart` 와 `.github/workflows/verify.yml` (PR · 수동 실행 확인은 Phase 6) |
-| README 독자는 미래의 작성자 본인, 한국어로 쓴다 | 개인 사용 패키지다 | — Pending |
+| README 독자는 미래의 작성자 본인, 한국어로 쓴다 | 개인 사용 패키지다 | ✓ Phase 5 — README 만 보고 따라 하기 UAT 통과 (2026-10-15) |
 | 완료 범위는 패키지 릴리스까지다 | 각 프로젝트 적용은 사용자가 원하는 시점에 따로 한다 | — Pending |
 | 묶음(기본 + Riverpod + codegen)의 정식 이름은 `package:woody_lints/recommended.yaml` 이다. 기존 URI `package:woody_lints/analysis_options.yaml` 은 `recommended.yaml` 을 include 하는 한 줄짜리 별칭으로 남긴다 | 조각 파일(`base.yaml` 등)처럼 묶음도 내용이 드러나는 이름을 쓴다. 옛 이름을 남겨 기존 프로젝트는 고칠 것이 없다. 옛 이름은 README 에 "예전 이름"으로만 적고 다음 major 에서 제거를 검토한다 | ✓ Phase 3 — 옛 주소 · 묶음 · 분리 전 커밋으로 받은 결과가 줄 단위로 같다 (README 안내는 Phase 5) |
 | 기본 규칙 조각 파일의 이름은 `base.yaml` 이다 | 파일 이름이 곧 공개 URI 다. 공식 `lints` 패키지의 `core.yaml` 과 이름이 겹치지 않는다 | ✓ Phase 3 |
@@ -118,6 +118,9 @@
 | `example/pubspec.lock` 을 커밋한다 (루트 `pubspec.lock` 은 지금처럼 커밋하지 않는다) | 소유자의 컴퓨터와 CI 가 같은 패키지 버전으로 판정한다. 정답지가 깨졌을 때 원인이 "저장소 변경" 또는 "plugin 새 버전" 으로 좁혀진다. `riverpod_lint` plugin 버전은 lock 이 묶지 못한다 | ✓ Phase 2 |
 | CI 를 돌리려고 작업 브랜치를 `.planning/` 과 함께 그대로 origin 에 올린다. CI 는 모든 push(브랜치와 tag) · PR · 수동 실행에서 돌고 예약 실행은 두지 않는다 | 올리기만 하면 결과가 보이고 `main` 에 합치는 방법을 미리 묶지 않는다. `.planning/` 을 뺀 사본 브랜치는 로컬과 원격의 이력을 갈라놓는다. 예약 실행은 60일 동안 활동이 없으면 꺼진다 | ✓ Phase 2 — Phase 3 부터의 push 는 다시 소유자에게 묻는다 |
 | `--update` 가 망가진 결과를 정답지로 쓰는 남은 경로는 Phase 3 에서 정답지를 새로 쓰기 전에 가장 먼저 닫는다 (지금 Phase 2 에서 한 바퀴 더 돌지 않는다) | `[2/4]` 가 통과로 잘못 찍히는 세 입력에서 `--update` 가 종료 코드 0 으로 끝난다. 보통 실행은 세 입력 모두 실패로 잡는다. 고칠 곳이 Phase 3 이 손대는 곳과 같다 | ✓ Phase 3 (03-01) — 세 입력 모두 `--update` 가 종료 코드 1 · 정답지 불변 (M15 ~ M17) |
+| 검증 명령의 줄 단위 reader 가 본 값을 루트 `dev_dependencies` 의 `yaml` 로 읽은 같은 파일의 값과 견준다 (`[3/10]` 의 (h)). 줄 단위 reader 의 본문 · 메시지는 그대로 두고, 꼴을 하나씩 막는 코드는 더하지 않는다 | Phase 5 의 gap 일곱 회차가 모두 "줄 단위 reader 가 보는 것 ≠ analyzer · pub 이 보는 것" 이었다. 대조는 꼴 하나가 아니라 그 모양의 종류를 닫는다. `yaml` 은 개발용 의존성이라 받는 쪽 의존성 그래프에 들어가지 않는다 (D-11 을 이 목적에 한해 다시 정함, 소유자 결정 G4-Q1) | ✓ Phase 5 — 여러 줄 문자열 · 중복 키 입력 여섯(M86 ~ M91)이 실패, 고치기 전 판으로는 통과. SDK 가 품은 package:yaml 판과 같은지는 재지 않았다 |
+| 검사가 보지 않는 꼴은 검사를 넓히지 않고 README · `example/README.md` 의 문장을 실제 범위로 좁힌다 | 남은 꼴(따옴표 키, flow 표기 안의 키, 네 칸 들여 쓴 펜스, HTML 주석 안의 `#` 줄 등)은 이 저장소 문서에 쓰지 않는 꼴이고, 막을수록 reader 가 늘어난다 | ✓ Phase 5 — 소유자 결정 G2-Q2 · G3-Q2 · G3-Q3 · G4-Q2, 처리 기록 `05-REVIEW-DISPOSITION.md` 의 `skipped` 8건 |
+| 리뷰 경고 IN-12 · IN-13 · IN-14 와 Phase 5 UAT 에서 미룬 문서 손질 넷은 Phase 6 에서 릴리스 tag 전에 닫는다 | 셋 다 통과로 끝나지 않는 쪽(막는 쪽)이고 문서 손질은 사용자 동작과 무관하다. 릴리스 전 README · `pubspec.yaml` 커밋과 smoke test 가 같은 곳을 본다 | — Pending (ROADMAP Phase 6 Notes) |
 | ROADMAP Phase 3 성공 기준 3 의 "생성 파일의 진단이 보고되지 않는다" 는 Dart 3.13.x 의 규칙 진단에 대한 말로 읽는다 | 생성 파일 안의 `riverpod_lint` 진단은 패키지가 주는 제외로 막을 수 없다 (plugin 이 제외 패턴을 그것을 적은 폴더 기준으로 푼다, 1.3.0 도 같다). 사용 프로젝트가 자기 옵션 파일에 직접 적으면 막힌다 | ✓ 소유자 확인 2026-10-12 (Phase 3 UAT 1번) — README 의 범위 안내는 Phase 5 Notes |
 
 ## Evolution
@@ -138,4 +141,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-13 after Phase 4*
+*Last updated: 2026-10-15 after Phase 5*
