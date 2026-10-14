@@ -959,30 +959,76 @@ List<String> declaredRuleNames(String options, {required String shownAs}) {
 ///
 /// `RULES.md` 의 켠 analyzer 옵션 표(`woody:enabled-options`)와 견줄 값이다. 블록이 없으면
 /// 빈 맵이다. 들여쓰기로 블록을 가른다 — `analyzer:` 는 들여쓰기 없는 줄, `language:` 는
-/// 그 아래 한 단계, 옵션은 `language:` 보다 깊은 줄이다.
-Map<String, bool> enabledLanguageOptions(String options) {
+/// 그 아래 한 단계, 옵션은 `language:` 보다 깊은 줄이다. 빈 줄과 `#` 줄은 건너뛴다.
+///
+/// 받는 꼴은 블록 꼴 하나다 — `analyzer:` / `  language:` / `    <이름>: true|false`, 세 줄
+/// 모두 줄 끝 `# 주석` 가능. `analyzer:` 아래의 `language:` 가 아닌 키(`errors:` ·
+/// `exclude:` 와 그 아래)는 읽지 않는다. 다음 셋은 건너뛰지 않고 [FormatException] 을 던진다
+/// — main 이 종료 코드 70 으로 끝낸다 (문구에 [shownAs] 의 파일 이름과 행이 들어간다).
+///
+/// - `analyzer:` 줄에 `#` 주석 밖의 값이 붙어 있다 (`analyzer: {language: {…}}`).
+/// - `language:` 줄에 `#` 주석 밖의 값이 붙어 있다 (`language: {strict-casts: true}`).
+/// - `language:` 블록 안의 줄이 `<이름>: true|false` 가 아니다 (`strict-casts: yes` 등).
+///
+/// 건너뛰면 `RULES.md` 의 켠 옵션 표와의 비교 (c) 가 켠 옵션을 보지 못한 채 통과한다 (소유자
+/// 확인 2026-10-14 — `language: {…}` · `analyzer: {language: {…}}` 가 `{}` 로 읽혔다;
+/// 05-VERIFICATION.md gaps 2 와 같은 원칙, 소유자 결정 R2-Q2).
+Map<String, bool> enabledLanguageOptions(
+  String options, {
+  required String shownAs,
+}) {
   final result = <String, bool>{};
+  final optionPattern = RegExp(
+    r'^([A-Za-z0-9_-]+):[ \t]*(true|false)[ \t]*(?:#.*)?$',
+  );
   var inAnalyzer = false;
   int? languageIndent;
-  for (final line in options.split('\n')) {
+  final lines = options.split('\n');
+  for (var i = 0; i < lines.length; i++) {
+    final line = lines[i];
     final trimmed = line.trim();
     if (trimmed.isEmpty || trimmed.startsWith('#')) continue;
     final indent = line.length - line.trimLeft().length;
     if (indent == 0) {
-      inAnalyzer = RegExp(r'^analyzer:\s*(#.*)?$').hasMatch(line);
       languageIndent = null;
+      if (RegExp(r'^analyzer:').hasMatch(line)) {
+        if (!RegExp(r'^analyzer:[ \t]*(?:#.*)?$').hasMatch(line)) {
+          throw FormatException(
+            '$shownAs 의 ${i + 1}행: `analyzer:` 줄에 값이 붙어 있다 — '
+            'flow 표기는 읽지 않는다. '
+            '블록(`analyzer:` / `  language:` / `    <이름>: true|false`)으로 적는다: $trimmed',
+          );
+        }
+        inAnalyzer = true;
+      } else {
+        inAnalyzer = false;
+      }
       continue;
     }
     if (!inAnalyzer) continue;
     if (languageIndent != null && indent > languageIndent) {
-      final match = RegExp(r'^([A-Za-z0-9_-]+):\s*(true|false)\s*(#.*)?$')
-          .firstMatch(trimmed);
-      if (match != null) result[match.group(1)!] = match.group(2) == 'true';
+      final match = optionPattern.firstMatch(trimmed);
+      if (match == null) {
+        throw FormatException(
+          '$shownAs 의 `language:` 블록의 ${i + 1}행을 읽지 못했다 — '
+          '`<이름>: true|false` (뒤에 `# 주석` 가능) 만 받는다: $trimmed',
+        );
+      }
+      result[match.group(1)!] = match.group(2) == 'true';
       continue;
     }
-    languageIndent = RegExp(r'^language:\s*(#.*)?$').hasMatch(trimmed)
-        ? indent
-        : null;
+    if (RegExp(r'^language:').hasMatch(trimmed)) {
+      if (!RegExp(r'^language:[ \t]*(?:#.*)?$').hasMatch(trimmed)) {
+        throw FormatException(
+          '$shownAs 의 ${i + 1}행: `language:` 줄에 값이 붙어 있다 — '
+          'flow 표기는 읽지 않는다. '
+          '블록(`analyzer:` / `  language:` / `    <이름>: true|false`)으로 적는다: $trimmed',
+        );
+      }
+      languageIndent = indent;
+    } else {
+      languageIndent = null;
+    }
   }
   return result;
 }
@@ -1650,10 +1696,11 @@ StepResult checkShippedComposition(String repoRoot) {
     shipped: declared,
     mismatchLine: '`$rulesMdFile` 의 켠 규칙 표와 `$rulesFile` 의 규칙 목록이 다르다.',
   );
+  final enabledOptions = enabledLanguageOptions(baseText, shownAs: rulesFile);
   compareBlock(
     block: 'enabled-options',
     shipped: [
-      for (final entry in enabledLanguageOptions(baseText).entries)
+      for (final entry in enabledOptions.entries)
         if (entry.value) entry.key,
     ],
     mismatchLine:
