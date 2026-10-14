@@ -56,7 +56,7 @@
 - [ ] **DOCS-03**: README 에 규칙을 한 줄 / 파일 / 프로젝트 단위로 끄는 방법과 plugin 진단을 끄는 방법이 있다
 - [ ] **DOCS-04**: README 에 버전을 올리는 방법(`ref:` 수정과 `pub get`)과 `ref: main` 에서 tag 로 옮기는 방법이 있다
 - [ ] **DOCS-05**: README 에 문제 해결 섹션이 있다 (plugin 경고가 안 보일 때, Analysis Server 재시작, `dart analyze` 와 `flutter analyze` 의 차이, tag 를 고정해도 바뀌는 것)
-- [ ] **DOCS-06**: README 의 규칙·설정 설명이 실제 YAML 과 일치한다 (현재의 불일치 2건과 기재되지 않은 설정 해소)
+- [x] **DOCS-06**: README 의 규칙·설정 설명이 실제 YAML 과 일치한다 (현재의 불일치 2건과 기재되지 않은 설정 해소)
 - [ ] **DOCS-07**: CHANGELOG 에 새 릴리스 항목이 있다 (추가·삭제 규칙, 지원 SDK 변경)
 - [ ] **DOCS-08**: CHANGELOG 의 1.0.0 과 1.3.0 사이 누락이 git 이력에서 확인되는 범위로 보완되어 있다
 - [ ] **DOCS-09**: CHANGELOG 새 릴리스 항목에 새로 생기는 진단 안내가 있다 (규칙별 실측 건수, `dart fix` 가능 여부)
@@ -144,7 +144,7 @@
 | DOCS-03 | Phase 5 | Gaps Found |
 | DOCS-04 | Phase 5 | Gaps Found |
 | DOCS-05 | Phase 5 | Gaps Found |
-| DOCS-06 | Phase 5 | Gaps Found |
+| DOCS-06 | Phase 5 | Complete |
 | DOCS-07 | Phase 5 | Gaps Found |
 | DOCS-08 | Phase 5 | Gaps Found |
 | DOCS-09 | Phase 5 | Gaps Found |

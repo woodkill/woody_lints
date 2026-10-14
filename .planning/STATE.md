@@ -4,12 +4,12 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 05
 current_phase_name: Documentation
-status: Phase 05 2회차 gap 수정 계획 05-10 · 05-11 완료 — 실행 대기 (/gsd-execute-phase 05 --gaps-only)
-stopped_at: Phase 05 2회차 gap 수정 계획 완료 (05-10 · 05-11)
-last_updated: "2026-10-14T05:53:33.465Z"
+status: executing
+stopped_at: Completed 05-10-PLAN.md
+last_updated: "2026-10-14T06:26:47.684Z"
 last_activity: 2026-10-14
-last_activity_desc: Phase 05 2회차 gap 수정 계획 05-10 · 05-11 작성, plan checker 2회차 통과
-state_head: d691a6f9d42a55e4c741141ac8ed7e1f9726673b
+last_activity_desc: 05-10 완료 — 닫힌 목록 · 구역 밖 목록 줄 · 문장 좁히기, 05-11 실행 대기
+state_head: d2d74c49b983c141b51eb82ca9232d8f38d90341
 progress:
   total_phases: 6
   completed_phases: 4
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-10-13)
 
 ## Current Position
 
-Phase: 05 (Documentation) — READY TO EXECUTE
-Plan: 9 of 11
-Status: Phase 05 2회차 gap 수정 계획 05-10 · 05-11 완료 — 실행 대기 (/gsd-execute-phase 05 --gaps-only)
-Last activity: 2026-10-14 — Phase 05 2회차 gap 수정 계획 05-10 · 05-11 작성, plan checker 2회차 통과
+Phase: 05 (Documentation) — EXECUTING
+Plan: 10 of 11
+Status: 2회차 gap 수정 05-10 완료 (닫힌 목록 · 구역 밖 목록 줄 · 문장 좁히기) — 05-11 (처리 기록 · push) 실행 대기
+Last activity: 2026-10-14 — 05-10 완료: 커밋 02966c4 · 204e401 · d2d74c4, 지워 보기 M68 ~ M78 과 회귀 입력 13개를 복제본에서
 
 Progress: [███████░░░] 67%
 
@@ -96,6 +96,7 @@ Progress: [███████░░░] 67%
 | Phase 05 P07 | 23min | 3 tasks | 3 files |
 | Phase 05 P08 | 30min | 3 tasks | 3 files |
 | Phase 05 P09 | 20min | 3 tasks | 6 files |
+| Phase 05 P10 | 27 min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -238,6 +239,10 @@ Recent decisions affecting current work:
 - [Phase 05]: 2회차 gap 수정 계획 전 소유자 결정 (2026-10-14, 모두 권고대로) — gap(다른 철자의 `linter` 키)은 조각마다 받는 키를 닫힌 목록으로 막는다 (최상위 키 + `lib/codegen.yaml` 의 `analyzer:` 아래 `errors` · `exclude`, G2-Q1 — WR-10 도 함께 닫음). README 코드 블록 보조 검사 지적 넷(WR-07 · WR-08 · WR-09 · IN-08)은 검사를 넓히지 않고 README · `example/README.md` 문장을 실제 범위로 좁혀 skipped 로 둔다 (G2-Q2). 「받는 규칙」 표시 구역 밖(같은 절)의 목록 줄은 `[3/10]` 실패로 더한다 (G2-Q3)
 - [Phase 05]: 2회차 gap 계획 중 소유자 결정 (2026-10-14, 모두 권고대로) — `lib/riverpod.yaml` 의 `plugins:` 아래 키도 `riverpod_lint` 만 받는다 (G2-Q4, 재현: 다른 plugin 키를 더해도 `[3/N]` passed=true), `tool/verify.dart` 의 (e) ~ (g) 문서 주석도 같은 범위로 좁힌다 (G2-Q5, 주석만)
 - [Phase 05]: 2회차 gap 수정 계획 05-10 (wave 9, 닫힌 목록 · 표시 구역 밖 목록 줄 · 문장 좁히기, M68 ~ M78) · 05-11 (wave 10, 처리 기록 · push). 닫힌 목록 밖의 키는 종료 코드 70 이 아니라 `[3/10]` 실패다 — 70 이면 M45 · M35 · M46 의 확인된 결과가 바뀐다 (planner 판단). Fable 크레딧 소진으로 planner · checker 를 Opus 로 돌렸다 (소유자 결정). plan checker 2회차 통과 (6784f30, de44389, d691a6f)
+- [Phase 05]: 05-10: 조각의 닫힌 목록(allowedTopLevelKeys · allowedChildKeys)은 종료 코드 70 이 아니라 [3/10] 실패로 알린다 — 예외 없이 블록만 더해 앞 기록의 70 · 실패가 그대로 남는다 (G2-Q1; M68 ~ M73, 회귀 입력 11개)
+- [Phase 05]: 05-10: lib/riverpod.yaml 의 plugins: 바로 아래는 riverpod_lint 하나만 받는다 — 다른 plugin 키는 [3/10] 실패 (G2-Q4; M78 전체 실행에서는 따옴표 키 zz_quoted_plugin 을 pub.dev 에서 찾지 못해 plugin 을 쓰는 정답지 단계 넷도 함께 실패)
+- [Phase 05]: 05-10: README 표시 구역이 든 절은 start 마커 앞의 가장 가까운 제목 다음 줄부터 end 마커 뒤의 첫 제목 앞까지이고(펜스 안의 # 줄은 제목이 아니다), 그 절의 구역 밖 목록 줄은 [3/10] 실패다 (G2-Q3; M74 ~ M77)
+- [Phase 05]: 05-10: (e) · (f) · (g) 는 코드를 넓히지 않고 README 382행 · example/README 116 · 358 · 395 · 436행 · tool/verify.dart 주석 줄만 실제 범위로 좁혔다 (G2-Q2 · G2-Q5 — 코드 줄은 Task 2 커밋과 같다)
 
 ### Pending Todos
 
@@ -264,6 +269,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-14T02:47:19.020Z
-Stopped at: Phase 05 2회차 gap 수정 계획 완료 (05-10 · 05-11)
-Resume file: .planning/phases/05-documentation/05-10-PLAN.md
+Last session: 2026-10-14T06:26:47.639Z
+Stopped at: Completed 05-10-PLAN.md
+Resume file: None
