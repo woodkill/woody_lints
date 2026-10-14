@@ -9,23 +9,23 @@ findings:
     title: "`.claude/CLAUDE.md` 의 고친 두 줄 옆에 저장소와 어긋나는 지시가 남아 있다"
   - id: WR-07
     severity: warning
-    disposition: open
+    disposition: skipped
     title: "README 검사 (e) 가 `package:` 로 정확히 시작하지 않는 include 주소를 보지 않는다 — scheme 오타로 10개 중 10개"
   - id: WR-08
     severity: warning
-    disposition: open
+    disposition: skipped
     title: "README 검사 (f) · (g) 가 flow 표기에 적힌 plugin 버전 · `ref:` 를 보지 않는다 — 낡은 값으로 10개 중 10개"
   - id: WR-09
     severity: warning
-    disposition: open
+    disposition: skipped
     title: "`fencedLines` 가 펜스가 아닌 코드 블록을 보지 않는다 — 들여쓴 코드 블록의 낡은 `ref:` 로 10개 중 10개"
   - id: WR-10
     severity: warning
-    disposition: open
+    disposition: fixed
     title: "`[3/10]` 이 조각의 `linter:` 밖 키를 보지 않는다 — `lib/codegen.yaml` 의 `language:` 옵션 · `formatter:` 가 사용 프로젝트에 닿는데 10개 중 10개"
   - id: IN-08
     severity: info
-    disposition: open
+    disposition: skipped
     title: "(e) 의 주소 끝 판정이 문장 부호를 모른다 — 맞는 주소의 거짓 실패와 다른 패키지 주소의 누락이 한 줄에서 함께 난다"
   - id: WR-01
     severity: warning
@@ -75,7 +75,7 @@ findings:
     severity: info
     disposition: fixed
     title: "README 「받는 규칙」 의 분류는 검사되지 않는다"
-open: 5
+open: 0
 total: 18
 recorded: 2026-10-14T03:23:47.764Z
 ---
@@ -85,11 +85,11 @@ recorded: 2026-10-14T03:23:47.764Z
 | Finding | Severity | Disposition | Source |
 |---------|----------|-------------|--------|
 | WR-06 | warning | deferred | D-09 — 마일스톤 끝 /gsd-map-codebase 에서 고친다 (70 · 173 · 313행의 "유지해야 한다" 지시 포함, 소유자 결정 2026-10-14) |
-| WR-07 | warning | open | - |
-| WR-08 | warning | open | - |
-| WR-09 | warning | open | - |
-| WR-10 | warning | open | - |
-| IN-08 | info | open | - |
+| WR-07 | warning | skipped | 소유자 결정 G2-Q2 — 문장을 검사 범위에 맞춤, 검사는 넓히지 않음; 05-10-PLAN.md Task 3 (d2d74c4) — example/README.md 116 · 358 · 436행과 tool/verify.dart 의 (e) 주석이 (e) 의 후보를 package: 로 정확히 시작하는 주소로 적음 (scheme 오타 · package: 뒤 공백은 범위 밖, 주석은 G2-Q5) |
+| WR-08 | warning | skipped | 소유자 결정 G2-Q2 — 문장을 검사 범위에 맞춤, 검사는 넓히지 않음; 05-10-PLAN.md Task 3 (d2d74c4) — README.md 382행 · example/README.md 116 · 395행 · tool/verify.dart 의 (f) · (g) 주석이 펜스 안에서 키가 줄 머리에 오는 줄로 적음 (flow 표기 안의 키는 범위 밖) |
+| WR-09 | warning | skipped | 소유자 결정 G2-Q2 — 문장을 검사 범위에 맞춤, 검사는 넓히지 않음; 05-10-PLAN.md Task 3 (d2d74c4) — README.md 382행 · example/README.md 116 · 395행 · tool/verify.dart 의 fencedLines · (f) · (g) 주석이 펜스 코드 블록만 본다고 적음 (들여 쓴 코드 블록 · 인용 안의 펜스는 범위 밖) |
+| WR-10 | warning | fixed | 05-10-PLAN.md Task 1 (02966c4) — 조각마다 받는 최상위 키와 lib/codegen.yaml 의 analyzer: · lib/riverpod.yaml 의 plugins: 아래 키를 닫힌 목록으로, M68 ~ M73 · M78 (소유자 결정 G2-Q1 · G2-Q4 — 05-VERIFICATION 2회차 gap 과 함께) |
+| IN-08 | info | skipped | 소유자 결정 G2-Q2 — 문장을 검사 범위에 맞춤, 검사는 넓히지 않음; 05-10-PLAN.md Task 3 (d2d74c4) — example/README.md 116 · 436행과 tool/verify.dart 의 (e) 주석이 주소의 끝 글자와 뒤에 붙은 문장 부호의 결과를 적음 |
 | WR-01 | warning | fixed | 05-08-PLAN.md Task 2 (63fe3d9) — (e) 가 후보를 모두 모아 꼴이 아닌 주소 · 다른 패키지의 주소를 실패, M54 · M55 (not in the current review) |
 | WR-02 | warning | fixed | 05-07-PLAN.md Task 3 (73f1c66) — (f) · (g) 가 따옴표 · 줄 끝 주석을 벗겨 읽고 꼴이 틀린 값을 실패, M47 ~ M50 (not in the current review) |
 | WR-03 | warning | fixed | 05-08-PLAN.md Task 2 (63fe3d9) — fencedLines 가 펜스 문자 · 길이를 기억, M56 ~ M58 (not in the current review) |
