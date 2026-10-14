@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 05
 current_phase_name: Documentation
 status: executing
-stopped_at: Completed 05-08-PLAN.md
-last_updated: "2026-10-14T02:20:55.705Z"
+stopped_at: Completed 05-09-PLAN.md
+last_updated: "2026-10-14T02:47:19.065Z"
 last_activity: 2026-10-14
 last_activity_desc: Phase 05 execution started
-state_head: 55627e13eed8b5e54e705e1c1c5a8a7f339676ec
+state_head: c42dc3324f4e8f00d72b3bc0711b85f5812b5204
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 35
-  completed_plans: 34
+  completed_plans: 35
   percent: 67
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-13)
 ## Current Position
 
 Phase: 05 (Documentation) — EXECUTING
-Plan: 8 of 9
+Plan: 9 of 9
 Status: Ready to execute
 Last activity: 2026-10-14 — Phase 05 execution started
 
@@ -95,6 +95,7 @@ Progress: [███████░░░] 67%
 | Phase 05 P05 | 2h 16m | 3 tasks | 0 files |
 | Phase 05 P07 | 23min | 3 tasks | 3 files |
 | Phase 05 P08 | 30min | 3 tasks | 3 files |
+| Phase 05 P09 | 20min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -230,6 +231,9 @@ Recent decisions affecting current work:
 - [Phase 05]: 05-08: RULES.md 표 구역 안에서 받는 줄은 0번째 줄의 머리 줄 · 1번째 줄의 구분 줄 · 첫 칸이 backtick 이름 하나인 데이터 행 · 데이터 행이 없는 구역의 '없음 — …' 한 줄뿐이고 그 밖의 줄은 [3/10] 실패다 (M51 ~ M53; 812c477). measure_rules.dart 의 readRulesTable 은 문서 주석만 고쳤다
 - [Phase 05]: 05-08: README (e) 는 package:woody_lints/ 뒤의 후보 가운데 <이름>.yaml 꼴이 아닌 것과 이름이 woody_lints 가 아닌 패키지의 .yaml · .yml 주소를 실패시키고, fencedLines 는 펜스의 문자 · 길이를 기억해 같은 문자만으로 된 · 같거나 긴 줄에서만 닫는다 (M54 ~ M58; 63fe3d9)
 - [Phase 05]: 05-08: lib/base.yaml 의 analyzer: · language: 줄에 값이 붙었거나 language: 블록에 <이름>: true|false 가 아닌 줄이 있으면 종료 코드 70, 줄 끝 주석을 단 블록 꼴은 받아 [3/10] 비교로 간다 (M59 ~ M61 70 · M62 1; a14be4f)
+- [Phase 05]: 05-09: lib/riverpod.yaml 의 riverpod_lint 선언은 따옴표를 벗겨 ^X.Y.Z 와 고정 버전 X.Y.Z 를 받고, 맵 꼴에서는 키 줄보다 깊은 줄 가운데서 version: 을 찾으며(키 순서 무관, 키 줄의 # 주석은 값이 아님), 범위 제약 등 그 밖의 꼴은 '꼴만 받는다' 와 읽은 값을 담은 문구로 종료 코드 70 이다 (05-REVIEW WR-05, 소유자 결정 R2-Q1 — M63 ~ M66). pubspecReleaseVersion 도 따옴표 version 을 받는다 (IN-01, M67; 644897f)
+- [Phase 05]: 05-09: 05 리뷰 처리 기록은 fixed 12 · deferred 1 (WR-06 — D-09, 마일스톤 끝 /gsd-map-codebase) · open 0 이다 (8789cfe). README 의 산문은 plugin 버전 숫자 대신 lib/riverpod.yaml 의 선언을 가리키고, plugin 하한을 올릴 때 함께 고칠 자리 셋은 README 「이 저장소를 고치는 사람에게」 한 곳에 있다 (e46cff4)
+- [Phase 05]: 05-09: gap 수정 05-07 ~ 05-09 를 git push origin gsd/v2.0-package-rework 한 줄로 올렸다 (2026-10-14T02:39:51Z, 92d478a..8789cfe, 25커밋, fast-forward, 둘째 push 없음, D-21 — 실행 뒤 보고). GitHub verify run 38502214557 success, job 4분 14초 (ubuntu-24.04 20261004.327.1), 로그에 [3/10] 통과와 점검 통과 (10개 중 10개). main 90a2736 · tag v1.3.0 하나 · PR 0 그대로이고 05-09 의 메타데이터 커밋은 origin 에 없다
 
 ### Pending Todos
 
@@ -256,6 +260,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-14T02:20:55.659Z
-Stopped at: Completed 05-08-PLAN.md
+Last session: 2026-10-14T02:47:19.020Z
+Stopped at: Completed 05-09-PLAN.md
 Resume file: None

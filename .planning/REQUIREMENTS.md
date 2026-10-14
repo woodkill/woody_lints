@@ -23,7 +23,7 @@
 - [x] **VERIFY-03**: 소유자는 로컬에서 명령 하나로 전체 검증을 실행할 수 있다
 - [x] **VERIFY-04**: GitHub Actions 가 push 와 PR 마다 로컬과 같은 검증을 실행하며, 시간 제한이 걸려 있다
 - [x] **VERIFY-05**: `base.yaml` 만 include 한 대조군 fixture 에서 Riverpod / codegen 설정이 적용되지 않음을 확인한다
-- [ ] **VERIFY-06**: README 의 규칙 목록이 실제 YAML 과 다르면 검증이 실패한다
+- [x] **VERIFY-06**: README 의 규칙 목록이 실제 YAML 과 다르면 검증이 실패한다
 - [x] **VERIFY-07**: `lib/` 에 `.dart` 파일이 있으면 검증이 실패한다
 - [x] **VERIFY-08**: 검증이 실제로 문제를 잡아냄이 확인되어 있다 — 규칙 하나를 지운 변경과 include 줄을 지운 변경이 각각 검증에서 실패한다
 
@@ -56,8 +56,8 @@
 - [ ] **DOCS-03**: README 에 규칙을 한 줄 / 파일 / 프로젝트 단위로 끄는 방법과 plugin 진단을 끄는 방법이 있다
 - [ ] **DOCS-04**: README 에 버전을 올리는 방법(`ref:` 수정과 `pub get`)과 `ref: main` 에서 tag 로 옮기는 방법이 있다
 - [ ] **DOCS-05**: README 에 문제 해결 섹션이 있다 (plugin 경고가 안 보일 때, Analysis Server 재시작, `dart analyze` 와 `flutter analyze` 의 차이, tag 를 고정해도 바뀌는 것)
-- [ ] **DOCS-06**: README 의 규칙·설정 설명이 실제 YAML 과 일치한다 (현재의 불일치 2건과 기재되지 않은 설정 해소)
-- [ ] **DOCS-07**: CHANGELOG 에 새 릴리스 항목이 있다 (추가·삭제 규칙, 지원 SDK 변경)
+- [x] **DOCS-06**: README 의 규칙·설정 설명이 실제 YAML 과 일치한다 (현재의 불일치 2건과 기재되지 않은 설정 해소)
+- [x] **DOCS-07**: CHANGELOG 에 새 릴리스 항목이 있다 (추가·삭제 규칙, 지원 SDK 변경)
 - [ ] **DOCS-08**: CHANGELOG 의 1.0.0 과 1.3.0 사이 누락이 git 이력에서 확인되는 범위로 보완되어 있다
 - [ ] **DOCS-09**: CHANGELOG 새 릴리스 항목에 새로 생기는 진단 안내가 있다 (규칙별 실측 건수, `dart fix` 가능 여부)
 - [ ] **DOCS-10**: 배포 YAML 의 머리 주석이 실제 구성을 설명하고, README 와 YAML 에 남은 템플릿 보일러플레이트가 제거되어 있다
@@ -120,7 +120,7 @@
 | VERIFY-03 | Phase 2 | Complete |
 | VERIFY-04 | Phase 2 | Complete |
 | VERIFY-05 | Phase 3 | Complete |
-| VERIFY-06 | Phase 5 | Gaps Found |
+| VERIFY-06 | Phase 5 | Complete |
 | VERIFY-07 | Phase 2 | Complete |
 | VERIFY-08 | Phase 2 | Complete |
 | PRESET-01 | Phase 3 | Complete |
@@ -144,8 +144,8 @@
 | DOCS-03 | Phase 5 | Gaps Found |
 | DOCS-04 | Phase 5 | Gaps Found |
 | DOCS-05 | Phase 5 | Gaps Found |
-| DOCS-06 | Phase 5 | Gaps Found |
-| DOCS-07 | Phase 5 | Gaps Found |
+| DOCS-06 | Phase 5 | Complete |
+| DOCS-07 | Phase 5 | Complete |
 | DOCS-08 | Phase 5 | Gaps Found |
 | DOCS-09 | Phase 5 | Gaps Found |
 | DOCS-10 | Phase 5 | Gaps Found |
