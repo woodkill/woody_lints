@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 06
 current_phase_name: Release
 status: executing
-stopped_at: Completed 06-03-PLAN.md
-last_updated: "2026-10-15T05:44:06.821Z"
+stopped_at: Completed 06-04-PLAN.md
+last_updated: "2026-10-15T08:12:15.991Z"
 last_activity: 2026-10-15
 last_activity_desc: Phase 06 execution started
-state_head: 0a53fd59b19ae29e19d7cdc9d9f223055e0e6815
+state_head: 704bf56fb028debe16f107bc9a8e6c9bdc5bccc2
 progress:
   total_phases: 6
   completed_phases: 5
   total_plans: 48
-  completed_plans: 44
+  completed_plans: 45
   percent: 83
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-15)
 ## Current Position
 
 Phase: 06 (Release) — EXECUTING
-Plan: 3 of 7
+Plan: 4 of 7
 Status: Executing Phase 06
 Last activity: 2026-10-15 — Phase 06 execution started
 
@@ -106,6 +106,7 @@ Progress: [████████░░] 83%
 | Phase 06 P01 | 17 min | 3 tasks | 3 files |
 | Phase 06 P02 | 9 min | 2 tasks | 2 files |
 | Phase 06 P03 | 13 min | 2 tasks | 1 files |
+| Phase 06 P04 | 140min | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -278,6 +279,8 @@ Recent decisions affecting current work:
 - [Phase 06]: 절차 6 의 tag 실행 필터(headBranch 가 tag 이름)는 A3 가정 그대로 적었다 — 06-05 가 진짜 tag 실행의 headBranch 값으로 확인하고 다르면 6단계를 고친다 (06-02)
 - [Phase 06]: 06-03: smoke 의 위반 파일 출처 주석 · import 줄은 본문 raw 문자열 밖 상수로 둔다 — 줄 머리 import 를 세는 검사가 스크립트 자신의 import 로 읽는다 (생성 내용은 그대로)
 - [Phase 06]: 06-03: smoke 의 주소별 판정은 verify.dart 와 같은 배타 순서(plugin 머리말 → 도구가 죽음 → 위반 두 줄의 존재)이고 plugin 폴더 수 · 버전은 정보로만 찍는다
+- [Phase 06]: 06-04: 릴리스 커밋 704bf56 (version 2.0.0, CHANGELOG 2026-10-15) 이 예행 통과 커밋이다 — 06-05 는 이 커밋에 tag v2.0.0 을 단다; CHANGELOG 날짜는 tag 날짜와 달라도 고치지 않는다
+- [Phase 06]: 06-04: 예행 smoke 1회차는 네트워크 정지(pub get 70분, plugin 받기 41분 정지 뒤 orchestrator 가 끊음)로 무효 — 같은 커밋으로 다시 돌려 rc 0, README · 스크립트는 고치지 않았다
 
 ### Pending Todos
 
@@ -305,6 +308,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-15T05:43:59.818Z
-Stopped at: Completed 06-03-PLAN.md
+Last session: 2026-10-15T08:12:09.418Z
+Stopped at: Completed 06-04-PLAN.md
 Resume file: None

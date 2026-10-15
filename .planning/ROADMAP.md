@@ -318,7 +318,7 @@ Plans:
   2. `git ls-remote --tags origin` 에 새 버전의 annotated tag 가 보이고, 그 tag 의 `pubspec.yaml` version 과 CHANGELOG 최상단 버전이 tag 이름과 같다
   3. 빈 프로젝트가 새 tag 를 git 의존성(`ref: vX.Y.Z`)으로 받아 `dart analyze` 를 돌리면 기본 규칙 진단과 `riverpod_lint` plugin 진단이 둘 다 보고된다
 
-**Plans**: 3/7 plans executed (계획 2026-10-15 — 06-CONTEXT.md D-01 ~ D-14, 06-RESEARCH.md; 5 waves)
+**Plans**: 4/7 plans executed (계획 2026-10-15 — 06-CONTEXT.md D-01 ~ D-14, 06-RESEARCH.md; 5 waves)
 
 Plans:
 
@@ -328,7 +328,7 @@ Plans:
 - [x] 06-03-PLAN.md — `tool/smoke.dart <ref> [--keep]` — 저장소 밖 임시 폴더에서 `flutter create` → README 대로 → 새 `PUB_CACHE` 로 받기 → 두 주소로 `dart analyze` → D-09 (2) · (3) 판정; 하위 명령은 고정 SDK 의 `bin/flutter` · dart 로만(저장소 밖 임시 폴더); origin 의 커밋 `2336ba0` 으로 통과 실행, 실패 방향 셋 — 없는 ref · annotated tag `v1.3.0` (tag 경로를 tag push 전에) · 앞선 브랜치 이름 (REL-04; D-08 · D-09 · D-10)
 
 **Wave 2** *(blocked on Wave 1 — 릴리스 커밋은 손질 · 검사 · 스크립트 뒤에; 본 체크아웃에서, 같은 브랜치 push 는 D-21 대로 실행 뒤 보고)*
-- [ ] 06-04-PLAN.md — 릴리스 커밋 (`version: 2.0.0` · IN-13 주석 · CHANGELOG 날짜 · `VERSIONING.md` 「실제 사례」 67 · 69행 현재형 (소유자 결정 2026-10-15 R2-Q1) · lock 여섯을 `fvm dart pub get` 으로만) 과 평소 · `--tag v2.0.0` 10/10 (D-01 1 · 3, D-12 (2)) → push gate (범위 `2336ba0…HEAD` 의 더해진 줄 전부에 비공개 점검, fail-closed — push 전에 따로) → `git push origin gsd/v2.0-package-rework` → GitHub `verify` (평소 모드 줄) (D-01 2, D-21) → 예행 `tool/smoke.dart <릴리스 커밋>` 과 D-14 측정 — 저장소 밖 측정은 고정 SDK 의 dart 로 (D-01 4, D-07, D-14)
+- [x] 06-04-PLAN.md — 릴리스 커밋 (`version: 2.0.0` · IN-13 주석 · CHANGELOG 날짜 · `VERSIONING.md` 「실제 사례」 67 · 69행 현재형 (소유자 결정 2026-10-15 R2-Q1) · lock 여섯을 `fvm dart pub get` 으로만) 과 평소 · `--tag v2.0.0` 10/10 (D-01 1 · 3, D-12 (2)) → push gate (범위 `2336ba0…HEAD` 의 더해진 줄 전부에 비공개 점검, fail-closed — push 전에 따로) → `git push origin gsd/v2.0-package-rework` → GitHub `verify` (평소 모드 줄) (D-01 2, D-21) → 예행 `tool/smoke.dart <릴리스 커밋>` 과 D-14 측정 — 저장소 밖 측정은 고정 SDK 의 dart 로 (D-01 4, D-07, D-14)
 
 **Wave 3** *(blocked on Wave 2 — tag push 는 소유자 직전 확인, one-way)*
 - [ ] 06-05-PLAN.md — 예행 통과 커밋에 로컬 annotated tag `v2.0.0` 과 4중 점검 → checkpoint (blocking-human — 고정 SDK 로 README 를 손으로 따라 한 결과와 smoke 단계와의 대조를 함께, 05-UAT 1번; `tag` / `readme` / `script` / `hold`) → `git push origin v2.0.0` → `ls-remote` · CI 의 tag 실행 로그 (`버전 일치 검사: tag v2.0.0 (GITHUB_REF_NAME)`) · `tool/smoke.dart v2.0.0` (REL-02 · REL-03 · REL-04; D-01 5 ~ 8, D-06, D-09)
@@ -375,7 +375,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
 | 4. Rule Reselection | 13/13 | Complete    | 2026-10-13 |
 | 5. Documentation | 15/15 | Complete    | 2026-10-15 |
-| 6. Release | 3/7 | In Progress | - |
+| 6. Release | 4/7 | In Progress | - |
 
 ## Backlog
 
