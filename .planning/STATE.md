@@ -4,17 +4,17 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 06
 current_phase_name: Release
-status: Phase 06 계획 완료 — 실행 대기 (/gsd-execute-phase 06)
-stopped_at: Phase 06 계획 완료 (06-01 ~ 06-07)
-last_updated: "2026-10-15T04:42:26.221Z"
+status: executing
+stopped_at: Completed 06-01-PLAN.md
+last_updated: "2026-10-15T05:14:34.190Z"
 last_activity: 2026-10-15
-last_activity_desc: "Phase 06 계획 7개 작성 (wave 5), plan checker 2회차 통과 — info 4"
-state_head: 5d030f28870b9b03edba02b21c3aec653c8cb228
+last_activity_desc: Phase 06 execution started
+state_head: b0ff2d283d5bd21c7d60e22a0673041a00aa4eff
 progress:
   total_phases: 6
   completed_phases: 5
   total_plans: 48
-  completed_plans: 41
+  completed_plans: 42
   percent: 83
 ---
 
@@ -25,14 +25,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-10-15)
 
 **Core value:** 사용 프로젝트가 `include` 한 줄로 받는 규칙이 문서에 적힌 그대로 적용되고, 각 규칙이 왜 켜져 있는지 근거가 남아 있다.
-**Current focus:** Phase 6 — Release
+**Current focus:** Phase 06 — Release
 
 ## Current Position
 
-Phase: 06 (Release) — READY TO EXECUTE
-Plan: 0 of 7
-Status: Phase 06 계획 완료 — 실행 대기 (/gsd-execute-phase 06)
-Last activity: 2026-10-15 — Phase 06 계획 7개 작성 (wave 5), plan checker 2회차 통과 — info 4
+Phase: 06 (Release) — EXECUTING
+Plan: 1 of 7
+Status: Ready to execute
+Last activity: 2026-10-15 — Phase 06 execution started
 
 Progress: [████████░░] 83%
 
@@ -103,6 +103,7 @@ Progress: [████████░░] 83%
 | Phase 05 P13 | 7 min | 2 tasks | 1 files |
 | Phase 05 P14 | 18min | 2 tasks | 7 files |
 | Phase 05 P15 | 8 min | 2 tasks | 1 files |
+| Phase 06 P01 | 17 min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -269,6 +270,8 @@ Recent decisions affecting current work:
 - [Phase 06]: 계획 7개 · wave 5 — 06-01 `[3/10]` (i) 버전 일치 검사 · `--tag` · `GITHUB_REF_TYPE`/`GITHUB_REF_NAME` · IN-12 · IN-14 · 지워 보기 M92 ~ M97 · workflow 7행 주석, 06-02 README 손질 (D-14 · UAT 2 · 4 · 381행) · `VERSIONING.md` 「릴리스 절차」, 06-03 `tool/smoke.dart <ref> [--keep]`, 06-04 릴리스 커밋 `chore(release): 2.0.0` (version · CHANGELOG 날짜 · lock 여섯 `pub get` · IN-13 · VERSIONING 실제 사례) → 브랜치 push → 예행 smoke · D-14 재기, 06-05 tag 직전 확인 (README 손 따라 하기 포함) → `v2.0.0` push · tag smoke · `ls-remote`, 06-06 PR → 병합 직전 확인 → merge commit · `workflow_dispatch`, 06-07 처리 기록 (5c141cb, 69e0558, 5d030f2)
 - [Phase 06]: 계획 전 소유자 결정 (2026-10-15, 모두 권고대로) — 조사 먼저, 모델은 Fable 로 시작해 바닥나면 Opus (조사 · 계획 · 검토 모두 Fable 로 끝남). Round 2: `VERSIONING.md` 「실제 사례」 67행 `(미출시, 다음 릴리스)` → `(YYYY-MM-DD, tag v2.0.0)` · 69행 "그래서 **2.0.0** 으로 냈다." 를 06-04 릴리스 커밋에서 (R2-Q1), `.github/workflows/verify.yml` 7행 주석만 현재형으로 06-01 에서 — trigger 줄은 그대로 (R2-Q2)
 - [Phase 06]: plan checker 1회차 blocker 5 · warning 8 (줄 수가 맞지 않는 삽입, `## ` 개수, 저장소 밖 `fvm dart` 가 전역 SDK(Dart 3.11.1)를 씀, 거르지 않은 깨끗한 트리 단언, RESEARCH 의 RESOLVED 표시 / `미출시` 글자만 거부하는 구현을 놓침, smoke 의 tag 경로를 tag 전에 돌리지 않음, push gate 의 범위 · fail-open 등) → 수정 1회 (고정 SDK 를 `fvm flutter --version --machine` 의 `flutterRoot` 로 찾아 직접 실행, push gate 를 별도 첫 단언으로, `v1.3.0` 으로 tag 경로 미리 확인) → 2회차 통과 — info 4
+- [Phase 06]: 06-01: [3/10] 의 확인 (i) 는 tag 모드에서 pubspec.yaml 원문과 꼬리 없이 정확히 견주고, tag 이름은 --tag 인자 우선 · 없으면 GITHUB_REF_TYPE=tag 일 때의 GITHUB_REF_NAME · 둘 다 없으면 평소 모드이며 stderr 의 버전 일치 검사 줄로 모드를 남긴다
+- [Phase 06]: 06-01: --tag 의 다음 인자가 -- 로 시작하면 값 없음으로 보고 종료 코드 64 (계획보다 한 경우 더 막음)
 
 ### Pending Todos
 
@@ -296,6 +299,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-15T04:43:02.000Z
-Stopped at: Phase 06 계획 완료 (06-01 ~ 06-07)
+Last session: 2026-10-15T05:14:33.764Z
+Stopped at: Completed 06-01-PLAN.md
 Resume file: None
