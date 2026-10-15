@@ -2,18 +2,18 @@
 gsd_state_version: "1.0"
 milestone: v2.0
 milestone_name: Package Rework
-current_phase: 6
+current_phase: 06
 current_phase_name: Release
-status: planning
-stopped_at: Phase 6 context gathered
-last_updated: "2026-10-15T00:23:38.487Z"
+status: Phase 06 계획 완료 — 실행 대기 (/gsd-execute-phase 06)
+stopped_at: Phase 06 계획 완료 (06-01 ~ 06-07)
+last_updated: "2026-10-15T04:42:26.221Z"
 last_activity: 2026-10-15
-last_activity_desc: Phase 05 complete, transitioned to Phase 6
-state_head: faf6f604d6d7a2f17418404c1042948c5ed07fb9
+last_activity_desc: "Phase 06 계획 7개 작성 (wave 5), plan checker 2회차 통과 — info 4"
+state_head: 5d030f28870b9b03edba02b21c3aec653c8cb228
 progress:
   total_phases: 6
   completed_phases: 5
-  total_plans: 41
+  total_plans: 48
   completed_plans: 41
   percent: 83
 ---
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-10-15)
 
 ## Current Position
 
-Phase: 6 — Release
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-10-15 — Phase 05 complete, transitioned to Phase 6
+Phase: 06 (Release) — READY TO EXECUTE
+Plan: 0 of 7
+Status: Phase 06 계획 완료 — 실행 대기 (/gsd-execute-phase 06)
+Last activity: 2026-10-15 — Phase 06 계획 7개 작성 (wave 5), plan checker 2회차 통과 — info 4
 
 Progress: [████████░░] 83%
 
@@ -266,6 +266,9 @@ Recent decisions affecting current work:
 - [Phase 05]: 4회차 gap 수정을 git push origin gsd/v2.0-package-rework 한 줄로 올렸다 (c2f275a..2336ba0, 16커밋, fast-forward, D-21) — verify run 38639587080 success, job 4분 13초, CHANGELOG 는 그대로
 - [Phase 05]: Phase 05 재리뷰 경고 IN-12 · IN-13 · IN-14 는 Phase 6 (Release) 로 미룸 (소유자 결정 2026-10-15, 권고안) — 셋 다 막는 쪽이고 Phase 6 이 pubspec.yaml version 을 바꿀 때 함께 고침; 처리 기록 deferred · ROADMAP Phase 6 Notes
 - [Phase 05]: UAT 8건 통과 (2026-10-15) — 05-VERIFICATION 의 사람 확인 여섯과 SUMMARY coverage 에서 빠졌던 사람 판단 둘(배포 YAML 머리 주석, `example/README.md` 실측 기록). 1 · 2 · 4 · 5번은 통과로 적고 문서 손질 넷(README 설치 안내와 `flutter create` 템플릿의 기존 키, 355행 출처 표시, 34행 flutter#191151 의 사실 — stable 판이 3.47.2 부터 들어 있음, (05-14) 읽는 법의 판 표시)을 Phase 6 로 미룸 (ROADMAP Phase 6 Notes, ce98310). 05-VERIFICATION status passed
+- [Phase 06]: 계획 7개 · wave 5 — 06-01 `[3/10]` (i) 버전 일치 검사 · `--tag` · `GITHUB_REF_TYPE`/`GITHUB_REF_NAME` · IN-12 · IN-14 · 지워 보기 M92 ~ M97 · workflow 7행 주석, 06-02 README 손질 (D-14 · UAT 2 · 4 · 381행) · `VERSIONING.md` 「릴리스 절차」, 06-03 `tool/smoke.dart <ref> [--keep]`, 06-04 릴리스 커밋 `chore(release): 2.0.0` (version · CHANGELOG 날짜 · lock 여섯 `pub get` · IN-13 · VERSIONING 실제 사례) → 브랜치 push → 예행 smoke · D-14 재기, 06-05 tag 직전 확인 (README 손 따라 하기 포함) → `v2.0.0` push · tag smoke · `ls-remote`, 06-06 PR → 병합 직전 확인 → merge commit · `workflow_dispatch`, 06-07 처리 기록 (5c141cb, 69e0558, 5d030f2)
+- [Phase 06]: 계획 전 소유자 결정 (2026-10-15, 모두 권고대로) — 조사 먼저, 모델은 Fable 로 시작해 바닥나면 Opus (조사 · 계획 · 검토 모두 Fable 로 끝남). Round 2: `VERSIONING.md` 「실제 사례」 67행 `(미출시, 다음 릴리스)` → `(YYYY-MM-DD, tag v2.0.0)` · 69행 "그래서 **2.0.0** 으로 냈다." 를 06-04 릴리스 커밋에서 (R2-Q1), `.github/workflows/verify.yml` 7행 주석만 현재형으로 06-01 에서 — trigger 줄은 그대로 (R2-Q2)
+- [Phase 06]: plan checker 1회차 blocker 5 · warning 8 (줄 수가 맞지 않는 삽입, `## ` 개수, 저장소 밖 `fvm dart` 가 전역 SDK(Dart 3.11.1)를 씀, 거르지 않은 깨끗한 트리 단언, RESEARCH 의 RESOLVED 표시 / `미출시` 글자만 거부하는 구현을 놓침, smoke 의 tag 경로를 tag 전에 돌리지 않음, push gate 의 범위 · fail-open 등) → 수정 1회 (고정 SDK 를 `fvm flutter --version --machine` 의 `flutterRoot` 로 찾아 직접 실행, push gate 를 별도 첫 단언으로, `v1.3.0` 으로 tag 경로 미리 확인) → 2회차 통과 — info 4
 
 ### Pending Todos
 
@@ -278,9 +281,9 @@ None yet.
 - [Phase 2] 리뷰 지적 15건이 열려 있다 (`02-REVIEW-DISPOSITION.md`, 합계 17 — WR-01 ~ WR-06 · WR-08 · IN-01 ~ IN-08). `02-VERIFICATION.md` 의 "다음 phase 가 알아야 할 것" 1 ~ 7 이 Phase 3 · 4 · 6 에 걸리는 것을 추렸다. WR-06 은 Phase 6 이 `version` 을 올릴 때 종료 코드 69 로 만난다
 - [Phase 3] 리뷰 지적 14건이 열려 있다 (`03-REVIEW-DISPOSITION.md`, warning 8 · info 6). 그중 검증 장치의 빈틈 셋은 Phase 4 · 5 가 배포 YAML 을 고칠 때 밟는 자리다 — WR-01 `[2/9]` 가 묶음 · 별칭을 보지 않아 거기 적은 규칙을 놓친다 (거짓 통과), WR-02 `riverpod_lint` 줄 끝 주석 · 마지막 줄바꿈 없음에서 종료 코드 70 (거짓 실패), WR-03 `base.yaml` 의 맵 형식 규칙(`rule: false`)에서 `[2/9]` 거짓 실패. Phase 4 계획 때 먼저 닫을지 정한다 (`03-VERIFICATION.md` Gaps Summary) — 정함 (2026-10-13, `04-CONTEXT.md` D-12): WR-01 은 plan 04-01 의 `[3/10]` 이 닫고, WR-02 는 Phase 5 의 첫 일, WR-03 은 목록 형식 관례로 피하고 열어 둔다. WR-02 는 05-01 이 닫음 (M32 · M33, `03-REVIEW-DISPOSITION.md` fixed). 04-13 뒤에는 `lib/base.yaml` 의 맵 형식 규칙 줄에서 `[3/10]` 이 거짓 통과 대신 종료 코드 70 으로 멈춘다 (README M31)
 - [Phase 4] 리뷰 지적 18건이 열려 있다 (`04-REVIEW-DISPOSITION.md`, 합계 28 — open 18 · deferred 3 · fixed 7). deferred 셋: WR-11 (`[3/10]` 의 겹침 · `RULES.md` 일치가 `lib/base.yaml` 만 읽음) 은 05-01 이 닫음 (M35, `04-REVIEW-DISPOSITION.md` fixed), CR-03 · WR-09 (측정 도구) 는 다음 재측정(RULES-13) 전에
-- [Phase 6] `main` 병합은 `ref: main` 사용 프로젝트 5개에 새 버전을 배포하는 일이다. tag 와 병합의 순서를 계획 때 정한다
-- [Phase 6] Phase 2 에서 미룬 확인 둘 — PR 에서 `verify` 가 도는지, 수동 실행 버튼 (ROADMAP 의 Phase 6 Notes)
-- [Phase 6] 릴리스 tag 전에 닫을 것: 05-REVIEW 경고 IN-12 · IN-13 · IN-14 와 05-UAT 의 문서 손질 넷 (ROADMAP 의 Phase 6 Notes). README · `example/README.md` · `tool/verify.dart` · `pubspec.yaml` 을 고친 뒤 `fvm dart run tool/verify.dart` 10/10 을 다시 본다
+- [Phase 6] `main` 병합은 `ref: main` 사용 프로젝트 5개에 새 버전을 배포하는 일이다. tag 와 병합의 순서를 계획 때 정한다 → 순서는 06-CONTEXT D-01 · D-02 로 정함 (tag 먼저, 병합은 06-06 에서 PR + merge commit, 둘 다 직전 확인)
+- [Phase 6] Phase 2 에서 미룬 확인 둘 — PR 에서 `verify` 가 도는지, 수동 실행 버튼 (ROADMAP 의 Phase 6 Notes) → 06-06 이 확인하고 06-07 이 기록한다
+- [Phase 6] 릴리스 tag 전에 닫을 것: 05-REVIEW 경고 IN-12 · IN-13 · IN-14 와 05-UAT 의 문서 손질 넷 (ROADMAP 의 Phase 6 Notes). → 06-01 · 06-02 · 06-04 가 고치고 06-07 이 기록한다. README · `example/README.md` · `tool/verify.dart` · `pubspec.yaml` 을 고친 뒤 `fvm dart run tool/verify.dart` 10/10 을 다시 본다
 - [Phase 5] `.claude/CLAUDE.md` 70 · 173 · 313행이 이미 걷어낸 루트 `analysis_options.yaml` exclude 를 "유지해야 한다" 고 지시한다 (05-REVIEW WR-06, D-09 로 deferred — 마일스톤 끝 `/gsd-map-codebase`). 그 전에 루트 exclude 를 건드리는 작업이 오면 그 지시를 따르지 않는다. `tool/measure_rules.dart` 의 `readRulesTable` · `tool/verify.dart` 의 `readUpstreamRules.readSet` 은 읽지 못하는 줄을 건너뛰는 꼴로 열어 둠 (소유자 결정 2026-10-14). 같은 파일 261행의 pubspec 설명에 4회차 gap 이 더할 `dev_dependencies` 가 없다 — 같은 D-09 로 미룸 (2026-10-15)
 
 ## Deferred Items
@@ -293,6 +296,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-15T00:23:38.037Z
-Stopped at: Phase 6 context gathered
-Resume file: .planning/phases/06-release/06-CONTEXT.md
+Last session: 2026-10-15T04:43:02.000Z
+Stopped at: Phase 06 계획 완료 (06-01 ~ 06-07)
+Resume file: None
