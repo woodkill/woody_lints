@@ -27,6 +27,9 @@
 //
 // 종료 코드: 0 모두 통과 / 1 단계 실패 / 64 사용법 오류 / 69 pub get 실패 / 70 예외로 끝남
 //            / 78 실행 중인 SDK 가 .fvmrc 와 다름
+//            / 255 package:yaml 이 YamlException 밖의 Error 를 던진 경우 — main 이 받지 않는다
+//              (한 글자 !!float 값의 RangeError, 아주 깊은 flow 중첩의 StackOverflowError;
+//              05-REVIEW.md IN-14, 코드는 그대로 — 06-CONTEXT.md D-13)
 //
 // 의존성은 루트 pubspec.yaml 의 dev_dependencies 에 둔 yaml (package:yaml) 하나다 —
 // [3/N] 이 줄 단위로 읽은 값을 YAML 해석 결과와 견줄 때만 쓴다 (analyzer · pub 과 같은
@@ -1931,8 +1934,10 @@ const yamlAgreementHint =
 /// 들여쓰기와 그보다 얕은 줄)을 모두 `nested` 로 받는다 — 그래서 결과는 reader 가 실제로 쓰는
 /// 들여쓰기 · 블록 경계 규칙 그대로다 (같은 규칙을 다시 짜지 않는다).
 ///
-/// 줄이 키 꼴(`<이름>:`)이면 키 이름을, 아니면 원문(`topLevel` 은 들여쓰기를 살린 원문,
-/// `children` 은 trim 한 원문)을 담는다. 아래 줄의 목록 항목(`- …`)은 키가 아니라 담지 않는다.
+/// 최상위 줄은 키 꼴이면 키 이름을, 아니면 원문(들여쓰기를 살린 원문)을 담는다. 아래 줄은 키처럼
+/// 보이는 줄(`keyLikePattern`)만 담는다 — 키 꼴이면 키 이름을, 따옴표 키 등은 trim 한 원문을;
+/// 목록 항목(`- …`)과 `include:` 다음 줄의 `package:…` 같은 스칼라 값 줄은 키가 아니라 담지 않는다
+/// (05-REVIEW.md IN-12 — 2026-10-15).
 /// 같은 키가 두 번 보이면 두 번 담는다 — YAML 은 같은 키를 두 번 받지 않으므로 reader 쪽에만
 /// 두 번 보이는 키는 여러 줄 문자열 안의 줄이다 (05-VERIFICATION.md 4회차 gap, 소유자 결정 G4-Q1).
 ({List<String> topLevel, Map<String, List<String>> children})
@@ -1942,6 +1947,11 @@ keysSeenByLineReader(String options) {
     r'^([A-Za-z_][A-Za-z0-9_-]*):[ \t]*(?:#.*)?$',
   );
   final listItemPattern = RegExp(r'^-(?:[ \t]|$)');
+  // 아래 줄 가운데 키처럼 보이는 줄 — `이름:` · `"이름":` · `'이름':` · `이름 :`.
+  // `package:…` 처럼 콜론 뒤에 공백 · 줄 끝이 없는 스칼라 값 줄은 키가 아니다 (05-REVIEW.md IN-12).
+  final keyLikePattern = RegExp(
+    r'''^(?:"[^"]*"|'[^']*'|[^\s#'"][^#]*?)[ \t]*:(?:[ \t]|$)''',
+  );
   // findUnexpectedKeys 가 돌려준 `<줄 번호>행: <원문>` 에서 원문만 뗀다.
   String textOf(String shown) => shown.substring(shown.indexOf('행: ') + 3);
 
@@ -1962,7 +1972,9 @@ keysSeenByLineReader(String options) {
   for (final MapEntry(key: parent, value: lines) in nested.entries) {
     for (final shown in lines) {
       final text = textOf(shown).trim();
-      if (listItemPattern.hasMatch(text)) continue;
+      if (listItemPattern.hasMatch(text) || !keyLikePattern.hasMatch(text)) {
+        continue;
+      }
       children
           .putIfAbsent(parent, () => [])
           .add(keyPattern.firstMatch(text)?.group(1) ?? text);
@@ -2043,7 +2055,9 @@ String yamlPluginConstraint(Object? root) {
 ///
 /// 목록은 순서 없이 건수까지 견준다 ([subtractLines] 를 양쪽으로). YAML 로 읽지 못하는 파일
 /// (같은 키 두 번, 깨진 YAML — [YamlException])은 블록 하나로 알리고 그 파일의 다른 비교는
-/// 건너뛴다. [YamlException] 만 잡는다 — 그 밖의 예외는 지금처럼 main 이 받는다.
+/// 건너뛴다. [YamlException] 만 잡는다 — `FormatException` 등은 main 이 받고(70), `RangeError` 같은
+/// `Error` 는 main 도 받지 않아 처리되지 않은 예외(255)로 끝난다 (05-REVIEW.md IN-14 — 코드는 고치지
+/// 않았다, 06-CONTEXT.md D-13).
 ///
 /// reader 는 바꾸지 않고 다시 부른다 — 앞의 확인이 같은 reader 를 이미 불러 그 [FormatException]
 /// (종료 코드 70)은 여기까지 오지 않는다. 다른 것은 YAML 로 올바르고 analyzer 도 받는 파일에서
