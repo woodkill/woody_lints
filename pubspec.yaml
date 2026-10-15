@@ -1,6 +1,6 @@
 name: woody_lints
 description: Woody's custom lint rules for Flutter projects.
-version: 2.0.0-dev
+version: 2.0.0
 
 # pub.dev에 올리지 않고 개인적으로 사용
 publish_to: 'none'
@@ -10,7 +10,7 @@ repository: https://github.com/woodkill/woody_lints.git
 environment:
   sdk: ^3.13.0
 
-# lib/analysis_options.yaml 이 `include: package:flutter_lints/flutter.yaml` 을
+# lib/base.yaml 이 `include: package:flutter_lints/flutter.yaml` 을
 # 쓰므로 사용하는 프로젝트에 전달되는 dependencies 에 둔다
 # (dev_dependencies 는 사용하는 쪽 의존성 그래프에 포함되지 않는다).
 dependencies:
