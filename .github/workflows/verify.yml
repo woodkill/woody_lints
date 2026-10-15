@@ -4,7 +4,7 @@ name: verify
 on:
   # 필터 없음 = 모든 브랜치와 tag 의 push 에서 돈다 (GitHub: branches / tags 필터가 둘 다 없으면 둘 다 실행된다).
   # tag 에서 한 번 더 도는 것은 그대로 둔다 — 소유자 결정 2026-10-12 (D-10 의 "tag 트리거는 넣지 않는다" 와 다름, 02-CONTEXT.md D-10 의 덧붙임 참조).
-  # Phase 6 (REL-03) 이 tag 전용 검사를 더할 때: `tags:` 만 적으면 브랜치 push 에서는 더 돌지 않는다 — `branches:` 를 함께 적거나 필터 없이 둔다.
+  # tag push 에서는 검증 명령 `[3/10]` 의 버전 일치 검사가 `GITHUB_REF_TYPE` · `GITHUB_REF_NAME` 으로 tag 이름을 읽는다. `tags:` 만 적으면 브랜치 push 에서는 더 돌지 않으므로 필터 없이 둔다.
   push:
   pull_request:
   # 수동 실행 버튼 — workflow 파일이 main 에 들어간 뒤에 보인다 (D-06).

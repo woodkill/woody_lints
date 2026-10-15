@@ -3,16 +3,19 @@
 //
 //   [1/N] lib/ 에 .dart 파일이 없는지
 //   [2/N] 조각 파일 셋(lib/base.yaml · codegen.yaml · riverpod.yaml)의 복사본을 분석해 진단이 하나도 없는지 (deprecated / removed / 없는 규칙, 겹친 규칙 · 모르는 키 같은 옵션 경고, 깨진 YAML)
-//   [3/N] 배포 파일의 구성 — 묶음 · 별칭은 include 만 담는지, lib/base.yaml 의 규칙이 기반 세트와 겹치지 않는지, RULES.md 의 켠 규칙 표와 같은지, 다른 조각에 규칙이 없는지, 조각 셋의 최상위 키(와 그 바로 아래 키 — lib/codegen.yaml 의 analyzer:, lib/riverpod.yaml 의 plugins:)가 정해진 목록 안인지, README 의 표시 구역이 든 절에 구역 밖 목록 줄이 없는지, README 의 규칙 목록(표시 구역) · package: 로 시작하는 프리셋 주소 · 펜스 코드 블록 안 블록 꼴의 plugin 버전 · ref 가 배포 파일 · pubspec 과 같은지, 줄 단위로 읽은 규칙 · 키 · analyzer 옵션 · plugin 선언 · version 이 YAML (package:yaml) 이 같은 파일에서 읽은 값과 같은지
+//   [3/N] 배포 파일의 구성 — 묶음 · 별칭은 include 만 담는지, lib/base.yaml 의 규칙이 기반 세트와 겹치지 않는지, RULES.md 의 켠 규칙 표와 같은지, 다른 조각에 규칙이 없는지, 조각 셋의 최상위 키(와 그 바로 아래 키 — lib/codegen.yaml 의 analyzer:, lib/riverpod.yaml 의 plugins:)가 정해진 목록 안인지, README 의 표시 구역이 든 절에 구역 밖 목록 줄이 없는지, README 의 규칙 목록(표시 구역) · package: 로 시작하는 프리셋 주소 · 펜스 코드 블록 안 블록 꼴의 plugin 버전 · ref 가 배포 파일 · pubspec 과 같은지, 줄 단위로 읽은 규칙 · 키 · analyzer 옵션 · plugin 선언 · version 이 YAML (package:yaml) 이 같은 파일에서 읽은 값과 같은지, tag(있으면) · pubspec.yaml 의 version · CHANGELOG.md 최상단 버전이 같은지 (tag 가 없으면 꼬리를 뗀 version 과 CHANGELOG 버전만)
 //   [4/N] 연습용 프로젝트 전부의 analysis_options.yaml 이 정해진 내용인지 (주석 · 빈 줄을 뺀 내용을 통째로 견준다)
 //   [5/N] ~ [N/N] 연습용 프로젝트마다 `dart analyze` 로 분석한 결과가 정답지와 같은지
 //         (`fixtures` 표의 순서. recommended 는 자기 정답지 없이 같은 실행의 example 결과와 견준다)
 //
-// 실행: fvm dart run tool/verify.dart [--update]
+// 실행: fvm dart run tool/verify.dart [--update] [--tag vX.Y.Z]
 //   --update  정답지 전부를 한 번에 실제 결과로 다시 쓴다 — 바뀐 것만 쓰고, 연습용 프로젝트마다
 //             바뀐 줄을 먼저 화면에 보여 준 뒤 끝에 쓴 정답지의 목록을 찍는다.
 //             CI 에서는 동작하지 않는다. 같은 실행에서 한 단계라도 실패했으면 어느 정답지도
 //             쓰지 않는다 (종료 코드 1).
+//   --tag vX.Y.Z  달려는 tag 이름으로 [3/N] 의 버전 일치 확인을 tag 모드로 돌린다 (로컬에서 tag 를 만들기 전에 쓴다).
+//             인자가 없고 GitHub Actions 의 tag push 실행(GITHUB_REF_TYPE=tag)이면 GITHUB_REF_NAME 을 같은 뜻으로 쓴다.
+//             어느 쪽도 없으면 평소 모드이고, 어느 모드로 돌았는지는 stderr 의 `버전 일치 검사:` 줄에 찍는다.
 //
 // 단계에 앞서 준비를 한다: 실행 중인 SDK 가 .fvmrc 와 같은지 확인하고, 저장소 루트와
 // 연습용 프로젝트 전부의 패키지를 받는다. 준비가 실패하면 검증을 시작하지 않는다.
@@ -145,6 +148,9 @@ const rulesMdFile = 'RULES.md';
 
 /// 사용 안내 문서 (저장소 루트 기준). `[3/N]` 이 표시 구역의 규칙 목록, `package:` 로 시작하는 프리셋 주소, 펜스 코드 블록 안 블록 꼴의 plugin 버전 · `ref:` 를 배포 파일 · `pubspec.yaml` 과 견준다 (VERIFY-06, 05-CONTEXT.md D-01 · D-02).
 const readmeFile = 'README.md';
+
+/// 변경 이력 문서 (저장소 루트 기준). `[3/N]` 의 (i) 가 최상단 `## X.Y.Z - <날짜 자리>` 제목을 `pubspec.yaml` 의 version · tag 이름과 견준다 (REL-03, 06-CONTEXT.md D-04).
+const changelogFile = 'CHANGELOG.md';
 
 /// README 의 규칙 이름 목록을 감싸는 표시 구역 이름 — `RULES.md` 의 `enabled-rules` 와 다르게 두어 grep 이 갈린다.
 const readmeRulesBlock = 'readme-rules';
@@ -1613,6 +1619,60 @@ String pubspecReleaseVersion(String repoRoot) {
   return match.group(1)!;
 }
 
+/// `pubspec.yaml` 의 `version:` 값을 꼬리를 떼지 않은 원문 그대로 돌려준다 (`2.0.0-dev` → `2.0.0-dev`).
+///
+/// [pubspecReleaseVersion] 과 같은 줄 정규식으로 읽고 값의 바깥 따옴표와 줄 끝 `# 주석` 은
+/// 벗긴다 ([unquotedScalar] — YAML 에서 따옴표 값은 같은 값이다). 줄은 [splitYamlLines] 로
+/// 나눠 한 줄씩 본다 (CR · LF · CRLF, 소유자 결정 G3-R2-Q1). `[3/N]` 의 (i) 가 tag 모드에서
+/// tag 의 버전과 꼬리 없이 정확히 견준다 — 꼬리를 뗀 값으로 견주면 `-dev` 인 채로 단 tag 를
+/// 통과시킨다 (06-CONTEXT.md D-04 (2)). [pubspecReleaseVersion] 은 (g) · (h) 가 쓰므로 바꾸지 않는다.
+/// 읽지 못하면(줄이 없거나 값이 비면) [FormatException] (main 이 종료 코드 70 으로 끝낸다).
+String pubspecVersionText(String repoRoot) {
+  final versionLine = RegExp(r'^version:[ \t]*(.*?)(?:[ \t]+#.*)?[ \t]*$');
+  final lines = splitYamlLines(
+    File('$repoRoot/pubspec.yaml').readAsStringSync(),
+  );
+  for (final line in lines) {
+    final raw = versionLine.firstMatch(line)?.group(1);
+    if (raw == null) continue;
+    final text = unquotedScalar(raw);
+    if (text.isEmpty) break;
+    return text;
+  }
+  throw const FormatException('pubspec.yaml 에서 version: 을 읽지 못했다');
+}
+
+/// `CHANGELOG.md` 의 최상단 제목 `## X.Y.Z - <날짜 자리>` 를 버전과 날짜 자리로 나눠 돌려준다.
+///
+/// 줄은 [splitYamlLines] 로 나누고 `## ` 로 시작하는 첫 줄을 잡는다 — 파일 머리에 `# Changelog`
+/// 같은 줄이 있어도 첫 `## ` 줄이 최상단 제목이다. `## ` 뒤를 `trim` 한 뒤 첫 ` - ` 에서 한 번만
+/// 나눈다: 앞 토큰이 버전, 뒤 전체가 날짜 자리다 (둘 다 `trim`). 제목의 ` - ` 는 한 번만 쓰고
+/// 앞 토큰이 버전이다 (VERSIONING.md 81 ~ 82행) — 두 번 쓴 제목은 날짜 자리가 `YYYY-MM-DD`
+/// 꼴이 아니게 되어 (i) 가 실패로 알린다 (06-CONTEXT.md D-04 · D-05).
+/// `## ` 줄이 없거나 ` - ` 가 없으면 파일 모양이 예상과 다른 것이라 [FormatException]
+/// (main 이 종료 코드 70 으로 끝낸다).
+({String version, String dateSlot}) changelogTop(String repoRoot) {
+  final lines = splitYamlLines(
+    File('$repoRoot/$changelogFile').readAsStringSync(),
+  );
+  final heading = lines.firstWhere(
+    (l) => l.startsWith('## '),
+    orElse: () => '',
+  );
+  if (heading.isEmpty) {
+    throw const FormatException('CHANGELOG.md 에 `## ` 제목이 없다');
+  }
+  final body = heading.substring(3).trim();
+  final cut = body.indexOf(' - ');
+  if (cut < 0) {
+    throw FormatException('CHANGELOG.md 최상단 제목에 ` - ` 가 없다: $heading');
+  }
+  return (
+    version: body.substring(0, cut).trim(),
+    dateSlot: body.substring(cut + 3).trim(),
+  );
+}
+
 /// 저장소 루트가 받은 기반 세트(`lints` · `flutter_lints`)가 켜는 규칙을 읽는다.
 ///
 /// 돌려주는 맵은 소문자로 바꾼 규칙 이름 → `<패키지 폴더 이름> <파일 이름>`
@@ -2112,6 +2172,79 @@ List<List<String>> compareLineReadersWithYaml(String repoRoot) {
   return blocks;
 }
 
+/// `[3/N]` 의 (i) — tag 이름 · `pubspec.yaml` 의 version · `CHANGELOG.md` 최상단 버전이 같은지 본다 (REL-03).
+///
+/// 돌려주는 값은 블록(줄 목록)의 목록이고, 블록 하나는 `[머리 줄, '', 안내 줄]` 이다 — 호출자가
+/// `forEach(addBlock)` 으로 넣는다. 어긋남마다 블록 하나다 (06-CONTEXT.md D-04 · D-05 · D-06).
+///
+/// - [tag] 가 null (평소 push — D-04 (1)): [pubspecReleaseVersion] (꼬리를 뗀 값) == [changelogTop]
+///   의 버전만 본다. 준비 중 상태(`2.0.0-dev` · `미출시`)는 통과한다.
+/// - [tag] 가 `vX.Y.Z` 꼴이 아니면 블록 하나로 끝낸다 — 나머지는 보지 않는다 (이 저장소의 `v`
+///   tag 는 패키지 릴리스 전용이다).
+/// - [tag] 가 `vX.Y.Z` 꼴이면 (D-04 (2) · (3)) 셋을 각각 본다: [pubspecVersionText] (원문) 와
+///   tag 의 버전이 꼬리 없이 정확히 같은지, CHANGELOG 최상단 버전이 tag 의 버전과 같은지, 그
+///   제목의 날짜 자리가 `YYYY-MM-DD` 꼴인지 (D-05 — `미출시` 가 여기서 걸린다).
+///
+/// 보지 않는 것: README 의 `ref:` 예시는 (g) 가 본다. tag 를 단 날과 CHANGELOG 날짜가 같은지는
+/// 보지 않는다 (시간대에 따라 하루가 어긋난다 — D-05). 로컬에 `--tag` 도 GitHub 의 환경변수도
+/// 없으면 평소 모드다 (main 이 정한다). 파일 모양이 예상과 다르면 reader 가 [FormatException]
+/// 을 던지고 main 이 종료 코드 70 으로 끝낸다.
+List<List<String>> checkVersionAgreement(String repoRoot, {String? tag}) {
+  const guide =
+      '릴리스 커밋에서 `-dev` 를 떼고 `CHANGELOG.md` 제목의 `미출시` 를 날짜로 바꾸며, '
+      'lock 여섯도 같은 커밋에서 다시 받는다 — VERSIONING.md 「릴리스 절차」 '
+      '(06-CONTEXT.md D-04 · D-05).';
+  final text = pubspecVersionText(repoRoot);
+  final release = pubspecReleaseVersion(repoRoot);
+  final top = changelogTop(repoRoot);
+  final blocks = <List<String>>[];
+
+  if (tag == null) {
+    if (release != top.version) {
+      blocks.add([
+        '`pubspec.yaml` 의 version ($text → $release) 과 `CHANGELOG.md` 최상단 버전 (${top.version}) 이 다르다.',
+        '',
+        guide,
+      ]);
+    }
+    return blocks;
+  }
+
+  final tagVersion = RegExp(r'^v(\d+\.\d+\.\d+)$').firstMatch(tag)?.group(1);
+  if (tagVersion == null) {
+    return [
+      [
+        'tag 이름 `$tag` 이 `vX.Y.Z` 꼴이 아니다 — 이 저장소의 `v` tag 는 패키지 릴리스 전용이다.',
+        '',
+        '이 저장소의 tag 는 `vX.Y.Z` 꼴만 쓴다 — `--tag` 에는 달려는 이름을 그대로 준다 (VERSIONING.md 「릴리스 절차」).',
+      ],
+    ];
+  }
+  if (text != tagVersion) {
+    final tail = text == '$tagVersion-dev' ? ' — `-dev` 꼬리가 남아 있다.' : '.';
+    blocks.add([
+      'tag `$tag` 의 버전 ($tagVersion) 과 `pubspec.yaml` 의 version ($text) 이 다르다$tail',
+      '',
+      guide,
+    ]);
+  }
+  if (top.version != tagVersion) {
+    blocks.add([
+      'tag `$tag` 의 버전 ($tagVersion) 과 `CHANGELOG.md` 최상단 버전 (${top.version}) 이 다르다.',
+      '',
+      guide,
+    ]);
+  }
+  if (!RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(top.dateSlot)) {
+    blocks.add([
+      '`CHANGELOG.md` 최상단 제목의 날짜 자리가 `YYYY-MM-DD` 꼴이 아니다: `${top.dateSlot}`',
+      '',
+      guide,
+    ]);
+  }
+  return blocks;
+}
+
 /// [3/N] 배포 파일의 구성 — 저장소 안의 파일끼리 어긋나지 않는지 한 단계로 본다 (D-11, D-12).
 ///
 /// 확인을 모두 돌리고 실패를 모아 한 [StepResult] 로 돌려준다. analyzer 는 돌리지 않는다.
@@ -2140,9 +2273,10 @@ List<List<String>> compareLineReadersWithYaml(String repoRoot) {
 /// - (g) README 의 펜스 코드 블록 안에서 키가 줄 머리에 오는 `ref: vX.Y.Z` 줄의 값 == [pubspecReleaseVersion] — 읽은 값이 0개면 실패 (VERIFY-06, D-02)
 ///   — 값의 따옴표 · 줄 끝 주석을 벗겨 읽고, 꼴이 틀린 값도 실패 (키는 따옴표 · 콜론 앞 공백 없이 글자 그대로인 줄만 후보 — 05-REVIEW.md WR-13)
 /// - (h) 줄 단위 reader 가 읽은 값 == YAML (package:yaml) 이 같은 파일에서 읽은 값 ([compareLineReadersWithYaml]) — 조각 셋의 규칙과 최상위 키 · 그 바로 아래 키, `lib/base.yaml` 의 analyzer 옵션, `lib/riverpod.yaml` 의 riverpod_lint 선언, `pubspec.yaml` 의 version. YAML 로 읽지 못하는 파일(같은 키 두 번 · 깨진 YAML)도 실패 (05-VERIFICATION.md 4회차 gap, 소유자 결정 G4-Q1)
+/// - (i) tag 가 없으면 [pubspecReleaseVersion] == CHANGELOG 최상단 버전 ([changelogTop]); tag 가 있으면 `vX.Y.Z` 꼴 · [pubspecVersionText] 와 꼬리 없이 정확히 · CHANGELOG 버전 · 날짜 자리 `YYYY-MM-DD` (REL-03, 06-CONTEXT.md D-04 ~ D-06)
 ///
 /// (e) 는 `package:` 로 시작하지 않는 scheme 오타 · `package:` 뒤의 공백 · `.yaml` · `.yml` 로 끝나지 않는 다른 패키지의 주소를 보지 않고, 주소 바로 뒤에 `,` · `.` 같은 문장 부호가 붙으면 `woody_lints` 주소는 꼴이 아닌 것으로 실패하고 다른 패키지의 주소는 후보가 되지 않는다. (f) · (g) 는 따옴표로 감싼 키 · 콜론 앞에 공백이 든 키(`"ref":` · `ref :`), flow 표기(`{…}`) 안의 키와 펜스가 아닌 코드 블록(네 칸 들여 쓴 블록 · 인용 안의 펜스)을 보지 않고, 펜스 안에서 네 칸 이상 들여 쓴 펜스 문자 줄(백틱 셋 이상 · `~~~`)은 그 펜스를 닫는 것으로 보아 그 뒤의 같은 블록 값은 견주지 않는다 (05-REVIEW.md WR-07 ~ WR-09 · WR-13 · WR-14 · IN-08 · IN-10 — 소유자 결정 G2-Q2 · G2-Q5 · G3-Q2 · G4-Q2, 검사는 넓히지 않았다).
-StepResult checkShippedComposition(String repoRoot) {
+StepResult checkShippedComposition(String repoRoot, {String? tag}) {
   final details = <String>[];
   void addBlock(List<String> lines) {
     if (details.isNotEmpty) details.add('');
@@ -2500,6 +2634,9 @@ StepResult checkShippedComposition(String repoRoot) {
   // (h) 줄 단위 reader 가 읽은 값 == YAML 이 읽은 값 (05-VERIFICATION.md 4회차 gap, 소유자 결정 G4-Q1).
   compareLineReadersWithYaml(repoRoot).forEach(addBlock);
 
+  // (i) tag · pubspec.yaml 의 version · CHANGELOG.md 최상단 버전 (REL-03, 06-CONTEXT.md D-04 ~ D-06). tag 가 없으면 평소 모드 — 꼬리 뗀 version 과 CHANGELOG 버전만.
+  checkVersionAgreement(repoRoot, tag: tag).forEach(addBlock);
+
   return StepResult(
     label: shippedCompositionLabel,
     passed: details.isEmpty,
@@ -2805,10 +2942,29 @@ PluginVersion summarizePluginVersion(List<StepResult> results) {
 /// 줄이다 — plugin 버전은 분석이 끝나야 읽히므로 단계를 모두 돌린 뒤에 찍는다.
 /// 사용법 오류, 준비 단계의 안내, 진행 표시는 stderr 다.
 Future<void> main(List<String> args) async {
-  final unknown = args.where((a) => a != '--update').toList();
+  const usage = '사용법: $runCommand [--update] [--tag vX.Y.Z]';
+  // `--tag <값>` 은 둘을 함께 소비한다. 값이 없거나 비었거나 다음 인자가 `--` 로 시작하면
+  // 사용법 오류다 (`--tag --update` 를 tag 이름 `--update` 로 읽지 않는다).
+  String? tagArg;
+  final unknown = <String>[];
+  for (var i = 0; i < args.length; i++) {
+    final arg = args[i];
+    if (arg == '--tag') {
+      final value = i + 1 < args.length ? args[i + 1] : '';
+      if (value.isEmpty || value.startsWith('--')) {
+        stderr.writeln('--tag 에 값이 없다');
+        stderr.writeln(usage);
+        await quit(64);
+      }
+      tagArg = value;
+      i++;
+    } else if (arg != '--update') {
+      unknown.add(arg);
+    }
+  }
   if (unknown.isNotEmpty) {
     stderr.writeln('모르는 인자: ${unknown.join(' ')}');
-    stderr.writeln('사용법: $runCommand [--update]');
+    stderr.writeln(usage);
     await quit(64);
   }
   final update = args.contains('--update');
@@ -2820,8 +2976,26 @@ Future<void> main(List<String> args) async {
     // 준비 1 — 실행 중인 SDK 가 .fvmrc 와 다르면 검증을 시작하지 않는다 (D-12).
     final sdk = await ensurePinnedSdk(repoRoot);
 
-    // 준비 2 — 정답지 갱신은 로컬에서 사람이 diff 를 보고 커밋한다 (D-14).
+    // 버전 일치 검사(`[3/N]` 의 (i))의 모드 — `--tag` 인자가 우선이고, 없으면 GitHub Actions 의
+    // tag push 실행(`GITHUB_REF_TYPE=tag`)의 `GITHUB_REF_NAME` 이다. 둘 다 없으면 평소 모드
+    // (06-CONTEXT.md D-04, 06-RESEARCH.md § 1). 통과한 `[3/N]` 은 내용 줄이 없어 CI 로그에서
+    // 어느 모드로 돌았는지 가를 줄이 이것뿐이다 — stdout 의 첫 줄은 `SDK` 줄이어야 하므로 stderr 에 찍는다.
     final env = Platform.environment;
+    final ciTag = env['GITHUB_REF_TYPE'] == 'tag'
+        ? env['GITHUB_REF_NAME']
+        : null;
+    final effectiveTag = tagArg ?? ciTag;
+    if (effectiveTag == null) {
+      stderr.writeln(
+        '버전 일치 검사: 평소 (pubspec.yaml 의 꼬리 뗀 version ↔ CHANGELOG.md 최상단 버전)',
+      );
+    } else if (tagArg != null) {
+      stderr.writeln('버전 일치 검사: tag $effectiveTag (--tag)');
+    } else {
+      stderr.writeln('버전 일치 검사: tag $effectiveTag (GITHUB_REF_NAME)');
+    }
+
+    // 준비 2 — 정답지 갱신은 로컬에서 사람이 diff 를 보고 커밋한다 (D-14).
     if (update && (env['CI'] == 'true' || env['GITHUB_ACTIONS'] == 'true')) {
       stderr.writeln('CI 에서는 --update 를 쓰지 않는다 — 로컬에서 갱신해 커밋하세요.');
       await quit(64);
@@ -2846,7 +3020,7 @@ Future<void> main(List<String> args) async {
     final results = <StepResult>[
       checkLibHasNoDart(repoRoot),
       await checkRuleNames(repoRoot),
-      checkShippedComposition(repoRoot),
+      checkShippedComposition(repoRoot, tag: effectiveTag),
       checkFixtureOptions(repoRoot, fixtures),
     ];
     AnalyzeOutcome? exampleOutcome;
