@@ -83,13 +83,25 @@ const analyzeExitCodes = [0, 2, 3];
 /// 빈 프로젝트의 `dependencies:` 에 더하는 줄 — `example/pubspec.yaml` 과 같은 선언.
 const riverpodDependency = '  flutter_riverpod: ^3.0.0';
 
-/// 위반 파일의 내용 — example 의 샘플 두 곳을 글자 그대로 옮겼다.
+/// 위반 파일의 첫 줄 — 출처 주석.
+const violationsHeader =
+    '// 출처: example/lib/added_rules.dart 의 prefer_single_quotes 와 '
+    'example/lib/riverpod_rules.dart 의 provider_parameters 를 글자 그대로 옮겼다 '
+    '(woody_lints 의 tool/smoke.dart).';
+
+/// 위반 파일의 import 줄 (`example/lib/riverpod_rules.dart` 1행).
+///
+/// 아래 본문 안에 두지 않는 것은 줄 머리의 `import` 가 이 스크립트 자신의 import 로 읽히지 않게
+/// 하려는 것이다 (import 를 줄 단위로 세는 검사가 있다).
+const violationsImport =
+    "import 'package:flutter_riverpod/flutter_riverpod.dart';";
+
+/// 위반 파일의 본문 — example 의 샘플 두 곳을 글자 그대로 옮겼다.
 ///
 /// `example/lib/added_rules.dart` 28 ~ 29행 (`prefer_single_quotes`) 과
 /// `example/lib/riverpod_rules.dart` 12 ~ 18행 (`provider_parameters`).
+/// [writeViolations] 가 [violationsHeader] · [violationsImport] 뒤에 붙인다.
 const violationsBody = r'''
-// 출처: example/lib/added_rules.dart 의 prefer_single_quotes 와 example/lib/riverpod_rules.dart 의 provider_parameters 를 글자 그대로 옮겼다 (woody_lints 의 tool/smoke.dart).
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// `prefer_single_quotes` — 겹따옴표 문자열.
 const String doubleQuoted = "b";
@@ -346,7 +358,9 @@ void setInclude(String appDir, String address) {
 void writeViolations(String appDir) {
   final file = File('$appDir/$violationsFile');
   file.parent.createSync(recursive: true);
-  file.writeAsStringSync(violationsBody);
+  file.writeAsStringSync(
+    '$violationsHeader\n$violationsImport\n$violationsBody',
+  );
 }
 
 /// `pubspec.lock` 의 `woody_lints` 항목 (키 → 값). 파일이나 항목이 없으면 빈 map.
