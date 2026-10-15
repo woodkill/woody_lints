@@ -323,12 +323,12 @@ Plans:
 Plans:
 
 **Wave 1** *(파일이 겹치지 않아 나란히 — 06-01 `tool/verify.dart` · `example/README.md`, 06-02 `README.md` · `VERSIONING.md`, 06-03 `tool/smoke.dart`)*
-- [ ] 06-01-PLAN.md — (tracer) `tool/verify.dart` `[3/10]` 에 버전 일치 확인 (i) 와 `--tag vX.Y.Z` 인자 · `GITHUB_REF_TYPE` / `GITHUB_REF_NAME` · stderr 모드 줄 (REL-03; D-04 · D-05), IN-12 코드 (`keysSeenByLineReader` 의 `keyLikePattern`) · IN-14 주석 · 05-UAT 5번 문장 (D-13), 지워 보기 M92 ~ M97 을 복제본에서 돌려 `example/README.md` 에 기록 (D-06)
+- [ ] 06-01-PLAN.md — (tracer) `tool/verify.dart` `[3/10]` 에 버전 일치 확인 (i) 와 `--tag vX.Y.Z` 인자 · `GITHUB_REF_TYPE` / `GITHUB_REF_NAME` · stderr 모드 줄 (REL-03; D-04 · D-05), IN-12 코드 (`keysSeenByLineReader` 의 `keyLikePattern`) · IN-14 주석 · 05-UAT 5번 문장 (D-13), 지워 보기 M92 ~ M97 을 복제본에서 돌려 `example/README.md` 에 기록 (D-06); `.github/workflows/verify.yml` 7행 주석만 현재형으로 (소유자 결정 2026-10-15 R2-Q2)
 - [ ] 06-02-PLAN.md — README 「설치」 · 「프로젝트 전체」 · 「생성 파일 제외」 의 기존 키 합치기 문장과 `plugins:` 블록 측정 문장 (D-14), 34 · 355 · 381행 (05-UAT 4 · 2, D-11); `VERSIONING.md` 「릴리스 절차」 1 ~ 10 과 plugin 새 버전 대응 단락, 82행 현재형 (D-11 · D-12)
 - [ ] 06-03-PLAN.md — `tool/smoke.dart <ref> [--keep]` — 저장소 밖 임시 폴더에서 `flutter create` → README 대로 → 새 `PUB_CACHE` 로 받기 → 두 주소로 `dart analyze` → D-09 (2) · (3) 판정; origin 의 커밋 `2336ba0` 으로 통과 실행, 실패 방향 셋 (REL-04; D-08 · D-09 · D-10)
 
 **Wave 2** *(blocked on Wave 1 — 릴리스 커밋은 손질 · 검사 · 스크립트 뒤에; 본 체크아웃에서, 같은 브랜치 push 는 D-21 대로 실행 뒤 보고)*
-- [ ] 06-04-PLAN.md — 릴리스 커밋 (`version: 2.0.0` · IN-13 주석 · CHANGELOG 날짜 · lock 여섯을 `fvm dart pub get` 으로만) 과 평소 · `--tag v2.0.0` 10/10 (D-01 1 · 3, D-12 (2)) → 범위 `2336ba0…HEAD` 전체 비공개 점검 → `git push origin gsd/v2.0-package-rework` → GitHub `verify` (평소 모드 줄) (D-01 2, D-21) → 예행 `tool/smoke.dart <릴리스 커밋>` 과 D-14 측정 (D-01 4, D-07, D-14)
+- [ ] 06-04-PLAN.md — 릴리스 커밋 (`version: 2.0.0` · IN-13 주석 · CHANGELOG 날짜 · `VERSIONING.md` 「실제 사례」 67 · 69행 현재형 (소유자 결정 2026-10-15 R2-Q1) · lock 여섯을 `fvm dart pub get` 으로만) 과 평소 · `--tag v2.0.0` 10/10 (D-01 1 · 3, D-12 (2)) → 범위 `2336ba0…HEAD` 전체 비공개 점검 → `git push origin gsd/v2.0-package-rework` → GitHub `verify` (평소 모드 줄) (D-01 2, D-21) → 예행 `tool/smoke.dart <릴리스 커밋>` 과 D-14 측정 (D-01 4, D-07, D-14)
 
 **Wave 3** *(blocked on Wave 2 — tag push 는 소유자 직전 확인, one-way)*
 - [ ] 06-05-PLAN.md — 예행 통과 커밋에 로컬 annotated tag `v2.0.0` 과 4중 점검 → checkpoint (blocking-human — README 를 손으로 따라 한 결과를 함께, 05-UAT 1번) → `git push origin v2.0.0` → `ls-remote` · CI 의 tag 실행 로그 (`버전 일치 검사: tag v2.0.0 (GITHUB_REF_NAME)`) · `tool/smoke.dart v2.0.0` (REL-02 · REL-03 · REL-04; D-01 5 ~ 8, D-06, D-09)
