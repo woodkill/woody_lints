@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 06
 current_phase_name: Release
 status: executing
-stopped_at: Completed 06-01-PLAN.md
-last_updated: "2026-10-15T05:14:34.190Z"
+stopped_at: Completed 06-02-PLAN.md
+last_updated: "2026-10-15T05:26:13.670Z"
 last_activity: 2026-10-15
 last_activity_desc: Phase 06 execution started
-state_head: b0ff2d283d5bd21c7d60e22a0673041a00aa4eff
+state_head: f95d48237341023541bc75b539b6465a4458340f
 progress:
   total_phases: 6
   completed_phases: 5
   total_plans: 48
-  completed_plans: 42
+  completed_plans: 43
   percent: 83
 ---
 
@@ -30,8 +30,8 @@ See: .planning/PROJECT.md (updated 2026-10-15)
 ## Current Position
 
 Phase: 06 (Release) — EXECUTING
-Plan: 1 of 7
-Status: Ready to execute
+Plan: 2 of 7
+Status: Executing Phase 06
 Last activity: 2026-10-15 — Phase 06 execution started
 
 Progress: [████████░░] 83%
@@ -104,6 +104,7 @@ Progress: [████████░░] 83%
 | Phase 05 P14 | 18min | 2 tasks | 7 files |
 | Phase 05 P15 | 8 min | 2 tasks | 1 files |
 | Phase 06 P01 | 17 min | 3 tasks | 3 files |
+| Phase 06 P02 | 9 min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -272,6 +273,8 @@ Recent decisions affecting current work:
 - [Phase 06]: plan checker 1회차 blocker 5 · warning 8 (줄 수가 맞지 않는 삽입, `## ` 개수, 저장소 밖 `fvm dart` 가 전역 SDK(Dart 3.11.1)를 씀, 거르지 않은 깨끗한 트리 단언, RESEARCH 의 RESOLVED 표시 / `미출시` 글자만 거부하는 구현을 놓침, smoke 의 tag 경로를 tag 전에 돌리지 않음, push gate 의 범위 · fail-open 등) → 수정 1회 (고정 SDK 를 `fvm flutter --version --machine` 의 `flutterRoot` 로 찾아 직접 실행, push gate 를 별도 첫 단언으로, `v1.3.0` 으로 tag 경로 미리 확인) → 2회차 통과 — info 4
 - [Phase 06]: 06-01: [3/10] 의 확인 (i) 는 tag 모드에서 pubspec.yaml 원문과 꼬리 없이 정확히 견주고, tag 이름은 --tag 인자 우선 · 없으면 GITHUB_REF_TYPE=tag 일 때의 GITHUB_REF_NAME · 둘 다 없으면 평소 모드이며 stderr 의 버전 일치 검사 줄로 모드를 남긴다
 - [Phase 06]: 06-01: --tag 의 다음 인자가 -- 로 시작하면 값 없음으로 보고 종료 코드 64 (계획보다 한 경우 더 막음)
+- [Phase 06]: VERSIONING.md 「릴리스 절차」 5단계의 tag 점검은 06-RESEARCH § 8 대로 넷(cat-file · rev-parse · tag 의 pubspec version · tag 의 CHANGELOG 첫 줄)으로 적었다 — 계획 본문은 셋을 나열하고 넷이라 했다 (06-02)
+- [Phase 06]: 절차 6 의 tag 실행 필터(headBranch 가 tag 이름)는 A3 가정 그대로 적었다 — 06-05 가 진짜 tag 실행의 headBranch 값으로 확인하고 다르면 6단계를 고친다 (06-02)
 
 ### Pending Todos
 
@@ -299,6 +302,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-15T05:14:33.764Z
-Stopped at: Completed 06-01-PLAN.md
+Last session: 2026-10-15T05:26:07.253Z
+Stopped at: Completed 06-02-PLAN.md
 Resume file: None
