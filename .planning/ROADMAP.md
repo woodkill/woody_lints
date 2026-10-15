@@ -318,14 +318,14 @@ Plans:
   2. `git ls-remote --tags origin` 에 새 버전의 annotated tag 가 보이고, 그 tag 의 `pubspec.yaml` version 과 CHANGELOG 최상단 버전이 tag 이름과 같다
   3. 빈 프로젝트가 새 tag 를 git 의존성(`ref: vX.Y.Z`)으로 받아 `dart analyze` 를 돌리면 기본 규칙 진단과 `riverpod_lint` plugin 진단이 둘 다 보고된다
 
-**Plans**: 2/7 plans executed (계획 2026-10-15 — 06-CONTEXT.md D-01 ~ D-14, 06-RESEARCH.md; 5 waves)
+**Plans**: 3/7 plans executed (계획 2026-10-15 — 06-CONTEXT.md D-01 ~ D-14, 06-RESEARCH.md; 5 waves)
 
 Plans:
 
 **Wave 1** *(파일이 겹치지 않아 나란히 — 06-01 `tool/verify.dart` · `example/README.md` · `.github/workflows/verify.yml` 7행, 06-02 `README.md` · `VERSIONING.md`, 06-03 `tool/smoke.dart`; worktree 격리로 — 같은 트리에서는 서로의 'HEAD 와 같다' 단언이 겹치므로 격리가 꺼져 있으면 차례로)*
 - [x] 06-01-PLAN.md — (tracer) `tool/verify.dart` `[3/10]` 에 버전 일치 확인 (i) 와 `--tag vX.Y.Z` 인자 · `GITHUB_REF_TYPE` / `GITHUB_REF_NAME` · stderr 모드 줄 (REL-03; D-04 · D-05), IN-12 코드 (`keysSeenByLineReader` 의 `keyLikePattern`) · IN-14 주석 · 05-UAT 5번 문장 (D-13), 지워 보기 M92 ~ M97 을 복제본에서 돌려 `example/README.md` 에 기록하고 D-06 의 다섯 입력 · D-05 의 날짜 꼴을 함수 단위 하네스로 다시 단언 (D-05 · D-06); `.github/workflows/verify.yml` 7행 주석만 현재형으로 (소유자 결정 2026-10-15 R2-Q2)
 - [x] 06-02-PLAN.md — README 「설치」 · 「프로젝트 전체」 · 「생성 파일 제외」 의 기존 키 합치기 문장과 `plugins:` 블록 측정 문장 (D-14), 34 · 355 · 381행 (05-UAT 4 · 2, D-11); `VERSIONING.md` 「릴리스 절차」 1 ~ 10 과 plugin 새 버전 대응 단락, 82행 현재형 (D-11 · D-12)
-- [ ] 06-03-PLAN.md — `tool/smoke.dart <ref> [--keep]` — 저장소 밖 임시 폴더에서 `flutter create` → README 대로 → 새 `PUB_CACHE` 로 받기 → 두 주소로 `dart analyze` → D-09 (2) · (3) 판정; 하위 명령은 고정 SDK 의 `bin/flutter` · dart 로만(저장소 밖 임시 폴더); origin 의 커밋 `2336ba0` 으로 통과 실행, 실패 방향 셋 — 없는 ref · annotated tag `v1.3.0` (tag 경로를 tag push 전에) · 앞선 브랜치 이름 (REL-04; D-08 · D-09 · D-10)
+- [x] 06-03-PLAN.md — `tool/smoke.dart <ref> [--keep]` — 저장소 밖 임시 폴더에서 `flutter create` → README 대로 → 새 `PUB_CACHE` 로 받기 → 두 주소로 `dart analyze` → D-09 (2) · (3) 판정; 하위 명령은 고정 SDK 의 `bin/flutter` · dart 로만(저장소 밖 임시 폴더); origin 의 커밋 `2336ba0` 으로 통과 실행, 실패 방향 셋 — 없는 ref · annotated tag `v1.3.0` (tag 경로를 tag push 전에) · 앞선 브랜치 이름 (REL-04; D-08 · D-09 · D-10)
 
 **Wave 2** *(blocked on Wave 1 — 릴리스 커밋은 손질 · 검사 · 스크립트 뒤에; 본 체크아웃에서, 같은 브랜치 push 는 D-21 대로 실행 뒤 보고)*
 - [ ] 06-04-PLAN.md — 릴리스 커밋 (`version: 2.0.0` · IN-13 주석 · CHANGELOG 날짜 · `VERSIONING.md` 「실제 사례」 67 · 69행 현재형 (소유자 결정 2026-10-15 R2-Q1) · lock 여섯을 `fvm dart pub get` 으로만) 과 평소 · `--tag v2.0.0` 10/10 (D-01 1 · 3, D-12 (2)) → push gate (범위 `2336ba0…HEAD` 의 더해진 줄 전부에 비공개 점검, fail-closed — push 전에 따로) → `git push origin gsd/v2.0-package-rework` → GitHub `verify` (평소 모드 줄) (D-01 2, D-21) → 예행 `tool/smoke.dart <릴리스 커밋>` 과 D-14 측정 — 저장소 밖 측정은 고정 SDK 의 dart 로 (D-01 4, D-07, D-14)
@@ -375,7 +375,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
 | 4. Rule Reselection | 13/13 | Complete    | 2026-10-13 |
 | 5. Documentation | 15/15 | Complete    | 2026-10-15 |
-| 6. Release | 2/7 | In Progress | - |
+| 6. Release | 3/7 | In Progress | - |
 
 ## Backlog
 

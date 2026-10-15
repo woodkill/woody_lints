@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 06
 current_phase_name: Release
 status: executing
-stopped_at: Completed 06-02-PLAN.md
-last_updated: "2026-10-15T05:26:13.670Z"
+stopped_at: Completed 06-03-PLAN.md
+last_updated: "2026-10-15T05:44:06.821Z"
 last_activity: 2026-10-15
 last_activity_desc: Phase 06 execution started
-state_head: f95d48237341023541bc75b539b6465a4458340f
+state_head: 0a53fd59b19ae29e19d7cdc9d9f223055e0e6815
 progress:
   total_phases: 6
   completed_phases: 5
   total_plans: 48
-  completed_plans: 43
+  completed_plans: 44
   percent: 83
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-15)
 ## Current Position
 
 Phase: 06 (Release) — EXECUTING
-Plan: 2 of 7
+Plan: 3 of 7
 Status: Executing Phase 06
 Last activity: 2026-10-15 — Phase 06 execution started
 
@@ -105,6 +105,7 @@ Progress: [████████░░] 83%
 | Phase 05 P15 | 8 min | 2 tasks | 1 files |
 | Phase 06 P01 | 17 min | 3 tasks | 3 files |
 | Phase 06 P02 | 9 min | 2 tasks | 2 files |
+| Phase 06 P03 | 13 min | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -275,6 +276,8 @@ Recent decisions affecting current work:
 - [Phase 06]: 06-01: --tag 의 다음 인자가 -- 로 시작하면 값 없음으로 보고 종료 코드 64 (계획보다 한 경우 더 막음)
 - [Phase 06]: VERSIONING.md 「릴리스 절차」 5단계의 tag 점검은 06-RESEARCH § 8 대로 넷(cat-file · rev-parse · tag 의 pubspec version · tag 의 CHANGELOG 첫 줄)으로 적었다 — 계획 본문은 셋을 나열하고 넷이라 했다 (06-02)
 - [Phase 06]: 절차 6 의 tag 실행 필터(headBranch 가 tag 이름)는 A3 가정 그대로 적었다 — 06-05 가 진짜 tag 실행의 headBranch 값으로 확인하고 다르면 6단계를 고친다 (06-02)
+- [Phase 06]: 06-03: smoke 의 위반 파일 출처 주석 · import 줄은 본문 raw 문자열 밖 상수로 둔다 — 줄 머리 import 를 세는 검사가 스크립트 자신의 import 로 읽는다 (생성 내용은 그대로)
+- [Phase 06]: 06-03: smoke 의 주소별 판정은 verify.dart 와 같은 배타 순서(plugin 머리말 → 도구가 죽음 → 위반 두 줄의 존재)이고 plugin 폴더 수 · 버전은 정보로만 찍는다
 
 ### Pending Todos
 
@@ -302,6 +305,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-15T05:26:07.253Z
-Stopped at: Completed 06-02-PLAN.md
+Last session: 2026-10-15T05:43:59.818Z
+Stopped at: Completed 06-03-PLAN.md
 Resume file: None
