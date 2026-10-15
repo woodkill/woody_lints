@@ -677,11 +677,11 @@ git ls-remote --heads origin       # 브랜치 둘 그대로
 | A4 | `flutter create` 를 플랫폼 하나(`android`)로 만든 템플릿이 README 따라 하기의 대표로 충분하다 (옵션 파일 모양은 플랫폼 수와 무관) | § 4 | 템플릿 원본의 `{{#android}}` 등은 제외 줄 수만 바꾼다 — 판정과 무관 |
 | A5 | `pull_request` 이벤트의 `GITHUB_REF_TYPE` 은 `branch` 다 (문서는 `branch` / `tag` 두 값만 적는다) | § 1 | tag 모드로 잘못 돌면 PR 실행이 `-dev` 로 실패 — PR 을 여는 단계에서 바로 보인다 (02-UAT 4번 확인과 같은 자리) |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **tag 실행을 `gh` 로 고르는 정확한 필터** — A3. 추천: 실행 id 를 Actions 화면에서 읽고 `gh run view <id> --log`.
-2. **`checkShippedComposition` 의 서명 변경이 `example/README.md` 의 "함수 단위" 기록과 충돌하는가** — 선택 인자이므로 기존 호출은 그대로다. 기록 문구(`checkShippedComposition`)는 바뀌지 않는다.
-3. **CHANGELOG 날짜와 tag 날짜가 다를 때의 기록** — 권고는 § 8 (그대로 두고 SUMMARY 에 적는다). 계획이 확정한다.
+1. **RESOLVED** — **tag 실행을 `gh` 로 고르는 정확한 필터** — A3. 계획의 답: 06-05-PLAN.md Task 3 이 `gh run list --workflow verify.yml --event push --json …,headBranch,…` 에서 `headSha == <릴리스 커밋>` 이면서 `headBranch` 가 작업 브랜치가 아닌 실행을 고르고(필터 값이 무엇으로 풀리든 동작), 없으면 `gh api repos/woodkill/woody_lints/actions/runs` 의 `head_sha` 로 전체를 본다; 실제 `headBranch` 값을 SUMMARY 에 적고 VERSIONING.md 「릴리스 절차」 6번과 다르면 보고한다. (원래 추천: 실행 id 를 Actions 화면에서 읽고 `gh run view <id> --log`.)
+2. **RESOLVED** — **`checkShippedComposition` 의 서명 변경이 `example/README.md` 의 "함수 단위" 기록과 충돌하는가** — 선택 인자이므로 기존 호출은 그대로다. 기록 문구(`checkShippedComposition`)는 바뀌지 않는다. 계획의 답: 06-01-PLAN.md Task 1 이 `checkShippedComposition(String repoRoot, {String? tag})` 로 바꾸고, Task 2 · 3 의 하네스가 같은 함수를 `tag:` 와 함께 부른다.
+3. **RESOLVED** — **CHANGELOG 날짜와 tag 날짜가 다를 때의 기록** — 권고는 § 8 (그대로 두고 SUMMARY 에 적는다). 계획의 답: 06-04-PLAN.md Task 1 이 CHANGELOG 날짜(와 VERSIONING.md 67행의 같은 날짜)를 릴리스 커밋을 만드는 날로 적고, 예행 · 확인이 날을 넘겨 tag 가 다음 날 달려도 고치지 않는다 (고치면 릴리스 커밋이 바뀌어 예행을 다시 해야 한다 — D-07; D-05 는 꼴만 본다) — SUMMARY 에 "CHANGELOG 날짜 = 릴리스 커밋 날" 로 적는다; 06-05-PLAN.md Task 3 의 시각 순서 표가 tag 를 단 날을 남긴다.
 
 ## Environment Availability
 
