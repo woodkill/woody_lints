@@ -28,10 +28,12 @@ flutter pub get
 
 받은 뒤에는 아래 「프리셋 고르기」에서 고른 include 를 프로젝트 루트의 `analysis_options.yaml` 에 적는다.
 
+`flutter create` 가 만든 `analysis_options.yaml` 에는 이미 `include:` 줄(기반 세트 `flutter_lints` 의 주소) · `analyzer: exclude:` (`build/**` 와 만든 플랫폼 폴더) · 빈 `linter: rules:` 가 있다 (Flutter 3.47.5 의 앱 템플릿, 2026-10-15 읽음). 기존 `include:` 줄은 이 패키지의 주소로 **바꾸고**, 이미 있는 `analyzer:` · `linter:` 키에는 아래 절들의 내용을 **합친다** — 같은 최상위 키를 두 번 적으면 YAML 이 받지 않는다.
+
 명령에 대한 메모 둘.
 
 - 이 문서의 설치 · 버전 올리기 실측(spike 015)은 `dart pub get` / `dart pub upgrade` 로 했다. 두 명령(`dart pub` 과 `flutter pub`)이 같은 `pubspec.lock` 과 패키지 목록을 만든 것은 확인했다(spike 004). "같은 pub 이 돈다" 는 그 일치에서 읽은 추론이다.
-- `flutter pub get` 은 Flutter 프로젝트의 옵션 파일에 `build/**` 와, 프로젝트에 있는 플랫폼 폴더(`android/**` 등)의 제외 줄을 덧붙인다. Flutter 3.47.5 의 `AnalysisOptionsMigration` 이 하는 일이고, 끄는 옵션은 없으며, 이미 제외되어 있으면 덧붙이지 않는다. 이 패키지의 문제가 아니다. 상류에 이 동작을 고치는 변경이 있다 — [flutter#191151](https://flutter.googlesource.com/mirrors/flutter/+/c7a822e59b5b37c4fa74f0cc71e9d1f4e25ac7ff) (병합 여부는 확인하지 않았다).
+- `flutter pub get` 은 Flutter 프로젝트의 옵션 파일에 `build/**` 와, 프로젝트에 있는 플랫폼 폴더(`android/**` 등)의 제외 줄을 덧붙인다. Flutter 3.47.5 의 `AnalysisOptionsMigration` 이 하는 일이고, 끄는 옵션은 없으며, 이미 제외되어 있으면 덧붙이지 않는다 (`flutter create` 로 만든 빈 프로젝트에서 그랬다 — 2026-10-15 실측). 이 패키지의 문제가 아니다. 상류 변경 [flutter#191151](https://flutter.googlesource.com/mirrors/flutter/+/c7a822e59b5b37c4fa74f0cc71e9d1f4e25ac7ff) 은 2026-08-19 에 병합됐고 stable 판 #191530 이 Flutter 3.47.2 부터 들어 있다 (3.47.5 의 동작이 이미 이것이다) — 바뀐 것은 "있는 플랫폼 폴더만 제외 · Flutter 가 아닌 패키지는 건너뜀" 이고 `build/**` 는 그대로 덧붙인다.
 
 ## 프리셋 고르기
 
@@ -221,6 +223,8 @@ analyzer:
 
 사용 프로젝트의 `analysis_options.yaml` 에 적는다. 규칙은 맵 문법(`이름: false`)으로, plugin 진단은 `plugins:` 아래에 `version` 과 `diagnostics:` 를 함께 적어 끈다.
 
+`flutter create` 가 만든 옵션 파일에는 빈 `linter: rules:` 가 이미 있다 — 그 아래에 `이름: false` 를 넣는 꼴이 된다 (같은 `linter:` 키를 두 번 적으면 YAML 이 받지 않는다). `plugins:` 블록은 그 프로젝트의 plugin 선언 자체다 — `riverpod.yaml` 을 받지 않는 프로젝트(`base.yaml` 만)에 이 블록을 붙이면 `riverpod_lint` 가 켜진다 (Flutter 3.47.5, 2026-10-15 실측 — 작업 브랜치의 커밋을 GitHub 에서 받은 `flutter create` 빈 프로젝트에서 `provider_parameters` 가 나왔고 `missing_provider_scope` 는 꺼졌다).
+
 ```yaml
 include: package:woody_lints/recommended.yaml
 
@@ -282,6 +286,8 @@ plugin 진단은 접두사를 붙여 윗줄에 적거나 같은 줄 끝에 적�
 ## 생성 파일 제외
 
 생성 파일(`*.g.dart`, `*.freezed.dart`)을 분석에서 빼려면 사용 프로젝트의 `analysis_options.yaml` 에 직접 적는다.
+
+`flutter create` 가 만든 옵션 파일에는 이미 `analyzer: exclude:` 가 있다 (`build/**` 와 만든 플랫폼 폴더). 그 목록에 아래 두 줄을 더한다 — 같은 `analyzer:` 키를 두 번 적으면 YAML 이 받지 않는다.
 
 ```yaml
 analyzer:
@@ -352,7 +358,7 @@ dev_dependencies:
 
 ### Analysis Server 재시작
 
-`plugins:` 를 바꾼 뒤(프리셋을 바꾸거나 위의 끄는 설정을 적은 뒤)에는 IDE 의 Dart Analysis Server 를 재시작해야 반영된다.
+`plugins:` 를 바꾼 뒤(프리셋을 바꾸거나 위의 끄는 설정을 적은 뒤)에는 IDE 의 Dart Analysis Server 를 재시작해야 반영된다. (1.3.0 의 배포 파일 주석에서 옮긴 문장이다 — spike 에서 재시작 자체를 재 보지는 않았다)
 
 plugin 은 Analysis Server 의 상태 폴더 아래 `.plugin_manager/<hash>/` 에 받아 컴파일된다. 기본 자리는 `~/.dartServer` 다 (읽은 것 — Analysis Server 문서와 1.3.0 의 주석. 이 자리에서 잰 것은 아니다).
 
@@ -378,5 +384,5 @@ plugin 은 Analysis Server 의 상태 폴더 아래 `.plugin_manager/<hash>/` �
 - 규칙은 `lib/base.yaml` 에만 적는다. 조각마다 받는 최상위 키가 정해져 있다 — `lib/base.yaml` 은 `include` · `linter` · `analyzer`, `lib/codegen.yaml` 은 `analyzer` (그 바로 아래는 `errors` · `exclude`), `lib/riverpod.yaml` 은 `plugins` (그 바로 아래는 `riverpod_lint`) 만 받는다. 그 밖의 최상위 줄(다른 조각의 `linter:`, 철자가 다른 `linter :` · `"linter":`, `formatter:`, 열 0 에서 시작하지 않는 최상위 키 등)과 그 바로 아래의 다른 키(`lib/codegen.yaml` 의 `language:`, `lib/riverpod.yaml` 의 다른 plugin 등)는 `[3/10]` 단계가 실패하고, `linter:` 줄에 값이 붙은 flow 표기(`linter: {rules: [...]}`)는 종료 코드 70 으로 멈춘다.
 - 규칙을 더하거나 빼면 `lib/base.yaml`, `RULES.md` 의 켠 규칙 표, 이 README 의 표시 구역(「받는 규칙」의 목록) 세 곳을 같은 커밋에서 고친다. 어긋나면 검증이 실패한다.
 - 검증은 `fvm dart run tool/verify.dart` 로 돌린다 — `pubspec.yaml` 이 바뀐 뒤에는 `fvm dart pub get` 을 먼저 한 번 돌린다 (이미 받은 작업 트리에서는 `dart run` 이 패키지를 다시 받지 않아 컴파일 오류(종료 코드 254)로 끝난다 — 2026-10-15 실측, Dart 3.13.4). 단계와 종료 코드, 지워 보기 기록은 [`example/README.md`](example/README.md) 에 있다.
-- 버전 등급과 CHANGELOG 항목 형식은 [`VERSIONING.md`](VERSIONING.md) 를 따른다.
+- 버전 등급 · CHANGELOG 항목 형식 · 릴리스 절차는 [`VERSIONING.md`](VERSIONING.md) 를 따른다.
 - 릴리스 버전(`pubspec.yaml` 의 `version:`)을 올릴 때는 이 README 의 `ref:` 예시 둘(「설치」 · 「`ref: main` 에서 tag 로 옮기기」)을 같은 커밋에서 고친다. `lib/riverpod.yaml` 의 plugin 하한을 올릴 때는 `lib/riverpod.yaml` 의 선언, `fixtures/overrides/analysis_options.yaml` 의 `version:`, 이 README 의 plugin 버전 예시 둘(「조각마다의 설정」 · 「규칙 · plugin 진단 끄기」)을 같은 커밋에서 고친다. `[4/10]` 이 `fixtures/overrides/analysis_options.yaml` 의 `version:` 을, `[3/10]` 이 이 README 의 펜스(`` ``` `` · `~~~`) 코드 블록 안에서 키가 줄 머리에 오는 `ref:` · `version:` · `riverpod_lint:` 줄의 값을 견준다 — 키는 따옴표 · 콜론 앞 공백 없이 `ref:` · `version:` · `riverpod_lint:` 글자 그대로인 줄만 후보이고(`"ref":` · `'riverpod_lint':` · `ref :` 꼴은 YAML 로는 같은 키지만 견주지 않는다), flow 표기(`{…}`) 안의 키, 네 칸 들여 쓴 코드 블록 · 인용(`>`) 안의 펜스에 적은 값도 견주지 않고, 펜스 안에서 네 칸 이상 들여 쓴 `` ``` `` · `~~~` 줄은 그 펜스를 닫는 것으로 보아 그 뒤의 같은 블록 값은 견주지 않으므로 (05-REVIEW.md IN-10) 예시는 지금처럼 펜스 안의 블록 꼴로, 키는 글자 그대로 둔다.
