@@ -114,7 +114,7 @@ smoke 쪽에는 새 발견 셋이 있다.
 
 두 꼴에서 쟀다.
 - 작은 프로젝트의 `include: mid.yaml` → `include: leaf.yaml` 의 leaf 를 깨진 YAML 로 둔 꼴
-- path 의존성 패키지의 `lib/rec.yaml` 이 `include:` 목록(`base.yaml` · `codegen.yaml`)을 두고, `codegen.yaml` 만 `exclude: [` 로 깨뜨린 꼴
+- path 의존성 패키지의 묶음 조각 파일(`rec.yaml`)이 `include:` 목록(`base.yaml` · `codegen.yaml`)을 두고, `codegen.yaml` 만 `exclude: [` 로 깨뜨린 꼴
 
 둘 다 JSON 에는 `prefer_single_quotes` 한 줄뿐이었고 종료 코드는 3 이었다. 같은 측정에서 순환 include 와 없는 규칙 이름은 `included_file_warning`, 없는 파일은 `include_file_not_found` 로 JSON 에 나왔다.
 
