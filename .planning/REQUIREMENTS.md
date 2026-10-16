@@ -67,8 +67,8 @@
 
 - [x] **REL-01**: 1.3.0 내용의 커밋에 `v1.3.0` tag 가 있고 원격에 올라가 있다
 - [ ] **REL-02**: 새 버전의 annotated tag 가 원격에 있어, 사용 프로젝트가 `ref: vX.Y.Z` 로 버전을 고정할 수 있다
-- [ ] **REL-03**: tag, `pubspec.yaml` 의 version, CHANGELOG 최상단 버전이 서로 다르면 CI 가 실패한다
-- [ ] **REL-04**: 릴리스 직후 빈 프로젝트에서 새 tag 를 git 의존성으로 받아, 기본 규칙 진단과 `riverpod_lint` plugin 진단이 보고됨을 확인한다
+- [x] **REL-03**: tag, `pubspec.yaml` 의 version, CHANGELOG 최상단 버전이 서로 다르면 CI 가 실패한다
+- [x] **REL-04**: 릴리스 직후 빈 프로젝트에서 새 tag 를 git 의존성으로 받아, 기본 규칙 진단과 `riverpod_lint` plugin 진단이 보고됨을 확인한다
 
 ## v2 Requirements
 
@@ -152,8 +152,8 @@
 | DOCS-11 | Phase 4 | Complete |
 | REL-01 | Phase 1 | Complete |
 | REL-02 | Phase 6 | Pending |
-| REL-03 | Phase 6 | Pending |
-| REL-04 | Phase 6 | Pending |
+| REL-03 | Phase 6 | Complete |
+| REL-04 | Phase 6 | Complete |
 
 **Coverage:**
 - v1 requirements: 43 total
