@@ -318,7 +318,7 @@ Plans:
   2. `git ls-remote --tags origin` 에 새 버전의 annotated tag 가 보이고, 그 tag 의 `pubspec.yaml` version 과 CHANGELOG 최상단 버전이 tag 이름과 같다
   3. 빈 프로젝트가 새 tag 를 git 의존성(`ref: vX.Y.Z`)으로 받아 `dart analyze` 를 돌리면 기본 규칙 진단과 `riverpod_lint` plugin 진단이 둘 다 보고된다
 
-**Plans**: 7/7 plans executed (계획 2026-10-15 — 06-CONTEXT.md D-01 ~ D-14, 06-RESEARCH.md; 5 waves)
+**Plans**: 7/7 plans executed — gap 수정 대기 (06-VERIFICATION.md 40/41: REL-03 의 version · CHANGELOG 최상단 reader, 2026-10-16; 계획 2026-10-15 — 06-CONTEXT.md D-01 ~ D-14, 06-RESEARCH.md; 5 waves)
 
 Plans:
 
@@ -375,7 +375,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
 | 4. Rule Reselection | 13/13 | Complete    | 2026-10-13 |
 | 5. Documentation | 15/15 | Complete    | 2026-10-15 |
-| 6. Release | 7/7 | In Progress | - |
+| 6. Release | 7/7 | gap 수정 대기 | - |
 
 ## Backlog
 
