@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 06
 current_phase_name: Release
 status: executing
-stopped_at: Completed 06-04-PLAN.md
-last_updated: "2026-10-15T08:12:15.991Z"
+stopped_at: Completed 06-05-PLAN.md
+last_updated: "2026-10-16T03:24:30.849Z"
 last_activity: 2026-10-15
 last_activity_desc: Phase 06 execution started
-state_head: 704bf56fb028debe16f107bc9a8e6c9bdc5bccc2
+state_head: 5076ed5f295a1480075ce66ef48b418ff2351d44
 progress:
   total_phases: 6
   completed_phases: 5
   total_plans: 48
-  completed_plans: 45
+  completed_plans: 46
   percent: 83
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-15)
 ## Current Position
 
 Phase: 06 (Release) — EXECUTING
-Plan: 4 of 7
+Plan: 5 of 7
 Status: Executing Phase 06
 Last activity: 2026-10-15 — Phase 06 execution started
 
@@ -107,6 +107,7 @@ Progress: [████████░░] 83%
 | Phase 06 P02 | 9 min | 2 tasks | 2 files |
 | Phase 06 P03 | 13 min | 2 tasks | 1 files |
 | Phase 06 P04 | 140min | 3 tasks | 9 files |
+| Phase 06 P05 | 8 min | 3 tasks | 0 files |
 
 ## Accumulated Context
 
@@ -281,6 +282,8 @@ Recent decisions affecting current work:
 - [Phase 06]: 06-03: smoke 의 주소별 판정은 verify.dart 와 같은 배타 순서(plugin 머리말 → 도구가 죽음 → 위반 두 줄의 존재)이고 plugin 폴더 수 · 버전은 정보로만 찍는다
 - [Phase 06]: 06-04: 릴리스 커밋 704bf56 (version 2.0.0, CHANGELOG 2026-10-15) 이 예행 통과 커밋이다 — 06-05 는 이 커밋에 tag v2.0.0 을 단다; CHANGELOG 날짜는 tag 날짜와 달라도 고치지 않는다
 - [Phase 06]: 06-04: 예행 smoke 1회차는 네트워크 정지(pub get 70분, plugin 받기 41분 정지 뒤 orchestrator 가 끊음)로 무효 — 같은 커밋으로 다시 돌려 rc 0, README · 스크립트는 고치지 않았다
+- [Phase 06]: 06-05: 소유자 응답 tag (2026-10-16T03:15:24Z) 뒤 git push origin v2.0.0 — annotated tag v2.0.0 은 예행 통과 커밋 704bf56 을 가리키고 옮기거나 지우지 않는다 (잘못이면 v2.0.1)
+- [Phase 06]: 06-05: README 손 따라 하기는 막힌 자리 없음 — 작은 점 둘(넣는 자리의 sort_pub_dependencies, 설치 블록의 dev_dependencies 머리 줄)은 나중에 README 만 고친다
 
 ### Pending Todos
 
@@ -308,6 +311,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-15T08:12:09.418Z
-Stopped at: Completed 06-04-PLAN.md
+Last session: 2026-10-16T03:24:25.825Z
+Stopped at: Completed 06-05-PLAN.md
 Resume file: None
