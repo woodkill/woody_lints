@@ -415,3 +415,11 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 **Follow-ups:**
 - [ ] IN-10: `example/README.md` (06-08) 소절의 읽는 법 (4) · (5) 와 11행의 의존성 괄호를 06-12 뒤 동작에 맞춘다 — 지금 (5) 는 `# Changelog` 머리말이 통과한다고 현재형으로 말하지만 첫 줄 규칙 뒤로는 실패한다 (M113)
 - [ ] IN-11: `tool/smoke.dart` 의 `killTree` 재확인 — SIGSTOP 이 성공한 pid 를 기록하고 SIGKILL 직전 표에 아직 남은 것은 사슬과 상관없이 끊어, 얼린 뒤 중간 프로세스가 먼저 끝난 자기 자손이 SIGCONT 로 풀려 살아남지 않게 한다 (reviewer · verifier 재현: P → A → B 에서 A 가 첫 표 직후 끝나면 B 가 남음); 06-13 must_have 4 의 "사슬 밖은 SIGCONT" 문장과 머리 주석의 범위 문장도 함께 고친다
+
+### Phase 999.3: Follow-up — Phase 06 deferred UAT follow-up: Test 3 (BACKLOG)
+
+**Goal:** Phase 06 검증 때 미룬 VERSIONING.md 문구 정리를 마친다
+**Source phase:** 06
+**Deferred at:** 2026-10-17, `/gsd-verify-work 06` 세션 완료 시점
+**Follow-ups:**
+- [ ] Test 3: VERSIONING.md 「판정 순서」 3번과 기준표에 'pubspec.yaml 의 dev_dependencies · 저장소 도구용 주석만 바뀐 것은 받는 쪽에 닿지 않으므로 저장소 안쪽(올리지 않음)' 을 정리한다 — 2.0.0 뒤 gap 수정(markdown dev 의존성 · 주석 3줄)이 버전을 올리지 않은 근거를 문서가 그대로 뒷받침하게. 지금은 3번("pubspec.yaml 이 바뀌긴 했나 → patch")과 기준표 "주석만 고침 → patch" 를 글자대로 읽으면 2.0.1 이고, 계획서가 근거로 든 "저장소 안쪽만 바뀜" 행에는 pubspec.yaml 이 없다 (deferred 2026-10-17)
