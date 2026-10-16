@@ -1724,7 +1724,7 @@ final topHeadingLine = RegExp(r'^## (\d+\.\d+\.\d+) - (\S.*?)[ \t]*$');
 /// 다른 것은 이 저장소에서 늘 `[3/N]` 실패였고, 블록이면 두 reader 의 값을 함께 보인다.
 ({String version, String dateSlot}) changelogTopOf(String raw) {
   // U+FEFF 떼기 — 소유자에게 보인 문장 (G6-Q1). 첫 줄 검사보다 먼저 한다.
-  final text = raw.startsWith('﻿') ? raw.substring(1) : raw;
+  final text = raw.startsWith('\uFEFF') ? raw.substring(1) : raw;
   final lines = splitYamlLines(text);
   final first = lines.isEmpty ? '' : lines.first;
 
