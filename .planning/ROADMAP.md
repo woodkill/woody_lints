@@ -340,7 +340,7 @@ Plans:
 - [x] 06-07-PLAN.md — 처리 기록: `02-UAT.md` 4 · 6번 pass, `05-UAT.md` 1 · 2 · 4 · 5번 `closed_in`, `05-REVIEW-DISPOSITION.md` IN-12 · IN-13 · IN-14 fixed (open 0, deferred 는 WR-06 — D-09)
 
 **Wave 6** *(gap 수정 — 06-VERIFICATION.md 40/41 · 06-REVIEW.md 일곱 발견, 소유자 결정 2026-10-16 G6-Q1 ~ G6-Q3; 파일이 겹치지 않아 나란히 — worktree 격리, 꺼져 있으면 06-08 → 06-09 차례로)*
-- [ ] 06-08-PLAN.md — `[3/10]` (i) 의 version 을 `package:yaml` 값으로 · (h) 의 pubspec 비교를 원문 전체로 · `pubspecReleaseVersion` 을 `pubspecVersionText` 위에 (CR-01 · IN-03), `changelogTop` 을 `package:markdown` (새 dev 의존성) 으로 해석한 첫 h2 (깊이 무관, U+FEFF 떼기) 로 (WR-02 · 검증자의 HTML 주석 꼴 — G6-Q1 (가)); 복제본에서 꼴 아홉을 세 경로(평소 · `--tag` · `GITHUB_REF_NAME`)로 실패시키고 고치기 전 판과 대조해 M98 ~ M106 기록 (REL-03; D-04 · D-05)
+- [ ] 06-08-PLAN.md — `[3/10]` (i) 의 version 을 `package:yaml` 값으로 · (h) 의 pubspec 비교를 원문 전체로 · `pubspecReleaseVersion` 을 `pubspecVersionText` 위에 (CR-01 · IN-03), `changelogTop` 을 `package:markdown` (새 dev 의존성) 으로 해석한 첫 h2 (깊이 무관, U+FEFF 떼기) 로 (WR-02 · 검증자의 HTML 주석 꼴 — G6-Q1 (가)); 복제본에서 꼴 아홉을 세 경로(평소 · `--tag` · `GITHUB_REF_NAME`)로 실패시키고 고치기 전 판과 대조해 M98 ~ M106 기록; skill 세 줄 · `example/README.md` 11행의 의존성 문장을 `yaml` · `markdown` 둘로 (G6-R2-Q1) (REL-03; D-04 · D-05)
 - [ ] 06-09-PLAN.md — `tool/smoke.dart`: `judge` 가 include 사슬 진단을 두 주소 각각의 실패 사유로 더하고 `(reasons, shown)` 을 돌려줌 (WR-01 · IN-02), 단계별 시간 제한(create 2분 · pub get 5분 · analyze 5분 — 넘으면 끊고 69) · `finally` · SIGINT(130) 정리 (WR-03 · IN-01), 오프라인 하네스 · SIGINT 끝에서 끝까지 · 전체 smoke `v2.0.0` 회귀 (REL-04; G6-Q2; D-09 · D-10)
 
 **Wave 7** *(blocked on Wave 6)*
