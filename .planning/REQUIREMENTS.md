@@ -152,8 +152,8 @@
 | DOCS-11 | Phase 4 | Complete |
 | REL-01 | Phase 1 | Complete |
 | REL-02 | Phase 6 | Pending |
-| REL-03 | Phase 6 | Pending |
-| REL-04 | Phase 6 | Pending |
+| REL-03 | Phase 6 | Gaps Found |
+| REL-04 | Phase 6 | Gaps Found |
 
 **Coverage:**
 - v1 requirements: 43 total

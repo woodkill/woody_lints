@@ -4,17 +4,17 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 06
 current_phase_name: Release
-status: executing
-stopped_at: Completed 06-09-PLAN.md
-last_updated: "2026-10-16T10:18:44.797Z"
-last_activity: 2026-10-16
+status: Phase 06 gap 수정 2회차 실행 중 (06-12 ~ 06-15)
+stopped_at: Completed 06-13-PLAN.md
+last_updated: "2026-10-16T16:42:10.424Z"
+last_activity: 2026-10-17
 last_activity_desc: Phase 06 execution started
-state_head: 4286d48b980e581c10ab8164debcbe072234e27a
+state_head: ea2d6647460a87e11583ec6ee43b65e78a38000f
 progress:
   total_phases: 6
   completed_phases: 5
-  total_plans: 52
-  completed_plans: 50
+  total_plans: 56
+  completed_plans: 54
   percent: 83
 ---
 
@@ -30,9 +30,9 @@ See: .planning/PROJECT.md (updated 2026-10-15)
 ## Current Position
 
 Phase: 06 (Release) — EXECUTING
-Plan: 9 of 11
-Status: Ready to execute
-Last activity: 2026-10-16 — Phase 06 execution started
+Plan: 13 of 15
+Status: Phase 06 gap 수정 2회차 실행 중 (06-12 ~ 06-15)
+Last activity: 2026-10-17 — Phase 06 execution started
 
 Progress: [████████░░] 83%
 
@@ -112,6 +112,10 @@ Progress: [████████░░] 83%
 | Phase 06 P07 | 2 min | 2 tasks | 3 files |
 | Phase 06 P08 | 25 min | 2 tasks | 6 files |
 | Phase 06 P09 | 15 min | 3 tasks | 1 files |
+| Phase 06 P10 | 12 min | 2 tasks | 1 files |
+| Phase 06 P11 | 6 min | 2 tasks | 0 files |
+| Phase 06 P12 | 28 min | 2 tasks | 7 files |
+| Phase 06 P13 | 8 min | 3 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -298,6 +302,16 @@ Recent decisions affecting current work:
 - [Phase 06]: smoke 의 시간 초과 · SIGINT 는 하위 명령의 자손까지 끊는다 — SIGSTOP 으로 얼리고 /bin/ps 표를 새 자손이 없을 때까지 다시 읽은 뒤 SIGKILL (dart analyze 가 analysis server 를 자식으로 두고, 표를 한 번만 읽고 끊었을 때 지운 임시 폴더가 다시 생긴 실측, 06-09)
 - [Phase 06]: smoke 의 SIGINT 처리기와 본 흐름의 겹침은 quit 의 먼저 부른 쪽 우선과 처리기 중의 본 흐름 멈춤(haltIfInterrupted)으로 막는다 (06-09)
 - [Phase 06]: smoke 의 단계 제한 값(create 2분 · pub get 5분 · analyze 5분)과 SIGINT 종료 코드 130 은 planner 가 고른 값이고 Round 2 에서 소유자에게 보였으며 반대가 없었다 (06-09)
+- [Phase 06]: 06 리뷰 발견 일곱을 모두 fixed 로 닫았다 — CR-01 · WR-02 · IN-03 은 06-08 Task 1 (6aa78fe), WR-01 · IN-02 는 06-09 Task 1 (2c5b73b), WR-03 · IN-01 은 06-09 Task 2 (4286d48); 버전 · CHANGELOG 는 그대로 (저장소 안쪽만 바뀜, G6-Q3 NOT)
+- [Phase 06]: 작업 브랜치를 push gate 0 뒤 한 줄로 올리고(ad09d6e..75f102f, 18커밋, 2026-10-16T10:24:13Z) PR #2 (main ←) 를 열었다 — push 실행 38887002394 · pull_request 실행 38887576984 둘 다 success 10/10, MERGEABLE / CLEAN; 병합은 06-11 의 소유자 확인 뒤이고 06-10 의 metadata 커밋은 origin 에 없다
+- [Phase 06]: 06-11: 소유자 응답 merge (2026-10-16T10:38:32Z) 뒤에만 gh pr merge 2 --merge — main = 2.0.0 + 06 gap 수정 (merge commit 0038572, 부모 5ee5a12 · 75f102f), 받는 쪽 변화 없음 (규칙 · version 2.0.0 · CHANGELOG · tag 그대로), main push 실행 38888830252 success 10/10
+- [Phase 06]: gap 수정 2회차 계획 넷 · wave 9 ~ 11 — 06-12 `changelogTop` 을 파일 첫 줄 고정 (U+FEFF 뗀 첫 줄이 `## X.Y.Z - …` 이고 `package:markdown` 첫 h2 와 같아야 통과, 아니면 `[3/10]` 블록) · 문장 고침 (IN-09 포함) · `VERSIONING.md` 한 줄 · 지워 보기 M107 ~ M115 와 M100 ~ M106 재측정, 06-13 `tool/smoke.dart` 여섯 고침 (IN-04 · WR-06 · WR-04 · IN-05 · IN-06 · IN-07) + 오프라인 하네스, 06-14 처리 기록 (아홉 fixed · IN-08 deferred) → push gate → push → PR, 06-15 병합 직전 확인 → merge commit (6898e59, 4602883)
+- [Phase 06]: gap 2회차 계획 전 소유자 결정 (2026-10-16, 모두 권고 + 한 항목 더) — G7-Q1 길 (나) 첫 줄 고정 (머리말 불허, 판 고정 IN-08 안 함), G7-Q2 IN-04 · WR-06 · WR-04 · IN-09 와 IN-05 · IN-06 · IN-07 까지, G7-Q3 main 병합까지 (병합 직전 다시 확인, tag · 버전 · CHANGELOG 그대로), G7-Q4 모델 Fable (끝까지 Fable). Round 2: G7-R2-Q1 대표 여섯은 전체 실행 × 세 경로, 변형은 함수 단위 × 두 모드 (06-08 과 같은 방식)
+- [Phase 06]: gap 2회차 plan checker 1회차 blocker 0 · warning 5 (코드 모양이 자기 분석 단언에 걸림 `use_null_aware_elements`, 파이프 하네스가 옛 판에서 멈춤, 앞 빈 줄 거부를 단언하지 않음, 줄바꿈으로 갈라진 옛 머리 주석을 부정 grep 이 못 잡음, 예산 추정 1.5배) → 수정 1회 (null-aware 맵, 15초 겨루기, `blankfirst` · `hdr ''` 입력, 한 줄 토큰 grep 둘, 예산은 설명으로 수용) → 2회차 통과 — info 3
+- [Phase 06]: 06-12: CHANGELOG 최상단은 U+FEFF 를 뗀 파일 첫 줄의 엄격한 ## X.Y.Z - <날짜 자리> 제목이고 Markdown 첫 h2 와 같을 때만 통과한다 (소유자 결정 G7-Q1 (나))
+- [Phase 06]: 06-12: 첫 줄 · 둘째 reader 실패는 종료 코드 70 이 아니라 [3/10] 블록이고 CHANGELOG 쪽 비교만 건너뛴다 (planner 선택 — 두 reader 의 값을 보인다)
+- [Phase 06]: 06-13: smoke runProcess 는 Utf8Decoder(allowMalformed: true) 로 출력을 받고 제한을 Future.wait(종료 코드 · stdout · stderr) 에 건다; judge 는 종료 코드 3 인데 JSON 에 error 줄이 없으면 실패 (c″), include 코드 셋 (G7-Q2)
+- [Phase 06]: 06-13: killTree 는 SIGKILL 직전 표를 다시 읽어 부모 사슬에 남은 pid 만 끊고 사슬 밖의 얼린 pid 는 SIGCONT 로 푼다, 표를 못 읽으면 stderr 한 줄; finally 경합 · pid 재사용은 강제할 수 없어 소스 · 회귀로만 본다
 
 ### Pending Todos
 
@@ -325,6 +339,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-16T10:18:44.361Z
-Stopped at: Completed 06-09-PLAN.md
+Last session: 2026-10-16T16:42:09.947Z
+Stopped at: Completed 06-13-PLAN.md
 Resume file: None

@@ -3,7 +3,7 @@
 //
 //   [1/N] lib/ 에 .dart 파일이 없는지
 //   [2/N] 조각 파일 셋(lib/base.yaml · codegen.yaml · riverpod.yaml)의 복사본을 분석해 진단이 하나도 없는지 (deprecated / removed / 없는 규칙, 겹친 규칙 · 모르는 키 같은 옵션 경고, 깨진 YAML)
-//   [3/N] 배포 파일의 구성 — 묶음 · 별칭은 include 만 담는지, lib/base.yaml 의 규칙이 기반 세트와 겹치지 않는지, RULES.md 의 켠 규칙 표와 같은지, 다른 조각에 규칙이 없는지, 조각 셋의 최상위 키(와 그 바로 아래 키 — lib/codegen.yaml 의 analyzer:, lib/riverpod.yaml 의 plugins:)가 정해진 목록 안인지, README 의 표시 구역이 든 절에 구역 밖 목록 줄이 없는지, README 의 규칙 목록(표시 구역) · package: 로 시작하는 프리셋 주소 · 펜스 코드 블록 안 블록 꼴의 plugin 버전 · ref 가 배포 파일 · pubspec 과 같은지, 줄 단위로 읽은 규칙 · 키 · analyzer 옵션 · plugin 선언 · version 이 YAML (package:yaml) 이 같은 파일에서 읽은 값과 같은지, tag(있으면) · pubspec.yaml 의 version · CHANGELOG.md 최상단 버전이 같은지 (tag 가 없으면 꼬리를 뗀 version 과 CHANGELOG 버전만) — version 은 YAML 이 읽은 값, CHANGELOG 최상단은 Markdown 으로 해석한 첫 h2
+//   [3/N] 배포 파일의 구성 — 묶음 · 별칭은 include 만 담는지, lib/base.yaml 의 규칙이 기반 세트와 겹치지 않는지, RULES.md 의 켠 규칙 표와 같은지, 다른 조각에 규칙이 없는지, 조각 셋의 최상위 키(와 그 바로 아래 키 — lib/codegen.yaml 의 analyzer:, lib/riverpod.yaml 의 plugins:)가 정해진 목록 안인지, README 의 표시 구역이 든 절에 구역 밖 목록 줄이 없는지, README 의 규칙 목록(표시 구역) · package: 로 시작하는 프리셋 주소 · 펜스 코드 블록 안 블록 꼴의 plugin 버전 · ref 가 배포 파일 · pubspec 과 같은지, 줄 단위로 읽은 규칙 · 키 · analyzer 옵션 · plugin 선언 · version 이 YAML (package:yaml) 이 같은 파일에서 읽은 값과 같은지, tag(있으면) · pubspec.yaml 의 version · CHANGELOG.md 최상단 버전이 같은지 (tag 가 없으면 꼬리를 뗀 version 과 CHANGELOG 버전만) — version 은 YAML 이 읽은 값, CHANGELOG 최상단은 파일 첫 줄의 `## X.Y.Z - …` 제목이고 Markdown 으로 해석한 첫 h2 와 같아야 한다
 //   [4/N] 연습용 프로젝트 전부의 analysis_options.yaml 이 정해진 내용인지 (주석 · 빈 줄을 뺀 내용을 통째로 견준다)
 //   [5/N] ~ [N/N] 연습용 프로젝트마다 `dart analyze` 로 분석한 결과가 정답지와 같은지
 //         (`fixtures` 표의 순서. recommended 는 자기 정답지 없이 같은 실행의 example 결과와 견준다)
@@ -32,14 +32,16 @@
 //              05-REVIEW.md IN-14, 코드는 그대로 — 06-CONTEXT.md D-13)
 //
 // 의존성은 루트 pubspec.yaml 의 dev_dependencies 에 둔 둘이다 — yaml (package:yaml) 은
-// [3/N] 이 줄 단위로 읽은 값을 YAML 해석 결과와 견줄 때만 쓴다 (analyzer · pub 과 같은
-// 해석기). Phase 2 의 "dart:io · dart:convert 만" (02-CONTEXT.md D-11) 을 이 목적에 한해
+// [3/N] 이 줄 단위로 읽은 값을 YAML 해석 결과와 견줄 때와 (i) 가 pubspec.yaml 의 version 을
+// 읽을 때 쓴다 (analyzer · pub 과 같은 해석기 — 06-REVIEW.md IN-09). Phase 2 의 "dart:io ·
+// dart:convert 만" (02-CONTEXT.md D-11) 을 이 목적에 한해
 // 다시 정했다 (05-VERIFICATION.md 4회차 gap, 소유자 결정 G4-Q1). .dart_tool/ 이 없는 새
 // 복제본(CI)은 `dart run` 이 패키지를 먼저 받지만, 이미 받은 작업 트리는 pubspec.yaml 이
 // 바뀐 뒤 `fvm dart pub get` 을 한 번 돌려야 컴파일된다 (2026-10-15 실측, Dart 3.13.4).
-// markdown (package:markdown) 은 [3/N] (i) 가 CHANGELOG.md 의 최상단 제목을 GitHub 화면과
-// 같게 읽을 때만 쓴다 (06-VERIFICATION.md gap, 소유자 결정 G6-Q1 — 2026-10-16). 둘 다 받는
-// 쪽 의존성 그래프에 들어가지 않는다.
+// markdown (package:markdown) 은 [3/N] (i) 가 CHANGELOG.md 첫 줄의 최상단 제목을 Markdown
+// 해석의 첫 h2 와 견주는 둘째 reader 로만 쓴다 — 첫 줄 규칙이 해석기와 GitHub 화면의 갈림을 막는다
+// (06-VERIFICATION.md 2회차 gap, 소유자 결정 G7-Q1 — 2026-10-16). 둘 다 받는 쪽 의존성
+// 그래프에 들어가지 않는다.
 import 'dart:convert';
 import 'dart:io';
 
@@ -1681,55 +1683,86 @@ md.Element? firstElement(List<md.Node> nodes, String tag) {
   return null;
 }
 
-/// `CHANGELOG.md` 의 최상단 제목 `## X.Y.Z - <날짜 자리>` 를 버전과 날짜 자리로 나눠 돌려준다.
+/// `CHANGELOG.md` 첫 줄의 엄격한 최상단 제목 꼴 `## X.Y.Z - <날짜 자리>` (소유자 결정 G7-Q1).
 ///
-/// 문서를 Markdown (package:markdown, GitHub Flavored) 으로 해석해 문서 순서의 첫 `h2` 요소의
-/// 글자를 읽는다 — GitHub 화면이 그리는 제목과 같다. HTML 주석 · 펜스 코드 블록 안의 열 0 `## `
-/// 줄은 GitHub 이 제목으로 그리지 않고, 공백 1 ~ 3칸 들여 쓴 ATX 제목과 setext(`---`) 제목은
-/// 제목으로 그린다 (06-REVIEW.md WR-02, 06-VERIFICATION.md gap, 소유자 결정 G6-Q1). 파일 머리에
-/// `# Changelog` 같은 h1 이 있어도 첫 h2 가 최상단 제목이다.
+/// 첫 줄을 보는 이유: 첫 줄 앞에는 아무 블록도 없고 ATX 제목은 한 줄짜리 잎 블록이라 뒤의 줄이
+/// 그것을 바꿀 수 없다 — 그래서 어느 CommonMark 렌더러(GitHub 포함)도 그 줄을 h2 로 그린다
+/// (06-VERIFICATION.md 2회차 gap). 버전 토큰은 세 숫자다 — tag `vX.Y.Z` 와 같은 꼴이다. 날짜 자리는
+/// 비어 있지 않은 글자이고 뒤 공백 · 탭은 뗀다 (ATX 제목의 뒤 공백은 렌더에 없다). ` - ` 가 두 번이면
+/// 둘째부터는 날짜 자리에 남아 tag 모드의 `YYYY-MM-DD` 검사가 잡는다 (06-CONTEXT.md D-04 · D-05).
+final topHeadingLine = RegExp(r'^## (\d+\.\d+\.\d+) - (\S.*?)[ \t]*$');
+
+/// `CHANGELOG.md` 의 글자 [raw] 에서 최상단 제목 `## X.Y.Z - <날짜 자리>` 를 버전과 날짜 자리로
+/// 나눠 돌려준다 — 파일을 읽지 않는 순수 함수다 ([changelogTop] 이 파일을 읽어 부른다).
 ///
-/// 깊이는 보지 않는다 — 인용(`>`) · 목록(`-`) 안의 h2 도 GitHub 이 제목으로 그린다. 최상위 h2 만
-/// 보면 그 꼴에서 아래의 옛 항목을 최상단으로 읽어, 들여 쓴 ATX 와 같은 거짓 통과가 된다
-/// (2026-10-16 실측: 맨 앞의 `> ## 2.1.0 - 미출시`).
+/// 첫 줄 규칙과 둘째 reader: U+FEFF 를 뗀 **첫 줄**이 [topHeadingLine] 꼴이어야 하고, 문서를
+/// Markdown (package:markdown, GitHub Flavored) 으로 해석한 문서 순서의 첫 `h2` 의 글자가 그 줄의
+/// 제목 글자와 같아야 한다. 해석기는 "첫 줄과 같게 읽었나" 만 본다 — 05 길 B · 소유자 결정 G4-Q1 의
+/// 두 reader 일치와 같은 꼴이다 (06-VERIFICATION.md 2회차 gap, 소유자 결정 G7-Q1).
 ///
-/// 글자 앞의 U+FEFF 는 해석 전에 뗀다 — 떼지 않은 문자열은 첫 `## ` 줄이 단락이 되어 다음 h2 를
-/// 읽는다. 디스크의 BOM 은 `readAsStringSync` 가 이미 떼므로 문자열 쪽의 방어다 (2026-10-16 실측,
-/// Dart 3.13.4). 줄은 [splitYamlLines] 로 나눠 해석기에 준다 (CR 하나도 줄 — 소유자 결정 G3-Q1).
+/// 꼴 전체가 닫히는 이유: 첫 줄 앞에는 블록이 없고 ATX 제목은 뒤 줄이 바꾸지 못하는 한 줄짜리 잎
+/// 블록이라, 첫 줄이 제목이면 어느 렌더러도 그 줄을 첫 h2 로 그린다. 검증자가 찾은 갈림 두 꼴 —
+/// 한 글자 `-` 밑줄의 setext (해석기는 제목이 아니라고 보고 GitHub 은 h2 로 그린다), 인용 · 목록 ·
+/// 단락 안에서 연 `<!--` (해석기는 그 뒤의 `## ` 를 h2 로 보고 GitHub 은 끝까지 주석으로 삼킨다) —
+/// 는 모두 첫 줄이 `## X.Y.Z - …` 가 아니므로 첫 줄 규칙에서 실패한다 (06-REVIEW.md WR-02 · WR-05).
 ///
-/// 보지 않는 것: raw HTML `<h2>…</h2>` 는 해석기가 HTML 블록(글자)으로 두어 제목이 아니다 —
-/// 렌더된 화면과 다를 수 있는 유일한 꼴이고 VERSIONING.md 가 정한 꼴 밖이라 검사를 넓히지 않았다.
-/// 인라인 서식(`## **2.0.0** - …`)은 렌더된 글자(`2.0.0`)로 읽는다.
+/// 첫 h2 는 깊이를 보지 않는다 — 둘째 reader 가 인용 · 목록 안의 h2 도 첫 h2 로 보아야 첫 줄과 견줄
+/// 수 있다. 첫 줄이 제목이면 그것이 곧 첫 h2 다.
 ///
-/// 제목 글자는 `trim` 한 뒤 첫 ` - ` 에서 한 번만 나눈다: 앞 토큰이 버전, 뒤 전체가 날짜 자리다
-/// (둘 다 `trim`). 제목의 ` - ` 는 한 번만 쓰고 앞 토큰이 버전이다 (VERSIONING.md 81 ~ 82행) — 두 번
-/// 쓴 제목은 날짜 자리가 `YYYY-MM-DD` 꼴이 아니게 되어 (i) 가 실패로 알린다 (06-CONTEXT.md D-04 ·
-/// D-05). h2 가 하나도 없거나 ` - ` 가 없으면 파일 모양이 예상과 다른 것이라 [FormatException]
-/// (main 이 종료 코드 70 으로 끝낸다).
-({String version, String dateSlot}) changelogTop(String repoRoot) {
-  final raw = File('$repoRoot/$changelogFile').readAsStringSync();
-  // U+FEFF 떼기 — 소유자에게 보인 문장 (G6-Q1).
+/// 둘째 reader 가 갈리는 알려진 꼴은 닫는 `##` 와 백슬래시 escape 다 — 해석기는 떼고 첫 줄 reader 는
+/// 둔다 (2026-10-16 실측, `markdown` 7.3.1 · Dart 3.13.4). 둘 다 실패 쪽이다. `## **X.Y.Z** - …`
+/// 장식 · `# Changelog` 머리말 · raw `<h2>` 머리는 첫 줄이 꼴이 아니라 실패한다 — 06-08 때 통과였던
+/// 입력 셋이고, 바뀐 방향은 모두 실패 쪽이다.
+///
+/// 제목 글자 규칙은 그대로다 — ` - ` 는 한 번, 앞 토큰이 버전, tag 모드에서는 날짜 자리가
+/// `YYYY-MM-DD` (VERSIONING.md 「CHANGELOG 항목 형식」, 06-CONTEXT.md D-04 · D-05). 글자 앞의
+/// U+FEFF 는 첫 줄 검사 전에 뗀다 — 디스크의 BOM 은 `readAsStringSync` 가 이미 떼므로 문자열 쪽의
+/// 방어다 (소유자 결정 G6-Q1, 06-08 실측). 줄은 [splitYamlLines] 로 나눈다 (CR 하나도 줄 — G3-Q1).
+///
+/// 첫 줄이 꼴이 아니거나 둘째 reader 가 갈리면 [FormatException] 을 던지고 [checkVersionAgreement]
+/// 가 `[3/N]` 의 블록으로 바꾼다 — 종료 코드 70 이 아니다. 올바른 파일에서 검사가 본 값이 정책과
+/// 다른 것은 이 저장소에서 늘 `[3/N]` 실패였고, 블록이면 두 reader 의 값을 함께 보인다.
+({String version, String dateSlot}) changelogTopOf(String raw) {
+  // U+FEFF 떼기 — 소유자에게 보인 문장 (G6-Q1). 첫 줄 검사보다 먼저 한다.
   final text = raw.startsWith('\uFEFF') ? raw.substring(1) : raw;
+  final lines = splitYamlLines(text);
+  final first = lines.isEmpty ? '' : lines.first;
+
+  // 문구 A 의 `<shown>` — 빈 줄이면 `(빈 줄)`, 아니면 60자까지(넘으면 `…`) 백틱으로 감싼다.
+  String shownLine(String line) {
+    final trimmed = line.trimRight();
+    if (trimmed.isEmpty) return '(빈 줄)';
+    final cut = trimmed.length > 60 ? '${trimmed.substring(0, 60)}…' : trimmed;
+    return '`$cut`';
+  }
+
+  // 문구 B 의 `<h2>` — 없으면 `(없음)`, 있으면 백틱으로 감싼다.
+  String shownHeading(String? heading) =>
+      heading == null ? '(없음)' : '`$heading`';
+
+  final m = topHeadingLine.firstMatch(first);
+  if (m == null) {
+    throw FormatException(
+      '`CHANGELOG.md` 의 첫 줄이 최상단 제목 `## X.Y.Z - <날짜 자리>` 꼴이 아니다: ${shownLine(first)}',
+    );
+  }
+  final body = '${m[1]} - ${m[2]}';
   final nodes = md.Document(
     extensionSet: md.ExtensionSet.gitHubFlavored,
     encodeHtml: false,
-  ).parseLines(splitYamlLines(text));
-  final heading = firstElement(nodes, 'h2');
-  if (heading == null) {
-    throw const FormatException(
-      'CHANGELOG.md 를 Markdown 으로 해석한 결과에 2단 제목(h2)이 없다',
+  ).parseLines(lines);
+  final h2 = firstElement(nodes, 'h2')?.textContent.trim();
+  if (h2 != body) {
+    throw FormatException(
+      '`CHANGELOG.md` 첫 줄의 제목과 Markdown 해석의 첫 h2 가 다르다 — 첫 줄: `$body` / 첫 h2: ${shownHeading(h2)}',
     );
   }
-  final body = heading.textContent.trim();
-  final cut = body.indexOf(' - ');
-  if (cut < 0) {
-    throw FormatException('CHANGELOG.md 최상단 제목에 ` - ` 가 없다: $body');
-  }
-  return (
-    version: body.substring(0, cut).trim(),
-    dateSlot: body.substring(cut + 3).trim(),
-  );
+  return (version: m[1]!, dateSlot: m[2]!);
 }
+
+/// 저장소 루트 [repoRoot] 의 `CHANGELOG.md` 를 읽어 [changelogTopOf] 로 최상단 제목을 나눈다.
+({String version, String dateSlot}) changelogTop(String repoRoot) =>
+    changelogTopOf(File('$repoRoot/$changelogFile').readAsStringSync());
 
 /// 저장소 루트가 받은 기반 세트(`lints` · `flutter_lints`)가 켜는 규칙을 읽는다.
 ///
@@ -2246,7 +2279,7 @@ List<List<String>> compareLineReadersWithYaml(String repoRoot) {
 /// `forEach(addBlock)` 으로 넣는다. 어긋남마다 블록 하나다 (06-CONTEXT.md D-04 · D-05 · D-06).
 ///
 /// - [tag] 가 null (평소 push — D-04 (1)): [pubspecYamlVersion] 의 꼬리를 뗀 값 == [changelogTop]
-///   의 버전만 본다. 준비 중 상태(`2.0.0-dev` · `미출시`)는 통과한다.
+///   의 버전 (파일 첫 줄의 제목 — Markdown 첫 h2 와 같을 때만) 만 본다. 준비 중 상태(`2.0.0-dev` · `미출시`)는 통과한다.
 /// - [tag] 가 `vX.Y.Z` 꼴이 아니면 블록 하나로 끝낸다 — 나머지는 보지 않는다 (이 저장소의 `v`
 ///   tag 는 패키지 릴리스 전용이다).
 /// - [tag] 가 `vX.Y.Z` 꼴이면 (D-04 (2) · (3)) 셋을 각각 본다: [pubspecYamlVersion] 의 원문
@@ -2258,14 +2291,24 @@ List<List<String>> compareLineReadersWithYaml(String repoRoot) {
 /// 보지 않는다 (시간대에 따라 하루가 어긋난다 — D-05). 로컬에 `--tag` 도 GitHub 의 환경변수도
 /// 없으면 평소 모드다 (main 이 정한다). `pubspec.yaml` 을 YAML 로 읽지 못하면 블록 하나로 알리고
 /// pubspec 쪽 비교만 건너뛴다 ((h) 도 같은 파일에 블록을 낸다 — 각 확인이 스스로 실패한다).
-/// 파일 모양이 예상과 다르면 reader 가 [FormatException] 을 던지고 main 이 종료 코드 70 으로 끝낸다.
+/// CHANGELOG 의 첫 줄이 꼴이 아니거나 둘째 reader 가 갈리면 블록 하나로 알리고 CHANGELOG 쪽 비교만
+/// 건너뛴다 ([changelogTopOf] 의 문구 A · B); pubspec 쪽 reader 의 [FormatException] 은 지금처럼
+/// main 이 70 으로 끝낸다.
 List<List<String>> checkVersionAgreement(String repoRoot, {String? tag}) {
   const guide =
       '릴리스 커밋에서 `-dev` 를 떼고 `CHANGELOG.md` 제목의 `미출시` 를 날짜로 바꾸며, '
       'lock 여섯도 같은 커밋에서 다시 받는다 — VERSIONING.md 「릴리스 절차」 '
       '(06-CONTEXT.md D-04 · D-05).';
-  final top = changelogTop(repoRoot);
+  const changelogGuide =
+      '최상단 항목은 파일 첫 줄에 둔다 — 앞에 머리말 · 빈 줄 · 주석 · 다른 블록을 두지 않는다 '
+      '(VERSIONING.md 「CHANGELOG 항목 형식」, 소유자 결정 G7-Q1).';
   final blocks = <List<String>>[];
+  ({String version, String dateSlot})? top;
+  try {
+    top = changelogTop(repoRoot);
+  } on FormatException catch (e) {
+    blocks.add([e.message, '', changelogGuide]);
+  }
   ({String text, String release})? pub;
   try {
     pub = pubspecYamlVersion(repoRoot);
@@ -2278,7 +2321,7 @@ List<List<String>> checkVersionAgreement(String repoRoot, {String? tag}) {
   }
 
   if (tag == null) {
-    if (pub != null && pub.release != top.version) {
+    if (top != null && pub != null && pub.release != top.version) {
       blocks.add([
         '`pubspec.yaml` 의 version (${pub.text} → ${pub.release}) 과 `CHANGELOG.md` 최상단 버전 (${top.version}) 이 다르다.',
         '',
@@ -2307,14 +2350,14 @@ List<List<String>> checkVersionAgreement(String repoRoot, {String? tag}) {
       guide,
     ]);
   }
-  if (top.version != tagVersion) {
+  if (top != null && top.version != tagVersion) {
     blocks.add([
       'tag `$tag` 의 버전 ($tagVersion) 과 `CHANGELOG.md` 최상단 버전 (${top.version}) 이 다르다.',
       '',
       guide,
     ]);
   }
-  if (!RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(top.dateSlot)) {
+  if (top != null && !RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(top.dateSlot)) {
     blocks.add([
       '`CHANGELOG.md` 최상단 제목의 날짜 자리가 `YYYY-MM-DD` 꼴이 아니다: `${top.dateSlot}`',
       '',
@@ -2352,7 +2395,7 @@ List<List<String>> checkVersionAgreement(String repoRoot, {String? tag}) {
 /// - (g) README 의 펜스 코드 블록 안에서 키가 줄 머리에 오는 `ref: vX.Y.Z` 줄의 값 == [pubspecReleaseVersion] — 읽은 값이 0개면 실패 (VERIFY-06, D-02)
 ///   — 값의 따옴표 · 줄 끝 주석을 벗겨 읽고, 꼴이 틀린 값도 실패 (키는 따옴표 · 콜론 앞 공백 없이 글자 그대로인 줄만 후보 — 05-REVIEW.md WR-13)
 /// - (h) 줄 단위 reader 가 읽은 값 == YAML (package:yaml) 이 같은 파일에서 읽은 값 ([compareLineReadersWithYaml]) — 조각 셋의 규칙과 최상위 키 · 그 바로 아래 키, `lib/base.yaml` 의 analyzer 옵션, `lib/riverpod.yaml` 의 riverpod_lint 선언, `pubspec.yaml` 의 version (원문 전체). YAML 로 읽지 못하는 파일(같은 키 두 번 · 깨진 YAML)도 실패 (05-VERIFICATION.md 4회차 gap, 소유자 결정 G4-Q1)
-/// - (i) tag 가 없으면 [pubspecYamlVersion] 의 꼬리를 뗀 값 == CHANGELOG 최상단 버전 ([changelogTop]); tag 가 있으면 `vX.Y.Z` 꼴 · YAML 의 version ([pubspecYamlVersion]) 과 꼬리 없이 정확히 · CHANGELOG 최상단은 Markdown 해석의 첫 h2 ([changelogTop]) · CHANGELOG 버전 · 날짜 자리 `YYYY-MM-DD` (REL-03, 06-CONTEXT.md D-04 ~ D-06)
+/// - (i) tag 가 없으면 [pubspecYamlVersion] 의 꼬리를 뗀 값 == CHANGELOG 최상단 버전 ([changelogTop]); tag 가 있으면 `vX.Y.Z` 꼴 · YAML 의 version ([pubspecYamlVersion]) 과 꼬리 없이 정확히 · CHANGELOG 최상단은 파일 첫 줄의 `## X.Y.Z - …` 제목이고 Markdown 해석의 첫 h2 와 같아야 한다 ([changelogTop] — 아니면 블록) · CHANGELOG 버전 · 날짜 자리 `YYYY-MM-DD` (REL-03, 06-CONTEXT.md D-04 ~ D-06)
 ///
 /// (e) 는 `package:` 로 시작하지 않는 scheme 오타 · `package:` 뒤의 공백 · `.yaml` · `.yml` 로 끝나지 않는 다른 패키지의 주소를 보지 않고, 주소 바로 뒤에 `,` · `.` 같은 문장 부호가 붙으면 `woody_lints` 주소는 꼴이 아닌 것으로 실패하고 다른 패키지의 주소는 후보가 되지 않는다. (f) · (g) 는 따옴표로 감싼 키 · 콜론 앞에 공백이 든 키(`"ref":` · `ref :`), flow 표기(`{…}`) 안의 키와 펜스가 아닌 코드 블록(네 칸 들여 쓴 블록 · 인용 안의 펜스)을 보지 않고, 펜스 안에서 네 칸 이상 들여 쓴 펜스 문자 줄(백틱 셋 이상 · `~~~`)은 그 펜스를 닫는 것으로 보아 그 뒤의 같은 블록 값은 견주지 않는다 (05-REVIEW.md WR-07 ~ WR-09 · WR-13 · WR-14 · IN-08 · IN-10 — 소유자 결정 G2-Q2 · G2-Q5 · G3-Q2 · G4-Q2, 검사는 넓히지 않았다).
 StepResult checkShippedComposition(String repoRoot, {String? tag}) {
