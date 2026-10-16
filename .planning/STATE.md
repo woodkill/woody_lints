@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 06
 current_phase_name: Release
 status: executing
-stopped_at: Completed 06-08-PLAN.md
-last_updated: "2026-10-16T09:57:03.417Z"
+stopped_at: Completed 06-09-PLAN.md
+last_updated: "2026-10-16T10:18:44.797Z"
 last_activity: 2026-10-16
 last_activity_desc: Phase 06 execution started
-state_head: c6187cd816e4b5407179c83d2e8250be1a4529d7
+state_head: 4286d48b980e581c10ab8164debcbe072234e27a
 progress:
   total_phases: 6
   completed_phases: 5
   total_plans: 52
-  completed_plans: 48
+  completed_plans: 50
   percent: 83
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-15)
 ## Current Position
 
 Phase: 06 (Release) — EXECUTING
-Plan: 8 of 11
+Plan: 9 of 11
 Status: Ready to execute
 Last activity: 2026-10-16 — Phase 06 execution started
 
@@ -111,6 +111,7 @@ Progress: [████████░░] 83%
 | Phase 06 P06 | 18 min | 3 tasks | 0 files |
 | Phase 06 P07 | 2 min | 2 tasks | 3 files |
 | Phase 06 P08 | 25 min | 2 tasks | 6 files |
+| Phase 06 P09 | 15 min | 3 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -294,6 +295,9 @@ Recent decisions affecting current work:
 - [Phase 06]: Phase 06 검증 gaps_found 40/41 — 이미 올린 v2.0.0 (tag · CI · smoke) 은 문제없음. gap 은 다음 릴리스의 [3/10] (i): version 을 줄 단위로 읽어 YAML 값과 대조하지 않음 (CR-01), CHANGELOG 최상단을 HTML 주석 · 펜스 · 들여 쓴 제목 · setext 와 구별하지 못함 (verifier 가 찾은 HTML 주석 꼴로 --tag 거짓 통과). CHANGELOG 읽기 방식(Markdown 해석기 / fail-closed)은 소유자가 gap 계획 전에 정한다. 저장소 안쪽 고침이라 새 버전 번호는 필요 없다.
 - [Phase 06]: [3/10] (i) 는 pubspec version 을 package:yaml 값에서, CHANGELOG 최상단을 package:markdown (GitHub Flavored) 해석의 첫 h2 (깊이 무관) 에서 읽고, (h) 는 줄 단위 reader 의 원문 전체를 YAML version 과 견준다 — 두 겹 (06-08, G6-Q1)
 - [Phase 06]: raw HTML <h2> 는 해석기가 글자로 두어 CHANGELOG 최상단 검사 범위 밖으로 문장으로만 적었다 — VERSIONING.md 가 정한 꼴 밖 (06-08)
+- [Phase 06]: smoke 의 시간 초과 · SIGINT 는 하위 명령의 자손까지 끊는다 — SIGSTOP 으로 얼리고 /bin/ps 표를 새 자손이 없을 때까지 다시 읽은 뒤 SIGKILL (dart analyze 가 analysis server 를 자식으로 두고, 표를 한 번만 읽고 끊었을 때 지운 임시 폴더가 다시 생긴 실측, 06-09)
+- [Phase 06]: smoke 의 SIGINT 처리기와 본 흐름의 겹침은 quit 의 먼저 부른 쪽 우선과 처리기 중의 본 흐름 멈춤(haltIfInterrupted)으로 막는다 (06-09)
+- [Phase 06]: smoke 의 단계 제한 값(create 2분 · pub get 5분 · analyze 5분)과 SIGINT 종료 코드 130 은 planner 가 고른 값이고 Round 2 에서 소유자에게 보였으며 반대가 없었다 (06-09)
 
 ### Pending Todos
 
@@ -321,6 +325,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-16T09:57:02.985Z
-Stopped at: Completed 06-08-PLAN.md
+Last session: 2026-10-16T10:18:44.361Z
+Stopped at: Completed 06-09-PLAN.md
 Resume file: None
