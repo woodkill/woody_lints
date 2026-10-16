@@ -21,6 +21,9 @@
 //       provider_parameters (warning, riverpod_lint) — 이 두 주소 각각의 결과에 둘 다 있다.
 //       기반 세트의 규칙은 쓰지 않는다: 템플릿이 이미 flutter_lints 를 include 하므로 include 가
 //       통째로 깨져도 그 줄은 나온다 (06-RESEARCH.md Pitfall 5).
+//   (2′) 어느 주소든 `analysis_options.yaml` 에 include 사슬이 끊긴 진단(`include_file_not_found` ·
+//       `included_file_warning`)이 있으면 실패 — 위반 두 줄이 그대로 나와도 (06-REVIEW.md WR-01,
+//       소유자 결정 G6-Q2).
 //   (3) 받은 프로젝트의 pubspec.lock 에서 woody_lints 항목이 source git, url 이 README 와 같고,
 //       resolved-ref 가 기대 커밋과 같다.
 //
@@ -79,6 +82,12 @@ const pluginFailureHeader =
 
 /// `dart analyze` 가 정상적으로 끝났을 때의 종료 코드 (진단 없음 / warning / error 까지).
 const analyzeExitCodes = [0, 2, 3];
+
+/// include 사슬이 끊겼을 때 `analysis_options.yaml` 에 나는 진단의 코드 둘.
+///
+/// 06-REVIEW.md WR-01 — 복제본에서 `lib/recommended.yaml` 의 include 하나를 없는 파일로 바꿔 확인한
+/// 코드다. 템플릿이 내는 다른 진단(예: 규칙 이름의 오타)과 섞이지 않게 둘로 좁힌다.
+const includeErrorCodes = {'include_file_not_found', 'included_file_warning'};
 
 /// 빈 프로젝트의 `dependencies:` 에 더하는 줄 — `example/pubspec.yaml` 과 같은 선언.
 const riverpodDependency = '  flutter_riverpod: ^3.0.0';
@@ -490,31 +499,67 @@ Future<AnalyzeOutcome> analyzeOnce({
   );
 }
 
-/// 주소 하나의 결과를 판정해 사유 목록을 돌려준다 (D-09 (2)). 비어 있으면 통과다.
+/// 주소 하나의 결과를 판정해 사유 목록과 화면의 `판정:` 문구를 함께 돌려준다 (D-09 (2)).
 ///
-/// 순서는 tool/verify.dart 의 정답지 비교와 같다 — (a) plugin 준비 실패의 머리말, (b) 도구가 죽음
-/// (종료 코드가 0 · 2 · 3 밖이거나 JSON 아님), (c) 위반 두 줄의 존재. 앞이 걸리면 뒤는 보지 않는다.
-List<String> judge(AnalyzeOutcome outcome) {
+/// 순서는 tool/verify.dart 의 정답지 비교와 같은 배타 순서에 include 사슬을 더한 것이다 —
+/// (a) plugin 준비 실패의 머리말, (b) 도구가 죽음 (종료 코드가 0 · 2 · 3 밖이거나 JSON 아님),
+/// (c′) `analysis_options.yaml` 의 [includeErrorCodes] 줄마다 사유 하나, (c) 위반 두 줄의 존재.
+/// (a) · (b) 가 걸리면 뒤는 보지 않는다.
+///
+/// (c′) 를 보는 까닭: 두 주소 모두 `lib/recommended.yaml` 을 거쳐 조각 셋을 받으므로 `codegen.yaml` 이
+/// 풀리지 않아도 위반 두 줄은 그대로 나온다 — CLAUDE.md Compatibility 의 codegen 부분이 받는 쪽에서
+/// 깨져도 통과하던 자리다 (06-REVIEW.md WR-01, 소유자 결정 G6-Q2). outcome 하나를 보므로 두 주소
+/// (`recommended` · `alias`) 각각 같은 길을 지난다.
+///
+/// 돌려주는 값: `reasons` 는 요약의 사유 목록이고 비어 있으면 통과다. `shown` 은 그 주소의 `판정:`
+/// 줄 — (a) · (b) 면 사유에서 주소 이름을 뗀 글자, 아니면 `… 있음 · … 없음` 에 include 사유가 있을 때
+/// ` · include 사슬 끊김 N줄` 을 잇는다. 조건과 문구를 여기 한 곳에만 두어 runSmoke 가 다시 적지
+/// 않게 한다 (06-REVIEW.md IN-02).
+({List<String> reasons, String shown}) judge(AnalyzeOutcome outcome) {
+  ({List<String> reasons, String shown}) fatal(String what) =>
+      (reasons: ['${outcome.name}: $what'], shown: what);
+
   if (outcome.hasPluginHeader) {
-    return ['${outcome.name}: plugin 준비 실패 (stderr 의 머리말)'];
+    return fatal('plugin 준비 실패 (stderr 의 머리말)');
   }
   final lines = outcome.lines;
   if (lines == null || !analyzeExitCodes.contains(outcome.exitCode)) {
     final what = lines == null ? 'JSON 아님' : 'exit ${outcome.exitCode}';
-    return ['${outcome.name}: 도구가 죽었다 ($what)'];
+    return fatal('도구가 죽었다 ($what)');
   }
-  final file = RegExp.escape(violationsFile);
+
   final reasons = <String>[];
+  // (c′) include 사슬 — 첫 칸(`:` 앞의 파일)이 프로젝트의 옵션 파일이고 끝 칸(규칙 이름)이 include 오류.
+  var includeBroken = 0;
+  for (final line in lines) {
+    final file = line.split(':').first;
+    final code = line.split('  ').last;
+    if (file == 'analysis_options.yaml' && includeErrorCodes.contains(code)) {
+      reasons.add('${outcome.name}: include 사슬이 끊겼다 ($line)');
+      includeBroken++;
+    }
+  }
+
+  // (c) 위반 두 줄.
+  final file = RegExp.escape(violationsFile);
+  final missing = <String>{};
   for (final (rule, severity) in [
     (expectedBaseRule, 'info'),
     (expectedPluginRule, 'warning'),
   ]) {
     final pattern = RegExp('^$file:\\d+  $severity  $rule\$');
     if (!lines.any(pattern.hasMatch)) {
+      missing.add(rule);
       reasons.add('${outcome.name}: $rule 없음');
     }
   }
-  return reasons;
+
+  String mark(String rule) => '$rule ${missing.contains(rule) ? '없음' : '있음'}';
+  final include = includeBroken > 0 ? ' · include 사슬 끊김 $includeBroken줄' : '';
+  return (
+    reasons: reasons,
+    shown: '${mark(expectedBaseRule)} · ${mark(expectedPluginRule)}$include',
+  );
 }
 
 /// 하위 명령이 실패했을 때 가린 출력과 함께 안내를 stderr 에 적는다.
@@ -667,19 +712,9 @@ Future<int> runSmoke({
       stderr.writeln('${target.name}: plugin 준비 실패 — stderr:');
       stderr.writeln(outcome.stderrText);
     }
-    final found = judge(outcome);
-    reasons.addAll(found);
-    if (outcome.hasPluginHeader ||
-        outcome.lines == null ||
-        !analyzeExitCodes.contains(outcome.exitCode)) {
-      stdout.writeln('   판정: ${found.first.substring(target.name.length + 2)}');
-    } else {
-      String mark(String rule) =>
-          '$rule ${found.any((r) => r.endsWith('$rule 없음')) ? '없음' : '있음'}';
-      stdout.writeln(
-        '   판정: ${mark(expectedBaseRule)} · ${mark(expectedPluginRule)}',
-      );
-    }
+    final verdict = judge(outcome);
+    reasons.addAll(verdict.reasons);
+    stdout.writeln('   판정: ${verdict.shown}');
   }
 
   // (3) — 받은 것이 README 의 주소에서 온 기대 커밋인가.
