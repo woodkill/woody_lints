@@ -4,12 +4,12 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 06
 current_phase_name: Release
-status: Phase 06 gap 수정 2회차 실행 완료 — 검증 대기 (main 3418989)
+status: Phase 06 재검증 human_needed 82/82 — UAT 대기 (/gsd-verify-work 06)
 stopped_at: Completed 06-15-PLAN.md
-last_updated: "2026-10-16T17:12:35.619Z"
+last_updated: "2026-10-16T21:32:33.539Z"
 last_activity: 2026-10-17
 last_activity_desc: Phase 06 execution started
-state_head: 5e44d4c1257c3f38b54cdd0eaf36dac664f86162
+state_head: 3c58449997d47dff4fb9639a64e83b10c010325a
 progress:
   total_phases: 6
   completed_phases: 5
@@ -31,7 +31,7 @@ See: .planning/PROJECT.md (updated 2026-10-15)
 
 Phase: 06 (Release) — EXECUTING
 Plan: 15 of 15
-Status: Phase 06 gap 수정 2회차 실행 완료 — 검증 대기 (main 3418989)
+Status: Phase 06 재검증 human_needed 82/82 — UAT 대기 (/gsd-verify-work 06)
 Last activity: 2026-10-17 — Phase 06 execution started
 
 Progress: [████████░░] 83%
@@ -317,6 +317,7 @@ Recent decisions affecting current work:
 - [Phase 06]: 06 리뷰 2회차의 열 발견을 닫았다 — WR-02 · WR-05 · IN-09 는 06-12 Task 1 (85e1b0d), IN-04 · WR-06 · WR-04 는 06-13 Task 1 (9d96778), IN-05 · IN-06 · IN-07 은 06-13 Task 2 (ea2d664) 로 fixed, IN-08 은 deferred (G7-Q1 — 첫 줄 규칙 아래에서는 거짓 통과 방향이 해석기 판에 기대지 않는다); open 0 · total 16; 버전 · CHANGELOG 는 그대로 (저장소 안쪽만 바뀜, G7-Q3 NOT)
 - [Phase 06]: 작업 브랜치를 push gate 0 뒤 한 줄로 올리고(724d17a..0461741, 11커밋, 2026-10-16T16:47:56Z 무렵) PR #3 (main ←) 를 열었다 — push 실행 38934754393 · pull_request 실행 38935292307 둘 다 success 10/10, MERGEABLE / CLEAN; 병합은 06-15 의 소유자 확인 뒤. 이 plan 의 metadata 커밋은 push 하지 않았다
 - [Phase 06]: 06-15: 소유자 응답 merge 뒤 gh pr merge 3 --merge — main = 2.0.0 + 06 gap 수정 2회차 (merge commit 3418989), 받는 쪽 변화 없음 (규칙 · version 2.0.0 · CHANGELOG · tag 그대로)
+- [Phase 06]: 재리뷰 경고 IN-10 (example/README.md 읽는 법 (4) · (5) 와 11행의 낡은 문장) 과 IN-11 (smoke killTree 재확인이 중간 프로세스가 먼저 끝난 자기 자손을 SIGCONT 로 살려 둠) 은 미룸 — 소유자 결정 2026-10-17, verifier 판정 경고 (명시된 진실 밖); 처리 기록 deferred · ROADMAP Backlog 999.2
 
 ### Pending Todos
 

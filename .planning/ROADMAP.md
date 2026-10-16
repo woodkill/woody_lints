@@ -318,7 +318,7 @@ Plans:
   2. `git ls-remote --tags origin` 에 새 버전의 annotated tag 가 보이고, 그 tag 의 `pubspec.yaml` version 과 CHANGELOG 최상단 버전이 tag 이름과 같다
   3. 빈 프로젝트가 새 tag 를 git 의존성(`ref: vX.Y.Z`)으로 받아 `dart analyze` 를 돌리면 기본 규칙 진단과 `riverpod_lint` plugin 진단이 둘 다 보고된다
 
-**Plans**: 15/15 plans executed — 06-01 ~ 06-07 첫 실행 (검증 gaps_found 40/41), gap 수정 06-08 ~ 06-11 실행 완료 2026-10-16 (PR #2 → `main` `0038572`) — 재검증 gaps_found 60/63: CHANGELOG 최상단 reader 가 GitHub 과 갈리는 꼴 둘(한 글자 밑줄 setext · 블록 안의 `<!--`)과 smoke 의 UTF-8 아닌 출력, `06-VERIFICATION.md`; **gap 수정 2회차 06-12 ~ 06-15 는 2026-10-16 계획 · 2026-10-17 실행 완료 (PR #3 → `main` `3418989`, 재검증 대기)** — 소유자 결정 G7-Q1 (나) 첫 줄 고정 · G7-Q2 smoke 여섯 · G7-Q3 main 병합까지, 06-REVIEW.md 열 발견(아홉 fixed · IN-08 deferred), 11 waves (gap 수정 1회차 4 는 2026-10-16 계획 — 06-VERIFICATION.md 40/41: REL-03 의 version · CHANGELOG 최상단 reader, 06-REVIEW.md 일곱 발견; 소유자 결정 G6-Q1 ~ G6-Q3; 06-01 ~ 06-07 은 2026-10-15 계획 — 06-CONTEXT.md D-01 ~ D-14, 06-RESEARCH.md)
+**Plans**: 15/15 plans executed — 06-01 ~ 06-07 첫 실행 (검증 gaps_found 40/41), gap 수정 06-08 ~ 06-11 실행 완료 2026-10-16 (PR #2 → `main` `0038572`) — 재검증 gaps_found 60/63: CHANGELOG 최상단 reader 가 GitHub 과 갈리는 꼴 둘(한 글자 밑줄 setext · 블록 안의 `<!--`)과 smoke 의 UTF-8 아닌 출력, `06-VERIFICATION.md`; **gap 수정 2회차 06-12 ~ 06-15 는 2026-10-16 계획 · 2026-10-17 실행 완료 (PR #3 → `main` `3418989`) — 재검증 human_needed 82/82, UAT 대기 (`06-UAT.md` 둘)** — 소유자 결정 G7-Q1 (나) 첫 줄 고정 · G7-Q2 smoke 여섯 · G7-Q3 main 병합까지, 06-REVIEW.md 열 발견(아홉 fixed · IN-08 deferred), 11 waves (gap 수정 1회차 4 는 2026-10-16 계획 — 06-VERIFICATION.md 40/41: REL-03 의 version · CHANGELOG 최상단 reader, 06-REVIEW.md 일곱 발견; 소유자 결정 G6-Q1 ~ G6-Q3; 06-01 ~ 06-07 은 2026-10-15 계획 — 06-CONTEXT.md D-01 ~ D-14, 06-RESEARCH.md)
 
 Plans:
 
@@ -395,7 +395,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
 | 4. Rule Reselection | 13/13 | Complete    | 2026-10-13 |
 | 5. Documentation | 15/15 | Complete    | 2026-10-15 |
-| 6. Release | 15/15 | gap 수정 2회차 실행 완료 — 재검증 대기 (`main` `3418989`) | - |
+| 6. Release | 15/15 | 재검증 human_needed 82/82 — UAT 대기 (`06-UAT.md`) | - |
 
 ## Backlog
 
@@ -406,3 +406,12 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 **Deferred at:** 2026-10-11, `/gsd-verify-work 1` 세션 완료 시점
 **Follow-ups:**
 - [ ] Test 8: pass, 문장은 나중에 — (기록자 풀이) 8번은 통과이고, VERSIONING.md 30행에 전제 한 문장을 더하는 일만 나중으로 미룬다. 더할 내용: plugin 이나 기반 세트의 하한을 올릴 때는 새 하한 버전이 요구하는 Dart 버전을 보고, 그것이 이 패키지의 SDK 하한보다 높으면 판정 순서 1번의 첫째 조건(SDK 를 고쳐야 하나)이 예 다. 근거: riverpod_lint 3.1.9 는 Dart 3.13 이상, 3.1.3 은 3.10 이상을 요구한다 (01-VERIFICATION.md 의 coincidental_reliance_items) (deferred 2026-10-11)
+
+### Phase 999.2: Follow-up — Phase 06 재리뷰 경고 IN-10 · IN-11 (BACKLOG)
+
+**Goal:** gap 수정 2회차 뒤 재리뷰(`06-REVIEW.md`)가 찾은 info 둘을 다음에 그 파일을 손댈 때 고친다
+**Source phase:** 06
+**Deferred at:** 2026-10-17, `/gsd-execute-phase 06 --gaps-only` 검증 꼬리 (소유자 결정 — 미룸; verifier 판정 경고, 명시된 진실 밖)
+**Follow-ups:**
+- [ ] IN-10: `example/README.md` (06-08) 소절의 읽는 법 (4) · (5) 와 11행의 의존성 괄호를 06-12 뒤 동작에 맞춘다 — 지금 (5) 는 `# Changelog` 머리말이 통과한다고 현재형으로 말하지만 첫 줄 규칙 뒤로는 실패한다 (M113)
+- [ ] IN-11: `tool/smoke.dart` 의 `killTree` 재확인 — SIGSTOP 이 성공한 pid 를 기록하고 SIGKILL 직전 표에 아직 남은 것은 사슬과 상관없이 끊어, 얼린 뒤 중간 프로세스가 먼저 끝난 자기 자손이 SIGCONT 로 풀려 살아남지 않게 한다 (reviewer · verifier 재현: P → A → B 에서 A 가 첫 표 직후 끝나면 B 가 남음); 06-13 must_have 4 의 "사슬 밖은 SIGCONT" 문장과 머리 주석의 범위 문장도 함께 고친다

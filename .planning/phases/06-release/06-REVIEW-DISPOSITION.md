@@ -5,11 +5,11 @@ titles: json
 findings:
   - id: IN-10
     severity: info
-    disposition: open
+    disposition: deferred
     title: "`example/README.md` 06-08 소절의 읽는 법 (5) 가 \"지금은\" `# Changelog` 머리말이 통과한다고 말한다 — 06-12 뒤로는 실패한다 (M113)"
   - id: IN-11
     severity: info
-    disposition: open
+    disposition: deferred
     title: "`killTree` 의 SIGKILL 직전 재확인이, 얼린 뒤 중간 프로세스가 끝나 사슬에서 빠진 자기 자손을 SIGCONT 로 풀어 살려 둔다"
   - id: WR-02
     severity: warning
@@ -75,7 +75,7 @@ findings:
     severity: info
     disposition: fixed
     title: "`pubspecVersionText` 가 `pubspecReleaseVersion` 의 줄 찾기를 따로 다시 짠다"
-open: 2
+open: 0
 total: 18
 recorded: 2026-10-16T17:46:25.577Z
 ---
@@ -84,8 +84,8 @@ recorded: 2026-10-16T17:46:25.577Z
 
 | Finding | Severity | Disposition | Source |
 |---------|----------|-------------|--------|
-| IN-10 | info | open | - |
-| IN-11 | info | open | - |
+| IN-10 | info | deferred | 소유자 결정 2026-10-17 — 미룸: 다음에 example/README.md 를 손댈 때 (06-08) 소절의 읽는 법 (4) · (5) 와 11행을 06-12 뒤 동작(머리말은 실패, M113)에 맞춘다 — verifier 판정 경고 (명시된 진실 밖, 문장을 믿으면 소리 나는 실패); ROADMAP Backlog 999.2 |
+| IN-11 | info | deferred | 소유자 결정 2026-10-17 — 미룸: 다음에 tool/smoke.dart 를 손댈 때 reviewer 의 Fix (SIGSTOP 이 성공한 pid 를 기록하고 표에 아직 남은 것은 사슬과 상관없이 끊음 — SIGCONT 없앰) — verifier 판정 경고 (06-13 must_have 4 그대로, 직접 하위 명령은 끊김, 재현은 수 ms 창); ROADMAP Backlog 999.2 |
 | WR-02 | warning | fixed | 06-12-PLAN.md Task 1 (85e1b0d) — changelogTop 이 CHANGELOG.md 의 첫 줄(U+FEFF 뗀 뒤)을 엄격한 최상단 제목 ## X.Y.Z - 날짜 자리 로 요구하고 package:markdown 의 첫 h2 와 같아야 통과 — 한 글자 밑줄의 setext 는 첫 줄이 제목이 아니라 [3/10] 블록으로 실패; M107 ~ M109 (소유자 결정 G7-Q1 (나)) (not in the current review) |
 | WR-04 | warning | fixed | 06-13-PLAN.md Task 1 (9d96778) — judge 가 종료 코드 3 인데 JSON 에 error 줄이 없으면 실패 사유를 더하고 includeErrorCodes 에 included_file_parse_error 를 더함 (소유자 결정 G7-Q2) (not in the current review) |
 | WR-05 | warning | fixed | 06-12-PLAN.md Task 1 (85e1b0d) — 같은 첫 줄 규칙 — 인용 · 목록 · 단락 안에서 연 HTML 주석 여는 글자는 첫 줄이 제목이 아니라 [3/10] 블록으로 실패; M110 ~ M112 (소유자 결정 G7-Q1 (나)) (not in the current review) |
