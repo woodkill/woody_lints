@@ -1,0 +1,7 @@
+Dart 3.14.0-211.1.beta on macos
+
+pub get 실패 (<replica>/example): exit 69
+Because every version of flutter from sdk depends on sky_engine from sdk which doesn't exist (could not find package sky_engine in the Flutter SDK), flutter from sdk is forbidden.
+So, because woody_lints_example depends on flutter from sdk, version solving failed.
+
+script exit 69

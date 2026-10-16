@@ -1,0 +1,48 @@
+Dart 3.14.0-211.1.beta on macos
+
+## E0 — lib 비어 있음 (대조) — lib: empty, example: 없음, 제외: 없음
+   exit 0, 0.5s, 진단 0건 (plugin 0), plugin 폴더 0개
+## U1 — 한 파일 구조, 제외 없음 — lib: unsplit, example: 없음, 제외: 없음
+   exit 0, 9.9s, 진단 0건 (plugin 0), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+## U2 — 한 파일 구조, lib 의 옵션 파일 제외 — lib: unsplit, example: 없음, 제외: lib/analysis_options.yaml
+   exit 0, 9.9s, 진단 0건 (plugin 0), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+## S1 — 나눈 구조, 제외 없음 — lib: split, example: 없음, 제외: 없음
+   exit 0, 10.0s, 진단 0건 (plugin 0), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+## S2 — 나눈 구조, 별칭 제외 — lib: split, example: 없음, 제외: lib/analysis_options.yaml
+   exit 0, 10.1s, 진단 0건 (plugin 0), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+## S3 — 나눈 구조에서 별칭 파일만 뺌 (조각 · 묶음만) — lib: split-no-alias, example: 없음, 제외: 없음
+   exit 0, 0.5s, 진단 0건 (plugin 0), plugin 폴더 0개
+## X1 — example 만, example 제외 — lib: empty, example: 있음, 제외: example/**
+   exit 0, 0.5s, 진단 0건 (plugin 0), plugin 폴더 0개
+## X2 — example 만, 제외 없음 — lib: empty, example: 있음, 제외: 없음
+   exit 2, 3.4s, 진단 2건 (plugin 0), plugin 폴더 0개
+     example/analysis_options.yaml:1  warning  include_file_not_found — The URI 'package:woody_lints/analysis_options.yaml' included in '<replica>/example/analysis_options.yaml' can't be found when analyzing '<replica>/example'.
+     example/lib/should_not_appear.dart:5  warning  invalid_annotation_target — The annotation 'immutable' can only be used on classes, extension types, or mixins.
+## T0 — 지금의 저장소 모양 — lib: unsplit, example: 있음, 제외: lib/analysis_options.yaml · example/**
+   exit 0, 10.0s, 진단 0건 (plugin 0), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+## T1 — Phase 3 이 지을 모양 (lib 제외를 걷어냄) — lib: split, example: 있음, 제외: example/**
+   exit 0, 10.0s, 진단 0건 (plugin 0), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+## T2 — 나눈 구조, 제외를 남겨 둠 — lib: split, example: 있음, 제외: lib/analysis_options.yaml · example/**
+   exit 0, 10.0s, 진단 0건 (plugin 0), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ E0 lib 가 비어 있으면 0건이고 plugin 을 준비하지 않는다 (대조) — exit 0, 0줄, plugin 폴더 0개
+
+| id | lib | example | 루트의 제외 | exit | 진단 | plugin 폴더 | 시간 |
+|---|---|---|---|---|---|---|---|
+| E0 | empty | 없음 | 없음 | 0 | 0줄 | 0 | 0.5s |
+| U1 | unsplit | 없음 | 없음 | 0 | 0줄 | 1 | 9.9s |
+| U2 | unsplit | 없음 | lib/analysis_options.yaml | 0 | 0줄 | 1 | 9.9s |
+| S1 | split | 없음 | 없음 | 0 | 0줄 | 1 | 10.0s |
+| S2 | split | 없음 | lib/analysis_options.yaml | 0 | 0줄 | 1 | 10.1s |
+| S3 | split-no-alias | 없음 | 없음 | 0 | 0줄 | 0 | 0.5s |
+| X1 | empty | 있음 | example/** | 0 | 0줄 | 0 | 0.5s |
+| X2 | empty | 있음 | 없음 | 2 | 2줄 (include_file_not_found 1, invalid_annotation_target 1) | 0 | 3.4s |
+| T0 | unsplit | 있음 | lib/analysis_options.yaml · example/** | 0 | 0줄 | 1 | 10.0s |
+| T1 | split | 있음 | example/** | 0 | 0줄 | 1 | 10.0s |
+| T2 | split | 있음 | lib/analysis_options.yaml · example/** | 0 | 0줄 | 1 | 10.0s |
+
+# 판정
+✓ E0 lib 가 비어 있으면 0건이고 plugin 을 준비하지 않는다 (대조) — exit 0, 0줄, plugin 폴더 0개
+모두 성립 (1건)
+
+원본 결과: <repo>/.planning/spikes/016-next-sdk-forward-compat/results/root-3.14.0-211.1.beta.json
+script exit 0

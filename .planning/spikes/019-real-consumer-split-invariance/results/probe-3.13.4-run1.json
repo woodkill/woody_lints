@@ -1,0 +1,617 @@
+{
+  "dart": "3.13.4",
+  "os": "macos",
+  "consumer": {
+    "dartFiles": {
+      "lib (생성 파일 제외)": 172,
+      "lib 의 생성 파일": 62,
+      "test": 233,
+      "bin": 1
+    },
+    "generatedHeaders": {
+      "freezed: type=lint": 7,
+      "g: type=lint + type=warning": 50,
+      "g: 머리 없음": 5
+    },
+    "sdkConstraint": "^3.11.1",
+    "includesOldAddress": true,
+    "directGeneratedExcludes": true,
+    "devDependencyRiverpodLint": true,
+    "lockedWoodyLintsRef": "90a2736"
+  },
+  "lockEnforced": true,
+  "runs": [
+    {
+      "id": "V0",
+      "title": "지금 받는 그대로 — git 의존성, lock 의 커밋(1.3.0)",
+      "exitCode": 2,
+      "elapsedMs": 32038,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginFailed": false,
+      "stderrLines": 0,
+      "pluginSide": {
+        "riverpod_lint": "3.1.9",
+        "analyzer": "14.5.0",
+        "analysis_server_plugin": "0.3.24"
+      },
+      "pluginConstraint": "^3.1.3",
+      "total": 16,
+      "markerLines": [
+        "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+        "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+        "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+        "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+        "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+        "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/woody_probe_marker/main.dart:5  warning  missing_provider_scope",
+        "lib/woody_probe_marker/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/woody_probe_marker/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ],
+      "project": {
+        "total": 0,
+        "digest": "cbf29ce484222325",
+        "byArea": {},
+        "bySeverity": {},
+        "ruleByCode": {},
+        "pluginByCode": {},
+        "generated": {
+          "rule": 0,
+          "plugin": 0,
+          "byCode": {}
+        }
+      }
+    },
+    {
+      "id": "V1",
+      "title": "한 파일 구조를 옆 폴더(path)에서",
+      "exitCode": 2,
+      "elapsedMs": 27359,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginFailed": false,
+      "stderrLines": 0,
+      "pluginSide": {
+        "riverpod_lint": "3.1.9",
+        "analyzer": "14.5.0",
+        "analysis_server_plugin": "0.3.24"
+      },
+      "pluginConstraint": "^3.1.3",
+      "total": 16,
+      "markerLines": [
+        "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+        "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+        "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+        "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+        "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+        "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/woody_probe_marker/main.dart:5  warning  missing_provider_scope",
+        "lib/woody_probe_marker/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/woody_probe_marker/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ],
+      "project": {
+        "total": 0,
+        "digest": "cbf29ce484222325",
+        "byArea": {},
+        "bySeverity": {},
+        "ruleByCode": {},
+        "pluginByCode": {},
+        "generated": {
+          "rule": 0,
+          "plugin": 0,
+          "byCode": {}
+        }
+      }
+    },
+    {
+      "id": "V2",
+      "title": "나눈 구조를 옛 주소로",
+      "exitCode": 2,
+      "elapsedMs": 22203,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginFailed": false,
+      "stderrLines": 0,
+      "pluginSide": {
+        "riverpod_lint": "3.1.9",
+        "analyzer": "14.5.0",
+        "analysis_server_plugin": "0.3.24"
+      },
+      "pluginConstraint": "^3.1.3",
+      "total": 16,
+      "markerLines": [
+        "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+        "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+        "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+        "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+        "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+        "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/woody_probe_marker/main.dart:5  warning  missing_provider_scope",
+        "lib/woody_probe_marker/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/woody_probe_marker/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ],
+      "project": {
+        "total": 0,
+        "digest": "cbf29ce484222325",
+        "byArea": {},
+        "bySeverity": {},
+        "ruleByCode": {},
+        "pluginByCode": {},
+        "generated": {
+          "rule": 0,
+          "plugin": 0,
+          "byCode": {}
+        }
+      }
+    },
+    {
+      "id": "V3",
+      "title": "나눈 구조를 묶음 주소로",
+      "exitCode": 2,
+      "elapsedMs": 22528,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginFailed": false,
+      "stderrLines": 0,
+      "pluginSide": {
+        "riverpod_lint": "3.1.9",
+        "analyzer": "14.5.0",
+        "analysis_server_plugin": "0.3.24"
+      },
+      "pluginConstraint": "^3.1.3",
+      "total": 16,
+      "markerLines": [
+        "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+        "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+        "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+        "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+        "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+        "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/woody_probe_marker/main.dart:5  warning  missing_provider_scope",
+        "lib/woody_probe_marker/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/woody_probe_marker/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ],
+      "project": {
+        "total": 0,
+        "digest": "cbf29ce484222325",
+        "byArea": {},
+        "bySeverity": {},
+        "ruleByCode": {},
+        "pluginByCode": {},
+        "generated": {
+          "rule": 0,
+          "plugin": 0,
+          "byCode": {}
+        }
+      }
+    },
+    {
+      "id": "X1",
+      "title": "대조 — 나눈 구조에서 base.yaml 만",
+      "exitCode": 2,
+      "elapsedMs": 6610,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginFailed": false,
+      "stderrLines": 0,
+      "pluginSide": {
+        "riverpod_lint": null,
+        "analyzer": null,
+        "analysis_server_plugin": null
+      },
+      "pluginConstraint": null,
+      "total": 14,
+      "markerLines": [
+        "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+        "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+        "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+        "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+        "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+        "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/woody_probe_marker/should_not_appear.dart:5  warning  invalid_annotation_target"
+      ],
+      "project": {
+        "total": 0,
+        "digest": "cbf29ce484222325",
+        "byArea": {},
+        "bySeverity": {},
+        "ruleByCode": {},
+        "pluginByCode": {},
+        "generated": {
+          "rule": 0,
+          "plugin": 0,
+          "byCode": {}
+        }
+      }
+    },
+    {
+      "id": "G2u",
+      "title": "한 파일 구조 — 프리셋의 제외만 남음",
+      "exitCode": 2,
+      "elapsedMs": 20751,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginFailed": false,
+      "stderrLines": 0,
+      "pluginSide": {
+        "riverpod_lint": "3.1.9",
+        "analyzer": "14.5.0",
+        "analysis_server_plugin": "0.3.24"
+      },
+      "pluginConstraint": "^3.1.3",
+      "total": 16,
+      "markerLines": [
+        "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+        "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+        "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+        "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+        "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+        "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/woody_probe_marker/main.dart:5  warning  missing_provider_scope",
+        "lib/woody_probe_marker/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/woody_probe_marker/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ],
+      "project": {
+        "total": 0,
+        "digest": "cbf29ce484222325",
+        "byArea": {},
+        "bySeverity": {},
+        "ruleByCode": {},
+        "pluginByCode": {},
+        "generated": {
+          "rule": 0,
+          "plugin": 0,
+          "byCode": {}
+        }
+      }
+    },
+    {
+      "id": "G2s",
+      "title": "나눈 구조(옛 주소) — 프리셋의 제외만 남음",
+      "exitCode": 2,
+      "elapsedMs": 24053,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginFailed": false,
+      "stderrLines": 0,
+      "pluginSide": {
+        "riverpod_lint": "3.1.9",
+        "analyzer": "14.5.0",
+        "analysis_server_plugin": "0.3.24"
+      },
+      "pluginConstraint": "^3.1.3",
+      "total": 16,
+      "markerLines": [
+        "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+        "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+        "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+        "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+        "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+        "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/woody_probe_marker/main.dart:5  warning  missing_provider_scope",
+        "lib/woody_probe_marker/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/woody_probe_marker/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ],
+      "project": {
+        "total": 0,
+        "digest": "cbf29ce484222325",
+        "byArea": {},
+        "bySeverity": {},
+        "ruleByCode": {},
+        "pluginByCode": {},
+        "generated": {
+          "rule": 0,
+          "plugin": 0,
+          "byCode": {}
+        }
+      }
+    },
+    {
+      "id": "G3",
+      "title": "대조 — base + riverpod 만 받아 어디에도 제외가 없음",
+      "exitCode": 2,
+      "elapsedMs": 23402,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginFailed": false,
+      "stderrLines": 0,
+      "pluginSide": {
+        "riverpod_lint": "3.1.9",
+        "analyzer": "14.5.0",
+        "analysis_server_plugin": "0.3.24"
+      },
+      "pluginConstraint": "^3.1.3",
+      "total": 21,
+      "markerLines": [
+        "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+        "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+        "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+        "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+        "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+        "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/woody_probe_marker/generated/sample.freezed.dart:4  info  avoid_print",
+        "lib/woody_probe_marker/generated/sample.freezed.dart:4  info  prefer_single_quotes",
+        "lib/woody_probe_marker/generated/sample.g.dart:4  info  avoid_print",
+        "lib/woody_probe_marker/generated/sample.g.dart:4  info  prefer_single_quotes",
+        "lib/woody_probe_marker/main.dart:5  warning  missing_provider_scope",
+        "lib/woody_probe_marker/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/woody_probe_marker/riverpod_rules.dart:5  info  avoid_public_notifier_properties",
+        "lib/woody_probe_marker/should_not_appear.dart:5  warning  invalid_annotation_target"
+      ],
+      "project": {
+        "total": 0,
+        "digest": "cbf29ce484222325",
+        "byArea": {},
+        "bySeverity": {},
+        "ruleByCode": {},
+        "pluginByCode": {},
+        "generated": {
+          "rule": 0,
+          "plugin": 0,
+          "byCode": {}
+        }
+      }
+    },
+    {
+      "id": "D",
+      "title": "pubspec 에서 riverpod_lint 줄을 뺌",
+      "exitCode": 2,
+      "elapsedMs": 33101,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginFailed": false,
+      "stderrLines": 0,
+      "pluginSide": {
+        "riverpod_lint": "3.1.9",
+        "analyzer": "14.5.0",
+        "analysis_server_plugin": "0.3.24"
+      },
+      "pluginConstraint": "^3.1.3",
+      "total": 16,
+      "markerLines": [
+        "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+        "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+        "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+        "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+        "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+        "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/woody_probe_marker/main.dart:5  warning  missing_provider_scope",
+        "lib/woody_probe_marker/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/woody_probe_marker/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ],
+      "project": {
+        "total": 0,
+        "digest": "cbf29ce484222325",
+        "byArea": {},
+        "bySeverity": {},
+        "ruleByCode": {},
+        "pluginByCode": {},
+        "generated": {
+          "rule": 0,
+          "plugin": 0,
+          "byCode": {}
+        }
+      }
+    }
+  ],
+  "checks": [
+    {
+      "label": "V0 표식 파일이 정답지 16줄을 그대로 낸다 (지금 받는 그대로)",
+      "ok": true,
+      "note": "16줄"
+    },
+    {
+      "label": "V1 = V0 — 옆 폴더에서 받아도 git 으로 받은 것과 같다",
+      "ok": true,
+      "note": "16줄, exit 2"
+    },
+    {
+      "label": "V2 = V1 — 나눠도 한 줄도 달라지지 않는다 (멈춤 조건)",
+      "ok": true,
+      "note": "16줄, exit 2"
+    },
+    {
+      "label": "V3 = V2 — 묶음 주소와 옛 주소가 같다",
+      "ok": true,
+      "note": "16줄, exit 2"
+    },
+    {
+      "label": "V2 표식 파일이 정답지 16줄을 그대로 낸다 (나눈 구조)",
+      "ok": true,
+      "note": "16줄"
+    },
+    {
+      "label": "X1 대조가 다르게 나온다 — 표식 파일에서 plugin 3줄이 빠지고 annotation 1줄이 생긴다",
+      "ok": true,
+      "note": "14줄"
+    },
+    {
+      "label": "X1 대조에서 plugin 을 준비하지 않는다",
+      "ok": true,
+      "note": "plugin 폴더 0개"
+    },
+    {
+      "label": "X1 대조에서 프로젝트의 plugin 진단이 0줄이다",
+      "ok": true,
+      "note": "V2 에서는 0줄"
+    },
+    {
+      "label": "V0 에서 plugin 이 준비됐다",
+      "ok": true,
+      "note": "plugin 폴더 1개, riverpod_lint 3.1.9"
+    },
+    {
+      "label": "V1 에서 plugin 이 준비됐다",
+      "ok": true,
+      "note": "plugin 폴더 1개, riverpod_lint 3.1.9"
+    },
+    {
+      "label": "V2 에서 plugin 이 준비됐다",
+      "ok": true,
+      "note": "plugin 폴더 1개, riverpod_lint 3.1.9"
+    },
+    {
+      "label": "V3 에서 plugin 이 준비됐다",
+      "ok": true,
+      "note": "plugin 폴더 1개, riverpod_lint 3.1.9"
+    },
+    {
+      "label": "G2u 에서 plugin 이 준비됐다",
+      "ok": true,
+      "note": "plugin 폴더 1개, riverpod_lint 3.1.9"
+    },
+    {
+      "label": "G2s 에서 plugin 이 준비됐다",
+      "ok": true,
+      "note": "plugin 폴더 1개, riverpod_lint 3.1.9"
+    },
+    {
+      "label": "G3 에서 plugin 이 준비됐다",
+      "ok": true,
+      "note": "plugin 폴더 1개, riverpod_lint 3.1.9"
+    },
+    {
+      "label": "D 에서 plugin 이 준비됐다",
+      "ok": true,
+      "note": "plugin 폴더 1개, riverpod_lint 3.1.9"
+    },
+    {
+      "label": "G2s = G2u — 직접 적은 제외를 빼도 나누기 전후가 같다",
+      "ok": true,
+      "note": "16줄, exit 2"
+    }
+  ],
+  "notes": [
+    {
+      "id": "V0",
+      "woodySource": "git"
+    },
+    {
+      "label": "V0 을 원본의 lock 그대로 받았다",
+      "value": true
+    },
+    {
+      "id": "V1",
+      "woodySource": "replica"
+    },
+    {
+      "id": "V2",
+      "woodySource": "replica"
+    },
+    {
+      "id": "V3",
+      "woodySource": "replica"
+    },
+    {
+      "id": "X1",
+      "woodySource": "replica"
+    },
+    {
+      "id": "G2u",
+      "woodySource": "replica"
+    },
+    {
+      "id": "G2s",
+      "woodySource": "replica"
+    },
+    {
+      "id": "G3",
+      "woodySource": "replica"
+    },
+    {
+      "id": "D",
+      "woodySource": "replica"
+    },
+    {
+      "label": "G2s 표식 파일 — 프리셋의 제외만으로 생성 파일 샘플의 규칙 진단이 막힌다 (Dart 3.13.4 에서 =)",
+      "same": true,
+      "note": "16줄"
+    },
+    {
+      "label": "G3 표식 파일 — 제외가 없으면 생성 파일 샘플 4줄과 annotation 1줄이 생긴다 (대조)",
+      "same": true,
+      "note": "21줄"
+    },
+    {
+      "label": "D = V2 — dev_dependencies 의 riverpod_lint 줄은 진단에 영향이 없다",
+      "same": true,
+      "note": "16줄, exit 2"
+    },
+    {
+      "label": "G3 의 invalid_annotation_target",
+      "value": 0
+    }
+  ]
+}

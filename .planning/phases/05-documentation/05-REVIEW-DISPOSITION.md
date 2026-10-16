@@ -1,0 +1,168 @@
+---
+phase: 05
+review: 05-REVIEW.md
+titles: json
+findings:
+  - id: WR-06
+    severity: warning
+    disposition: deferred
+    title: "`.claude/CLAUDE.md` 의 고친 두 줄 옆에 저장소와 어긋나는 지시가 남아 있다"
+  - id: WR-07
+    severity: warning
+    disposition: skipped
+    title: "README 검사 (e) 가 `package:` 로 정확히 시작하지 않는 include 주소를 보지 않는다 — scheme 오타로 10개 중 10개"
+  - id: WR-08
+    severity: warning
+    disposition: skipped
+    title: "README 검사 (f) · (g) 가 flow 표기에 적힌 plugin 버전 · `ref:` 를 보지 않는다 — 낡은 값으로 10개 중 10개"
+  - id: WR-09
+    severity: warning
+    disposition: skipped
+    title: "`fencedLines` 가 펜스가 아닌 코드 블록을 보지 않는다 — 들여쓴 코드 블록의 낡은 `ref:` 로 10개 중 10개"
+  - id: WR-12
+    severity: warning
+    disposition: skipped
+    title: "(d′) 의 절 경계가 HTML 주석 안의 `#` 줄 · 4칸 들여 쓴 ```` ``` ```` 를 제목 · 펜스로 본다 — 렌더링된 「받는 규칙」 목록 바로 아래의 불릿으로 10개 중 10개"
+  - id: WR-13
+    severity: warning
+    disposition: skipped
+    title: "README 검사 (f) · (g) 가 따옴표로 감싼 키 · 콜론 앞 공백(`\"ref\":` · `'riverpod_lint':` · `ref :`)을 후보로 보지 않는다 — 낡은 값으로 10개 중 10개, 좁힌 문장은 \"모두 후보로\""
+  - id: WR-14
+    severity: warning
+    disposition: skipped
+    title: "(e) 의 다른 패키지 주소 검사는 `.yaml` · `.yml` 로 끝나는 주소만 보는데, 좁힌 문장과 문서 주석은 \"`package:` 로 정확히 시작하는 주소가 꼴이 아니면 실패\" 라고 적는다 — `package:woody-lints/riverpod` 로 10개 중 10개"
+  - id: IN-08
+    severity: info
+    disposition: skipped
+    title: "(e) 의 주소 끝 판정이 문장 부호를 모른다 — 맞는 주소의 거짓 실패와 다른 패키지 주소의 누락이 한 줄에서 함께 난다"
+  - id: IN-10
+    severity: info
+    disposition: skipped
+    title: "(f) · (g) 의 범위 문장이 펜스 안의 네 칸 들여 쓴 ```` ``` ```` 줄을 적지 않는다 — 그 줄이 `fencedLines` 의 펜스를 닫아 진짜 펜스 안의 낡은 `ref:` 로 통과"
+  - id: IN-12
+    severity: info
+    disposition: deferred
+    title: "(h) 가 값 없는 최상위 키 바로 아래의 스칼라 값 줄을 \"아래 키\" 로 센다 — `include:` 값을 다음 줄에 적은 `lib/base.yaml` 로 analyzer · 정답지는 모두 통과인데 `[3/10]` 만 실패"
+  - id: IN-13
+    severity: info
+    disposition: deferred
+    title: "`pubspec.yaml` 의 `dependencies` 주석이 `include: package:flutter_lints/flutter.yaml` 을 쓰는 파일을 `lib/analysis_options.yaml` 로 적는다 — 지금은 `lib/base.yaml`"
+  - id: IN-14
+    severity: info
+    disposition: deferred
+    title: "`compareLineReadersWithYaml` 문서 주석의 \"그 밖의 예외는 지금처럼 main 이 받는다\" 가 맞지 않는다 — `loadYaml` 의 `RangeError` 는 main 을 지나 종료 코드 255"
+  - id: WR-15
+    severity: warning
+    disposition: fixed
+    title: "`pubspecReleaseVersion` 이 여러 줄 따옴표 스칼라 안의 `version:` 줄을 읽는다 — pub 은 진짜 `version:` 을 읽는데 README 의 낡은 `ref:` 로 10개 중 10개"
+  - id: WR-16
+    severity: warning
+    disposition: fixed
+    title: "`declaredRuleNames` · `enabledLanguageOptions` 가 여러 줄 스칼라(따옴표 · 블록) 안의 줄을 규칙 · 옵션으로 읽는다 — 사용 프로젝트에 닿지 않는 규칙 · 옵션을 `RULES.md` · README 가 켰다고 적는데 10개 중 10개"
+  - id: IN-11
+    severity: info
+    disposition: fixed
+    title: "`stripPlugins` 문서 주석의 \"복사본의 줄 수 … 가 원본과 같다\" 가 `plugins:` 섹션이 파일 끝일 때 맞지 않는다"
+  - id: WR-11
+    severity: warning
+    disposition: fixed
+    title: "(a′) · `declaredRuleNames` 가 `\\n` 으로만 줄을 나눈다 — 주석 줄 끝의 CR(`\\r`) 뒤에 둔 키 · 규칙이 사용 프로젝트에 닿는데 10개 중 10개"
+  - id: IN-09
+    severity: info
+    disposition: fixed
+    title: "(a′) 가 들어온 뒤 M35 · M37 의 `[3/10]` 출력이 바뀌었는데, 05-10 소절은 M46 만 짚는다"
+  - id: WR-10
+    severity: warning
+    disposition: fixed
+    title: "`[3/10]` 이 조각의 `linter:` 밖 키를 보지 않는다 — `lib/codegen.yaml` 의 `language:` 옵션 · `formatter:` 가 사용 프로젝트에 닿는데 10개 중 10개"
+  - id: WR-01
+    severity: warning
+    disposition: fixed
+    title: "README 검사 (e) 가 모양이 틀린 프리셋 주소를 조용히 건너뛴다 — 오타 주소로 통과"
+  - id: WR-02
+    severity: warning
+    disposition: fixed
+    title: "README 검사 (f) · (g) 가 따옴표 · 줄 끝 주석 · 두 자리 버전 값을 조용히 건너뛴다 — 낡은 값으로 통과"
+  - id: WR-03
+    severity: warning
+    disposition: fixed
+    title: "`fencedLines` 가 ``` 펜스만 안다 — `~~~` 코드 블록의 값은 (f) · (g) 가 보지 않는다"
+  - id: WR-04
+    severity: warning
+    disposition: fixed
+    title: "(b′) 가 flow 표기 `linter: {rules: [...]}` 로 다른 조각에 적은 규칙을 보지 못한다 — 사용 프로젝트는 받는데 검증은 10개 중 10개"
+  - id: WR-05
+    severity: warning
+    disposition: fixed
+    title: "`readShippedPluginConstraint` 가 YAML 토큰을 그대로 돌려주고 올바른 꼴 셋을 거부한다 — 70 이나 통과할 수 없는 `[3/N]` · `[4/N]`"
+  - id: IN-01
+    severity: info
+    disposition: fixed
+    title: "`pubspecReleaseVersion` 이 따옴표로 감싼 `version:` 에서 종료 코드 70"
+  - id: IN-02
+    severity: info
+    disposition: fixed
+    title: "CHANGELOG 2.0.0 의 \"내용은 1.3.0 과 같다\" 가 같은 절의 다른 항목과 어긋난다"
+  - id: IN-03
+    severity: info
+    disposition: fixed
+    title: "README 「프리셋 고르기」 의 \"그 연습용 프로젝트의 정답지로 확인\" 이 묶음에는 맞지 않는다"
+  - id: IN-04
+    severity: info
+    disposition: fixed
+    title: "plugin 하한을 올릴 때 함께 고칠 자리가 두 문서에 반씩 적혀 있다"
+  - id: IN-05
+    severity: info
+    disposition: fixed
+    title: "`tool/verify.dart` 문서 주석의 단계 번호가 `[2/4]` · `[1/4]` 로 남아 있다"
+  - id: IN-06
+    severity: info
+    disposition: fixed
+    title: "`readBulletBlock` 이 `readRulesMdBlock` 의 마커 처리를 복제하고, 결과 타입 이름이 README 에 맞지 않는다"
+  - id: IN-07
+    severity: info
+    disposition: fixed
+    title: "README 「받는 규칙」 의 분류는 검사되지 않는다"
+open: 0
+total: 30
+recorded: 2026-10-14T22:09:33.972Z
+---
+
+# Phase 05: Code Review Disposition
+
+| Finding | Severity | Disposition | Source |
+|---------|----------|-------------|--------|
+| WR-06 | warning | deferred | D-09 — 마일스톤 끝 /gsd-map-codebase 에서 고친다 (70 · 173 · 313행의 "유지해야 한다" 지시 포함, 소유자 결정 2026-10-14) |
+| WR-07 | warning | skipped | 소유자 결정 G2-Q2 — 문장을 검사 범위에 맞춤, 검사는 넓히지 않음; 05-10-PLAN.md Task 3 (d2d74c4) — example/README.md 116 · 358 · 436행과 tool/verify.dart 의 (e) 주석이 (e) 의 후보를 package: 로 정확히 시작하는 주소로 적음 (scheme 오타 · package: 뒤 공백은 범위 밖, 주석은 G2-Q5) |
+| WR-08 | warning | skipped | 소유자 결정 G2-Q2 — 문장을 검사 범위에 맞춤, 검사는 넓히지 않음; 05-10-PLAN.md Task 3 (d2d74c4) — README.md 382행 · example/README.md 116 · 395행 · tool/verify.dart 의 (f) · (g) 주석이 펜스 안에서 키가 줄 머리에 오는 줄로 적음 (flow 표기 안의 키는 범위 밖) |
+| WR-09 | warning | skipped | 소유자 결정 G2-Q2 — 문장을 검사 범위에 맞춤, 검사는 넓히지 않음; 05-10-PLAN.md Task 3 (d2d74c4) — README.md 382행 · example/README.md 116 · 395행 · tool/verify.dart 의 fencedLines · (f) · (g) 주석이 펜스 코드 블록만 본다고 적음 (들여 쓴 코드 블록 · 인용 안의 펜스는 범위 밖) |
+| WR-12 | warning | skipped | 소유자 결정 G3-Q3 — 정의를 문장에 적음, 검사는 고치지 않음; 05-12-PLAN.md Task 2 (d8b61b0) — example/README.md 116 · 549행이 제목 · 펜스 판정은 HTML 주석 안의 # 줄과 네 칸 들여 쓴 펜스 줄을 가리지 않는다고 적음 |
+| WR-13 | warning | skipped | 소유자 결정 G3-Q2 — 문장을 검사 범위에 맞춤, 검사는 넓히지 않음; 05-12-PLAN.md Task 2 (d8b61b0) — README.md 382행 · example/README.md 116 · 395행 · tool/verify.dart 의 (f) · (g) 주석이 키는 따옴표 · 콜론 앞 공백 없이 글자 그대로인 줄만 후보라고 적음 |
+| WR-14 | warning | skipped | 소유자 결정 G3-Q2 — 문장을 검사 범위에 맞춤, 검사는 넓히지 않음; 05-12-PLAN.md Task 2 (d8b61b0) — example/README.md 116행 · tool/verify.dart 의 (e) 문서 주석이 다른 패키지 쪽은 .yaml · .yml 로 끝나는 주소만 본다고 적음 |
+| IN-08 | info | skipped | 소유자 결정 G2-Q2 — 문장을 검사 범위에 맞춤, 검사는 넓히지 않음; 05-10-PLAN.md Task 3 (d2d74c4) — example/README.md 116 · 436행과 tool/verify.dart 의 (e) 주석이 주소의 끝 글자와 뒤에 붙은 문장 부호의 결과를 적음 |
+| IN-10 | info | skipped | 소유자 결정 G4-Q2 — 문장을 실제 범위에 맞춤, 검사는 고치지 않음; 05-14-PLAN.md Task 2 (0f62057) — README.md 382행 · example/README.md 116 · 395행 · tool/verify.dart 의 fencedLines · checkShippedComposition 문서 주석이 펜스 안의 네 칸 이상 들여 쓴 펜스 줄은 그 펜스를 닫는 것으로 본다고 적음 |
+| IN-12 | info | deferred | 권고 이유 승인 — Phase 6 (Release) 로 미룸, 소유자 결정 2026-10-15: 막는 쪽의 거짓 실패이고 지금 lib/base.yaml 은 그 꼴을 쓰지 않음, 고치는 자리는 (h) 의 keysSeenByLineReader 하나 (길 B 안) — 05-VERIFICATION 4회차 재검증 경고 |
+| IN-13 | info | deferred | 권고 이유 승인 — Phase 6 (Release) 로 미룸, 소유자 결정 2026-10-15: 동작 영향 없는 주석이고 Phase 6 이 pubspec.yaml 의 version 을 바꿀 때 함께 고침 (05-14 가 기존 줄을 막아 새 승인이 필요했던 자리) — 05-VERIFICATION 4회차 재검증 경고 |
+| IN-14 | info | deferred | 권고 이유 승인 — Phase 6 (Release) 로 미룸, 소유자 결정 2026-10-15: RangeError 는 종료 코드 255 로 멈춰 통과로 끝나지 않음 (막는 쪽), catch 하나나 주석 한 줄 (길 B 안) — 05-VERIFICATION 4회차 재검증 경고 |
+| WR-15 | warning | fixed | 05-14-PLAN.md Task 1 (77e0b88) — tool/verify.dart 의 [3/10] (h) compareLineReadersWithYaml 이 pubspecReleaseVersion 의 값을 package:yaml 이 읽은 version 과 견줌, pubspec.yaml 의 dev_dependencies 에 yaml, M87 (소유자 결정 G4-Q1 — 05-VERIFICATION 4회차 gap) (not in the current review) |
+| WR-16 | warning | fixed | 05-14-PLAN.md Task 1 (77e0b88) — tool/verify.dart 의 [3/10] (h) compareLineReadersWithYaml 이 declaredRuleNames · enabledLanguageOptions · findUnexpectedKeys · readShippedPluginConstraint 의 값을 package:yaml 이 읽은 값과 견줌, M86 · M88 ~ M91 (소유자 결정 G4-Q1 — 05-VERIFICATION 4회차 gap) (not in the current review) |
+| IN-11 | info | fixed | 05-14-PLAN.md Task 2 (0f62057) — tool/verify.dart 의 stripPlugins 문서 주석을 줄 번호가 원본과 같다 (끝의 빈 줄은 빠질 수 있다) 로 (소유자 결정 G4-Q2) (not in the current review) |
+| WR-11 | warning | fixed | 05-12-PLAN.md Task 1 (d771c0c) — tool/verify.dart 의 YAML 을 줄로 나누는 자리 여섯(findUnexpectedKeys · declaredRuleNames · enabledLanguageOptions · stripPlugins · readShippedPluginConstraint · checkRuleNames 의 copyLines)과 pubspecReleaseVersion 을 splitYamlLines (LineSplitter — CR · LF · CRLF) 로, M79 ~ M85 (소유자 결정 G3-Q1 · G3-R2-Q1 — 05-VERIFICATION 3회차 gap) (not in the current review) |
+| IN-09 | info | fixed | 05-12-PLAN.md Task 2 (d8b61b0) — example/README.md 518행의 읽는 법을 M35 · M37 · M46 으로 넓힘 (소유자 결정 G3-Q3) (not in the current review) |
+| WR-10 | warning | fixed | 05-10-PLAN.md Task 1 (02966c4) — 조각마다 받는 최상위 키와 lib/codegen.yaml 의 analyzer: · lib/riverpod.yaml 의 plugins: 아래 키를 닫힌 목록으로, M68 ~ M73 · M78 (소유자 결정 G2-Q1 · G2-Q4 — 05-VERIFICATION 2회차 gap 과 함께) (not in the current review) |
+| WR-01 | warning | fixed | 05-08-PLAN.md Task 2 (63fe3d9) — (e) 가 후보를 모두 모아 꼴이 아닌 주소 · 다른 패키지의 주소를 실패, M54 · M55 (not in the current review) |
+| WR-02 | warning | fixed | 05-07-PLAN.md Task 3 (73f1c66) — (f) · (g) 가 따옴표 · 줄 끝 주석을 벗겨 읽고 꼴이 틀린 값을 실패, M47 ~ M50 (not in the current review) |
+| WR-03 | warning | fixed | 05-08-PLAN.md Task 2 (63fe3d9) — fencedLines 가 펜스 문자 · 길이를 기억, M56 ~ M58 (not in the current review) |
+| WR-04 | warning | fixed | 05-07-PLAN.md Task 2 (057bef2) — linter: 줄에 붙은 flow 표기를 FormatException (70), M45 · M46 (not in the current review) |
+| WR-05 | warning | fixed | 05-09-PLAN.md Task 1 (644897f) — 따옴표 · 고정 버전 · 맵 안의 키 순서, 범위 제약은 원인을 말하는 70, M63 ~ M66 (not in the current review) |
+| IN-01 | info | fixed | 05-09-PLAN.md Task 1 (644897f) — 따옴표 version, M67 (not in the current review) |
+| IN-02 | info | fixed | 05-09-PLAN.md Task 2 (e46cff4) — CHANGELOG 2.0.0 그 밖의 변경 첫 불릿의 '옮기기만 했다' 를 나누는 변경 자체로 한정 (not in the current review) |
+| IN-03 | info | fixed | 05-09-PLAN.md Task 2 (e46cff4) — README 45행: 묶음(recommended)은 자기 정답지 없이 같은 실행의 example/ 결과와 견준다 (not in the current review) |
+| IN-04 | info | fixed | 05-09-PLAN.md Task 2 (e46cff4) — 함께 고칠 자리 셋을 README 382행 한 곳에, lib/riverpod.yaml 5행 주석이 같은 셋과 README 를 가리킴 (not in the current review) |
+| IN-05 | info | fixed | 05-09-PLAN.md Task 1 (644897f) — [1/N] · [2/N] (not in the current review) |
+| IN-06 | info | fixed | 05-07-PLAN.md Task 1 (5f43726) — readMarkerBlock · MarkerBlock (not in the current review) |
+| IN-07 | info | fixed | 05-09-PLAN.md Task 2 (e46cff4) — README 91행: 검증 명령은 이름만 견주고 분류는 보지 않는다 (D-16 유지, 분류 검사는 더하지 않음) (not in the current review) |
+
+Dispositions: `open` (recorded, not yet triaged), `fixed`, `skipped`, `deferred`.
+Set `deferred` by hand and put the reason in the Source cell; both are preserved. A `|` in the reason is kept as prose and escaped on the next run.
+Re-running the gate keeps every row it can. A row the current review no longer reports is kept and its Source cell flagged, so a finding does not leave this record silently. ONE exception: when a finding id is REUSED by a different finding, the earlier decision cannot keep a row — the id is taken — and it is dropped. A RECORDED decision (anything but `open`) is named on the console when that happens; a row still at `open` is replaced silently, because `open` records no decision to lose.

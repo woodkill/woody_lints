@@ -1,0 +1,8 @@
+# 생성 코드가 필요한 예제만 lib/gen/ 에 두고 거기만 생성한다.
+# lib/ 바로 아래의 예제는 일부러 문법을 어긴 것이라 generator 가 실패한다.
+targets:
+  $default:
+    builders:
+      riverpod_generator:
+        generate_for:
+          - lib/gen/**

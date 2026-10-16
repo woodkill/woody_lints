@@ -1,0 +1,26 @@
+Dart 3.13.4 on macos
+
+# contention — 같은 상태 폴더를 두 실행이 함께 쓸 때
+| 경우 | 첫째 | 둘째 |
+|---|---|---|
+| 처음 실행 둘을 동시에 #1 | 통과 (exit 2, 16.9s, 진단 4건) | 통과 (exit 2, 16.9s, 진단 4건) |
+| 처음 실행 둘을 동시에 #2 | 통과 (exit 2, 16.8s, 진단 4건) | 통과 (exit 2, 16.8s, 진단 4건) |
+| 처음 실행 둘을 동시에 #3 | 통과 (exit 2, 16.8s, 진단 4건) | 통과 (exit 2, 16.8s, 진단 4건) |
+| 처음 실행 둘을 동시에 #4 | 통과 (exit 2, 16.7s, 진단 4건) | 통과 (exit 2, 16.7s, 진단 4건) |
+| 처음 실행 둘을 동시에 #5 | 통과 (exit 2, 16.2s, 진단 4건) | 실패 (exit 0, 13.5s, 진단 2건, stderr: File truncated before or at offset 0x0. / Loading dynamic library failed: dlopen(<work>/state/pair-cold-5/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot, 0x0001): tried: '<work>/state/pair-cold-5/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' (), '/System/Volumes/Preboot/Cryptexes/OS<work>/state/pair-cold-5/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' (no such file), '<work>/state/pair-cold-5/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' ()) |
+| 처음 실행, 둘째를 3초 늦게 | 통과 (exit 2, 16.1s, 진단 4건) | 통과 (exit 2, 13.9s, 진단 4건) |
+| 처음 실행, 둘째를 8초 늦게 | 통과 (exit 2, 15.7s, 진단 4건) | 통과 (exit 2, 13.7s, 진단 4건) |
+| 처음 실행, 둘째를 12초 늦게 | 통과 (exit 2, 15.6s, 진단 4건) | 통과 (exit 2, 4.2s, 진단 4건) |
+| 준비된 상태에서 둘을 동시에 #1 | 통과 (exit 2, 3.9s, 진단 4건) | 통과 (exit 2, 3.9s, 진단 4건) |
+| 준비된 상태에서 둘을 동시에 #2 | 통과 (exit 2, 4.0s, 진단 4건) | 통과 (exit 2, 4.0s, 진단 4건) |
+| 준비된 상태에서 둘을 동시에 #3 | 통과 (exit 2, 4.0s, 진단 4건) | 통과 (exit 2, 4.0s, 진단 4건) |
+| 준비된 상태에서 둘을 동시에 #4 | 통과 (exit 2, 3.9s, 진단 4건) | 통과 (exit 2, 3.9s, 진단 4건) |
+| 준비된 상태에서 둘을 동시에 #5 | 통과 (exit 2, 4.0s, 진단 4건) | 통과 (exit 2, 4.0s, 진단 4건) |
+| 준비된 상태에서 둘을 동시에 #6 | 통과 (exit 2, 4.0s, 진단 4건) | 통과 (exit 2, 4.0s, 진단 4건) |
+| 준비된 상태에서 둘을 동시에 #7 | 통과 (exit 2, 3.9s, 진단 4건) | 통과 (exit 2, 4.0s, 진단 4건) |
+| 준비된 상태에서 둘을 동시에 #8 | 통과 (exit 2, 4.0s, 진단 4건) | 통과 (exit 2, 3.9s, 진단 4건) |
+| 대조군: 상태 폴더를 따로 주고 처음 실행 둘을 동시에 #1 | 통과 (exit 2, 17.0s, 진단 4건) | 통과 (exit 2, 17.3s, 진단 4건) |
+| 대조군: 상태 폴더를 따로 주고 처음 실행 둘을 동시에 #2 | 통과 (exit 2, 17.0s, 진단 4건) | 통과 (exit 2, 17.0s, 진단 4건) |
+
+실패가 있은 쌍: 1/18
+

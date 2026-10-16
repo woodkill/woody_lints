@@ -1,0 +1,212 @@
+{
+  "dart": "3.13.4",
+  "riverpodLint": "3.1.9",
+  "fullRun": {
+    "exitCode": 3,
+    "stderr": "",
+    "lines": [
+      "lib/gen/r04b_protected_notifier_properties.dart:20  info  protected_notifier_properties",
+      "lib/gen/r07_provider_dependencies.dart:10  warning  provider_dependencies",
+      "lib/gen/r08_scoped_providers_should_specify_dependencies.dart:14  warning  scoped_providers_should_specify_dependencies",
+      "lib/gen/r09_avoid_build_context_in_providers.dart:8  info  avoid_build_context_in_providers",
+      "lib/gen/r10_unsupported_provider_value.dart:14  warning  unsupported_provider_value",
+      "lib/gen/r14_only_use_keep_alive_inside_keep_alive.dart:11  warning  only_use_keep_alive_inside_keep_alive",
+      "lib/r01_missing_provider_scope.dart:5  warning  missing_provider_scope",
+      "lib/r02_provider_parameters.dart:8  warning  provider_parameters",
+      "lib/r03_avoid_public_notifier_properties.dart:5  info  avoid_public_notifier_properties",
+      "lib/r05_avoid_ref_inside_state_dispose.dart:19  warning  avoid_ref_inside_state_dispose",
+      "lib/r06_async_value_nullable_pattern.dart:6  warning  async_value_nullable_pattern",
+      "lib/r11_functional_ref.dart:5  warning  functional_ref",
+      "lib/r12_notifier_extends.dart:5  warning  notifier_extends",
+      "lib/r13_notifier_build.dart:8  warning  notifier_build",
+      "lib/r15_riverpod_syntax_error.dart:6  error  riverpod_syntax_error"
+    ]
+  },
+  "perRule": {
+    "async_value_nullable_pattern": {
+      "severity": "WARNING",
+      "type": "STATIC_WARNING",
+      "code": "async_value_nullable_pattern",
+      "location": "lib/r06_async_value_nullable_pattern.dart:6",
+      "hitsInFullRun": 1,
+      "soloExitCode": 2,
+      "soloPluginCodes": [
+        "async_value_nullable_pattern"
+      ],
+      "soloStderr": ""
+    },
+    "avoid_build_context_in_providers": {
+      "severity": "INFO",
+      "type": "STATIC_WARNING",
+      "code": "avoid_build_context_in_providers",
+      "location": "lib/gen/r09_avoid_build_context_in_providers.dart:8",
+      "hitsInFullRun": 1,
+      "soloExitCode": 0,
+      "soloPluginCodes": [
+        "avoid_build_context_in_providers"
+      ],
+      "soloStderr": "An unexpected error was encountered by the Analysis Server.\nPlease file an issue at https://github.com/dart-lang/sdk/issues/new/choose with the following details:\n\nUnsupported operation: RiverpodAnalysisError found but no errorReporter specified: RiverpodAnalysisError: Classes annotated with @riverpod cannot be abstract. ; node: @riverpod abstract class AbstractNotifier extends _$AbstractNotifier {int build() => 0;} (ClassDeclarationImpl)\n#0      errorReporter.<anonymous closure> (package:riverpod_analyzer_utils/src/errors.dart:6)\n#1      ClassBasedProviderDeclarationX.provider.<anonymous closure> (package:riverpod_analyzer_utils/src/nodes/generated_providers/notifier.dart:16)\n#2      ExpandoUtils.upsert (package:riverpod_analyzer_utils/src/analyzer_utils.dart:17)\n#3      ClassBasedProviderDeclarationX.provider (package:riverpod_analyzer_utils/src/nodes/generated_providers/notifier.dart:8)\n#4      _Visitor.visitClassDeclaration (package:riverpod_lint/src/lints/avoid_build_context_in_providers.dart:58)\n#5      ClassDeclarationImpl.accept (package:analyzer/src/dart/ast/ast.dart:7635)\n#6      AnalysisRuleVisitor._runSubscriptions (package:analyzer/src/lint/linter_visitor.g.dart:1187)\n#7      AnalysisRuleVisitor.visitClassDeclaration (package:analyzer/src/lint/linter_visitor.g.dart:175)\n#8      ClassDeclarationImpl.accept (package:analyzer/src/dart/ast/ast.dart:7635)\n#9      _V1ProjectedNodeListImpl.accept (package:analyzer/src/dart/ast/ast.dart:59046)\n#10     CompilationUnitImpl.visitChildren (package:analyzer/src/dart/ast/ast.dart:9394)\n#11     AnalysisRuleVisitor.visitCompilationUnit (package:analyzer/src/lint/linter_visitor.g.dart:200)\n#12     CompilationUnitImpl.accept (package:analyzer/src/dart/ast/ast.dart:9285)\n#13     PluginServer._computeDiagnosticsFromPlugin (package:analysis_server_plugin/src/plugin_server.dart:606)\n#14     PluginServer._analyzeAndSendDiagnostics.<anonymous closure> (package:analysis_server_plugin/src/plugin_server.dart:417)\n#15     _rootRun (dart:async/zone_root.dart:35)\n#16     _CustomZone.run (dart:async/zone.dart:810)\n#17     _runZoned (dart:async/zone_api.dart:165)\n#18     runZonedGuarded (dart:async/zone_api.dart:151)\n#19     PluginServer._analyzeAndSendDiagnostics (package:analysis_server_plugin/src/plugin_server.dart:416)\n#20     PluginServer._handleResolvedUnit (package:analysis_server_plugin/src/plugin_server.dart:1144)\n<asynchronous suspension>\n\nAn unexpected error was encountered by the Analysis Server.\nPlease file an issue at https://github.com/dart-lang/sdk/issues/new/choose with the following details:\n\nUnsupported operation: RiverpodAnalysisError found but no errorReporter specified: RiverpodAnalysisError: No \"build\" method found. Classes annotated with @riverpod must define a method named \"build\". ; node: @riverpod class NoBuild extends _$NoBuild {} (ClassDeclarationImpl)\n#0      errorReporter.<anonymous closure> (package:riverpod_analyzer_utils/src/errors.dart:6)\n#1      ClassBasedProviderDeclarationX.provider.<anonymous closure> (package:riverpod_analyzer_utils/src/nodes/generated_providers/notifier.dart:55)\n#2      ExpandoUtils.upsert (package:riverpod_analyzer_utils/src/analyzer_utils.dart:17)\n#3      ClassBasedProviderDeclarationX.provider (package:riverpod_analyzer_utils/src/nodes/generated_providers/notifier.dart:8)\n#4      _Visitor.visitClassDeclaration (package:riverpod_lint/src/lints/avoid_build_context_in_providers.dart:58)\n#5      ClassDeclarationImpl.accept (package:analyzer/src/dart/ast/ast.dart:7635)\n#6      AnalysisRuleVisitor._runSubscriptions (package:analyzer/src/lint/linter_visitor.g.dart:1187)\n#7      AnalysisRuleVisitor.visitClassDeclaration (package:analyzer/src/lint/linter_visitor.g.dart:175)\n#8      ClassDeclarationImpl.accept (package:analyzer/src/dart/ast/ast.dart:7635)\n#9      _V1ProjectedNodeListImpl.accept (package:analyzer/src/dart/ast/ast.dart:59046)\n#10     CompilationUnitImpl.visitChildren (package:analyzer/src/dart/ast/ast.dart:9394)\n#11     AnalysisRuleVisitor.visitCompilationUnit (package:analyzer/src/lint/linter_visitor.g.dart:200)\n#12     CompilationUnitImpl.accept (package:analyzer/src/dart/ast/ast.dart:9285)\n#13     PluginServer._computeDiagnosticsFromPlugin (package:analysis_server_plugin/src/plugin_server.dart:606)\n#14     PluginServer._analyzeAndSendDiagnostics.<anonymous closure> (package:analysis_server_plugin/src/plugin_server.dart:417)\n#15     _rootRun (dart:async/zone_root.dart:35)\n#16     _CustomZone.run (dart:async/zone.dart:810)\n#17     _runZoned (dart:async/zone_api.dart:165)\n#18     runZonedGuarded (dart:async/zone_api.dart:151)\n#19     PluginServer._analyzeAndSendDiagnostics (package:analysis_server_plugin/src/plugin_server.dart:416)\n#20     PluginServer._handleResolvedUnit (package:analysis_server_plugin/src/plugin_server.dart:1144)\n<asynchronous suspension>"
+    },
+    "avoid_public_notifier_properties": {
+      "severity": "INFO",
+      "type": "STATIC_WARNING",
+      "code": "avoid_public_notifier_properties",
+      "location": "lib/r03_avoid_public_notifier_properties.dart:5",
+      "hitsInFullRun": 1,
+      "soloExitCode": 0,
+      "soloPluginCodes": [
+        "avoid_public_notifier_properties"
+      ],
+      "soloStderr": ""
+    },
+    "avoid_ref_inside_state_dispose": {
+      "severity": "WARNING",
+      "type": "STATIC_WARNING",
+      "code": "avoid_ref_inside_state_dispose",
+      "location": "lib/r05_avoid_ref_inside_state_dispose.dart:19",
+      "hitsInFullRun": 1,
+      "soloExitCode": 2,
+      "soloPluginCodes": [
+        "avoid_ref_inside_state_dispose"
+      ],
+      "soloStderr": ""
+    },
+    "functional_ref": {
+      "severity": "WARNING",
+      "type": "STATIC_WARNING",
+      "code": "functional_ref",
+      "location": "lib/r11_functional_ref.dart:5",
+      "hitsInFullRun": 1,
+      "soloExitCode": 2,
+      "soloPluginCodes": [
+        "functional_ref"
+      ],
+      "soloStderr": ""
+    },
+    "missing_provider_scope": {
+      "severity": "WARNING",
+      "type": "STATIC_WARNING",
+      "code": "missing_provider_scope",
+      "location": "lib/r01_missing_provider_scope.dart:5",
+      "hitsInFullRun": 1,
+      "soloExitCode": 2,
+      "soloPluginCodes": [
+        "missing_provider_scope"
+      ],
+      "soloStderr": ""
+    },
+    "notifier_build": {
+      "severity": "WARNING",
+      "type": "STATIC_WARNING",
+      "code": "notifier_build",
+      "location": "lib/r13_notifier_build.dart:8",
+      "hitsInFullRun": 1,
+      "soloExitCode": 2,
+      "soloPluginCodes": [
+        "notifier_build"
+      ],
+      "soloStderr": ""
+    },
+    "notifier_extends": {
+      "severity": "WARNING",
+      "type": "STATIC_WARNING",
+      "code": "notifier_extends",
+      "location": "lib/r12_notifier_extends.dart:5",
+      "hitsInFullRun": 1,
+      "soloExitCode": 2,
+      "soloPluginCodes": [
+        "notifier_extends"
+      ],
+      "soloStderr": "An unexpected error was encountered by the Analysis Server.\nPlease file an issue at https://github.com/dart-lang/sdk/issues/new/choose with the following details:\n\nUnsupported operation: RiverpodAnalysisError found but no errorReporter specified: RiverpodAnalysisError: Classes annotated with @riverpod cannot be abstract. ; node: @riverpod abstract class AbstractNotifier extends _$AbstractNotifier {int build() => 0;} (ClassDeclarationImpl)\n#0      errorReporter.<anonymous closure> (package:riverpod_analyzer_utils/src/errors.dart:6)\n#1      ClassBasedProviderDeclarationX.provider.<anonymous closure> (package:riverpod_analyzer_utils/src/nodes/generated_providers/notifier.dart:16)\n#2      ExpandoUtils.upsert (package:riverpod_analyzer_utils/src/analyzer_utils.dart:17)\n#3      ClassBasedProviderDeclarationX.provider (package:riverpod_analyzer_utils/src/nodes/generated_providers/notifier.dart:8)\n#4      _Visitor.visitClassDeclaration (package:riverpod_lint/src/lints/notifier_extends.dart:87)\n#5      ClassDeclarationImpl.accept (package:analyzer/src/dart/ast/ast.dart:7635)\n#6      AnalysisRuleVisitor._runSubscriptions (package:analyzer/src/lint/linter_visitor.g.dart:1187)\n#7      AnalysisRuleVisitor.visitClassDeclaration (package:analyzer/src/lint/linter_visitor.g.dart:175)\n#8      ClassDeclarationImpl.accept (package:analyzer/src/dart/ast/ast.dart:7635)\n#9      _V1ProjectedNodeListImpl.accept (package:analyzer/src/dart/ast/ast.dart:59046)\n#10     CompilationUnitImpl.visitChildren (package:analyzer/src/dart/ast/ast.dart:9394)\n#11     AnalysisRuleVisitor.visitCompilationUnit (package:analyzer/src/lint/linter_visitor.g.dart:200)\n#12     CompilationUnitImpl.accept (package:analyzer/src/dart/ast/ast.dart:9285)\n#13     PluginServer._computeDiagnosticsFromPlugin (package:analysis_server_plugin/src/plugin_server.dart:606)\n#14     PluginServer._analyzeAndSendDiagnostics.<anonymous closure> (package:analysis_server_plugin/src/plugin_server.dart:417)\n#15     _rootRun (dart:async/zone_root.dart:35)\n#16     _CustomZone.run (dart:async/zone.dart:810)\n#17     _runZoned (dart:async/zone_api.dart:165)\n#18     runZonedGuarded (dart:async/zone_api.dart:151)\n#19     PluginServer._analyzeAndSendDiagnostics (package:analysis_server_plugin/src/plugin_server.dart:416)\n#20     PluginServer._handleResolvedUnit (package:analysis_server_plugin/src/plugin_server.dart:1144)\n<asynchronous suspension>\n\nAn unexpected error was encountered by the Analysis Server.\nPlease file an issue at https://github.com/dart-lang/sdk/issues/new/choose with the following details:\n\nUnsupported operation: RiverpodAnalysisError found but no errorReporter specified: RiverpodAnalysisError: No \"build\" method found. Classes annotated with @riverpod must define a method named \"build\". ; node: @riverpod class NoBuild extends _$NoBuild {} (ClassDeclarationImpl)\n#0      errorReporter.<anonymous closure> (package:riverpod_analyzer_utils/src/errors.dart:6)\n#1      ClassBasedProviderDeclarationX.provider.<anonymous closure> (package:riverpod_analyzer_utils/src/nodes/generated_providers/notifier.dart:55)\n#2      ExpandoUtils.upsert (package:riverpod_analyzer_utils/src/analyzer_utils.dart:17)\n#3      ClassBasedProviderDeclarationX.provider (package:riverpod_analyzer_utils/src/nodes/generated_providers/notifier.dart:8)\n#4      _Visitor.visitClassDeclaration (package:riverpod_lint/src/lints/notifier_extends.dart:87)\n#5      ClassDeclarationImpl.accept (package:analyzer/src/dart/ast/ast.dart:7635)\n#6      AnalysisRuleVisitor._runSubscriptions (package:analyzer/src/lint/linter_visitor.g.dart:1187)\n#7      AnalysisRuleVisitor.visitClassDeclaration (package:analyzer/src/lint/linter_visitor.g.dart:175)\n#8      ClassDeclarationImpl.accept (package:analyzer/src/dart/ast/ast.dart:7635)\n#9      _V1ProjectedNodeListImpl.accept (package:analyzer/src/dart/ast/ast.dart:59046)\n#10     CompilationUnitImpl.visitChildren (package:analyzer/src/dart/ast/ast.dart:9394)\n#11     AnalysisRuleVisitor.visitCompilationUnit (package:analyzer/src/lint/linter_visitor.g.dart:200)\n#12     CompilationUnitImpl.accept (package:analyzer/src/dart/ast/ast.dart:9285)\n#13     PluginServer._computeDiagnosticsFromPlugin (package:analysis_server_plugin/src/plugin_server.dart:606)\n#14     PluginServer._analyzeAndSendDiagnostics.<anonymous closure> (package:analysis_server_plugin/src/plugin_server.dart:417)\n#15     _rootRun (dart:async/zone_root.dart:35)\n#16     _CustomZone.run (dart:async/zone.dart:810)\n#17     _runZoned (dart:async/zone_api.dart:165)\n#18     runZonedGuarded (dart:async/zone_api.dart:151)\n#19     PluginServer._analyzeAndSendDiagnostics (package:analysis_server_plugin/src/plugin_server.dart:416)\n#20     PluginServer._handleResolvedUnit (package:analysis_server_plugin/src/plugin_server.dart:1144)\n<asynchronous suspension>"
+    },
+    "only_use_keep_alive_inside_keep_alive": {
+      "severity": "WARNING",
+      "type": "STATIC_WARNING",
+      "code": "only_use_keep_alive_inside_keep_alive",
+      "location": "lib/gen/r14_only_use_keep_alive_inside_keep_alive.dart:11",
+      "hitsInFullRun": 1,
+      "soloExitCode": 2,
+      "soloPluginCodes": [
+        "only_use_keep_alive_inside_keep_alive"
+      ],
+      "soloStderr": ""
+    },
+    "protected_notifier_properties": {
+      "severity": "INFO",
+      "type": "STATIC_WARNING",
+      "code": "protected_notifier_properties",
+      "location": "lib/gen/r04b_protected_notifier_properties.dart:20",
+      "hitsInFullRun": 1,
+      "soloExitCode": 0,
+      "soloPluginCodes": [
+        "protected_notifier_properties"
+      ],
+      "soloStderr": ""
+    },
+    "provider_dependencies": {
+      "severity": "WARNING",
+      "type": "STATIC_WARNING",
+      "code": "provider_dependencies",
+      "location": "lib/gen/r07_provider_dependencies.dart:10",
+      "hitsInFullRun": 1,
+      "soloExitCode": 2,
+      "soloPluginCodes": [
+        "provider_dependencies"
+      ],
+      "soloStderr": ""
+    },
+    "provider_parameters": {
+      "severity": "WARNING",
+      "type": "STATIC_WARNING",
+      "code": "provider_parameters",
+      "location": "lib/r02_provider_parameters.dart:8",
+      "hitsInFullRun": 1,
+      "soloExitCode": 2,
+      "soloPluginCodes": [
+        "provider_parameters"
+      ],
+      "soloStderr": ""
+    },
+    "riverpod_syntax_error": {
+      "severity": "ERROR",
+      "type": "STATIC_WARNING",
+      "code": "riverpod_syntax_error",
+      "location": "lib/r15_riverpod_syntax_error.dart:6",
+      "hitsInFullRun": 1,
+      "soloExitCode": 3,
+      "soloPluginCodes": [
+        "riverpod_syntax_error"
+      ],
+      "soloStderr": ""
+    },
+    "scoped_providers_should_specify_dependencies": {
+      "severity": "WARNING",
+      "type": "STATIC_WARNING",
+      "code": "scoped_providers_should_specify_dependencies",
+      "location": "lib/gen/r08_scoped_providers_should_specify_dependencies.dart:14",
+      "hitsInFullRun": 1,
+      "soloExitCode": 2,
+      "soloPluginCodes": [
+        "scoped_providers_should_specify_dependencies"
+      ],
+      "soloStderr": ""
+    },
+    "unsupported_provider_value": {
+      "severity": "WARNING",
+      "type": "STATIC_WARNING",
+      "code": "unsupported_provider_value",
+      "location": "lib/gen/r10_unsupported_provider_value.dart:14",
+      "hitsInFullRun": 1,
+      "soloExitCode": 2,
+      "soloPluginCodes": [
+        "unsupported_provider_value"
+      ],
+      "soloStderr": ""
+    }
+  },
+  "allDisabled": {
+    "exitCode": 0,
+    "pluginDiagnostics": 0,
+    "diagnostics": 0
+  }
+}

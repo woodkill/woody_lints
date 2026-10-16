@@ -1,0 +1,494 @@
+{
+  "date": "2026-10-12T14:27:50.074549Z",
+  "dart": "3.13.4",
+  "inventory": {
+    "lines": {
+      "hand": 67,
+      "gen": 121
+    },
+    "files": {
+      "hand": 49,
+      "gen": 57
+    },
+    "codes": {
+      "hand|ignore_for_file|type=lint": 5,
+      "hand|ignore|unused_import": 4,
+      "gen|ignore_for_file|type=lint": 57,
+      "gen|ignore_for_file|type=warning": 50,
+      "hand|ignore|unused_element_parameter": 1,
+      "gen|ignore_for_file|unused_element": 7,
+      "gen|ignore_for_file|deprecated_member_use": 7,
+      "gen|ignore_for_file|deprecated_member_use_from_same_package": 7,
+      "gen|ignore_for_file|use_function_type_syntax_for_parameters": 7,
+      "gen|ignore_for_file|unnecessary_const": 7,
+      "gen|ignore_for_file|avoid_init_to_null": 7,
+      "gen|ignore_for_file|invalid_override_different_default_values_named": 7,
+      "gen|ignore_for_file|prefer_expression_function_bodies": 7,
+      "gen|ignore_for_file|annotate_overrides": 7,
+      "gen|ignore_for_file|invalid_annotation_target": 7,
+      "gen|ignore_for_file|unnecessary_question_mark": 7,
+      "gen|ignore|cast_nullable_to_non_nullable": 56,
+      "gen|ignore|implicit_dynamic_type": 1,
+      "hand|ignore|discarded_futures": 2,
+      "hand|ignore|unnecessary_type_check": 1,
+      "hand|ignore|subtype_of_sealed_class": 18,
+      "hand|ignore_for_file|lines_longer_than_80_chars": 30,
+      "hand|ignore_for_file|subtype_of_sealed_class": 3,
+      "hand|ignore|argument_type_not_assignable": 1,
+      "hand|ignore|use_build_context_synchronously": 1,
+      "hand|ignore_for_file|avoid_print": 1
+    },
+    "typeLintHand": 5,
+    "typeLintHandGenerated": 0
+  },
+  "shots": [
+    {
+      "id": "I0",
+      "exitCode": 2,
+      "elapsedMs": 20763,
+      "jsonOk": true,
+      "pluginHeader": false,
+      "pluginFolders": 1,
+      "pluginVersion": "3.1.9",
+      "woodySource": "repo",
+      "lines": {
+        "all": 16,
+        "marker": 16,
+        "project": 0
+      },
+      "countByAreaCode": {
+        "marker": {
+          "missing_provider_scope": 1,
+          "provider_parameters": 1,
+          "prefer_const_constructors": 1,
+          "prefer_const_literals_to_create_immutables": 1,
+          "always_declare_return_types": 1,
+          "prefer_final_locals": 1,
+          "prefer_single_quotes": 1,
+          "unawaited_futures": 1,
+          "sized_box_for_whitespace": 1,
+          "sort_child_properties_last": 1,
+          "use_build_context_synchronously": 1,
+          "avoid_print": 1,
+          "control_flow_in_finally": 1,
+          "slash_for_doc_comments": 1,
+          "prefer_is_empty": 1,
+          "avoid_public_notifier_properties": 1
+        }
+      },
+      "projectDigest": "cbf29ce484222325",
+      "markerLines": [
+        "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+        "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+        "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+        "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+        "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+        "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/woody_probe_marker/main.dart:5  warning  missing_provider_scope",
+        "lib/woody_probe_marker/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/woody_probe_marker/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ]
+    },
+    {
+      "id": "I1",
+      "exitCode": 2,
+      "elapsedMs": 25679,
+      "jsonOk": true,
+      "pluginHeader": false,
+      "pluginFolders": 1,
+      "pluginVersion": "3.1.9",
+      "woodySource": "repo",
+      "lines": {
+        "all": 71,
+        "marker": 17,
+        "project": 54
+      },
+      "countByAreaCode": {
+        "marker": {
+          "missing_provider_scope": 1,
+          "provider_parameters": 1,
+          "prefer_const_constructors": 1,
+          "prefer_const_literals_to_create_immutables": 1,
+          "always_declare_return_types": 1,
+          "prefer_final_locals": 1,
+          "prefer_single_quotes": 1,
+          "unawaited_futures": 1,
+          "sized_box_for_whitespace": 1,
+          "sort_child_properties_last": 1,
+          "use_build_context_synchronously": 1,
+          "avoid_print": 1,
+          "control_flow_in_finally": 1,
+          "slash_for_doc_comments": 1,
+          "prefer_is_empty": 1,
+          "dangling_library_doc_comments": 1,
+          "avoid_public_notifier_properties": 1
+        },
+        "test": {
+          "subtype_of_sealed_class": 27,
+          "unnecessary_type_check": 1
+        },
+        "lib": {
+          "use_super_parameters": 3,
+          "prefer_final_locals": 4,
+          "no_leading_underscores_for_local_identifiers": 4,
+          "unnecessary_string_interpolations": 7,
+          "unnecessary_string_escapes": 8
+        }
+      },
+      "projectDigest": "ba355948969c3ff6",
+      "markerLines": [
+        "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+        "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+        "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+        "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+        "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+        "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/woody_probe_marker/ignore_probe/unnecessary_ignore.dart:1  info  dangling_library_doc_comments",
+        "lib/woody_probe_marker/main.dart:5  warning  missing_provider_scope",
+        "lib/woody_probe_marker/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/woody_probe_marker/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ]
+    },
+    {
+      "id": "I2",
+      "exitCode": 2,
+      "elapsedMs": 23302,
+      "jsonOk": true,
+      "pluginHeader": false,
+      "pluginFolders": 1,
+      "pluginVersion": "3.1.9",
+      "woodySource": "repo",
+      "lines": {
+        "all": 159,
+        "marker": 24,
+        "project": 135
+      },
+      "countByAreaCode": {
+        "marker": {
+          "missing_provider_scope": 1,
+          "provider_parameters": 1,
+          "prefer_const_constructors": 1,
+          "lines_longer_than_80_chars": 5,
+          "prefer_const_literals_to_create_immutables": 1,
+          "always_declare_return_types": 1,
+          "prefer_final_locals": 1,
+          "prefer_single_quotes": 1,
+          "unawaited_futures": 1,
+          "sized_box_for_whitespace": 1,
+          "sort_child_properties_last": 1,
+          "use_build_context_synchronously": 1,
+          "avoid_print": 1,
+          "control_flow_in_finally": 1,
+          "slash_for_doc_comments": 1,
+          "prefer_is_empty": 1,
+          "cast_nullable_to_non_nullable": 1,
+          "discarded_futures": 1,
+          "unnecessary_ignore": 1,
+          "avoid_public_notifier_properties": 1
+        },
+        "bin": {
+          "unnecessary_ignore": 1
+        },
+        "lib": {
+          "lines_longer_than_80_chars": 35,
+          "discarded_futures": 9,
+          "unnecessary_ignore": 1
+        },
+        "test": {
+          "lines_longer_than_80_chars": 72,
+          "unnecessary_ignore": 10,
+          "discarded_futures": 2,
+          "cast_nullable_to_non_nullable": 5
+        }
+      },
+      "projectDigest": "5b019cb8c876a738",
+      "markerLines": [
+        "lib/woody_probe_marker/added_rules.dart:12  info  lines_longer_than_80_chars",
+        "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+        "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+        "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+        "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+        "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+        "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/woody_probe_marker/ignore_probe/cast_nullable_to_non_nullable.dart:8  info  cast_nullable_to_non_nullable",
+        "lib/woody_probe_marker/ignore_probe/discarded_futures.dart:3  info  discarded_futures",
+        "lib/woody_probe_marker/ignore_probe/lines_longer_than_80_chars.dart:2  info  lines_longer_than_80_chars",
+        "lib/woody_probe_marker/ignore_probe/unnecessary_ignore.dart:2  info  unnecessary_ignore",
+        "lib/woody_probe_marker/main.dart:3  info  lines_longer_than_80_chars",
+        "lib/woody_probe_marker/main.dart:5  warning  missing_provider_scope",
+        "lib/woody_probe_marker/riverpod_rules.dart:15  info  lines_longer_than_80_chars",
+        "lib/woody_probe_marker/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/woody_probe_marker/riverpod_rules.dart:3  info  lines_longer_than_80_chars",
+        "lib/woody_probe_marker/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ]
+    },
+    {
+      "id": "I3",
+      "exitCode": 2,
+      "elapsedMs": 23918,
+      "jsonOk": true,
+      "pluginHeader": false,
+      "pluginFolders": 1,
+      "pluginVersion": "3.1.9",
+      "woodySource": "repo",
+      "lines": {
+        "all": 465,
+        "marker": 26,
+        "project": 439
+      },
+      "countByAreaCode": {
+        "marker": {
+          "missing_provider_scope": 1,
+          "provider_parameters": 1,
+          "prefer_const_constructors": 1,
+          "lines_longer_than_80_chars": 6,
+          "prefer_const_literals_to_create_immutables": 1,
+          "always_declare_return_types": 1,
+          "prefer_final_locals": 1,
+          "prefer_single_quotes": 1,
+          "unawaited_futures": 1,
+          "sized_box_for_whitespace": 1,
+          "sort_child_properties_last": 1,
+          "use_build_context_synchronously": 1,
+          "avoid_print": 1,
+          "control_flow_in_finally": 1,
+          "slash_for_doc_comments": 1,
+          "prefer_is_empty": 1,
+          "cast_nullable_to_non_nullable": 1,
+          "discarded_futures": 2,
+          "dangling_library_doc_comments": 1,
+          "avoid_public_notifier_properties": 1
+        },
+        "test": {
+          "subtype_of_sealed_class": 27,
+          "unnecessary_type_check": 1,
+          "lines_longer_than_80_chars": 203,
+          "discarded_futures": 2,
+          "cast_nullable_to_non_nullable": 5
+        },
+        "lib": {
+          "lines_longer_than_80_chars": 164,
+          "discarded_futures": 11,
+          "use_super_parameters": 3,
+          "prefer_final_locals": 4,
+          "no_leading_underscores_for_local_identifiers": 4,
+          "unnecessary_string_interpolations": 7,
+          "unnecessary_string_escapes": 8
+        }
+      },
+      "projectDigest": "dd1315cc1b40dbb4",
+      "markerLines": [
+        "lib/woody_probe_marker/added_rules.dart:12  info  lines_longer_than_80_chars",
+        "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+        "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+        "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+        "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+        "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+        "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/woody_probe_marker/ignore_probe/cast_nullable_to_non_nullable.dart:8  info  cast_nullable_to_non_nullable",
+        "lib/woody_probe_marker/ignore_probe/discarded_futures.dart:3  info  discarded_futures",
+        "lib/woody_probe_marker/ignore_probe/discarded_futures.dart:9  info  discarded_futures",
+        "lib/woody_probe_marker/ignore_probe/lines_longer_than_80_chars.dart:2  info  lines_longer_than_80_chars",
+        "lib/woody_probe_marker/ignore_probe/lines_longer_than_80_chars_ignored.dart:3  info  lines_longer_than_80_chars",
+        "lib/woody_probe_marker/ignore_probe/unnecessary_ignore.dart:1  info  dangling_library_doc_comments",
+        "lib/woody_probe_marker/main.dart:3  info  lines_longer_than_80_chars",
+        "lib/woody_probe_marker/main.dart:5  warning  missing_provider_scope",
+        "lib/woody_probe_marker/riverpod_rules.dart:15  info  lines_longer_than_80_chars",
+        "lib/woody_probe_marker/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/woody_probe_marker/riverpod_rules.dart:3  info  lines_longer_than_80_chars",
+        "lib/woody_probe_marker/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ]
+    },
+    {
+      "id": "I4",
+      "exitCode": 2,
+      "elapsedMs": 21419,
+      "jsonOk": true,
+      "pluginHeader": false,
+      "pluginFolders": 1,
+      "pluginVersion": "3.1.9",
+      "woodySource": "repo",
+      "lines": {
+        "all": 57,
+        "marker": 19,
+        "project": 38
+      },
+      "countByAreaCode": {
+        "marker": {
+          "missing_provider_scope": 1,
+          "provider_parameters": 1,
+          "prefer_const_constructors": 1,
+          "prefer_const_literals_to_create_immutables": 1,
+          "always_declare_return_types": 1,
+          "prefer_final_locals": 1,
+          "prefer_single_quotes": 1,
+          "unawaited_futures": 1,
+          "sized_box_for_whitespace": 1,
+          "sort_child_properties_last": 1,
+          "use_build_context_synchronously": 1,
+          "avoid_print": 1,
+          "control_flow_in_finally": 1,
+          "slash_for_doc_comments": 1,
+          "prefer_is_empty": 1,
+          "unnecessary_ignore": 3,
+          "avoid_public_notifier_properties": 1
+        },
+        "bin": {
+          "unnecessary_ignore": 1
+        },
+        "lib": {
+          "unnecessary_ignore": 3
+        },
+        "test": {
+          "unnecessary_ignore": 34
+        }
+      },
+      "projectDigest": "9dc4d84ba40c967f",
+      "markerLines": [
+        "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+        "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+        "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+        "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+        "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+        "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/woody_probe_marker/ignore_probe/discarded_futures.dart:8  info  unnecessary_ignore",
+        "lib/woody_probe_marker/ignore_probe/lines_longer_than_80_chars_ignored.dart:1  info  unnecessary_ignore",
+        "lib/woody_probe_marker/ignore_probe/unnecessary_ignore.dart:2  info  unnecessary_ignore",
+        "lib/woody_probe_marker/main.dart:5  warning  missing_provider_scope",
+        "lib/woody_probe_marker/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/woody_probe_marker/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ]
+    }
+  ],
+  "perRule": {
+    "lines_longer_than_80_chars": {
+      "withIgnores": 107,
+      "stripped": 367,
+      "hidden": 260,
+      "markerWith": 5,
+      "markerStripped": 6
+    },
+    "discarded_futures": {
+      "withIgnores": 11,
+      "stripped": 13,
+      "hidden": 2,
+      "markerWith": 1,
+      "markerStripped": 2
+    },
+    "cast_nullable_to_non_nullable": {
+      "withIgnores": 5,
+      "stripped": 5,
+      "hidden": 0,
+      "markerWith": 1,
+      "markerStripped": 1
+    }
+  },
+  "newLinesI1": {
+    "그 밖": {
+      "subtype_of_sealed_class": 27,
+      "unnecessary_type_check": 1
+    },
+    "type=lint 파일": {
+      "use_super_parameters": 3,
+      "prefer_final_locals": 4,
+      "no_leading_underscores_for_local_identifiers": 4,
+      "unnecessary_string_interpolations": 7,
+      "unnecessary_string_escapes": 8
+    }
+  },
+  "newLinesI3": {
+    "그 밖": {
+      "subtype_of_sealed_class": 27,
+      "unnecessary_type_check": 1,
+      "discarded_futures": 2,
+      "lines_longer_than_80_chars": 131
+    },
+    "type=lint 파일": {
+      "lines_longer_than_80_chars": 129,
+      "use_super_parameters": 3,
+      "prefer_final_locals": 4,
+      "no_leading_underscores_for_local_identifiers": 4,
+      "unnecessary_string_interpolations": 7,
+      "unnecessary_string_escapes": 8
+    }
+  },
+  "unnecessaryIgnore": {
+    "I2": {
+      "bin:unnecessary_ignore": 1,
+      "lib:unnecessary_ignore": 1,
+      "marker:unnecessary_ignore": 1,
+      "test:unnecessary_ignore": 10
+    },
+    "I4": {
+      "bin:unnecessary_ignore": 1,
+      "lib:unnecessary_ignore": 3,
+      "marker:unnecessary_ignore": 3,
+      "test:unnecessary_ignore": 34
+    }
+  },
+  "unnecessaryIgnoreNames": {
+    "I2": {
+      "ignore_for_file:avoid_print": 1,
+      "ignore:unused_element_parameter": 1,
+      "ignore:subtype_of_sealed_class": 1,
+      "ignore_for_file:lines_longer_than_80_chars": 6,
+      "ignore:unused_import": 1,
+      "ignore:argument_type_not_assignable": 1,
+      "ignore:use_build_context_synchronously": 1
+    },
+    "I4": {
+      "ignore_for_file:avoid_print": 1,
+      "ignore:discarded_futures": 2,
+      "ignore:unused_element_parameter": 1,
+      "ignore:subtype_of_sealed_class": 1,
+      "ignore_for_file:lines_longer_than_80_chars": 30,
+      "ignore:unused_import": 1,
+      "ignore:argument_type_not_assignable": 1,
+      "ignore:use_build_context_synchronously": 1
+    }
+  },
+  "checks": {
+    "K1 모든 회차에서 woody_lints 가 작업 중인 저장소를 가리켰다": true,
+    "K2 모든 회차에서 example 정답지 16줄이 표식의 줄에 들어 있다": true,
+    "K3 모든 회차에서 plugin 이 준비됐다": true,
+    "K4 대조: 후보 규칙마다 가리지 않은 표식이 I2 에서 걸린다": true,
+    "K5 대조: 가린 표식이 I2 에서 숨고 I3 에서 보인다 (discarded_futures, lines_longer_than_80_chars)": true,
+    "K6 대조: 아무것도 가리지 않는 표식 주석이 I4 에서 unnecessary_ignore 로 잡힌다": true,
+    "K7 저장소가 그대로다": true
+  }
+}

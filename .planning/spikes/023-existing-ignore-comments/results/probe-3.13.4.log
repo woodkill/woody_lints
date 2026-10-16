@@ -1,0 +1,72 @@
+# Spike 023 — 이미 있는 무시 주석
+SDK: 3.13.4
+
+## 무시 주석 (복사본의 lib · test · bin, 표식 제외)
+- 주석이 있는 줄: 손으로 쓴 파일 67 · 생성 파일 121 (파일 수 49 · 57)
+- `type=lint` 를 단 손으로 쓴(이름이 `.g.dart` · `.freezed.dart` 가 아닌) 파일 5개, 그중 머리 5줄에 GENERATED 가 있는 것 0개
+| 자리 | 종류 | 코드 | 건수 |
+|---|---|---|---|
+| gen | ignore_for_file | `annotate_overrides` | 7 |
+| gen | ignore_for_file | `avoid_init_to_null` | 7 |
+| gen | ignore_for_file | `deprecated_member_use` | 7 |
+| gen | ignore_for_file | `deprecated_member_use_from_same_package` | 7 |
+| gen | ignore_for_file | `invalid_annotation_target` | 7 |
+| gen | ignore_for_file | `invalid_override_different_default_values_named` | 7 |
+| gen | ignore_for_file | `prefer_expression_function_bodies` | 7 |
+| gen | ignore_for_file | `type=lint` | 57 |
+| gen | ignore_for_file | `type=warning` | 50 |
+| gen | ignore_for_file | `unnecessary_const` | 7 |
+| gen | ignore_for_file | `unnecessary_question_mark` | 7 |
+| gen | ignore_for_file | `unused_element` | 7 |
+| gen | ignore_for_file | `use_function_type_syntax_for_parameters` | 7 |
+| gen | ignore | `cast_nullable_to_non_nullable` | 56 |
+| gen | ignore | `implicit_dynamic_type` | 1 |
+| hand | ignore_for_file | `avoid_print` | 1 |
+| hand | ignore_for_file | `lines_longer_than_80_chars` | 30 |
+| hand | ignore_for_file | `subtype_of_sealed_class` | 3 |
+| hand | ignore_for_file | `type=lint` | 5 |
+| hand | ignore | `argument_type_not_assignable` | 1 |
+| hand | ignore | `discarded_futures` | 2 |
+| hand | ignore | `subtype_of_sealed_class` | 18 |
+| hand | ignore | `unnecessary_type_check` | 1 |
+| hand | ignore | `unused_element_parameter` | 1 |
+| hand | ignore | `unused_import` | 4 |
+| hand | ignore | `use_build_context_synchronously` | 1 |
+
+## 분석
+- I0: 주석 그대로, 더 켠 규칙 없음 → exit 2, 줄 16 (표식 16 · 프로젝트 0), 20763 ms
+- I1: 주석 걷어냄 (70줄), 더 켠 규칙 없음 → exit 2, 줄 71 (표식 17 · 프로젝트 54), 25679 ms
+- I2: 주석 그대로, 더 켠 규칙 lines_longer_than_80_chars, discarded_futures, cast_nullable_to_non_nullable, unnecessary_ignore → exit 2, 줄 159 (표식 24 · 프로젝트 135), 23302 ms
+- I3: 주석 걷어냄 (70줄), 더 켠 규칙 lines_longer_than_80_chars, discarded_futures, cast_nullable_to_non_nullable, unnecessary_ignore → exit 2, 줄 465 (표식 26 · 프로젝트 439), 23918 ms
+- I4: 주석 그대로, 더 켠 규칙 unnecessary_ignore → exit 2, 줄 57 (표식 19 · 프로젝트 38), 21419 ms
+
+## 견줌
+- I0 프로젝트: {}
+- I1 프로젝트: {subtype_of_sealed_class: 27, unnecessary_type_check: 1, use_super_parameters: 3, prefer_final_locals: 4, no_leading_underscores_for_local_identifiers: 4, unnecessary_string_interpolations: 7, unnecessary_string_escapes: 8}
+- I1 에서 새로 나온 줄 (파일 종류별): {그 밖: {subtype_of_sealed_class: 27, unnecessary_type_check: 1}, type=lint 파일: {use_super_parameters: 3, prefer_final_locals: 4, no_leading_underscores_for_local_identifiers: 4, unnecessary_string_interpolations: 7, unnecessary_string_escapes: 8}}
+
+| 규칙 | I2 (주석 그대로) | I3 (주석 걷어냄) | 주석이 가린 줄 | I2 표식 | I3 표식 |
+|---|---|---|---|---|---|
+| `lines_longer_than_80_chars` | 107 | 367 | 260 | 5 | 6 |
+| `discarded_futures` | 11 | 13 | 2 | 1 | 2 |
+| `cast_nullable_to_non_nullable` | 5 | 5 | 0 | 1 | 1 |
+- I3 에서 새로 나온 줄 (파일 종류별, 후보 규칙 밖 포함): {그 밖: {subtype_of_sealed_class: 27, unnecessary_type_check: 1, discarded_futures: 2, lines_longer_than_80_chars: 131}, type=lint 파일: {lines_longer_than_80_chars: 129, use_super_parameters: 3, prefer_final_locals: 4, no_leading_underscores_for_local_identifiers: 4, unnecessary_string_interpolations: 7, unnecessary_string_escapes: 8}}
+
+## unnecessary_ignore
+- I2: {bin:unnecessary_ignore: 1, lib:unnecessary_ignore: 1, marker:unnecessary_ignore: 1, test:unnecessary_ignore: 10} (private 기록 159줄)
+- I4: {bin:unnecessary_ignore: 1, lib:unnecessary_ignore: 3, marker:unnecessary_ignore: 3, test:unnecessary_ignore: 34} (private 기록 57줄)
+- 필요 없다고 보고된 주석의 코드 (프로젝트, I4): {ignore_for_file:avoid_print: 1, ignore:discarded_futures: 2, ignore:unused_element_parameter: 1, ignore:subtype_of_sealed_class: 1, ignore_for_file:lines_longer_than_80_chars: 30, ignore:unused_import: 1, ignore:argument_type_not_assignable: 1, ignore:use_build_context_synchronously: 1}
+- 같은 것 (프로젝트, I2 — 후보 규칙을 켠 뒤): {ignore_for_file:avoid_print: 1, ignore:unused_element_parameter: 1, ignore:subtype_of_sealed_class: 1, ignore_for_file:lines_longer_than_80_chars: 6, ignore:unused_import: 1, ignore:argument_type_not_assignable: 1, ignore:use_build_context_synchronously: 1}
+
+# 판정
+| 확인 | 결과 |
+|---|---|
+| K1 모든 회차에서 woody_lints 가 작업 중인 저장소를 가리켰다 | 성립 |
+| K2 모든 회차에서 example 정답지 16줄이 표식의 줄에 들어 있다 | 성립 |
+| K3 모든 회차에서 plugin 이 준비됐다 | 성립 |
+| K4 대조: 후보 규칙마다 가리지 않은 표식이 I2 에서 걸린다 | 성립 |
+| K5 대조: 가린 표식이 I2 에서 숨고 I3 에서 보인다 (discarded_futures, lines_longer_than_80_chars) | 성립 |
+| K6 대조: 아무것도 가리지 않는 표식 주석이 I4 에서 unnecessary_ignore 로 잡힌다 | 성립 |
+| K7 저장소가 그대로다 | 성립 |
+
+판정에 넣은 확인 7건이 모두 성립했다.

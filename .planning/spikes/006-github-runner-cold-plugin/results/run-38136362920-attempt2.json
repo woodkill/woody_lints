@@ -1,0 +1,457 @@
+{
+  "runId": 38136362920,
+  "attempt": 2,
+  "headSha": "9450731",
+  "samples": [
+    {
+      "dart": "3.13.4",
+      "os": "linux",
+      "cores": 4,
+      "githubActions": "true",
+      "ci": "true",
+      "sample": "1",
+      "pubGetMs": {
+        "basic": 2545,
+        "full": 848
+      },
+      "riverpodLint": [
+        "3.1.9"
+      ],
+      "crashed255": 0,
+      "runs": [
+        {
+          "label": "A1 첫 실행 (기본 방식)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 53020,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "A2 재실행 (--suppress-analytics)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 10640,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "C1 상태 폴더만 비움 (기본 방식)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 52363,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "C2 상태 폴더만 비움 (기본 방식)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 52143,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "C3 상태 폴더만 비움 (기본 방식)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 52557,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "B1 15개 fixture 첫 실행 (--suppress-analytics)",
+          "exitCode": 3,
+          "expectedExit": 3,
+          "elapsedMs": 44044,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 15,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        }
+      ]
+    },
+    {
+      "dart": "3.13.4",
+      "os": "linux",
+      "cores": 4,
+      "githubActions": "true",
+      "ci": "true",
+      "sample": "2",
+      "pubGetMs": {
+        "basic": 2071,
+        "full": 699
+      },
+      "riverpodLint": [
+        "3.1.9"
+      ],
+      "crashed255": 0,
+      "runs": [
+        {
+          "label": "A1 첫 실행 (기본 방식)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 43113,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "A2 재실행 (--suppress-analytics)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 8264,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "C1 상태 폴더만 비움 (기본 방식)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 42560,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "C2 상태 폴더만 비움 (기본 방식)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 42504,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "C3 상태 폴더만 비움 (기본 방식)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 42504,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "B1 15개 fixture 첫 실행 (--suppress-analytics)",
+          "exitCode": 3,
+          "expectedExit": 3,
+          "elapsedMs": 36522,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 15,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        }
+      ]
+    },
+    {
+      "dart": "3.13.4",
+      "os": "linux",
+      "cores": 4,
+      "githubActions": "true",
+      "ci": "true",
+      "sample": "3",
+      "pubGetMs": {
+        "basic": 2089,
+        "full": 712
+      },
+      "riverpodLint": [
+        "3.1.9"
+      ],
+      "crashed255": 0,
+      "runs": [
+        {
+          "label": "A1 첫 실행 (기본 방식)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 43105,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "A2 재실행 (--suppress-analytics)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 8016,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "C1 상태 폴더만 비움 (기본 방식)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 42307,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "C2 상태 폴더만 비움 (기본 방식)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 42360,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "C3 상태 폴더만 비움 (기본 방식)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 43484,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "B1 15개 fixture 첫 실행 (--suppress-analytics)",
+          "exitCode": 3,
+          "expectedExit": 3,
+          "elapsedMs": 37734,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 15,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        }
+      ]
+    },
+    {
+      "dart": "3.13.4",
+      "os": "linux",
+      "cores": 4,
+      "githubActions": "true",
+      "ci": "true",
+      "sample": "4",
+      "pubGetMs": {
+        "basic": 2562,
+        "full": 574
+      },
+      "riverpodLint": [
+        "3.1.9"
+      ],
+      "crashed255": 0,
+      "runs": [
+        {
+          "label": "A1 첫 실행 (기본 방식)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 27532,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "A2 재실행 (--suppress-analytics)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 5548,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "C1 상태 폴더만 비움 (기본 방식)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 26997,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "C2 상태 폴더만 비움 (기본 방식)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 27832,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "C3 상태 폴더만 비움 (기본 방식)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 27594,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "B1 15개 fixture 첫 실행 (--suppress-analytics)",
+          "exitCode": 3,
+          "expectedExit": 3,
+          "elapsedMs": 23779,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 15,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        }
+      ]
+    },
+    {
+      "dart": "3.13.4",
+      "os": "linux",
+      "cores": 4,
+      "githubActions": "true",
+      "ci": "true",
+      "sample": "5",
+      "pubGetMs": {
+        "basic": 2129,
+        "full": 702
+      },
+      "riverpodLint": [
+        "3.1.9"
+      ],
+      "crashed255": 0,
+      "runs": [
+        {
+          "label": "A1 첫 실행 (기본 방식)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 43006,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "A2 재실행 (--suppress-analytics)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 7951,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "C1 상태 폴더만 비움 (기본 방식)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 42278,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "C2 상태 폴더만 비움 (기본 방식)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 41837,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "C3 상태 폴더만 비움 (기본 방식)",
+          "exitCode": 2,
+          "expectedExit": 2,
+          "elapsedMs": 42284,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 4,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        },
+        {
+          "label": "B1 15개 fixture 첫 실행 (--suppress-analytics)",
+          "exitCode": 3,
+          "expectedExit": 3,
+          "elapsedMs": 36691,
+          "jsonOk": true,
+          "matches": true,
+          "diagnostics": 15,
+          "missing": [],
+          "unexpected": [],
+          "stderrHead": ""
+        }
+      ]
+    }
+  ]
+}

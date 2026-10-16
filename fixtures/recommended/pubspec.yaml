@@ -1,0 +1,17 @@
+name: woody_lints_fixture_recommended
+description: woody_lints 검증용 연습 프로젝트 — recommended.yaml 묶음 한 줄이 옛 주소와 같은 진단을 내는지 본다.
+publish_to: 'none'
+version: 0.0.0
+
+environment:
+  sdk: ^3.13.0
+
+dependencies:
+  flutter_riverpod: ^3.0.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  # 저장소 루트의 woody_lints 를 그대로 받는다 (사용 프로젝트의 git 의존성 자리).
+  woody_lints:
+    path: ../..

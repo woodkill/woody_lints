@@ -1,0 +1,116 @@
+{
+  "dart": "3.13.4",
+  "os": "macos",
+  "osRelease": null,
+  "processors": 10,
+  "memoryMb": null,
+  "githubActions": null,
+  "imageOs": null,
+  "imageVersion": null,
+  "label": null,
+  "sample": null,
+  "mode": "seq",
+  "rootPubGetMs": 252,
+  "fixturePubGetMs": {
+    "example (옛 주소)": 206,
+    "recommended": 204,
+    "base_only": 186,
+    "overrides": 205,
+    "base_riverpod": 186,
+    "base_codegen": 207
+  },
+  "prepMs": 1473,
+  "totalMs": 117215,
+  "pluginVersions": {
+    "riverpod_lint": [
+      "3.1.9"
+    ],
+    "analyzer": [
+      "14.5.0"
+    ],
+    "analysis_server_plugin": [
+      "0.3.24"
+    ]
+  },
+  "passes": [
+    {
+      "tag": "seq-cold",
+      "wallMs": 92673,
+      "sumMs": 92650,
+      "perFixtureMs": {
+        "example (옛 주소)": 18420,
+        "recommended": 24504,
+        "base_only": 4385,
+        "overrides": 23731,
+        "base_riverpod": 17809,
+        "base_codegen": 3798
+      },
+      "exitCodes": {
+        "example (옛 주소)": 2,
+        "recommended": 2,
+        "base_only": 2,
+        "overrides": 2,
+        "base_riverpod": 2,
+        "base_codegen": 0
+      },
+      "lineCounts": {
+        "example (옛 주소)": 16,
+        "recommended": 16,
+        "base_only": 18,
+        "overrides": 15,
+        "base_riverpod": 21,
+        "base_codegen": 13
+      },
+      "pluginFolders": {
+        "example (옛 주소)": 1,
+        "recommended": 1,
+        "base_only": 0,
+        "overrides": 1,
+        "base_riverpod": 1,
+        "base_codegen": 0
+      },
+      "stderrHeads": {}
+    },
+    {
+      "tag": "seq-warm",
+      "wallMs": 23055,
+      "sumMs": 23051,
+      "perFixtureMs": {
+        "example (옛 주소)": 3888,
+        "recommended": 4073,
+        "base_only": 3731,
+        "overrides": 4072,
+        "base_riverpod": 3701,
+        "base_codegen": 3583
+      },
+      "exitCodes": {
+        "example (옛 주소)": 2,
+        "recommended": 2,
+        "base_only": 2,
+        "overrides": 2,
+        "base_riverpod": 2,
+        "base_codegen": 0
+      },
+      "lineCounts": {
+        "example (옛 주소)": 16,
+        "recommended": 16,
+        "base_only": 18,
+        "overrides": 15,
+        "base_riverpod": 21,
+        "base_codegen": 13
+      },
+      "pluginFolders": {
+        "example (옛 주소)": 1,
+        "recommended": 1,
+        "base_only": 0,
+        "overrides": 1,
+        "base_riverpod": 1,
+        "base_codegen": 0
+      },
+      "stderrHeads": {}
+    }
+  ],
+  "checksOk": true,
+  "failed": [],
+  "checkCount": 24
+}

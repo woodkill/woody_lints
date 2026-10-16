@@ -1,0 +1,5 @@
+exit 2
+lib/main.dart:10  warning  missing_provider_scope
+lib/main.dart:9  info  avoid_print
+lib/main.dart:9  info  prefer_single_quotes
+lib/src/counter.dart:8  info  avoid_public_notifier_properties

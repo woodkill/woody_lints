@@ -1,0 +1,104 @@
+# 옛 plugin 버전(3.1.0 고정) + info
+# 1회차 exit=0
+An error occurred while executing an analyzer plugin: An error occurred while setting up the analyzer plugin package at '<state>/.plugin_manager/85535520b0a3d02b71bc997341498273'. The `dart pub upgrade` command failed:
+  exitCode = 1
+  stdout = Resolving dependencies...
+
+  stderr = Because analysis_server_plugin >=0.3.8 <0.3.9 depends on analyzer_plugin 0.14.2 and analysis_server_plugin >=0.3.9 <0.3.10 depends on analyzer_plugin 0.14.3, analysis_server_plugin >=0.3.8 <0.3.10 requires analyzer_plugin 0.14.2 or 0.14.3.
+And because analysis_server_plugin >=0.3.10 <0.3.11 depends on analyzer_plugin 0.14.4, analysis_server_plugin >=0.3.8 <0.3.11 requires analyzer_plugin 0.14.2 or 0.14.3 or 0.14.4.
+And because analysis_server_plugin >=0.3.11 <0.3.13 depends on analyzer_plugin 0.14.5 and analysis_server_plugin >=0.3.13 <0.3.14 depends on analyzer_plugin 0.14.7, analysis_server_plugin >=0.3.8 <0.3.14 requires analyzer_plugin 0.14.2 or 0.14.3 or 0.14.4 or 0.14.5 or 0.14.7.
+And because analysis_server_plugin >=0.3.14 <0.3.15 depends on analyzer_plugin 0.14.8 and analysis_server_plugin >=0.3.15 <0.3.16 depends on analyzer_plugin 0.14.9, analysis_server_plugin >=0.3.8 <0.3.16 requires analyzer_plugin 0.14.2 or 0.14.3 or 0.14.4 or 0.14.5 or 0.14.7 or 0.14.8 or 0.14.9.
+And because analysis_server_plugin >=0.3.16 <0.3.17 depends on analyzer_plugin 0.14.10 and analysis_server_plugin >=0.3.17 <0.3.18 depends on analyzer_plugin 0.14.11, analysis_server_plugin >=0.3.8 <0.3.18 requires analyzer_plugin 0.14.2 or 0.14.3 or 0.14.4 or 0.14.5 or 0.14.7 or 0.14.8 or 0.14.9 or 0.14.10 or 0.14.11.
+And because analysis_server_plugin >=0.3.18 <0.3.19 depends on analyzer_plugin 0.14.12 and analysis_server_plugin >=0.3.19 <0.3.20 depends on analyzer_plugin 0.14.13, analysis_server_plugin >=0.3.8 <0.3.20 requires analyzer_plugin 0.14.2 or 0.14.3 or 0.14.4 or 0.14.5 or 0.14.7 or 0.14.8 or 0.14.9 or 0.14.10 or 0.14.11 or 0.14.12 or 0.14.13.
+And because analysis_server_plugin >=0.3.20 <0.3.21 depends on analyzer_plugin 0.14.14 and analysis_server_plugin >=0.3.21 <0.3.22 depends on analyzer_plugin 0.14.15, analysis_server_plugin >=0.3.8 <0.3.22 requires analyzer_plugin 0.14.2 or 0.14.3 or 0.14.4 or 0.14.5 or 0.14.7 or 0.14.8 or 0.14.9 or 0.14.10 or 0.14.11 or 0.14.12 or 0.14.13 or 0.14.14 or 0.14.15.
+And because analysis_server_plugin >=0.3.22 <0.3.23 depends on analyzer_plugin 0.14.16 and analysis_server_plugin >=0.3.23 <0.3.24 depends on analyzer_plugin 0.14.17, analysis_server_plugin >=0.3.8 <0.3.24 requires analyzer_plugin 0.14.2 or 0.14.3 or 0.14.4 or 0.14.5 or 0.14.7 or 0.14.8 or 0.14.9 or 0.14.10 or 0.14.11 or 0.14.12 or 0.14.13 or 0.14.14 or 0.14.15 or 0.14.16 or 0.14.17.
+And because analysis_server_plugin >=0.3.24 depends on analyzer_plugin 0.14.18 and riverpod_lint >=3.1.0 <3.1.4-dev.1 depends on analyzer_plugin ^0.13.10, riverpod_lint >=3.1.0 <3.1.4-dev.1 is incompatible with analysis_server_plugin >=0.3.8.
+So, because plugin_entrypoint depends on both analysis_server_plugin ^0.3.8 and riverpod_lint 3.1.0, version solving failed.
+
+
+You can try one of the following suggestions to make the pubspec resolve:
+* Try upgrading your constraint on riverpod_lint: dart pub add riverpod_lint:^3.1.9
+* Consider downgrading your constraint on analysis_server_plugin: dart pub add analysis_server_plugin:^0.3.3
+
+
+#0      PluginManager._computeFiles (package:analysis_server/src/plugin/plugin_manager.dart:683)
+#1      PluginManager.filesFor (package:analysis_server/src/plugin/plugin_manager.dart:348)
+#2      PluginManager.addPluginToContextRoot (package:analysis_server/src/plugin/plugin_manager.dart:189)
+#3      PluginWatcher._addPlugins (package:analysis_server/src/plugin/plugin_watcher.dart:160)
+#4      PluginWatcher.addedDriver (package:analysis_server/src/plugin/plugin_watcher.dart:75)
+#5      AnalysisDriverScheduler.add (package:analyzer/src/dart/analysis/driver.dart:2682)
+#6      new AnalysisDriver (package:analyzer/src/dart/analysis/driver.dart:345)
+#7      ContextBuilderImpl.createContext (package:analyzer/src/dart/analysis/context_builder.dart:160)
+#8      new AnalysisContextCollectionImpl (package:analyzer/src/dart/analysis/analysis_context_collection.dart:95)
+#9      ContextManagerImpl._createAnalysisContexts.performContextRebuildGuarded.performContextRebuild (package:analysis_server/src/context_manager.dart:596)
+<asynchronous suspension>
+#10     ContextManagerImpl._createAnalysisContexts.performContextRebuildGuarded (package:analysis_server/src/context_manager.dart:750)
+<asynchronous suspension>
+#11     _CancellingTaskQueue.queue.<anonymous closure> (package:analysis_server/src/context_manager.dart:1059)
+<asynchronous suspension>
+#12     ContextManagerImpl.setRoots (package:analysis_server/src/context_manager.dart:386)
+<asynchronous suspension>
+#13     LegacyAnalysisServer.setAnalysisRoots (package:analysis_server/src/legacy_analysis_server.dart:903)
+<asynchronous suspension>
+#14     AnalysisSetAnalysisRootsHandler.handle (package:analysis_server/src/handler/legacy/analysis_set_analysis_roots.dart:52)
+<asynchronous suspension>
+#15     LegacyAnalysisServer.handleRequest.<anonymous closure>.<anonymous closure> (package:analysis_server/src/legacy_analysis_server.dart:651)
+<asynchronous suspension>
+#16     AsyncSpan.runUnary (package:perf_witness/src/async_span.dart:183)
+<asynchronous suspension>
+#17     OperationPerformanceImpl.runAsync (package:analyzer/src/util/performance/operation_performance.dart:229)
+<asynchronous suspension>
+#18     LegacyAnalysisServer.handleRequest.<anonymous closure> (package:analysis_server/src/legacy_analysis_server.dart:631)
+<asynchronous suspension>
+
+# 2회차 exit=0
+An error occurred while executing an analyzer plugin: An error occurred while setting up the analyzer plugin package at '<state>/.plugin_manager/85535520b0a3d02b71bc997341498273'. The `dart pub upgrade` command failed:
+  exitCode = 1
+  stdout = Resolving dependencies...
+
+  stderr = Because analysis_server_plugin >=0.3.8 <0.3.9 depends on analyzer_plugin 0.14.2 and analysis_server_plugin >=0.3.9 <0.3.10 depends on analyzer_plugin 0.14.3, analysis_server_plugin >=0.3.8 <0.3.10 requires analyzer_plugin 0.14.2 or 0.14.3.
+And because analysis_server_plugin >=0.3.10 <0.3.11 depends on analyzer_plugin 0.14.4, analysis_server_plugin >=0.3.8 <0.3.11 requires analyzer_plugin 0.14.2 or 0.14.3 or 0.14.4.
+And because analysis_server_plugin >=0.3.11 <0.3.13 depends on analyzer_plugin 0.14.5 and analysis_server_plugin >=0.3.13 <0.3.14 depends on analyzer_plugin 0.14.7, analysis_server_plugin >=0.3.8 <0.3.14 requires analyzer_plugin 0.14.2 or 0.14.3 or 0.14.4 or 0.14.5 or 0.14.7.
+And because analysis_server_plugin >=0.3.14 <0.3.15 depends on analyzer_plugin 0.14.8 and analysis_server_plugin >=0.3.15 <0.3.16 depends on analyzer_plugin 0.14.9, analysis_server_plugin >=0.3.8 <0.3.16 requires analyzer_plugin 0.14.2 or 0.14.3 or 0.14.4 or 0.14.5 or 0.14.7 or 0.14.8 or 0.14.9.
+And because analysis_server_plugin >=0.3.16 <0.3.17 depends on analyzer_plugin 0.14.10 and analysis_server_plugin >=0.3.17 <0.3.18 depends on analyzer_plugin 0.14.11, analysis_server_plugin >=0.3.8 <0.3.18 requires analyzer_plugin 0.14.2 or 0.14.3 or 0.14.4 or 0.14.5 or 0.14.7 or 0.14.8 or 0.14.9 or 0.14.10 or 0.14.11.
+And because analysis_server_plugin >=0.3.18 <0.3.19 depends on analyzer_plugin 0.14.12 and analysis_server_plugin >=0.3.19 <0.3.20 depends on analyzer_plugin 0.14.13, analysis_server_plugin >=0.3.8 <0.3.20 requires analyzer_plugin 0.14.2 or 0.14.3 or 0.14.4 or 0.14.5 or 0.14.7 or 0.14.8 or 0.14.9 or 0.14.10 or 0.14.11 or 0.14.12 or 0.14.13.
+And because analysis_server_plugin >=0.3.20 <0.3.21 depends on analyzer_plugin 0.14.14 and analysis_server_plugin >=0.3.21 <0.3.22 depends on analyzer_plugin 0.14.15, analysis_server_plugin >=0.3.8 <0.3.22 requires analyzer_plugin 0.14.2 or 0.14.3 or 0.14.4 or 0.14.5 or 0.14.7 or 0.14.8 or 0.14.9 or 0.14.10 or 0.14.11 or 0.14.12 or 0.14.13 or 0.14.14 or 0.14.15.
+And because analysis_server_plugin >=0.3.22 <0.3.23 depends on analyzer_plugin 0.14.16 and analysis_server_plugin >=0.3.23 <0.3.24 depends on analyzer_plugin 0.14.17, analysis_server_plugin >=0.3.8 <0.3.24 requires analyzer_plugin 0.14.2 or 0.14.3 or 0.14.4 or 0.14.5 or 0.14.7 or 0.14.8 or 0.14.9 or 0.14.10 or 0.14.11 or 0.14.12 or 0.14.13 or 0.14.14 or 0.14.15 or 0.14.16 or 0.14.17.
+And because analysis_server_plugin >=0.3.24 depends on analyzer_plugin 0.14.18 and riverpod_lint >=3.1.0 <3.1.4-dev.1 depends on analyzer_plugin ^0.13.10, riverpod_lint >=3.1.0 <3.1.4-dev.1 is incompatible with analysis_server_plugin >=0.3.8.
+So, because plugin_entrypoint depends on both analysis_server_plugin ^0.3.8 and riverpod_lint 3.1.0, version solving failed.
+
+
+You can try one of the following suggestions to make the pubspec resolve:
+* Try upgrading your constraint on riverpod_lint: dart pub add riverpod_lint:^3.1.9
+* Consider downgrading your constraint on analysis_server_plugin: dart pub add analysis_server_plugin:^0.3.3
+
+
+#0      PluginManager._computeFiles (package:analysis_server/src/plugin/plugin_manager.dart:683)
+#1      PluginManager.filesFor (package:analysis_server/src/plugin/plugin_manager.dart:348)
+#2      PluginManager.addPluginToContextRoot (package:analysis_server/src/plugin/plugin_manager.dart:189)
+#3      PluginWatcher._addPlugins (package:analysis_server/src/plugin/plugin_watcher.dart:160)
+#4      PluginWatcher.addedDriver (package:analysis_server/src/plugin/plugin_watcher.dart:75)
+#5      AnalysisDriverScheduler.add (package:analyzer/src/dart/analysis/driver.dart:2682)
+#6      new AnalysisDriver (package:analyzer/src/dart/analysis/driver.dart:345)
+#7      ContextBuilderImpl.createContext (package:analyzer/src/dart/analysis/context_builder.dart:160)
+#8      new AnalysisContextCollectionImpl (package:analyzer/src/dart/analysis/analysis_context_collection.dart:95)
+#9      ContextManagerImpl._createAnalysisContexts.performContextRebuildGuarded.performContextRebuild (package:analysis_server/src/context_manager.dart:596)
+<asynchronous suspension>
+#10     ContextManagerImpl._createAnalysisContexts.performContextRebuildGuarded (package:analysis_server/src/context_manager.dart:750)
+<asynchronous suspension>
+#11     _CancellingTaskQueue.queue.<anonymous closure> (package:analysis_server/src/context_manager.dart:1059)
+<asynchronous suspension>
+#12     ContextManagerImpl.setRoots (package:analysis_server/src/context_manager.dart:386)
+<asynchronous suspension>
+#13     LegacyAnalysisServer.setAnalysisRoots (package:analysis_server/src/legacy_analysis_server.dart:903)
+<asynchronous suspension>
+#14     AnalysisSetAnalysisRootsHandler.handle (package:analysis_server/src/handler/legacy/analysis_set_analysis_roots.dart:52)
+<asynchronous suspension>
+#15     LegacyAnalysisServer.handleRequest.<anonymous closure>.<anonymous closure> (package:analysis_server/src/legacy_analysis_server.dart:651)
+<asynchronous suspension>
+#16     AsyncSpan.runUnary (package:perf_witness/src/async_span.dart:183)
+<asynchronous suspension>
+#17     OperationPerformanceImpl.runAsync (package:analyzer/src/util/performance/operation_performance.dart:229)
+<asynchronous suspension>
+#18     LegacyAnalysisServer.handleRequest.<anonymous closure> (package:analysis_server/src/legacy_analysis_server.dart:631)
+<asynchronous suspension>

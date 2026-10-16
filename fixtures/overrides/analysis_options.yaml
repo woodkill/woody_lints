@@ -1,0 +1,12 @@
+include: package:woody_lints/recommended.yaml
+
+# 프로젝트 전체에서 끄기 — 규칙 하나 (맵 문법) 와 plugin 진단 하나 (version 을 함께 적는다).
+linter:
+  rules:
+    prefer_final_locals: false
+
+plugins:
+  riverpod_lint:
+    version: ^3.1.9
+    diagnostics:
+      missing_provider_scope: false

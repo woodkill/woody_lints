@@ -1,0 +1,1762 @@
+{
+  "runId": 38216842742,
+  "workflow": "spike-017-018-runner",
+  "event": "push",
+  "headSha": "0d20c10",
+  "conclusion": "success",
+  "createdAt": "2026-10-12T07:16:40Z",
+  "jobs": [
+    {
+      "name": "six · ubuntu-24.04 · par · 1",
+      "conclusion": "success",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "jobSeconds": 146,
+      "stepSeconds": {
+        "Set up job": 1,
+        "Run actions/checkout@v7": 1,
+        "Run subosito/flutter-action@v2": 49,
+        "컴퓨터와 SDK": 0,
+        "여섯 프로젝트 점검": 91,
+        "Post Run subosito/flutter-action@v2": 0,
+        "Post Run actions/checkout@v7": 0,
+        "Complete job": 0
+      },
+      "runnerImage": "ubuntu-24.04 20261004.327.1",
+      "osRelease": "Ubuntu 24.04.5 LTS",
+      "glibc": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.9) 2.39",
+      "verifyScreen": null,
+      "verifyVerdict": null,
+      "result": {
+        "dart": "3.13.4",
+        "os": "linux",
+        "osRelease": "Ubuntu 24.04.5 LTS",
+        "processors": 4,
+        "memoryMb": 15989,
+        "githubActions": "true",
+        "imageOs": "ubuntu24",
+        "imageVersion": "20261004.327.1",
+        "label": "ubuntu-24.04",
+        "sample": "1",
+        "mode": "par",
+        "rootPubGetMs": 63,
+        "fixturePubGetMs": {
+          "example (옛 주소)": 1156,
+          "recommended": 37,
+          "base_only": 38,
+          "overrides": 38,
+          "base_riverpod": 38,
+          "base_codegen": 38
+        },
+        "prepMs": 1427,
+        "totalMs": 90406,
+        "pluginVersions": {
+          "riverpod_lint": [
+            "3.1.9"
+          ],
+          "analyzer": [
+            "14.5.0"
+          ],
+          "analysis_server_plugin": [
+            "0.3.24"
+          ]
+        },
+        "passes": [
+          {
+            "tag": "par-cold",
+            "wallMs": 68752,
+            "sumMs": 302583,
+            "perFixtureMs": {
+              "example (옛 주소)": 67320,
+              "recommended": 68750,
+              "base_only": 19420,
+              "overrides": 68197,
+              "base_riverpod": 60372,
+              "base_codegen": 18522
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          },
+          {
+            "tag": "par-warm",
+            "wallMs": 20216,
+            "sumMs": 116184,
+            "perFixtureMs": {
+              "example (옛 주소)": 20215,
+              "recommended": 19702,
+              "base_only": 17253,
+              "overrides": 20104,
+              "base_riverpod": 19945,
+              "base_codegen": 18962
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          }
+        ],
+        "checksOk": true,
+        "failed": [],
+        "checkCount": 24
+      }
+    },
+    {
+      "name": "six · ubuntu-24.04 · par · 2",
+      "conclusion": "success",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "jobSeconds": 185,
+      "stepSeconds": {
+        "Set up job": 0,
+        "Run actions/checkout@v7": 1,
+        "Run subosito/flutter-action@v2": 56,
+        "컴퓨터와 SDK": 1,
+        "여섯 프로젝트 점검": 123,
+        "Post Run subosito/flutter-action@v2": 0,
+        "Post Run actions/checkout@v7": 0,
+        "Complete job": 0
+      },
+      "runnerImage": "ubuntu-24.04 20261004.327.1",
+      "osRelease": "Ubuntu 24.04.5 LTS",
+      "glibc": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.9) 2.39",
+      "verifyScreen": null,
+      "verifyVerdict": null,
+      "result": {
+        "dart": "3.13.4",
+        "os": "linux",
+        "osRelease": "Ubuntu 24.04.5 LTS",
+        "processors": 4,
+        "memoryMb": 15989,
+        "githubActions": "true",
+        "imageOs": "ubuntu24",
+        "imageVersion": "20261004.327.1",
+        "label": "ubuntu-24.04",
+        "sample": "2",
+        "mode": "par",
+        "rootPubGetMs": 68,
+        "fixturePubGetMs": {
+          "example (옛 주소)": 2050,
+          "recommended": 57,
+          "base_only": 58,
+          "overrides": 56,
+          "base_riverpod": 57,
+          "base_codegen": 57
+        },
+        "prepMs": 2420,
+        "totalMs": 122920,
+        "pluginVersions": {
+          "riverpod_lint": [
+            "3.1.9"
+          ],
+          "analyzer": [
+            "14.5.0"
+          ],
+          "analysis_server_plugin": [
+            "0.3.24"
+          ]
+        },
+        "passes": [
+          {
+            "tag": "par-cold",
+            "wallMs": 93566,
+            "sumMs": 413671,
+            "perFixtureMs": {
+              "example (옛 주소)": 93563,
+              "recommended": 93452,
+              "base_only": 26494,
+              "overrides": 92117,
+              "base_riverpod": 84328,
+              "base_codegen": 23714
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          },
+          {
+            "tag": "par-warm",
+            "wallMs": 26917,
+            "sumMs": 150380,
+            "perFixtureMs": {
+              "example (옛 주소)": 24873,
+              "recommended": 25215,
+              "base_only": 24812,
+              "overrides": 25686,
+              "base_riverpod": 26915,
+              "base_codegen": 22877
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          }
+        ],
+        "checksOk": true,
+        "failed": [],
+        "checkCount": 24
+      }
+    },
+    {
+      "name": "six · ubuntu-24.04 · par · 3",
+      "conclusion": "success",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "jobSeconds": 159,
+      "stepSeconds": {
+        "Set up job": 1,
+        "Run actions/checkout@v7": 1,
+        "Run subosito/flutter-action@v2": 49,
+        "컴퓨터와 SDK": 1,
+        "여섯 프로젝트 점검": 104,
+        "Post Run subosito/flutter-action@v2": 0,
+        "Post Run actions/checkout@v7": 1,
+        "Complete job": 0
+      },
+      "runnerImage": "ubuntu-24.04 20261004.327.1",
+      "osRelease": "Ubuntu 24.04.5 LTS",
+      "glibc": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.9) 2.39",
+      "verifyScreen": null,
+      "verifyVerdict": null,
+      "result": {
+        "dart": "3.13.4",
+        "os": "linux",
+        "osRelease": "Ubuntu 24.04.5 LTS",
+        "processors": 4,
+        "memoryMb": 15989,
+        "githubActions": "true",
+        "imageOs": "ubuntu24",
+        "imageVersion": "20261004.327.1",
+        "label": "ubuntu-24.04",
+        "sample": "3",
+        "mode": "par",
+        "rootPubGetMs": 63,
+        "fixturePubGetMs": {
+          "example (옛 주소)": 1517,
+          "recommended": 51,
+          "base_only": 51,
+          "overrides": 51,
+          "base_riverpod": 49,
+          "base_codegen": 50
+        },
+        "prepMs": 1846,
+        "totalMs": 103998,
+        "pluginVersions": {
+          "riverpod_lint": [
+            "3.1.9"
+          ],
+          "analyzer": [
+            "14.5.0"
+          ],
+          "analysis_server_plugin": [
+            "0.3.24"
+          ]
+        },
+        "passes": [
+          {
+            "tag": "par-cold",
+            "wallMs": 79463,
+            "sumMs": 360314,
+            "perFixtureMs": {
+              "example (옛 주소)": 76231,
+              "recommended": 79461,
+              "base_only": 23902,
+              "overrides": 78670,
+              "base_riverpod": 78530,
+              "base_codegen": 23518
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          },
+          {
+            "tag": "par-warm",
+            "wallMs": 22675,
+            "sumMs": 131991,
+            "perFixtureMs": {
+              "example (옛 주소)": 22376,
+              "recommended": 22674,
+              "base_only": 20049,
+              "overrides": 22528,
+              "base_riverpod": 22448,
+              "base_codegen": 21915
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          }
+        ],
+        "checksOk": true,
+        "failed": [],
+        "checkCount": 24
+      }
+    },
+    {
+      "name": "six · ubuntu-24.04 · seq · 1",
+      "conclusion": "success",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "jobSeconds": 245,
+      "stepSeconds": {
+        "Set up job": 2,
+        "Run actions/checkout@v7": 1,
+        "Run subosito/flutter-action@v2": 46,
+        "컴퓨터와 SDK": 0,
+        "여섯 프로젝트 점검": 192,
+        "Post Run subosito/flutter-action@v2": 0,
+        "Post Run actions/checkout@v7": 0,
+        "Complete job": 0
+      },
+      "runnerImage": "ubuntu-24.04 20261004.327.1",
+      "osRelease": "Ubuntu 24.04.5 LTS",
+      "glibc": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.9) 2.39",
+      "verifyScreen": null,
+      "verifyVerdict": null,
+      "result": {
+        "dart": "3.13.4",
+        "os": "linux",
+        "osRelease": "Ubuntu 24.04.5 LTS",
+        "processors": 4,
+        "memoryMb": 15989,
+        "githubActions": "true",
+        "imageOs": "ubuntu24",
+        "imageVersion": "20261004.327.1",
+        "label": "ubuntu-24.04",
+        "sample": "1",
+        "mode": "seq",
+        "rootPubGetMs": 92,
+        "fixturePubGetMs": {
+          "example (옛 주소)": 1794,
+          "recommended": 47,
+          "base_only": 46,
+          "overrides": 46,
+          "base_riverpod": 48,
+          "base_codegen": 47
+        },
+        "prepMs": 2131,
+        "totalMs": 191070,
+        "pluginVersions": {
+          "riverpod_lint": [
+            "3.1.9"
+          ],
+          "analyzer": [
+            "14.5.0"
+          ],
+          "analysis_server_plugin": [
+            "0.3.24"
+          ]
+        },
+        "passes": [
+          {
+            "tag": "seq-cold",
+            "wallMs": 145811,
+            "sumMs": 145794,
+            "perFixtureMs": {
+              "example (옛 주소)": 34737,
+              "recommended": 34040,
+              "base_only": 6183,
+              "overrides": 34204,
+              "base_riverpod": 30435,
+              "base_codegen": 6192
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          },
+          {
+            "tag": "seq-warm",
+            "wallMs": 43114,
+            "sumMs": 43107,
+            "perFixtureMs": {
+              "example (옛 주소)": 6407,
+              "recommended": 6480,
+              "base_only": 5729,
+              "overrides": 6505,
+              "base_riverpod": 11858,
+              "base_codegen": 6126
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          }
+        ],
+        "checksOk": true,
+        "failed": [],
+        "checkCount": 24
+      }
+    },
+    {
+      "name": "six · ubuntu-24.04 · seq · 2",
+      "conclusion": "success",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "jobSeconds": 308,
+      "stepSeconds": {
+        "Set up job": 1,
+        "Run actions/checkout@v7": 1,
+        "Run subosito/flutter-action@v2": 62,
+        "컴퓨터와 SDK": 1,
+        "여섯 프로젝트 점검": 240,
+        "Post Run subosito/flutter-action@v2": 0,
+        "Post Run actions/checkout@v7": 0,
+        "Complete job": 0
+      },
+      "runnerImage": "ubuntu-24.04 20261004.327.1",
+      "osRelease": "Ubuntu 24.04.5 LTS",
+      "glibc": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.9) 2.39",
+      "verifyScreen": null,
+      "verifyVerdict": null,
+      "result": {
+        "dart": "3.13.4",
+        "os": "linux",
+        "osRelease": "Ubuntu 24.04.5 LTS",
+        "processors": 4,
+        "memoryMb": 15989,
+        "githubActions": "true",
+        "imageOs": "ubuntu24",
+        "imageVersion": "20261004.327.1",
+        "label": "ubuntu-24.04",
+        "sample": "2",
+        "mode": "seq",
+        "rootPubGetMs": 115,
+        "fixturePubGetMs": {
+          "example (옛 주소)": 2888,
+          "recommended": 62,
+          "base_only": 60,
+          "overrides": 61,
+          "base_riverpod": 60,
+          "base_codegen": 61
+        },
+        "prepMs": 3324,
+        "totalMs": 239773,
+        "pluginVersions": {
+          "riverpod_lint": [
+            "3.1.9"
+          ],
+          "analyzer": [
+            "14.5.0"
+          ],
+          "analysis_server_plugin": [
+            "0.3.24"
+          ]
+        },
+        "passes": [
+          {
+            "tag": "seq-cold",
+            "wallMs": 186357,
+            "sumMs": 186335,
+            "perFixtureMs": {
+              "example (옛 주소)": 45127,
+              "recommended": 43486,
+              "base_only": 8065,
+              "overrides": 43930,
+              "base_riverpod": 38019,
+              "base_codegen": 7707
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          },
+          {
+            "tag": "seq-warm",
+            "wallMs": 50071,
+            "sumMs": 50062,
+            "perFixtureMs": {
+              "example (옛 주소)": 8318,
+              "recommended": 8276,
+              "base_only": 7490,
+              "overrides": 8376,
+              "base_riverpod": 9863,
+              "base_codegen": 7737
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          }
+        ],
+        "checksOk": true,
+        "failed": [],
+        "checkCount": 24
+      }
+    },
+    {
+      "name": "six · ubuntu-24.04 · seq · 3",
+      "conclusion": "success",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "jobSeconds": 293,
+      "stepSeconds": {
+        "Set up job": 1,
+        "Run actions/checkout@v7": 1,
+        "Run subosito/flutter-action@v2": 64,
+        "컴퓨터와 SDK": 1,
+        "여섯 프로젝트 점검": 222,
+        "Post Run subosito/flutter-action@v2": 0,
+        "Post Run actions/checkout@v7": 0,
+        "Complete job": 0
+      },
+      "runnerImage": "ubuntu-24.04 20261004.327.1",
+      "osRelease": "Ubuntu 24.04.5 LTS",
+      "glibc": "ldd (Ubuntu GLIBC 2.39-0ubuntu8.9) 2.39",
+      "verifyScreen": null,
+      "verifyVerdict": null,
+      "result": {
+        "dart": "3.13.4",
+        "os": "linux",
+        "osRelease": "Ubuntu 24.04.5 LTS",
+        "processors": 4,
+        "memoryMb": 15988,
+        "githubActions": "true",
+        "imageOs": "ubuntu24",
+        "imageVersion": "20261004.327.1",
+        "label": "ubuntu-24.04",
+        "sample": "3",
+        "mode": "seq",
+        "rootPubGetMs": 139,
+        "fixturePubGetMs": {
+          "example (옛 주소)": 3471,
+          "recommended": 52,
+          "base_only": 51,
+          "overrides": 51,
+          "base_riverpod": 52,
+          "base_codegen": 51
+        },
+        "prepMs": 3880,
+        "totalMs": 220668,
+        "pluginVersions": {
+          "riverpod_lint": [
+            "3.1.9"
+          ],
+          "analyzer": [
+            "14.5.0"
+          ],
+          "analysis_server_plugin": [
+            "0.3.24"
+          ]
+        },
+        "passes": [
+          {
+            "tag": "seq-cold",
+            "wallMs": 166111,
+            "sumMs": 166092,
+            "perFixtureMs": {
+              "example (옛 주소)": 39864,
+              "recommended": 38521,
+              "base_only": 7199,
+              "overrides": 39149,
+              "base_riverpod": 34187,
+              "base_codegen": 7171
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          },
+          {
+            "tag": "seq-warm",
+            "wallMs": 50659,
+            "sumMs": 50651,
+            "perFixtureMs": {
+              "example (옛 주소)": 7440,
+              "recommended": 7663,
+              "base_only": 6882,
+              "overrides": 7659,
+              "base_riverpod": 13967,
+              "base_codegen": 7038
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          }
+        ],
+        "checksOk": true,
+        "failed": [],
+        "checkCount": 24
+      }
+    },
+    {
+      "name": "six · ubuntu-26.04 · par · 1",
+      "conclusion": "success",
+      "labels": [
+        "ubuntu-26.04"
+      ],
+      "jobSeconds": 166,
+      "stepSeconds": {
+        "Set up job": 0,
+        "Run actions/checkout@v7": 1,
+        "Run subosito/flutter-action@v2": 33,
+        "컴퓨터와 SDK": 0,
+        "여섯 프로젝트 점검": 128,
+        "Post Run subosito/flutter-action@v2": 0,
+        "Post Run actions/checkout@v7": 0,
+        "Complete job": 1
+      },
+      "runnerImage": "ubuntu-26.04 20260927.149.1",
+      "osRelease": "Ubuntu 26.04.1 LTS",
+      "glibc": "ldd (Ubuntu GLIBC 2.43-2ubuntu2.4) 2.43",
+      "verifyScreen": null,
+      "verifyVerdict": null,
+      "result": {
+        "dart": "3.13.4",
+        "os": "linux",
+        "osRelease": "Ubuntu 26.04.1 LTS",
+        "processors": 4,
+        "memoryMb": 15983,
+        "githubActions": "true",
+        "imageOs": "ubuntu26",
+        "imageVersion": "20260927.149.1",
+        "label": "ubuntu-26.04",
+        "sample": "1",
+        "mode": "par",
+        "rootPubGetMs": 87,
+        "fixturePubGetMs": {
+          "example (옛 주소)": 2144,
+          "recommended": 62,
+          "base_only": 62,
+          "overrides": 60,
+          "base_riverpod": 60,
+          "base_codegen": 59
+        },
+        "prepMs": 2549,
+        "totalMs": 127615,
+        "pluginVersions": {
+          "riverpod_lint": [
+            "3.1.9"
+          ],
+          "analyzer": [
+            "14.5.0"
+          ],
+          "analysis_server_plugin": [
+            "0.3.24"
+          ]
+        },
+        "passes": [
+          {
+            "tag": "par-cold",
+            "wallMs": 94881,
+            "sumMs": 415366,
+            "perFixtureMs": {
+              "example (옛 주소)": 94550,
+              "recommended": 94878,
+              "base_only": 22608,
+              "overrides": 94464,
+              "base_riverpod": 84585,
+              "base_codegen": 24280
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          },
+          {
+            "tag": "par-warm",
+            "wallMs": 30166,
+            "sumMs": 171796,
+            "perFixtureMs": {
+              "example (옛 주소)": 29489,
+              "recommended": 27471,
+              "base_only": 27301,
+              "overrides": 30042,
+              "base_riverpod": 30165,
+              "base_codegen": 27326
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          }
+        ],
+        "checksOk": true,
+        "failed": [],
+        "checkCount": 24
+      }
+    },
+    {
+      "name": "six · ubuntu-26.04 · par · 2",
+      "conclusion": "success",
+      "labels": [
+        "ubuntu-26.04"
+      ],
+      "jobSeconds": 163,
+      "stepSeconds": {
+        "Set up job": 1,
+        "Run actions/checkout@v7": 0,
+        "Run subosito/flutter-action@v2": 32,
+        "컴퓨터와 SDK": 0,
+        "여섯 프로젝트 점검": 127,
+        "Post Run subosito/flutter-action@v2": 0,
+        "Post Run actions/checkout@v7": 0,
+        "Complete job": 0
+      },
+      "runnerImage": "ubuntu-26.04 20260927.149.1",
+      "osRelease": "Ubuntu 26.04.1 LTS",
+      "glibc": "ldd (Ubuntu GLIBC 2.43-2ubuntu2.4) 2.43",
+      "verifyScreen": null,
+      "verifyVerdict": null,
+      "result": {
+        "dart": "3.13.4",
+        "os": "linux",
+        "osRelease": "Ubuntu 26.04.1 LTS",
+        "processors": 4,
+        "memoryMb": 15983,
+        "githubActions": "true",
+        "imageOs": "ubuntu26",
+        "imageVersion": "20260927.149.1",
+        "label": "ubuntu-26.04",
+        "sample": "2",
+        "mode": "par",
+        "rootPubGetMs": 71,
+        "fixturePubGetMs": {
+          "example (옛 주소)": 2037,
+          "recommended": 61,
+          "base_only": 60,
+          "overrides": 60,
+          "base_riverpod": 60,
+          "base_codegen": 60
+        },
+        "prepMs": 2425,
+        "totalMs": 126195,
+        "pluginVersions": {
+          "riverpod_lint": [
+            "3.1.9"
+          ],
+          "analyzer": [
+            "14.5.0"
+          ],
+          "analysis_server_plugin": [
+            "0.3.24"
+          ]
+        },
+        "passes": [
+          {
+            "tag": "par-cold",
+            "wallMs": 93958,
+            "sumMs": 416477,
+            "perFixtureMs": {
+              "example (옛 주소)": 93956,
+              "recommended": 93688,
+              "base_only": 23490,
+              "overrides": 93065,
+              "base_riverpod": 86385,
+              "base_codegen": 25890
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          },
+          {
+            "tag": "par-warm",
+            "wallMs": 29793,
+            "sumMs": 167265,
+            "perFixtureMs": {
+              "example (옛 주소)": 28427,
+              "recommended": 27670,
+              "base_only": 26308,
+              "overrides": 28160,
+              "base_riverpod": 29791,
+              "base_codegen": 26906
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          }
+        ],
+        "checksOk": true,
+        "failed": [],
+        "checkCount": 24
+      }
+    },
+    {
+      "name": "six · ubuntu-26.04 · par · 3",
+      "conclusion": "success",
+      "labels": [
+        "ubuntu-26.04"
+      ],
+      "jobSeconds": 136,
+      "stepSeconds": {
+        "Set up job": 1,
+        "Run actions/checkout@v7": 1,
+        "Run subosito/flutter-action@v2": 28,
+        "컴퓨터와 SDK": 1,
+        "여섯 프로젝트 점검": 103,
+        "Post Run subosito/flutter-action@v2": 0,
+        "Post Run actions/checkout@v7": 0,
+        "Complete job": 0
+      },
+      "runnerImage": "ubuntu-26.04 20260927.149.1",
+      "osRelease": "Ubuntu 26.04.1 LTS",
+      "glibc": "ldd (Ubuntu GLIBC 2.43-2ubuntu2.4) 2.43",
+      "verifyScreen": null,
+      "verifyVerdict": null,
+      "result": {
+        "dart": "3.13.4",
+        "os": "linux",
+        "osRelease": "Ubuntu 26.04.1 LTS",
+        "processors": 4,
+        "memoryMb": 15983,
+        "githubActions": "true",
+        "imageOs": "ubuntu26",
+        "imageVersion": "20260927.149.1",
+        "label": "ubuntu-26.04",
+        "sample": "3",
+        "mode": "par",
+        "rootPubGetMs": 62,
+        "fixturePubGetMs": {
+          "example (옛 주소)": 1552,
+          "recommended": 51,
+          "base_only": 50,
+          "overrides": 50,
+          "base_riverpod": 50,
+          "base_codegen": 50
+        },
+        "prepMs": 1878,
+        "totalMs": 102490,
+        "pluginVersions": {
+          "riverpod_lint": [
+            "3.1.9"
+          ],
+          "analyzer": [
+            "14.5.0"
+          ],
+          "analysis_server_plugin": [
+            "0.3.24"
+          ]
+        },
+        "passes": [
+          {
+            "tag": "par-cold",
+            "wallMs": 78389,
+            "sumMs": 349405,
+            "perFixtureMs": {
+              "example (옛 주소)": 77607,
+              "recommended": 76820,
+              "base_only": 19986,
+              "overrides": 78386,
+              "base_riverpod": 73742,
+              "base_codegen": 22862
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          },
+          {
+            "tag": "par-warm",
+            "wallMs": 22209,
+            "sumMs": 128499,
+            "perFixtureMs": {
+              "example (옛 주소)": 22208,
+              "recommended": 21216,
+              "base_only": 20836,
+              "overrides": 21499,
+              "base_riverpod": 20588,
+              "base_codegen": 22150
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          }
+        ],
+        "checksOk": true,
+        "failed": [],
+        "checkCount": 24
+      }
+    },
+    {
+      "name": "six · ubuntu-26.04 · seq · 1",
+      "conclusion": "success",
+      "labels": [
+        "ubuntu-26.04"
+      ],
+      "jobSeconds": 282,
+      "stepSeconds": {
+        "Set up job": 1,
+        "Run actions/checkout@v7": 1,
+        "Run subosito/flutter-action@v2": 34,
+        "컴퓨터와 SDK": 0,
+        "여섯 프로젝트 점검": 243,
+        "Post Run subosito/flutter-action@v2": 0,
+        "Post Run actions/checkout@v7": 1,
+        "Complete job": 0
+      },
+      "runnerImage": "ubuntu-26.04 20260927.149.1",
+      "osRelease": "Ubuntu 26.04.1 LTS",
+      "glibc": "ldd (Ubuntu GLIBC 2.43-2ubuntu2.4) 2.43",
+      "verifyScreen": null,
+      "verifyVerdict": null,
+      "result": {
+        "dart": "3.13.4",
+        "os": "linux",
+        "osRelease": "Ubuntu 26.04.1 LTS",
+        "processors": 4,
+        "memoryMb": 15983,
+        "githubActions": "true",
+        "imageOs": "ubuntu26",
+        "imageVersion": "20260927.149.1",
+        "label": "ubuntu-26.04",
+        "sample": "1",
+        "mode": "seq",
+        "rootPubGetMs": 148,
+        "fixturePubGetMs": {
+          "example (옛 주소)": 2526,
+          "recommended": 63,
+          "base_only": 60,
+          "overrides": 61,
+          "base_riverpod": 61,
+          "base_codegen": 61
+        },
+        "prepMs": 2996,
+        "totalMs": 242524,
+        "pluginVersions": {
+          "riverpod_lint": [
+            "3.1.9"
+          ],
+          "analyzer": [
+            "14.5.0"
+          ],
+          "analysis_server_plugin": [
+            "0.3.24"
+          ]
+        },
+        "passes": [
+          {
+            "tag": "seq-cold",
+            "wallMs": 191229,
+            "sumMs": 191206,
+            "perFixtureMs": {
+              "example (옛 주소)": 45068,
+              "recommended": 44761,
+              "base_only": 8037,
+              "overrides": 44686,
+              "base_riverpod": 40665,
+              "base_codegen": 7987
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          },
+          {
+            "tag": "seq-warm",
+            "wallMs": 48279,
+            "sumMs": 48270,
+            "perFixtureMs": {
+              "example (옛 주소)": 8103,
+              "recommended": 8169,
+              "base_only": 7141,
+              "overrides": 8234,
+              "base_riverpod": 9807,
+              "base_codegen": 6815
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          }
+        ],
+        "checksOk": true,
+        "failed": [],
+        "checkCount": 24
+      }
+    },
+    {
+      "name": "six · ubuntu-26.04 · seq · 2",
+      "conclusion": "success",
+      "labels": [
+        "ubuntu-26.04"
+      ],
+      "jobSeconds": 263,
+      "stepSeconds": {
+        "Set up job": 1,
+        "Run actions/checkout@v7": 1,
+        "Run subosito/flutter-action@v2": 39,
+        "컴퓨터와 SDK": 0,
+        "여섯 프로젝트 점검": 218,
+        "Post Run subosito/flutter-action@v2": 0,
+        "Post Run actions/checkout@v7": 0,
+        "Complete job": 0
+      },
+      "runnerImage": "ubuntu-26.04 20260927.149.1",
+      "osRelease": "Ubuntu 26.04.1 LTS",
+      "glibc": "ldd (Ubuntu GLIBC 2.43-2ubuntu2.4) 2.43",
+      "verifyScreen": null,
+      "verifyVerdict": null,
+      "result": {
+        "dart": "3.13.4",
+        "os": "linux",
+        "osRelease": "Ubuntu 26.04.1 LTS",
+        "processors": 4,
+        "memoryMb": 15982,
+        "githubActions": "true",
+        "imageOs": "ubuntu26",
+        "imageVersion": "20260927.149.1",
+        "label": "ubuntu-26.04",
+        "sample": "2",
+        "mode": "seq",
+        "rootPubGetMs": 97,
+        "fixturePubGetMs": {
+          "example (옛 주소)": 3464,
+          "recommended": 53,
+          "base_only": 52,
+          "overrides": 52,
+          "base_riverpod": 53,
+          "base_codegen": 52
+        },
+        "prepMs": 3835,
+        "totalMs": 217329,
+        "pluginVersions": {
+          "riverpod_lint": [
+            "3.1.9"
+          ],
+          "analyzer": [
+            "14.5.0"
+          ],
+          "analysis_server_plugin": [
+            "0.3.24"
+          ]
+        },
+        "passes": [
+          {
+            "tag": "seq-cold",
+            "wallMs": 165540,
+            "sumMs": 165521,
+            "perFixtureMs": {
+              "example (옛 주소)": 40003,
+              "recommended": 38427,
+              "base_only": 7174,
+              "overrides": 38382,
+              "base_riverpod": 34208,
+              "base_codegen": 7324
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          },
+          {
+            "tag": "seq-warm",
+            "wallMs": 47940,
+            "sumMs": 47933,
+            "perFixtureMs": {
+              "example (옛 주소)": 7712,
+              "recommended": 7656,
+              "base_only": 6107,
+              "overrides": 7549,
+              "base_riverpod": 12281,
+              "base_codegen": 6626
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          }
+        ],
+        "checksOk": true,
+        "failed": [],
+        "checkCount": 24
+      }
+    },
+    {
+      "name": "six · ubuntu-26.04 · seq · 3",
+      "conclusion": "success",
+      "labels": [
+        "ubuntu-26.04"
+      ],
+      "jobSeconds": 269,
+      "stepSeconds": {
+        "Set up job": 1,
+        "Run actions/checkout@v7": 0,
+        "Run subosito/flutter-action@v2": 33,
+        "컴퓨터와 SDK": 1,
+        "여섯 프로젝트 점검": 230,
+        "Post Run subosito/flutter-action@v2": 0,
+        "Post Run actions/checkout@v7": 1,
+        "Complete job": 0
+      },
+      "runnerImage": "ubuntu-26.04 20260927.149.1",
+      "osRelease": "Ubuntu 26.04.1 LTS",
+      "glibc": "ldd (Ubuntu GLIBC 2.43-2ubuntu2.4) 2.43",
+      "verifyScreen": null,
+      "verifyVerdict": null,
+      "result": {
+        "dart": "3.13.4",
+        "os": "linux",
+        "osRelease": "Ubuntu 26.04.1 LTS",
+        "processors": 4,
+        "memoryMb": 15983,
+        "githubActions": "true",
+        "imageOs": "ubuntu26",
+        "imageVersion": "20260927.149.1",
+        "label": "ubuntu-26.04",
+        "sample": "3",
+        "mode": "seq",
+        "rootPubGetMs": 76,
+        "fixturePubGetMs": {
+          "example (옛 주소)": 1981,
+          "recommended": 61,
+          "base_only": 59,
+          "overrides": 59,
+          "base_riverpod": 59,
+          "base_codegen": 59
+        },
+        "prepMs": 2370,
+        "totalMs": 230092,
+        "pluginVersions": {
+          "riverpod_lint": [
+            "3.1.9"
+          ],
+          "analyzer": [
+            "14.5.0"
+          ],
+          "analysis_server_plugin": [
+            "0.3.24"
+          ]
+        },
+        "passes": [
+          {
+            "tag": "seq-cold",
+            "wallMs": 178353,
+            "sumMs": 178332,
+            "perFixtureMs": {
+              "example (옛 주소)": 42704,
+              "recommended": 41663,
+              "base_only": 7406,
+              "overrides": 41592,
+              "base_riverpod": 37765,
+              "base_codegen": 7199
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          },
+          {
+            "tag": "seq-warm",
+            "wallMs": 49350,
+            "sumMs": 49342,
+            "perFixtureMs": {
+              "example (옛 주소)": 7523,
+              "recommended": 7652,
+              "base_only": 6639,
+              "overrides": 7447,
+              "base_riverpod": 13123,
+              "base_codegen": 6956
+            },
+            "exitCodes": {
+              "example (옛 주소)": 2,
+              "recommended": 2,
+              "base_only": 2,
+              "overrides": 2,
+              "base_riverpod": 2,
+              "base_codegen": 0
+            },
+            "lineCounts": {
+              "example (옛 주소)": 16,
+              "recommended": 16,
+              "base_only": 18,
+              "overrides": 15,
+              "base_riverpod": 21,
+              "base_codegen": 13
+            },
+            "pluginFolders": {
+              "example (옛 주소)": 1,
+              "recommended": 1,
+              "base_only": 0,
+              "overrides": 1,
+              "base_riverpod": 1,
+              "base_codegen": 0
+            },
+            "stderrHeads": {}
+          }
+        ],
+        "checksOk": true,
+        "failed": [],
+        "checkCount": 24
+      }
+    },
+    {
+      "name": "verify · ubuntu-26.04 · 1",
+      "conclusion": "success",
+      "labels": [
+        "ubuntu-26.04"
+      ],
+      "jobSeconds": 70,
+      "stepSeconds": {
+        "Set up job": 1,
+        "Run actions/checkout@v7": 1,
+        "Run subosito/flutter-action@v2": 27,
+        "컴퓨터": 1,
+        "검증": 37,
+        "Post Run subosito/flutter-action@v2": 0,
+        "Post Run actions/checkout@v7": 0,
+        "Complete job": 0
+      },
+      "runnerImage": "ubuntu-26.04 20260927.149.1",
+      "osRelease": "Ubuntu 26.04.1 LTS",
+      "glibc": "ldd (Ubuntu GLIBC 2.43-2ubuntu2.4) 2.43",
+      "verifyScreen": [
+        "SDK        Flutter 3.47.5 / Dart 3.13.4",
+        "기반 세트  flutter_lints 6.0.0 / lints 6.1.0",
+        "plugin     riverpod_lint 3.1.9"
+      ],
+      "verifyVerdict": "점검 통과 (4개 중 4개)",
+      "result": null
+    },
+    {
+      "name": "verify · ubuntu-26.04 · 2",
+      "conclusion": "success",
+      "labels": [
+        "ubuntu-26.04"
+      ],
+      "jobSeconds": 70,
+      "stepSeconds": {
+        "Set up job": 1,
+        "Run actions/checkout@v7": 1,
+        "Run subosito/flutter-action@v2": 27,
+        "컴퓨터": 0,
+        "검증": 38,
+        "Post Run subosito/flutter-action@v2": 0,
+        "Post Run actions/checkout@v7": 0,
+        "Complete job": 0
+      },
+      "runnerImage": "ubuntu-26.04 20260927.149.1",
+      "osRelease": "Ubuntu 26.04.1 LTS",
+      "glibc": "ldd (Ubuntu GLIBC 2.43-2ubuntu2.4) 2.43",
+      "verifyScreen": [
+        "SDK        Flutter 3.47.5 / Dart 3.13.4",
+        "기반 세트  flutter_lints 6.0.0 / lints 6.1.0",
+        "plugin     riverpod_lint 3.1.9"
+      ],
+      "verifyVerdict": "점검 통과 (4개 중 4개)",
+      "result": null
+    },
+    {
+      "name": "verify · ubuntu-26.04 · 3",
+      "conclusion": "success",
+      "labels": [
+        "ubuntu-26.04"
+      ],
+      "jobSeconds": 58,
+      "stepSeconds": {
+        "Set up job": 1,
+        "Run actions/checkout@v7": 1,
+        "Run subosito/flutter-action@v2": 24,
+        "컴퓨터": 0,
+        "검증": 29,
+        "Post Run subosito/flutter-action@v2": 0,
+        "Post Run actions/checkout@v7": 1,
+        "Complete job": 0
+      },
+      "runnerImage": "ubuntu-26.04 20260927.149.1",
+      "osRelease": "Ubuntu 26.04.1 LTS",
+      "glibc": "ldd (Ubuntu GLIBC 2.43-2ubuntu2.4) 2.43",
+      "verifyScreen": [
+        "SDK        Flutter 3.47.5 / Dart 3.13.4",
+        "기반 세트  flutter_lints 6.0.0 / lints 6.1.0",
+        "plugin     riverpod_lint 3.1.9"
+      ],
+      "verifyVerdict": "점검 통과 (4개 중 4개)",
+      "result": null
+    }
+  ]
+}

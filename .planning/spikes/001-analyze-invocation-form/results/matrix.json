@@ -1,0 +1,514 @@
+[
+  {
+    "label": "A. fixture 에서 인자 없음",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [],
+    "phase": "cold",
+    "run": 1,
+    "exitCode": 2,
+    "elapsedMs": 17793,
+    "lines": [
+      "lib/main.dart:10  warning  missing_provider_scope",
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes",
+      "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "A. fixture 에서 인자 없음",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [],
+    "phase": "warm",
+    "run": 1,
+    "exitCode": 2,
+    "elapsedMs": 6391,
+    "lines": [
+      "lib/main.dart:10  warning  missing_provider_scope",
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes",
+      "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "A. fixture 에서 인자 없음",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [],
+    "phase": "cold",
+    "run": 2,
+    "exitCode": 2,
+    "elapsedMs": 18384,
+    "lines": [
+      "lib/main.dart:10  warning  missing_provider_scope",
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes",
+      "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "A. fixture 에서 인자 없음",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [],
+    "phase": "warm",
+    "run": 2,
+    "exitCode": 2,
+    "elapsedMs": 5678,
+    "lines": [
+      "lib/main.dart:10  warning  missing_provider_scope",
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes",
+      "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "A. fixture 에서 인자 없음",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [],
+    "phase": "cold",
+    "run": 3,
+    "exitCode": 2,
+    "elapsedMs": 18187,
+    "lines": [
+      "lib/main.dart:10  warning  missing_provider_scope",
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes",
+      "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "A. fixture 에서 인자 없음",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [],
+    "phase": "warm",
+    "run": 3,
+    "exitCode": 2,
+    "elapsedMs": 5433,
+    "lines": [
+      "lib/main.dart:10  warning  missing_provider_scope",
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes",
+      "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "A. fixture 에서 인자 없음",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [],
+    "phase": "cold",
+    "run": 4,
+    "exitCode": 255,
+    "elapsedMs": 17580,
+    "lines": [],
+    "stderr": "Unhandled exception:\nSocketException: Connection attempt cancelled, host: www.google-analytics.com, port: 443\n#0      _NativeSocket.startConnect (dart:io-patch/socket_patch.dart:849)\n#1      _RawSocket.startConnect (dart:io-patch/socket_patch.dart:2313)\n#2      RawSocket.startConnect (dart:io-patch/socket_patch.dart:41)\n#3      RawSecureSocket.startConnect (dart:io/secure_socket.dart:334)\n#4      SecureSocket.startConnect (dart:io/secure_socket.dart:85)\n#5      _ConnectionTarget.connect (dart:_http/http_impl.dart:2694)\n#6      _HttpClient._getConnection.connect (dart:_http/http_impl.dart:3200)\n#7      _HttpClient._getConnection (dart:_http/http_impl.dart:3205)\n#8      _HttpClient._openUrl (dart:_http/http_impl.dart:3026)\n#9      _HttpClient.openUrl (dart:_http/http_impl.dart:2868)\n#10     IOClient.send (package:http/src/io_client.dart:114)\n#11     BaseClient._sendUnstreamed (package:http/src/base_client.dart:93)\n#12     BaseClient.post (package:http/src/base_client.dart:32)\n#13     GAClient.sendData (package:unified_analytics/src/ga_client.dart:65)\n#14     AnalyticsImpl.send (package:unified_analytics/src/analytics.dart:645)\n#15     AnalyticsManager.sendMemoryUsage (package:analysis_server/src/analytics/analytics_manager.dart:286)\n#16     Driver.start.<anonymous closure> (package:analysis_server/src/server/driver.dart:424)\n#17     UsageEventCreator._triggerEvent (package:memory_usage/src/_usage_event.dart:42)\n#18     UsageEventCreator.mayBeCreateUsageEvent (package:memory_usage/src/_usage_event.dart:31)\n#19     trackMemoryUsage.<anonymous closure> (package:memory_usage/src/usage_tracking.dart:42)\n#20     _Timer._runTimers (dart:isolate-patch/timer_impl.dart:423)\n#21     _Timer._handleMessage (dart:isolate-patch/timer_impl.dart:454)\n#22     _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:192)\nUnhandled exception:\nBad state: The analysis server crashed unexpectedly\n",
+    "parseError": "stdout 에 JSON 줄이 없다"
+  },
+  {
+    "label": "A. fixture 에서 인자 없음",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [],
+    "phase": "warm",
+    "run": 4,
+    "exitCode": 255,
+    "elapsedMs": 5555,
+    "lines": [],
+    "stderr": "Unhandled exception:\nSocketException: Connection attempt cancelled, host: www.google-analytics.com, port: 443\n#0      _NativeSocket.startConnect (dart:io-patch/socket_patch.dart:849)\n#1      _RawSocket.startConnect (dart:io-patch/socket_patch.dart:2313)\n#2      RawSocket.startConnect (dart:io-patch/socket_patch.dart:41)\n#3      RawSecureSocket.startConnect (dart:io/secure_socket.dart:334)\n#4      SecureSocket.startConnect (dart:io/secure_socket.dart:85)\n#5      _ConnectionTarget.connect (dart:_http/http_impl.dart:2694)\n#6      _HttpClient._getConnection.connect (dart:_http/http_impl.dart:3200)\n#7      _HttpClient._getConnection (dart:_http/http_impl.dart:3205)\n#8      _HttpClient._openUrl (dart:_http/http_impl.dart:3026)\n#9      _HttpClient.openUrl (dart:_http/http_impl.dart:2868)\n#10     IOClient.send (package:http/src/io_client.dart:114)\n#11     BaseClient._sendUnstreamed (package:http/src/base_client.dart:93)\n#12     BaseClient.post (package:http/src/base_client.dart:32)\n#13     GAClient.sendData (package:unified_analytics/src/ga_client.dart:65)\n#14     AnalyticsImpl.send (package:unified_analytics/src/analytics.dart:645)\n#15     AnalyticsManager.sendMemoryUsage (package:analysis_server/src/analytics/analytics_manager.dart:286)\n#16     Driver.start.<anonymous closure> (package:analysis_server/src/server/driver.dart:424)\n#17     UsageEventCreator._triggerEvent (package:memory_usage/src/_usage_event.dart:42)\n#18     UsageEventCreator.mayBeCreateUsageEvent (package:memory_usage/src/_usage_event.dart:31)\n#19     trackMemoryUsage.<anonymous closure> (package:memory_usage/src/usage_tracking.dart:42)\n#20     _Timer._runTimers (dart:isolate-patch/timer_impl.dart:423)\n#21     _Timer._handleMessage (dart:isolate-patch/timer_impl.dart:454)\n#22     _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:192)\nUnhandled exception:\nBad state: The analysis server crashed unexpectedly\n",
+    "parseError": "stdout 에 JSON 줄이 없다"
+  },
+  {
+    "label": "A. fixture 에서 인자 없음",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [],
+    "phase": "cold",
+    "run": 5,
+    "exitCode": 255,
+    "elapsedMs": 19085,
+    "lines": [],
+    "stderr": "Unhandled exception:\nSocketException: Connection attempt cancelled, host: www.google-analytics.com, port: 443\n#0      _NativeSocket.startConnect (dart:io-patch/socket_patch.dart:849)\n#1      _RawSocket.startConnect (dart:io-patch/socket_patch.dart:2313)\n#2      RawSocket.startConnect (dart:io-patch/socket_patch.dart:41)\n#3      RawSecureSocket.startConnect (dart:io/secure_socket.dart:334)\n#4      SecureSocket.startConnect (dart:io/secure_socket.dart:85)\n#5      _ConnectionTarget.connect (dart:_http/http_impl.dart:2694)\n#6      _HttpClient._getConnection.connect (dart:_http/http_impl.dart:3200)\n#7      _HttpClient._getConnection (dart:_http/http_impl.dart:3205)\n#8      _HttpClient._openUrl (dart:_http/http_impl.dart:3026)\n#9      _HttpClient.openUrl (dart:_http/http_impl.dart:2868)\n#10     IOClient.send (package:http/src/io_client.dart:114)\n#11     BaseClient._sendUnstreamed (package:http/src/base_client.dart:93)\n#12     BaseClient.post (package:http/src/base_client.dart:32)\n#13     GAClient.sendData (package:unified_analytics/src/ga_client.dart:65)\n#14     AnalyticsImpl.send (package:unified_analytics/src/analytics.dart:645)\n#15     AnalyticsManager.sendMemoryUsage (package:analysis_server/src/analytics/analytics_manager.dart:286)\n#16     Driver.start.<anonymous closure> (package:analysis_server/src/server/driver.dart:424)\n#17     UsageEventCreator._triggerEvent (package:memory_usage/src/_usage_event.dart:42)\n#18     UsageEventCreator.mayBeCreateUsageEvent (package:memory_usage/src/_usage_event.dart:31)\n#19     trackMemoryUsage.<anonymous closure> (package:memory_usage/src/usage_tracking.dart:42)\n#20     _Timer._runTimers (dart:isolate-patch/timer_impl.dart:423)\n#21     _Timer._handleMessage (dart:isolate-patch/timer_impl.dart:454)\n#22     _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:192)\nUnhandled exception:\nBad state: The analysis server crashed unexpectedly\n",
+    "parseError": "stdout 에 JSON 줄이 없다"
+  },
+  {
+    "label": "A. fixture 에서 인자 없음",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [],
+    "phase": "warm",
+    "run": 5,
+    "exitCode": 2,
+    "elapsedMs": 6872,
+    "lines": [
+      "lib/main.dart:10  warning  missing_provider_scope",
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes",
+      "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "B. fixture 에서 `.`",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [
+      "."
+    ],
+    "phase": "cold",
+    "run": 1,
+    "exitCode": 2,
+    "elapsedMs": 18281,
+    "lines": [
+      "lib/main.dart:10  warning  missing_provider_scope",
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes",
+      "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "B. fixture 에서 `.`",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [
+      "."
+    ],
+    "phase": "warm",
+    "run": 1,
+    "exitCode": 2,
+    "elapsedMs": 5525,
+    "lines": [
+      "lib/main.dart:10  warning  missing_provider_scope",
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes",
+      "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "C. fixture 에서 `lib`",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [
+      "lib"
+    ],
+    "phase": "cold",
+    "run": 1,
+    "exitCode": 0,
+    "elapsedMs": 4467,
+    "lines": [
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "C. fixture 에서 `lib`",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [
+      "lib"
+    ],
+    "phase": "warm",
+    "run": 1,
+    "exitCode": 0,
+    "elapsedMs": 2250,
+    "lines": [
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "D. fixture 에서 `lib/src`",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [
+      "lib/src"
+    ],
+    "phase": "cold",
+    "run": 1,
+    "exitCode": 0,
+    "elapsedMs": 4441,
+    "lines": [],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "D. fixture 에서 `lib/src`",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [
+      "lib/src"
+    ],
+    "phase": "warm",
+    "run": 1,
+    "exitCode": 0,
+    "elapsedMs": 3488,
+    "lines": [],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "E. fixture 에서 `lib/main.dart`",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [
+      "lib/main.dart"
+    ],
+    "phase": "cold",
+    "run": 1,
+    "exitCode": 2,
+    "elapsedMs": 17161,
+    "lines": [
+      "lib/main.dart:10  warning  missing_provider_scope",
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "E. fixture 에서 `lib/main.dart`",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [
+      "lib/main.dart"
+    ],
+    "phase": "warm",
+    "run": 1,
+    "exitCode": 2,
+    "elapsedMs": 4977,
+    "lines": [
+      "lib/main.dart:10  warning  missing_provider_scope",
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "F. fixture 에서 파일 2개",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [
+      "lib/main.dart",
+      "lib/src/counter.dart"
+    ],
+    "phase": "cold",
+    "run": 1,
+    "exitCode": 2,
+    "elapsedMs": 17998,
+    "lines": [
+      "lib/main.dart:10  warning  missing_provider_scope",
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes",
+      "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "F. fixture 에서 파일 2개",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [
+      "lib/main.dart",
+      "lib/src/counter.dart"
+    ],
+    "phase": "warm",
+    "run": 1,
+    "exitCode": 2,
+    "elapsedMs": 5561,
+    "lines": [
+      "lib/main.dart:10  warning  missing_provider_scope",
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes",
+      "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "G. fixture 에서 절대 경로(자기 자신)",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [
+      "<repo>/.planning/spikes/001-analyze-invocation-form/fixture"
+    ],
+    "phase": "cold",
+    "run": 1,
+    "exitCode": 2,
+    "elapsedMs": 18215,
+    "lines": [
+      "lib/main.dart:10  warning  missing_provider_scope",
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes",
+      "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "G. fixture 에서 절대 경로(자기 자신)",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form/fixture",
+    "arguments": [
+      "<repo>/.planning/spikes/001-analyze-invocation-form/fixture"
+    ],
+    "phase": "warm",
+    "run": 1,
+    "exitCode": 2,
+    "elapsedMs": 5561,
+    "lines": [
+      "lib/main.dart:10  warning  missing_provider_scope",
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes",
+      "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "H. 저장소 루트에서 상대 경로",
+    "workingDirectory": "<repo>",
+    "arguments": [
+      ".planning/spikes/001-analyze-invocation-form/fixture"
+    ],
+    "phase": "cold",
+    "run": 1,
+    "exitCode": 255,
+    "elapsedMs": 18133,
+    "lines": [],
+    "stderr": "Unhandled exception:\nSocketException: Connection attempt cancelled, host: www.google-analytics.com, port: 443\n#0      _NativeSocket.startConnect (dart:io-patch/socket_patch.dart:849)\n#1      _RawSocket.startConnect (dart:io-patch/socket_patch.dart:2313)\n#2      RawSocket.startConnect (dart:io-patch/socket_patch.dart:41)\n#3      RawSecureSocket.startConnect (dart:io/secure_socket.dart:334)\n#4      SecureSocket.startConnect (dart:io/secure_socket.dart:85)\n#5      _ConnectionTarget.connect (dart:_http/http_impl.dart:2694)\n#6      _HttpClient._getConnection.connect (dart:_http/http_impl.dart:3200)\n#7      _HttpClient._getConnection (dart:_http/http_impl.dart:3205)\n#8      _HttpClient._openUrl (dart:_http/http_impl.dart:3026)\n#9      _HttpClient.openUrl (dart:_http/http_impl.dart:2868)\n#10     IOClient.send (package:http/src/io_client.dart:114)\n#11     BaseClient._sendUnstreamed (package:http/src/base_client.dart:93)\n#12     BaseClient.post (package:http/src/base_client.dart:32)\n#13     GAClient.sendData (package:unified_analytics/src/ga_client.dart:65)\n#14     AnalyticsImpl.send (package:unified_analytics/src/analytics.dart:645)\n#15     AnalyticsManager.sendMemoryUsage (package:analysis_server/src/analytics/analytics_manager.dart:286)\n#16     Driver.start.<anonymous closure> (package:analysis_server/src/server/driver.dart:424)\n#17     UsageEventCreator._triggerEvent (package:memory_usage/src/_usage_event.dart:42)\n#18     UsageEventCreator.mayBeCreateUsageEvent (package:memory_usage/src/_usage_event.dart:31)\n#19     trackMemoryUsage.<anonymous closure> (package:memory_usage/src/usage_tracking.dart:42)\n#20     _Timer._runTimers (dart:isolate-patch/timer_impl.dart:423)\n#21     _Timer._handleMessage (dart:isolate-patch/timer_impl.dart:454)\n#22     _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:192)\nUnhandled exception:\nBad state: The analysis server crashed unexpectedly\n",
+    "parseError": "stdout 에 JSON 줄이 없다"
+  },
+  {
+    "label": "H. 저장소 루트에서 상대 경로",
+    "workingDirectory": "<repo>",
+    "arguments": [
+      ".planning/spikes/001-analyze-invocation-form/fixture"
+    ],
+    "phase": "warm",
+    "run": 1,
+    "exitCode": 2,
+    "elapsedMs": 5859,
+    "lines": [
+      "lib/main.dart:10  warning  missing_provider_scope",
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes",
+      "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "I. 저장소 루트에서 절대 경로",
+    "workingDirectory": "<repo>",
+    "arguments": [
+      "<repo>/.planning/spikes/001-analyze-invocation-form/fixture"
+    ],
+    "phase": "cold",
+    "run": 1,
+    "exitCode": 2,
+    "elapsedMs": 18446,
+    "lines": [
+      "lib/main.dart:10  warning  missing_provider_scope",
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes",
+      "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "I. 저장소 루트에서 절대 경로",
+    "workingDirectory": "<repo>",
+    "arguments": [
+      "<repo>/.planning/spikes/001-analyze-invocation-form/fixture"
+    ],
+    "phase": "warm",
+    "run": 1,
+    "exitCode": 2,
+    "elapsedMs": 5718,
+    "lines": [
+      "lib/main.dart:10  warning  missing_provider_scope",
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes",
+      "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "J. 저장소 루트에서 `<fixture>/lib`",
+    "workingDirectory": "<repo>",
+    "arguments": [
+      ".planning/spikes/001-analyze-invocation-form/fixture/lib"
+    ],
+    "phase": "cold",
+    "run": 1,
+    "exitCode": 0,
+    "elapsedMs": 4441,
+    "lines": [
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "J. 저장소 루트에서 `<fixture>/lib`",
+    "workingDirectory": "<repo>",
+    "arguments": [
+      ".planning/spikes/001-analyze-invocation-form/fixture/lib"
+    ],
+    "phase": "warm",
+    "run": 1,
+    "exitCode": 0,
+    "elapsedMs": 2258,
+    "lines": [
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "K. fixture 의 부모에서 `fixture`",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form",
+    "arguments": [
+      "fixture"
+    ],
+    "phase": "cold",
+    "run": 1,
+    "exitCode": 2,
+    "elapsedMs": 18125,
+    "lines": [
+      "lib/main.dart:10  warning  missing_provider_scope",
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes",
+      "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+    ],
+    "stderr": "",
+    "parseError": null
+  },
+  {
+    "label": "K. fixture 의 부모에서 `fixture`",
+    "workingDirectory": "<repo>/.planning/spikes/001-analyze-invocation-form",
+    "arguments": [
+      "fixture"
+    ],
+    "phase": "warm",
+    "run": 1,
+    "exitCode": 2,
+    "elapsedMs": 6227,
+    "lines": [
+      "lib/main.dart:10  warning  missing_provider_scope",
+      "lib/main.dart:9  info  avoid_print",
+      "lib/main.dart:9  info  prefer_single_quotes",
+      "lib/src/counter.dart:8  info  avoid_public_notifier_properties"
+    ],
+    "stderr": "",
+    "parseError": null
+  }
+]

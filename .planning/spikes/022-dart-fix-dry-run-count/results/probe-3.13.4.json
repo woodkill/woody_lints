@@ -1,0 +1,2363 @@
+{
+  "date": "2026-10-12T14:21:27.219190Z",
+  "dart": "3.13.4",
+  "fixture": {
+    "diag": {
+      "async_return_with_no_await": 1,
+      "use_primary_constructors": 4,
+      "empty_container_bodies": 2,
+      "no_dynamic_casts": 1,
+      "no_raw_types": 1,
+      "unnecessary_const_in_enum_constructor": 1,
+      "unnecessary_type_name_in_constructor": 4
+    },
+    "combined": {
+      "exitCode": 0,
+      "ms": 273,
+      "total": 13,
+      "stateEntries": 321,
+      "summary": "13 proposed fixes in 5 files.",
+      "byAreaCode": {
+        "lib": {
+          "empty_container_bodies": 2,
+          "use_primary_constructors": 4,
+          "unnecessary_const_in_enum_constructor": 1,
+          "unnecessary_type_name_in_constructor": 3,
+          "use_declaring_parameters": 3
+        }
+      }
+    },
+    "alone": {
+      "async_return_with_no_await": 0,
+      "use_primary_constructors": 4,
+      "empty_container_bodies": 2,
+      "no_dynamic_casts": 0,
+      "no_raw_types": 0,
+      "unnecessary_const_in_enum_constructor": 1,
+      "unnecessary_type_name_in_constructor": 4,
+      "use_declaring_parameters": 0
+    },
+    "applyAll": {
+      "exitCode": 0,
+      "ms": 271,
+      "total": 13,
+      "stateEntries": 321,
+      "summary": "13 fixes made in 5 files.",
+      "byAreaCode": {
+        "lib": {
+          "empty_container_bodies": 2,
+          "use_primary_constructors": 4,
+          "unnecessary_const_in_enum_constructor": 1,
+          "unnecessary_type_name_in_constructor": 3,
+          "use_declaring_parameters": 3
+        }
+      }
+    },
+    "afterApplyAll": {
+      "async_return_with_no_await": 1,
+      "no_dynamic_casts": 1,
+      "no_raw_types": 1
+    },
+    "alone_use_primary_constructors": 4,
+    "diag_use_primary_constructors": 4
+  },
+  "groups": {
+    "G1": {
+      "sdk": "original",
+      "languageVersion": "3.11",
+      "analyze": {
+        "id": "G1-analyze",
+        "exitCode": 2,
+        "elapsedMs": 20066,
+        "jsonOk": true,
+        "pluginHeader": false,
+        "pluginFolders": 1,
+        "pluginVersion": "3.1.9",
+        "woodySource": "repo",
+        "lines": {
+          "all": 4512,
+          "marker": 26,
+          "project": 4486
+        },
+        "countByAreaCode": {
+          "marker": {
+            "missing_provider_scope": 1,
+            "provider_parameters": 1,
+            "migrate_design_widgets": 3,
+            "prefer_const_constructors": 1,
+            "lines_longer_than_80_chars": 4,
+            "prefer_const_literals_to_create_immutables": 1,
+            "always_declare_return_types": 1,
+            "prefer_final_locals": 1,
+            "omit_obvious_property_types": 2,
+            "prefer_single_quotes": 1,
+            "unawaited_futures": 1,
+            "sized_box_for_whitespace": 1,
+            "sort_child_properties_last": 1,
+            "use_build_context_synchronously": 1,
+            "avoid_print": 1,
+            "control_flow_in_finally": 1,
+            "slash_for_doc_comments": 1,
+            "prefer_is_empty": 1,
+            "avoid_public_notifier_properties": 1,
+            "specify_nonobvious_property_types": 1
+          },
+          "bin": {
+            "document_ignores": 1,
+            "unnecessary_ignore": 1,
+            "omit_obvious_property_types": 2,
+            "unreachable_from_main": 1,
+            "always_put_control_body_on_new_line": 21,
+            "avoid_redundant_argument_values": 12
+          },
+          "lib": {
+            "migrate_design_widgets": 62,
+            "always_use_package_imports": 615,
+            "comment_references": 178,
+            "omit_local_variable_types": 12,
+            "omit_obvious_property_types": 182,
+            "avoid_positional_boolean_parameters": 1,
+            "always_put_control_body_on_new_line": 324,
+            "directives_ordering": 3,
+            "lines_longer_than_80_chars": 35,
+            "avoid_redundant_argument_values": 9,
+            "do_not_use_environment": 13,
+            "no_runtimetype_tostring": 1,
+            "avoid_catching_errors": 2,
+            "avoid_classes_with_only_static_members": 4,
+            "prefer_constructors_over_static_methods": 1,
+            "omit_obvious_local_variable_types": 1,
+            "avoid_equals_and_hash_code_on_mutable_classes": 8,
+            "diagnostic_describe_all_properties": 122,
+            "async_return_with_no_await": 16,
+            "always_put_required_named_parameters_first": 31,
+            "document_ignores": 1,
+            "discarded_futures": 9,
+            "prefer_if_elements_to_conditional_expressions": 3,
+            "avoid_types_on_closure_parameters": 2,
+            "prefer_int_literals": 5,
+            "prefer_const_declarations": 2,
+            "unnecessary_ignore": 1,
+            "join_return_with_assignment": 1,
+            "use_decorated_box": 1,
+            "avoid_bool_literals_in_conditional_expressions": 1
+          },
+          "pubspec.yaml": {
+            "sort_pub_dependencies": 2
+          },
+          "test": {
+            "use_raw_strings": 9,
+            "lines_longer_than_80_chars": 72,
+            "unnecessary_raw_strings": 32,
+            "directives_ordering": 160,
+            "avoid_redundant_argument_values": 102,
+            "always_put_control_body_on_new_line": 53,
+            "omit_obvious_property_types": 527,
+            "comment_references": 18,
+            "missing_whitespace_between_adjacent_strings": 13,
+            "migrate_design_widgets": 94,
+            "avoid_catching_errors": 1,
+            "omit_obvious_local_variable_types": 235,
+            "omit_local_variable_types": 873,
+            "avoid_types_on_closure_parameters": 232,
+            "prefer_const_declarations": 3,
+            "avoid_escaping_inner_quotes": 1,
+            "avoid_implementing_value_types": 25,
+            "unnecessary_lambdas": 197,
+            "unnecessary_ignore": 10,
+            "document_ignores": 46,
+            "use_setters_to_change_properties": 3,
+            "avoid_positional_boolean_parameters": 4,
+            "async_return_with_no_await": 14,
+            "prefer_int_literals": 12,
+            "avoid_dynamic_calls": 28,
+            "discarded_futures": 2,
+            "prefer_foreach": 3,
+            "no_adjacent_strings_in_list": 9,
+            "unnecessary_null_checks": 1,
+            "do_not_use_environment": 4,
+            "unnecessary_parenthesis": 1,
+            "unnecessary_unawaited": 3,
+            "always_put_required_named_parameters_first": 1,
+            "unreachable_from_main": 1,
+            "cast_nullable_to_non_nullable": 5,
+            "diagnostic_describe_all_properties": 1,
+            "only_throw_errors": 4,
+            "avoid_annotating_with_dynamic": 1
+          }
+        },
+        "projectDigest": "b89f1f6b6822f5c9",
+        "markerLines": [
+          "lib/woody_probe_marker/added_rules.dart:1  info  migrate_design_widgets",
+          "lib/woody_probe_marker/added_rules.dart:12  info  lines_longer_than_80_chars",
+          "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+          "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+          "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+          "lib/woody_probe_marker/added_rules.dart:29  info  omit_obvious_property_types",
+          "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+          "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+          "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+          "lib/woody_probe_marker/base_rules.dart:1  info  migrate_design_widgets",
+          "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+          "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+          "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+          "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+          "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+          "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+          "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+          "lib/woody_probe_marker/main.dart:1  info  migrate_design_widgets",
+          "lib/woody_probe_marker/main.dart:3  info  lines_longer_than_80_chars",
+          "lib/woody_probe_marker/main.dart:5  warning  missing_provider_scope",
+          "lib/woody_probe_marker/riverpod_rules.dart:13  info  specify_nonobvious_property_types",
+          "lib/woody_probe_marker/riverpod_rules.dart:15  info  lines_longer_than_80_chars",
+          "lib/woody_probe_marker/riverpod_rules.dart:17  warning  provider_parameters",
+          "lib/woody_probe_marker/riverpod_rules.dart:3  info  lines_longer_than_80_chars",
+          "lib/woody_probe_marker/riverpod_rules.dart:5  info  avoid_public_notifier_properties",
+          "lib/woody_probe_marker/riverpod_rules.dart:6  info  omit_obvious_property_types"
+        ]
+      },
+      "combined": {
+        "exitCode": 0,
+        "ms": 28542,
+        "total": 3525,
+        "stateEntries": 16286,
+        "summary": "3525 proposed fixes in 375 files.",
+        "byAreaCode": {
+          "bin": {
+            "avoid_redundant_argument_values": 12,
+            "omit_obvious_property_types": 2,
+            "unnecessary_ignore": 1
+          },
+          "lib": {
+            "always_use_package_imports": 615,
+            "migrate_design_widgets": 122,
+            "omit_local_variable_types": 12,
+            "directives_ordering": 92,
+            "omit_obvious_property_types": 182,
+            "avoid_redundant_argument_values": 9,
+            "comment_references": 24,
+            "diagnostic_describe_all_properties": 49,
+            "always_put_required_named_parameters_first": 15,
+            "prefer_if_elements_to_conditional_expressions": 1,
+            "avoid_types_on_closure_parameters": 2,
+            "unnecessary_null_checks": 2,
+            "unnecessary_ignore": 1,
+            "prefer_const_declarations": 2,
+            "prefer_int_literals": 5,
+            "use_decorated_box": 1,
+            "avoid_bool_literals_in_conditional_expressions": 1
+          },
+          "marker": {
+            "always_declare_return_types": 1,
+            "migrate_design_widgets": 3,
+            "omit_obvious_property_types": 2,
+            "prefer_const_constructors": 1,
+            "prefer_const_declarations": 1,
+            "prefer_const_literals_to_create_immutables": 1,
+            "prefer_final_locals": 1,
+            "prefer_single_quotes": 1,
+            "prefer_is_empty": 1,
+            "sized_box_for_whitespace": 1,
+            "slash_for_doc_comments": 1,
+            "sort_child_properties_last": 1,
+            "specify_nonobvious_property_types": 1
+          },
+          "test": {
+            "unnecessary_raw_strings": 32,
+            "use_raw_strings": 9,
+            "avoid_redundant_argument_values": 134,
+            "directives_ordering": 169,
+            "omit_obvious_property_types": 527,
+            "avoid_types_on_closure_parameters": 232,
+            "migrate_design_widgets": 132,
+            "omit_local_variable_types": 861,
+            "prefer_const_declarations": 5,
+            "comment_references": 6,
+            "avoid_escaping_inner_quotes": 1,
+            "unnecessary_lambdas": 198,
+            "unnecessary_ignore": 11,
+            "prefer_int_literals": 12,
+            "unnecessary_null_checks": 3,
+            "omit_obvious_local_variable_types": 12,
+            "unnecessary_parenthesis": 1,
+            "empty_statements": 3,
+            "unnecessary_unawaited": 3,
+            "always_put_required_named_parameters_first": 1,
+            "cast_nullable_to_non_nullable": 5,
+            "diagnostic_describe_all_properties": 1,
+            "avoid_annotating_with_dynamic": 1
+          }
+        }
+      }
+    },
+    "G2": {
+      "sdk": "original",
+      "languageVersion": "3.11",
+      "analyze": {
+        "id": "G2-analyze",
+        "exitCode": 2,
+        "elapsedMs": 20665,
+        "jsonOk": true,
+        "pluginHeader": false,
+        "pluginFolders": 1,
+        "pluginVersion": "3.1.9",
+        "woodySource": "repo",
+        "lines": {
+          "all": 13510,
+          "marker": 24,
+          "project": 13486
+        },
+        "countByAreaCode": {
+          "marker": {
+            "missing_provider_scope": 1,
+            "provider_parameters": 1,
+            "prefer_const_constructors": 1,
+            "always_specify_types": 8,
+            "prefer_const_literals_to_create_immutables": 1,
+            "always_declare_return_types": 1,
+            "prefer_final_locals": 1,
+            "prefer_single_quotes": 1,
+            "unawaited_futures": 1,
+            "sized_box_for_whitespace": 1,
+            "sort_child_properties_last": 1,
+            "use_build_context_synchronously": 1,
+            "avoid_print": 1,
+            "control_flow_in_finally": 1,
+            "slash_for_doc_comments": 1,
+            "prefer_is_empty": 1,
+            "avoid_public_notifier_properties": 1
+          },
+          "bin": {
+            "always_specify_types": 111,
+            "specify_nonobvious_local_variable_types": 52
+          },
+          "lib": {
+            "always_specify_types": 1524,
+            "specify_nonobvious_local_variable_types": 878,
+            "prefer_relative_imports": 9
+          },
+          "test": {
+            "always_specify_types": 7739,
+            "specify_nonobvious_local_variable_types": 3173
+          }
+        },
+        "projectDigest": "5b424a7195f8f9c2",
+        "markerLines": [
+          "lib/woody_probe_marker/added_rules.dart:13  info  always_specify_types",
+          "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+          "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+          "lib/woody_probe_marker/added_rules.dart:24  info  always_specify_types",
+          "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+          "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+          "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+          "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+          "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+          "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+          "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+          "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+          "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+          "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+          "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+          "lib/woody_probe_marker/main.dart:5  warning  missing_provider_scope",
+          "lib/woody_probe_marker/riverpod_rules.dart:13  info  always_specify_types",
+          "lib/woody_probe_marker/riverpod_rules.dart:13  info  always_specify_types",
+          "lib/woody_probe_marker/riverpod_rules.dart:13  info  always_specify_types",
+          "lib/woody_probe_marker/riverpod_rules.dart:16  info  always_specify_types",
+          "lib/woody_probe_marker/riverpod_rules.dart:17  info  always_specify_types",
+          "lib/woody_probe_marker/riverpod_rules.dart:17  info  always_specify_types",
+          "lib/woody_probe_marker/riverpod_rules.dart:17  warning  provider_parameters",
+          "lib/woody_probe_marker/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+        ]
+      },
+      "combined": {
+        "exitCode": 0,
+        "ms": 24595,
+        "total": 13313,
+        "stateEntries": 9849,
+        "summary": "13313 proposed fixes in 338 files.",
+        "byAreaCode": {
+          "bin": {
+            "always_specify_types": 109,
+            "specify_nonobvious_local_variable_types": 52
+          },
+          "lib": {
+            "always_specify_types": 1346,
+            "specify_nonobvious_local_variable_types": 866,
+            "prefer_relative_imports": 9,
+            "undefined_identifier": 9,
+            "no_leading_underscores_for_local_identifiers": 8,
+            "unnecessary_null_comparison": 7,
+            "body_might_complete_normally_nullable": 1,
+            "invalid_null_aware_operator": 1
+          },
+          "marker": {
+            "always_declare_return_types": 1,
+            "always_specify_types": 9,
+            "prefer_const_constructors": 2,
+            "prefer_const_literals_to_create_immutables": 1,
+            "prefer_final_locals": 1,
+            "prefer_single_quotes": 1,
+            "prefer_is_empty": 1,
+            "sized_box_for_whitespace": 1,
+            "slash_for_doc_comments": 1,
+            "sort_child_properties_last": 1
+          },
+          "pubspec.yaml": {
+            "missing_dependency": 1
+          },
+          "test": {
+            "always_specify_types": 7457,
+            "specify_nonobvious_local_variable_types": 3152,
+            "undefined_identifier": 50,
+            "no_leading_underscores_for_local_identifiers": 220,
+            "body_might_complete_normally_nullable": 5,
+            "unnecessary_non_null_assertion": 1
+          }
+        }
+      }
+    },
+    "G3": {
+      "sdk": "original",
+      "languageVersion": "3.11",
+      "analyze": {
+        "id": "G3-analyze",
+        "exitCode": 2,
+        "elapsedMs": 20556,
+        "jsonOk": true,
+        "pluginHeader": false,
+        "pluginFolders": 1,
+        "pluginVersion": "3.1.9",
+        "woodySource": "repo",
+        "lines": {
+          "all": 27080,
+          "marker": 24,
+          "project": 27056
+        },
+        "countByAreaCode": {
+          "analysis_options.yaml": {
+            "incompatible_lint": 2
+          },
+          "marker": {
+            "missing_provider_scope": 1,
+            "provider_parameters": 1,
+            "prefer_double_quotes": 8,
+            "prefer_const_constructors": 1,
+            "prefer_const_literals_to_create_immutables": 1,
+            "always_declare_return_types": 1,
+            "prefer_final_locals": 1,
+            "prefer_single_quotes": 1,
+            "unawaited_futures": 1,
+            "sized_box_for_whitespace": 1,
+            "sort_child_properties_last": 1,
+            "use_build_context_synchronously": 1,
+            "avoid_print": 1,
+            "control_flow_in_finally": 1,
+            "slash_for_doc_comments": 1,
+            "prefer_is_empty": 1,
+            "avoid_public_notifier_properties": 1
+          },
+          "bin": {
+            "prefer_double_quotes": 190,
+            "unnecessary_final": 84
+          },
+          "lib": {
+            "prefer_double_quotes": 2241,
+            "unnecessary_final": 1008
+          },
+          "test": {
+            "prefer_double_quotes": 17914,
+            "unnecessary_final": 5617
+          }
+        },
+        "projectDigest": "5d4bc6ba0202cd77",
+        "markerLines": [
+          "lib/woody_probe_marker/added_rules.dart:1  info  prefer_double_quotes",
+          "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+          "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+          "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+          "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+          "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+          "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+          "lib/woody_probe_marker/added_rules.dart:7  info  prefer_double_quotes",
+          "lib/woody_probe_marker/base_rules.dart:1  info  prefer_double_quotes",
+          "lib/woody_probe_marker/base_rules.dart:12  info  prefer_double_quotes",
+          "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+          "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+          "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+          "lib/woody_probe_marker/base_rules.dart:22  info  prefer_double_quotes",
+          "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+          "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+          "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+          "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+          "lib/woody_probe_marker/main.dart:1  info  prefer_double_quotes",
+          "lib/woody_probe_marker/main.dart:5  warning  missing_provider_scope",
+          "lib/woody_probe_marker/riverpod_rules.dart:1  info  prefer_double_quotes",
+          "lib/woody_probe_marker/riverpod_rules.dart:17  warning  provider_parameters",
+          "lib/woody_probe_marker/riverpod_rules.dart:5  info  avoid_public_notifier_properties",
+          "lib/woody_probe_marker/should_not_appear.dart:1  info  prefer_double_quotes"
+        ]
+      },
+      "combined": {
+        "exitCode": 0,
+        "ms": 28223,
+        "total": 106808,
+        "stateEntries": 10436,
+        "summary": "106808 proposed fixes in 406 files.",
+        "byAreaCode": {
+          "bin": {
+            "prefer_double_quotes": 380,
+            "prefer_final_locals": 150,
+            "prefer_single_quotes": 380,
+            "unnecessary_final": 159
+          },
+          "lib": {
+            "prefer_double_quotes": 4482,
+            "prefer_final_locals": 1960,
+            "prefer_single_quotes": 4482,
+            "unnecessary_final": 1988
+          },
+          "marker": {
+            "always_declare_return_types": 1,
+            "prefer_const_constructors": 2,
+            "prefer_const_literals_to_create_immutables": 1,
+            "prefer_double_quotes": 18,
+            "prefer_final_locals": 2,
+            "prefer_single_quotes": 17,
+            "unnecessary_final": 2,
+            "prefer_is_empty": 1,
+            "sized_box_for_whitespace": 1,
+            "slash_for_doc_comments": 1,
+            "sort_child_properties_last": 1
+          },
+          "test": {
+            "prefer_double_quotes": 35827,
+            "prefer_final_locals": 10340,
+            "prefer_single_quotes": 35826,
+            "unnecessary_final": 10787
+          }
+        }
+      }
+    },
+    "G4": {
+      "sdk": "^3.13.0",
+      "languageVersion": "3.13",
+      "analyze": {
+        "id": "G4-analyze",
+        "exitCode": 2,
+        "elapsedMs": 20443,
+        "jsonOk": true,
+        "pluginHeader": false,
+        "pluginFolders": 1,
+        "pluginVersion": "3.1.9",
+        "woodySource": "repo",
+        "lines": {
+          "all": 1910,
+          "marker": 17,
+          "project": 1893
+        },
+        "countByAreaCode": {
+          "marker": {
+            "missing_provider_scope": 1,
+            "provider_parameters": 1,
+            "prefer_const_constructors": 1,
+            "prefer_const_literals_to_create_immutables": 1,
+            "always_declare_return_types": 1,
+            "prefer_final_locals": 1,
+            "prefer_single_quotes": 1,
+            "unawaited_futures": 1,
+            "sized_box_for_whitespace": 1,
+            "sort_child_properties_last": 1,
+            "use_build_context_synchronously": 1,
+            "avoid_print": 1,
+            "control_flow_in_finally": 1,
+            "slash_for_doc_comments": 1,
+            "prefer_is_empty": 1,
+            "use_primary_constructors": 1,
+            "avoid_public_notifier_properties": 1
+          },
+          "bin": {
+            "use_primary_constructors": 3,
+            "unnecessary_type_name_in_constructor": 2
+          },
+          "lib": {
+            "unnecessary_type_name_in_constructor": 220,
+            "use_primary_constructors": 258,
+            "unnecessary_const_in_enum_constructor": 2,
+            "prefer_initializing_formals": 24
+          },
+          "test": {
+            "use_primary_constructors": 707,
+            "empty_container_bodies": 615,
+            "unnecessary_type_name_in_constructor": 59,
+            "prefer_initializing_formals": 3
+          }
+        },
+        "projectDigest": "964ac36e74317974",
+        "markerLines": [
+          "lib/woody_probe_marker/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+          "lib/woody_probe_marker/added_rules.dart:18  info  always_declare_return_types",
+          "lib/woody_probe_marker/added_rules.dart:24  info  prefer_final_locals",
+          "lib/woody_probe_marker/added_rules.dart:29  info  prefer_single_quotes",
+          "lib/woody_probe_marker/added_rules.dart:33  info  unawaited_futures",
+          "lib/woody_probe_marker/added_rules.dart:7  info  prefer_const_constructors",
+          "lib/woody_probe_marker/base_rules.dart:12  info  sort_child_properties_last",
+          "lib/woody_probe_marker/base_rules.dart:17  info  use_build_context_synchronously",
+          "lib/woody_probe_marker/base_rules.dart:22  info  avoid_print",
+          "lib/woody_probe_marker/base_rules.dart:30  info  control_flow_in_finally",
+          "lib/woody_probe_marker/base_rules.dart:34  info  slash_for_doc_comments",
+          "lib/woody_probe_marker/base_rules.dart:38  info  prefer_is_empty",
+          "lib/woody_probe_marker/base_rules.dart:8  info  sized_box_for_whitespace",
+          "lib/woody_probe_marker/main.dart:5  warning  missing_provider_scope",
+          "lib/woody_probe_marker/riverpod_rules.dart:17  warning  provider_parameters",
+          "lib/woody_probe_marker/riverpod_rules.dart:4  info  use_primary_constructors",
+          "lib/woody_probe_marker/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+        ]
+      },
+      "combined": {
+        "exitCode": 0,
+        "ms": 15131,
+        "total": 2022,
+        "stateEntries": 9376,
+        "summary": "2022 proposed fixes in 274 files.",
+        "byAreaCode": {
+          "bin": {
+            "use_declaring_parameters": 8,
+            "use_primary_constructors": 3
+          },
+          "lib": {
+            "use_primary_constructors": 258,
+            "use_declaring_parameters": 244,
+            "unnecessary_type_name_in_constructor": 38,
+            "unnecessary_const_in_enum_constructor": 2,
+            "empty_container_bodies": 1,
+            "initialize_in_field_declaration": 8,
+            "prefer_initializing_formals": 9
+          },
+          "marker": {
+            "always_declare_return_types": 1,
+            "prefer_const_constructors": 2,
+            "prefer_const_literals_to_create_immutables": 1,
+            "prefer_final_locals": 1,
+            "prefer_single_quotes": 1,
+            "prefer_is_empty": 1,
+            "sized_box_for_whitespace": 1,
+            "slash_for_doc_comments": 1,
+            "sort_child_properties_last": 1,
+            "use_primary_constructors": 1
+          },
+          "test": {
+            "empty_container_bodies": 619,
+            "use_primary_constructors": 707,
+            "use_declaring_parameters": 80,
+            "initialize_in_field_declaration": 4,
+            "unnecessary_primary_constructor_body": 4,
+            "prefer_const_constructors": 21,
+            "prefer_const_constructors_in_immutables": 3,
+            "unnecessary_type_name_in_constructor": 2
+          }
+        }
+      }
+    }
+  },
+  "rows": {
+    "always_put_control_body_on_new_line": {
+      "group": "G1",
+      "diag": 398,
+      "diagProject": 398,
+      "diagByArea": {
+        "bin": 21,
+        "lib": 324,
+        "test": 53
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6120,
+      "aloneByArea": {}
+    },
+    "always_put_required_named_parameters_first": {
+      "group": "G1",
+      "diag": 32,
+      "diagProject": 32,
+      "diagByArea": {
+        "lib": 31,
+        "test": 1
+      },
+      "combined": 16,
+      "alone": 16,
+      "aloneOther": 0,
+      "aloneMs": 7207,
+      "aloneByArea": {
+        "lib": 15,
+        "test": 1
+      }
+    },
+    "always_use_package_imports": {
+      "group": "G1",
+      "diag": 615,
+      "diagProject": 615,
+      "diagByArea": {
+        "lib": 615
+      },
+      "combined": 615,
+      "alone": 615,
+      "aloneOther": 0,
+      "aloneMs": 8880,
+      "aloneByArea": {
+        "lib": 615
+      }
+    },
+    "async_return_with_no_await": {
+      "group": "G1",
+      "diag": 30,
+      "diagProject": 30,
+      "diagByArea": {
+        "lib": 16,
+        "test": 14
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6038,
+      "aloneByArea": {}
+    },
+    "avoid_annotating_with_dynamic": {
+      "group": "G1",
+      "diag": 1,
+      "diagProject": 1,
+      "diagByArea": {
+        "test": 1
+      },
+      "combined": 1,
+      "alone": 1,
+      "aloneOther": 0,
+      "aloneMs": 6942,
+      "aloneByArea": {
+        "test": 1
+      }
+    },
+    "avoid_bool_literals_in_conditional_expressions": {
+      "group": "G1",
+      "diag": 1,
+      "diagProject": 1,
+      "diagByArea": {
+        "lib": 1
+      },
+      "combined": 1,
+      "alone": 1,
+      "aloneOther": 0,
+      "aloneMs": 6909,
+      "aloneByArea": {
+        "lib": 1
+      }
+    },
+    "avoid_catches_without_on_clauses": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "avoid_catching_errors": {
+      "group": "G1",
+      "diag": 3,
+      "diagProject": 3,
+      "diagByArea": {
+        "lib": 2,
+        "test": 1
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6053,
+      "aloneByArea": {}
+    },
+    "avoid_classes_with_only_static_members": {
+      "group": "G1",
+      "diag": 4,
+      "diagProject": 4,
+      "diagByArea": {
+        "lib": 4
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6086,
+      "aloneByArea": {}
+    },
+    "avoid_double_and_int_checks": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "avoid_dynamic_calls": {
+      "group": "G1",
+      "diag": 28,
+      "diagProject": 28,
+      "diagByArea": {
+        "test": 28
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6063,
+      "aloneByArea": {}
+    },
+    "avoid_equals_and_hash_code_on_mutable_classes": {
+      "group": "G1",
+      "diag": 8,
+      "diagProject": 8,
+      "diagByArea": {
+        "lib": 8
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6053,
+      "aloneByArea": {}
+    },
+    "avoid_escaping_inner_quotes": {
+      "group": "G1",
+      "diag": 1,
+      "diagProject": 1,
+      "diagByArea": {
+        "test": 1
+      },
+      "combined": 1,
+      "alone": 1,
+      "aloneOther": 0,
+      "aloneMs": 6999,
+      "aloneByArea": {
+        "test": 1
+      }
+    },
+    "avoid_final_parameters": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "avoid_implementing_value_types": {
+      "group": "G1",
+      "diag": 25,
+      "diagProject": 25,
+      "diagByArea": {
+        "test": 25
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6078,
+      "aloneByArea": {}
+    },
+    "avoid_js_rounded_ints": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "avoid_multiple_declarations_per_line": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "avoid_positional_boolean_parameters": {
+      "group": "G1",
+      "diag": 5,
+      "diagProject": 5,
+      "diagByArea": {
+        "lib": 1,
+        "test": 4
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6101,
+      "aloneByArea": {}
+    },
+    "avoid_redundant_argument_values": {
+      "group": "G1",
+      "diag": 123,
+      "diagProject": 123,
+      "diagByArea": {
+        "bin": 12,
+        "lib": 9,
+        "test": 102
+      },
+      "combined": 155,
+      "alone": 155,
+      "aloneOther": 0,
+      "aloneMs": 9668,
+      "aloneByArea": {
+        "bin": 12,
+        "lib": 9,
+        "test": 134
+      }
+    },
+    "avoid_returning_this": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "avoid_setters_without_getters": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "avoid_slow_async_io": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "avoid_type_to_string": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "avoid_types_on_closure_parameters": {
+      "group": "G1",
+      "diag": 234,
+      "diagProject": 234,
+      "diagByArea": {
+        "lib": 2,
+        "test": 232
+      },
+      "combined": 234,
+      "alone": 234,
+      "aloneOther": 0,
+      "aloneMs": 8009,
+      "aloneByArea": {
+        "lib": 2,
+        "test": 232
+      }
+    },
+    "avoid_unused_constructor_parameters": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "avoid_void_async": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "cancel_subscriptions": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "cast_nullable_to_non_nullable": {
+      "group": "G1",
+      "diag": 5,
+      "diagProject": 5,
+      "diagByArea": {
+        "test": 5
+      },
+      "combined": 5,
+      "alone": 5,
+      "aloneOther": 0,
+      "aloneMs": 7109,
+      "aloneByArea": {
+        "test": 5
+      }
+    },
+    "close_sinks": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "combinators_ordering": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "comment_references": {
+      "group": "G1",
+      "diag": 196,
+      "diagProject": 196,
+      "diagByArea": {
+        "lib": 178,
+        "test": 18
+      },
+      "combined": 30,
+      "alone": 10,
+      "aloneOther": 0,
+      "aloneMs": 17201,
+      "aloneByArea": {
+        "lib": 4,
+        "test": 6
+      }
+    },
+    "conditional_uri_does_not_exist": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "deprecated_consistency": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "deprecated_member_use_from_same_package": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "diagnostic_describe_all_properties": {
+      "group": "G1",
+      "diag": 123,
+      "diagProject": 123,
+      "diagByArea": {
+        "lib": 122,
+        "test": 1
+      },
+      "combined": 50,
+      "alone": 46,
+      "aloneOther": 0,
+      "aloneMs": 7574,
+      "aloneByArea": {
+        "lib": 45,
+        "test": 1
+      }
+    },
+    "directives_ordering": {
+      "group": "G1",
+      "diag": 163,
+      "diagProject": 163,
+      "diagByArea": {
+        "lib": 3,
+        "test": 160
+      },
+      "combined": 261,
+      "alone": 160,
+      "aloneOther": 0,
+      "aloneMs": 9166,
+      "aloneByArea": {
+        "lib": 3,
+        "test": 157
+      }
+    },
+    "discarded_futures": {
+      "group": "G1",
+      "diag": 11,
+      "diagProject": 11,
+      "diagByArea": {
+        "lib": 9,
+        "test": 2
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6126,
+      "aloneByArea": {}
+    },
+    "do_not_use_environment": {
+      "group": "G1",
+      "diag": 17,
+      "diagProject": 17,
+      "diagByArea": {
+        "lib": 13,
+        "test": 4
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6071,
+      "aloneByArea": {}
+    },
+    "document_ignores": {
+      "group": "G1",
+      "diag": 48,
+      "diagProject": 48,
+      "diagByArea": {
+        "bin": 1,
+        "lib": 1,
+        "test": 46
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6147,
+      "aloneByArea": {}
+    },
+    "eol_at_end_of_file": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "flutter_style_todos": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "join_return_with_assignment": {
+      "group": "G1",
+      "diag": 1,
+      "diagProject": 1,
+      "diagByArea": {
+        "lib": 1
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6041,
+      "aloneByArea": {}
+    },
+    "leading_newlines_in_multiline_strings": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "library_names": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "lines_longer_than_80_chars": {
+      "group": "G1",
+      "diag": 111,
+      "diagProject": 107,
+      "diagByArea": {
+        "lib": 35,
+        "marker": 4,
+        "test": 72
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6034,
+      "aloneByArea": {}
+    },
+    "literal_only_boolean_expressions": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "matching_super_parameters": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "migrate_design_widgets": {
+      "group": "G1",
+      "diag": 159,
+      "diagProject": 156,
+      "diagByArea": {
+        "lib": 62,
+        "marker": 3,
+        "test": 94
+      },
+      "combined": 257,
+      "alone": 159,
+      "aloneOther": 1,
+      "aloneMs": 8852,
+      "aloneByArea": {
+        "lib": 62,
+        "marker": 3,
+        "test": 94
+      }
+    },
+    "missing_code_block_language_in_doc_comment": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "missing_whitespace_between_adjacent_strings": {
+      "group": "G1",
+      "diag": 13,
+      "diagProject": 13,
+      "diagByArea": {
+        "test": 13
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6032,
+      "aloneByArea": {}
+    },
+    "no_adjacent_strings_in_list": {
+      "group": "G1",
+      "diag": 9,
+      "diagProject": 9,
+      "diagByArea": {
+        "test": 9
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6101,
+      "aloneByArea": {}
+    },
+    "no_dynamic_casts": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "no_literal_bool_comparisons": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "no_raw_types": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "no_runtimetype_tostring": {
+      "group": "G1",
+      "diag": 1,
+      "diagProject": 1,
+      "diagByArea": {
+        "lib": 1
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6026,
+      "aloneByArea": {}
+    },
+    "no_self_assignments": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "noop_primitive_operations": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "omit_local_variable_types": {
+      "group": "G1",
+      "diag": 885,
+      "diagProject": 885,
+      "diagByArea": {
+        "lib": 12,
+        "test": 873
+      },
+      "combined": 873,
+      "alone": 885,
+      "aloneOther": 0,
+      "aloneMs": 8570,
+      "aloneByArea": {
+        "lib": 12,
+        "test": 873
+      }
+    },
+    "omit_obvious_local_variable_types": {
+      "group": "G1",
+      "diag": 236,
+      "diagProject": 236,
+      "diagByArea": {
+        "lib": 1,
+        "test": 235
+      },
+      "combined": 12,
+      "alone": 236,
+      "aloneOther": 0,
+      "aloneMs": 7949,
+      "aloneByArea": {
+        "lib": 1,
+        "test": 235
+      }
+    },
+    "omit_obvious_property_types": {
+      "group": "G1",
+      "diag": 713,
+      "diagProject": 711,
+      "diagByArea": {
+        "bin": 2,
+        "lib": 182,
+        "marker": 2,
+        "test": 527
+      },
+      "combined": 713,
+      "alone": 713,
+      "aloneOther": 0,
+      "aloneMs": 10029,
+      "aloneByArea": {
+        "bin": 2,
+        "lib": 182,
+        "marker": 2,
+        "test": 527
+      }
+    },
+    "only_throw_errors": {
+      "group": "G1",
+      "diag": 4,
+      "diagProject": 4,
+      "diagByArea": {
+        "test": 4
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6091,
+      "aloneByArea": {}
+    },
+    "parameter_assignments": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "prefer_asserts_in_initializer_lists": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "prefer_const_declarations": {
+      "group": "G1",
+      "diag": 5,
+      "diagProject": 5,
+      "diagByArea": {
+        "lib": 2,
+        "test": 3
+      },
+      "combined": 8,
+      "alone": 5,
+      "aloneOther": 0,
+      "aloneMs": 7132,
+      "aloneByArea": {
+        "lib": 2,
+        "test": 3
+      }
+    },
+    "prefer_constructors_over_static_methods": {
+      "group": "G1",
+      "diag": 1,
+      "diagProject": 1,
+      "diagByArea": {
+        "lib": 1
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6058,
+      "aloneByArea": {}
+    },
+    "prefer_final_in_for_each": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "prefer_foreach": {
+      "group": "G1",
+      "diag": 3,
+      "diagProject": 3,
+      "diagByArea": {
+        "test": 3
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6157,
+      "aloneByArea": {}
+    },
+    "prefer_if_elements_to_conditional_expressions": {
+      "group": "G1",
+      "diag": 3,
+      "diagProject": 3,
+      "diagByArea": {
+        "lib": 3
+      },
+      "combined": 1,
+      "alone": 1,
+      "aloneOther": 0,
+      "aloneMs": 7046,
+      "aloneByArea": {
+        "lib": 1
+      }
+    },
+    "prefer_int_literals": {
+      "group": "G1",
+      "diag": 17,
+      "diagProject": 17,
+      "diagByArea": {
+        "lib": 5,
+        "test": 12
+      },
+      "combined": 17,
+      "alone": 17,
+      "aloneOther": 0,
+      "aloneMs": 7295,
+      "aloneByArea": {
+        "lib": 5,
+        "test": 12
+      }
+    },
+    "prefer_null_aware_method_calls": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "prefer_void_to_null": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "public_member_api_docs": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "remove_deprecations_in_breaking_versions": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "require_trailing_commas": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "simple_directive_paths": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "simplify_variable_pattern": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "sized_box_shrink_expand": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "sort_constructors_first": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "sort_pub_dependencies": {
+      "group": "G1",
+      "diag": 2,
+      "diagProject": 2,
+      "diagByArea": {
+        "pubspec.yaml": 2
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6066,
+      "aloneByArea": {}
+    },
+    "sort_unnamed_constructors_first": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "specify_nonobvious_property_types": {
+      "group": "G1",
+      "diag": 1,
+      "diagProject": 0,
+      "diagByArea": {
+        "marker": 1
+      },
+      "combined": 1,
+      "alone": 1,
+      "aloneOther": 1,
+      "aloneMs": 6855,
+      "aloneByArea": {
+        "marker": 1
+      }
+    },
+    "switch_on_type": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "test_types_in_equals": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "throw_in_finally": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "tighten_type_of_initializing_formals": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "unnecessary_breaks": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "unnecessary_ignore": {
+      "group": "G1",
+      "diag": 12,
+      "diagProject": 12,
+      "diagByArea": {
+        "bin": 1,
+        "lib": 1,
+        "test": 10
+      },
+      "combined": 13,
+      "alone": 11,
+      "aloneOther": 0,
+      "aloneMs": 7192,
+      "aloneByArea": {
+        "bin": 1,
+        "test": 10
+      }
+    },
+    "unnecessary_lambdas": {
+      "group": "G1",
+      "diag": 197,
+      "diagProject": 197,
+      "diagByArea": {
+        "test": 197
+      },
+      "combined": 198,
+      "alone": 197,
+      "aloneOther": 0,
+      "aloneMs": 7673,
+      "aloneByArea": {
+        "test": 197
+      }
+    },
+    "unnecessary_library_directive": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "unnecessary_null_aware_operator_on_extension_on_nullable": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "unnecessary_null_checks": {
+      "group": "G1",
+      "diag": 1,
+      "diagProject": 1,
+      "diagByArea": {
+        "test": 1
+      },
+      "combined": 5,
+      "alone": 1,
+      "aloneOther": 0,
+      "aloneMs": 6882,
+      "aloneByArea": {
+        "test": 1
+      }
+    },
+    "unnecessary_parenthesis": {
+      "group": "G1",
+      "diag": 1,
+      "diagProject": 1,
+      "diagByArea": {
+        "test": 1
+      },
+      "combined": 1,
+      "alone": 1,
+      "aloneOther": 0,
+      "aloneMs": 6952,
+      "aloneByArea": {
+        "test": 1
+      }
+    },
+    "unnecessary_raw_strings": {
+      "group": "G1",
+      "diag": 32,
+      "diagProject": 32,
+      "diagByArea": {
+        "test": 32
+      },
+      "combined": 32,
+      "alone": 32,
+      "aloneOther": 0,
+      "aloneMs": 7426,
+      "aloneByArea": {
+        "test": 32
+      }
+    },
+    "unnecessary_statements": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "unnecessary_unawaited": {
+      "group": "G1",
+      "diag": 3,
+      "diagProject": 3,
+      "diagByArea": {
+        "test": 3
+      },
+      "combined": 3,
+      "alone": 3,
+      "aloneOther": 0,
+      "aloneMs": 6966,
+      "aloneByArea": {
+        "test": 3
+      }
+    },
+    "unreachable_from_main": {
+      "group": "G1",
+      "diag": 2,
+      "diagProject": 2,
+      "diagByArea": {
+        "bin": 1,
+        "test": 1
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6071,
+      "aloneByArea": {}
+    },
+    "use_colored_box": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "use_decorated_box": {
+      "group": "G1",
+      "diag": 1,
+      "diagProject": 1,
+      "diagByArea": {
+        "lib": 1
+      },
+      "combined": 1,
+      "alone": 1,
+      "aloneOther": 0,
+      "aloneMs": 7028,
+      "aloneByArea": {
+        "lib": 1
+      }
+    },
+    "use_enums": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "use_is_even_rather_than_modulo": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "use_named_constants": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "use_raw_strings": {
+      "group": "G1",
+      "diag": 9,
+      "diagProject": 9,
+      "diagByArea": {
+        "test": 9
+      },
+      "combined": 9,
+      "alone": 9,
+      "aloneOther": 0,
+      "aloneMs": 7165,
+      "aloneByArea": {
+        "test": 9
+      }
+    },
+    "use_setters_to_change_properties": {
+      "group": "G1",
+      "diag": 3,
+      "diagProject": 3,
+      "diagByArea": {
+        "test": 3
+      },
+      "combined": 0,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 6000,
+      "aloneByArea": {}
+    },
+    "use_string_buffers": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "use_test_throws_matchers": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "use_truncating_division": {
+      "group": "G1",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "always_specify_types": {
+      "group": "G2",
+      "diag": 9382,
+      "diagProject": 9374,
+      "diagByArea": {
+        "bin": 111,
+        "lib": 1524,
+        "marker": 8,
+        "test": 7739
+      },
+      "combined": 8921,
+      "alone": 8913,
+      "aloneOther": 1,
+      "aloneMs": 12510,
+      "aloneByArea": {
+        "bin": 109,
+        "lib": 1342,
+        "marker": 8,
+        "test": 7454
+      }
+    },
+    "prefer_relative_imports": {
+      "group": "G2",
+      "diag": 9,
+      "diagProject": 9,
+      "diagByArea": {
+        "lib": 9
+      },
+      "combined": 9,
+      "alone": 9,
+      "aloneOther": 0,
+      "aloneMs": 6869,
+      "aloneByArea": {
+        "lib": 9
+      }
+    },
+    "specify_nonobvious_local_variable_types": {
+      "group": "G2",
+      "diag": 4103,
+      "diagProject": 4103,
+      "diagByArea": {
+        "bin": 52,
+        "lib": 878,
+        "test": 3173
+      },
+      "combined": 4070,
+      "alone": 4070,
+      "aloneOther": 0,
+      "aloneMs": 11580,
+      "aloneByArea": {
+        "bin": 52,
+        "lib": 866,
+        "test": 3152
+      }
+    },
+    "type_annotate_public_apis": {
+      "group": "G2",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 0,
+      "alone": null,
+      "aloneOther": null,
+      "aloneMs": null,
+      "aloneByArea": null
+    },
+    "prefer_double_quotes": {
+      "group": "G3",
+      "diag": 20353,
+      "diagProject": 20345,
+      "diagByArea": {
+        "bin": 190,
+        "lib": 2241,
+        "marker": 8,
+        "test": 17914
+      },
+      "combined": 40707,
+      "alone": 20353,
+      "aloneOther": 0,
+      "aloneMs": 13104,
+      "aloneByArea": {
+        "bin": 190,
+        "lib": 2241,
+        "marker": 8,
+        "test": 17914
+      }
+    },
+    "unnecessary_final": {
+      "group": "G3",
+      "diag": 6709,
+      "diagProject": 6709,
+      "diagByArea": {
+        "bin": 84,
+        "lib": 1008,
+        "test": 5617
+      },
+      "combined": 12936,
+      "alone": 6709,
+      "aloneOther": 0,
+      "aloneMs": 12154,
+      "aloneByArea": {
+        "bin": 84,
+        "lib": 1008,
+        "test": 5617
+      }
+    },
+    "empty_container_bodies": {
+      "group": "G4",
+      "diag": 615,
+      "diagProject": 615,
+      "diagByArea": {
+        "test": 615
+      },
+      "combined": 620,
+      "alone": 615,
+      "aloneOther": 0,
+      "aloneMs": 8882,
+      "aloneByArea": {
+        "test": 615
+      }
+    },
+    "unnecessary_type_name_in_constructor": {
+      "group": "G4",
+      "diag": 281,
+      "diagProject": 281,
+      "diagByArea": {
+        "bin": 2,
+        "lib": 220,
+        "test": 59
+      },
+      "combined": 40,
+      "alone": 281,
+      "aloneOther": 0,
+      "aloneMs": 8634,
+      "aloneByArea": {
+        "bin": 2,
+        "lib": 220,
+        "test": 59
+      }
+    },
+    "unnecessary_const_in_enum_constructor": {
+      "group": "G4",
+      "diag": 2,
+      "diagProject": 2,
+      "diagByArea": {
+        "lib": 2
+      },
+      "combined": 2,
+      "alone": 2,
+      "aloneOther": 0,
+      "aloneMs": 6848,
+      "aloneByArea": {
+        "lib": 2
+      }
+    },
+    "use_primary_constructors": {
+      "group": "G4",
+      "diag": 969,
+      "diagProject": 968,
+      "diagByArea": {
+        "bin": 3,
+        "lib": 258,
+        "marker": 1,
+        "test": 707
+      },
+      "combined": 969,
+      "alone": 969,
+      "aloneOther": 0,
+      "aloneMs": 10671,
+      "aloneByArea": {
+        "bin": 3,
+        "lib": 258,
+        "marker": 1,
+        "test": 707
+      }
+    },
+    "initialize_in_field_declaration": {
+      "group": "G4",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 12,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 5883,
+      "aloneByArea": {}
+    },
+    "use_declaring_parameters": {
+      "group": "G4",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 332,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 5915,
+      "aloneByArea": {}
+    },
+    "unnecessary_primary_constructor_body": {
+      "group": "G4",
+      "diag": 0,
+      "diagProject": 0,
+      "diagByArea": {},
+      "combined": 4,
+      "alone": 0,
+      "aloneOther": 0,
+      "aloneMs": 5936,
+      "aloneByArea": {}
+    }
+  },
+  "applied": {
+    "always_put_required_named_parameters_first": {
+      "diag": 32,
+      "alone": 16,
+      "remaining": 0,
+      "otherDelta": {
+        "lines_longer_than_80_chars": 3
+      },
+      "applyExit": 0,
+      "applyMs": 7494,
+      "applySummary": "16 fixes made in 16 files."
+    },
+    "avoid_redundant_argument_values": {
+      "diag": 123,
+      "alone": 155,
+      "remaining": 0,
+      "otherDelta": {
+        "unnecessary_lambdas": 1
+      },
+      "applyExit": 0,
+      "applyMs": 9820,
+      "applySummary": "155 fixes made in 60 files."
+    },
+    "comment_references": {
+      "diag": 196,
+      "alone": 10,
+      "remaining": 96,
+      "otherDelta": {
+        "migrate_design_widgets": 1,
+        "unused_import": 1,
+        "unnecessary_import": 2
+      },
+      "applyExit": 0,
+      "applyMs": 17730,
+      "applySummary": "10 fixes made in 3 files."
+    },
+    "diagnostic_describe_all_properties": {
+      "diag": 123,
+      "alone": 46,
+      "remaining": 0,
+      "otherDelta": {
+        "lines_longer_than_80_chars": 32,
+        "undefined_class": 40,
+        "undefined_method": 77,
+        "creation_with_non_type": 31
+      },
+      "applyExit": 0,
+      "applyMs": 7746,
+      "applySummary": "46 fixes made in 34 files."
+    },
+    "prefer_double_quotes": {
+      "diag": 20353,
+      "alone": 20353,
+      "remaining": 0,
+      "otherDelta": {
+        "prefer_single_quotes": 20352
+      },
+      "applyExit": 0,
+      "applyMs": 13361,
+      "applySummary": "20353 fixes made in 405 files."
+    },
+    "always_specify_types": {
+      "diag": 9382,
+      "alone": 8913,
+      "remaining": 469,
+      "otherDelta": {
+        "specify_nonobvious_local_variable_types": -4070,
+        "argument_type_not_assignable": 1,
+        "ambiguous_import": 5,
+        "implementation_imports": 3,
+        "unnecessary_import": 36
+      },
+      "applyExit": 0,
+      "applyMs": 12620,
+      "applySummary": "8914 fixes made in 336 files."
+    },
+    "unnecessary_final": {
+      "diag": 6709,
+      "alone": 6709,
+      "remaining": 0,
+      "otherDelta": {
+        "prefer_final_locals": 6263
+      },
+      "applyExit": 0,
+      "applyMs": 12053,
+      "applySummary": "6709 fixes made in 347 files."
+    },
+    "specify_nonobvious_local_variable_types": {
+      "diag": 4103,
+      "alone": 4070,
+      "remaining": 33,
+      "otherDelta": {
+        "always_specify_types": -4070,
+        "argument_type_not_assignable": 1,
+        "ambiguous_import": 3,
+        "implementation_imports": 1,
+        "unnecessary_import": 4
+      },
+      "applyExit": 0,
+      "applyMs": 11187,
+      "applySummary": "4070 fixes made in 299 files."
+    },
+    "use_primary_constructors": {
+      "diag": 969,
+      "alone": 969,
+      "remaining": 0,
+      "otherDelta": {
+        "unnecessary_type_name_in_constructor": -249,
+        "unnecessary_const_in_enum_constructor": -2,
+        "use_declaring_parameters": 332,
+        "initialize_in_field_declaration": 30,
+        "prefer_const_constructors_in_immutables": 3
+      },
+      "applyExit": 0,
+      "applyMs": 10863,
+      "applySummary": "969 fixes made in 264 files."
+    }
+  },
+  "checks": {
+    "K1 1부 대조: 단독 dry-run 의 수가 그 규칙의 진단 수와 같다 (use_primary_constructors)": true,
+    "K2 2부의 모든 분석에서 woody_lints 가 작업 중인 저장소를 가리켰다": true,
+    "K3 2부의 모든 분석에서 example 정답지 16줄이 표식의 줄에 모두 들어 있다 (후보 규칙이 표식에 줄을 더할 수 있다)": true,
+    "K4 2부의 모든 분석에서 plugin 이 준비됐다": true,
+    "K5 저장소가 그대로다": false
+  }
+}

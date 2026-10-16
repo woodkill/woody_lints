@@ -1,0 +1,82 @@
+# Spike 021 — 새 규칙과 언어 버전
+SDK: 3.13.4
+
+## 1부 — 연습용 패키지 (규칙 10 + strict-inference + avoid_print)
+- p311old (sdk ^3.11.1): exit 2, 461 ms, 진단 5건
+- p313old (sdk ^3.13.0): exit 2, 460 ms, 진단 16건
+- p313new (sdk ^3.13.0): exit 0, 459 ms, 진단 5건
+- p311new (sdk ^3.11.1): exit 3, 461 ms, 진단 8건
+
+### 파일마다 나온 진단 코드
+| 표식 파일 | 3.11 (`^3.11.1`) | 3.13 (`^3.13.0`) |
+|---|---|---|
+| `async_return_with_no_await.dart` | async_return_with_no_await | async_return_with_no_await |
+| `empty_container_bodies.dart` | — | empty_container_bodies, use_primary_constructors |
+| `unnecessary_const_in_enum_constructor.dart` | — | unnecessary_const_in_enum_constructor, unnecessary_type_name_in_constructor, use_primary_constructors |
+| `unnecessary_type_name_in_constructor.dart` | — | unnecessary_type_name_in_constructor, unnecessary_type_name_in_constructor |
+| `use_primary_constructors.dart` | — | unnecessary_type_name_in_constructor, use_primary_constructors |
+| `no_raw_types.dart` | no_raw_types | empty_container_bodies, no_raw_types, use_primary_constructors |
+| `no_dynamic_casts.dart` | no_dynamic_casts | no_dynamic_casts |
+| `strict_inference.dart` | inference_failure_on_collection_literal | inference_failure_on_collection_literal |
+| `control_avoid_print.dart` | avoid_print | avoid_print |
+| `at311/empty_container_bodies.dart` (`// @dart=3.11`) | — | — |
+| `initialize_in_field_declaration.dart` (3.13 문법) | experiment_not_enabled, experiment_not_enabled | initialize_in_field_declaration |
+| `unnecessary_const_in_enum_constructor_primary.dart` (3.13 문법) | experiment_not_enabled | unnecessary_const_in_enum_constructor |
+| `unnecessary_primary_constructor_body.dart` (3.13 문법) | experiment_not_enabled, experiment_not_enabled, unnecessary_primary_constructor_body | unnecessary_primary_constructor_body |
+| `use_declaring_parameters.dart` (3.13 문법) | experiment_not_enabled, experiment_not_enabled | initialize_in_field_declaration, use_declaring_parameters |
+
+### 규칙마다 — 3.11 에서 보고되는가 (소스를 읽은 추정과 견줌)
+| 규칙 | 추정 | 3.11 | 3.13 | 견줌 |
+|---|---|---|---|---|
+| `async_return_with_no_await` | open | 보고 | 보고 | = |
+| `empty_container_bodies` | gate | 없음 | 보고 | = |
+| `initialize_in_field_declaration` | gate | 없음 | 보고 | = |
+| `unnecessary_const_in_enum_constructor` | gate | 없음 | 보고 | = |
+| `unnecessary_primary_constructor_body` | syntax | 보고 | 보고 | ≠ |
+| `unnecessary_type_name_in_constructor` | gate | 없음 | 보고 | = |
+| `use_declaring_parameters` | gate | 없음 | 보고 | = |
+| `use_primary_constructors` | gate | 없음 | 보고 | = |
+| `no_raw_types` | open | 보고 | 보고 | = |
+| `no_dynamic_casts` | open | 보고 | 보고 | = |
+| `strict-inference` | open | 보고 | 보고 | = |
+- 3.13 문법 표식을 `^3.11.1` 에서 분석했을 때 나온 다른 코드: [experiment_not_enabled]
+
+## 2부 — 사용 프로젝트의 복사본
+- 복사한 파일 776개, Dart 파일 469, SDK 제약 ^3.11.1
+- woody_lints 를 받은 자리: repo
+- B0: exit 2, 20646 ms, 줄 16 (표식 16 · 프로젝트 0), plugin 폴더 1 · riverpod_lint 3.1.9
+- B1: exit 2, 20491 ms, 줄 156 (표식 20 · 프로젝트 136), plugin 폴더 1 · riverpod_lint 3.1.9
+- B2: exit 2, 20455 ms, 줄 2067 (표식 38 · 프로젝트 2029), plugin 폴더 1 · riverpod_lint 3.1.9
+
+### 규칙마다 — 표식 · 프로젝트의 줄 (B1 = 하한 3.11, B2 = 하한 3.13)
+| 규칙 | B1 표식 | B1 프로젝트 | B2 표식 | B2 프로젝트 |
+|---|---|---|---|---|
+| `async_return_with_no_await` | 1 | 30 | 1 | 30 |
+| `empty_container_bodies` | 0 | 0 | 2 | 615 |
+| `initialize_in_field_declaration` | 0 | 0 | 2 | 0 |
+| `unnecessary_const_in_enum_constructor` | 0 | 0 | 2 | 2 |
+| `unnecessary_primary_constructor_body` | 0 | 0 | 1 | 0 |
+| `unnecessary_type_name_in_constructor` | 0 | 0 | 4 | 281 |
+| `use_declaring_parameters` | 0 | 0 | 1 | 0 |
+| `use_primary_constructors` | 0 | 0 | 5 | 968 |
+| `no_raw_types` | 1 | 0 | 1 | 0 |
+| `no_dynamic_casts` | 1 | 0 | 1 | 0 |
+| `strict-inference` | 1 | 106 | 1 | 106 |
+- B2 프로젝트의 줄을 자리별로: {inference_failure_on_function_invocation: {test: 106}, use_primary_constructors: {bin: 3, lib: 258, test: 707}, unnecessary_type_name_in_constructor: {bin: 2, lib: 220, test: 59}, unnecessary_const_in_enum_constructor: {lib: 2}, async_return_with_no_await: {lib: 16, test: 14}, empty_container_bodies: {test: 615}}
+- strict-inference 의 코드 (B1 + B2): {inference_failure_on_collection_literal: 2, inference_failure_on_function_invocation: 212}
+- 대상 밖 규칙의 프로젝트 줄: B0 {}, B1 {}, B2 {prefer_initializing_formals: 27}
+- 새 규칙 표식에 걸린 대상 밖 규칙 (B1): []
+
+# 판정
+| 확인 | 결과 |
+|---|---|
+| K1 대조: avoid_print 가 두 하한의 연습용 패키지에서 걸린다 | 성립 |
+| K2 대조: 3.13 패키지에서 empty_container_bodies 표식이 걸린다 (표식이 유효하다) | 성립 |
+| K3 복사본의 woody_lints 가 모든 회차에서 작업 중인 저장소를 가리킨다 | 성립 |
+| K4 B0 의 표식 줄이 example 정답지 16줄과 같다 | 성립 |
+| K5 모든 회차에서 plugin 이 준비됐다 (폴더 1, 실패 머리말 없음) | 성립 |
+| K6 B1 에서 막는 조건이 없는 규칙의 표식이 걸린다 (async_return_with_no_await) | 성립 |
+| K7 저장소가 그대로다 (git status · .dart_tool · package_config · pubspec.lock) | 성립 |
+
+판정에 넣은 확인 7건이 모두 성립했다.
+소스를 읽은 추정과 다른 규칙: [unnecessary_primary_constructor_body]

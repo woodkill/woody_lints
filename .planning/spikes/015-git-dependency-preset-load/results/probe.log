@@ -1,0 +1,167 @@
+Dart 3.13.4 on macos
+정답지 exit 2 + 16줄
+
+# 1부. 기준 — git 의존성 + 한 파일 구조 (사용 프로젝트가 지금 받는 모양)
+커밋 A (한 파일 구조): d1193073f8fade508a58f6e081a8433297ad8250
+## pub-1 — consumer-git: dart pub get --no-example
+   exit 0, 1.7s, lock: source git, ref main, resolved-ref d1193073f8fade508a58f6e081a8433297ad8250
+   woody_lints 의 자리: file://<work>/pub-cache/git/replica-d1193073f8fade508a58f6e081a8433297ad8250/
+   ✓ git 의존성으로 받은 패키지가 pub cache 의 git 폴더에 놓였다 — file://<work>/pub-cache/git/replica-d1193073f8fade508a58f6e081a8433297ad8250/
+   ✓ lock 이 git 출처와 커밋 A 를 가리킨다 — source git, resolved-ref d1193073f8fade508a58f6e081a8433297ad8250
+## G-old — git 의존성, 한 파일 구조, 옛 주소 한 줄
+   exit 2, 15.2s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+     lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables
+     lib/added_rules.dart:18  info  always_declare_return_types
+     lib/added_rules.dart:24  info  prefer_final_locals
+     lib/added_rules.dart:29  info  prefer_single_quotes
+     lib/added_rules.dart:33  info  unawaited_futures
+     lib/added_rules.dart:7  info  prefer_const_constructors
+     lib/base_rules.dart:12  info  sort_child_properties_last
+     lib/base_rules.dart:17  info  use_build_context_synchronously
+     lib/base_rules.dart:22  info  avoid_print
+     lib/base_rules.dart:30  info  control_flow_in_finally
+     lib/base_rules.dart:34  info  slash_for_doc_comments
+     lib/base_rules.dart:38  info  prefer_is_empty
+     lib/base_rules.dart:8  info  sized_box_for_whitespace
+     lib/main.dart:5  warning  missing_provider_scope
+     lib/riverpod_rules.dart:17  warning  provider_parameters
+     lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties
+   ✓ G-old 의 진단이 기대와 같다 — 16줄, exit 2
+   ✓ G-old 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+
+# 2부. main 이 나눈 구조로 나아간다 — 받는 쪽의 lock 은 언제 따라가는가
+커밋 B (나눈 구조): 483fccccb1b84e65dbb9c598455adf61c5b006a1
+## pub-2 — consumer-git: dart pub get --no-example
+   exit 0, 0.3s, lock: source git, ref main, resolved-ref d1193073f8fade508a58f6e081a8433297ad8250
+   ✓ main 이 나아가도 pub get 은 lock 의 커밋(A)에 머문다 — resolved-ref d1193073f8fade508a58f6e081a8433297ad8250
+## pub-3 — consumer-git: dart pub get --no-example --enforce-lockfile
+   exit 0, 0.3s, lock: source git, ref main, resolved-ref d1193073f8fade508a58f6e081a8433297ad8250
+   ✓ 그때의 --enforce-lockfile 은 통과한다 (lock 이 여전히 맞는 풀이다) — exit 0
+## pub-4 — consumer-git: dart pub upgrade woody_lints --no-example
+   exit 0, 0.4s, lock: source git, ref main, resolved-ref 483fccccb1b84e65dbb9c598455adf61c5b006a1
+   ✓ pub upgrade woody_lints 가 커밋 B 로 옮긴다 — resolved-ref 483fccccb1b84e65dbb9c598455adf61c5b006a1, 자리 file://<work>/pub-cache/git/replica-483fccccb1b84e65dbb9c598455adf61c5b006a1/
+
+# 3부. git 의존성 + 나눈 구조
+## G-alias — git 의존성, 옛 주소 한 줄 (3단: 별칭 → 묶음 → 조각)
+   exit 2, 15.3s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+     lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables
+     lib/added_rules.dart:18  info  always_declare_return_types
+     lib/added_rules.dart:24  info  prefer_final_locals
+     lib/added_rules.dart:29  info  prefer_single_quotes
+     lib/added_rules.dart:33  info  unawaited_futures
+     lib/added_rules.dart:7  info  prefer_const_constructors
+     lib/base_rules.dart:12  info  sort_child_properties_last
+     lib/base_rules.dart:17  info  use_build_context_synchronously
+     lib/base_rules.dart:22  info  avoid_print
+     lib/base_rules.dart:30  info  control_flow_in_finally
+     lib/base_rules.dart:34  info  slash_for_doc_comments
+     lib/base_rules.dart:38  info  prefer_is_empty
+     lib/base_rules.dart:8  info  sized_box_for_whitespace
+     lib/main.dart:5  warning  missing_provider_scope
+     lib/riverpod_rules.dart:17  warning  provider_parameters
+     lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties
+   ✓ G-alias 의 진단이 기대와 같다 — 16줄, exit 2
+   ✓ G-alias 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+   ✓ G-alias 의 plugin 선언이 ^3.1.3 으로 전해졌다 — 실제 ^3.1.3
+## G-bundle — git 의존성, 묶음 주소 한 줄
+   exit 2, 16.3s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ G-bundle 의 진단이 기대와 같다 — 16줄, exit 2
+   ✓ G-bundle 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+## G-base-riverpod — git 의존성, base.yaml + riverpod.yaml
+   exit 2, 16.5s, 진단 21건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ G-base-riverpod 의 진단이 기대와 같다 — 21줄, exit 2
+   ✓ G-base-riverpod 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+## G-base-only — git 의존성, base.yaml 만
+   exit 2, 3.5s, 진단 18건 (plugin 0), plugin 폴더 0개
+   ✓ G-base-only 의 진단이 기대와 같다 — 18줄, exit 2
+   ✓ G-base-only 은 plugin 을 준비하지 않았다 — 폴더 0개
+plugin 쪽에서 풀린 analyzer 14.5.0 / analysis_server_plugin 0.3.24
+
+# 4부. 대조 — `ref:` 를 바꾸면 그 ref 의 내용을 받는다
+커밋 C (브랜치 no-riverpod): c5b7922d7b89a67355f562d7e3e1e536d2f7f0f5, annotated tag v9.9.9 (d111dd223dd882d3407a3ca25d5c797728655ecf) → B
+## pub-5 — consumer-git: dart pub get --no-example --enforce-lockfile
+   exit 65, 0.4s, lock: source git, ref main, resolved-ref 483fccccb1b84e65dbb9c598455adf61c5b006a1
+   stderr: Unable to satisfy `pubspec.yaml` using `pubspec.lock`. /  / To update `pubspec.lock` run `dart pub get` without / `--enforce-lockfile`.
+   ✓ `ref:` 만 고친 직후의 --enforce-lockfile 은 실패한다 — exit 65
+## pub-6 — consumer-git: dart pub get --no-example
+   exit 0, 0.3s, lock: source git, ref no-riverpod, resolved-ref c5b7922d7b89a67355f562d7e3e1e536d2f7f0f5
+   ✓ `ref:` 를 고치고 pub get 을 하면 그 ref 의 커밋(C)으로 옮긴다 — resolved-ref c5b7922d7b89a67355f562d7e3e1e536d2f7f0f5
+## N-ref — git 의존성, ref: no-riverpod, 옛 주소 한 줄
+   exit 0, 3.5s, 진단 13건 (plugin 0), plugin 폴더 0개
+   ✓ N-ref 의 진단이 기대와 같다 — 13줄, exit 0
+   ✓ N-ref 은 plugin 을 준비하지 않았다 — 폴더 0개
+## pub-7 — consumer-git: dart pub get --no-example
+   exit 0, 0.3s, lock: source git, ref v9.9.9, resolved-ref 483fccccb1b84e65dbb9c598455adf61c5b006a1
+   ✓ `ref:` 에 tag 를 적고 pub get 을 하면 그 tag 의 커밋(B)으로 옮긴다 — resolved-ref 483fccccb1b84e65dbb9c598455adf61c5b006a1
+## pub-8 — consumer-git: dart pub get --no-example
+   exit 0, 0.3s, lock: source git, ref main, resolved-ref 483fccccb1b84e65dbb9c598455adf61c5b006a1
+
+# 5부. 생성 파일 제외 — git 과 path 를 나란히
+## pub-9 — consumer-path: dart pub get --no-example
+   exit 0, 0.2s, lock: source path, ref -, resolved-ref -
+   woody_lints 의 자리: ../../replica
+## P-alias — path 의존성, 옛 주소 한 줄 (같은 스크립트의 대조)
+   exit 2, 21.6s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ P-alias 의 진단이 기대와 같다 — 16줄, exit 2
+   ✓ P-alias 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+## X-none-git — git 의존성, 제외 없음 (base.yaml + riverpod.yaml)
+   exit 2, 5.2s, 진단 23건 (plugin 4), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+## X-none-path — path 의존성, 제외 없음 (base.yaml + riverpod.yaml)
+   exit 2, 4.7s, 진단 23건 (plugin 4), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ X-none 의 git 실행이 path 실행과 한 줄도 다르지 않다 — 23줄, exit 2 / 2
+## X-bundle-git — git 의존성, 패키지의 codegen.yaml (묶음으로 받음)
+   exit 2, 4.4s, 진단 17건 (plugin 4), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+## X-bundle-path — path 의존성, 패키지의 codegen.yaml (묶음으로 받음)
+   exit 2, 4.6s, 진단 17건 (plugin 4), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ X-bundle 의 git 실행이 path 실행과 한 줄도 다르지 않다 — 17줄, exit 2 / 2
+## X-own-git — git 의존성, 묶음 + 사용 프로젝트의 옵션 파일에 직접
+   exit 2, 4.6s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+## X-own-path — path 의존성, 묶음 + 사용 프로젝트의 옵션 파일에 직접
+   exit 2, 4.8s, 진단 16건 (plugin 3), plugin 폴더 1개 (riverpod_lint 3.1.9, 선언 ^3.1.3)
+   ✓ X-own 의 git 실행이 path 실행과 한 줄도 다르지 않다 — 16줄, exit 2 / 2
+
+| `**/*.g.dart` 제외를 적은 곳 | git: 규칙 | git: plugin | path: 규칙 | path: plugin |
+|---|---|---|---|---|
+| 제외 없음 (base.yaml + riverpod.yaml) | 나옴 | 나옴 | 나옴 | 나옴 |
+| 패키지의 codegen.yaml (묶음으로 받음) | 안 나옴 | 나옴 | 안 나옴 | 나옴 |
+| 묶음 + 사용 프로젝트의 옵션 파일에 직접 | 안 나옴 | 안 나옴 | 안 나옴 | 안 나옴 |
+   ✓ 제외가 없으면 생성 파일 샘플의 규칙 · plugin 진단이 둘 다 나온다 (대조)
+   ✓ 사용 프로젝트가 직접 적은 제외는 git 의존성에서도 둘 다 막는다
+   ✓ pub cache 에 놓인 codegen.yaml 의 제외는 규칙 진단만 막는다 (spike 012 의 path 결과와 같다) — 규칙 안 나옴, plugin 나옴
+
+pub cache 의 git 폴더: cache, replica-483fccccb1b84e65dbb9c598455adf61c5b006a1, replica-c5b7922d7b89a67355f562d7e3e1e536d2f7f0f5, replica-d1193073f8fade508a58f6e081a8433297ad8250
+
+# 판정
+✓ git 의존성으로 받은 패키지가 pub cache 의 git 폴더에 놓였다 — file://<work>/pub-cache/git/replica-d1193073f8fade508a58f6e081a8433297ad8250/
+✓ lock 이 git 출처와 커밋 A 를 가리킨다 — source git, resolved-ref d1193073f8fade508a58f6e081a8433297ad8250
+✓ G-old 의 진단이 기대와 같다 — 16줄, exit 2
+✓ G-old 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+✓ main 이 나아가도 pub get 은 lock 의 커밋(A)에 머문다 — resolved-ref d1193073f8fade508a58f6e081a8433297ad8250
+✓ 그때의 --enforce-lockfile 은 통과한다 (lock 이 여전히 맞는 풀이다) — exit 0
+✓ pub upgrade woody_lints 가 커밋 B 로 옮긴다 — resolved-ref 483fccccb1b84e65dbb9c598455adf61c5b006a1, 자리 file://<work>/pub-cache/git/replica-483fccccb1b84e65dbb9c598455adf61c5b006a1/
+✓ G-alias 의 진단이 기대와 같다 — 16줄, exit 2
+✓ G-alias 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+✓ G-alias 의 plugin 선언이 ^3.1.3 으로 전해졌다 — 실제 ^3.1.3
+✓ G-bundle 의 진단이 기대와 같다 — 16줄, exit 2
+✓ G-bundle 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+✓ G-base-riverpod 의 진단이 기대와 같다 — 21줄, exit 2
+✓ G-base-riverpod 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+✓ G-base-only 의 진단이 기대와 같다 — 18줄, exit 2
+✓ G-base-only 은 plugin 을 준비하지 않았다 — 폴더 0개
+✓ `ref:` 만 고친 직후의 --enforce-lockfile 은 실패한다 — exit 65
+✓ `ref:` 를 고치고 pub get 을 하면 그 ref 의 커밋(C)으로 옮긴다 — resolved-ref c5b7922d7b89a67355f562d7e3e1e536d2f7f0f5
+✓ N-ref 의 진단이 기대와 같다 — 13줄, exit 0
+✓ N-ref 은 plugin 을 준비하지 않았다 — 폴더 0개
+✓ `ref:` 에 tag 를 적고 pub get 을 하면 그 tag 의 커밋(B)으로 옮긴다 — resolved-ref 483fccccb1b84e65dbb9c598455adf61c5b006a1
+✓ P-alias 의 진단이 기대와 같다 — 16줄, exit 2
+✓ P-alias 이 plugin 을 한 번 준비했다 — 폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)
+✓ X-none 의 git 실행이 path 실행과 한 줄도 다르지 않다 — 23줄, exit 2 / 2
+✓ X-bundle 의 git 실행이 path 실행과 한 줄도 다르지 않다 — 17줄, exit 2 / 2
+✓ X-own 의 git 실행이 path 실행과 한 줄도 다르지 않다 — 16줄, exit 2 / 2
+✓ 제외가 없으면 생성 파일 샘플의 규칙 · plugin 진단이 둘 다 나온다 (대조)
+✓ 사용 프로젝트가 직접 적은 제외는 git 의존성에서도 둘 다 막는다
+✓ pub cache 에 놓인 codegen.yaml 의 제외는 규칙 진단만 막는다 (spike 012 의 path 결과와 같다) — 규칙 안 나옴, plugin 나옴
+모두 성립 (29건)
+
+원본 결과: <repo>/.planning/spikes/015-git-dependency-preset-load/results/probe.json
+script exit 0

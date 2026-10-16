@@ -1,0 +1,26 @@
+Dart 3.13.4, riverpod_lint 3.1.9
+
+전체 실행: exit 3, 진단 15건 (plugin 15건), stderr 없음
+  나오지 않은 규칙: 없음
+
+| 규칙 | severity | type | code 표기 | 위치 | 이 규칙만 켰을 때 exit | 그때 plugin 진단 |
+|---|---|---|---|---|---|---|
+| `async_value_nullable_pattern` | WARNING | STATIC_WARNING | `async_value_nullable_pattern` | lib/r06_async_value_nullable_pattern.dart:6 | 2 | async_value_nullable_pattern |
+| `avoid_build_context_in_providers` | INFO | STATIC_WARNING | `avoid_build_context_in_providers` | lib/gen/r09_avoid_build_context_in_providers.dart:8 | 0 | avoid_build_context_in_providers |
+| `avoid_public_notifier_properties` | INFO | STATIC_WARNING | `avoid_public_notifier_properties` | lib/r03_avoid_public_notifier_properties.dart:5 | 0 | avoid_public_notifier_properties |
+| `avoid_ref_inside_state_dispose` | WARNING | STATIC_WARNING | `avoid_ref_inside_state_dispose` | lib/r05_avoid_ref_inside_state_dispose.dart:19 | 2 | avoid_ref_inside_state_dispose |
+| `functional_ref` | WARNING | STATIC_WARNING | `functional_ref` | lib/r11_functional_ref.dart:5 | 2 | functional_ref |
+| `missing_provider_scope` | WARNING | STATIC_WARNING | `missing_provider_scope` | lib/r01_missing_provider_scope.dart:5 | 2 | missing_provider_scope |
+| `notifier_build` | WARNING | STATIC_WARNING | `notifier_build` | lib/r13_notifier_build.dart:8 | 2 | notifier_build |
+| `notifier_extends` | WARNING | STATIC_WARNING | `notifier_extends` | lib/r12_notifier_extends.dart:5 | 2 | notifier_extends |
+| `only_use_keep_alive_inside_keep_alive` | WARNING | STATIC_WARNING | `only_use_keep_alive_inside_keep_alive` | lib/gen/r14_only_use_keep_alive_inside_keep_alive.dart:11 | 2 | only_use_keep_alive_inside_keep_alive |
+| `protected_notifier_properties` | INFO | STATIC_WARNING | `protected_notifier_properties` | lib/gen/r04b_protected_notifier_properties.dart:20 | 0 | protected_notifier_properties |
+| `provider_dependencies` | WARNING | STATIC_WARNING | `provider_dependencies` | lib/gen/r07_provider_dependencies.dart:10 | 2 | provider_dependencies |
+| `provider_parameters` | WARNING | STATIC_WARNING | `provider_parameters` | lib/r02_provider_parameters.dart:8 | 2 | provider_parameters |
+| `riverpod_syntax_error` | ERROR | STATIC_WARNING | `riverpod_syntax_error` | lib/r15_riverpod_syntax_error.dart:6 | 3 | riverpod_syntax_error |
+| `scoped_providers_should_specify_dependencies` | WARNING | STATIC_WARNING | `scoped_providers_should_specify_dependencies` | lib/gen/r08_scoped_providers_should_specify_dependencies.dart:14 | 2 | scoped_providers_should_specify_dependencies |
+| `unsupported_provider_value` | WARNING | STATIC_WARNING | `unsupported_provider_value` | lib/gen/r10_unsupported_provider_value.dart:14 | 2 | unsupported_provider_value |
+
+15개 모두 끔: exit 0, 진단 0건 (plugin 0건)
+
+원본 결과: <repo>/.planning/spikes/003-riverpod-lint-severity-matrix/results/severity_matrix.json

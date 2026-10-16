@@ -1,0 +1,115 @@
+# Spike 020 — rules.json 의 state 와 실제 상태
+SDK: 3.13.4
+
+## 상류 파일 (tag 3.13.4)
+- rules.json: 266554 bytes, fnv64 0538b4c1ed2c140b
+- messages.yaml: 496484 bytes, fnv64 22433360fd6c8171
+- machine-README.md: 1247 bytes, fnv64 d0dcd22da3515f17
+- machine/README.md 에 "unsupported and deprecated" 문구: 있다
+
+## 상류 세트 (저장소 루트의 package_config)
+- lints: lints-6.1.0
+- flutter_lints: flutter_lints-6.0.0
+- 규칙 수: core 35, recommended(직접) 58, flutter(직접) 10
+
+## 규칙 이름
+- rules.json 262개, messages.yaml 275개, 합집합 275개
+- rules.json 에만: []
+- messages.yaml 에만: [analyzer_element_model_tracking_bad, analyzer_element_model_tracking_more_than_one, analyzer_element_model_tracking_zero, analyzer_public_api_bad_part_directive, analyzer_public_api_bad_type, analyzer_public_api_experimental_inconsistency, analyzer_public_api_exports_non_public_name, analyzer_public_api_impl_in_public_api, erase_dart_type_extension_types, migrate_design_widgets, no_solo_tests, no_trailing_spaces, visit_registered_nodes]
+- messages.yaml 에서 같은 규칙의 코드끼리 state 가 다른 것: []
+
+## 분석 (Dart 3.13.4)
+- pkg13 (sdk ^3.13.0): exit 2, 진단 42건, 474 ms, 코드별 {removed_lint: 14, undefined_lint: 12, deprecated_lint: 6, incompatible_lint: 10}
+- pkg11 (sdk ^3.11.1): exit 2, 진단 39건, 471 ms, 코드별 {removed_lint: 14, undefined_lint: 12, deprecated_lint: 3, incompatible_lint: 10}
+
+## state — rules.json · messages.yaml · 실제 (하한 ^3.13.0)
+| 규칙 | rules.json | messages.yaml | 실제 ^3.13.0 | 실제 ^3.11.1 |
+|---|---|---|---|---|
+| `always_require_non_null_named_parameters` | removed | removed | removed | removed |
+| `analyzer_element_model_tracking_bad` | — | internal | undefined | undefined |
+| `analyzer_element_model_tracking_more_than_one` | — | internal | undefined | undefined |
+| `analyzer_element_model_tracking_zero` | — | internal | undefined | undefined |
+| `analyzer_public_api_bad_part_directive` | — | internal | undefined | undefined |
+| `analyzer_public_api_bad_type` | — | internal | undefined | undefined |
+| `analyzer_public_api_experimental_inconsistency` | — | internal | undefined | undefined |
+| `analyzer_public_api_exports_non_public_name` | — | internal | undefined | undefined |
+| `analyzer_public_api_impl_in_public_api` | — | internal | undefined | undefined |
+| `annotate_redeclares` | experimental | experimental | stable-or-experimental | stable-or-experimental |
+| `avoid_as` | removed | removed | removed | removed |
+| `avoid_futureor_void` | experimental | experimental | stable-or-experimental | stable-or-experimental |
+| `avoid_null_checks_in_equality_operators` | deprecated | deprecated | deprecated | deprecated |
+| `avoid_private_typedef_functions` | deprecated | deprecated | deprecated | stable-or-experimental |
+| `avoid_returning_null` | removed | removed | removed | removed |
+| `avoid_returning_null_for_future` | removed | removed | removed | removed |
+| `avoid_unstable_final_fields` | removed | removed | removed | removed |
+| `enable_null_safety` | removed | removed | removed | removed |
+| `erase_dart_type_extension_types` | — | internal | stable-or-experimental | stable-or-experimental |
+| `implicit_reopen` | experimental | experimental | stable-or-experimental | stable-or-experimental |
+| `invalid_case_patterns` | experimental | experimental | stable-or-experimental | stable-or-experimental |
+| `invariant_booleans` | removed | removed | removed | removed |
+| `iterable_contains_unrelated_type` | removed | removed | removed | removed |
+| `list_remove_unrelated_type` | removed | removed | removed | removed |
+| `migrate_design_widgets` | — | testing | stable-or-experimental | stable-or-experimental |
+| `no_default_cases` | experimental | experimental | stable-or-experimental | stable-or-experimental |
+| `no_solo_tests` | — | internal | undefined | undefined |
+| `no_trailing_spaces` | — | internal | undefined | undefined |
+| `one_member_abstracts` | deprecated | deprecated | deprecated | stable-or-experimental |
+| `package_api_docs` | removed | removed | removed | removed |
+| `prefer_bool_in_asserts` | removed | removed | removed | removed |
+| `prefer_equal_for_default_values` | removed | removed | removed | removed |
+| `prefer_final_parameters` | deprecated | deprecated | deprecated | deprecated |
+| `super_goes_last` | removed | removed | removed | removed |
+| `unnecessary_async` | experimental | experimental | stable-or-experimental | stable-or-experimental |
+| `unnecessary_await_in_return` | stable | deprecated | deprecated | stable-or-experimental |
+| `unnecessary_ignore` | stable | experimental | stable-or-experimental | stable-or-experimental |
+| `unnecessary_underscores` | stable | experimental | stable-or-experimental | stable-or-experimental |
+| `unsafe_html` | removed | removed | removed | removed |
+| `unsafe_variance` | experimental | experimental | stable-or-experimental | stable-or-experimental |
+| `use_if_null_to_convert_nulls_to_bools` | deprecated | deprecated | deprecated | deprecated |
+| `use_late_for_private_fields_and_variables` | experimental | experimental | stable-or-experimental | stable-or-experimental |
+| `use_primary_constructors` | experimental | testing | stable-or-experimental | stable-or-experimental |
+| `use_super_parameters` | experimental | experimental | stable-or-experimental | stable-or-experimental |
+| `var_with_no_type_annotation` | experimental | experimental | stable-or-experimental | stable-or-experimental |
+| `visit_registered_nodes` | — | internal | undefined | undefined |
+
+- 실제와 어긋난 rules.json: 3개 [erase_dart_type_extension_types, migrate_design_widgets, unnecessary_await_in_return]
+- 실제와 어긋난 messages.yaml: 14개 [analyzer_element_model_tracking_bad, analyzer_element_model_tracking_more_than_one, analyzer_element_model_tracking_zero, analyzer_public_api_bad_part_directive, analyzer_public_api_bad_type, analyzer_public_api_experimental_inconsistency, analyzer_public_api_exports_non_public_name, analyzer_public_api_impl_in_public_api, erase_dart_type_extension_types, migrate_design_widgets, no_solo_tests, no_trailing_spaces, use_primary_constructors, visit_registered_nodes]
+- rules.json ≠ messages.yaml: 17개 [analyzer_element_model_tracking_bad, analyzer_element_model_tracking_more_than_one, analyzer_element_model_tracking_zero, analyzer_public_api_bad_part_directive, analyzer_public_api_bad_type, analyzer_public_api_experimental_inconsistency, analyzer_public_api_exports_non_public_name, analyzer_public_api_impl_in_public_api, erase_dart_type_extension_types, migrate_design_widgets, no_solo_tests, no_trailing_spaces, unnecessary_await_in_return, unnecessary_ignore, unnecessary_underscores, use_primary_constructors, visit_registered_nodes]
+
+## incompatible — rules.json 의 선언과 실제 `incompatible_lint`
+- rules.json 이 선언한 쌍 12개, 전부 켠 실행에서 보고된 쌍 10개
+- 선언됐는데 전부 켠 실행에서 보고되지 않은 쌍: [prefer_final_locals × unnecessary_final, prefer_final_parameters × unnecessary_final]
+- 보고됐는데 선언되지 않은 쌍: []
+- 쌍마다 둘만 켠 실행에서 보고된 쌍: 12개 / 12개
+  - always_specify_types × avoid_types_on_closure_parameters: 4 incompatible_lint
+  - always_specify_types × omit_local_variable_types: 4 incompatible_lint
+  - always_specify_types × omit_obvious_local_variable_types: 4 incompatible_lint
+  - always_specify_types × omit_obvious_property_types: 4 incompatible_lint
+  - always_use_package_imports × prefer_relative_imports: 4 incompatible_lint
+  - avoid_final_parameters × prefer_final_parameters: 4 deprecated_lint, 4 incompatible_lint
+  - omit_local_variable_types × specify_nonobvious_local_variable_types: 4 incompatible_lint
+  - omit_obvious_property_types × type_annotate_public_apis: 4 incompatible_lint
+  - prefer_double_quotes × prefer_single_quotes: 4 incompatible_lint
+  - prefer_final_in_for_each × unnecessary_final: 4 incompatible_lint
+  - prefer_final_locals × unnecessary_final: 4 incompatible_lint
+  - prefer_final_parameters × unnecessary_final: 3 deprecated_lint, 4 incompatible_lint
+- 전부 켠 실행에서 한 줄에 붙은 incompatible_lint 의 최대 수: 1
+
+## 상류 세트 — rules.json 의 `sets` 와 실제 YAML
+- rules.json 에서 `sets` 가 비어 있지 않은 규칙: 0개
+- 실제 YAML 에 든 규칙: 102개 (core 35 / recommended 58 / flutter 10)
+- 상류 YAML 에 있는데 두 메타데이터 어디에도 없는 이름: []
+- 상류 세트에 든 규칙 가운데 messages.yaml 이 stable 이 아니거나 실제로 경고가 나는 것: [unnecessary_underscores(experimental, stable-or-experimental), use_super_parameters(experimental, stable-or-experimental)]
+
+# 판정
+| 확인 | 결과 |
+|---|---|
+| K1 두 분석 모두 JSON 을 냈다 | 성립 |
+| K2 대조: no_such_rule_zz9 → undefined_lint (두 하한) | 성립 |
+| K3 대조: unnecessary_await_in_return → ^3.13.0 에서 deprecated_lint, ^3.11.1 에서 없음 | 성립 |
+| K4 대조: avoid_returning_null → removed_lint (두 하한) | 성립 |
+| K5 옵션 파일 밖의 진단이 없다 (패키지의 lib 는 깨끗하다) | 성립 |
+| K6 저장소가 그대로다 (git status · 루트 package_config) | 성립 |
+| K7 대조: 쌍마다 둘만 켠 실행에서 prefer_single_quotes × prefer_double_quotes 가 보고된다 | 성립 |
+
+판정에 넣은 확인 7건이 모두 성립했다.

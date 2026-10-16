@@ -1,0 +1,1088 @@
+{
+  "dart": "3.13.4",
+  "os": "macos",
+  "expectedExit": 2,
+  "expectedLines": [
+    "lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+    "lib/added_rules.dart:18  info  always_declare_return_types",
+    "lib/added_rules.dart:24  info  prefer_final_locals",
+    "lib/added_rules.dart:29  info  prefer_single_quotes",
+    "lib/added_rules.dart:33  info  unawaited_futures",
+    "lib/added_rules.dart:7  info  prefer_const_constructors",
+    "lib/base_rules.dart:12  info  sort_child_properties_last",
+    "lib/base_rules.dart:17  info  use_build_context_synchronously",
+    "lib/base_rules.dart:22  info  avoid_print",
+    "lib/base_rules.dart:30  info  control_flow_in_finally",
+    "lib/base_rules.dart:34  info  slash_for_doc_comments",
+    "lib/base_rules.dart:38  info  prefer_is_empty",
+    "lib/base_rules.dart:8  info  sized_box_for_whitespace",
+    "lib/main.dart:5  warning  missing_provider_scope",
+    "lib/riverpod_rules.dart:17  warning  provider_parameters",
+    "lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+  ],
+  "commits": {
+    "A": "d1193073f8fade508a58f6e081a8433297ad8250",
+    "B": "483fccccb1b84e65dbb9c598455adf61c5b006a1",
+    "C": "c5b7922d7b89a67355f562d7e3e1e536d2f7f0f5"
+  },
+  "pluginAnalyzer": "14.5.0",
+  "pluginServer": "0.3.24",
+  "pubCacheGitFolders": [
+    "cache",
+    "replica-483fccccb1b84e65dbb9c598455adf61c5b006a1",
+    "replica-c5b7922d7b89a67355f562d7e3e1e536d2f7f0f5",
+    "replica-d1193073f8fade508a58f6e081a8433297ad8250"
+  ],
+  "pub": [
+    {
+      "id": "pub-1",
+      "consumer": "consumer-git",
+      "args": [
+        "get",
+        "--no-example"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 1631,
+      "lock": {
+        "dependency": "direct dev",
+        "path": ".",
+        "ref": "main",
+        "resolved-ref": "d1193073f8fade508a58f6e081a8433297ad8250",
+        "url": "<replica>",
+        "source": "git",
+        "version": "2.0.0-dev"
+      },
+      "packageRoot": "file://<work>/pub-cache/git/replica-d1193073f8fade508a58f6e081a8433297ad8250/",
+      "stdout": "Resolving dependencies...\nDownloading packages...\n  material_color_utilities 0.13.0 (0.13.1 available)\n  test_api 0.7.12 (0.7.15 available)\n* woody_lints 2.0.0-dev from git ../replica at d11930 (was 2.0.0-dev from path ..)\nChanged 1 dependency!\n2 packages have newer versions incompatible with dependency constraints.\nTry `dart pub outdated` for more information.",
+      "stderr": ""
+    },
+    {
+      "id": "pub-2",
+      "consumer": "consumer-git",
+      "args": [
+        "get",
+        "--no-example"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 233,
+      "lock": {
+        "dependency": "direct dev",
+        "path": ".",
+        "ref": "main",
+        "resolved-ref": "d1193073f8fade508a58f6e081a8433297ad8250",
+        "url": "<replica>",
+        "source": "git",
+        "version": "2.0.0-dev"
+      },
+      "packageRoot": "file://<work>/pub-cache/git/replica-d1193073f8fade508a58f6e081a8433297ad8250/",
+      "stdout": "Resolving dependencies...\nDownloading packages...\n  material_color_utilities 0.13.0 (0.13.1 available)\n  test_api 0.7.12 (0.7.15 available)\nGot dependencies!\n2 packages have newer versions incompatible with dependency constraints.\nTry `dart pub outdated` for more information.",
+      "stderr": ""
+    },
+    {
+      "id": "pub-3",
+      "consumer": "consumer-git",
+      "args": [
+        "get",
+        "--no-example",
+        "--enforce-lockfile"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 270,
+      "lock": {
+        "dependency": "direct dev",
+        "path": ".",
+        "ref": "main",
+        "resolved-ref": "d1193073f8fade508a58f6e081a8433297ad8250",
+        "url": "<replica>",
+        "source": "git",
+        "version": "2.0.0-dev"
+      },
+      "packageRoot": "file://<work>/pub-cache/git/replica-d1193073f8fade508a58f6e081a8433297ad8250/",
+      "stdout": "Resolving dependencies...\nDownloading packages...\n  material_color_utilities 0.13.0 (0.13.1 available)\n  test_api 0.7.12 (0.7.15 available)\nGot dependencies!\n2 packages have newer versions incompatible with dependency constraints.\nTry `dart pub outdated` for more information.",
+      "stderr": ""
+    },
+    {
+      "id": "pub-4",
+      "consumer": "consumer-git",
+      "args": [
+        "upgrade",
+        "woody_lints",
+        "--no-example"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 382,
+      "lock": {
+        "dependency": "direct dev",
+        "path": ".",
+        "ref": "main",
+        "resolved-ref": "483fccccb1b84e65dbb9c598455adf61c5b006a1",
+        "url": "<replica>",
+        "source": "git",
+        "version": "2.0.0-dev"
+      },
+      "packageRoot": "file://<work>/pub-cache/git/replica-483fccccb1b84e65dbb9c598455adf61c5b006a1/",
+      "stdout": "Resolving dependencies...\nDownloading packages...\n  material_color_utilities 0.13.0 (0.13.1 available)\n  test_api 0.7.12 (0.7.15 available)\n~ woody_lints 2.0.0-dev from git ../replica at 483fcc (was 2.0.0-dev from git ../replica at d11930)\nChanged 1 dependency!\n2 packages have newer versions incompatible with dependency constraints.\nTry `dart pub outdated` for more information.",
+      "stderr": ""
+    },
+    {
+      "id": "pub-5",
+      "consumer": "consumer-git",
+      "args": [
+        "get",
+        "--no-example",
+        "--enforce-lockfile"
+      ],
+      "exitCode": 65,
+      "elapsedMs": 397,
+      "lock": {
+        "dependency": "direct dev",
+        "path": ".",
+        "ref": "main",
+        "resolved-ref": "483fccccb1b84e65dbb9c598455adf61c5b006a1",
+        "url": "<replica>",
+        "source": "git",
+        "version": "2.0.0-dev"
+      },
+      "packageRoot": "file://<work>/pub-cache/git/replica-483fccccb1b84e65dbb9c598455adf61c5b006a1/",
+      "stdout": "Resolving dependencies...\nDownloading packages...\n  material_color_utilities 0.13.0 (0.13.1 available)\n  test_api 0.7.12 (0.7.15 available)\n* woody_lints 2.0.0-dev from git ../replica at c5b792 (was 2.0.0-dev from git ../replica at 483fcc)\nWould change 1 dependency.\n2 packages have newer versions incompatible with dependency constraints.\nTry `dart pub outdated` for more information.",
+      "stderr": "Unable to satisfy `pubspec.yaml` using `pubspec.lock`.\n\nTo update `pubspec.lock` run `dart pub get` without\n`--enforce-lockfile`."
+    },
+    {
+      "id": "pub-6",
+      "consumer": "consumer-git",
+      "args": [
+        "get",
+        "--no-example"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 335,
+      "lock": {
+        "dependency": "direct dev",
+        "path": ".",
+        "ref": "no-riverpod",
+        "resolved-ref": "c5b7922d7b89a67355f562d7e3e1e536d2f7f0f5",
+        "url": "<replica>",
+        "source": "git",
+        "version": "2.0.0-dev"
+      },
+      "packageRoot": "file://<work>/pub-cache/git/replica-c5b7922d7b89a67355f562d7e3e1e536d2f7f0f5/",
+      "stdout": "Resolving dependencies...\nDownloading packages...\n  material_color_utilities 0.13.0 (0.13.1 available)\n  test_api 0.7.12 (0.7.15 available)\n* woody_lints 2.0.0-dev from git ../replica at c5b792 (was 2.0.0-dev from git ../replica at 483fcc)\nChanged 1 dependency!\n2 packages have newer versions incompatible with dependency constraints.\nTry `dart pub outdated` for more information.",
+      "stderr": ""
+    },
+    {
+      "id": "pub-7",
+      "consumer": "consumer-git",
+      "args": [
+        "get",
+        "--no-example"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 319,
+      "lock": {
+        "dependency": "direct dev",
+        "path": ".",
+        "ref": "v9.9.9",
+        "resolved-ref": "483fccccb1b84e65dbb9c598455adf61c5b006a1",
+        "url": "<replica>",
+        "source": "git",
+        "version": "2.0.0-dev"
+      },
+      "packageRoot": "file://<work>/pub-cache/git/replica-483fccccb1b84e65dbb9c598455adf61c5b006a1/",
+      "stdout": "Resolving dependencies...\nDownloading packages...\n  material_color_utilities 0.13.0 (0.13.1 available)\n  test_api 0.7.12 (0.7.15 available)\n* woody_lints 2.0.0-dev from git ../replica at 483fcc (was 2.0.0-dev from git ../replica at c5b792)\nChanged 1 dependency!\n2 packages have newer versions incompatible with dependency constraints.\nTry `dart pub outdated` for more information.",
+      "stderr": ""
+    },
+    {
+      "id": "pub-8",
+      "consumer": "consumer-git",
+      "args": [
+        "get",
+        "--no-example"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 335,
+      "lock": {
+        "dependency": "direct dev",
+        "path": ".",
+        "ref": "main",
+        "resolved-ref": "483fccccb1b84e65dbb9c598455adf61c5b006a1",
+        "url": "<replica>",
+        "source": "git",
+        "version": "2.0.0-dev"
+      },
+      "packageRoot": "file://<work>/pub-cache/git/replica-483fccccb1b84e65dbb9c598455adf61c5b006a1/",
+      "stdout": "Resolving dependencies...\nDownloading packages...\n  material_color_utilities 0.13.0 (0.13.1 available)\n  test_api 0.7.12 (0.7.15 available)\n* woody_lints 2.0.0-dev from git ../replica at 483fcc (was 2.0.0-dev from git ../replica at 483fcc)\nChanged 1 dependency!\n2 packages have newer versions incompatible with dependency constraints.\nTry `dart pub outdated` for more information.",
+      "stderr": ""
+    },
+    {
+      "id": "pub-9",
+      "consumer": "consumer-path",
+      "args": [
+        "get",
+        "--no-example"
+      ],
+      "exitCode": 0,
+      "elapsedMs": 238,
+      "lock": {
+        "dependency": "direct dev",
+        "path": "../replica",
+        "relative": "true",
+        "source": "path",
+        "version": "2.0.0-dev"
+      },
+      "packageRoot": "../../replica",
+      "stdout": "Resolving dependencies...\nDownloading packages...\n  material_color_utilities 0.13.0 (0.13.1 available)\n  test_api 0.7.12 (0.7.15 available)\n* woody_lints 2.0.0-dev from path ../replica (was 2.0.0-dev from path ..)\nChanged 1 dependency!\n2 packages have newer versions incompatible with dependency constraints.\nTry `dart pub outdated` for more information.",
+      "stderr": ""
+    }
+  ],
+  "generatedTable": [
+    {
+      "variant": "none",
+      "title": "제외 없음 (base.yaml + riverpod.yaml)",
+      "git": {
+        "rule": "나옴",
+        "plugin": "나옴"
+      },
+      "path": {
+        "rule": "나옴",
+        "plugin": "나옴"
+      }
+    },
+    {
+      "variant": "bundle",
+      "title": "패키지의 codegen.yaml (묶음으로 받음)",
+      "git": {
+        "rule": "안 나옴",
+        "plugin": "나옴"
+      },
+      "path": {
+        "rule": "안 나옴",
+        "plugin": "나옴"
+      }
+    },
+    {
+      "variant": "own",
+      "title": "묶음 + 사용 프로젝트의 옵션 파일에 직접",
+      "git": {
+        "rule": "안 나옴",
+        "plugin": "안 나옴"
+      },
+      "path": {
+        "rule": "안 나옴",
+        "plugin": "안 나옴"
+      }
+    }
+  ],
+  "checks": [
+    {
+      "label": "git 의존성으로 받은 패키지가 pub cache 의 git 폴더에 놓였다",
+      "ok": true,
+      "note": "file://<work>/pub-cache/git/replica-d1193073f8fade508a58f6e081a8433297ad8250/"
+    },
+    {
+      "label": "lock 이 git 출처와 커밋 A 를 가리킨다",
+      "ok": true,
+      "note": "source git, resolved-ref d1193073f8fade508a58f6e081a8433297ad8250"
+    },
+    {
+      "label": "G-old 의 진단이 기대와 같다",
+      "ok": true,
+      "note": "16줄, exit 2"
+    },
+    {
+      "label": "G-old 이 plugin 을 한 번 준비했다",
+      "ok": true,
+      "note": "폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)"
+    },
+    {
+      "label": "main 이 나아가도 pub get 은 lock 의 커밋(A)에 머문다",
+      "ok": true,
+      "note": "resolved-ref d1193073f8fade508a58f6e081a8433297ad8250"
+    },
+    {
+      "label": "그때의 --enforce-lockfile 은 통과한다 (lock 이 여전히 맞는 풀이다)",
+      "ok": true,
+      "note": "exit 0"
+    },
+    {
+      "label": "pub upgrade woody_lints 가 커밋 B 로 옮긴다",
+      "ok": true,
+      "note": "resolved-ref 483fccccb1b84e65dbb9c598455adf61c5b006a1, 자리 file://<work>/pub-cache/git/replica-483fccccb1b84e65dbb9c598455adf61c5b006a1/"
+    },
+    {
+      "label": "G-alias 의 진단이 기대와 같다",
+      "ok": true,
+      "note": "16줄, exit 2"
+    },
+    {
+      "label": "G-alias 이 plugin 을 한 번 준비했다",
+      "ok": true,
+      "note": "폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)"
+    },
+    {
+      "label": "G-alias 의 plugin 선언이 ^3.1.3 으로 전해졌다",
+      "ok": true,
+      "note": "실제 ^3.1.3"
+    },
+    {
+      "label": "G-bundle 의 진단이 기대와 같다",
+      "ok": true,
+      "note": "16줄, exit 2"
+    },
+    {
+      "label": "G-bundle 이 plugin 을 한 번 준비했다",
+      "ok": true,
+      "note": "폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)"
+    },
+    {
+      "label": "G-base-riverpod 의 진단이 기대와 같다",
+      "ok": true,
+      "note": "21줄, exit 2"
+    },
+    {
+      "label": "G-base-riverpod 이 plugin 을 한 번 준비했다",
+      "ok": true,
+      "note": "폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)"
+    },
+    {
+      "label": "G-base-only 의 진단이 기대와 같다",
+      "ok": true,
+      "note": "18줄, exit 2"
+    },
+    {
+      "label": "G-base-only 은 plugin 을 준비하지 않았다",
+      "ok": true,
+      "note": "폴더 0개"
+    },
+    {
+      "label": "`ref:` 만 고친 직후의 --enforce-lockfile 은 실패한다",
+      "ok": true,
+      "note": "exit 65"
+    },
+    {
+      "label": "`ref:` 를 고치고 pub get 을 하면 그 ref 의 커밋(C)으로 옮긴다",
+      "ok": true,
+      "note": "resolved-ref c5b7922d7b89a67355f562d7e3e1e536d2f7f0f5"
+    },
+    {
+      "label": "N-ref 의 진단이 기대와 같다",
+      "ok": true,
+      "note": "13줄, exit 0"
+    },
+    {
+      "label": "N-ref 은 plugin 을 준비하지 않았다",
+      "ok": true,
+      "note": "폴더 0개"
+    },
+    {
+      "label": "`ref:` 에 tag 를 적고 pub get 을 하면 그 tag 의 커밋(B)으로 옮긴다",
+      "ok": true,
+      "note": "resolved-ref 483fccccb1b84e65dbb9c598455adf61c5b006a1"
+    },
+    {
+      "label": "P-alias 의 진단이 기대와 같다",
+      "ok": true,
+      "note": "16줄, exit 2"
+    },
+    {
+      "label": "P-alias 이 plugin 을 한 번 준비했다",
+      "ok": true,
+      "note": "폴더 1개, riverpod_lint 3.1.9 (선언 ^3.1.3)"
+    },
+    {
+      "label": "X-none 의 git 실행이 path 실행과 한 줄도 다르지 않다",
+      "ok": true,
+      "note": "23줄, exit 2 / 2"
+    },
+    {
+      "label": "X-bundle 의 git 실행이 path 실행과 한 줄도 다르지 않다",
+      "ok": true,
+      "note": "17줄, exit 2 / 2"
+    },
+    {
+      "label": "X-own 의 git 실행이 path 실행과 한 줄도 다르지 않다",
+      "ok": true,
+      "note": "16줄, exit 2 / 2"
+    },
+    {
+      "label": "제외가 없으면 생성 파일 샘플의 규칙 · plugin 진단이 둘 다 나온다 (대조)",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "label": "사용 프로젝트가 직접 적은 제외는 git 의존성에서도 둘 다 막는다",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "label": "pub cache 에 놓인 codegen.yaml 의 제외는 규칙 진단만 막는다 (spike 012 의 path 결과와 같다)",
+      "ok": true,
+      "note": "규칙 안 나옴, plugin 나옴"
+    }
+  ],
+  "runs": [
+    {
+      "id": "G-old",
+      "title": "git 의존성, 한 파일 구조, 옛 주소 한 줄",
+      "exitCode": 2,
+      "elapsedMs": 15249,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginVersion": "3.1.9",
+      "pluginConstraint": "^3.1.3",
+      "lines": [
+        "lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/added_rules.dart:18  info  always_declare_return_types",
+        "lib/added_rules.dart:24  info  prefer_final_locals",
+        "lib/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/added_rules.dart:33  info  unawaited_futures",
+        "lib/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/base_rules.dart:22  info  avoid_print",
+        "lib/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/base_rules.dart:38  info  prefer_is_empty",
+        "lib/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/main.dart:5  warning  missing_provider_scope",
+        "lib/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ],
+      "messages": [
+        "Use 'const' literals as arguments to constructors of '@immutable' classes.",
+        "The function 'noReturnType' should have a return type but doesn't.",
+        "Local variables should be final.",
+        "Unnecessary use of double quotes.",
+        "Missing an 'await' for the 'Future' computed by this expression.",
+        "Use 'const' with the constructor to improve performance.",
+        "The 'child' argument should be last in widget constructor invocations.",
+        "Don't use 'BuildContext's across async gaps.",
+        "Don't invoke 'print' in production code.",
+        "Use of 'return' in a 'finally' clause.",
+        "Use the end-of-line form ('///') for doc comments.",
+        "Use 'isEmpty' instead of 'length' to test whether the collection is empty.",
+        "Use a 'SizedBox' to add whitespace to a layout.",
+        "Flutter applications using Riverpod must contain a ProviderScope at the root of their widget tree.",
+        "Providers should not rely on parameters for their value. Instead, they should use a family or read other providers.",
+        "Notifiers should not have public properties/getters. Instead, all their public API should be exposed through the `state` property."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "G-alias",
+      "title": "git 의존성, 옛 주소 한 줄 (3단: 별칭 → 묶음 → 조각)",
+      "exitCode": 2,
+      "elapsedMs": 14779,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginVersion": "3.1.9",
+      "pluginConstraint": "^3.1.3",
+      "lines": [
+        "lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/added_rules.dart:18  info  always_declare_return_types",
+        "lib/added_rules.dart:24  info  prefer_final_locals",
+        "lib/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/added_rules.dart:33  info  unawaited_futures",
+        "lib/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/base_rules.dart:22  info  avoid_print",
+        "lib/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/base_rules.dart:38  info  prefer_is_empty",
+        "lib/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/main.dart:5  warning  missing_provider_scope",
+        "lib/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ],
+      "messages": [
+        "Use 'const' literals as arguments to constructors of '@immutable' classes.",
+        "The function 'noReturnType' should have a return type but doesn't.",
+        "Local variables should be final.",
+        "Unnecessary use of double quotes.",
+        "Missing an 'await' for the 'Future' computed by this expression.",
+        "Use 'const' with the constructor to improve performance.",
+        "The 'child' argument should be last in widget constructor invocations.",
+        "Don't use 'BuildContext's across async gaps.",
+        "Don't invoke 'print' in production code.",
+        "Use of 'return' in a 'finally' clause.",
+        "Use the end-of-line form ('///') for doc comments.",
+        "Use 'isEmpty' instead of 'length' to test whether the collection is empty.",
+        "Use a 'SizedBox' to add whitespace to a layout.",
+        "Flutter applications using Riverpod must contain a ProviderScope at the root of their widget tree.",
+        "Providers should not rely on parameters for their value. Instead, they should use a family or read other providers.",
+        "Notifiers should not have public properties/getters. Instead, all their public API should be exposed through the `state` property."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "G-bundle",
+      "title": "git 의존성, 묶음 주소 한 줄",
+      "exitCode": 2,
+      "elapsedMs": 14998,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginVersion": "3.1.9",
+      "pluginConstraint": "^3.1.3",
+      "lines": [
+        "lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/added_rules.dart:18  info  always_declare_return_types",
+        "lib/added_rules.dart:24  info  prefer_final_locals",
+        "lib/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/added_rules.dart:33  info  unawaited_futures",
+        "lib/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/base_rules.dart:22  info  avoid_print",
+        "lib/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/base_rules.dart:38  info  prefer_is_empty",
+        "lib/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/main.dart:5  warning  missing_provider_scope",
+        "lib/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ],
+      "messages": [
+        "Use 'const' literals as arguments to constructors of '@immutable' classes.",
+        "The function 'noReturnType' should have a return type but doesn't.",
+        "Local variables should be final.",
+        "Unnecessary use of double quotes.",
+        "Missing an 'await' for the 'Future' computed by this expression.",
+        "Use 'const' with the constructor to improve performance.",
+        "The 'child' argument should be last in widget constructor invocations.",
+        "Don't use 'BuildContext's across async gaps.",
+        "Don't invoke 'print' in production code.",
+        "Use of 'return' in a 'finally' clause.",
+        "Use the end-of-line form ('///') for doc comments.",
+        "Use 'isEmpty' instead of 'length' to test whether the collection is empty.",
+        "Use a 'SizedBox' to add whitespace to a layout.",
+        "Flutter applications using Riverpod must contain a ProviderScope at the root of their widget tree.",
+        "Providers should not rely on parameters for their value. Instead, they should use a family or read other providers.",
+        "Notifiers should not have public properties/getters. Instead, all their public API should be exposed through the `state` property."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "G-base-riverpod",
+      "title": "git 의존성, base.yaml + riverpod.yaml",
+      "exitCode": 2,
+      "elapsedMs": 14996,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginVersion": "3.1.9",
+      "pluginConstraint": "^3.1.3",
+      "lines": [
+        "lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/added_rules.dart:18  info  always_declare_return_types",
+        "lib/added_rules.dart:24  info  prefer_final_locals",
+        "lib/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/added_rules.dart:33  info  unawaited_futures",
+        "lib/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/base_rules.dart:22  info  avoid_print",
+        "lib/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/base_rules.dart:38  info  prefer_is_empty",
+        "lib/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/generated/sample.freezed.dart:4  info  avoid_print",
+        "lib/generated/sample.freezed.dart:4  info  prefer_single_quotes",
+        "lib/generated/sample.g.dart:4  info  avoid_print",
+        "lib/generated/sample.g.dart:4  info  prefer_single_quotes",
+        "lib/main.dart:5  warning  missing_provider_scope",
+        "lib/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties",
+        "lib/should_not_appear.dart:5  warning  invalid_annotation_target"
+      ],
+      "messages": [
+        "Use 'const' literals as arguments to constructors of '@immutable' classes.",
+        "The function 'noReturnType' should have a return type but doesn't.",
+        "Local variables should be final.",
+        "Unnecessary use of double quotes.",
+        "Missing an 'await' for the 'Future' computed by this expression.",
+        "Use 'const' with the constructor to improve performance.",
+        "The 'child' argument should be last in widget constructor invocations.",
+        "Don't use 'BuildContext's across async gaps.",
+        "Don't invoke 'print' in production code.",
+        "Use of 'return' in a 'finally' clause.",
+        "Use the end-of-line form ('///') for doc comments.",
+        "Use 'isEmpty' instead of 'length' to test whether the collection is empty.",
+        "Use a 'SizedBox' to add whitespace to a layout.",
+        "Don't invoke 'print' in production code.",
+        "Unnecessary use of double quotes.",
+        "Don't invoke 'print' in production code.",
+        "Unnecessary use of double quotes.",
+        "Flutter applications using Riverpod must contain a ProviderScope at the root of their widget tree.",
+        "Providers should not rely on parameters for their value. Instead, they should use a family or read other providers.",
+        "Notifiers should not have public properties/getters. Instead, all their public API should be exposed through the `state` property.",
+        "The annotation 'immutable' can only be used on classes, extension types, or mixins."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "G-base-only",
+      "title": "git 의존성, base.yaml 만",
+      "exitCode": 2,
+      "elapsedMs": 3186,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [
+        "lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/added_rules.dart:18  info  always_declare_return_types",
+        "lib/added_rules.dart:24  info  prefer_final_locals",
+        "lib/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/added_rules.dart:33  info  unawaited_futures",
+        "lib/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/base_rules.dart:22  info  avoid_print",
+        "lib/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/base_rules.dart:38  info  prefer_is_empty",
+        "lib/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/generated/sample.freezed.dart:4  info  avoid_print",
+        "lib/generated/sample.freezed.dart:4  info  prefer_single_quotes",
+        "lib/generated/sample.g.dart:4  info  avoid_print",
+        "lib/generated/sample.g.dart:4  info  prefer_single_quotes",
+        "lib/should_not_appear.dart:5  warning  invalid_annotation_target"
+      ],
+      "messages": [
+        "Use 'const' literals as arguments to constructors of '@immutable' classes.",
+        "The function 'noReturnType' should have a return type but doesn't.",
+        "Local variables should be final.",
+        "Unnecessary use of double quotes.",
+        "Missing an 'await' for the 'Future' computed by this expression.",
+        "Use 'const' with the constructor to improve performance.",
+        "The 'child' argument should be last in widget constructor invocations.",
+        "Don't use 'BuildContext's across async gaps.",
+        "Don't invoke 'print' in production code.",
+        "Use of 'return' in a 'finally' clause.",
+        "Use the end-of-line form ('///') for doc comments.",
+        "Use 'isEmpty' instead of 'length' to test whether the collection is empty.",
+        "Use a 'SizedBox' to add whitespace to a layout.",
+        "Don't invoke 'print' in production code.",
+        "Unnecessary use of double quotes.",
+        "Don't invoke 'print' in production code.",
+        "Unnecessary use of double quotes.",
+        "The annotation 'immutable' can only be used on classes, extension types, or mixins."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "N-ref",
+      "title": "git 의존성, ref: no-riverpod, 옛 주소 한 줄",
+      "exitCode": 0,
+      "elapsedMs": 3163,
+      "jsonOk": true,
+      "pluginFolders": 0,
+      "pluginSnapshot": false,
+      "pluginVersion": null,
+      "pluginConstraint": null,
+      "lines": [
+        "lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/added_rules.dart:18  info  always_declare_return_types",
+        "lib/added_rules.dart:24  info  prefer_final_locals",
+        "lib/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/added_rules.dart:33  info  unawaited_futures",
+        "lib/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/base_rules.dart:22  info  avoid_print",
+        "lib/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/base_rules.dart:38  info  prefer_is_empty",
+        "lib/base_rules.dart:8  info  sized_box_for_whitespace"
+      ],
+      "messages": [
+        "Use 'const' literals as arguments to constructors of '@immutable' classes.",
+        "The function 'noReturnType' should have a return type but doesn't.",
+        "Local variables should be final.",
+        "Unnecessary use of double quotes.",
+        "Missing an 'await' for the 'Future' computed by this expression.",
+        "Use 'const' with the constructor to improve performance.",
+        "The 'child' argument should be last in widget constructor invocations.",
+        "Don't use 'BuildContext's across async gaps.",
+        "Don't invoke 'print' in production code.",
+        "Use of 'return' in a 'finally' clause.",
+        "Use the end-of-line form ('///') for doc comments.",
+        "Use 'isEmpty' instead of 'length' to test whether the collection is empty.",
+        "Use a 'SizedBox' to add whitespace to a layout."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "P-alias",
+      "title": "path 의존성, 옛 주소 한 줄 (같은 스크립트의 대조)",
+      "exitCode": 2,
+      "elapsedMs": 15144,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginVersion": "3.1.9",
+      "pluginConstraint": "^3.1.3",
+      "lines": [
+        "lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/added_rules.dart:18  info  always_declare_return_types",
+        "lib/added_rules.dart:24  info  prefer_final_locals",
+        "lib/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/added_rules.dart:33  info  unawaited_futures",
+        "lib/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/base_rules.dart:22  info  avoid_print",
+        "lib/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/base_rules.dart:38  info  prefer_is_empty",
+        "lib/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/main.dart:5  warning  missing_provider_scope",
+        "lib/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ],
+      "messages": [
+        "Use 'const' literals as arguments to constructors of '@immutable' classes.",
+        "The function 'noReturnType' should have a return type but doesn't.",
+        "Local variables should be final.",
+        "Unnecessary use of double quotes.",
+        "Missing an 'await' for the 'Future' computed by this expression.",
+        "Use 'const' with the constructor to improve performance.",
+        "The 'child' argument should be last in widget constructor invocations.",
+        "Don't use 'BuildContext's across async gaps.",
+        "Don't invoke 'print' in production code.",
+        "Use of 'return' in a 'finally' clause.",
+        "Use the end-of-line form ('///') for doc comments.",
+        "Use 'isEmpty' instead of 'length' to test whether the collection is empty.",
+        "Use a 'SizedBox' to add whitespace to a layout.",
+        "Flutter applications using Riverpod must contain a ProviderScope at the root of their widget tree.",
+        "Providers should not rely on parameters for their value. Instead, they should use a family or read other providers.",
+        "Notifiers should not have public properties/getters. Instead, all their public API should be exposed through the `state` property."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "X-none-git",
+      "title": "git 의존성, 제외 없음 (base.yaml + riverpod.yaml)",
+      "exitCode": 2,
+      "elapsedMs": 3426,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginVersion": "3.1.9",
+      "pluginConstraint": "^3.1.3",
+      "lines": [
+        "lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/added_rules.dart:18  info  always_declare_return_types",
+        "lib/added_rules.dart:24  info  prefer_final_locals",
+        "lib/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/added_rules.dart:33  info  unawaited_futures",
+        "lib/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/base_rules.dart:22  info  avoid_print",
+        "lib/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/base_rules.dart:38  info  prefer_is_empty",
+        "lib/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/generated/riverpod_violation.g.dart:5  info  prefer_single_quotes",
+        "lib/generated/riverpod_violation.g.dart:5  warning  provider_parameters",
+        "lib/generated/sample.freezed.dart:4  info  avoid_print",
+        "lib/generated/sample.freezed.dart:4  info  prefer_single_quotes",
+        "lib/generated/sample.g.dart:4  info  avoid_print",
+        "lib/generated/sample.g.dart:4  info  prefer_single_quotes",
+        "lib/main.dart:5  warning  missing_provider_scope",
+        "lib/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties",
+        "lib/should_not_appear.dart:5  warning  invalid_annotation_target"
+      ],
+      "messages": [
+        "Use 'const' literals as arguments to constructors of '@immutable' classes.",
+        "The function 'noReturnType' should have a return type but doesn't.",
+        "Local variables should be final.",
+        "Unnecessary use of double quotes.",
+        "Missing an 'await' for the 'Future' computed by this expression.",
+        "Use 'const' with the constructor to improve performance.",
+        "The 'child' argument should be last in widget constructor invocations.",
+        "Don't use 'BuildContext's across async gaps.",
+        "Don't invoke 'print' in production code.",
+        "Use of 'return' in a 'finally' clause.",
+        "Use the end-of-line form ('///') for doc comments.",
+        "Use 'isEmpty' instead of 'length' to test whether the collection is empty.",
+        "Use a 'SizedBox' to add whitespace to a layout.",
+        "Unnecessary use of double quotes.",
+        "Providers should not rely on parameters for their value. Instead, they should use a family or read other providers.",
+        "Don't invoke 'print' in production code.",
+        "Unnecessary use of double quotes.",
+        "Don't invoke 'print' in production code.",
+        "Unnecessary use of double quotes.",
+        "Flutter applications using Riverpod must contain a ProviderScope at the root of their widget tree.",
+        "Providers should not rely on parameters for their value. Instead, they should use a family or read other providers.",
+        "Notifiers should not have public properties/getters. Instead, all their public API should be exposed through the `state` property.",
+        "The annotation 'immutable' can only be used on classes, extension types, or mixins."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "X-none-path",
+      "title": "path 의존성, 제외 없음 (base.yaml + riverpod.yaml)",
+      "exitCode": 2,
+      "elapsedMs": 3365,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginVersion": "3.1.9",
+      "pluginConstraint": "^3.1.3",
+      "lines": [
+        "lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/added_rules.dart:18  info  always_declare_return_types",
+        "lib/added_rules.dart:24  info  prefer_final_locals",
+        "lib/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/added_rules.dart:33  info  unawaited_futures",
+        "lib/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/base_rules.dart:22  info  avoid_print",
+        "lib/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/base_rules.dart:38  info  prefer_is_empty",
+        "lib/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/generated/riverpod_violation.g.dart:5  info  prefer_single_quotes",
+        "lib/generated/riverpod_violation.g.dart:5  warning  provider_parameters",
+        "lib/generated/sample.freezed.dart:4  info  avoid_print",
+        "lib/generated/sample.freezed.dart:4  info  prefer_single_quotes",
+        "lib/generated/sample.g.dart:4  info  avoid_print",
+        "lib/generated/sample.g.dart:4  info  prefer_single_quotes",
+        "lib/main.dart:5  warning  missing_provider_scope",
+        "lib/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties",
+        "lib/should_not_appear.dart:5  warning  invalid_annotation_target"
+      ],
+      "messages": [
+        "Use 'const' literals as arguments to constructors of '@immutable' classes.",
+        "The function 'noReturnType' should have a return type but doesn't.",
+        "Local variables should be final.",
+        "Unnecessary use of double quotes.",
+        "Missing an 'await' for the 'Future' computed by this expression.",
+        "Use 'const' with the constructor to improve performance.",
+        "The 'child' argument should be last in widget constructor invocations.",
+        "Don't use 'BuildContext's across async gaps.",
+        "Don't invoke 'print' in production code.",
+        "Use of 'return' in a 'finally' clause.",
+        "Use the end-of-line form ('///') for doc comments.",
+        "Use 'isEmpty' instead of 'length' to test whether the collection is empty.",
+        "Use a 'SizedBox' to add whitespace to a layout.",
+        "Unnecessary use of double quotes.",
+        "Providers should not rely on parameters for their value. Instead, they should use a family or read other providers.",
+        "Don't invoke 'print' in production code.",
+        "Unnecessary use of double quotes.",
+        "Don't invoke 'print' in production code.",
+        "Unnecessary use of double quotes.",
+        "Flutter applications using Riverpod must contain a ProviderScope at the root of their widget tree.",
+        "Providers should not rely on parameters for their value. Instead, they should use a family or read other providers.",
+        "Notifiers should not have public properties/getters. Instead, all their public API should be exposed through the `state` property.",
+        "The annotation 'immutable' can only be used on classes, extension types, or mixins."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "X-bundle-git",
+      "title": "git 의존성, 패키지의 codegen.yaml (묶음으로 받음)",
+      "exitCode": 2,
+      "elapsedMs": 3486,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginVersion": "3.1.9",
+      "pluginConstraint": "^3.1.3",
+      "lines": [
+        "lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/added_rules.dart:18  info  always_declare_return_types",
+        "lib/added_rules.dart:24  info  prefer_final_locals",
+        "lib/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/added_rules.dart:33  info  unawaited_futures",
+        "lib/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/base_rules.dart:22  info  avoid_print",
+        "lib/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/base_rules.dart:38  info  prefer_is_empty",
+        "lib/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/generated/riverpod_violation.g.dart:5  warning  provider_parameters",
+        "lib/main.dart:5  warning  missing_provider_scope",
+        "lib/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ],
+      "messages": [
+        "Use 'const' literals as arguments to constructors of '@immutable' classes.",
+        "The function 'noReturnType' should have a return type but doesn't.",
+        "Local variables should be final.",
+        "Unnecessary use of double quotes.",
+        "Missing an 'await' for the 'Future' computed by this expression.",
+        "Use 'const' with the constructor to improve performance.",
+        "The 'child' argument should be last in widget constructor invocations.",
+        "Don't use 'BuildContext's across async gaps.",
+        "Don't invoke 'print' in production code.",
+        "Use of 'return' in a 'finally' clause.",
+        "Use the end-of-line form ('///') for doc comments.",
+        "Use 'isEmpty' instead of 'length' to test whether the collection is empty.",
+        "Use a 'SizedBox' to add whitespace to a layout.",
+        "Providers should not rely on parameters for their value. Instead, they should use a family or read other providers.",
+        "Flutter applications using Riverpod must contain a ProviderScope at the root of their widget tree.",
+        "Providers should not rely on parameters for their value. Instead, they should use a family or read other providers.",
+        "Notifiers should not have public properties/getters. Instead, all their public API should be exposed through the `state` property."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "X-bundle-path",
+      "title": "path 의존성, 패키지의 codegen.yaml (묶음으로 받음)",
+      "exitCode": 2,
+      "elapsedMs": 3491,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginVersion": "3.1.9",
+      "pluginConstraint": "^3.1.3",
+      "lines": [
+        "lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/added_rules.dart:18  info  always_declare_return_types",
+        "lib/added_rules.dart:24  info  prefer_final_locals",
+        "lib/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/added_rules.dart:33  info  unawaited_futures",
+        "lib/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/base_rules.dart:22  info  avoid_print",
+        "lib/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/base_rules.dart:38  info  prefer_is_empty",
+        "lib/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/generated/riverpod_violation.g.dart:5  warning  provider_parameters",
+        "lib/main.dart:5  warning  missing_provider_scope",
+        "lib/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ],
+      "messages": [
+        "Use 'const' literals as arguments to constructors of '@immutable' classes.",
+        "The function 'noReturnType' should have a return type but doesn't.",
+        "Local variables should be final.",
+        "Unnecessary use of double quotes.",
+        "Missing an 'await' for the 'Future' computed by this expression.",
+        "Use 'const' with the constructor to improve performance.",
+        "The 'child' argument should be last in widget constructor invocations.",
+        "Don't use 'BuildContext's across async gaps.",
+        "Don't invoke 'print' in production code.",
+        "Use of 'return' in a 'finally' clause.",
+        "Use the end-of-line form ('///') for doc comments.",
+        "Use 'isEmpty' instead of 'length' to test whether the collection is empty.",
+        "Use a 'SizedBox' to add whitespace to a layout.",
+        "Providers should not rely on parameters for their value. Instead, they should use a family or read other providers.",
+        "Flutter applications using Riverpod must contain a ProviderScope at the root of their widget tree.",
+        "Providers should not rely on parameters for their value. Instead, they should use a family or read other providers.",
+        "Notifiers should not have public properties/getters. Instead, all their public API should be exposed through the `state` property."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "X-own-git",
+      "title": "git 의존성, 묶음 + 사용 프로젝트의 옵션 파일에 직접",
+      "exitCode": 2,
+      "elapsedMs": 3477,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginVersion": "3.1.9",
+      "pluginConstraint": "^3.1.3",
+      "lines": [
+        "lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/added_rules.dart:18  info  always_declare_return_types",
+        "lib/added_rules.dart:24  info  prefer_final_locals",
+        "lib/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/added_rules.dart:33  info  unawaited_futures",
+        "lib/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/base_rules.dart:22  info  avoid_print",
+        "lib/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/base_rules.dart:38  info  prefer_is_empty",
+        "lib/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/main.dart:5  warning  missing_provider_scope",
+        "lib/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ],
+      "messages": [
+        "Use 'const' literals as arguments to constructors of '@immutable' classes.",
+        "The function 'noReturnType' should have a return type but doesn't.",
+        "Local variables should be final.",
+        "Unnecessary use of double quotes.",
+        "Missing an 'await' for the 'Future' computed by this expression.",
+        "Use 'const' with the constructor to improve performance.",
+        "The 'child' argument should be last in widget constructor invocations.",
+        "Don't use 'BuildContext's across async gaps.",
+        "Don't invoke 'print' in production code.",
+        "Use of 'return' in a 'finally' clause.",
+        "Use the end-of-line form ('///') for doc comments.",
+        "Use 'isEmpty' instead of 'length' to test whether the collection is empty.",
+        "Use a 'SizedBox' to add whitespace to a layout.",
+        "Flutter applications using Riverpod must contain a ProviderScope at the root of their widget tree.",
+        "Providers should not rely on parameters for their value. Instead, they should use a family or read other providers.",
+        "Notifiers should not have public properties/getters. Instead, all their public API should be exposed through the `state` property."
+      ],
+      "stderr": ""
+    },
+    {
+      "id": "X-own-path",
+      "title": "path 의존성, 묶음 + 사용 프로젝트의 옵션 파일에 직접",
+      "exitCode": 2,
+      "elapsedMs": 3469,
+      "jsonOk": true,
+      "pluginFolders": 1,
+      "pluginSnapshot": true,
+      "pluginVersion": "3.1.9",
+      "pluginConstraint": "^3.1.3",
+      "lines": [
+        "lib/added_rules.dart:13  info  prefer_const_literals_to_create_immutables",
+        "lib/added_rules.dart:18  info  always_declare_return_types",
+        "lib/added_rules.dart:24  info  prefer_final_locals",
+        "lib/added_rules.dart:29  info  prefer_single_quotes",
+        "lib/added_rules.dart:33  info  unawaited_futures",
+        "lib/added_rules.dart:7  info  prefer_const_constructors",
+        "lib/base_rules.dart:12  info  sort_child_properties_last",
+        "lib/base_rules.dart:17  info  use_build_context_synchronously",
+        "lib/base_rules.dart:22  info  avoid_print",
+        "lib/base_rules.dart:30  info  control_flow_in_finally",
+        "lib/base_rules.dart:34  info  slash_for_doc_comments",
+        "lib/base_rules.dart:38  info  prefer_is_empty",
+        "lib/base_rules.dart:8  info  sized_box_for_whitespace",
+        "lib/main.dart:5  warning  missing_provider_scope",
+        "lib/riverpod_rules.dart:17  warning  provider_parameters",
+        "lib/riverpod_rules.dart:5  info  avoid_public_notifier_properties"
+      ],
+      "messages": [
+        "Use 'const' literals as arguments to constructors of '@immutable' classes.",
+        "The function 'noReturnType' should have a return type but doesn't.",
+        "Local variables should be final.",
+        "Unnecessary use of double quotes.",
+        "Missing an 'await' for the 'Future' computed by this expression.",
+        "Use 'const' with the constructor to improve performance.",
+        "The 'child' argument should be last in widget constructor invocations.",
+        "Don't use 'BuildContext's across async gaps.",
+        "Don't invoke 'print' in production code.",
+        "Use of 'return' in a 'finally' clause.",
+        "Use the end-of-line form ('///') for doc comments.",
+        "Use 'isEmpty' instead of 'length' to test whether the collection is empty.",
+        "Use a 'SizedBox' to add whitespace to a layout.",
+        "Flutter applications using Riverpod must contain a ProviderScope at the root of their widget tree.",
+        "Providers should not rely on parameters for their value. Instead, they should use a family or read other providers.",
+        "Notifiers should not have public properties/getters. Instead, all their public API should be exposed through the `state` property."
+      ],
+      "stderr": ""
+    }
+  ]
+}

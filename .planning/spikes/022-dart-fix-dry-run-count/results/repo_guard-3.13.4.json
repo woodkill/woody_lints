@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-12T14:22:52.561609Z",
+  "steps": {
+    "복사와 pub get (path: 저장소)": true,
+    "SDK 하한 ^3.13.0 으로 pub get": true,
+    "dart analyze": true,
+    "dart fix --dry-run": true,
+    "dart fix --apply --code=use_primary_constructors": true,
+    "원래 하한으로 pub get": true
+  }
+}

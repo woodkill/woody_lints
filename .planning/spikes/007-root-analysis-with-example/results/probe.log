@@ -1,0 +1,102 @@
+Dart 3.13.4 on macos
+
+# 1부. 루트에서 인자 없이 (커밋 전 린터와 같은 실행)
+## A0 — example 없음 (지금의 저장소)
+   exit 0, 0.5s, 진단 0건 (example 0, 그중 plugin 0, 규칙 검사 0, 그 밖 0), plugin 준비 폴더 0개
+## A1 — example 있음, pub get 전, 루트 제외 없음
+   exit 3, 0.5s, 진단 9건 (example 9, 그중 plugin 0, 규칙 검사 0, 그 밖 0), plugin 준비 폴더 0개
+     example/lib/main.dart:1  error  uri_does_not_exist
+     example/lib/main.dart:10  error  creation_with_non_type
+     example/lib/main.dart:10  error  undefined_function
+     example/lib/main.dart:10  error  undefined_function
+     example/lib/main.dart:9  info  avoid_print
+     example/lib/main.dart:9  info  prefer_single_quotes
+     example/lib/src/counter.dart:1  error  uri_does_not_exist
+     example/lib/src/counter.dart:11  warning  override_on_non_overriding_member
+     example/lib/src/counter.dart:7  error  extends_non_class
+## A4 — example 있음, pub get 전, 루트에 'example/**' 제외
+   exit 0, 0.5s, 진단 0건 (example 0, 그중 plugin 0, 규칙 검사 0, 그 밖 0), plugin 준비 폴더 0개
+## A2 — example 있음, pub get 후, 루트 제외 없음
+   exit 2, 15.2s, 진단 4건 (example 4, 그중 plugin 2, 규칙 검사 0, 그 밖 0), plugin 준비 폴더 1개 (plugin.aot 있음)
+     example/lib/main.dart:10  warning  missing_provider_scope
+     example/lib/main.dart:9  info  avoid_print
+     example/lib/main.dart:9  info  prefer_single_quotes
+     example/lib/src/counter.dart:8  info  avoid_public_notifier_properties
+## A3 — example 있음, pub get 후, 루트에 'example/**' 제외
+   exit 0, 0.5s, 진단 0건 (example 0, 그중 plugin 0, 규칙 검사 0, 그 밖 0), plugin 준비 폴더 0개
+## A5 — example 있음, pub get 후, 루트에 'example' 제외
+   exit 0, 0.5s, 진단 0건 (example 0, 그중 plugin 0, 규칙 검사 0, 그 밖 0), plugin 준비 폴더 0개
+## A6 — example 있음, pub get 후, 루트에 'example' 과 'example/**' 제외
+   exit 0, 0.5s, 진단 0건 (example 0, 그중 plugin 0, 규칙 검사 0, 그 밖 0), plugin 준비 폴더 0개
+
+# 2부. example 안에서 인자 없이 (검증 명령이 하는 실행)
+## E2 — 루트 제외 없음
+   exit 2, 15.2s, 진단 4건 (example 4, 그중 plugin 2, 규칙 검사 0, 그 밖 0), plugin 준비 폴더 1개 (plugin.aot 있음)
+     example/lib/main.dart:10  warning  missing_provider_scope
+     example/lib/main.dart:9  info  avoid_print
+     example/lib/main.dart:9  info  prefer_single_quotes
+     example/lib/src/counter.dart:8  info  avoid_public_notifier_properties
+## E3 — 루트에 'example/**' 제외
+   exit 2, 15.2s, 진단 4건 (example 4, 그중 plugin 2, 규칙 검사 0, 그 밖 0), plugin 준비 폴더 1개 (plugin.aot 있음)
+     example/lib/main.dart:10  warning  missing_provider_scope
+     example/lib/main.dart:9  info  avoid_print
+     example/lib/main.dart:9  info  prefer_single_quotes
+     example/lib/src/counter.dart:8  info  avoid_public_notifier_properties
+## E6 — 루트에 'example' 과 'example/**' 제외
+   exit 2, 15.2s, 진단 4건 (example 4, 그중 plugin 2, 규칙 검사 0, 그 밖 0), plugin 준비 폴더 1개 (plugin.aot 있음)
+     example/lib/main.dart:10  warning  missing_provider_scope
+     example/lib/main.dart:9  info  avoid_print
+     example/lib/main.dart:9  info  prefer_single_quotes
+     example/lib/src/counter.dart:8  info  avoid_public_notifier_properties
+
+# 2부-2. 루트에서 example 을 인자로 (채택하지 않은 형태. 루트 제외가 이 형태를 막는지 본다)
+## H2 — 루트 제외 없음
+   exit 2, 15.2s, 진단 4건 (example 4, 그중 plugin 2, 규칙 검사 0, 그 밖 0), plugin 준비 폴더 1개 (plugin.aot 있음)
+     example/lib/main.dart:10  warning  missing_provider_scope
+     example/lib/main.dart:9  info  avoid_print
+     example/lib/main.dart:9  info  prefer_single_quotes
+     example/lib/src/counter.dart:8  info  avoid_public_notifier_properties
+## H3 — 루트에 'example/**' 제외
+   exit 2, 15.4s, 진단 4건 (example 4, 그중 plugin 2, 규칙 검사 0, 그 밖 0), plugin 준비 폴더 1개 (plugin.aot 있음)
+     example/lib/main.dart:10  warning  missing_provider_scope
+     example/lib/main.dart:9  info  avoid_print
+     example/lib/main.dart:9  info  prefer_single_quotes
+     example/lib/src/counter.dart:8  info  avoid_public_notifier_properties
+
+# 3부. 규칙 검사 (문제 규칙 4개를 끼우고 plugins: 를 뺀 복사본을 build/woody_rule_check/ 에 둔다)
+## R2a — 루트 제외 없음, 루트에서 인자 없이
+   exit 2, 15.1s, 진단 8건 (example 4, 그중 plugin 2, 규칙 검사 4, 그 밖 0), plugin 준비 폴더 1개 (plugin.aot 있음)
+     build/woody_rule_check/analysis_options.yaml:41  warning  deprecated_lint
+     build/woody_rule_check/analysis_options.yaml:42  warning  deprecated_lint
+     build/woody_rule_check/analysis_options.yaml:43  warning  removed_lint
+     build/woody_rule_check/analysis_options.yaml:44  warning  undefined_lint
+     example/lib/main.dart:10  warning  missing_provider_scope
+     example/lib/main.dart:9  info  avoid_print
+     example/lib/main.dart:9  info  prefer_single_quotes
+     example/lib/src/counter.dart:8  info  avoid_public_notifier_properties
+## R2b — 루트 제외 없음, 루트에서 그 폴더를 인자로
+   exit 2, 0.5s, 진단 4건 (example 0, 그중 plugin 0, 규칙 검사 4, 그 밖 0), plugin 준비 폴더 0개
+     build/woody_rule_check/analysis_options.yaml:41  warning  deprecated_lint
+     build/woody_rule_check/analysis_options.yaml:42  warning  deprecated_lint
+     build/woody_rule_check/analysis_options.yaml:43  warning  removed_lint
+     build/woody_rule_check/analysis_options.yaml:44  warning  undefined_lint
+## R3a — 루트에 'example/**' 제외, 루트에서 인자 없이
+   exit 2, 0.5s, 진단 4건 (example 0, 그중 plugin 0, 규칙 검사 4, 그 밖 0), plugin 준비 폴더 0개
+     build/woody_rule_check/analysis_options.yaml:41  warning  deprecated_lint
+     build/woody_rule_check/analysis_options.yaml:42  warning  deprecated_lint
+     build/woody_rule_check/analysis_options.yaml:43  warning  removed_lint
+     build/woody_rule_check/analysis_options.yaml:44  warning  undefined_lint
+## R3b — 루트에 'example/**' 제외, 루트에서 그 폴더를 인자로
+   exit 2, 0.5s, 진단 4건 (example 0, 그중 plugin 0, 규칙 검사 4, 그 밖 0), plugin 준비 폴더 0개
+     build/woody_rule_check/analysis_options.yaml:41  warning  deprecated_lint
+     build/woody_rule_check/analysis_options.yaml:42  warning  deprecated_lint
+     build/woody_rule_check/analysis_options.yaml:43  warning  removed_lint
+     build/woody_rule_check/analysis_options.yaml:44  warning  undefined_lint
+
+# 4부. 문제 없는 복사본 (검증이 통과할 때의 모양)
+## P2b — 루트 제외 없음, 루트에서 그 폴더를 인자로
+   exit 0, 0.5s, 진단 0건 (example 0, 그중 plugin 0, 규칙 검사 0, 그 밖 0), plugin 준비 폴더 0개
+## P3a — 루트에 'example/**' 제외, 루트에서 인자 없이
+   exit 0, 0.5s, 진단 0건 (example 0, 그중 plugin 0, 규칙 검사 0, 그 밖 0), plugin 준비 폴더 0개
+
+원본 결과: .planning/spikes/007-root-analysis-with-example/results/probe.json

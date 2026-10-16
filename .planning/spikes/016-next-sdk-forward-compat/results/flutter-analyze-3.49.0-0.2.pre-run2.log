@@ -1,0 +1,51 @@
+Analyzing example...                                            
+
+   info • Use 'const' with the constructor to improve performance. Try adding the 'const' keyword to the constructor invocation • lib/added_rules.dart:7:28 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance. Try adding the 'const' keyword to the constructor invocation • lib/added_rules.dart:7:28 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance. Try adding the 'const' keyword to the constructor invocation • lib/added_rules.dart:7:28 • prefer_const_constructors
+   info • Use 'const' literals as arguments to constructors of '@immutable' classes. Try adding 'const' before the literal • lib/added_rules.dart:13:61 • prefer_const_literals_to_create_immutables
+   info • Use 'const' literals as arguments to constructors of '@immutable' classes. Try adding 'const' before the literal • lib/added_rules.dart:13:61 • prefer_const_literals_to_create_immutables
+   info • Use 'const' literals as arguments to constructors of '@immutable' classes. Try adding 'const' before the literal • lib/added_rules.dart:13:61 • prefer_const_literals_to_create_immutables
+   info • The function 'noReturnType' should have a return type but doesn't. Try adding a return type to the function • lib/added_rules.dart:18:3 • always_declare_return_types
+   info • The function 'noReturnType' should have a return type but doesn't. Try adding a return type to the function • lib/added_rules.dart:18:3 • always_declare_return_types
+   info • The function 'noReturnType' should have a return type but doesn't. Try adding a return type to the function • lib/added_rules.dart:18:3 • always_declare_return_types
+   info • Local variables should be final. Try making the variable final • lib/added_rules.dart:24:3 • prefer_final_locals
+   info • Local variables should be final. Try making the variable final • lib/added_rules.dart:24:3 • prefer_final_locals
+   info • Local variables should be final. Try making the variable final • lib/added_rules.dart:24:3 • prefer_final_locals
+   info • Unnecessary use of double quotes. Try using single quotes unless the string contains single quotes • lib/added_rules.dart:29:29 • prefer_single_quotes
+   info • Unnecessary use of double quotes. Try using single quotes unless the string contains single quotes • lib/added_rules.dart:29:29 • prefer_single_quotes
+   info • Unnecessary use of double quotes. Try using single quotes unless the string contains single quotes • lib/added_rules.dart:29:29 • prefer_single_quotes
+   info • Missing an 'await' for the 'Future' computed by this expression. Try adding an 'await' or wrapping the expression with 'unawaited' (if it is a 'Future') • lib/added_rules.dart:33:3 • unawaited_futures
+   info • Missing an 'await' for the 'Future' computed by this expression. Try adding an 'await' or wrapping the expression with 'unawaited' (if it is a 'Future') • lib/added_rules.dart:33:3 • unawaited_futures
+   info • Missing an 'await' for the 'Future' computed by this expression. Try adding an 'await' or wrapping the expression with 'unawaited' (if it is a 'Future') • lib/added_rules.dart:33:3 • unawaited_futures
+   info • Use a 'SizedBox' to add whitespace to a layout. Try using a 'SizedBox' rather than a 'Container' • lib/base_rules.dart:8:24 • sized_box_for_whitespace
+   info • Use a 'SizedBox' to add whitespace to a layout. Try using a 'SizedBox' rather than a 'Container' • lib/base_rules.dart:8:24 • sized_box_for_whitespace
+   info • The 'child' argument should be last in widget constructor invocations. Try moving the argument to the end of the argument list • lib/base_rules.dart:12:23 • sort_child_properties_last
+   info • The 'child' argument should be last in widget constructor invocations. Try moving the argument to the end of the argument list • lib/base_rules.dart:12:23 • sort_child_properties_last
+   info • Don't use 'BuildContext's across async gaps. Try rewriting the code to not use the 'BuildContext', or guard the use with a 'mounted' check • lib/base_rules.dart:17:16 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps. Try rewriting the code to not use the 'BuildContext', or guard the use with a 'mounted' check • lib/base_rules.dart:17:16 • use_build_context_synchronously
+   info • Don't invoke 'print' in production code. Try using a logging framework • lib/base_rules.dart:22:3 • avoid_print
+   info • Don't invoke 'print' in production code. Try using a logging framework • lib/base_rules.dart:22:3 • avoid_print
+   info • Use of 'return' in a 'finally' clause. Try restructuring the code • lib/base_rules.dart:30:5 • control_flow_in_finally
+   info • Use of 'return' in a 'finally' clause. Try restructuring the code • lib/base_rules.dart:30:5 • control_flow_in_finally
+   info • Use the end-of-line form ('///') for doc comments. Try rewriting the comment to use '///' • lib/base_rules.dart:34:1 • slash_for_doc_comments
+   info • Use the end-of-line form ('///') for doc comments. Try rewriting the comment to use '///' • lib/base_rules.dart:34:1 • slash_for_doc_comments
+   info • Use 'isEmpty' instead of 'length' to test whether the collection is empty. Try rewriting the expression to use 'isEmpty' • lib/base_rules.dart:38:37 • prefer_is_empty
+   info • Use 'isEmpty' instead of 'length' to test whether the collection is empty. Try rewriting the expression to use 'isEmpty' • lib/base_rules.dart:38:37 • prefer_is_empty
+   info • Don't invoke 'print' in production code. Try using a logging framework • lib/generated/sample.freezed.dart:4:3 • avoid_print
+   info • Don't invoke 'print' in production code. Try using a logging framework • lib/generated/sample.freezed.dart:4:3 • avoid_print
+   info • Don't invoke 'print' in production code. Try using a logging framework • lib/generated/sample.freezed.dart:4:3 • avoid_print
+   info • Unnecessary use of double quotes. Try using single quotes unless the string contains single quotes • lib/generated/sample.freezed.dart:4:9 • prefer_single_quotes
+   info • Unnecessary use of double quotes. Try using single quotes unless the string contains single quotes • lib/generated/sample.freezed.dart:4:9 • prefer_single_quotes
+   info • Unnecessary use of double quotes. Try using single quotes unless the string contains single quotes • lib/generated/sample.freezed.dart:4:9 • prefer_single_quotes
+   info • Don't invoke 'print' in production code. Try using a logging framework • lib/generated/sample.g.dart:4:3 • avoid_print
+   info • Don't invoke 'print' in production code. Try using a logging framework • lib/generated/sample.g.dart:4:3 • avoid_print
+   info • Don't invoke 'print' in production code. Try using a logging framework • lib/generated/sample.g.dart:4:3 • avoid_print
+   info • Unnecessary use of double quotes. Try using single quotes unless the string contains single quotes • lib/generated/sample.g.dart:4:9 • prefer_single_quotes
+   info • Unnecessary use of double quotes. Try using single quotes unless the string contains single quotes • lib/generated/sample.g.dart:4:9 • prefer_single_quotes
+   info • Unnecessary use of double quotes. Try using single quotes unless the string contains single quotes • lib/generated/sample.g.dart:4:9 • prefer_single_quotes
+warning • Flutter applications using Riverpod must contain a ProviderScope at the root of their widget tree • lib/main.dart:5:3 • missing_provider_scope
+   info • Notifiers should not have public properties/getters. Instead, all their public API should be exposed through the `state` property • lib/riverpod_rules.dart:5:3 • avoid_public_notifier_properties
+warning • Providers should not rely on parameters for their value. Instead, they should use a family or read other providers • lib/riverpod_rules.dart:17:37 • provider_parameters
+
+47 issues found. (ran in 3.7s)

@@ -1,0 +1,50 @@
+Dart 3.13.4 on macos
+
+# corrupt — plugin.aot 이 잘린 채 남았을 때
+준비: 통과 (exit 2, 15.4s, 진단 4건)
+plugin.aot 을 0바이트로 잘랐다 (원래 15197472바이트). depfile.txt 는 그대로 둔다.
+잘린 채로 분석: 실패 (exit 0, 0.8s, 진단 2건)
+    진단: lib/main.dart:9  info  avoid_print | lib/main.dart:9  info  prefer_single_quotes
+    spike 002 의 머리말이 stderr 에 있음: 예
+    stderr 는 11줄이다. 앞 12줄:
+    stderr> File truncated before or at offset 0x0.
+    stderr> Loading dynamic library failed: dlopen(<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot, 0x0001): tried: '<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' (), '/System/Volumes/Preboot/Cryptexes/OS<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' (no such file), '<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' ()
+    stderr> An error occurred while executing an analyzer plugin: IsolateSpawnException: Unable to spawn isolate: The uri(file://<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot) provided to `Isolate.spawnUri()` does not contain a valid AOT snapshot.
+    stderr> 
+    stderr> An error occurred while executing an analyzer plugin: Unrecorded error while starting the plugin.
+    stderr> #0      PluginSession.start (package:analysis_server/src/plugin/plugin_isolate.dart:499)
+    stderr> <asynchronous suspension>
+    stderr> #1      PluginIsolate.start (package:analysis_server/src/plugin/plugin_isolate.dart:229)
+    stderr> <asynchronous suspension>
+    stderr> #2      PluginManager.addPluginToContextRoot (package:analysis_server/src/plugin/plugin_manager.dart:215)
+    stderr> <asynchronous suspension>
+한 번 더: 실패 (exit 0, 0.8s, 진단 2건)
+    진단: lib/main.dart:9  info  avoid_print | lib/main.dart:9  info  prefer_single_quotes
+    spike 002 의 머리말이 stderr 에 있음: 예
+    stderr 는 11줄이다. 앞 12줄:
+    stderr> File truncated before or at offset 0x0.
+    stderr> Loading dynamic library failed: dlopen(<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot, 0x0001): tried: '<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' (), '/System/Volumes/Preboot/Cryptexes/OS<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' (no such file), '<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot' ()
+    stderr> An error occurred while executing an analyzer plugin: IsolateSpawnException: Unable to spawn isolate: The uri(file://<work>/state/corrupt/.plugin_manager/bbefe70ca7ea1c6e6f9f0074a9612630/bin/plugin.aot) provided to `Isolate.spawnUri()` does not contain a valid AOT snapshot.
+    stderr> 
+    stderr> An error occurred while executing an analyzer plugin: Unrecorded error while starting the plugin.
+    stderr> #0      PluginSession.start (package:analysis_server/src/plugin/plugin_isolate.dart:499)
+    stderr> <asynchronous suspension>
+    stderr> #1      PluginIsolate.start (package:analysis_server/src/plugin/plugin_isolate.dart:229)
+    stderr> <asynchronous suspension>
+    stderr> #2      PluginManager.addPluginToContextRoot (package:analysis_server/src/plugin/plugin_manager.dart:215)
+    stderr> <asynchronous suspension>
+    그 뒤 plugin.aot 크기: 0바이트
+plugin.aot 만 지운 뒤: 통과 (exit 2, 12.8s, 진단 4건)
+
+# server — 오래 떠 있는 Analysis Server 와 함께 쓸 때
+서버가 initialize 에 답함: 예
+서버가 plugin 을 준비함: 예 (9초)
+서버가 plugin 진단을 보냄 (missing_provider_scope): 예
+서버가 떠 있는 동안의 명령줄 분석 #1: 통과 (exit 2, 3.7s, 진단 4건)
+서버가 떠 있는 동안의 명령줄 분석 #2: 통과 (exit 2, 3.6s, 진단 4건)
+서버가 떠 있는 동안의 명령줄 분석 #3: 통과 (exit 2, 3.6s, 진단 4건)
+depfile 을 지운 뒤의 명령줄 분석: 통과 (exit 2, 12.9s, 진단 4건) — plugin.aot 이 새로 만들어짐: 예
+그 뒤의 명령줄 분석: 통과 (exit 2, 3.6s, 진단 4건)
+그동안 서버 프로세스가 살아 있음: 예
+서버가 shutdown 요청에 답함: 예
+

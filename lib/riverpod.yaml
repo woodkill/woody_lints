@@ -1,0 +1,5 @@
+# woody_lints 의 Riverpod 조각 — riverpod_lint analyzer plugin 을 켠다. 이 조각만 받으려면 package:woody_lints/riverpod.yaml 을 include 한다.
+# plugins: 는 최상위 키여야 한다 — riverpod_lint 3.x 는 analysis_server_plugin 방식만 지원하고, 옛 `analyzer: plugins:` 선언은 아무것도 로드하지 않는다.
+# plugin 캐시 · Analysis Server 재시작 · `dart analyze` 와 `flutter analyze` 의 차이는 README.md 「문제 해결」에 있다.
+plugins:
+  riverpod_lint: ^3.1.9 # 하한을 올리면 fixtures/overrides/analysis_options.yaml 의 version: 과 README.md 의 plugin 버전 예시 둘도 같은 커밋에서 올린다 — README.md 「이 저장소를 고치는 사람에게」, 검증 명령의 [3/10] · [4/10] 이 견준다
