@@ -31,7 +31,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Preset Split** - 기본 / Riverpod / codegen 조각과 `recommended.yaml` 묶음, 옛 URI 별칭 (기대 진단 불변) (completed 2026-10-12)
 - [x] **Phase 4: Rule Reselection** - `flutter_starter_kit` 실측을 근거로 규칙을 하나씩 결정하고 근거를 기록 (completed 2026-10-13)
 - [x] **Phase 5: Documentation** - README / CHANGELOG / YAML 주석을 확정된 설정에 맞춰 다시 쓰고 일치를 검증으로 고정 (completed 2026-10-15)
-- [ ] **Phase 6: Release** - 새 버전 annotated tag 와 git 의존성 smoke test
+- [x] **Phase 6: Release** - 새 버전 annotated tag 와 git 의존성 smoke test (completed 2026-10-17)
 
 ## Phase Details
 
@@ -318,7 +318,7 @@ Plans:
   2. `git ls-remote --tags origin` 에 새 버전의 annotated tag 가 보이고, 그 tag 의 `pubspec.yaml` version 과 CHANGELOG 최상단 버전이 tag 이름과 같다
   3. 빈 프로젝트가 새 tag 를 git 의존성(`ref: vX.Y.Z`)으로 받아 `dart analyze` 를 돌리면 기본 규칙 진단과 `riverpod_lint` plugin 진단이 둘 다 보고된다
 
-**Plans**: 15/15 plans executed — 06-01 ~ 06-07 첫 실행 (검증 gaps_found 40/41), gap 수정 06-08 ~ 06-11 실행 완료 2026-10-16 (PR #2 → `main` `0038572`) — 재검증 gaps_found 60/63: CHANGELOG 최상단 reader 가 GitHub 과 갈리는 꼴 둘(한 글자 밑줄 setext · 블록 안의 `<!--`)과 smoke 의 UTF-8 아닌 출력, `06-VERIFICATION.md`; **gap 수정 2회차 06-12 ~ 06-15 는 2026-10-16 계획 · 2026-10-17 실행 완료 (PR #3 → `main` `3418989`) — 재검증 human_needed 82/82, UAT 대기 (`06-UAT.md` 둘)** — 소유자 결정 G7-Q1 (나) 첫 줄 고정 · G7-Q2 smoke 여섯 · G7-Q3 main 병합까지, 06-REVIEW.md 열 발견(아홉 fixed · IN-08 deferred), 11 waves (gap 수정 1회차 4 는 2026-10-16 계획 — 06-VERIFICATION.md 40/41: REL-03 의 version · CHANGELOG 최상단 reader, 06-REVIEW.md 일곱 발견; 소유자 결정 G6-Q1 ~ G6-Q3; 06-01 ~ 06-07 은 2026-10-15 계획 — 06-CONTEXT.md D-01 ~ D-14, 06-RESEARCH.md)
+**Plans**: 15/15 plans complete — 06-01 ~ 06-07 첫 실행 (검증 gaps_found 40/41), gap 수정 06-08 ~ 06-11 실행 완료 2026-10-16 (PR #2 → `main` `0038572`) — 재검증 gaps_found 60/63: CHANGELOG 최상단 reader 가 GitHub 과 갈리는 꼴 둘(한 글자 밑줄 setext · 블록 안의 `<!--`)과 smoke 의 UTF-8 아닌 출력, `06-VERIFICATION.md`; **gap 수정 2회차 06-12 ~ 06-15 는 2026-10-16 계획 · 2026-10-17 실행 완료 (PR #3 → `main` `3418989`) — 재검증 human_needed 82/82 → UAT 4/4 통과 (2026-10-17, `06-UAT.md` — SUMMARY 의 사람 판단 둘을 더함), 검증 passed** — 소유자 결정 G7-Q1 (나) 첫 줄 고정 · G7-Q2 smoke 여섯 · G7-Q3 main 병합까지, 06-REVIEW.md 열 발견(아홉 fixed · IN-08 deferred), 11 waves (gap 수정 1회차 4 는 2026-10-16 계획 — 06-VERIFICATION.md 40/41: REL-03 의 version · CHANGELOG 최상단 reader, 06-REVIEW.md 일곱 발견; 소유자 결정 G6-Q1 ~ G6-Q3; 06-01 ~ 06-07 은 2026-10-15 계획 — 06-CONTEXT.md D-01 ~ D-14, 06-RESEARCH.md)
 
 Plans:
 
@@ -395,7 +395,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
 | 4. Rule Reselection | 13/13 | Complete    | 2026-10-13 |
 | 5. Documentation | 15/15 | Complete    | 2026-10-15 |
-| 6. Release | 15/15 | 재검증 human_needed 82/82 — UAT 대기 (`06-UAT.md`) | - |
+| 6. Release | 15/15 | Complete    | 2026-10-17 |
 
 ## Backlog
 
@@ -422,4 +422,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 **Source phase:** 06
 **Deferred at:** 2026-10-17, `/gsd-verify-work 06` 세션 완료 시점
 **Follow-ups:**
-- [ ] Test 3: VERSIONING.md 「판정 순서」 3번과 기준표에 'pubspec.yaml 의 dev_dependencies · 저장소 도구용 주석만 바뀐 것은 받는 쪽에 닿지 않으므로 저장소 안쪽(올리지 않음)' 을 정리한다 — 2.0.0 뒤 gap 수정(markdown dev 의존성 · 주석 3줄)이 버전을 올리지 않은 근거를 문서가 그대로 뒷받침하게. 지금은 3번("pubspec.yaml 이 바뀌긴 했나 → patch")과 기준표 "주석만 고침 → patch" 를 글자대로 읽으면 2.0.1 이고, 계획서가 근거로 든 "저장소 안쪽만 바뀜" 행에는 pubspec.yaml 이 없다 (deferred 2026-10-17)
+- [ ] Test 3: VERSIONING.md 「판정 순서」 3번과 기준표에 'pubspec.yaml 의 dev_dependencies · 저장소 도구용 주석만 바뀐 것은 받는 쪽에 닿지 않으므로 저장소 안쪽(올리지 않음)' 을 정리한다 — 2.0.0 뒤 gap 수정(markdown dev 의존성 · 주석 3줄)이 버전을 올리지 않은 근거를 문서가 그대로 뒷받침하게. 지금은 3번("pubspec.yaml 이 바뀌긴 했나 → patch")과 기준표 "주석만 고침 → patch" 를 글자대로 읽으면 2.0.1 이고, 계획서가 근거로 든 "저장소 안쪽만 바뀜" 행에는 pubspec.yaml 이 없다. STATE Blockers 의 [Phase 1] WR-03 남은 두 경우(README · CHANGELOG 만 고친 변경, 새 프리셋 추가 — 판정 순서와 기준표가 다른 등급)와 같은 종류라 함께 본다 (deferred 2026-10-17)

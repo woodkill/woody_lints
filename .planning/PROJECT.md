@@ -2,7 +2,7 @@
 
 ## What This Is
 
-`woody_lints` 는 Flutter 프로젝트의 `analysis_options.yaml` 에서 `include:` 한 줄로 끌어다 쓰는 설정 전용 패키지(configuration-only package)다. Dart 코드는 없고 `lib/` 의 YAML 이 배포 산출물이며, 작성자 본인의 Flutter 프로젝트들이 Git 의존성으로 가져다 쓴다. 2.0.0 개발 브랜치에서는 조각 셋(`base.yaml` · `riverpod.yaml` · `codegen.yaml`), 묶음 `recommended.yaml`, 옛 주소 별칭 `analysis_options.yaml` 의 다섯 파일이다 (Phase 3).
+`woody_lints` 는 Flutter 프로젝트의 `analysis_options.yaml` 에서 `include:` 한 줄로 끌어다 쓰는 설정 전용 패키지(configuration-only package)다. Dart 코드는 없고 `lib/` 의 YAML 이 배포 산출물이며, 작성자 본인의 Flutter 프로젝트들이 Git 의존성으로 가져다 쓴다. 2.0.0 (tag `v2.0.0`, 2026-10-16 `main` 병합)부터는 조각 셋(`base.yaml` · `riverpod.yaml` · `codegen.yaml`), 묶음 `recommended.yaml`, 옛 주소 별칭 `analysis_options.yaml` 의 다섯 파일이다 (Phase 3 · Phase 6).
 
 이번 작업은 "잘 모르던 시절에 만든" 이 패키지를 지금 기준으로 다시 다듬어 새 버전으로 릴리스하는 것이다.
 
@@ -33,13 +33,14 @@
 - ✓ 기반 세트와 겹치는 선언 6개와 주석 처리된 설정 3개를 배포 파일에서 지웠다 — 정답지 다섯 그대로, 사유는 CHANGELOG 2.0.0 항목 — Phase 4
 - ✓ `README.md`, `CHANGELOG.md`, 배포 YAML 다섯의 머리 주석이 실제 설정과 일치한다 — 검증 명령 `[3/10]` 이 README 의 규칙 목록 · `package:` 주소 · plugin 버전 · `ref:` 와 `RULES.md` 를 배포 파일과 견주고, 마지막 확인 (h) 가 줄 단위 reader 의 값을 `package:yaml` 로 읽은 값과 견준다 (지워 보기 M32 ~ M91). CHANGELOG 1.1.0 ~ 1.2.5 를 git 이력으로 복원했다 — Phase 5
 - ✓ README 를 "몇 달 뒤의 내가 그대로 따라 하면 되는" 사용 안내로 다시 썼다 (설치, 프리셋 고르기, 규칙 · plugin 진단 끄기 세 층, 생성 파일 제외, 버전 올리기 세 갈래, 문제 해결) — 소유자 UAT 통과 (2026-10-15). 실제 tag 로 받는 확인과 UAT 에서 미룬 문서 손질 넷은 Phase 6 — Phase 5
+- ✓ GitHub Actions 가 push · PR · 수동 실행마다 그 검증을 자동 실행한다 — PR #1 ~ #3 의 `pull_request` 실행 모두 success, `main` 에서 `workflow_dispatch` 실행 38850984674 success, `Run workflow` 버튼을 소유자가 화면에서 확인 (UAT, 2026-10-17) — Phase 6
+- ✓ git tag 로 릴리스하고, 사용 프로젝트가 `ref: vX.Y.Z` 로 버전을 고정할 수 있다 — annotated tag `v2.0.0` 이 원격에서 `704bf56` 을 가리키고, 빈 프로젝트가 `ref: v2.0.0` 으로 받아 두 주소 모두에서 기본 규칙 · `riverpod_lint` 진단이 나온다 (`tool/smoke.dart`). tag · `pubspec.yaml` version · CHANGELOG 최상단이 다르면 CI 가 `[3/10]` 에서 실패한다 — Phase 6
 
 ### Active
 
 <!-- 이번 작업 범위. 릴리스되어 확인되기 전까지는 가설이다. -->
 
-- [ ] GitHub Actions 가 push 와 PR 마다 그 검증을 자동 실행한다 — push 쪽은 Phase 2 에서 확인했다 (성공한 실행 2건, 겹친 실행의 취소 1건, 2026-10-12). PR 에서 도는지와 수동 실행 버튼은 PR 이 처음 열리고 workflow 가 `main` 에 들어가는 Phase 6 에서 본다
-- [ ] git tag 로 릴리스하고, 사용 프로젝트가 `ref: vX.Y.Z` 로 버전을 고정할 수 있다
+(없음 — v2.0 범위는 모두 확인했다. 미룬 손질은 ROADMAP `## Backlog` 999.1 ~ 999.3)
 
 ### Out of Scope
 
@@ -99,29 +100,32 @@
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| git tag 로 릴리스하고 README 를 `ref: vX.Y.Z` 기준으로 안내한다 | 규칙 재검토로 새 경고가 많이 생길 수 있어, 프로젝트마다 올리는 시점을 고를 수 있어야 한다 | — Pending |
-| 최신 stable 만 지원한다 (Dart 3.13 이상) | 사용 프로젝트가 Flutter 3.47.5 이고 이전 SDK 를 쓰는 프로젝트는 이전 tag 에 머물 수 있다 | — Pending |
+| git tag 로 릴리스하고 README 를 `ref: vX.Y.Z` 기준으로 안내한다 | 규칙 재검토로 새 경고가 많이 생길 수 있어, 프로젝트마다 올리는 시점을 고를 수 있어야 한다 | ✓ Phase 6 — annotated tag `v2.0.0` (`704bf56`), 빈 프로젝트가 `ref: v2.0.0` 으로 받아 두 주소 모두 진단 확인 |
+| 최신 stable 만 지원한다 (Dart 3.13 이상) | 사용 프로젝트가 Flutter 3.47.5 이고 이전 SDK 를 쓰는 프로젝트는 이전 tag 에 머물 수 있다 | ✓ Phase 6 — 2.0.0 을 `sdk: ^3.13.0` 으로 냄, 3.13 미만은 `ref: v1.3.0` (README) |
 | 규칙은 후보별 근거를 보고 하나씩 결정한다 | 구체적 불편이 없어 엄격도를 미리 정할 근거가 없다 | ✓ Phase 4 — 묶음 다섯 · 질문 아홉을 소유자가 정함 (`04-DECISIONS.md` 결정 표: 켬 81 · 안 켬 38 · 결정 안 함 14), `sort_pub_dependencies` 는 측정 도구 결함을 고친 뒤 다시 정함 |
 | 근거에는 `flutter_starter_kit` 복사본 실측을 포함한다 | 규칙이 내 코드에 실제로 몇 건의 경고를 내는지가 판단 기준이다 | ✓ Phase 4 — `tool/measure_rules.dart` 의 회차 기록 `tool/measurements/2026-10-13-R1.json` (경로 · 메시지 없이 건수만), 원본은 바꾸지 않음. 재측정 전에 고칠 것 둘(CR-03 · WR-09)은 RULES-13 메모 |
 | Riverpod / codegen 설정을 선택형 프리셋으로 분리한다 | 지금은 모든 주요 프로젝트가 Riverpod + codegen 이지만, 앞으로 다른 구성의 프로젝트가 생길 것을 대비한다 | ✓ Phase 3 — 조각은 서로를 include 하지 않고, 묶음이 셋을 `package:` 주소 목록으로 include 한다 |
 | 검증은 `example/` 프로젝트 + GitHub Actions 로 자동화한다 | 유일한 산출물이 자체 분석에서 제외되어 있어 검증 수단이 없다 | ✓ Phase 2 — `tool/verify.dart` 와 `.github/workflows/verify.yml` (PR · 수동 실행 확인은 Phase 6) |
 | README 독자는 미래의 작성자 본인, 한국어로 쓴다 | 개인 사용 패키지다 | ✓ Phase 5 — README 만 보고 따라 하기 UAT 통과 (2026-10-15) |
-| 완료 범위는 패키지 릴리스까지다 | 각 프로젝트 적용은 사용자가 원하는 시점에 따로 한다 | — Pending |
+| 완료 범위는 패키지 릴리스까지다 | 각 프로젝트 적용은 사용자가 원하는 시점에 따로 한다 | ✓ Phase 6 — tag · `main` 병합까지 하고 사용 프로젝트는 건드리지 않음 (`ref: main` 프로젝트는 `pub upgrade` 때 받는다) |
 | 묶음(기본 + Riverpod + codegen)의 정식 이름은 `package:woody_lints/recommended.yaml` 이다. 기존 URI `package:woody_lints/analysis_options.yaml` 은 `recommended.yaml` 을 include 하는 한 줄짜리 별칭으로 남긴다 | 조각 파일(`base.yaml` 등)처럼 묶음도 내용이 드러나는 이름을 쓴다. 옛 이름을 남겨 기존 프로젝트는 고칠 것이 없다. 옛 이름은 README 에 "예전 이름"으로만 적고 다음 major 에서 제거를 검토한다 | ✓ Phase 3 — 옛 주소 · 묶음 · 분리 전 커밋으로 받은 결과가 줄 단위로 같다 (README 안내는 Phase 5) |
 | 기본 규칙 조각 파일의 이름은 `base.yaml` 이다 | 파일 이름이 곧 공개 URI 다. 공식 `lints` 패키지의 `core.yaml` 과 이름이 겹치지 않는다 | ✓ Phase 3 |
-| `lib/` 와 `pubspec.yaml` 을 고치는 작업은 milestone 브랜치에 쌓고 릴리스 때만 `main` 에 합친다 (`git.branching_strategy: milestone`) | 사용 프로젝트가 전부 `ref: main` 이라, `main` 에 push 된 중간 상태가 `pub upgrade` 때 그대로 배포된다 | — Pending |
+| `lib/` 와 `pubspec.yaml` 을 고치는 작업은 milestone 브랜치에 쌓고 릴리스 때만 `main` 에 합친다 (`git.branching_strategy: milestone`) | 사용 프로젝트가 전부 `ref: main` 이라, `main` 에 push 된 중간 상태가 `pub upgrade` 때 그대로 배포된다 | ✓ Phase 6 — PR #1 merge commit `5ee5a12` (2026-10-16) 로 처음 합침; 그 뒤 저장소 안쪽만 고친 gap 수정은 PR #2 · #3 merge commit 으로 |
 | 검증 판정은 기대 진단 비교(golden comparison)를 주 수단으로 한다 | lint 는 info 라 종료 코드만으로는 규칙이 켜져 있음을 증명하지 못한다 (조사 결과) | ✓ Phase 2 — 정답지 `example/expected_diagnostics.txt` (`exit 2` + 16줄), 줄과 건수를 견준다 |
 | 1.3.0 기준점은 commit `90a2736` 의 annotated tag `v1.3.0` 이다. 한 번 올린 tag 는 옮기거나 지우지 않는다 | 사용 프로젝트의 `pubspec.lock` 이 받은 커밋 번호를 적어 두므로, tag 를 옮기면 기록과 어긋난다. 잘못이 발견되면 새 이름(v1.3.1 등)을 쓴다 | ✓ Phase 1 — origin 에 올림 (2026-10-11) |
-| 다음 릴리스는 2.0.0 이다. 준비하는 동안 milestone 브랜치의 `pubspec.yaml` 은 `2.0.0-dev` 로 둔다 | 이번 릴리스의 가장 큰 등급이 지원 SDK 하한 상향(`^3.10.4` → `^3.13.0`, major)이다 | — Pending |
-| 버전 등급의 기준은 "받는 쪽이 겪는 일" 이고 기준 문서는 루트 `VERSIONING.md` 다. 규칙을 새로 켜는 것은 그 규칙이 warning 등급이어도 minor 다 | 받는 쪽은 정확한 tag 하나에 고정하므로 버전 번호는 사람에게 보내는 신호다. 새로 켜는 규칙은 CHANGELOG 의 "새로 생기는 경고" 표에서 미리 볼 수 있다 | — Pending |
-| GSD 의 자동 tag(`git.create_tag`)를 끄고, 마일스톤 번호를 패키지 버전에 맞춰 `v2.0` 으로 둔다 | 이 저장소의 `v` tag 는 사용 프로젝트가 `ref:` 로 가리키는 패키지 릴리스다. 뜻이 다른 `v1.0` tag 가 최신 내용에 붙으면 옛 버전으로 오해한다 | — Pending |
+| 다음 릴리스는 2.0.0 이다. 준비하는 동안 milestone 브랜치의 `pubspec.yaml` 은 `2.0.0-dev` 로 둔다 | 이번 릴리스의 가장 큰 등급이 지원 SDK 하한 상향(`^3.10.4` → `^3.13.0`, major)이다 | ✓ Phase 6 — 릴리스 커밋 `704bf56` 에서 `-dev` 를 뗌 |
+| 버전 등급의 기준은 "받는 쪽이 겪는 일" 이고 기준 문서는 루트 `VERSIONING.md` 다. 규칙을 새로 켜는 것은 그 규칙이 warning 등급이어도 minor 다 | 받는 쪽은 정확한 tag 하나에 고정하므로 버전 번호는 사람에게 보내는 신호다. 새로 켜는 규칙은 CHANGELOG 의 "새로 생기는 경고" 표에서 미리 볼 수 있다 | ✓ Phase 6 — 2.0.0 을 major 로 냄. 릴리스 뒤 `pubspec.yaml` 의 `dev_dependencies` · 주석만 바뀐 경우의 등급 문구는 Backlog 999.3 (Phase 6 UAT 3번) |
+| GSD 의 자동 tag(`git.create_tag`)를 끄고, 마일스톤 번호를 패키지 버전에 맞춰 `v2.0` 으로 둔다 | 이 저장소의 `v` tag 는 사용 프로젝트가 `ref:` 로 가리키는 패키지 릴리스다. 뜻이 다른 `v1.0` tag 가 최신 내용에 붙으면 옛 버전으로 오해한다 | ✓ Phase 6 — 원격 tag 는 `v1.3.0` · `v2.0.0` 둘뿐 (2026-10-17) |
 | `example/pubspec.lock` 을 커밋한다 (루트 `pubspec.lock` 은 지금처럼 커밋하지 않는다) | 소유자의 컴퓨터와 CI 가 같은 패키지 버전으로 판정한다. 정답지가 깨졌을 때 원인이 "저장소 변경" 또는 "plugin 새 버전" 으로 좁혀진다. `riverpod_lint` plugin 버전은 lock 이 묶지 못한다 | ✓ Phase 2 |
 | CI 를 돌리려고 작업 브랜치를 `.planning/` 과 함께 그대로 origin 에 올린다. CI 는 모든 push(브랜치와 tag) · PR · 수동 실행에서 돌고 예약 실행은 두지 않는다 | 올리기만 하면 결과가 보이고 `main` 에 합치는 방법을 미리 묶지 않는다. `.planning/` 을 뺀 사본 브랜치는 로컬과 원격의 이력을 갈라놓는다. 예약 실행은 60일 동안 활동이 없으면 꺼진다 | ✓ Phase 2 — Phase 3 부터의 push 는 다시 소유자에게 묻는다 |
 | `--update` 가 망가진 결과를 정답지로 쓰는 남은 경로는 Phase 3 에서 정답지를 새로 쓰기 전에 가장 먼저 닫는다 (지금 Phase 2 에서 한 바퀴 더 돌지 않는다) | `[2/4]` 가 통과로 잘못 찍히는 세 입력에서 `--update` 가 종료 코드 0 으로 끝난다. 보통 실행은 세 입력 모두 실패로 잡는다. 고칠 곳이 Phase 3 이 손대는 곳과 같다 | ✓ Phase 3 (03-01) — 세 입력 모두 `--update` 가 종료 코드 1 · 정답지 불변 (M15 ~ M17) |
 | 검증 명령의 줄 단위 reader 가 본 값을 루트 `dev_dependencies` 의 `yaml` 로 읽은 같은 파일의 값과 견준다 (`[3/10]` 의 (h)). 줄 단위 reader 의 본문 · 메시지는 그대로 두고, 꼴을 하나씩 막는 코드는 더하지 않는다 | Phase 5 의 gap 일곱 회차가 모두 "줄 단위 reader 가 보는 것 ≠ analyzer · pub 이 보는 것" 이었다. 대조는 꼴 하나가 아니라 그 모양의 종류를 닫는다. `yaml` 은 개발용 의존성이라 받는 쪽 의존성 그래프에 들어가지 않는다 (D-11 을 이 목적에 한해 다시 정함, 소유자 결정 G4-Q1) | ✓ Phase 5 — 여러 줄 문자열 · 중복 키 입력 여섯(M86 ~ M91)이 실패, 고치기 전 판으로는 통과. SDK 가 품은 package:yaml 판과 같은지는 재지 않았다 |
 | 검사가 보지 않는 꼴은 검사를 넓히지 않고 README · `example/README.md` 의 문장을 실제 범위로 좁힌다 | 남은 꼴(따옴표 키, flow 표기 안의 키, 네 칸 들여 쓴 펜스, HTML 주석 안의 `#` 줄 등)은 이 저장소 문서에 쓰지 않는 꼴이고, 막을수록 reader 가 늘어난다 | ✓ Phase 5 — 소유자 결정 G2-Q2 · G3-Q2 · G3-Q3 · G4-Q2, 처리 기록 `05-REVIEW-DISPOSITION.md` 의 `skipped` 8건 |
-| 리뷰 경고 IN-12 · IN-13 · IN-14 와 Phase 5 UAT 에서 미룬 문서 손질 넷은 Phase 6 에서 릴리스 tag 전에 닫는다 | 셋 다 통과로 끝나지 않는 쪽(막는 쪽)이고 문서 손질은 사용자 동작과 무관하다. 릴리스 전 README · `pubspec.yaml` 커밋과 smoke test 가 같은 곳을 본다 | — Pending (ROADMAP Phase 6 Notes) |
+| 리뷰 경고 IN-12 · IN-13 · IN-14 와 Phase 5 UAT 에서 미룬 문서 손질 넷은 Phase 6 에서 릴리스 tag 전에 닫는다 | 셋 다 통과로 끝나지 않는 쪽(막는 쪽)이고 문서 손질은 사용자 동작과 무관하다. 릴리스 전 README · `pubspec.yaml` 커밋과 smoke test 가 같은 곳을 본다 | ✓ Phase 6 — IN-12 · IN-14 는 06-01, 문서 손질은 06-02, IN-13 은 릴리스 커밋 `704bf56` |
 | ROADMAP Phase 3 성공 기준 3 의 "생성 파일의 진단이 보고되지 않는다" 는 Dart 3.13.x 의 규칙 진단에 대한 말로 읽는다 | 생성 파일 안의 `riverpod_lint` 진단은 패키지가 주는 제외로 막을 수 없다 (plugin 이 제외 패턴을 그것을 적은 폴더 기준으로 푼다, 1.3.0 도 같다). 사용 프로젝트가 자기 옵션 파일에 직접 적으면 막힌다 | ✓ 소유자 확인 2026-10-12 (Phase 3 UAT 1번) — README 의 범위 안내는 Phase 5 Notes |
+| tag push 와 `main` 병합은 실행 바로 앞에서 소유자에게 한 번 더 묻고, tag 는 예행(smoke)을 통과한 그 커밋에만 단다. 병합은 merge commit 만 쓴다 | 원격에 남아 되돌리기 어려운 두 작업이다. squash · rebase 는 커밋 번호를 바꿔 tag 를 단 커밋이 `main` 이력에서 빠진다 | ✓ Phase 6 — `VERSIONING.md` 「릴리스 절차」 1 ~ 10, 소유자 응답 뒤 tag push 1회 · 병합 3회 |
+| CHANGELOG 최상단 제목은 파일 첫 줄로 고정하고, 검사는 그 줄을 Markdown(GitHub Flavored) 해석의 첫 h2 와 견준다 (`markdown` 은 `dev_dependencies`) | 줄 단위 reader 와 GitHub 화면이 갈리는 꼴을 하나씩 막는 대신, 첫 줄 앞에 아무 블록도 없게 해 꼴의 종류를 닫는다 | ✓ Phase 6 — 소유자 결정 G7-Q1, 같은 꼴 입력 63개에서 거짓 통과 0 (06-VERIFICATION) |
+| 릴리스 확인 도구 `tool/smoke.dart` 는 단계별 시간 제한(create 2분 · pub get 5분 · analyze 주소마다 5분)과 Ctrl-C 정리를 두고, verify · CI 에는 넣지 않는다 | 네트워크가 멈추면 받기가 끝없이 기다렸다 (06-04 예행 1회차). 릴리스 때 손으로 한 번 돌리는 도구다 | ✓ Phase 6 — 소유자 결정 G6-Q2 · G7-Q2. 하네스로 일으킬 수 없는 경합 둘은 알려진 한계 (UAT 4번), `killTree` 의 재현된 구멍 IN-11 은 Backlog 999.2 |
 
 ## Evolution
 
@@ -141,4 +145,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-10-15 after Phase 5*
+*Last updated: 2026-10-17 after Phase 6*

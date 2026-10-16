@@ -3,43 +3,42 @@ gsd_state_version: "1.0"
 milestone: v2.0
 milestone_name: Package Rework
 current_phase: 06
-current_phase_name: Release
-status: Phase 06 재검증 human_needed 82/82 — UAT 대기 (/gsd-verify-work 06)
-stopped_at: Completed 06-15-PLAN.md
-last_updated: "2026-10-16T21:32:33.539Z"
+status: completed
+stopped_at: Phase 06 complete — all phases complete
+last_updated: "2026-10-16T23:36:32.698Z"
 last_activity: 2026-10-17
-last_activity_desc: Phase 06 execution started
-state_head: 3c58449997d47dff4fb9639a64e83b10c010325a
+last_activity_desc: Phase 06 complete
+state_head: fc1b662529610c5c054292168a8f447f177f3895
 progress:
   total_phases: 6
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 56
   completed_plans: 56
-  percent: 83
+  percent: 100
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-10-15)
+See: .planning/PROJECT.md (updated 2026-10-17)
 
 **Core value:** 사용 프로젝트가 `include` 한 줄로 받는 규칙이 문서에 적힌 그대로 적용되고, 각 규칙이 왜 켜져 있는지 근거가 남아 있다.
-**Current focus:** Phase 06 — Release
+**Current focus:** v2.0 마일스톤 정리 — 6개 phase 모두 완료 (`/gsd-complete-milestone`)
 
 ## Current Position
 
-Phase: 06 (Release) — EXECUTING
-Plan: 15 of 15
-Status: Phase 06 재검증 human_needed 82/82 — UAT 대기 (/gsd-verify-work 06)
-Last activity: 2026-10-17 — Phase 06 execution started
+Phase: 06
+Plan: Not started
+Status: All phases complete
+Last activity: 2026-10-17 — Phase 06 complete
 
-Progress: [████████░░] 83%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 41
+- Total plans completed: 56
 - Average duration: - min
 - Total execution time: 0.0 hours
 
@@ -52,6 +51,7 @@ Progress: [████████░░] 83%
 | 3 | 4 | - | - |
 | 04 | 13 | - | - |
 | 05 | 15 | - | - |
+| 06 | 15 | - | - |
 
 **Recent Trend:**
 - Last 5 plans: -
@@ -318,6 +318,7 @@ Recent decisions affecting current work:
 - [Phase 06]: 작업 브랜치를 push gate 0 뒤 한 줄로 올리고(724d17a..0461741, 11커밋, 2026-10-16T16:47:56Z 무렵) PR #3 (main ←) 를 열었다 — push 실행 38934754393 · pull_request 실행 38935292307 둘 다 success 10/10, MERGEABLE / CLEAN; 병합은 06-15 의 소유자 확인 뒤. 이 plan 의 metadata 커밋은 push 하지 않았다
 - [Phase 06]: 06-15: 소유자 응답 merge 뒤 gh pr merge 3 --merge — main = 2.0.0 + 06 gap 수정 2회차 (merge commit 3418989), 받는 쪽 변화 없음 (규칙 · version 2.0.0 · CHANGELOG · tag 그대로)
 - [Phase 06]: 재리뷰 경고 IN-10 (example/README.md 읽는 법 (4) · (5) 와 11행의 낡은 문장) 과 IN-11 (smoke killTree 재확인이 중간 프로세스가 먼저 끝난 자기 자손을 SIGCONT 로 살려 둠) 은 미룸 — 소유자 결정 2026-10-17, verifier 판정 경고 (명시된 진실 밖); 처리 기록 deferred · ROADMAP Backlog 999.2
+- [Phase 06]: UAT 4/4 통과 (2026-10-17) — Run workflow 버튼 화면 확인, prohibition 49건 판정 동의, VERSIONING 「릴리스 절차」 1 ~ 10 이 실제와 일치 (06-02 D2), smoke 의 강제할 수 없는 경합 둘은 알려진 한계 (06-13 D5). 릴리스 뒤 `pubspec.yaml` 의 `dev_dependencies` · 주석만 바뀐 경우의 등급 문구는 Backlog 999.3 으로 미룸; 06-VERIFICATION status passed
 
 ### Pending Todos
 
@@ -330,9 +331,6 @@ None yet.
 - [Phase 2] 리뷰 지적 15건이 열려 있다 (`02-REVIEW-DISPOSITION.md`, 합계 17 — WR-01 ~ WR-06 · WR-08 · IN-01 ~ IN-08). `02-VERIFICATION.md` 의 "다음 phase 가 알아야 할 것" 1 ~ 7 이 Phase 3 · 4 · 6 에 걸리는 것을 추렸다. WR-06 은 Phase 6 이 `version` 을 올릴 때 종료 코드 69 로 만난다
 - [Phase 3] 리뷰 지적 14건이 열려 있다 (`03-REVIEW-DISPOSITION.md`, warning 8 · info 6). 그중 검증 장치의 빈틈 셋은 Phase 4 · 5 가 배포 YAML 을 고칠 때 밟는 자리다 — WR-01 `[2/9]` 가 묶음 · 별칭을 보지 않아 거기 적은 규칙을 놓친다 (거짓 통과), WR-02 `riverpod_lint` 줄 끝 주석 · 마지막 줄바꿈 없음에서 종료 코드 70 (거짓 실패), WR-03 `base.yaml` 의 맵 형식 규칙(`rule: false`)에서 `[2/9]` 거짓 실패. Phase 4 계획 때 먼저 닫을지 정한다 (`03-VERIFICATION.md` Gaps Summary) — 정함 (2026-10-13, `04-CONTEXT.md` D-12): WR-01 은 plan 04-01 의 `[3/10]` 이 닫고, WR-02 는 Phase 5 의 첫 일, WR-03 은 목록 형식 관례로 피하고 열어 둔다. WR-02 는 05-01 이 닫음 (M32 · M33, `03-REVIEW-DISPOSITION.md` fixed). 04-13 뒤에는 `lib/base.yaml` 의 맵 형식 규칙 줄에서 `[3/10]` 이 거짓 통과 대신 종료 코드 70 으로 멈춘다 (README M31)
 - [Phase 4] 리뷰 지적 18건이 열려 있다 (`04-REVIEW-DISPOSITION.md`, 합계 28 — open 18 · deferred 3 · fixed 7). deferred 셋: WR-11 (`[3/10]` 의 겹침 · `RULES.md` 일치가 `lib/base.yaml` 만 읽음) 은 05-01 이 닫음 (M35, `04-REVIEW-DISPOSITION.md` fixed), CR-03 · WR-09 (측정 도구) 는 다음 재측정(RULES-13) 전에
-- [Phase 6] `main` 병합은 `ref: main` 사용 프로젝트 5개에 새 버전을 배포하는 일이다. tag 와 병합의 순서를 계획 때 정한다 → 순서는 06-CONTEXT D-01 · D-02 로 정함 (tag 먼저, 병합은 06-06 에서 PR + merge commit, 둘 다 직전 확인)
-- [Phase 6] Phase 2 에서 미룬 확인 둘 — PR 에서 `verify` 가 도는지, 수동 실행 버튼 (ROADMAP 의 Phase 6 Notes) → 06-06 이 확인하고 06-07 이 기록한다
-- [Phase 6] 릴리스 tag 전에 닫을 것: 05-REVIEW 경고 IN-12 · IN-13 · IN-14 와 05-UAT 의 문서 손질 넷 (ROADMAP 의 Phase 6 Notes). → 06-01 · 06-02 · 06-04 가 고치고 06-07 이 기록한다. README · `example/README.md` · `tool/verify.dart` · `pubspec.yaml` 을 고친 뒤 `fvm dart run tool/verify.dart` 10/10 을 다시 본다
 - [Phase 5] `.claude/CLAUDE.md` 70 · 173 · 313행이 이미 걷어낸 루트 `analysis_options.yaml` exclude 를 "유지해야 한다" 고 지시한다 (05-REVIEW WR-06, D-09 로 deferred — 마일스톤 끝 `/gsd-map-codebase`). 그 전에 루트 exclude 를 건드리는 작업이 오면 그 지시를 따르지 않는다. `tool/measure_rules.dart` 의 `readRulesTable` · `tool/verify.dart` 의 `readUpstreamRules.readSet` 은 읽지 못하는 줄을 건너뛰는 꼴로 열어 둠 (소유자 결정 2026-10-14). 같은 파일 261행의 pubspec 설명에 4회차 gap 이 더할 `dev_dependencies` 가 없다 — 같은 D-09 로 미룸 (2026-10-15)
 
 ## Deferred Items
@@ -345,6 +343,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-16T17:10:07.432Z
-Stopped at: Completed 06-15-PLAN.md
+Last session: 2026-10-16T23:38:25.000Z
+Stopped at: Phase 06 complete — all phases complete
 Resume file: None
