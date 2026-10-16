@@ -318,7 +318,7 @@ Plans:
   2. `git ls-remote --tags origin` 에 새 버전의 annotated tag 가 보이고, 그 tag 의 `pubspec.yaml` version 과 CHANGELOG 최상단 버전이 tag 이름과 같다
   3. 빈 프로젝트가 새 tag 를 git 의존성(`ref: vX.Y.Z`)으로 받아 `dart analyze` 를 돌리면 기본 규칙 진단과 `riverpod_lint` plugin 진단이 둘 다 보고된다
 
-**Plans**: 15/15 plans executed (11/15 executed) — 06-01 ~ 06-07 첫 실행 (검증 gaps_found 40/41), gap 수정 06-08 ~ 06-11 실행 완료 2026-10-16 (PR #2 → `main` `0038572`) — 재검증 gaps_found 60/63: CHANGELOG 최상단 reader 가 GitHub 과 갈리는 꼴 둘(한 글자 밑줄 setext · 블록 안의 `<!--`)과 smoke 의 UTF-8 아닌 출력, `06-VERIFICATION.md`; **gap 수정 2회차 06-12 ~ 06-15 는 2026-10-16 계획** — 소유자 결정 G7-Q1 (나) 첫 줄 고정 · G7-Q2 smoke 여섯 · G7-Q3 main 병합까지, 06-REVIEW.md 열 발견(아홉 fixed · IN-08 deferred), 11 waves (gap 수정 1회차 4 는 2026-10-16 계획 — 06-VERIFICATION.md 40/41: REL-03 의 version · CHANGELOG 최상단 reader, 06-REVIEW.md 일곱 발견; 소유자 결정 G6-Q1 ~ G6-Q3; 06-01 ~ 06-07 은 2026-10-15 계획 — 06-CONTEXT.md D-01 ~ D-14, 06-RESEARCH.md)
+**Plans**: 15/15 plans executed — 06-01 ~ 06-07 첫 실행 (검증 gaps_found 40/41), gap 수정 06-08 ~ 06-11 실행 완료 2026-10-16 (PR #2 → `main` `0038572`) — 재검증 gaps_found 60/63: CHANGELOG 최상단 reader 가 GitHub 과 갈리는 꼴 둘(한 글자 밑줄 setext · 블록 안의 `<!--`)과 smoke 의 UTF-8 아닌 출력, `06-VERIFICATION.md`; **gap 수정 2회차 06-12 ~ 06-15 는 2026-10-16 계획 · 2026-10-17 실행 완료 (PR #3 → `main` `3418989`, 재검증 대기)** — 소유자 결정 G7-Q1 (나) 첫 줄 고정 · G7-Q2 smoke 여섯 · G7-Q3 main 병합까지, 06-REVIEW.md 열 발견(아홉 fixed · IN-08 deferred), 11 waves (gap 수정 1회차 4 는 2026-10-16 계획 — 06-VERIFICATION.md 40/41: REL-03 의 version · CHANGELOG 최상단 reader, 06-REVIEW.md 일곱 발견; 소유자 결정 G6-Q1 ~ G6-Q3; 06-01 ~ 06-07 은 2026-10-15 계획 — 06-CONTEXT.md D-01 ~ D-14, 06-RESEARCH.md)
 
 Plans:
 
@@ -395,7 +395,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
 | 4. Rule Reselection | 13/13 | Complete    | 2026-10-13 |
 | 5. Documentation | 15/15 | Complete    | 2026-10-15 |
-| 6. Release | 15/15 | gap 수정 2회차 계획됨 — 06-12 ~ 06-15 (재검증 60/63) | - |
+| 6. Release | 15/15 | gap 수정 2회차 실행 완료 — 재검증 대기 (`main` `3418989`) | - |
 
 ## Backlog
 
