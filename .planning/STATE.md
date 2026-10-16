@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 06
 current_phase_name: Release
 status: Phase 06 gap 수정 2회차 실행 중 (06-12 ~ 06-15)
-stopped_at: Completed 06-12-PLAN.md
-last_updated: "2026-10-16T16:18:55.174Z"
+stopped_at: Completed 06-13-PLAN.md
+last_updated: "2026-10-16T16:42:10.424Z"
 last_activity: 2026-10-17
 last_activity_desc: Phase 06 execution started
-state_head: 317d3ffde20b20a8bbd36e9f21ecd472cc715ebb
+state_head: ea2d6647460a87e11583ec6ee43b65e78a38000f
 progress:
   total_phases: 6
   completed_phases: 5
   total_plans: 56
-  completed_plans: 53
+  completed_plans: 54
   percent: 83
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-15)
 ## Current Position
 
 Phase: 06 (Release) — EXECUTING
-Plan: 12 of 15
+Plan: 13 of 15
 Status: Phase 06 gap 수정 2회차 실행 중 (06-12 ~ 06-15)
 Last activity: 2026-10-17 — Phase 06 execution started
 
@@ -115,6 +115,7 @@ Progress: [████████░░] 83%
 | Phase 06 P10 | 12 min | 2 tasks | 1 files |
 | Phase 06 P11 | 6 min | 2 tasks | 0 files |
 | Phase 06 P12 | 28 min | 2 tasks | 7 files |
+| Phase 06 P13 | 8 min | 3 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -309,6 +310,8 @@ Recent decisions affecting current work:
 - [Phase 06]: gap 2회차 plan checker 1회차 blocker 0 · warning 5 (코드 모양이 자기 분석 단언에 걸림 `use_null_aware_elements`, 파이프 하네스가 옛 판에서 멈춤, 앞 빈 줄 거부를 단언하지 않음, 줄바꿈으로 갈라진 옛 머리 주석을 부정 grep 이 못 잡음, 예산 추정 1.5배) → 수정 1회 (null-aware 맵, 15초 겨루기, `blankfirst` · `hdr ''` 입력, 한 줄 토큰 grep 둘, 예산은 설명으로 수용) → 2회차 통과 — info 3
 - [Phase 06]: 06-12: CHANGELOG 최상단은 U+FEFF 를 뗀 파일 첫 줄의 엄격한 ## X.Y.Z - <날짜 자리> 제목이고 Markdown 첫 h2 와 같을 때만 통과한다 (소유자 결정 G7-Q1 (나))
 - [Phase 06]: 06-12: 첫 줄 · 둘째 reader 실패는 종료 코드 70 이 아니라 [3/10] 블록이고 CHANGELOG 쪽 비교만 건너뛴다 (planner 선택 — 두 reader 의 값을 보인다)
+- [Phase 06]: 06-13: smoke runProcess 는 Utf8Decoder(allowMalformed: true) 로 출력을 받고 제한을 Future.wait(종료 코드 · stdout · stderr) 에 건다; judge 는 종료 코드 3 인데 JSON 에 error 줄이 없으면 실패 (c″), include 코드 셋 (G7-Q2)
+- [Phase 06]: 06-13: killTree 는 SIGKILL 직전 표를 다시 읽어 부모 사슬에 남은 pid 만 끊고 사슬 밖의 얼린 pid 는 SIGCONT 로 푼다, 표를 못 읽으면 stderr 한 줄; finally 경합 · pid 재사용은 강제할 수 없어 소스 · 회귀로만 본다
 
 ### Pending Todos
 
@@ -336,6 +339,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-16T16:18:54.693Z
-Stopped at: Completed 06-12-PLAN.md
+Last session: 2026-10-16T16:42:09.947Z
+Stopped at: Completed 06-13-PLAN.md
 Resume file: None
