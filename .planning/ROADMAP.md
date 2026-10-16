@@ -318,7 +318,7 @@ Plans:
   2. `git ls-remote --tags origin` 에 새 버전의 annotated tag 가 보이고, 그 tag 의 `pubspec.yaml` version 과 CHANGELOG 최상단 버전이 tag 이름과 같다
   3. 빈 프로젝트가 새 tag 를 git 의존성(`ref: vX.Y.Z`)으로 받아 `dart analyze` 를 돌리면 기본 규칙 진단과 `riverpod_lint` plugin 진단이 둘 다 보고된다
 
-**Plans**: 11 plans — 7 executed, gap 수정 4 (06-08 ~ 06-11, 2026-10-16 계획 — 06-VERIFICATION.md 40/41: REL-03 의 version · CHANGELOG 최상단 reader, 06-REVIEW.md 일곱 발견; 소유자 결정 G6-Q1 ~ G6-Q3; 06-01 ~ 06-07 은 2026-10-15 계획 — 06-CONTEXT.md D-01 ~ D-14, 06-RESEARCH.md; 8 waves)
+**Plans**: 8/11 plans executed — 7 executed, gap 수정 4 (06-08 ~ 06-11, 2026-10-16 계획 — 06-VERIFICATION.md 40/41: REL-03 의 version · CHANGELOG 최상단 reader, 06-REVIEW.md 일곱 발견; 소유자 결정 G6-Q1 ~ G6-Q3; 06-01 ~ 06-07 은 2026-10-15 계획 — 06-CONTEXT.md D-01 ~ D-14, 06-RESEARCH.md; 8 waves)
 
 Plans:
 
@@ -340,7 +340,7 @@ Plans:
 - [x] 06-07-PLAN.md — 처리 기록: `02-UAT.md` 4 · 6번 pass, `05-UAT.md` 1 · 2 · 4 · 5번 `closed_in`, `05-REVIEW-DISPOSITION.md` IN-12 · IN-13 · IN-14 fixed (open 0, deferred 는 WR-06 — D-09)
 
 **Wave 6** *(gap 수정 — 06-VERIFICATION.md 40/41 · 06-REVIEW.md 일곱 발견, 소유자 결정 2026-10-16 G6-Q1 ~ G6-Q3; 파일이 겹치지 않아 나란히 — worktree 격리, 꺼져 있으면 06-08 → 06-09 차례로)*
-- [ ] 06-08-PLAN.md — `[3/10]` (i) 의 version 을 `package:yaml` 값으로 · (h) 의 pubspec 비교를 원문 전체로 · `pubspecReleaseVersion` 을 `pubspecVersionText` 위에 (CR-01 · IN-03), `changelogTop` 을 `package:markdown` (새 dev 의존성) 으로 해석한 첫 h2 (깊이 무관, U+FEFF 떼기) 로 (WR-02 · 검증자의 HTML 주석 꼴 — G6-Q1 (가)); 복제본에서 꼴 아홉을 세 경로(평소 · `--tag` · `GITHUB_REF_NAME`)로 실패시키고 고치기 전 판과 대조해 M98 ~ M106 기록; skill 세 줄 · `example/README.md` 11행의 의존성 문장을 `yaml` · `markdown` 둘로 (G6-R2-Q1) (REL-03; D-04 · D-05)
+- [x] 06-08-PLAN.md — `[3/10]` (i) 의 version 을 `package:yaml` 값으로 · (h) 의 pubspec 비교를 원문 전체로 · `pubspecReleaseVersion` 을 `pubspecVersionText` 위에 (CR-01 · IN-03), `changelogTop` 을 `package:markdown` (새 dev 의존성) 으로 해석한 첫 h2 (깊이 무관, U+FEFF 떼기) 로 (WR-02 · 검증자의 HTML 주석 꼴 — G6-Q1 (가)); 복제본에서 꼴 아홉을 세 경로(평소 · `--tag` · `GITHUB_REF_NAME`)로 실패시키고 고치기 전 판과 대조해 M98 ~ M106 기록; skill 세 줄 · `example/README.md` 11행의 의존성 문장을 `yaml` · `markdown` 둘로 (G6-R2-Q1) (REL-03; D-04 · D-05)
 - [ ] 06-09-PLAN.md — `tool/smoke.dart`: `judge` 가 include 사슬 진단을 두 주소 각각의 실패 사유로 더하고 `(reasons, shown)` 을 돌려줌 (WR-01 · IN-02), 단계별 시간 제한(create 2분 · pub get 5분 · analyze 5분 — 넘으면 끊고 69) · `finally` · SIGINT(130) 정리 (WR-03 · IN-01), 오프라인 하네스 · SIGINT 끝에서 끝까지 · 전체 smoke `v2.0.0` 회귀 (REL-04; G6-Q2; D-09 · D-10)
 
 **Wave 7** *(blocked on Wave 6)*
@@ -385,7 +385,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
 | 4. Rule Reselection | 13/13 | Complete    | 2026-10-13 |
 | 5. Documentation | 15/15 | Complete    | 2026-10-15 |
-| 6. Release | 7/11 | gap 수정 계획 (06-08 ~ 06-11) | - |
+| 6. Release | 8/11 | gap 수정 계획 (06-08 ~ 06-11) | - |
 
 ## Backlog
 

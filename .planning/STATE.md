@@ -4,16 +4,16 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 06
 current_phase_name: Release
-status: Phase 06 gaps_found (40/41) — gap 계획 대기 (/gsd-plan-phase 06 --gaps)
-stopped_at: Completed 06-07-PLAN.md
-last_updated: "2026-10-16T05:44:14.499Z"
-last_activity: 2026-10-15
+status: executing
+stopped_at: Completed 06-08-PLAN.md
+last_updated: "2026-10-16T09:57:03.417Z"
+last_activity: 2026-10-16
 last_activity_desc: Phase 06 execution started
-state_head: 3e18be6f608fa2fbfc77217d2f16502252d6fdd3
+state_head: c6187cd816e4b5407179c83d2e8250be1a4529d7
 progress:
   total_phases: 6
   completed_phases: 5
-  total_plans: 48
+  total_plans: 52
   completed_plans: 48
   percent: 83
 ---
@@ -30,9 +30,9 @@ See: .planning/PROJECT.md (updated 2026-10-15)
 ## Current Position
 
 Phase: 06 (Release) — EXECUTING
-Plan: 7 of 7
-Status: Phase 06 gaps_found (40/41) — gap 계획 대기 (/gsd-plan-phase 06 --gaps)
-Last activity: 2026-10-15 — Phase 06 execution started
+Plan: 8 of 11
+Status: Ready to execute
+Last activity: 2026-10-16 — Phase 06 execution started
 
 Progress: [████████░░] 83%
 
@@ -110,6 +110,7 @@ Progress: [████████░░] 83%
 | Phase 06 P05 | 8 min | 3 tasks | 0 files |
 | Phase 06 P06 | 18 min | 3 tasks | 0 files |
 | Phase 06 P07 | 2 min | 2 tasks | 3 files |
+| Phase 06 P08 | 25 min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -291,6 +292,8 @@ Recent decisions affecting current work:
 - [Phase 06]: 05-UAT 1번 closed_in 의 06-05 Task 2 부분은 사실대로 적었다 — orchestrator 가 README 를 대신 따라 하고 소유자가 화면을 봄, 막힌 자리 없음 (06-07)
 - [Phase 06]: 처리 기록을 닫았다 — 02-UAT 4 · 6번 pass (PR #1 의 pull_request 38845784725, workflow_dispatch 38850984674; Run workflow 버튼의 화면 확인은 06-UAT), 05-UAT 1 · 2 · 4 · 5번 closed_in, 05-REVIEW-DISPOSITION IN-12 ~ 14 fixed. deferred 는 WR-06 (D-09) 하나, open 0. 커밋 41785ad · 5ceead2 는 push 하지 않았다 (06-07)
 - [Phase 06]: Phase 06 검증 gaps_found 40/41 — 이미 올린 v2.0.0 (tag · CI · smoke) 은 문제없음. gap 은 다음 릴리스의 [3/10] (i): version 을 줄 단위로 읽어 YAML 값과 대조하지 않음 (CR-01), CHANGELOG 최상단을 HTML 주석 · 펜스 · 들여 쓴 제목 · setext 와 구별하지 못함 (verifier 가 찾은 HTML 주석 꼴로 --tag 거짓 통과). CHANGELOG 읽기 방식(Markdown 해석기 / fail-closed)은 소유자가 gap 계획 전에 정한다. 저장소 안쪽 고침이라 새 버전 번호는 필요 없다.
+- [Phase 06]: [3/10] (i) 는 pubspec version 을 package:yaml 값에서, CHANGELOG 최상단을 package:markdown (GitHub Flavored) 해석의 첫 h2 (깊이 무관) 에서 읽고, (h) 는 줄 단위 reader 의 원문 전체를 YAML version 과 견준다 — 두 겹 (06-08, G6-Q1)
+- [Phase 06]: raw HTML <h2> 는 해석기가 글자로 두어 CHANGELOG 최상단 검사 범위 밖으로 문장으로만 적었다 — VERSIONING.md 가 정한 꼴 밖 (06-08)
 
 ### Pending Todos
 
@@ -318,6 +321,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-16T04:44:23.043Z
-Stopped at: Completed 06-07-PLAN.md
+Last session: 2026-10-16T09:57:02.985Z
+Stopped at: Completed 06-08-PLAN.md
 Resume file: None
