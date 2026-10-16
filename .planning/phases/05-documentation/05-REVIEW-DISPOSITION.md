@@ -41,15 +41,15 @@ findings:
     title: "(f) · (g) 의 범위 문장이 펜스 안의 네 칸 들여 쓴 ```` ``` ```` 줄을 적지 않는다 — 그 줄이 `fencedLines` 의 펜스를 닫아 진짜 펜스 안의 낡은 `ref:` 로 통과"
   - id: IN-12
     severity: info
-    disposition: deferred
+    disposition: fixed
     title: "(h) 가 값 없는 최상위 키 바로 아래의 스칼라 값 줄을 \"아래 키\" 로 센다 — `include:` 값을 다음 줄에 적은 `lib/base.yaml` 로 analyzer · 정답지는 모두 통과인데 `[3/10]` 만 실패"
   - id: IN-13
     severity: info
-    disposition: deferred
+    disposition: fixed
     title: "`pubspec.yaml` 의 `dependencies` 주석이 `include: package:flutter_lints/flutter.yaml` 을 쓰는 파일을 `lib/analysis_options.yaml` 로 적는다 — 지금은 `lib/base.yaml`"
   - id: IN-14
     severity: info
-    disposition: deferred
+    disposition: fixed
     title: "`compareLineReadersWithYaml` 문서 주석의 \"그 밖의 예외는 지금처럼 main 이 받는다\" 가 맞지 않는다 — `loadYaml` 의 `RangeError` 는 main 을 지나 종료 코드 255"
   - id: WR-15
     severity: warning
@@ -141,9 +141,9 @@ recorded: 2026-10-14T22:09:33.972Z
 | WR-14 | warning | skipped | 소유자 결정 G3-Q2 — 문장을 검사 범위에 맞춤, 검사는 넓히지 않음; 05-12-PLAN.md Task 2 (d8b61b0) — example/README.md 116행 · tool/verify.dart 의 (e) 문서 주석이 다른 패키지 쪽은 .yaml · .yml 로 끝나는 주소만 본다고 적음 |
 | IN-08 | info | skipped | 소유자 결정 G2-Q2 — 문장을 검사 범위에 맞춤, 검사는 넓히지 않음; 05-10-PLAN.md Task 3 (d2d74c4) — example/README.md 116 · 436행과 tool/verify.dart 의 (e) 주석이 주소의 끝 글자와 뒤에 붙은 문장 부호의 결과를 적음 |
 | IN-10 | info | skipped | 소유자 결정 G4-Q2 — 문장을 실제 범위에 맞춤, 검사는 고치지 않음; 05-14-PLAN.md Task 2 (0f62057) — README.md 382행 · example/README.md 116 · 395행 · tool/verify.dart 의 fencedLines · checkShippedComposition 문서 주석이 펜스 안의 네 칸 이상 들여 쓴 펜스 줄은 그 펜스를 닫는 것으로 본다고 적음 |
-| IN-12 | info | deferred | 권고 이유 승인 — Phase 6 (Release) 로 미룸, 소유자 결정 2026-10-15: 막는 쪽의 거짓 실패이고 지금 lib/base.yaml 은 그 꼴을 쓰지 않음, 고치는 자리는 (h) 의 keysSeenByLineReader 하나 (길 B 안) — 05-VERIFICATION 4회차 재검증 경고 |
-| IN-13 | info | deferred | 권고 이유 승인 — Phase 6 (Release) 로 미룸, 소유자 결정 2026-10-15: 동작 영향 없는 주석이고 Phase 6 이 pubspec.yaml 의 version 을 바꿀 때 함께 고침 (05-14 가 기존 줄을 막아 새 승인이 필요했던 자리) — 05-VERIFICATION 4회차 재검증 경고 |
-| IN-14 | info | deferred | 권고 이유 승인 — Phase 6 (Release) 로 미룸, 소유자 결정 2026-10-15: RangeError 는 종료 코드 255 로 멈춰 통과로 끝나지 않음 (막는 쪽), catch 하나나 주석 한 줄 (길 B 안) — 05-VERIFICATION 4회차 재검증 경고 |
+| IN-12 | info | fixed | 06-01-PLAN.md Task 2 (971a6f2) — tool/verify.dart 의 keysSeenByLineReader 에 keyLikePattern 을 더해 값 없는 최상위 키 아래의 스칼라 값 줄을 키로 담지 않음 (길 B 안 — keyPattern · valueLessKeyPattern 은 그대로), M97 — include: 값을 다음 줄에 둔 lib/base.yaml 이 10/10, M78 회귀 그대로 (소유자 결정 2026-10-15 — Phase 6 로 미룸, 06-CONTEXT.md 정한 대로 고치는 다섯) |
+| IN-13 | info | fixed | 06-04-PLAN.md Task 1 (704bf56) — pubspec.yaml 13행 주석의 파일 이름을 lib/base.yaml 로, 릴리스 커밋(version 2.0.0)에서 함께 (소유자 결정 2026-10-15 — Phase 6 로 미룸, 06-CONTEXT.md 정한 대로 고치는 다섯) |
+| IN-14 | info | fixed | 06-01-PLAN.md Task 2 (971a6f2) — 주석 · 문장만: tool/verify.dart 머리 주석의 종료 코드 목록에 255 (package:yaml 이 YamlException 밖의 Error 를 던진 경우 — main 이 받지 않는다) 와 compareLineReadersWithYaml 문서 주석, example/README.md 종료 코드 표의 255 행과 (05-14) 읽는 법의 범위 — 코드는 그대로 (06-CONTEXT.md D-13, 소유자 결정 2026-10-15 — Phase 6 로 미룸) |
 | WR-15 | warning | fixed | 05-14-PLAN.md Task 1 (77e0b88) — tool/verify.dart 의 [3/10] (h) compareLineReadersWithYaml 이 pubspecReleaseVersion 의 값을 package:yaml 이 읽은 version 과 견줌, pubspec.yaml 의 dev_dependencies 에 yaml, M87 (소유자 결정 G4-Q1 — 05-VERIFICATION 4회차 gap) (not in the current review) |
 | WR-16 | warning | fixed | 05-14-PLAN.md Task 1 (77e0b88) — tool/verify.dart 의 [3/10] (h) compareLineReadersWithYaml 이 declaredRuleNames · enabledLanguageOptions · findUnexpectedKeys · readShippedPluginConstraint 의 값을 package:yaml 이 읽은 값과 견줌, M86 · M88 ~ M91 (소유자 결정 G4-Q1 — 05-VERIFICATION 4회차 gap) (not in the current review) |
 | IN-11 | info | fixed | 05-14-PLAN.md Task 2 (0f62057) — tool/verify.dart 의 stripPlugins 문서 주석을 줄 번호가 원본과 같다 (끝의 빈 줄은 빠질 수 있다) 로 (소유자 결정 G4-Q2) (not in the current review) |
