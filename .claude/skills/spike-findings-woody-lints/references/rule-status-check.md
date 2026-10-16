@@ -11,7 +11,7 @@ MANIFEST.md 의 `verify-harness-tool-behavior` 에서 이 영역에 걸리는 �
 - deprecated / removed 규칙 검사에 쓰는 배포 파일 복사본은 **저장소 안**에 둔다. `deprecated_lint` / `removed_lint` 는 그 파일이 속한 패키지의 pubspec SDK 하한이 해당 버전 이상일 때만 보고되고, pubspec 이 없는 임시 폴더에서는 보고되지 않는다 (005)
 - 규칙 검사는 저장소 루트에서 **복사본 폴더를 인자로** 준다 (`dart analyze build/woody_rule_check`). 그 폴더의 진단만 나오고 plugin 을 준비하지 않으며 `example/` 의 상태에 기대지 않는다. 005 의 "루트에서 인자 없이"를 대신한다 (007)
 - `lib/`, `pubspec.yaml` 은 바꾸지 않는다. 루트 `analysis_options.yaml` 은 기존 exclude 항목(`lib/analysis_options.yaml`)을 그대로 둔다 (`lib/` 는 읽기만 한다)
-- 검증 스크립트는 Dart 이고 `dart:io` · `dart:convert` 에 더해, 개발용 의존성(`dev_dependencies`) 둘을 쓴다 — `package:yaml` 은 YAML 대조에만, `package:markdown` 은 CHANGELOG 최상단 제목을 GitHub 화면과 같게 읽는 데만 (D-11, 2026-10-15 G4-Q1 · 2026-10-16 G6-Q1)
+- 검증 스크립트는 Dart 이고 `dart:io` · `dart:convert` 에 더해, 개발용 의존성(`dev_dependencies`) 둘을 쓴다 — `package:yaml` 은 YAML 대조와 `pubspec.yaml` 의 version 읽기에, `package:markdown` 은 CHANGELOG 첫 줄의 최상단 제목을 Markdown 해석의 첫 h2 와 견주는 둘째 reader 로만 (D-11, 2026-10-15 G4-Q1 · 2026-10-16 G6-Q1 · G7-Q1 · IN-09)
 - 실측은 저장소 고정 SDK (Flutter 3.47.5 / Dart 3.13.4) 에서 한다
 
 MANIFEST.md 의 `preset-split-include-behavior` 에서 이 영역에 걸리는 것.
