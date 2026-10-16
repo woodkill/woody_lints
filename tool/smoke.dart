@@ -22,8 +22,11 @@
 //       기반 세트의 규칙은 쓰지 않는다: 템플릿이 이미 flutter_lints 를 include 하므로 include 가
 //       통째로 깨져도 그 줄은 나온다 (06-RESEARCH.md Pitfall 5).
 //   (2′) 어느 주소든 `analysis_options.yaml` 에 include 사슬이 끊긴 진단(`include_file_not_found` ·
-//       `included_file_warning`)이 있으면 실패 — 위반 두 줄이 그대로 나와도 (06-REVIEW.md WR-01,
-//       소유자 결정 G6-Q2).
+//       `included_file_warning` · `included_file_parse_error`)이 있으면 실패 — 위반 두 줄이 그대로
+//       나와도 (06-REVIEW.md WR-01 · WR-04, 소유자 결정 G6-Q2 · G7-Q2).
+//   (2″) 어느 주소든 `dart analyze` 의 종료 코드가 3 (error 있음) 인데 JSON 진단에 `error` 줄이 하나도
+//       없으면 실패 — 옵션 파일 쪽 error 는 JSON 에 오지 않고 종료 코드만 3 이다 (2026-10-16 실측,
+//       Dart 3.13.4; 06-REVIEW.md WR-04, 소유자 결정 G7-Q2).
 //   (3) 받은 프로젝트의 pubspec.lock 에서 woody_lints 항목이 source git, url 이 README 와 같고,
 //       resolved-ref 가 기대 커밋과 같다.
 //
@@ -40,10 +43,12 @@
 // 종료 코드: 0 통과 / 1 판정 실패 / 64 사용법 오류
 //            / 69 하위 명령 실패 (git rev-parse · flutter create · flutter pub get) 또는 단계의 시간 제한
 //                 초과 (create 2분 · pub get 5분 · dart analyze 주소마다 5분 — 넘으면 그 프로세스를 끊고
-//                 임시 폴더를 지운다; 06-REVIEW.md WR-03, 소유자 결정 G6-Q2)
+//                 임시 폴더를 지운다; 06-REVIEW.md WR-03, 소유자 결정 G6-Q2). 제한은 종료 코드와
+//                 출력 수집 전체에 걸린다 (06-REVIEW.md WR-06)
 //            / 70 예외로 끝남 / 78 실행 중인 SDK 가 .fvmrc 와 다름
 //            / 130 Ctrl-C (SIGINT) — 도는 하위 명령을 끊고 임시 폴더를 지운 뒤 끝낸다 (06-REVIEW.md IN-01)
-//            / 255 세 예외 밖의 처리되지 않은 예외 — 임시 폴더는 finally 가 지운다
+//            / 255 세 예외 밖의 처리되지 않은 예외 (동기 흐름) — 임시 폴더는 finally 가 지운다; 하위 명령
+//                  출력의 UTF-8 아닌 바이트는 U+FFFD 로 받아 이 경로로 가지 않는다 (06-REVIEW.md IN-04)
 //
 // 의존성은 dart:io · dart:convert 뿐이다 (루트 pubspec.yaml 은 그대로). tool/verify.dart 를 import 하지
 // 않는다 — main 이 둘인 파일이 묶이므로 쓰는 도우미(Flutter root 찾기 · lock 항목 읽기 · 진단 정규화 ·
@@ -90,11 +95,17 @@ const pluginFailureHeader =
 /// `dart analyze` 가 정상적으로 끝났을 때의 종료 코드 (진단 없음 / warning / error 까지).
 const analyzeExitCodes = [0, 2, 3];
 
-/// include 사슬이 끊겼을 때 `analysis_options.yaml` 에 나는 진단의 코드 둘.
+/// include 사슬이 끊겼을 때 `analysis_options.yaml` 에 나는 진단의 코드 셋.
 ///
 /// 06-REVIEW.md WR-01 — 복제본에서 `lib/recommended.yaml` 의 include 하나를 없는 파일로 바꿔 확인한
-/// 코드다. 템플릿이 내는 다른 진단(예: 규칙 이름의 오타)과 섞이지 않게 둘로 좁힌다.
-const includeErrorCodes = {'include_file_not_found', 'included_file_warning'};
+/// 코드다. 템플릿이 내는 다른 진단(예: 규칙 이름의 오타)과 섞이지 않게 좁힌다. 셋째는 include 받는
+/// 파일이 YAML 로 읽히지 않을 때의 코드 — 사람용 출력에만 나오고 `--format=json` 의 `diagnostics` 에는
+/// 오지 않는다 (2026-10-16 실측, Dart 3.13.4; 06-REVIEW.md WR-04) — 그래서 (c″) 가 종료 코드로 잡는다.
+const includeErrorCodes = {
+  'include_file_not_found',
+  'included_file_warning',
+  'included_file_parse_error',
+};
 
 /// `flutter create` 의 시간 제한.
 ///
@@ -395,6 +406,18 @@ Future<void> killTree(Process process) async {
 /// 끊고 `(result: null, elapsed, timedOut: true)` 다 — SIGKILL 은 SIGTERM 을 무시하는 상태(멈춘 받기)에서도
 /// 끊는다 (06-REVIEW.md WR-03). `Process.run` 은 제한을 둘 수 없어 `Process.start` 로 띄우고, stdout ·
 /// stderr 는 기다리기 전에 함께 모으기 시작한다 — 한쪽 파이프가 차면 하위 명령이 멈춰 교착한다.
+///
+/// 출력은 `Utf8Decoder(allowMalformed: true)` 로 받는다 — 엄격한 decoder 는 아무도 듣지 않는 future 에서
+/// `FormatException` 을 내어 처리되지 않은 비동기 예외(255)가 되고 `main` 의 `finally` 를 건너뛰어, 새
+/// pub cache 가 든 임시 폴더가 남았다 (06-VERIFICATION.md 2회차 둘째 gap — 하네스 재현, 06-REVIEW.md
+/// IN-04). 출력은 화면 표시와 JSON 판정에만 쓰이므로 깨진 바이트를 U+FFFD 로 바꿔도 뜻이 같다 (소유자
+/// 결정 G7-Q2).
+///
+/// 제한은 종료 코드만이 아니라 출력 수집에도 걸린다 (`Future.wait` 의 셋). 하위 명령이 끝나도 파이프를
+/// 물려받은 자손이 살아 있으면 `out` · `err` 가 끝나지 않아 제한 없이 기다렸다 (06-REVIEW.md WR-06 —
+/// `sleep 20 & echo hi` 에서 20초). 제한 뒤 늦게 끝나는 원래 future 의 오류는 `timeout` 이 버린다. 이 꼴의
+/// 자손(부모가 먼저 끝나 pid 1 로 옮겨 간 것)은 [killTree] 가 끊지 못한다 — 머리 주석의 범위 문장
+/// (06-REVIEW.md IN-06 (b)).
 Future<({ProcessResult? result, Duration elapsed, bool timedOut})> runProcess(
   String executable,
   List<String> args, {
@@ -416,18 +439,19 @@ Future<({ProcessResult? result, Duration elapsed, bool timedOut})> runProcess(
     await haltIfInterrupted();
   }
   try {
-    final out = utf8.decoder.bind(process.stdout).join();
-    final err = utf8.decoder.bind(process.stderr).join();
-    final code = await process.exitCode
-        .then<int?>((code) => code)
+    const decoder = Utf8Decoder(allowMalformed: true);
+    final out = decoder.bind(process.stdout).join();
+    final err = decoder.bind(process.stderr).join();
+    final done = await Future.wait<Object>([process.exitCode, out, err])
+        .then<List<Object>?>((v) => v)
         .timeout(timeout, onTimeout: () => null);
-    if (code == null) {
+    if (done == null) {
       await killTree(process);
       watch.stop();
       await haltIfInterrupted();
       return (result: null, elapsed: watch.elapsed, timedOut: true);
     }
-    final result = ProcessResult(process.pid, code, await out, await err);
+    final result = ProcessResult(process.pid, done[0] as int, done[1], done[2]);
     watch.stop();
     await haltIfInterrupted();
     return (result: result, elapsed: watch.elapsed, timedOut: false);
@@ -654,8 +678,13 @@ Future<AnalyzeOutcome?> analyzeOnce({
 ///
 /// 순서는 tool/verify.dart 의 정답지 비교와 같은 배타 순서에 include 사슬을 더한 것이다 —
 /// (a) plugin 준비 실패의 머리말, (b) 도구가 죽음 (종료 코드가 0 · 2 · 3 밖이거나 JSON 아님),
-/// (c′) `analysis_options.yaml` 의 [includeErrorCodes] 줄마다 사유 하나, (c) 위반 두 줄의 존재.
-/// (a) · (b) 가 걸리면 뒤는 보지 않는다.
+/// (c′) `analysis_options.yaml` 의 [includeErrorCodes] 줄마다 사유 하나, (c″) 종료 코드 3 인데 JSON 에
+/// `error` 줄이 하나도 없으면 사유 하나, (c) 위반 두 줄의 존재. (a) · (b) 가 걸리면 뒤는 보지 않는다.
+///
+/// (c″) 를 보는 까닭: 종료 코드 3 은 error 가 있다는 뜻인데 옵션 파일 쪽 error(include 받는 파일의 깨진
+/// YAML — `included_file_parse_error`)는 JSON 에 오지 않는다. 받는 쪽에서 `lib/codegen.yaml` 이 깨지면
+/// 생성 파일 제외 · `invalid_annotation_target: ignore` 가 통째로 빠지는데도 통과했다 (06-REVIEW.md
+/// WR-04, 소유자 결정 G7-Q2).
 ///
 /// (c′) 를 보는 까닭: 두 주소 모두 `lib/recommended.yaml` 을 거쳐 조각 셋을 받으므로 `codegen.yaml` 이
 /// 풀리지 않아도 위반 두 줄은 그대로 나온다 — CLAUDE.md Compatibility 의 codegen 부분이 받는 쪽에서
@@ -664,7 +693,7 @@ Future<AnalyzeOutcome?> analyzeOnce({
 ///
 /// 돌려주는 값: `reasons` 는 요약의 사유 목록이고 비어 있으면 통과다. `shown` 은 그 주소의 `판정:`
 /// 줄 — (a) · (b) 면 사유에서 주소 이름을 뗀 글자, 아니면 `… 있음 · … 없음` 에 include 사유가 있을 때
-/// ` · include 사슬 끊김 N줄` 을 잇는다. 조건과 문구를 여기 한 곳에만 두어 runSmoke 가 다시 적지
+/// ` · include 사슬 끊김 N줄` 을, (c″) 면 ` · 종료 코드 3 인데 error 없음` 을 잇는다. 조건과 문구를 여기 한 곳에만 두어 runSmoke 가 다시 적지
 /// 않게 한다 (06-REVIEW.md IN-02).
 ({List<String> reasons, String shown}) judge(AnalyzeOutcome outcome) {
   ({List<String> reasons, String shown}) fatal(String what) =>
@@ -691,6 +720,20 @@ Future<AnalyzeOutcome?> analyzeOnce({
     }
   }
 
+  // (c″) 종료 코드 3 (error 있음) 인데 JSON 에 error 줄이 없다 — 둘째 칸(강도)이 `error` 인 줄을 찾는다.
+  bool isErrorLine(String line) {
+    final cells = line.split('  ');
+    return cells.length >= 2 && cells[1] == 'error';
+  }
+
+  var exitWithoutError = false;
+  if (outcome.exitCode == 3 && !lines.any(isErrorLine)) {
+    reasons.add(
+      '${outcome.name}: 종료 코드 3 인데 JSON 에 error 가 없다 (옵션 파일의 error — include 사슬)',
+    );
+    exitWithoutError = true;
+  }
+
   // (c) 위반 두 줄.
   final file = RegExp.escape(violationsFile);
   final missing = <String>{};
@@ -707,9 +750,11 @@ Future<AnalyzeOutcome?> analyzeOnce({
 
   String mark(String rule) => '$rule ${missing.contains(rule) ? '없음' : '있음'}';
   final include = includeBroken > 0 ? ' · include 사슬 끊김 $includeBroken줄' : '';
+  final noError = exitWithoutError ? ' · 종료 코드 3 인데 error 없음' : '';
   return (
     reasons: reasons,
-    shown: '${mark(expectedBaseRule)} · ${mark(expectedPluginRule)}$include',
+    shown:
+        '${mark(expectedBaseRule)} · ${mark(expectedPluginRule)}$include$noError',
   );
 }
 
