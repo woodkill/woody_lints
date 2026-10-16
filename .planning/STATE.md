@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 06
 current_phase_name: Release
 status: executing
-stopped_at: Completed 06-05-PLAN.md
-last_updated: "2026-10-16T03:24:30.849Z"
+stopped_at: Completed 06-06-PLAN.md
+last_updated: "2026-10-16T04:37:36.507Z"
 last_activity: 2026-10-15
 last_activity_desc: Phase 06 execution started
-state_head: 5076ed5f295a1480075ce66ef48b418ff2351d44
+state_head: ad09d6e0e973843a52232ab68496bcdf22082def
 progress:
   total_phases: 6
   completed_phases: 5
   total_plans: 48
-  completed_plans: 46
+  completed_plans: 47
   percent: 83
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-15)
 ## Current Position
 
 Phase: 06 (Release) — EXECUTING
-Plan: 5 of 7
+Plan: 6 of 7
 Status: Executing Phase 06
 Last activity: 2026-10-15 — Phase 06 execution started
 
@@ -108,6 +108,7 @@ Progress: [████████░░] 83%
 | Phase 06 P03 | 13 min | 2 tasks | 1 files |
 | Phase 06 P04 | 140min | 3 tasks | 9 files |
 | Phase 06 P05 | 8 min | 3 tasks | 0 files |
+| Phase 06 P06 | 18 min | 3 tasks | 0 files |
 
 ## Accumulated Context
 
@@ -284,6 +285,8 @@ Recent decisions affecting current work:
 - [Phase 06]: 06-04: 예행 smoke 1회차는 네트워크 정지(pub get 70분, plugin 받기 41분 정지 뒤 orchestrator 가 끊음)로 무효 — 같은 커밋으로 다시 돌려 rc 0, README · 스크립트는 고치지 않았다
 - [Phase 06]: 06-05: 소유자 응답 tag (2026-10-16T03:15:24Z) 뒤 git push origin v2.0.0 — annotated tag v2.0.0 은 예행 통과 커밋 704bf56 을 가리키고 옮기거나 지우지 않는다 (잘못이면 v2.0.1)
 - [Phase 06]: 06-05: README 손 따라 하기는 막힌 자리 없음 — 작은 점 둘(넣는 자리의 sort_pub_dependencies, 설치 블록의 dev_dependencies 머리 줄)은 나중에 README 만 고친다
+- [Phase 06]: main = 2.0.0 (merge commit 5ee5a12), ref: main 프로젝트는 pub upgrade 때 받는다 — PR #1 을 소유자 응답 merge (2026-10-16T04:25:06Z) 뒤 gh pr merge 1 --merge 로 합쳤고 부모는 90a2736 · ad09d6e, v2.0.0 은 main 의 조상, 작업 브랜치와 tag 는 그대로
+- [Phase 06]: Phase 2 가 미룬 확인 4번 (pull_request 실행 38845784725) 과 6번의 자동화 부분 (workflow_dispatch 실행 38850984674) 이 둘 다 평소 모드 10/10 으로 통과했다 — Run workflow 버튼의 화면 확인은 phase 끝 UAT 에 남는다
 
 ### Pending Todos
 
@@ -311,6 +314,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-16T03:24:25.825Z
-Stopped at: Completed 06-05-PLAN.md
+Last session: 2026-10-16T04:37:34.872Z
+Stopped at: Completed 06-06-PLAN.md
 Resume file: None
