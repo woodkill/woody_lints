@@ -105,7 +105,7 @@ status: complete
 
 ### (2) Task 2 — push · CI · PR
 
-**push gate (push 전, 적힌 그대로 rc 0):** `git fetch` 뒤 범위 `ad09d6e..75f102f` (18커밋, 바뀐 파일 25개). 더해진 줄 전부에서 (1) 절대 경로 · 홈 · 임시 폴더 꼴 0줄, (2) `LEAK?` 0 (같은 자리에서 심은 경로 `lib/zz_planted_leak.dart` 는 `LEAK?` 로 잡힘), (3) `fixes? made in|proposed fixes in` 0줄; orchestrator 상태 파일 셋은 범위에 없음; `.planning/` 밖 작업 트리 깨끗. 덧붙여 계정 이메일 글자도 0줄.
+**push gate (push 전, 적힌 그대로 rc 0):** `git fetch` 뒤 범위 `ad09d6e..75f102f` (18커밋, 바뀐 파일 25개). 더해진 줄 전부에서 (1) 절대 경로 · 홈 · 임시 폴더 꼴 0줄, (2) `LEAK?` 0 (같은 자리에서 일부러 심은 가짜 경로 하나는 `LEAK?` 로 잡힘), (3) `fixes? made in|proposed fixes in` 0줄; orchestrator 상태 파일 셋은 범위에 없음; `.planning/` 밖 작업 트리 깨끗. 덧붙여 계정 이메일 글자도 0줄.
 
 - 첫 커밋: `6265265 docs(06-06): main 병합 · pull_request · workflow_dispatch plan 완료 — SUMMARY, STATE, ROADMAP 진행`
 - 마지막 커밋: `75f102f docs(review): 06 처리 기록 — CR-01 · WR-01 ~ WR-03 · IN-01 ~ IN-03 fixed (gap 수정 06-08 · 06-09, open 0)`
