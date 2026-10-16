@@ -39,6 +39,8 @@
 // 확인한다)만 쓴다 — `flutter create` · `flutter pub get` 은 그 SDK 의 bin/flutter, `dart analyze` 는
 // 실행 중인 dart 다. PATH 의 이름으로 부르는 것은 저장소에서 돌리는 git 하나뿐이다 (하위 명령을 끊을 때
 // 자손 프로세스를 찾는 ps 는 절대 경로 /bin/ps 로 부른다).
+// 부모가 먼저 끝난 자손(pid 1 로 옮겨 간 것 — 예: `sh -c 'sleep N & echo hi'` 의 sleep)은 끊지 못한다 —
+// dart:io 는 하위 명령을 새 프로세스 그룹으로 띄울 수 없다 (06-REVIEW.md IN-06).
 //
 // 종료 코드: 0 통과 / 1 판정 실패 / 64 사용법 오류
 //            / 69 하위 명령 실패 (git rev-parse · flutter create · flutter pub get) 또는 단계의 시간 제한
@@ -122,6 +124,12 @@ const analyzeTimeout = Duration(minutes: 5);
 
 /// SIGINT 처리기가 끊을, 지금 도는 하위 명령 ([runProcess] 가 띄운 동안만 값이 있다).
 Process? runningChild;
+
+/// [runProcess] 가 띄우는 중인 하위 명령 — `Process.start` 가 돌아오기 전의 창에만 값이 있다.
+///
+/// 이 창에 SIGINT 가 오면 처리기는 [runningChild] 가 비어 있는 것을 본다. 그래서 처리기는
+/// [awaitRunningChild] 로 이것을 기다려 끊는다 (06-REVIEW.md IN-05).
+Future<Process>? pendingSpawn;
 
 /// SIGINT 처리기가 끝내는 중인지 — 그 뒤로 본 흐름은 [haltIfInterrupted] 에서 멈춘다.
 var interrupted = false;
@@ -322,12 +330,46 @@ String scrub(String text, Map<String, String> names) {
   return scrubbed;
 }
 
+/// [scrub] 에 줄 경로 → 이름 맵 — 임시 폴더 · Flutter SDK root · 저장소 · 홈 폴더.
+///
+/// [runSmoke] 와 [main] 의 예외 안내 둘이 함께 써서 같은 범위를 가린다 (06-REVIEW.md IN-07).
+/// `ProcessException` 의 글자에는 실행 파일 경로(`<SDK root>/bin/flutter`, 보통 홈 아래)가 들어가므로
+/// [runSmoke] 와 같은 범위가 필요하다. [workPath] · [sdkRoot] 는 아직 없으면(임시 폴더를 만들기 전 ·
+/// SDK 확인 전) 그 항목만 뺀다.
+Map<String, String> scrubNamesFor({
+  required String repoRoot,
+  String? sdkRoot,
+  String? workPath,
+}) => {
+  ?workPath: '<임시 폴더>',
+  ?sdkRoot: '<Flutter SDK>',
+  repoRoot: '<repo>',
+  Platform.environment['HOME'] ?? '': '<홈>',
+};
+
 /// SIGINT 처리기가 끝내는 중이면 끝나지 않는 future 에서 멈춘다.
 ///
 /// 처리기가 하위 명령을 끊으면 그 명령을 기다리던 본 흐름이 깨어난다 — 지운 임시 폴더 위에서 다음
 /// 단계로 가거나 처리기가 비우는 중의 stdout 에 쓰지 않게, 본 흐름의 await 뒤마다 부른다.
 Future<void> haltIfInterrupted() async {
   if (interrupted) await Future.any(const <Future<Never>>[]);
+}
+
+/// SIGINT 처리기가 끊을 하위 명령 — [runningChild] 가 있으면 그것, 띄우는 중이면([pendingSpawn]) 띄우기를
+/// 기다린 값, 둘 다 없으면 null.
+///
+/// 띄우지 못했으면(`ProcessException`) 끊을 것이 없으므로 null 이다 — 그 예외는 [runProcess] 쪽에서
+/// 본 흐름으로 간다 (06-REVIEW.md IN-05).
+Future<Process?> awaitRunningChild() async {
+  final child = runningChild;
+  if (child != null) return child;
+  final spawn = pendingSpawn;
+  if (spawn == null) return null;
+  try {
+    return await spawn;
+  } on ProcessException {
+    return null;
+  }
 }
 
 /// 지금 도는 프로세스의 표 (pid → ppid, `/bin/ps` 에서). 읽지 못하면 null.
@@ -351,10 +393,10 @@ Map<int, int>? processTable() {
   return table;
 }
 
-/// [pid] 아래의 모든 자손 프로세스 번호. 표를 읽지 못하면 빈 목록.
-List<int> descendantsOf(int pid) {
-  final table = processTable();
-  if (table == null) return const [];
+/// 프로세스 표 [table] (pid → ppid) 에서 [pid] 아래의 모든 자손 프로세스 번호.
+///
+/// 표를 받기만 한다 (읽지 않는다) — [killTree] 가 같은 표를 여러 번 쓰고, 하네스가 표를 바꿔 넣는다.
+List<int> descendantsOf(int pid, Map<int, int> table) {
   final children = <int, List<int>>{};
   for (final MapEntry(key: child, value: parent) in table.entries) {
     children.putIfAbsent(parent, () => []).add(child);
@@ -377,25 +419,59 @@ List<int> descendantsOf(int pid) {
 /// 얼린다(SIGSTOP): 멈춘 프로세스는 새 자식을 띄우지 못하고 부모와의 연결도 그대로라, 새로 보이는 자손이
 /// 없을 때까지 표를 다시 읽어 얼린 뒤 한꺼번에 끊는다. 표를 한 번만 읽고 끊었을 때는 그 사이에 뜬
 /// 자식이 남아, 지운 임시 폴더에 `pub-cache/_temp` 를 다시 만들었다 (2026-10-16 SIGINT 실험).
-Future<void> killTree(Process process) async {
+///
+/// 06-REVIEW.md IN-06 의 둘:
+/// - (a) 표를 읽지 못하면(`/bin/ps` 가 없거나 실패) stderr 에 `자손 프로세스를 찾지 못했다 — 부모만
+///   끊었다` 한 줄을 남기고 부모만 끊는다 — 조용히 덜 끊지 않는다. 얼리는 도중에 표를 못 읽으면 그때까지
+///   얼린 것으로 간다.
+/// - (c) SIGKILL 직전에 표를 한 번 더 읽어, 부모 사슬이 아직 [process] 로 이어지는 pid 만 끊는다. 얼린 뒤
+///   사슬에서 빠진 pid 는 재사용되어 남의 프로세스일 수 있으므로 끊지 않고 SIGCONT 로 풀어 둔다 (얼린 채
+///   두지 않는다 — planner 보완, 소유자 결정 G7-Q2). 그 재확인 표를 못 읽으면 확인할 수 없으니 얼린 것을
+///   모두 끊는다 (고치기 전 동작).
+///
+/// [readTable] 은 표를 읽는 함수다 (기본값 [processTable]) — 하네스가 "읽지 못함" 을 강제하려고 둔다.
+/// 부모가 먼저 끝나 pid 1 로 옮겨 간 자손은 끊지 못한다 (머리 주석의 범위 문장, IN-06 (b)).
+Future<void> killTree(
+  Process process, {
+  Map<int, int>? Function() readTable = processTable,
+}) async {
   process.kill(ProcessSignal.sigstop);
+  var table = readTable();
+  if (table == null) {
+    stderr.writeln('자손 프로세스를 찾지 못했다 — 부모만 끊었다');
+    process.kill(ProcessSignal.sigkill);
+    await process.exitCode;
+    return;
+  }
   final frozen = <int>{};
-  for (var round = 0; round < 20; round++) {
-    final fresh = descendantsOf(process.pid).where((p) => !frozen.contains(p));
+  for (var round = 0; round < 20 && table != null; round++) {
+    final fresh = descendantsOf(
+      process.pid,
+      table,
+    ).where((p) => !frozen.contains(p)).toList();
     if (fresh.isEmpty) break;
-    for (final pid in fresh.toList()) {
+    for (final pid in fresh) {
       Process.killPid(pid, ProcessSignal.sigstop);
       frozen.add(pid);
     }
+    table = readTable();
   }
+  // (c) SIGKILL 직전의 재확인 — 사슬에 남은 pid 만 끊고, 사슬 밖의 얼린 pid 는 풀어 준다.
+  final again = readTable();
+  final doomed = again == null
+      ? frozen
+      : descendantsOf(process.pid, again).toSet();
   process.kill(ProcessSignal.sigkill);
-  for (final pid in frozen) {
+  for (final pid in doomed) {
     Process.killPid(pid, ProcessSignal.sigkill);
+  }
+  for (final pid in frozen.difference(doomed)) {
+    Process.killPid(pid, ProcessSignal.sigcont);
   }
   await process.exitCode;
   for (var i = 0; i < 50; i++) {
-    final table = processTable();
-    if (table == null || !frozen.any(table.containsKey)) break;
+    final now = readTable();
+    if (now == null || !doomed.any(now.containsKey)) break;
     await Future<void>.delayed(const Duration(milliseconds: 100));
   }
 }
@@ -426,16 +502,23 @@ Future<({ProcessResult? result, Duration elapsed, bool timedOut})> runProcess(
   required Duration timeout,
 }) async {
   final watch = Stopwatch()..start();
-  final process = await Process.start(
+  final spawn = Process.start(
     executable,
     args,
     workingDirectory: workingDirectory,
     environment: environment,
   );
+  pendingSpawn = spawn;
+  final Process process;
+  try {
+    process = await spawn;
+  } finally {
+    pendingSpawn = null;
+  }
   runningChild = process;
   if (interrupted) {
-    // 띄우는 사이에 SIGINT 가 왔다 — 처리기는 이 프로세스를 보지 못했으므로 여기서 끊는다.
-    await killTree(process);
+    // 띄우는 사이에 SIGINT 가 왔다 — 끊기는 처리기가 awaitRunningChild 로 이 프로세스를 기다려 한다
+    // (06-REVIEW.md IN-05). 같은 프로세스를 두 번 끊지 않게 여기서는 멈추기만 한다.
     await haltIfInterrupted();
   }
   try {
@@ -827,12 +910,11 @@ Future<int> runSmoke({
 }) async {
   final appDir = '${work.path}/app';
   final pubCache = '${work.path}/pub-cache';
-  final scrubNames = {
-    work.path: '<임시 폴더>',
-    sdk.root: '<Flutter SDK>',
-    repoRoot: '<repo>',
-    Platform.environment['HOME'] ?? '': '<홈>',
-  };
+  final scrubNames = scrubNamesFor(
+    repoRoot: repoRoot,
+    sdkRoot: sdk.root,
+    workPath: work.path,
+  );
 
   // 빈 프로젝트 — 첫 받기는 README 의 `flutter pub get` 한 번으로 두려고 --no-pub.
   final create = await runProcess(
@@ -1006,7 +1088,8 @@ Future<void> main(List<String> args) async {
   final interrupts = ProcessSignal.sigint.watch().listen((_) async {
     if (interrupted || quitting) return;
     interrupted = true;
-    final child = runningChild;
+    // 띄우는 중이면 그 띄우기를 기다려 끊는다 (06-REVIEW.md IN-05).
+    final child = await awaitRunningChild();
     if (child != null) {
       await killTree(child);
     }
@@ -1015,14 +1098,17 @@ Future<void> main(List<String> args) async {
     await quit(130);
   });
   var code = 70;
+  // catch 의 안내가 SDK root 도 가리도록 try 밖에 둔다 (06-REVIEW.md IN-07).
+  SdkInfo? sdk;
   try {
-    final sdk = await ensurePinnedSdk(repoRoot);
-    stdout.writeln('SDK Flutter ${sdk.flutter} / Dart ${sdk.dart}');
+    sdk = await ensurePinnedSdk(repoRoot);
+    final pinned = sdk;
+    stdout.writeln('SDK Flutter ${pinned.flutter} / Dart ${pinned.dart}');
     final expected = await expectedCommit(repoRoot, ref);
     stdout.writeln("기대 커밋: $expected (git rev-parse '$ref^{commit}')");
     work = Directory.systemTemp.createTempSync('woody_smoke_');
     code = await runSmoke(
-      sdk: sdk,
+      sdk: pinned,
       repoRoot: repoRoot,
       ref: ref,
       expected: expected,
@@ -1032,16 +1118,26 @@ Future<void> main(List<String> args) async {
     stderr.writeln('파일 모양이 예상과 다르다: ${e.message}');
     code = 70;
   } on FileSystemException catch (e) {
-    final names = {if (work != null) work.path: '<임시 폴더>', repoRoot: '<repo>'};
+    final names = scrubNamesFor(
+      repoRoot: repoRoot,
+      sdkRoot: sdk?.root,
+      workPath: work?.path,
+    );
     stderr.writeln('파일 작업 실패: ${e.message} (${scrub(e.path ?? '', names)})');
     code = 70;
   } on ProcessException catch (e) {
-    final names = {if (work != null) work.path: '<임시 폴더>', repoRoot: '<repo>'};
+    final names = scrubNamesFor(
+      repoRoot: repoRoot,
+      sdkRoot: sdk?.root,
+      workPath: work?.path,
+    );
     stderr.writeln('프로세스를 띄우지 못했다: ${scrub('$e', names)}');
     code = 70;
   } finally {
-    await interrupts.cancel();
+    // 정리 뒤에 처리기를 내린다 — 처리기를 내린 뒤의 Ctrl-C 는 기본 동작으로 바로 끝나, deleteSync
+    // 도중이면 폴더를 반쯤 남긴다 (06-REVIEW.md IN-05).
     cleanup();
+    await interrupts.cancel();
   }
   await quit(code);
 }
