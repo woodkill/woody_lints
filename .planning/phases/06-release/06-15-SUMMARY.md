@@ -180,7 +180,7 @@ $ git ls-remote --tags origin
 v2.0.0^{commit} = 704bf56fb028debe16f107bc9a8e6c9bdc5bccc2
 ```
 
-(괄호 안 제목은 확인용으로 60자에서 잘랐고, 긴 주석 줄은 `…` 로 줄였다.) 부모는 둘이다. 첫 부모는 06-11 의 merge commit `0038572`, 둘째 부모는 병합 전 작업 브랜치 머리 `0461741` 다. 고침 커밋 셋은 범위 `54d9ae9..origin/gsd/v2.0-package-rework` 에서 제목 머리로 찾았다 (`-- tool/verify.dart` 에서 하나, `-- tool/smoke.dart` 에서 둘 — `<automated>` 가 같은 방식으로 다시 찾았다). 작업 브랜치는 원격에 남아 있다 (Keep branches). tag 4줄도 그대로다. 로컬 `main` 브랜치는 건드리지 않았다. `grep` 은 zsh wrapper 를 피해 `/usr/bin/grep` 으로 돌렸다.
+(괄호 안 제목은 확인용으로 60자에서 잘랐고, 긴 주석 줄은 `…` 로 줄였다.) 부모는 둘이다. 첫 부모는 06-11 의 merge commit `0038572`, 둘째 부모는 병합 전 작업 브랜치 머리 `0461741` 다. 고침 커밋 셋은 범위 `54d9ae9..origin/gsd/v2.0-package-rework` 에서 제목 머리로 찾았다 (`-- tool/verify.dart` 에서 하나, `-- tool/smoke.dart` 에서 둘 — `<automated>` 가 같은 방식으로 다시 찾았다). 작업 브랜치는 원격에 남아 있다 (Keep branches). tag 4줄도 그대로다. 로컬 `main` 브랜치는 건드리지 않았다. `grep` 은 zsh wrapper 를 피해 시스템 grep 으로 돌렸다.
 
 **`main` 의 push 실행:** run **38936761858** (event push, headBranch `main`, headSha `3418989`), 17:03:42Z 생성, `completed` · **`success`**. job `verify` 는 17:03:45Z ~ 17:08:00Z (4분 15초) 이다. 이미지는 `ubuntu-24.04` / `20261012.334.1` (runner `20261012.601`) 이다. `gh run watch 38936761858 --exit-status` 는 rc 0 으로 끝났다 (17:08:05Z). 로그:
 
