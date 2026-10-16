@@ -74,18 +74,22 @@ blocked: 0
   idea: "6에서 — README 설치 · 「생성 파일 제외」 · 「프로젝트 전체」 블록이 `flutter create` 템플릿의 기존 `include: package:flutter_lints/flutter.yaml` · `analyzer: exclude:` · `linter: rules:` 와 겹친다 — 기존 줄은 바꾸고 같은 키는 합친다는 한 문장을 넣을지, `base.yaml` 만 받는 사람이 `plugins:` 블록을 붙이면 plugin 이 켜지는지를 smoke test 에서 README 대로 따라 하며 확인"
   deferred_at: 2026-10-15
   moved_to: "ROADMAP Phase 6 Notes"
+  closed_in: "Phase 6 — 06-02-PLAN.md Task 1 (c9a3225: 「설치」 · 「프로젝트 전체」 · 「생성 파일 제외」 의 합치기 문장), 06-04-PLAN.md Task 3 (D-14 측정 — base.yaml 만 받고 plugins: 블록을 붙이면 plugin 이 켜짐), 06-05-PLAN.md Task 2 (orchestrator 가 README 를 대신 따라 하고 소유자가 화면을 봄 — 막힌 자리 없음)"
 
 - test: 2
   idea: "6에서 — README 355행 'plugins: 를 바꾼 뒤 … Analysis Server 를 재시작해야 반영된다' 에 '(1.3.0 주석에서 옮긴 것, 재 보지 않았다)' 표시를 1번과 같은 README 커밋에서 붙인다"
   deferred_at: 2026-10-15
   moved_to: "ROADMAP Phase 6 Notes"
+  closed_in: "Phase 6 — 06-02-PLAN.md Task 1 (c9a3225: 355행 출처 표시)"
 
 - test: 4
   idea: "6에서 — README 34행을 고친다: flutter#191151 은 병합됐고 stable 판 #191530 이 Flutter 3.47.2 부터 들어 있다(3.47.5 가 이미 이 동작). 바뀐 것은 '있는 플랫폼 폴더만 제외 · Flutter 아닌 패키지는 건너뜀' 이고 build/** 는 여전히 덧붙이며 끄는 옵션은 없다 — '고치는 변경 · 병합 여부 확인 안 함' 구절을 뺀다"
   deferred_at: 2026-10-15
   moved_to: "ROADMAP Phase 6 Notes"
+  closed_in: "Phase 6 — 06-02-PLAN.md Task 1 (c9a3225: 34행 사실대로)"
 
 - test: 5
   idea: "6에서 — example/README.md (05-14) 소절 읽는 법의 'YAML (package:yaml — analyzer · pub 과 같은 해석기)' 에 '(판이 같은지는 재지 않았다)' 를 덧붙인다. 같은 읽는 법의 '깨진 YAML 도 블록 하나로 실패한다' 는 IN-14 와 함께 고친다. README 379행은 그대로"
   deferred_at: 2026-10-15
   moved_to: "ROADMAP Phase 6 Notes"
+  closed_in: "Phase 6 — 06-01-PLAN.md Task 2 (971a6f2: (05-14) 읽는 법 — 판이 같은지는 재지 않았다 · 255 의 범위)"
