@@ -4,16 +4,16 @@ milestone: v2.0
 milestone_name: Package Rework
 current_phase: 06
 current_phase_name: Release
-status: Phase 06 gaps_found (60/63, 2회차) — gap 계획 대기 (/gsd-plan-phase 06 --gaps)
-stopped_at: Completed 06-11-PLAN.md
-last_updated: "2026-10-16T11:52:19.348Z"
-last_activity: 2026-10-16
-last_activity_desc: Phase 06 execution started
-state_head: 54d9ae9c7c248ab8709b624f54bf5d2ce65c1ecc
+status: Phase 06 gap 계획 2회차 완료 — 실행 대기 (/gsd-execute-phase 06 --gaps-only)
+stopped_at: Phase 06 gap 계획 2회차 완료 (06-12 ~ 06-15)
+last_updated: "2026-10-16T15:27:35.089Z"
+last_activity: 2026-10-17
+last_activity_desc: "Phase 06 gap 수정 계획 넷 작성 (06-12 ~ 06-15, wave 9 ~ 11), plan checker 2회차 통과 — info 3"
+state_head: 46028832b7037ef78ddce6cfb3f52b20dcf54509
 progress:
   total_phases: 6
   completed_phases: 5
-  total_plans: 52
+  total_plans: 56
   completed_plans: 52
   percent: 83
 ---
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-10-15)
 
 ## Current Position
 
-Phase: 06 (Release) — EXECUTING
-Plan: 11 of 11
-Status: Phase 06 gaps_found (60/63, 2회차) — gap 계획 대기 (/gsd-plan-phase 06 --gaps)
-Last activity: 2026-10-16 — Phase 06 execution started
+Phase: 06 (Release) — READY TO EXECUTE
+Plan: 11 of 15
+Status: Phase 06 gap 계획 2회차 완료 — 실행 대기 (/gsd-execute-phase 06 --gaps-only)
+Last activity: 2026-10-17 — Phase 06 gap 수정 계획 넷 작성 (06-12 ~ 06-15, wave 9 ~ 11), plan checker 2회차 통과 — info 3
 
 Progress: [████████░░] 83%
 
@@ -303,6 +303,9 @@ Recent decisions affecting current work:
 - [Phase 06]: 06 리뷰 발견 일곱을 모두 fixed 로 닫았다 — CR-01 · WR-02 · IN-03 은 06-08 Task 1 (6aa78fe), WR-01 · IN-02 는 06-09 Task 1 (2c5b73b), WR-03 · IN-01 은 06-09 Task 2 (4286d48); 버전 · CHANGELOG 는 그대로 (저장소 안쪽만 바뀜, G6-Q3 NOT)
 - [Phase 06]: 작업 브랜치를 push gate 0 뒤 한 줄로 올리고(ad09d6e..75f102f, 18커밋, 2026-10-16T10:24:13Z) PR #2 (main ←) 를 열었다 — push 실행 38887002394 · pull_request 실행 38887576984 둘 다 success 10/10, MERGEABLE / CLEAN; 병합은 06-11 의 소유자 확인 뒤이고 06-10 의 metadata 커밋은 origin 에 없다
 - [Phase 06]: 06-11: 소유자 응답 merge (2026-10-16T10:38:32Z) 뒤에만 gh pr merge 2 --merge — main = 2.0.0 + 06 gap 수정 (merge commit 0038572, 부모 5ee5a12 · 75f102f), 받는 쪽 변화 없음 (규칙 · version 2.0.0 · CHANGELOG · tag 그대로), main push 실행 38888830252 success 10/10
+- [Phase 06]: gap 수정 2회차 계획 넷 · wave 9 ~ 11 — 06-12 `changelogTop` 을 파일 첫 줄 고정 (U+FEFF 뗀 첫 줄이 `## X.Y.Z - …` 이고 `package:markdown` 첫 h2 와 같아야 통과, 아니면 `[3/10]` 블록) · 문장 고침 (IN-09 포함) · `VERSIONING.md` 한 줄 · 지워 보기 M107 ~ M115 와 M100 ~ M106 재측정, 06-13 `tool/smoke.dart` 여섯 고침 (IN-04 · WR-06 · WR-04 · IN-05 · IN-06 · IN-07) + 오프라인 하네스, 06-14 처리 기록 (아홉 fixed · IN-08 deferred) → push gate → push → PR, 06-15 병합 직전 확인 → merge commit (6898e59, 4602883)
+- [Phase 06]: gap 2회차 계획 전 소유자 결정 (2026-10-16, 모두 권고 + 한 항목 더) — G7-Q1 길 (나) 첫 줄 고정 (머리말 불허, 판 고정 IN-08 안 함), G7-Q2 IN-04 · WR-06 · WR-04 · IN-09 와 IN-05 · IN-06 · IN-07 까지, G7-Q3 main 병합까지 (병합 직전 다시 확인, tag · 버전 · CHANGELOG 그대로), G7-Q4 모델 Fable (끝까지 Fable). Round 2: G7-R2-Q1 대표 여섯은 전체 실행 × 세 경로, 변형은 함수 단위 × 두 모드 (06-08 과 같은 방식)
+- [Phase 06]: gap 2회차 plan checker 1회차 blocker 0 · warning 5 (코드 모양이 자기 분석 단언에 걸림 `use_null_aware_elements`, 파이프 하네스가 옛 판에서 멈춤, 앞 빈 줄 거부를 단언하지 않음, 줄바꿈으로 갈라진 옛 머리 주석을 부정 grep 이 못 잡음, 예산 추정 1.5배) → 수정 1회 (null-aware 맵, 15초 겨루기, `blankfirst` · `hdr ''` 입력, 한 줄 토큰 grep 둘, 예산은 설명으로 수용) → 2회차 통과 — info 3
 
 ### Pending Todos
 
@@ -330,6 +333,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-16T10:47:46.658Z
-Stopped at: Completed 06-11-PLAN.md
+Last session: 2026-10-16T15:28:01.000Z
+Stopped at: Phase 06 gap 계획 2회차 완료 (06-12 ~ 06-15)
 Resume file: None
