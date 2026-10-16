@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 06
 current_phase_name: Release
 status: executing
-stopped_at: Completed 06-09-PLAN.md
-last_updated: "2026-10-16T10:18:44.797Z"
+stopped_at: Completed 06-10-PLAN.md
+last_updated: "2026-10-16T10:36:06.512Z"
 last_activity: 2026-10-16
 last_activity_desc: Phase 06 execution started
-state_head: 4286d48b980e581c10ab8164debcbe072234e27a
+state_head: 75f102f1aaa060c88e8962dff445078767bf20ff
 progress:
   total_phases: 6
   completed_phases: 5
   total_plans: 52
-  completed_plans: 50
+  completed_plans: 51
   percent: 83
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-10-15)
 ## Current Position
 
 Phase: 06 (Release) — EXECUTING
-Plan: 9 of 11
+Plan: 10 of 11
 Status: Ready to execute
 Last activity: 2026-10-16 — Phase 06 execution started
 
@@ -112,6 +112,7 @@ Progress: [████████░░] 83%
 | Phase 06 P07 | 2 min | 2 tasks | 3 files |
 | Phase 06 P08 | 25 min | 2 tasks | 6 files |
 | Phase 06 P09 | 15 min | 3 tasks | 1 files |
+| Phase 06 P10 | 12 min | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -298,6 +299,8 @@ Recent decisions affecting current work:
 - [Phase 06]: smoke 의 시간 초과 · SIGINT 는 하위 명령의 자손까지 끊는다 — SIGSTOP 으로 얼리고 /bin/ps 표를 새 자손이 없을 때까지 다시 읽은 뒤 SIGKILL (dart analyze 가 analysis server 를 자식으로 두고, 표를 한 번만 읽고 끊었을 때 지운 임시 폴더가 다시 생긴 실측, 06-09)
 - [Phase 06]: smoke 의 SIGINT 처리기와 본 흐름의 겹침은 quit 의 먼저 부른 쪽 우선과 처리기 중의 본 흐름 멈춤(haltIfInterrupted)으로 막는다 (06-09)
 - [Phase 06]: smoke 의 단계 제한 값(create 2분 · pub get 5분 · analyze 5분)과 SIGINT 종료 코드 130 은 planner 가 고른 값이고 Round 2 에서 소유자에게 보였으며 반대가 없었다 (06-09)
+- [Phase 06]: 06 리뷰 발견 일곱을 모두 fixed 로 닫았다 — CR-01 · WR-02 · IN-03 은 06-08 Task 1 (6aa78fe), WR-01 · IN-02 는 06-09 Task 1 (2c5b73b), WR-03 · IN-01 은 06-09 Task 2 (4286d48); 버전 · CHANGELOG 는 그대로 (저장소 안쪽만 바뀜, G6-Q3 NOT)
+- [Phase 06]: 작업 브랜치를 push gate 0 뒤 한 줄로 올리고(ad09d6e..75f102f, 18커밋, 2026-10-16T10:24:13Z) PR #2 (main ←) 를 열었다 — push 실행 38887002394 · pull_request 실행 38887576984 둘 다 success 10/10, MERGEABLE / CLEAN; 병합은 06-11 의 소유자 확인 뒤이고 06-10 의 metadata 커밋은 origin 에 없다
 
 ### Pending Todos
 
@@ -325,6 +328,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-16T10:18:44.361Z
-Stopped at: Completed 06-09-PLAN.md
+Last session: 2026-10-16T10:36:06.074Z
+Stopped at: Completed 06-10-PLAN.md
 Resume file: None
