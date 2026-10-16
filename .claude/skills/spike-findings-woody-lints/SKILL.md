@@ -49,7 +49,7 @@ Spike sessions wrapped: 2026-10-11 (001 ~ 006), 2026-10-11 (007 ~ 008), 2026-10-
 - `lib/`, `pubspec.yaml` 은 바꾸지 않는다. 루트 `analysis_options.yaml` 은 기존 exclude 항목(`lib/analysis_options.yaml`)을 그대로 둔다 (spike 는 저장소의 이 파일들을 아예 고치지 않고 복사본에서 실험했다)
 - 6가지의 결과는 모두 기록 문서로 남긴다 (D-15)
 - 정답지 한 줄은 `상대경로:줄  강도  규칙이름`, 맨 위에 `exit N` (D-04) — spike 스크립트의 정규화가 이 형식을 따른다
-- 검증 스크립트는 Dart 이고 `dart:io` · `dart:convert` 에 더해, YAML 대조에만 `package:yaml` 을 개발용 의존성(`dev_dependencies`)으로 쓴다 (D-11, 2026-10-15 G4-Q1)
+- 검증 스크립트는 Dart 이고 `dart:io` · `dart:convert` 에 더해, 개발용 의존성(`dev_dependencies`) 둘을 쓴다 — `package:yaml` 은 YAML 대조에만, `package:markdown` 은 CHANGELOG 최상단 제목을 GitHub 화면과 같게 읽는 데만 (D-11, 2026-10-15 G4-Q1 · 2026-10-16 G6-Q1)
 
 spike 에서 나와 실제 구현이 지켜야 하는 것 (근거는 각 spike 의 README).
 

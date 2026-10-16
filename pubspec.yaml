@@ -18,5 +18,8 @@ dependencies:
 
 # tool/verify.dart 가 줄 단위로 읽은 값을 YAML 해석 결과와 견줄 때만 쓴다 — analyzer · pub 과 같은 해석기.
 # dev_dependencies 는 이 패키지를 받는 쪽 의존성 그래프에 들어가지 않는다 (05-VERIFICATION.md 4회차 gap, 소유자 결정 G4-Q1).
+# markdown 은 tool/verify.dart 가 CHANGELOG.md 의 최상단 제목을 GitHub 화면과 같게 읽을 때만 쓴다 — HTML 주석 · 펜스 안의 `## ` 줄은 제목이 아니고, 들여 쓴 ATX · setext 제목은 제목이다 (06-VERIFICATION.md gap, 소유자 결정 G6-Q1).
+# 이것도 받는 쪽 의존성 그래프에 들어가지 않고, 커밋된 lock 여섯도 바뀌지 않는다 (2026-10-16 복제본 실측).
 dev_dependencies:
+  markdown: ^7.3.1
   yaml: ^3.1.4
