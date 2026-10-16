@@ -318,7 +318,7 @@ Plans:
   2. `git ls-remote --tags origin` 에 새 버전의 annotated tag 가 보이고, 그 tag 의 `pubspec.yaml` version 과 CHANGELOG 최상단 버전이 tag 이름과 같다
   3. 빈 프로젝트가 새 tag 를 git 의존성(`ref: vX.Y.Z`)으로 받아 `dart analyze` 를 돌리면 기본 규칙 진단과 `riverpod_lint` plugin 진단이 둘 다 보고된다
 
-**Plans**: 6/7 plans executed (계획 2026-10-15 — 06-CONTEXT.md D-01 ~ D-14, 06-RESEARCH.md; 5 waves)
+**Plans**: 7/7 plans executed (계획 2026-10-15 — 06-CONTEXT.md D-01 ~ D-14, 06-RESEARCH.md; 5 waves)
 
 Plans:
 
@@ -337,7 +337,7 @@ Plans:
 - [x] 06-06-PLAN.md — push gate (범위 `v2.0.0^{commit}..HEAD`) 뒤 남은 기록 커밋 push → PR (`main` ← 작업 브랜치) 과 `pull_request` 실행 (02-UAT 4번) → checkpoint (blocking-human) → `gh pr merge --merge` (merge commit 만) → `v2.0.0` 이 `main` 의 조상 · `main` push 실행 → `gh workflow run verify.yml --ref main` 과 `workflow_dispatch` 실행 (02-UAT 6번; 버튼은 human-check → 06-UAT) (REL-02; D-01 9, D-02, D-03)
 
 **Wave 5** *(blocked on Wave 4)*
-- [ ] 06-07-PLAN.md — 처리 기록: `02-UAT.md` 4 · 6번 pass, `05-UAT.md` 1 · 2 · 4 · 5번 `closed_in`, `05-REVIEW-DISPOSITION.md` IN-12 · IN-13 · IN-14 fixed (open 0, deferred 는 WR-06 — D-09)
+- [x] 06-07-PLAN.md — 처리 기록: `02-UAT.md` 4 · 6번 pass, `05-UAT.md` 1 · 2 · 4 · 5번 `closed_in`, `05-REVIEW-DISPOSITION.md` IN-12 · IN-13 · IN-14 fixed (open 0, deferred 는 WR-06 — D-09)
 
 **Decision points** (이 phase 안에서 소유자가 정한다):
 - **D9 (결정됨, 2026-10-11)** — `git.create_tag` 를 껐고 마일스톤 번호를 `v2.0` 으로 맞췄다. GSD 는 tag 를 만들지 않으며, 이 저장소의 `v` tag 는 패키지 릴리스(`vX.Y.Z`)에만 쓴다. 릴리스 tag 는 이 phase 에서 직접 만든다.
@@ -375,7 +375,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Preset Split | 4/4 | Complete    | 2026-10-12 |
 | 4. Rule Reselection | 13/13 | Complete    | 2026-10-13 |
 | 5. Documentation | 15/15 | Complete    | 2026-10-15 |
-| 6. Release | 6/7 | In Progress | - |
+| 6. Release | 7/7 | In Progress | - |
 
 ## Backlog
 
