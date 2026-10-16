@@ -29,14 +29,21 @@
 //
 // 저장소의 파일은 읽기만 한다 — 저장소 안에는 아무것도 만들지 않고 GitHub 에는 아무것도 올리지 않는다
 // (받기만 한다). 화면에는 임시 폴더 경로를 찍지 않는다 (하위 명령의 출력은 `<임시 폴더>` 로 가린다).
+// 어떻게 끝나도(예외 · 시간 초과 · Ctrl-C) 임시 폴더는 지운다 — `--keep` 때만 남기고 그때만 경로를 찍는다.
 //
 // 하위 명령의 SDK: 임시 프로젝트는 저장소 밖이라 .fvmrc 가 없다 — 그곳에서 fvm 이나 PATH 의
 // flutter · dart 를 부르면 전역 SDK 로 풀린다. 그래서 이 스크립트를 띄운 SDK(.fvmrc 와 같은지 먼저
 // 확인한다)만 쓴다 — `flutter create` · `flutter pub get` 은 그 SDK 의 bin/flutter, `dart analyze` 는
-// 실행 중인 dart 다. PATH 의 이름으로 부르는 것은 저장소에서 돌리는 git 하나뿐이다.
+// 실행 중인 dart 다. PATH 의 이름으로 부르는 것은 저장소에서 돌리는 git 하나뿐이다 (하위 명령을 끊을 때
+// 자손 프로세스를 찾는 ps 는 절대 경로 /bin/ps 로 부른다).
 //
-// 종료 코드: 0 통과 / 1 판정 실패 / 64 사용법 오류 / 69 하위 명령 실패 (git rev-parse · flutter create ·
-//            flutter pub get) / 70 예외로 끝남 / 78 실행 중인 SDK 가 .fvmrc 와 다름
+// 종료 코드: 0 통과 / 1 판정 실패 / 64 사용법 오류
+//            / 69 하위 명령 실패 (git rev-parse · flutter create · flutter pub get) 또는 단계의 시간 제한
+//                 초과 (create 2분 · pub get 5분 · dart analyze 주소마다 5분 — 넘으면 그 프로세스를 끊고
+//                 임시 폴더를 지운다; 06-REVIEW.md WR-03, 소유자 결정 G6-Q2)
+//            / 70 예외로 끝남 / 78 실행 중인 SDK 가 .fvmrc 와 다름
+//            / 130 Ctrl-C (SIGINT) — 도는 하위 명령을 끊고 임시 폴더를 지운 뒤 끝낸다 (06-REVIEW.md IN-01)
+//            / 255 세 예외 밖의 처리되지 않은 예외 — 임시 폴더는 finally 가 지운다
 //
 // 의존성은 dart:io · dart:convert 뿐이다 (루트 pubspec.yaml 은 그대로). tool/verify.dart 를 import 하지
 // 않는다 — main 이 둘인 파일이 묶이므로 쓰는 도우미(Flutter root 찾기 · lock 항목 읽기 · 진단 정규화 ·
@@ -88,6 +95,28 @@ const analyzeExitCodes = [0, 2, 3];
 /// 06-REVIEW.md WR-01 — 복제본에서 `lib/recommended.yaml` 의 include 하나를 없는 파일로 바꿔 확인한
 /// 코드다. 템플릿이 내는 다른 진단(예: 규칙 이름의 오타)과 섞이지 않게 둘로 좁힌다.
 const includeErrorCodes = {'include_file_not_found', 'included_file_warning'};
+
+/// `flutter create` 의 시간 제한.
+///
+/// 단계별 제한 셋의 근거: 정상은 create 수 초 · pub get 약 10초 · analyze 주소마다 약 15 ~ 20초다
+/// (06-03 · 06-04 실측). 06-04 예행 1회차는 `pub get` 70분 · plugin 받기 41분 동안 멈춰 사람이 끊었다.
+/// 값은 06-REVIEW.md WR-03 의 제안 값이다 (소유자 결정 G6-Q2 — 값은 planner 재량, Round 2 에서 보임).
+const createTimeout = Duration(minutes: 2);
+
+/// `flutter pub get` 의 시간 제한 — GitHub · pub.dev 에 닿지 못하면 여기서 멈춘다 ([createTimeout] 의 근거).
+const pubGetTimeout = Duration(minutes: 5);
+
+/// 주소마다의 `dart analyze` 시간 제한 — plugin 준비가 pub.dev 에 닿지 못하면 여기서 멈춘다 ([createTimeout] 의 근거).
+const analyzeTimeout = Duration(minutes: 5);
+
+/// SIGINT 처리기가 끊을, 지금 도는 하위 명령 ([runProcess] 가 띄운 동안만 값이 있다).
+Process? runningChild;
+
+/// SIGINT 처리기가 끝내는 중인지 — 그 뒤로 본 흐름은 [haltIfInterrupted] 에서 멈춘다.
+var interrupted = false;
+
+/// [quit] 가 이미 끝내는 중인지 — 처리기와 본 흐름이 둘 다 부르면 먼저 부른 쪽의 종료 코드로 끝낸다.
+var quitting = false;
 
 /// 빈 프로젝트의 `dependencies:` 에 더하는 줄 — `example/pubspec.yaml` 과 같은 선언.
 const riverpodDependency = '  flutter_riverpod: ^3.0.0';
@@ -185,7 +214,12 @@ class AnalyzeOutcome {
 }
 
 /// stdout 과 stderr 를 비운 뒤 [code] 로 끝낸다.
+///
+/// 두 번째 호출은 끝나지 않는 future 에서 멈춘다 — 비우는 중의 stdout 에 다른 쪽이 쓰거나 다시 비우면
+/// `StateError` 가 나고, 늦게 부른 쪽의 종료 코드가 먼저 부른 쪽을 덮지 않게 한다.
 Future<Never> quit(int code) async {
+  if (quitting) await Future.any(const <Future<Never>>[]);
+  quitting = true;
   await stdout.flush();
   await stderr.flush();
   exit(code);
@@ -277,24 +311,129 @@ String scrub(String text, Map<String, String> names) {
   return scrubbed;
 }
 
-/// [executable] 을 [args] 로 돌리고 결과와 걸린 시간을 돌려준다.
+/// SIGINT 처리기가 끝내는 중이면 끝나지 않는 future 에서 멈춘다.
 ///
-/// [environment] 는 물려받은 환경 위에 더한다.
-Future<(ProcessResult, Duration)> runProcess(
+/// 처리기가 하위 명령을 끊으면 그 명령을 기다리던 본 흐름이 깨어난다 — 지운 임시 폴더 위에서 다음
+/// 단계로 가거나 처리기가 비우는 중의 stdout 에 쓰지 않게, 본 흐름의 await 뒤마다 부른다.
+Future<void> haltIfInterrupted() async {
+  if (interrupted) await Future.any(const <Future<Never>>[]);
+}
+
+/// 지금 도는 프로세스의 표 (pid → ppid, `/bin/ps` 에서). 읽지 못하면 null.
+Map<int, int>? processTable() {
+  final ProcessResult listed;
+  try {
+    listed = Process.runSync('/bin/ps', ['-A', '-o', 'pid=', '-o', 'ppid=']);
+  } on ProcessException {
+    return null;
+  }
+  if (listed.exitCode != 0) return null;
+  final table = <int, int>{};
+  for (final row in '${listed.stdout}'.split('\n')) {
+    final cells = row.trim().split(RegExp(r'\s+'));
+    if (cells.length != 2) continue;
+    final pid = int.tryParse(cells[0]);
+    final parent = int.tryParse(cells[1]);
+    if (pid == null || parent == null) continue;
+    table[pid] = parent;
+  }
+  return table;
+}
+
+/// [pid] 아래의 모든 자손 프로세스 번호. 표를 읽지 못하면 빈 목록.
+List<int> descendantsOf(int pid) {
+  final table = processTable();
+  if (table == null) return const [];
+  final children = <int, List<int>>{};
+  for (final MapEntry(key: child, value: parent) in table.entries) {
+    children.putIfAbsent(parent, () => []).add(child);
+  }
+  final found = <int>[];
+  final queue = [pid];
+  while (queue.isNotEmpty) {
+    for (final child in children[queue.removeLast()] ?? const <int>[]) {
+      found.add(child);
+      queue.add(child);
+    }
+  }
+  return found;
+}
+
+/// [process] 와 그 자손을 모두 SIGKILL 로 끊고, 자손이 표에서 사라질 때까지(최대 약 5초) 기다린다.
+///
+/// `flutter` 는 dart 를 exec 하지만 그 dart 가 다시 자식을 띄운다 — `dart analyze` 는 analysis server
+/// (`dartaotruntime`) 를 자식으로 둔다 (2026-10-16 실측). 부모만 끊으면 멈춘 받기가 남는다. 그래서 먼저
+/// 얼린다(SIGSTOP): 멈춘 프로세스는 새 자식을 띄우지 못하고 부모와의 연결도 그대로라, 새로 보이는 자손이
+/// 없을 때까지 표를 다시 읽어 얼린 뒤 한꺼번에 끊는다. 표를 한 번만 읽고 끊었을 때는 그 사이에 뜬
+/// 자식이 남아, 지운 임시 폴더에 `pub-cache/_temp` 를 다시 만들었다 (2026-10-16 SIGINT 실험).
+Future<void> killTree(Process process) async {
+  process.kill(ProcessSignal.sigstop);
+  final frozen = <int>{};
+  for (var round = 0; round < 20; round++) {
+    final fresh = descendantsOf(process.pid).where((p) => !frozen.contains(p));
+    if (fresh.isEmpty) break;
+    for (final pid in fresh.toList()) {
+      Process.killPid(pid, ProcessSignal.sigstop);
+      frozen.add(pid);
+    }
+  }
+  process.kill(ProcessSignal.sigkill);
+  for (final pid in frozen) {
+    Process.killPid(pid, ProcessSignal.sigkill);
+  }
+  await process.exitCode;
+  for (var i = 0; i < 50; i++) {
+    final table = processTable();
+    if (table == null || !frozen.any(table.containsKey)) break;
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+  }
+}
+
+/// [executable] 을 [args] 로 돌리고 결과 · 걸린 시간 · 시간 초과 여부를 돌려준다.
+///
+/// [environment] 는 물려받은 환경 위에 더한다. [timeout] 을 넘기면 그 프로세스와 자손을 SIGKILL 로
+/// 끊고 `(result: null, elapsed, timedOut: true)` 다 — SIGKILL 은 SIGTERM 을 무시하는 상태(멈춘 받기)에서도
+/// 끊는다 (06-REVIEW.md WR-03). `Process.run` 은 제한을 둘 수 없어 `Process.start` 로 띄우고, stdout ·
+/// stderr 는 기다리기 전에 함께 모으기 시작한다 — 한쪽 파이프가 차면 하위 명령이 멈춰 교착한다.
+Future<({ProcessResult? result, Duration elapsed, bool timedOut})> runProcess(
   String executable,
   List<String> args, {
   String? workingDirectory,
   Map<String, String>? environment,
+  required Duration timeout,
 }) async {
   final watch = Stopwatch()..start();
-  final result = await Process.run(
+  final process = await Process.start(
     executable,
     args,
     workingDirectory: workingDirectory,
     environment: environment,
   );
-  watch.stop();
-  return (result, watch.elapsed);
+  runningChild = process;
+  if (interrupted) {
+    // 띄우는 사이에 SIGINT 가 왔다 — 처리기는 이 프로세스를 보지 못했으므로 여기서 끊는다.
+    await killTree(process);
+    await haltIfInterrupted();
+  }
+  try {
+    final out = utf8.decoder.bind(process.stdout).join();
+    final err = utf8.decoder.bind(process.stderr).join();
+    final code = await process.exitCode
+        .then<int?>((code) => code)
+        .timeout(timeout, onTimeout: () => null);
+    if (code == null) {
+      await killTree(process);
+      watch.stop();
+      await haltIfInterrupted();
+      return (result: null, elapsed: watch.elapsed, timedOut: true);
+    }
+    final result = ProcessResult(process.pid, code, await out, await err);
+    watch.stop();
+    await haltIfInterrupted();
+    return (result: result, elapsed: watch.elapsed, timedOut: false);
+  } finally {
+    runningChild = null;
+  }
 }
 
 /// [elapsed] 를 `N.Ns` 꼴로.
@@ -464,7 +603,9 @@ String? readPluginVersion(String stateDir) {
 /// 경로 인자를 주지 않는다 — 하위 폴더를 인자로 주면 plugin 진단을 잃는다 (spike 001).
 /// [stateDir] 는 이 주소만 쓰는 Analysis Server 상태 폴더이고 미리 만들어 둔다.
 /// [scrubNames] 는 stderr 를 가릴 때 쓰는 경로 → 이름이다.
-Future<AnalyzeOutcome> analyzeOnce({
+///
+/// [analyzeTimeout] 을 넘기면 끊고 stderr 에 안내를 적은 뒤 null 을 돌려준다 (부르는 쪽이 69 로 끝낸다).
+Future<AnalyzeOutcome?> analyzeOnce({
   required String name,
   required String address,
   required String appDir,
@@ -473,7 +614,7 @@ Future<AnalyzeOutcome> analyzeOnce({
   required Map<String, String> scrubNames,
 }) async {
   setInclude(appDir, address);
-  final (result, elapsed) = await runProcess(
+  final run = await runProcess(
     Platform.resolvedExecutable,
     ['--suppress-analytics', 'analyze', '--format=json'],
     workingDirectory: appDir,
@@ -481,7 +622,17 @@ Future<AnalyzeOutcome> analyzeOnce({
       'ANALYZER_STATE_LOCATION_OVERRIDE': stateDir,
       'PUB_CACHE': pubCache,
     },
+    timeout: analyzeTimeout,
   );
+  if (run.timedOut) {
+    stderr.writeln(
+      'dart analyze ($name): 시간 제한 ${analyzeTimeout.inMinutes}분을 넘겨 끊었다 '
+      '(plugin 준비가 pub.dev 에 닿지 못하면 여기서 멈춘다)',
+    );
+    return null;
+  }
+  final result = run.result!;
+  final elapsed = run.elapsed;
   final lines = normalizeDiagnostics(result.stdout as String, [
     appDir,
     Directory(appDir).resolveSymbolicLinksSync(),
@@ -586,6 +737,7 @@ Future<String> expectedCommit(String repoRoot, String ref) async {
     '--quiet',
     '$ref^{commit}',
   ], workingDirectory: repoRoot);
+  await haltIfInterrupted();
   final sha = '${result.stdout}'.trim();
   if (result.exitCode != 0 || sha.isEmpty) {
     stderr.writeln(
@@ -638,7 +790,7 @@ Future<int> runSmoke({
   };
 
   // 빈 프로젝트 — 첫 받기는 README 의 `flutter pub get` 한 번으로 두려고 --no-pub.
-  final (created, createTime) = await runProcess(
+  final create = await runProcess(
     sdk.flutterExecutable,
     [
       '--suppress-analytics',
@@ -650,7 +802,17 @@ Future<int> runSmoke({
       appDir,
     ],
     environment: {'PUB_CACHE': pubCache},
+    timeout: createTimeout,
   );
+  if (create.timedOut) {
+    stderr.writeln(
+      'flutter create: 시간 제한 ${createTimeout.inMinutes}분을 넘겨 끊었다 '
+      '(네트워크 · 디스크 상태를 보고 다시 실행)',
+    );
+    return 69;
+  }
+  final created = create.result!;
+  final createTime = create.elapsed;
   if (created.exitCode != 0) {
     reportFailure('flutter create', created, scrubNames);
     return 69;
@@ -664,12 +826,22 @@ Future<int> runSmoke({
   writeViolations(appDir);
 
   // README 의 명령 그대로. pub cache 는 임시 폴더 아래 — GitHub 에서 처음부터 받는다.
-  final (got, getTime) = await runProcess(
+  final get = await runProcess(
     sdk.flutterExecutable,
     ['--suppress-analytics', 'pub', 'get'],
     workingDirectory: appDir,
     environment: {'PUB_CACHE': pubCache},
+    timeout: pubGetTimeout,
   );
+  if (get.timedOut) {
+    stderr.writeln(
+      'flutter pub get: 시간 제한 ${pubGetTimeout.inMinutes}분을 넘겨 끊었다 '
+      '(GitHub · pub.dev 에 닿지 못하면 여기서 멈춘다 — 네트워크를 보고 다시 실행)',
+    );
+    return 69;
+  }
+  final got = get.result!;
+  final getTime = get.elapsed;
   if (got.exitCode != 0) {
     reportFailure('flutter pub get', got, scrubNames);
     return 69;
@@ -696,6 +868,7 @@ Future<int> runSmoke({
       pubCache: pubCache,
       scrubNames: scrubNames,
     );
+    if (outcome == null) return 69;
     outcomes.add(outcome);
     stdout.writeln('');
     stdout.writeln('## ${target.name} — ${target.address}');
@@ -750,11 +923,52 @@ Future<int> runSmoke({
   return 1;
 }
 
+/// 임시 폴더 [work] 를 정리하고 (지웠는지, 화면에 찍을 문구) 를 돌려준다.
+///
+/// [keep] 이면 지우지 않고 그 경로를 문구에 담는다 — 경로가 화면에 나오는 것은 이때뿐이다 (06-CONTEXT
+/// 묻지 않고 잡은 것). 지우지 못하면 이유만 담는다.
+({bool deleted, String message}) cleanupWork(
+  Directory work, {
+  required bool keep,
+}) {
+  if (keep) return (deleted: false, message: '임시 폴더를 남겼다: ${work.path}');
+  try {
+    work.deleteSync(recursive: true);
+    return (deleted: true, message: '임시 폴더를 지웠다');
+  } on FileSystemException catch (e) {
+    return (deleted: false, message: '임시 폴더를 지우지 못했다: ${e.message}');
+  }
+}
+
 /// 진입점 — 인자 → SDK 확인 → 기대 커밋 → 임시 폴더에서 smoke → 정리 → 종료 코드.
+///
+/// 정리는 `finally` 에서 한다 — 세 예외 밖의 throw 에서도 지운 뒤 처리되지 않은 예외(255)로 끝난다.
+/// Ctrl-C (SIGINT) 는 도는 하위 명령과 자손을 끊고 같은 정리를 한 뒤 130 으로 끝낸다 (06-REVIEW.md IN-01).
 Future<void> main(List<String> args) async {
   final (ref, keep) = await parseArgs(args);
   final repoRoot = File.fromUri(Platform.script).parent.parent.path;
   Directory? work;
+  var cleaned = false;
+  void cleanup() {
+    final dir = work;
+    if (dir == null || cleaned) return;
+    cleaned = true;
+    final done = cleanupWork(dir, keep: keep);
+    // --keep 의 "남겼다" 는 지금처럼 stdout 의 마지막 줄이고, 지우지 못한 경우만 stderr 다.
+    (done.deleted || keep ? stdout : stderr).writeln(done.message);
+  }
+
+  final interrupts = ProcessSignal.sigint.watch().listen((_) async {
+    if (interrupted || quitting) return;
+    interrupted = true;
+    final child = runningChild;
+    if (child != null) {
+      await killTree(child);
+    }
+    cleanup();
+    stderr.writeln('중단됨 (SIGINT) — 임시 폴더를 정리하고 끝낸다');
+    await quit(130);
+  });
   var code = 70;
   try {
     final sdk = await ensurePinnedSdk(repoRoot);
@@ -780,18 +994,9 @@ Future<void> main(List<String> args) async {
     final names = {if (work != null) work.path: '<임시 폴더>', repoRoot: '<repo>'};
     stderr.writeln('프로세스를 띄우지 못했다: ${scrub('$e', names)}');
     code = 70;
-  }
-  if (work != null) {
-    if (keep) {
-      stdout.writeln('임시 폴더를 남겼다: ${work.path}');
-    } else {
-      try {
-        work.deleteSync(recursive: true);
-        stdout.writeln('임시 폴더를 지웠다');
-      } on FileSystemException catch (e) {
-        stderr.writeln('임시 폴더를 지우지 못했다: ${e.message}');
-      }
-    }
+  } finally {
+    await interrupts.cancel();
+    cleanup();
   }
   await quit(code);
 }
