@@ -5,16 +5,16 @@ milestone_name: Package Rework
 current_phase: 06
 current_phase_name: Release
 status: executing
-stopped_at: Completed 06-05-PLAN.md
-last_updated: "2026-10-16T03:24:30.849Z"
-last_activity: 2026-10-15
+stopped_at: Completed 06-09-PLAN.md
+last_updated: "2026-10-16T10:18:44.797Z"
+last_activity: 2026-10-16
 last_activity_desc: Phase 06 execution started
-state_head: 5076ed5f295a1480075ce66ef48b418ff2351d44
+state_head: 4286d48b980e581c10ab8164debcbe072234e27a
 progress:
   total_phases: 6
   completed_phases: 5
-  total_plans: 48
-  completed_plans: 46
+  total_plans: 52
+  completed_plans: 50
   percent: 83
 ---
 
@@ -30,9 +30,9 @@ See: .planning/PROJECT.md (updated 2026-10-15)
 ## Current Position
 
 Phase: 06 (Release) — EXECUTING
-Plan: 5 of 7
-Status: Executing Phase 06
-Last activity: 2026-10-15 — Phase 06 execution started
+Plan: 9 of 11
+Status: Ready to execute
+Last activity: 2026-10-16 — Phase 06 execution started
 
 Progress: [████████░░] 83%
 
@@ -108,6 +108,10 @@ Progress: [████████░░] 83%
 | Phase 06 P03 | 13 min | 2 tasks | 1 files |
 | Phase 06 P04 | 140min | 3 tasks | 9 files |
 | Phase 06 P05 | 8 min | 3 tasks | 0 files |
+| Phase 06 P06 | 18 min | 3 tasks | 0 files |
+| Phase 06 P07 | 2 min | 2 tasks | 3 files |
+| Phase 06 P08 | 25 min | 2 tasks | 6 files |
+| Phase 06 P09 | 15 min | 3 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -284,6 +288,16 @@ Recent decisions affecting current work:
 - [Phase 06]: 06-04: 예행 smoke 1회차는 네트워크 정지(pub get 70분, plugin 받기 41분 정지 뒤 orchestrator 가 끊음)로 무효 — 같은 커밋으로 다시 돌려 rc 0, README · 스크립트는 고치지 않았다
 - [Phase 06]: 06-05: 소유자 응답 tag (2026-10-16T03:15:24Z) 뒤 git push origin v2.0.0 — annotated tag v2.0.0 은 예행 통과 커밋 704bf56 을 가리키고 옮기거나 지우지 않는다 (잘못이면 v2.0.1)
 - [Phase 06]: 06-05: README 손 따라 하기는 막힌 자리 없음 — 작은 점 둘(넣는 자리의 sort_pub_dependencies, 설치 블록의 dev_dependencies 머리 줄)은 나중에 README 만 고친다
+- [Phase 06]: main = 2.0.0 (merge commit 5ee5a12), ref: main 프로젝트는 pub upgrade 때 받는다 — PR #1 을 소유자 응답 merge (2026-10-16T04:25:06Z) 뒤 gh pr merge 1 --merge 로 합쳤고 부모는 90a2736 · ad09d6e, v2.0.0 은 main 의 조상, 작업 브랜치와 tag 는 그대로
+- [Phase 06]: Phase 2 가 미룬 확인 4번 (pull_request 실행 38845784725) 과 6번의 자동화 부분 (workflow_dispatch 실행 38850984674) 이 둘 다 평소 모드 10/10 으로 통과했다 — Run workflow 버튼의 화면 확인은 phase 끝 UAT 에 남는다
+- [Phase 06]: 05-UAT 1번 closed_in 의 06-05 Task 2 부분은 사실대로 적었다 — orchestrator 가 README 를 대신 따라 하고 소유자가 화면을 봄, 막힌 자리 없음 (06-07)
+- [Phase 06]: 처리 기록을 닫았다 — 02-UAT 4 · 6번 pass (PR #1 의 pull_request 38845784725, workflow_dispatch 38850984674; Run workflow 버튼의 화면 확인은 06-UAT), 05-UAT 1 · 2 · 4 · 5번 closed_in, 05-REVIEW-DISPOSITION IN-12 ~ 14 fixed. deferred 는 WR-06 (D-09) 하나, open 0. 커밋 41785ad · 5ceead2 는 push 하지 않았다 (06-07)
+- [Phase 06]: Phase 06 검증 gaps_found 40/41 — 이미 올린 v2.0.0 (tag · CI · smoke) 은 문제없음. gap 은 다음 릴리스의 [3/10] (i): version 을 줄 단위로 읽어 YAML 값과 대조하지 않음 (CR-01), CHANGELOG 최상단을 HTML 주석 · 펜스 · 들여 쓴 제목 · setext 와 구별하지 못함 (verifier 가 찾은 HTML 주석 꼴로 --tag 거짓 통과). CHANGELOG 읽기 방식(Markdown 해석기 / fail-closed)은 소유자가 gap 계획 전에 정한다. 저장소 안쪽 고침이라 새 버전 번호는 필요 없다.
+- [Phase 06]: [3/10] (i) 는 pubspec version 을 package:yaml 값에서, CHANGELOG 최상단을 package:markdown (GitHub Flavored) 해석의 첫 h2 (깊이 무관) 에서 읽고, (h) 는 줄 단위 reader 의 원문 전체를 YAML version 과 견준다 — 두 겹 (06-08, G6-Q1)
+- [Phase 06]: raw HTML <h2> 는 해석기가 글자로 두어 CHANGELOG 최상단 검사 범위 밖으로 문장으로만 적었다 — VERSIONING.md 가 정한 꼴 밖 (06-08)
+- [Phase 06]: smoke 의 시간 초과 · SIGINT 는 하위 명령의 자손까지 끊는다 — SIGSTOP 으로 얼리고 /bin/ps 표를 새 자손이 없을 때까지 다시 읽은 뒤 SIGKILL (dart analyze 가 analysis server 를 자식으로 두고, 표를 한 번만 읽고 끊었을 때 지운 임시 폴더가 다시 생긴 실측, 06-09)
+- [Phase 06]: smoke 의 SIGINT 처리기와 본 흐름의 겹침은 quit 의 먼저 부른 쪽 우선과 처리기 중의 본 흐름 멈춤(haltIfInterrupted)으로 막는다 (06-09)
+- [Phase 06]: smoke 의 단계 제한 값(create 2분 · pub get 5분 · analyze 5분)과 SIGINT 종료 코드 130 은 planner 가 고른 값이고 Round 2 에서 소유자에게 보였으며 반대가 없었다 (06-09)
 
 ### Pending Todos
 
@@ -311,6 +325,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-10-16T03:24:25.825Z
-Stopped at: Completed 06-05-PLAN.md
+Last session: 2026-10-16T10:18:44.361Z
+Stopped at: Completed 06-09-PLAN.md
 Resume file: None

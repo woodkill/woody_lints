@@ -26,8 +26,8 @@ result: pass
 
 ### 4. PR 을 열면 verify 가 도는가
 expected: 방법 — 이 저장소에 PR 이 처음 열릴 때 GitHub 의 Actions 탭에 `verify` 실행이 `pull_request` event 로 생기는지 본다. 기대 — PR 의 커밋에서 `verify` 가 실행되고 단계 4개가 통과한다. (성공 기준 5, VERIFY-04 — `pull_request:` 는 선언되어 있지만 PR 이 한 번도 열리지 않았고 D-10 이 점검용 PR 을 미리 열지 않기로 했다)
-result: skipped
-reason: "Deferred follow-up: 나중에"
+result: pass
+note: "Phase 6 에서 닫음 (2026-10-16) — 06-06-PLAN.md Task 1: PR #1 을 연 직후 `pull_request` event 의 `verify` run 38845784725 가 completed · success, 로그에 `점검 통과 (10개 중 10개)` · `버전 일치 검사: 평소` (단계는 Phase 2 의 4개가 아니라 지금의 10개). 06-06-SUMMARY.md"
 
 ### 5. 다음 push 뒤 그 커밋의 verify 실행이 성공하는가
 expected: 방법 — 다음에 작업 브랜치를 올린 뒤(D-09 대로 소유자 확인 후) 그 커밋의 `verify` 실행을 본다. 기대 — `completed` / `success`, 로그에 `점검 통과 (4개 중 4개)`. (GitHub 에서 성공한 실행은 `1f06c55` 의 것 하나다. 02-05 가 바꾼 `tool/verify.dart` 는 올라가지 않아 Linux runner 에서 돈 적이 없다 — 로컬에서는 같은 SDK 로 통과한다)
@@ -35,8 +35,8 @@ result: pass
 
 ### 6. 수동 실행 버튼이 동작하는가
 expected: 방법 — workflow 파일이 `main` 에 들어간 뒤 GitHub 의 Actions → verify 화면에서 `Run workflow` 버튼을 눌러 본다. 기대 — 버튼이 보이고, 누르면 `workflow_dispatch` event 의 실행이 생겨 통과한다. (버튼은 기본 브랜치에 workflow 파일이 있어야 나타난다. 릴리스 전에는 볼 수 없다 — D-06)
-result: skipped
-reason: "Deferred follow-up: 나중에"
+result: pass
+note: "Phase 6 에서 닫음 (2026-10-16) — 06-06-PLAN.md Task 3: 병합으로 workflow 파일이 `main` 에 들어간 뒤 `gh workflow run verify.yml --ref main` 이 만든 `workflow_dispatch` run 38850984674 가 completed · success. `Run workflow` 버튼이 화면에 보이는지는 06-UAT (사람 확인). 06-06-SUMMARY.md"
 
 ### 7. 겹치는 실행이 취소되는가
 expected: 방법 — 같은 브랜치에 커밋을 연달아 두 번 올린다 (앞선 실행이 약 2분 도는 동안). 기대 — 앞선 실행이 `cancelled` 로 끝나고 뒤 실행만 끝까지 돈다. (`concurrency` 블록은 파일에 있지만 실행이 지금까지 1건이라 취소가 일어난 적이 없다 — behavior-unverified)
@@ -53,10 +53,10 @@ result: pass
 ## Summary
 
 total: 9
-passed: 7
+passed: 9
 issues: 0
 pending: 0
-skipped: 2
+skipped: 0
 blocked: 0
 
 ## Gaps
@@ -66,10 +66,12 @@ blocked: 0
 - test: 4
   idea: "나중에 — (기록자 풀이) PR 에서 `verify` 가 도는지는 이 저장소에 PR 이 처음 열릴 때 본다. `.github/workflows/verify.yml` 에 `pull_request:` 가 조건 없이 선언되어 있지만 PR 이 열린 적이 없고 (2026-10-12 `gh pr list --state all` 0건), D-10 이 점검용 PR 을 미리 열지 않기로 했다. 처음 열릴 만한 때는 Phase 6 의 `main` 병합이다 — 그때 Actions 탭에 `pull_request` event 의 `verify` 실행이 생기고 단계 4개가 통과하는지 본다"
   deferred_at: 2026-10-12
+  closed_in: "Phase 6 — 06-06-SUMMARY.md (2026-10-16)"
 
 - test: 6
   idea: "나중에 — (기록자 풀이) 수동 실행 버튼은 workflow 파일이 `main` 에 들어간 뒤에 본다. `.github/workflows/verify.yml` 에 `workflow_dispatch:` 가 선언되어 있지만 `main` (`90a2736`) 에는 `.github/workflows/` 가 없고, GitHub 은 기본 브랜치에 workflow 파일이 있어야 버튼을 보여 준다 (D-06). `main` 병합은 Phase 6 이다 — 릴리스 뒤 Actions → verify 화면에서 `Run workflow` 버튼이 보이는지, 누르면 `workflow_dispatch` event 의 실행이 생겨 통과하는지 본다"
   deferred_at: 2026-10-12
+  closed_in: "Phase 6 — 06-06-SUMMARY.md (2026-10-16)"
 
 - test: 9
   idea: "3에서 — (기록자 풀이) 9번은 결정 항목이고 답은 'Phase 3 에서 닫는다' 다 (선택지: 3에서 / 지금 / 문구만 / 그대로). Phase 3 이 정답지를 새로 쓰거나 fixture 를 더하기 전에 가장 먼저 한다: (1) `[2/4]` 가 통과로 잘못 찍히는 세 입력(닫지 않은 따옴표로 깨진 YAML, `rules:` 키의 오타, 겹친 규칙 + 없는 진단 코드)에서 `--update` 가 망가진 결과를 정답지로 쓰고 종료 코드 0 으로 끝나는 경로를 닫는다 — 02-05 가 일부러 넣지 않은 WR-03 의 다른 절반(세 코드 밖의 진단도 실패로 치기)을 뒤집는 결정이다 (2) `example/README.md` 80행 · 30행과 `[2/4]` 의 실패 문구를 코드가 실제로 보는 것에 맞춘다. 근거: 02-VERIFICATION.md 의 '다음 phase 가 알아야 할 것' 1 · 2 (검증기가 셋 다 재현), 2026-10-12 UAT 에서 `rules:` → `rulez:` 를 복사본에서 다시 재현 — 보통 실행 exit 1, `--update` 는 `정답지를 썼다` + `점검 통과 (4개 중 4개)` + exit 0, 그 뒤의 보통 실행도 exit 0"

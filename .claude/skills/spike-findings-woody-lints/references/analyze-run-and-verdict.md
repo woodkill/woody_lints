@@ -10,7 +10,7 @@ MANIFEST.md 의 `verify-harness-tool-behavior` 에서 이 영역에 걸리는 �
 
 - 판정의 주 수단은 정답지 비교다 (D-15)
 - 정답지 한 줄은 `상대경로:줄  강도  규칙이름`, 맨 위에 `exit N` (D-04)
-- 검증 스크립트는 Dart 이고 `dart:io` · `dart:convert` 에 더해, YAML 대조에만 `package:yaml` 을 개발용 의존성(`dev_dependencies`)으로 쓴다 (D-11, 2026-10-15 G4-Q1)
+- 검증 스크립트는 Dart 이고 `dart:io` · `dart:convert` 에 더해, 개발용 의존성(`dev_dependencies`) 둘을 쓴다 — `package:yaml` 은 YAML 대조에만, `package:markdown` 은 CHANGELOG 최상단 제목을 GitHub 화면과 같게 읽는 데만 (D-11, 2026-10-15 G4-Q1 · 2026-10-16 G6-Q1)
 - `dart analyze` 는 `example/` 을 작업 디렉터리로 두고 **인자 없이**, **사용 통계 전송을 끈 채**(`--suppress-analytics`) 실행한다 (001)
 - plugin 준비 실패는 종료 코드가 아니라 **stderr 의 머리말**(`An error occurred while executing an analyzer plugin:`)과 정답지의 빠진 줄로 알아챈다. 종료 코드 0 / 2 는 plugin 이 죽어도 나온다 (002)
 - 검증에는 네트워크가 필요하다. plugin 이 이미 준비되어 있어도 pub 서버에 닿지 못하면 plugin 진단 없이 끝난다 (002)
