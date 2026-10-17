@@ -1,170 +1,152 @@
 ---
-last_mapped_commit: 90a2736b8d998c84467faf562a0fec720b797eaf
-last_mapped_at: 2026-10-11
+last_mapped_commit: 8ac96b71e9d394c5d1dfb132814ee87379519c69
+last_mapped_at: 2026-10-17
 ---
 # Codebase Structure
 
-**Analysis Date:** 2026-10-11
+**Analysis Date:** 2026-10-17
 
 ## Directory Layout
 
 ```
 woody_lints/
-├── lib/
-│   └── analysis_options.yaml   # 배포 산출물: 사용하는 프로젝트가 include 하는 공유 lint 설정
-├── .vscode/
-│   └── settings.json           # VS Code 의 Flutter SDK 경로 (.fvm/versions/3.41.2)
-├── .planning/
-│   └── codebase/               # GSD 코드베이스 분석 문서
-├── analysis_options.yaml       # 이 저장소 자체 분석 전용 설정 (배포되지 않음)
-├── pubspec.yaml                # 패키지 매니페스트 (name, version, sdk, dependencies)
-├── pubspec.lock                # 로컬 생성, Git 미추적
-├── CHANGELOG.md                # 버전별 변경 이력
-├── README.md                   # 설치 절차와 포함 규칙 목록
-├── .fvmrc                      # FVM Flutter 버전 고정 (3.41.2)
-├── .gitignore                  # .dart_tool/, pubspec.lock, .DS_Store, .fvm/ 제외
-├── .dart_tool/                 # pub 생성물, Git 미추적
-└── .fvm/                       # FVM SDK 캐시, Git 미추적
+├── lib/                      # 배포 산출물 — 공개 URI 가 되는 YAML 다섯 (Dart 없음)
+│   ├── analysis_options.yaml #   옛 주소 별칭 → recommended.yaml
+│   ├── recommended.yaml      #   묶음: base + riverpod + codegen
+│   ├── base.yaml             #   규칙 전부 + flutter_lints include
+│   ├── riverpod.yaml         #   최상위 plugins: riverpod_lint
+│   └── codegen.yaml          #   analyzer.errors / analyzer.exclude
+├── tool/                     # 저장소 안쪽 도구 (받는 쪽에 안 감)
+│   ├── verify.dart           #   검증 명령 [1/10]~[10/10]
+│   ├── smoke.dart            #   릴리스 smoke test
+│   ├── measure_rules.dart    #   규칙 실측 도구
+│   └── measurements/         #   실측 결과 JSON
+├── example/                  # 연습용 프로젝트 1 (옛 주소) + 정답지 + 검증 설명서
+├── fixtures/                 # 연습용 프로젝트 2~6 (example/lib 복사본 + 다른 include)
+│   ├── recommended/          #   묶음 (정답지 없음, example 결과와 대조)
+│   ├── base_only/
+│   ├── base_riverpod/
+│   ├── base_codegen/
+│   └── overrides/            #   끄는 설정 + lib/suppress/ 5파일
+├── .github/workflows/verify.yml  # CI
+├── .claude/                  # 프로젝트 지시 · spike skill (실측 근거)
+├── .planning/                # GSD 계획 기록 (코드베이스 아님)
+├── analysis_options.yaml     # 저장소 자체 분석 전용
+├── pubspec.yaml              # 패키지 매니페스트 (version 2.0.0)
+├── README.md                 # 사용법 (한국어)
+├── RULES.md                  # 규칙 근거 · 실측 기록
+├── VERSIONING.md             # 버전 정책 · 릴리스 절차
+├── CHANGELOG.md              # 변경 이력
+├── .fvmrc                    # Flutter 3.47.5 고정
+├── .vscode/settings.json     # dart.flutterSdkPath → .fvm/versions/3.47.5
+└── .gitignore
 ```
-
-Git 이 추적하는 파일은 8개, 합계 약 210줄이다: `.fvmrc`, `.gitignore`, `.vscode/settings.json`, `CHANGELOG.md`, `README.md`, `analysis_options.yaml`, `lib/analysis_options.yaml`, `pubspec.yaml`.
-
-`.dart` 소스 파일, `test/`, `example/`, `bin/`, `tool/`, CI 설정(`.github/`)은 존재하지 않는다.
 
 ## Directory Purposes
 
 **`lib/`:**
-- Purpose: 패키지의 공개 표면(public surface). `package:woody_lints/` URI 가 이 디렉터리로 매핑된다
-- Contains: YAML 설정 파일만. Dart 코드 없음
-- Key files: `lib/analysis_options.yaml`
+- Purpose: 받는 쪽이 `include` 하는 유일한 배포물
+- Contains: YAML 만. `.dart` 가 있으면 `[1/10]` 실패 (`tool/verify.dart:4`)
+- Key files: `lib/base.yaml` (규칙 95행), `lib/recommended.yaml`, `lib/analysis_options.yaml`
 
-**`.vscode/`:**
-- Purpose: 저장소 기여자용 편집기 설정
-- Contains: `dart.flutterSdkPath` 한 항목
-- Key files: `.vscode/settings.json`
+**`tool/`:**
+- Purpose: 검증 · 릴리스 확인 · 실측 스크립트. 각각 단일 파일 — 공유 Dart 모듈을 두지 않는다 (`tool/measure_rules.dart:39-41`)
+- Contains: `tool/verify.dart` (3223행), `tool/smoke.dart` (1143행), `tool/measure_rules.dart` (5188행), `tool/measurements/2026-10-13-R1.json`
+- 의존성: 루트 `pubspec.yaml` 의 `dev_dependencies` (`yaml`, `markdown`)
 
-**`.planning/codebase/`:**
-- Purpose: GSD 명령이 읽는 코드베이스 분석 문서
-- Contains: `ARCHITECTURE.md`, `STRUCTURE.md` 등 UPPERCASE.md 문서
-- Key files: `.planning/codebase/ARCHITECTURE.md`, `.planning/codebase/STRUCTURE.md`
+**`example/`:**
+- Purpose: 옛 주소 한 줄을 받는 연습용 Flutter 프로젝트 — 일부러 규칙을 어긴 샘플
+- Contains: `example/lib/*_rules.dart` 샘플, `example/lib/should_not_appear.dart`, `example/lib/generated/sample.{g,freezed}.dart`, `example/expected_diagnostics.txt` (93줄), `example/pubspec.yaml` (`woody_lints: path: ..`), 커밋된 `example/pubspec.lock`
+- Key files: `example/README.md` — 검증 단계 · 종료 코드 · 지워 보기 기록(M 번호) 의 설명서
+
+**`fixtures/`:**
+- Purpose: 같은 샘플을 다른 프리셋 조합으로 받는 연습용 프로젝트 다섯
+- Contains: 폴더마다 `analysis_options.yaml`, `pubspec.yaml` (`path: ../..`), 커밋된 `pubspec.lock`, `lib/` (example 복사본), `expected_diagnostics.txt` (recommended 제외)
+- Key files: `fixtures/overrides/analysis_options.yaml`, `fixtures/overrides/lib/suppress/`
+
+**`.claude/skills/spike-findings-woody-lints/`:**
+- Purpose: spike 001~023 실측 결과와 구현 설계도. 검증 · fixture · CI · 프리셋 구조를 바꾸기 전에 읽는다
+- Key files: `.claude/skills/spike-findings-woody-lints/SKILL.md`, `.claude/skills/spike-findings-woody-lints/references/preset-split-structure.md`, `.claude/skills/spike-findings-woody-lints/references/ci-workflow.md`
 
 ## Key File Locations
 
 **Entry Points:**
-- `lib/analysis_options.yaml`: 사용하는 프로젝트가 `include: package:woody_lints/analysis_options.yaml` 로 참조하는 유일한 진입점
-- `pubspec.yaml`: pub 이 패키지를 해석하는 지점
+- `lib/recommended.yaml`: 새 프로젝트용 공개 주소
+- `lib/analysis_options.yaml`: 옛 주소 (뜻 유지)
+- `tool/verify.dart`: 검증 명령 (`fvm dart run tool/verify.dart`)
+- `tool/smoke.dart`: 릴리스 확인 (`fvm dart run tool/smoke.dart <ref>`)
 
 **Configuration:**
-- `lib/analysis_options.yaml`: 공유 lint 규칙(`linter.rules`), analyzer 설정(`analyzer.errors`, `analyzer.exclude`), analyzer plugin(`plugins:`)
-- `analysis_options.yaml`: 저장소 자체 분석 설정 — `lib/analysis_options.yaml` 제외
-- `pubspec.yaml`: 버전 `1.3.0`, `publish_to: 'none'`, `sdk: ^3.10.4`, `flutter_lints: ^6.0.0`
-- `.fvmrc`: Flutter `3.41.2`
-- `.vscode/settings.json`: `.fvm/versions/3.41.2`
-- `.gitignore`: `.dart_tool/`, `pubspec.lock`, `.DS_Store`, `.fvm/`
+- `pubspec.yaml`: 이름 · 버전 · SDK `^3.13.0` · 의존성
+- `analysis_options.yaml`: 루트 분석 (`flutter_lints` 만, `example/**` · `fixtures/**` exclude)
+- `.fvmrc`, `.vscode/settings.json`: SDK 고정 (둘을 함께 바꾼다)
+- `.github/workflows/verify.yml`: CI
 
 **Core Logic:**
-- `lib/analysis_options.yaml:13`: 기반 규칙 include (`package:flutter_lints/flutter.yaml`)
-- `lib/analysis_options.yaml:20-40`: 추가 lint 규칙 — 성능 3개, 가독성 및 스타일 4개 활성(2개 주석 처리), 버그 방지 4개
-- `lib/analysis_options.yaml:42-47`: analyzer 오류 재정의와 생성 코드 제외
-- `lib/analysis_options.yaml:57-58`: `riverpod_lint: ^3.1.3` plugin 선언
-
-**Documentation:**
-- `README.md:23-68`: 사용법 (설치 4단계)
-- `README.md:70-95`: 포함된 규칙 목록
-- `CHANGELOG.md`: 릴리스 노트 (최상단 = 최신 버전)
+- `lib/base.yaml`: 규칙 목록
+- `tool/verify.dart` 의 `const fixtures`: 연습용 프로젝트 정의
 
 **Testing:**
-- Not detected. 테스트 파일과 테스트 설정이 없다.
+- `example/expected_diagnostics.txt`, `fixtures/*/expected_diagnostics.txt`: 정답지
+- `example/README.md`: 검증 설명서
 
 ## Naming Conventions
 
 **Files:**
-- 분석 설정 파일은 Dart 도구가 요구하는 고정 이름 `analysis_options.yaml` 을 쓴다: `lib/analysis_options.yaml`, `analysis_options.yaml`
-- 패키지 표준 파일은 pub 관례 이름을 쓴다: `pubspec.yaml`, `README.md`, `CHANGELOG.md`
-- YAML 확장자는 `.yaml` 을 쓴다 (`.yml` 아님)
+- 프리셋: 소문자 한 단어 `.yaml` (`lib/base.yaml`, `lib/codegen.yaml`); 파일 이름 = 공개 URI
+- 문서: 대문자 `.md` (`RULES.md`, `VERSIONING.md`)
+- 도구: snake_case 동사/명사 `.dart` (`tool/measure_rules.dart`)
+- 연습용 샘플: `<분류>_rules.dart` / `<규칙>_rule.dart` (`example/lib/style_rules.dart`, `example/lib/final_parameters_rule.dart`)
+- 정답지: 고정 이름 `expected_diagnostics.txt`
+- 실측 결과: `<YYYY-MM-DD>-<run id>.json` (`tool/measurements/2026-10-13-R1.json`)
 
 **Directories:**
-- pub 패키지 표준 레이아웃을 따른다: 공개 파일은 `lib/`
-- 도구 디렉터리는 점(dot) 접두사: `.vscode/`, `.fvm/`, `.dart_tool/`, `.planning/`
-
-**Package:**
-- 패키지명은 `snake_case`: `woody_lints` (`pubspec.yaml:1`)
-
-**YAML 내부:**
-- lint 규칙명은 Dart linter 공식 이름 그대로 `snake_case`: `prefer_const_constructors`
-- 규칙 한 줄 형식: `- 규칙명 # 한국어 설명` (`lib/analysis_options.yaml:23`)
-- 규칙 그룹 머리 주석: `# 성능`, `# 가독성 및 스타일`, `# 버그 방지`
-- 비활성 규칙은 줄을 지우지 않고 `# - 규칙명 # 설명` 으로 주석 처리 (`lib/analysis_options.yaml:31`, `:34`)
-- 들여쓰기 2칸
-
-**CHANGELOG:**
-- 버전 머리말 `## X.Y.Z`, 항목은 `- ` 불릿, 본문은 한국어, 규칙명·키는 백틱으로 감싼 영어
+- 연습용 프로젝트: 프리셋 조합을 snake_case 로 (`fixtures/base_riverpod/`)
 
 ## Where to Add New Code
 
-**새 lint 규칙 (New lint rule):**
-- Primary code: `lib/analysis_options.yaml` 의 `linter.rules` — 목적에 맞는 그룹 주석(`# 성능` / `# 가독성 및 스타일` / `# 버그 방지`) 아래에 `- 규칙명 # 한국어 설명` 형식으로 추가
-- 문서: `README.md` 의 "포함된 규칙 목록" 해당 분류에 `- 규칙명: 설명` 추가
-- 릴리스: `pubspec.yaml:3` 의 `version` 을 올리고 `CHANGELOG.md` 최상단에 `## X.Y.Z` 항목 추가
-- Tests: 테스트 인프라 없음. 사용하는 Flutter 프로젝트에서 `dart analyze` 를 실행해 확인
+**새 규칙:**
+- Primary code: `lib/base.yaml` 의 해당 분류 주석 아래, 줄 끝 한국어 이유 주석
+- 같은 커밋: `RULES.md` 켠 규칙 표, `README.md` 의 `woody:readme-rules` 구역, `CHANGELOG.md` (VERSIONING 기준 minor, "새로 생기는 경고" 칸)
+- Tests: `example/lib/` 의 분류 샘플 파일에 위반 한 건 → `fixtures/*/lib/` 같은 파일에 복사 → `fvm dart run tool/verify.dart --update` 로 정답지 갱신 후 `git diff` 확인
 
-**규칙 비활성화 (Disable a rule):**
-- `lib/analysis_options.yaml` 에서 해당 줄을 주석 처리하고, `README.md` 규칙 목록에서도 제거
+**새 프리셋 조각:**
+- Implementation: `lib/` 바로 아래 새 YAML (공개 URI 가 됨, minor). 조각끼리 include 하지 않고 필요하면 `lib/recommended.yaml` 의 include 목록에 더한다
+- 검증: `tool/verify.dart` 의 허용 최상위 키 목록 · `const fixtures` 에 행 추가, 새 폴더를 `fixtures/` 아래에 example 복사본으로 (lock 커밋, `.gitignore:11` 이 `fixtures/*/pubspec.lock` 을 허용)
 
-**analyzer 오류 심각도 변경 / 진단 무시:**
-- `lib/analysis_options.yaml` 의 `analyzer.errors` (`:43-44`) 에 `진단코드: ignore|info|warning|error` 추가
+**새 연습용 샘플 파일:**
+- `example/lib/` 에 만들고 다섯 `fixtures/*/lib/` 에 글자 그대로 복사 (`example/lib/relative_imports_rule.dart` 3행만 예외)
 
-**생성 코드 제외 패턴 추가:**
-- `lib/analysis_options.yaml` 의 `analyzer.exclude` (`:45-47`) 에 작은따옴표로 감싼 glob 추가 — 예: `'**/*.gr.dart'`
-
-**새 analyzer plugin:**
-- `lib/analysis_options.yaml` 의 최상위 `plugins:` (`:57-58`) 에 `패키지명: ^버전` 추가. `pubspec.yaml` 에는 추가하지 않는다 (plugin 은 Analysis Server 캐시에서 따로 해석된다)
-- `README.md` 의 "analyzer plugin" 항목에 설명 추가
-
-**새 기반 lint 패키지 (include 대상 변경·추가):**
-- `lib/analysis_options.yaml:13` 의 `include:` 수정
-- 해당 패키지를 `pubspec.yaml` 의 `dependencies` 에 추가 (`dev_dependencies` 아님)
-
-**추가 공유 설정 변형 (예: 순수 Dart 용, strict 용):**
-- `lib/` 바로 아래에 새 YAML 파일로 추가 — 예: `lib/strict.yaml` → 사용하는 쪽에서 `include: package:woody_lints/strict.yaml`
-- 기존 `lib/analysis_options.yaml` 의 경로와 이름은 바꾸지 않는다
-
-**저장소 자체 분석 설정:**
-- `analysis_options.yaml` (루트). 공유할 규칙은 여기에 넣지 않는다
-
-**Flutter SDK 버전 변경:**
-- `.fvmrc` 의 `flutter` 값과 `.vscode/settings.json` 의 `dart.flutterSdkPath` 를 같은 버전으로 함께 수정
-
-**Utilities / Dart 코드:**
-- 해당 없음. 이 패키지는 Dart 코드를 담지 않는다. custom lint 규칙 구현이 필요해지면 `lib/src/` 와 `lib/woody_lints.dart` 를 새로 만드는 구조 변경이므로 별도 설계가 필요하다
+**도구 변경:**
+- 해당 `tool/*.dart` 파일 안에. 새 공유 Dart 파일을 `tool/` 에 두지 않는다. 지워 보기 기록은 `example/README.md` 「검증이 실제로 잡아내는지 확인한 기록」 에 더한다
 
 ## Special Directories
 
-**`.dart_tool/`:**
-- Purpose: pub 이 만드는 패키지 해석 결과 (`package_config.json`, `package_graph.json`, `version`)
+**`.dart_tool/woody_verify/`:**
+- Purpose: 연습용 프로젝트별 Analysis Server 상태 폴더 (plugin 컴파일 캐시)
 - Generated: Yes
 - Committed: No (`.gitignore:3`)
 
-**`.fvm/`:**
-- Purpose: FVM 의 Flutter SDK 캐시와 심볼릭 링크 (`flutter_sdk`, `versions/`, `fvm_config.json`, `release`, `version`)
+**`build/woody_rule_check/`:**
+- Purpose: `[2/10]` 조각 복사본 (실행 후 삭제)
 - Generated: Yes
-- Committed: No (`.gitignore:12`)
+- Committed: No (`.gitignore:20`)
 
-**`pubspec.lock`:**
-- Purpose: 로컬 의존성 잠금 (flutter_lints 6.0.0, lints 6.1.0)
+**`.fvm/`:**
+- Purpose: FVM SDK 캐시
 - Generated: Yes
-- Committed: No (`.gitignore:7`) — 라이브러리 패키지 관례
+- Committed: No (`.gitignore:16`)
+
+**`example/pubspec.lock`, `fixtures/*/pubspec.lock`:**
+- Purpose: 로컬 · CI 가 같은 패키지 버전으로 판정. 릴리스 때 `pub get` 으로만 다시 받는다 (`VERSIONING.md` 릴리스 절차 2)
+- Generated: Yes
+- Committed: Yes (`.gitignore:9-11`). 루트 `pubspec.lock` 은 커밋하지 않는다 (`.gitignore:7`)
 
 **`.planning/`:**
-- Purpose: GSD 계획·분석 문서
-- Generated: Yes (GSD 명령이 작성)
-- Committed: Git 추적 대상에 아직 없음
-
-**`.vscode/`:**
-- Purpose: 편집기 설정
+- Purpose: GSD 계획 기록 (milestone 보관 포함)
 - Generated: No
 - Committed: Yes
 
 ---
 
-*Structure analysis: 2026-10-11*
+*Structure analysis: 2026-10-17*
