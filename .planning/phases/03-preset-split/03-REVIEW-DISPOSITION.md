@@ -15,9 +15,9 @@ findings:
     note: "05-01: stripPlugins 가 plugins: 섹션을 빈 줄로 바꾸고 readShippedPluginConstraint 가 줄 끝 주석 · 맵 형식을 받는다 (example/README.md M32 ~ M34)"
   - id: WR-03
     severity: warning
-    disposition: open
+    disposition: fixed
     title: "규칙 세기와 규칙 이름 읽기가 목록 형식만 알아, 같은 뜻의 맵 형식이 `[2/N]` 거짓 실패가 된다 (재현함)"
-    note: "목록 형식 관례로 회피 — 맵 형식을 쓰게 되면 닫는다 (04-CONTEXT.md D-12)"
+    note: "04-13 (67d1bc7): 방향을 바꿔 닫음 — 맵 형식 줄은 거짓 실패 대신 [3/10] 의 declaredRuleNames 가 행 번호를 담아 종료 코드 70 으로 거부한다 (example/README.md M31). 목록 형식 관례(04-CONTEXT.md D-12)는 그대로. v2.0 마감 때 기록"
   - id: WR-04
     severity: warning
     disposition: open
@@ -62,7 +62,7 @@ findings:
     severity: info
     disposition: open
     title: "`lib/` 의 YAML 집합 확인이 최상위 `.yaml` 만 본다"
-open: 12
+open: 11
 total: 14
 recorded: 2026-10-12T13:04:38.618Z
 ---
@@ -73,7 +73,7 @@ recorded: 2026-10-12T13:04:38.618Z
 |---------|----------|-------------|--------|
 | WR-01 | warning | fixed | 04-01 tool/verify.dart [3/10] (example/README.md M23 · M24) |
 | WR-02 | warning | fixed | 05-01-PLAN.md Task 1 (1831c04) — stripPlugins 가 plugins: 섹션을 빈 줄로 바꾸고(줄 번호 보존) readShippedPluginConstraint 가 줄 끝 주석 · 맵 형식을 받는다, README M32 ~ M34 (M32 · M33 은 고치기 전 70) |
-| WR-03 | warning | open | - |
+| WR-03 | warning | fixed | 04-13-PLAN.md (67d1bc7) — 방향 변경: 맵 형식 줄은 [3/10] 이 행 번호와 함께 종료 코드 70 으로 거부 (example/README.md M31). v2.0 마감 때 기록 |
 | WR-04 | warning | open | - |
 | WR-05 | warning | open | - |
 | WR-06 | warning | open | - |
