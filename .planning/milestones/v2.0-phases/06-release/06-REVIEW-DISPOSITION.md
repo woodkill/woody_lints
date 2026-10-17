@@ -3,6 +3,14 @@ phase: 06
 review: 06-REVIEW.md
 titles: json
 findings:
+  - id: IN-10
+    severity: info
+    disposition: deferred
+    title: "`example/README.md` 06-08 소절의 읽는 법 (5) 가 \"지금은\" `# Changelog` 머리말이 통과한다고 말한다 — 06-12 뒤로는 실패한다 (M113)"
+  - id: IN-11
+    severity: info
+    disposition: deferred
+    title: "`killTree` 의 SIGKILL 직전 재확인이, 얼린 뒤 중간 프로세스가 끝나 사슬에서 빠진 자기 자손을 SIGCONT 로 풀어 살려 둔다"
   - id: WR-02
     severity: warning
     disposition: fixed
@@ -68,24 +76,26 @@ findings:
     disposition: fixed
     title: "`pubspecVersionText` 가 `pubspecReleaseVersion` 의 줄 찾기를 따로 다시 짠다"
 open: 0
-total: 16
-recorded: 2026-10-16T11:25:46.334Z
+total: 18
+recorded: 2026-10-16T17:46:25.577Z
 ---
 
 # Phase 06: Code Review Disposition
 
 | Finding | Severity | Disposition | Source |
 |---------|----------|-------------|--------|
-| WR-02 | warning | fixed | 06-12-PLAN.md Task 1 (85e1b0d) — changelogTop 이 CHANGELOG.md 의 첫 줄(U+FEFF 뗀 뒤)을 엄격한 최상단 제목 ## X.Y.Z - 날짜 자리 로 요구하고 package:markdown 의 첫 h2 와 같아야 통과 — 한 글자 밑줄의 setext 는 첫 줄이 제목이 아니라 [3/10] 블록으로 실패; M107 ~ M109 (소유자 결정 G7-Q1 (나)) |
-| WR-04 | warning | fixed | 06-13-PLAN.md Task 1 (9d96778) — judge 가 종료 코드 3 인데 JSON 에 error 줄이 없으면 실패 사유를 더하고 includeErrorCodes 에 included_file_parse_error 를 더함 (소유자 결정 G7-Q2) |
-| WR-05 | warning | fixed | 06-12-PLAN.md Task 1 (85e1b0d) — 같은 첫 줄 규칙 — 인용 · 목록 · 단락 안에서 연 HTML 주석 여는 글자는 첫 줄이 제목이 아니라 [3/10] 블록으로 실패; M110 ~ M112 (소유자 결정 G7-Q1 (나)) |
-| WR-06 | warning | fixed | 06-13-PLAN.md Task 1 (9d96778) — runProcess 의 제한이 종료 코드와 출력 수집 전체(Future.wait)에 걸려 파이프를 붙든 자손이 있어도 제한 안에 timedOut (소유자 결정 G7-Q2) |
-| IN-04 | info | fixed | 06-13-PLAN.md Task 1 (9d96778) — runProcess 가 Utf8Decoder(allowMalformed: true) 로 UTF-8 아닌 출력을 U+FFFD 로 받아 처리되지 않은 비동기 예외(255)가 finally 를 건너뛰지 않음; 하네스 (06-VERIFICATION.md 2회차 gap, 소유자 결정 G7-Q2) |
-| IN-05 | info | fixed | 06-13-PLAN.md Task 2 (ea2d664) — pendingSpawn · awaitRunningChild 로 처리기가 띄우는 중인 하위 명령을 기다려 끊고, finally 가 cleanup 뒤에 처리기를 내림 (소유자 결정 G7-Q2) |
-| IN-06 | info | fixed | 06-13-PLAN.md Task 2 (ea2d664) — killTree 가 표를 읽지 못하면 stderr 한 줄, SIGKILL 직전 표를 다시 읽어 사슬에 남은 pid 만 끊고 사슬 밖은 SIGCONT, 머리 주석에 부모가 먼저 끝난 자손은 끊지 못한다는 범위 (소유자 결정 G7-Q2) |
-| IN-07 | info | fixed | 06-13-PLAN.md Task 2 (ea2d664) — scrubNamesFor 하나를 runSmoke 와 main 의 예외 안내 둘이 함께 씀 (SDK root · 홈 · 저장소 · 임시 폴더) (소유자 결정 G7-Q2) |
-| IN-08 | info | deferred | 소유자 결정 G7-Q1 — 판 고정은 하지 않는다: 첫 줄 규칙 아래에서는 거짓 통과 방향이 해석기 판에 기대지 않는다 (첫 줄이 엄격한 제목이어야 하고 package:markdown 은 첫 줄과의 일치만 보는 둘째 reader 다); 2026-10-16 |
-| IN-09 | info | fixed | 06-12-PLAN.md Task 1 (85e1b0d) — 다섯 자리(skill 세 줄 · pubspec.yaml 19행 · tool/verify.dart 머리 주석)의 문장이 package:yaml 을 YAML 대조와 pubspec.yaml 의 version 읽기에 쓴다고 말함 (소유자 결정 G7-Q2) |
+| IN-10 | info | deferred | 소유자 결정 2026-10-17 — 미룸: 다음에 example/README.md 를 손댈 때 (06-08) 소절의 읽는 법 (4) · (5) 와 11행을 06-12 뒤 동작(머리말은 실패, M113)에 맞춘다 — verifier 판정 경고 (명시된 진실 밖, 문장을 믿으면 소리 나는 실패); ROADMAP Backlog 999.2 |
+| IN-11 | info | deferred | 소유자 결정 2026-10-17 — 미룸: 다음에 tool/smoke.dart 를 손댈 때 reviewer 의 Fix (SIGSTOP 이 성공한 pid 를 기록하고 표에 아직 남은 것은 사슬과 상관없이 끊음 — SIGCONT 없앰) — verifier 판정 경고 (06-13 must_have 4 그대로, 직접 하위 명령은 끊김, 재현은 수 ms 창); ROADMAP Backlog 999.2 |
+| WR-02 | warning | fixed | 06-12-PLAN.md Task 1 (85e1b0d) — changelogTop 이 CHANGELOG.md 의 첫 줄(U+FEFF 뗀 뒤)을 엄격한 최상단 제목 ## X.Y.Z - 날짜 자리 로 요구하고 package:markdown 의 첫 h2 와 같아야 통과 — 한 글자 밑줄의 setext 는 첫 줄이 제목이 아니라 [3/10] 블록으로 실패; M107 ~ M109 (소유자 결정 G7-Q1 (나)) (not in the current review) |
+| WR-04 | warning | fixed | 06-13-PLAN.md Task 1 (9d96778) — judge 가 종료 코드 3 인데 JSON 에 error 줄이 없으면 실패 사유를 더하고 includeErrorCodes 에 included_file_parse_error 를 더함 (소유자 결정 G7-Q2) (not in the current review) |
+| WR-05 | warning | fixed | 06-12-PLAN.md Task 1 (85e1b0d) — 같은 첫 줄 규칙 — 인용 · 목록 · 단락 안에서 연 HTML 주석 여는 글자는 첫 줄이 제목이 아니라 [3/10] 블록으로 실패; M110 ~ M112 (소유자 결정 G7-Q1 (나)) (not in the current review) |
+| WR-06 | warning | fixed | 06-13-PLAN.md Task 1 (9d96778) — runProcess 의 제한이 종료 코드와 출력 수집 전체(Future.wait)에 걸려 파이프를 붙든 자손이 있어도 제한 안에 timedOut (소유자 결정 G7-Q2) (not in the current review) |
+| IN-04 | info | fixed | 06-13-PLAN.md Task 1 (9d96778) — runProcess 가 Utf8Decoder(allowMalformed: true) 로 UTF-8 아닌 출력을 U+FFFD 로 받아 처리되지 않은 비동기 예외(255)가 finally 를 건너뛰지 않음; 하네스 (06-VERIFICATION.md 2회차 gap, 소유자 결정 G7-Q2) (not in the current review) |
+| IN-05 | info | fixed | 06-13-PLAN.md Task 2 (ea2d664) — pendingSpawn · awaitRunningChild 로 처리기가 띄우는 중인 하위 명령을 기다려 끊고, finally 가 cleanup 뒤에 처리기를 내림 (소유자 결정 G7-Q2) (not in the current review) |
+| IN-06 | info | fixed | 06-13-PLAN.md Task 2 (ea2d664) — killTree 가 표를 읽지 못하면 stderr 한 줄, SIGKILL 직전 표를 다시 읽어 사슬에 남은 pid 만 끊고 사슬 밖은 SIGCONT, 머리 주석에 부모가 먼저 끝난 자손은 끊지 못한다는 범위 (소유자 결정 G7-Q2) (not in the current review) |
+| IN-07 | info | fixed | 06-13-PLAN.md Task 2 (ea2d664) — scrubNamesFor 하나를 runSmoke 와 main 의 예외 안내 둘이 함께 씀 (SDK root · 홈 · 저장소 · 임시 폴더) (소유자 결정 G7-Q2) (not in the current review) |
+| IN-08 | info | deferred | 소유자 결정 G7-Q1 — 판 고정은 하지 않는다: 첫 줄 규칙 아래에서는 거짓 통과 방향이 해석기 판에 기대지 않는다 (첫 줄이 엄격한 제목이어야 하고 package:markdown 은 첫 줄과의 일치만 보는 둘째 reader 다); 2026-10-16 (not in the current review) |
+| IN-09 | info | fixed | 06-12-PLAN.md Task 1 (85e1b0d) — 다섯 자리(skill 세 줄 · pubspec.yaml 19행 · tool/verify.dart 머리 주석)의 문장이 package:yaml 을 YAML 대조와 pubspec.yaml 의 version 읽기에 쓴다고 말함 (소유자 결정 G7-Q2) (not in the current review) |
 | CR-01 | critical | fixed | 06-08-PLAN.md Task 1 (6aa78fe) — tool/verify.dart 의 [3/10] (i) 가 pubspec.yaml 의 version 을 package:yaml 이 읽은 값(pubspecYamlVersion — 원문 · 꼬리 뗀 값)에서 쓰고, (h) 가 pubspecVersionText 의 원문 전체를 YAML 의 version 과 견줌 (두 겹); M98 · M99 (06-VERIFICATION.md gap — 검증자 권고 그대로, 소유자 결정 2026-10-16) (not in the current review) |
 | WR-01 | warning | fixed | 06-09-PLAN.md Task 1 (2c5b73b) — tool/smoke.dart 의 judge 가 두 주소 각각에서 analysis_options.yaml 의 include_file_not_found · included_file_warning 줄을 실패 사유로 더함 (소유자 결정 G6-Q2) (not in the current review) |
 | WR-03 | warning | fixed | 06-09-PLAN.md Task 2 (4286d48) — runProcess 가 단계마다 제한(create 2분 · pub get 5분 · analyze 5분)을 두고 넘으면 SIGKILL 로 끊고 69, 머리 주석의 종료 코드 목록 (소유자 결정 G6-Q2) (not in the current review) |

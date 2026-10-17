@@ -9,12 +9,14 @@ findings:
     title: "`--update` 가 같은 실행에서 실패가 난 뒤에도, plugin 버전을 읽지 못한 때에도 정답지를 쓴다"
   - id: WR-02
     severity: warning
-    disposition: open
+    disposition: fixed
     title: "`dart analyze` 의 종료 코드와 JSON 이 어긋나는 것을 보지 않아, 규칙 이름 단계가 YAML 이 깨진 배포 파일을 \"통과\" 로 찍는다"
+    note: "03-01 (998cc32): [2/N] 이 exit 0 · 진단 0건일 때만 통과하고, 깨진 YAML 은 형식 인자 없는 재실행의 parse_error 줄로 알린다 (example/README.md M15). v2.0 마감 때 기록 (감사 v2.0-MILESTONE-AUDIT.md)"
   - id: WR-03
     severity: warning
-    disposition: open
+    disposition: fixed
     title: "규칙 이름 단계가 세 코드 밖의 진단을 모두 버리고, 규칙을 하나도 읽지 못해도 통과한다"
+    note: "규칙 0개 절반은 02-05 (40776b5, M13 · M14), 세 코드 밖 진단 절반은 03-01 (998cc32) 이 진단 0건 조건으로 닫음 (M17 — duplicate_rule · unrecognized_error_code 가 [2/N] 실패). v2.0 마감 때 기록"
   - id: WR-04
     severity: warning
     disposition: open
@@ -29,8 +31,9 @@ findings:
     title: "루트 `pubspec.yaml` 의 `version` 을 바꾸면 exit 69 가 나는데, 안내는 `example/pubspec.yaml` 을 가리키고 어긋난 패키지 이름은 버려진다"
   - id: WR-08
     severity: warning
-    disposition: open
+    disposition: fixed
     title: "규칙 수 세기가 `rules:` 키를 보지 않아, `rules:` 를 잘못 적어 규칙이 하나도 적용되지 않는 배포 파일에서 `[2/4]` 가 통과한다"
+    note: "03-01 (998cc32): 진단 0건 조건으로 잘못 적은 rules: 키의 unsupported_option 경고가 [2/N] 을 실패시킨다 (example/README.md M16). v2.0 마감 때 기록"
   - id: IN-01
     severity: info
     disposition: open
@@ -71,7 +74,7 @@ findings:
     severity: warning
     disposition: fixed
     title: "workflow 의 `push:` 는 필터가 없어 tag push 에서도 돈다 — 주석과 D-10 은 반대로 적혀 있다"
-open: 15
+open: 12
 total: 17
 recorded: 2026-10-12T01:29:53.295Z
 ---
@@ -81,12 +84,12 @@ recorded: 2026-10-12T01:29:53.295Z
 | Finding | Severity | Disposition | Source |
 |---------|----------|-------------|--------|
 | WR-01 | warning | open | - |
-| WR-02 | warning | open | - |
-| WR-03 | warning | open | - |
+| WR-02 | warning | fixed | 03-01-PLAN.md (998cc32) — [2/N] 이 exit 0 · 진단 0건일 때만 통과, 깨진 YAML 은 parse_error 줄 (example/README.md M15). v2.0 마감 때 기록 |
+| WR-03 | warning | fixed | 02-05-PLAN.md Task 2 (40776b5, M13 · M14) + 03-01-PLAN.md (998cc32, M17) — 규칙 0개 · 세 코드 밖 진단 모두 [2/N] 실패. v2.0 마감 때 기록 |
 | WR-04 | warning | open | - |
 | WR-05 | warning | open | - |
 | WR-06 | warning | open | - |
-| WR-08 | warning | open | - |
+| WR-08 | warning | fixed | 03-01-PLAN.md (998cc32) — 잘못 적은 rules: 키의 unsupported_option 이 [2/N] 실패 (example/README.md M16). v2.0 마감 때 기록 |
 | IN-01 | info | open | - |
 | IN-02 | info | open | - |
 | IN-03 | info | open | - |

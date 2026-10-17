@@ -12,9 +12,9 @@ created: "2026-10-16"
 
 > Per-phase security contract: threat register, accepted risks, and audit trail.
 >
-> 출처: `06-01-PLAN.md` ~ `06-11-PLAN.md` 의 STRIDE 등록부 (계획 단계에서 작성됨 — `T-06-01` ~ `T-06-28`, gap 수정 06-08 ~ 06-11 의 `T-06-29` ~ `T-06-42`, plan 마다 둔 `T-06-SC`). ASVS level 1, block on `high`. SUMMARY 의 `## Threat Flags` 는 열한 plan 모두 없다.
-> 이 phase 가 바꾼 실행 코드는 로컬 검증 스크립트 `tool/verify.dart` (`[3/10]` 의 (i) · `--tag` · IN-12) 와 새 스크립트 `tool/smoke.dart` 둘이다. 배포 산출물 `lib/*.yaml` 은 바꾸지 않았다. 원격 쓰기가 여섯 있었다 — 작업 브랜치 push 셋(06-04 · 06-06 · 06-10, 실행 뒤 보고 — D-21, 06-10 은 G6-Q3), tag `v2.0.0` push (06-05, 소유자 `tag` 뒤), `main` 병합 둘 (06-06 PR #1 · 06-11 PR #2, 각각 소유자 `merge` 뒤). gap 수정(06-08 ~ 06-11)은 `[3/10]` (i) 의 reader 를 YAML · Markdown 해석기 값으로 바꾸고 (개발용 의존성 `markdown` 추가), `tool/smoke.dart` 에 include 사슬 판정 · 단계별 시간 제한 · `finally` / SIGINT 정리를 더했다 — 받는 쪽 규칙 · 버전은 그대로다.
-> 아래 "확인" 은 2026-10-16 phase 실행 뒤(T-06-01 ~ 28 은 HEAD `4841371`, T-06-29 ~ 42 와 T-06-SC 의 06-08 부분은 HEAD `ccf1b8f`) 이 저장소에서 명령을 다시 돌리거나 파일 · 원격을 직접 읽어 얻은 결과다. "복제본 rc 0" 은 `06-VALIDATION.md` 「감사 기록」 두 절의 실행 — task 마다 자기 커밋으로 되돌린 로컬 복제본에서 계획의 `<automated>` 를 적힌 그대로 돌린 결과 — 를 가리킨다.
+> 출처: `06-01-PLAN.md` ~ `06-15-PLAN.md` 의 STRIDE 등록부 (계획 단계에서 작성됨 — `T-06-01` ~ `T-06-28`, gap 수정 06-08 ~ 06-11 의 `T-06-29` ~ `T-06-42`, gap 수정 2회차 06-12 ~ 06-15 의 `T-06-43` ~ `T-06-55`, plan 마다 둔 `T-06-SC`). ASVS level 1, block on `high`. SUMMARY 의 `## Threat Flags` 는 열다섯 plan 모두 없다.
+> 이 phase 가 바꾼 실행 코드는 로컬 검증 스크립트 `tool/verify.dart` (`[3/10]` 의 (i) · `--tag` · IN-12) 와 새 스크립트 `tool/smoke.dart` 둘이다. 배포 산출물 `lib/*.yaml` 은 바꾸지 않았다. 원격 쓰기가 여덟 있었다 — 작업 브랜치 push 넷(06-04 · 06-06 · 06-10 · 06-14, 실행 뒤 보고 — D-21, 06-10 은 G6-Q3, 06-14 는 G7-Q3), tag `v2.0.0` push (06-05, 소유자 `tag` 뒤), `main` 병합 셋 (06-06 PR #1 · 06-11 PR #2 · 06-15 PR #3, 각각 소유자 `merge` 뒤). gap 수정(06-08 ~ 06-11)은 `[3/10]` (i) 의 reader 를 YAML · Markdown 해석기 값으로 바꾸고 (개발용 의존성 `markdown` 추가), `tool/smoke.dart` 에 include 사슬 판정 · 단계별 시간 제한 · `finally` / SIGINT 정리를 더했다 — 받는 쪽 규칙 · 버전은 그대로다. gap 수정 2회차(06-12 ~ 06-15)는 `[3/10]` (i) 가 CHANGELOG 최상단을 파일 첫 줄의 엄격한 제목에서 읽고 Markdown 첫 h2 와 견주게 했고, `tool/smoke.dart` 의 디코딩 · 제한 · 종료 코드 3 판정 · SIGINT 창 · `killTree` · 경로 가리기를 고쳤다 — 의존성 · 받는 쪽 규칙 · 버전은 그대로다.
+> 아래 "확인" 은 2026-10-16 phase 실행 뒤(T-06-01 ~ 28 은 HEAD `4841371`, T-06-29 ~ 42 와 T-06-SC 의 06-08 부분은 HEAD `ccf1b8f`, T-06-43 ~ 55 와 T-06-SC 의 06-12 ~ 06-15 부분은 HEAD `ea43b8e`) 이 저장소에서 명령을 다시 돌리거나 파일 · 원격을 직접 읽어 얻은 결과다. "복제본 rc 0" 은 `06-VALIDATION.md` 「감사 기록」 세 절의 실행 — task 마다 자기 커밋으로 되돌린 로컬 복제본에서 계획의 `<automated>` 를 적힌 그대로 돌린 결과 — 를 가리킨다.
 
 ---
 
@@ -22,7 +22,7 @@ created: "2026-10-16"
 
 | Boundary | Description | Data Crossing |
 |----------|-------------|---------------|
-| 로컬 저장소 → 공개 원격 (GitHub) | 06-04 에서 `2336ba0..704bf56` (35커밋), 06-06 에서 `704bf56..ad09d6e` (2커밋) 가 작업 브랜치에 올라갔다 — 합쳐 37커밋 · 파일 43개 (`.planning/phases/06-release` 18, `05-documentation` 7, `fixtures` 5, `tool` 2, `example` 2, `README.md` · `VERSIONING.md` · `CHANGELOG.md` · `pubspec.yaml` · `STATE` · `ROADMAP` · `REQUIREMENTS` 각 1), 더해진 줄 6,832. 그 위에 tag `v2.0.0` (tag 객체 `753f520` → `704bf56`) 과 `main` 의 병합 커밋 `5ee5a12` (`90a2736` 위에 392커밋) 이어서 06-10 에서 `ad09d6e..75f102f` (18커밋 · 파일 25개 · 더해진 줄 3,201 — `.planning/phases/06-release` 13, `tool` 2, `.claude/skills` 3, `05-documentation` 2, `02-verification-harness` 1, `example` · `pubspec.yaml` · `STATE` · `ROADMAP` 각 1) 가 올라갔고 PR #2 로 `main` 의 병합 커밋 `0038572` (부모 `5ee5a12` · `75f102f`) 가 생겼다. | 파일 내용 · tag 메시지 · PR 본문 · 병합 메시지 (공개) |
+| 로컬 저장소 → 공개 원격 (GitHub) | 06-04 에서 `2336ba0..704bf56` (35커밋), 06-06 에서 `704bf56..ad09d6e` (2커밋) 가 작업 브랜치에 올라갔다 — 합쳐 37커밋 · 파일 43개 (`.planning/phases/06-release` 18, `05-documentation` 7, `fixtures` 5, `tool` 2, `example` 2, `README.md` · `VERSIONING.md` · `CHANGELOG.md` · `pubspec.yaml` · `STATE` · `ROADMAP` · `REQUIREMENTS` 각 1), 더해진 줄 6,832. 그 위에 tag `v2.0.0` (tag 객체 `753f520` → `704bf56`) 과 `main` 의 병합 커밋 `5ee5a12` (`90a2736` 위에 392커밋) 이어서 06-10 에서 `ad09d6e..75f102f` (18커밋 · 파일 25개 · 더해진 줄 3,201 — `.planning/phases/06-release` 13, `tool` 2, `.claude/skills` 3, `05-documentation` 2, `02-verification-harness` 1, `example` · `pubspec.yaml` · `STATE` · `ROADMAP` 각 1) 가 올라갔고 PR #2 로 `main` 의 병합 커밋 `0038572` (부모 `5ee5a12` · `75f102f`) 가 생겼다. 06-14 에서 `724d17a..0461741` (11커밋 · 파일 18개 · 더해진 줄 1,912 — `.planning/phases/06-release` 8, `.claude/skills` 3, `tool` 2, `example` · `pubspec.yaml` · `VERSIONING.md` · `STATE` · `ROADMAP` 각 1) 가 올라갔고 PR #3 으로 `main` 의 병합 커밋 `3418989` (부모 `0038572` · `0461741`) 가 생겼다. | 파일 내용 · tag 메시지 · PR 본문 · 병합 메시지 (공개) |
 | 로컬 → GitHub Actions | push · tag · PR · 병합 · 수동 실행이 `verify` workflow 를 돌린다 — 권한은 `contents: read` 뿐 (`.github/workflows/verify.yml` 14 ~ 15행, 저장소 기본 workflow 권한도 `read`) | 저장소 내용 (읽기) |
 | GitHub → 임시 빈 프로젝트 | `tool/smoke.dart` 가 공개 주소에서 커밋 · tag 를 받아 저장소 밖 임시 폴더에서 분석한다 | 이 패키지 · `flutter_riverpod` · plugin (읽기) |
 | 사람의 결정 → 실행 | tag push 와 `main` 병합은 소유자의 `tag` · `merge` 뒤에만 — auto-mode 에서도 멈춘다 (`gate="blocking-human"`) | 결정 |
@@ -75,7 +75,20 @@ created: "2026-10-16"
 | T-06-40 | Tampering | squash · rebase 로 고침 · tag 커밋이 `main` 이력에서 빠지거나 브랜치 삭제 · 새 tag | high | mitigate | `gh pr merge 2 --merge` 만. 확인: `origin/main` `0038572` 의 부모 `5ee5a12` · `75f102f`; `6aa78fe` · `2c5b73b` · `4286d48` · `75f102f` · `v2.0.0` 모두 조상; 원격 head 둘 · tag 4줄 (orchestrator 직접 확인); 06-11-T2 적힌 그대로 rc 0 | closed |
 | T-06-41 | Repudiation | 무인 실행이 checkpoint 를 자동 승인해 소유자 확인 없이 합친다 | high | mitigate | `gate="blocking-human"`. 확인: orchestrator 가 dispatch 전에 물음 — 소유자 `merge` 10:38:32Z < `mergedAt` 10:40:54Z | closed |
 | T-06-42 | Information disclosure | 병합 메시지 · SUMMARY 에 임시 폴더 경로 · 비공개 정보 | low | mitigate | 확인: merge commit 메시지에 홈 · 임시 경로 · 개인 이메일 꼴 0; 06-11-SUMMARY 절대 경로 꼴 0 | closed |
-| T-06-SC | Tampering | 패키지 설치 (npm/pip/cargo) | high (06-01 ~ 04 · 06-08) / low (06-05 ~ 07 · 06-09 ~ 11) | mitigate / accept | 06-01 ~ 06-07 은 저장소에 패키지를 더하지 않았다 — `pubspec.yaml` 의 변경은 version · 주석 두 줄 (06-04-T1, numstat 2/2), lock 여섯은 `woody_lints` 의 `version` 줄 하나씩; smoke 가 받는 `flutter_riverpod ^3.0.0` 은 `example/pubspec.yaml` 이 이미 쓰는 선언이고 저장소 밖 임시 폴더에만 놓였다. **06-08 이 `dev_dependencies` 에 `markdown: ^7.3.1` 을 더했다** (소유자 결정 G6-Q1). 확인: pub.dev API 의 publisher `tools.dart.dev`, 최신 7.3.1, 의존성 `args` · `meta` (orchestrator 가 06-08 dispatch 전과 이 감사 때 다시 읽음); 루트 lock 은 `direct dev` · hosted pub.dev · 7.3.1; 받는 쪽 그래프 밖 (T-06-31). 06-09 ~ 06-11 은 설치 없음 (AR-06-03) | closed |
+| T-06-43 | Tampering | `[3/10]` (i) 가 해석기와 GitHub 화면이 갈리는 입력(한 글자 `-` setext · 블록 안의 `<!--`)에서 거짓 통과한다 | high | mitigate | 첫 줄 규칙(`topHeadingLine`)이 주 reader, `package:markdown` 첫 h2 일치가 둘째 reader. 확인: 06-12-T2 커밋 전 상태 복제본 rc 0 (525초 — M107 ~ M115 · 재측정 일곱, 대표 여섯은 세 경로 전체 실행, 고치기 전 판의 거짓 통과를 같은 자리에서 대조); 실패 방향 (가) — 해석기와 견주지 않는 판은 06-12-T1 rc 1 (`06-VALIDATION.md` 감사 기록) | closed |
+| T-06-44 | Denial of service | 첫 줄 규칙이 올바른 CHANGELOG 에서 거짓 실패해 평소 push 의 CI 가 빨개진다 | high | mitigate | 확인: 06-12-T1 커밋 전 상태 복제본 rc 0 (세 모드 10/10 · 문자열 하네스 통과 여섯 — BOM · CRLF · 뒤 공백 · `미출시` · ` - ` 두 번); 실제 실행 셋(브랜치 push `38934754393`, `pull_request` `38935292307`, `main` push `38936761858`)이 모두 success · 10/10 · `[3/10] … 통과` · `버전 일치 검사: 평소` (orchestrator 가 `gh run view --log` 로 다시 셈) | closed |
+| T-06-45 | Information disclosure | 기록 · 커밋 · SUMMARY 에 복제본 · 하네스의 임시 폴더 경로 · 비공개 정보 · 저장소에 없는 경로 꼴이 들어간다 | medium | mitigate | 확인: 06-12 의 추가된 405줄 · 06-12-SUMMARY 에 실제 경로 · 이메일 · 비공개 이름 · `LEAK?` 경로 0 (orchestrator 재점검); 06-14 의 push gate rc 0 | closed |
+| T-06-46 | Denial of service | UTF-8 아닌 출력이 처리되지 않은 비동기 예외(255)로 `finally` 정리를 건너뛰고, 파이프를 붙든 자손이 제한을 넘겨 기다리게 한다 | high | mitigate | `allowMalformed` decoder (2곳) · `Future.wait` 제한. 확인: 06-13-T1 복제본(`9d96778`) rc 0 — `utf8 finally=ran` · `fffd=true` · `pipe timedOut=true … fast=true`; 06-13-T3 복제본(`ea2d664`) rc 0 — SIGINT 130 · 폴더 0, `v2.0.0` smoke 통과 | closed |
+| T-06-47 | Tampering | 받은 옵션 파일이 깨진 YAML 이어도 smoke 가 통과한다 (생성 파일 제외 · `invalid_annotation_target: ignore` 가 빠진 채) | medium | mitigate | (c″) 종료 코드 3 · `error` 줄 없음 규칙과 `included_file_parse_error`. 확인: 06-13-T1 복제본 rc 0 (`exit3-noerr` · `exit3-err` · `parse-err` · `exit3-inc`); 실패 방향 (나) — 조건을 뒤집은 판은 rc 1; 06-13-T3 통과 실행의 꼬리 0 (거짓 양성 없음) | closed |
+| T-06-48 | Information disclosure | `main` 의 `ProcessException` 안내에 SDK root · 홈 경로가 그대로 나온다 | low | mitigate | 확인: `scrubNamesFor(` 4곳 (정의 1 · `runSmoke` 1 · catch 2), `'<repo>'` 글자 1곳; 06-13-T2 복제본(`ea2d664`) rc 0 — `scrub3` · `scrub4` 가린 글자, 출력의 홈 경로 글자 0 | closed |
+| T-06-49 | Elevation of privilege | `killTree` 가 재사용된 pid 를 끊거나, 표를 읽지 못하면 자손을 조용히 남긴다 | low | mitigate | SIGKILL 직전 표 재확인 · 사슬 밖 SIGCONT · 표 없음 안내. 확인: `ProcessSignal.sigcont` 1곳 · `readTable` 매개변수; 06-13-T2 복제본 rc 0 (`notable exit=-9` · 안내 줄 정확히 1 · `tree … left=0`). pid 재사용과 `finally` 순서의 경합 창은 강제할 수 없어 소스 · 회귀로만 봤다 (06-13-SUMMARY) — 하위 프로세스에 사용자 입력이 들어가지 않고 이 저장소의 smoke 가 띄운 사슬만 다룬다 | closed |
+| T-06-50 | Information disclosure | push 범위에 임시 폴더 경로 · 절대 경로 · 비공개 정보 · 저장소에 없는 경로 꼴이 들어가 공개된다 | high | mitigate | fail-closed push gate. 확인: 06-14 executor 가 push 직전 rc 0 (`724d17a..0461741`); orchestrator 가 dispatch 전 같은 gate rc 0 과 넓은 재점검(이메일 · 비공개 이름 · `~/` · U+FEFF) 0 — 걸린 글자는 계획 `<automated>` 안의 점검 패턴과 표준 참조 `@~/.claude/gsd-core/…` 뿐; PR #3 본문에 비공개 문자열 · 저장소에 없는 경로 0 | closed |
+| T-06-51 | Repudiation | 처리 기록이 실재하지 않는 · 다른 task 의 커밋을 가리키거나, 고치지 않은 지적을 `fixed` 로, IN-08 을 이유 없이 `deferred` 로 둔다 | medium | mitigate | 확인: 06-14-T1 복제본(`0461741`) rc 0 — 아홉 행의 sha 가 제목 머리로 찾은 `85e1b0d` · `9d96778` · `ea2d664` 와 발견별로 같음, IN-08 은 G7-Q1 이유, open 0 · total 16 | closed |
+| T-06-52 | Denial of service | runner 에서 첫 줄 규칙이 다르게 읽히거나 PR 실행이 tag 모드로 돈다 | low | mitigate | 확인: T-06-44 의 실행 셋 모두 평소 모드 줄 · 10/10 (`ubuntu-24.04` / `20261012.334.1`) | closed |
+| T-06-53 | Tampering | squash · rebase 로 고침 · tag 커밋이 `main` 이력에서 빠지거나 브랜치 삭제 · 새 tag | high | mitigate | `gh pr merge 3 --merge` 만. 확인: `origin/main` `3418989` 의 부모 `0038572` · `0461741`; `85e1b0d` · `e6a4cbc` · `9d96778` · `ea2d664` · `0461741` · `v2.0.0` 모두 조상; 원격 head 둘 · tag 4줄 (orchestrator 직접 확인); 06-15-T2 적힌 그대로 rc 0 | closed |
+| T-06-54 | Repudiation | 무인 실행이 checkpoint 를 자동 승인해 소유자 확인 없이 합친다 | high | mitigate | `gate="blocking-human"`. 확인: orchestrator 가 dispatch 전에 물음 — 소유자 `merge` 17:01:23Z < `mergedAt` 17:03:39Z | closed |
+| T-06-55 | Information disclosure | 병합 메시지 · SUMMARY 에 임시 폴더 경로 · 비공개 정보 | low | mitigate | 확인: merge commit `3418989` 메시지와 06-12 ~ 06-15 SUMMARY 에 홈 · 임시 경로 · 개인 이메일 · 비공개 이름 · 저장소에 없는 경로 꼴 0 (orchestrator 재점검; 06-15 executor 가 SUMMARY 의 시스템 도구 경로 한 줄을 `5e44d4c` 에서 말로 바꾼 뒤) | closed |
+| T-06-SC | Tampering | 패키지 설치 (npm/pip/cargo) | high (06-01 ~ 04 · 06-08) / low (06-05 ~ 07 · 06-09 ~ 15) | mitigate / accept | 06-01 ~ 06-07 은 저장소에 패키지를 더하지 않았다 — `pubspec.yaml` 의 변경은 version · 주석 두 줄 (06-04-T1, numstat 2/2), lock 여섯은 `woody_lints` 의 `version` 줄 하나씩; smoke 가 받는 `flutter_riverpod ^3.0.0` 은 `example/pubspec.yaml` 이 이미 쓰는 선언이고 저장소 밖 임시 폴더에만 놓였다. **06-08 이 `dev_dependencies` 에 `markdown: ^7.3.1` 을 더했다** (소유자 결정 G6-Q1). 확인: pub.dev API 의 publisher `tools.dart.dev`, 최신 7.3.1, 의존성 `args` · `meta` (orchestrator 가 06-08 dispatch 전과 이 감사 때 다시 읽음); 루트 lock 은 `direct dev` · hosted pub.dev · 7.3.1; 받는 쪽 그래프 밖 (T-06-31). 06-09 ~ 06-11 은 설치 없음 (AR-06-03). 06-12 ~ 06-15 도 설치 없음 (AR-06-04) — 06-12 의 `pubspec.yaml` 변경은 주석 두 줄 (`85e1b0d`, numstat 2/2; `6a19a2c` 이후 주석 밖 줄 변화 0) | closed |
 
 *Status: open · closed · open — below high threshold (non-blocking)*
 *Severity: critical > high > medium > low — only open threats at or above workflow.security_block_on count toward threats_open*
@@ -90,6 +103,7 @@ created: "2026-10-16"
 | AR-06-01 | T-06-18 | 올린 tag 는 옮기지 않기로 했다 (PROJECT.md Key Decisions, D-01) — tag 실행이나 tag smoke 가 실패하면 고치는 길은 `v2.0.1` 이다. 같은 코드 · 같은 커밋으로 브랜치 CI · 예행이 먼저 통과해 남은 위험은 runner 환경 차이뿐이었고, 실제 실행은 둘 다 통과했다 | 계획 단계의 등록부 (06-05-PLAN.md) — 소유자가 tag push 를 승인함 (2026-10-16) | 2026-10-16 |
 | AR-06-02 | T-06-SC (06-05 · 06-06 · 06-07) | 이 세 plan 은 git · gh 명령과 문서만 다룬다 — 설치할 패키지가 없다 | 계획 단계의 등록부 | 2026-10-16 |
 | AR-06-03 | T-06-SC (06-09 · 06-10 · 06-11) | 이 세 plan 은 패키지를 설치하지 않는다 — 06-09 는 `dart:io` · `dart:convert` 만, 06-10 · 06-11 은 git · gh 명령과 기록뿐. runner 가 받는 `markdown` 은 06-08 이 publisher 를 확인한 그 선언이다 | 계획 단계의 등록부 (06-09 · 06-10 · 06-11-PLAN.md) | 2026-10-16 |
+| AR-06-04 | T-06-SC (06-12 ~ 06-15) | 이 네 plan 은 패키지를 설치하지 않는다 — 06-12 는 `pubspec.yaml` 주석 두 줄만 (의존성 그대로), 06-13 은 `dart:io` · `dart:convert` 만, 06-14 · 06-15 는 git · gh 명령과 기록뿐. smoke 가 받는 것은 06-03 과 같은 `v2.0.0` · `flutter_riverpod` · plugin 이다 | 계획 단계의 등록부 (06-12 ~ 06-15-PLAN.md) | 2026-10-16 |
 
 *Accepted risks do not resurface in future audit runs.*
 
@@ -101,6 +115,7 @@ created: "2026-10-16"
 |------------|---------------|--------|------|--------|
 | 2026-10-16 | 29 | 29 | 0 | orchestrator (secure-phase, ASVS L1 — 계획 단계 등록부라 감사 에이전트 생략) |
 | 2026-10-16 (gap 수정 뒤) | 43 | 43 | 0 | orchestrator (secure-phase, ASVS L1 — 계획 단계 등록부라 감사 에이전트 생략) |
+| 2026-10-16 (gap 수정 2회차 뒤) | 56 | 56 | 0 | orchestrator (secure-phase, ASVS L1 — 계획 단계 등록부라 감사 에이전트 생략) |
 
 감사 메모 (2026-10-16):
 - 공개된 범위는 위 「Trust Boundaries」 첫 행과 같다. 아직 올리지 않은 `.planning/` 기록 커밋이 이 감사 시점에 다섯 있다 (`6265265` · `41785ad` · `5ceead2` · `970b9fc` · `4841371`). 06-06 의 push gate 를 그 범위로 다시 돌린 결과는 rc 0 이다 (`06-VALIDATION.md` 감사 기록). 이 커밋들을 언제 올릴지는 phase 끝에 소유자에게 묻는다.
@@ -112,6 +127,12 @@ created: "2026-10-16"
 - 아직 올리지 않은 기록 커밋이 이 감사 시점에 넷 있다 (`fd7bcce` · `3a51efa` · `0251731` · `ccf1b8f`, 이 감사의 커밋은 그 뒤). validate 감사에서 같은 push gate 를 그 범위로 돌리자 `06-10-SUMMARY.md` 108행이 gate 의 자기 점검이 심는 가짜 경로를 글자 그대로 적어 `LEAK?` 로 걸렸다 — 실제 누출은 아니지만 fail-closed gate 라 다음 push 를 막는 자리였다. `0251731` 이 그 줄을 말로 바꿨고 gate 는 rc 0 이 되었다. 이 커밋들을 올릴지는 phase 끝에 소유자에게 묻는다.
 - 06-09 의 `killTree` 는 계획에 없던 구현이다 (자손까지 얼린 뒤 끊음, `/bin/ps` 를 절대 경로 · `Process.runSync` 로). 하위 프로세스에 사용자 입력이 들어가지 않고 pid 만 다루므로 새 위협으로 보지 않았다 — 동작 판정은 code review 와 verifier 에 맡긴다.
 
+감사 메모 (2026-10-16 UTC, gap 수정 2회차 06-12 ~ 06-15 뒤):
+- 새로 공개된 범위는 `724d17a..0461741` (위 「Trust Boundaries」 첫 행). 06-14 의 push gate · orchestrator 의 넓은 재점검 · PR #3 본문 점검 모두 0 이었다. 이어서 `main` 에 PR #3 의 병합 커밋 `3418989` 이 생겼다 — 병합은 새 파일을 올리지 않는다.
+- 계획 밖 커밋 하나가 공개 범위에 들었다: `e6a4cbc` — 06-12 Task 1 이 `tool/verify.dart` 에 넣은 보이지 않는 U+FEFF 글자를 이스케이프 표기로 되돌림 (소유자 결정, 동작 같음). 이 phase 의 추적 파일에 U+FEFF 바이트는 이제 0 이다. 보이지 않는 글자는 리뷰에서 코드를 다르게 읽히게 하는 꼴이라 push 전에 고쳤다.
+- 아직 올리지 않은 기록 커밋이 이 감사 시점에 다섯 있다 (`4ee0c55` · `3ba5fca` · `5e44d4c` · `21f8e23` · `ea43b8e`, 이 감사의 커밋은 그 뒤). 06-14 의 push gate 에서 `origin/main` sha 만 바꾼 판을 그 범위로 돌린 결과는 rc 0 이다 (`06-VALIDATION.md` 감사 기록). 이 커밋들을 올릴지는 phase 끝에 소유자에게 묻는다.
+- 06-13 의 `killTree` 재확인 · SIGCONT 는 계획대로다 (T-06-49). `main` 실행에도 "`ubuntu-latest` 가 2026-10-19 부터 Ubuntu 26 으로 옮겨진다" 안내가 다시 붙었다 — `verify.yml` 은 `runs-on: ubuntu-latest` 이므로 다음 CI 는 새 이미지에서 돈다. 보안 위협은 아니고 다음 일이 알아 둘 사실이다.
+
 ---
 
 ## Sign-Off
@@ -121,7 +142,7 @@ created: "2026-10-16"
 - [x] `threats_open: 0` confirmed
 - [x] `status: verified` set in frontmatter
 
-**Approval:** verified 2026-10-16
+**Approval:** verified 2026-10-16 (gap 수정 2회차 06-12 ~ 06-15 뒤 다시 — 56/56)
 
 ## Security Audit 2026-10-16
 
@@ -137,4 +158,12 @@ created: "2026-10-16"
 |---|---|
 | Threats found | 43 |
 | Closed | 43 |
+| Open | 0 |
+
+## Security Audit 2026-10-16
+
+| Metric | Count |
+|---|---|
+| Threats found | 56 |
+| Closed | 56 |
 | Open | 0 |

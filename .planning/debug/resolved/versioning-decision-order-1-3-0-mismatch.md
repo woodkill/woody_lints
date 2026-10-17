@@ -1,8 +1,8 @@
 ---
-status: diagnosed
+status: resolved
 trigger: "UAT gap G-01-1 — VERSIONING.md 의 판정 순서(25-28행)를 1.3.0 사례에 문자 그대로 대입하면 major 가 나오는데 '실제 사례' 절은 minor 라고 적었다. 2.0.0 사례는 일치한다. 소유자는 UAT 에서 '문서를 고친다'를 택했다."
 created: 2026-10-11T06:09:39Z
-updated: 2026-10-11T06:18:00Z
+updated: 2026-10-16T23:46:09Z
 mode: find_root_cause_only
 symptoms_prefilled: true
 bug_class: Bohrbug (결정적 — 같은 문서를 읽으면 항상 같은 두 답이 나온다)
@@ -14,7 +14,7 @@ bug_class: Bohrbug (결정적 — 같은 문서를 읽으면 항상 같은 두 �
 hypothesis: (확정) 판정 순서 1번(`VERSIONING.md` 25행 = `01-CONTEXT.md` D-09 ①, 68행)의 둘째 조건 "자동 검사가 막힐 수 있나" 는 기준표 42행의 **결과 칸**("받는 쪽이 겪는 일: 자동 검사가 막힐 수 있다")만 떼어 온 문구다. 기준표는 **변경 종류 칸**("규칙 심각도를 warning 이상으로 올림")으로 등급을 매기는데, 질문에서는 변경 종류 한정이 빠졋다. 그래서 "결과가 같은 다른 변경" — 처음부터 warning 등급인 규칙을 새로 켜는 것(1.3.0 의 `riverpod_lint` 첫 활성화, 기준표 43행·46행) — 도 1번에 "예" 로 걸린다. 1.3.0 사례(60-62행)는 기준표·D-02 의 변경 종류 기준(규칙/plugin 추가 = minor)으로 썼기 때문에 이 조건을 따지지 않았다. 분류: **(a) 문구 결함** — D-02 의 채택 근거(`research/ARCHITECTURE.md` 388행: "규칙 추가는 `--fatal-infos` CI 를 깨뜨릴 수 있어 엄밀히 breaking 이지만 tag 고정이라 MINOR 로 둔다")가 "자동 검사가 막힐 수 있다" 를 이미 minor 로 받아들였으므로, 그 결과를 major 질문으로 쓴 것은 정책 의도와 어긋나는 문구다.
 test: 완료 — 문장 대조, 연구 문서 추적, 사실 재확인
 expecting: 해당 없음
-next_action: ROOT CAUSE FOUND 반환 (diagnose only — 수정은 소유자 결정)
+next_action: 없음 — 소유자가 방향 (나) 를 택했고 01-04 에서 고쳤다 (Resolution.fix 참조). v2.0 마감 전 점검(2026-10-16 UTC)에서 소유자 확인으로 resolved 처리
 known_pattern_candidate: 없음 (`.planning/debug/knowledge-base.md` 부재)
 
 reasoning_checkpoint:
@@ -111,13 +111,17 @@ related_findings: |
   - WR-02 (자동 검사 미정의): **같은 뿌리.** 같은 조건의 측정 기준이다. 둘째 조건을 변경 종류로 좁히면 "자동 검사" 는 등급 경계가 아니게 되어 참고 문구로 내려가고, 결과 기준을 유지하면 반드시 정의해야 한다(flutter analyze 기준이면 규칙 추가 전부가 major 가 되어 D-02 가 무너진다).
   - WR-04 (52행 "에만" vs 54행): **같은 뿌리.** D-02 의 major 범위(설정·SDK 만)와 D-04 의 결과 기반 이유 사이의 긴장을 사유 절에서 드러낸 것. 61행은 52행의 범위를, 25행은 54행의 범위를 따른다. 어느 방향을 택해도 52행·54행은 25행과 함께 고쳐야 한다.
   - WR-03 (판정 순서 vs 기준표 세 경우): **별개 결함.** 구조적 원인(D-09 가 D-05 를 행 단위로 옮기지 않음)은 같지만 방향이 반대(40·41·45·47행 누락 → 판정 순서가 너무 좁음)이고 1.3.0 사례와 무관하다. WR-01 의 방향 선택과 독립적으로 고칠 수 있다. 단 README/CHANGELOG 만 고친 변경(47행 patch vs 4번 올리지 않음)은 D-05 를 건드리는 소유자 결정이다.
-fix: (해당 없음 — diagnose only. 방향 후보는 아래)
+fix: |
+  소유자가 UAT 에서 방향 (나) 변경 종류 기준을 택했고 01-04 gap plan 이 고쳤다 (01-UAT.md G-01-1 `status: resolved`, `resolved_by: 01-04-PLAN.md`).
+  `VERSIONING.md` 판정 순서 1번이 기준표의 major 다섯 행을 모두 묻게 되었고, 셋째 조건은 "이미 켜져 있던 규칙의 심각도가 warning 이상으로 올라가나" 로 좁혔다 — 처음부터 warning 이상인 규칙을 새로 켜는 것은 2번(minor) 이라고 본문에 적었다 (`6b9eec8`). 같은 문구 수정을 `01-CONTEXT.md` D-02 · D-09 ① 에 주석으로 남겼다 (`83f9768`). 같은 뿌리인 WR-01 · WR-02 · WR-04 는 `01-REVIEW-DISPOSITION.md` 에 01-04 로 fixed 처리되었다.
 fix_directions: |
   (가) 결과 기준 유지 — 1.3.0 을 재분류. 25행 그대로. 60-62행을 68-71행의 "옛 판정과 지금 정책이 다른 것" 목록으로 옮겨 "당시 minor → 지금 정책이면 major (1번에서 멈춤)" 로 쓰고, 1번이 "아니오" 인 새 minor 사례를 둔다. 52행 "에만" 제거, 43·46행에 심각도 조건 추가(info 면 minor, warning 이상이면 major), 판정 순서 아래에 "자동 검사 = dart analyze 옵션 없이" 정의 추가(WR-02 필수). 바꾸는 결정: D-02(major 범위 확대), D-05(43·46행 수정), D-09 3.(1.3.0 = minor 사례 폐기). D-04·D-09 ① 유지. 가장 큰 변경이며 Phase 3/4 의 riverpod_lint 하한 상향·warning 규칙 추가가 major 로 바뀐다.
   (나) 변경 종류 기준으로 좁힘 — 25행 둘째 조건을 "이미 켜져 있던 규칙의 심각도가 warning 이상으로 올라가나" 로 바꾼다. 61행에 둘째 조건의 답("기존 규칙의 심각도는 바뀌지 않았다. 새로 켜진 riverpod_lint 규칙 중 warning 등급이 있지만 새로 켠 규칙은 2번에서 다룬다")을 덧붙인다. 52행 "에만" 을 "설정 파일·SDK 를 고쳐야 하거나 기존 규칙의 심각도가 warning 이상으로 올라가는 변경" 으로, 54행의 이유를 변경 종류와 맞게("새로 생기는 경고 표에 잡히지 않는 채로 기존 진단이 실패로 바뀐다" 등) 고친다. 바꾸는 결정: D-09 ①(문구), D-02 셋째 문장(문구 — 정책 "규칙 추가 = minor" 는 유지). D-04·D-05·D-09 3. 유지. **가장 작은 변경**이며 결정 원문의 채택 근거(ARCHITECTURE 388행, PITFALLS 539-540행)와 같은 방향이다. WR-02 는 참고 문구로 축소된다.
   (다) 빠진 경우를 기준표에 명시 — 01-02-SUMMARY 308행의 제안대로 D-05 표에 "처음부터 warning 이상인 규칙을 새로 켬 (plugin 첫 활성화 포함)" 행을 추가해 등급을 적고(minor 면 (나) 와 같은 결론, major 면 (가) 와 같은 결론), 25행 둘째 조건을 그 행과 42행을 가리키는 문구로 바꾸고, 61행에 그 행에 따른 답을 덧붙인다. 바꾸는 결정: D-05(행 추가), D-09 ①(문구). 등급을 minor 로 적으면 D-02·D-09 3. 유지, major 로 적으면 (가) 와 같이 D-02·D-09 3. 변경. 빈칸을 표에 드러낸다는 점에서 (나) 보다 설명이 명확하지만 변경은 더 크다.
-verification: (해당 없음 — diagnose only)
-files_changed: []
+verification: "01-04 실행 뒤 Phase 1 검증(01-VERIFICATION.md)이 G-01-1 을 계산으로 확인했고(1.3.0 minor, 2.0.0 major), 01-UAT.md 의 G-01-1 은 resolved. 2026-10-16 (UTC) 에 `VERSIONING.md` 25행에 셋째 조건(이미 켜져 있던 규칙) 이 있는 것을 다시 확인했다"
+files_changed:
+  - "VERSIONING.md (6b9eec8)"
+  - ".planning/phases/01-baseline-and-toolchain/01-CONTEXT.md (83f9768)"
 files_involved:
   - "VERSIONING.md:25 — 판정 순서 1번 둘째 조건이 결과 기반이라 기준표 42행보다 넓다 (1차 결함 지점)"
   - "VERSIONING.md:60-62 — 1.3.0 사례가 25행 둘째 조건을 따지지 않는다 (증상 지점)"
