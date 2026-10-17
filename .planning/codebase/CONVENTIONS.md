@@ -52,33 +52,33 @@ last_mapped_at: 2026-10-17
 
 ## 규칙 추가 · 변경 절차 (Prescriptive)
 
-근거: `README.md` 「이 저장소를 고치는 사람에게」(382-388행), `lib/base.yaml` 3행 주석, `tool/verify.dart` 6행 (`[3/N]` 설명), `VERSIONING.md` 「판정 순서」 · 「CHANGELOG 항목 형식」.
+- 근거: `README.md` 「이 저장소를 고치는 사람에게」(382-388행), `lib/base.yaml` 3행 주석, `tool/verify.dart` 6행 (`[3/N]` 설명), `VERSIONING.md` 「판정 순서」 · 「CHANGELOG 항목 형식」.
 
-1. 규칙은 `lib/base.yaml` 에만 적는다. 알맞은 분류 주석(`# 성능` · `# 가독성 및 스타일` · `# 버그 방지` · `# strict …`) 아래에 넣는다. `lib/codegen.yaml` · `lib/riverpod.yaml` 에 `linter:` 를 두면 `[3/10]` 이 실패한다 (`example/README.md` M35).
-2. 같은 커밋에서 다음을 함께 고친다 — 어긋나면 `[3/10]` 이 실패한다 (`README.md` 385행):
-   - `RULES.md` 「켠 규칙」 표 (`<!-- woody:enabled-rules:start -->` ~ `end`, 9-93행). 행의 첫 칸은 backtick 이름 하나.
-   - `README.md` 「받는 규칙」의 표시 구역 `woody:readme-rules` (빈 줄 · `**분류**` 소제목 · `` - `이름` `` 불릿만 허용; 구역이 든 절의 구역 밖에 목록 줄을 두지 않는다 — `example/README.md` M43 · M44 · M74 ~ M77).
-   - `CHANGELOG.md` 최상단 버전 항목 (규칙 추가는 minor, 「새로 생기는 경고」 칸 필수 — `VERSIONING.md` 45 · 54행).
-   - 연습용 프로젝트 샘플과 정답지 (`fvm dart run tool/verify.dart --update` 로 갱신, `example/README.md` 「실행」). `example/lib/` 를 고치면 `fixtures/*/lib/` 복사본 다섯도 같이 고친다 (`example/README.md` 「연습용 프로젝트 여섯」).
-3. 형식:
-   - 목록 형식 `    - rule_name # 이유` 만 쓴다. 맵 항목(`- avoid_print: true`), 이름을 다음 줄로 넘긴 `-` 는 검증이 종료 코드 70 으로 멈춘다 (`example/README.md` M29 · M30). 따옴표로 감싼 이름은 읽지만 쓰지 않는다 (M27 · M28).
-   - 줄 끝에 한국어 주석으로 켠 이유를 한 줄 적는다. "무엇" 보다 "왜" — 예: `prefer_const_constructors # … 성능 이득은 근거가 부족하다는 것이 Flutter 팀의 판단 (lints#205)` (`lib/base.yaml`).
-   - 기반 세트(`flutter_lints` / `lints`)가 이미 켜는 규칙은 넣지 않는다 — `[3/10]` 이 겹침으로 실패한다 (M20).
-4. 끄는 규칙: `lib/base.yaml` 에 주석 처리로 남기지 않는다(현재 주석 처리된 규칙 줄은 0). 대신 `RULES.md` 「켜지 않은 규칙」 표(`woody:disabled-rules` 구역)에 접두사 7종(`기반 세트` · `비호환` · `experimental`/`testing` · `v2 로 미룸 (RULES-NN)` · `deprecated`/`removed`/`없음` · `규칙이 돌지 않음` · `소유자 결정`) 또는 `보류` 로 시작하는 이유를 적는다 (`RULES.md` 105-119행).
-5. 조각마다 받는 최상위 키는 닫힌 목록이다: `lib/base.yaml` 은 `include` · `linter` · `analyzer`, `lib/codegen.yaml` 은 `analyzer`(아래 `errors` · `exclude`), `lib/riverpod.yaml` 은 `plugins`(아래 `riverpod_lint`). `lib/recommended.yaml` · `lib/analysis_options.yaml` 은 `include` 만 (`README.md` 384행).
-6. `riverpod_lint` 하한을 올릴 때 같은 커밋에서 고칠 자리 (`lib/riverpod.yaml` 5행 주석, `README.md` 388행):
-   - `lib/riverpod.yaml` 의 `riverpod_lint:` 선언
-   - `fixtures/overrides/analysis_options.yaml` 의 `version:` (`[4/10]` 이 견줌)
-   - `README.md` 의 plugin 버전 예시 둘 (「조각마다의 설정」 · 「규칙 · plugin 진단 끄기」, 펜스 안 블록 꼴 · 키 글자 그대로 — `[3/10]` 이 견줌)
-7. 릴리스 버전을 올릴 때는 `pubspec.yaml` `version:`, `CHANGELOG.md` 첫 줄 제목, `README.md` 의 `ref:` 예시 둘, 커밋된 lock 여섯(`example/pubspec.lock`, `fixtures/*/pubspec.lock` — `fvm dart pub get` 으로만)을 같은 커밋에서 고친다 (`VERSIONING.md` 「릴리스 절차」 140-141행, `README.md` 388행).
-8. 새 규칙이 SDK 에서 실제로 도는지 판단할 때 `rules.json` 대신 `messages.yaml` 과 실제 분석을 쓴다 (프로젝트 skill `.claude/skills/spike-findings-woody-lints/references/rule-status-check.md`).
+- **1.** 규칙은 `lib/base.yaml` 에만 적는다. 알맞은 분류 주석(`# 성능` · `# 가독성 및 스타일` · `# 버그 방지` · `# strict …`) 아래에 넣는다. `lib/codegen.yaml` · `lib/riverpod.yaml` 에 `linter:` 를 두면 `[3/10]` 이 실패한다 (`example/README.md` M35).
+- **2.** 같은 커밋에서 다음을 함께 고친다 — 어긋나면 `[3/10]` 이 실패한다 (`README.md` 385행):
+- ↳ `RULES.md` 「켠 규칙」 표 (`<!-- woody:enabled-rules:start -->` ~ `end`, 9-93행). 행의 첫 칸은 backtick 이름 하나.
+- ↳ `README.md` 「받는 규칙」의 표시 구역 `woody:readme-rules` (빈 줄 · `**분류**` 소제목 · `` - `이름` `` 불릿만 허용; 구역이 든 절의 구역 밖에 목록 줄을 두지 않는다 — `example/README.md` M43 · M44 · M74 ~ M77).
+- ↳ `CHANGELOG.md` 최상단 버전 항목 (규칙 추가는 minor, 「새로 생기는 경고」 칸 필수 — `VERSIONING.md` 45 · 54행).
+- ↳ 연습용 프로젝트 샘플과 정답지 (`fvm dart run tool/verify.dart --update` 로 갱신, `example/README.md` 「실행」). `example/lib/` 를 고치면 `fixtures/*/lib/` 복사본 다섯도 같이 고친다 (`example/README.md` 「연습용 프로젝트 여섯」).
+- **3.** 형식:
+- ↳ 목록 형식 `    - rule_name # 이유` 만 쓴다. 맵 항목(`- avoid_print: true`), 이름을 다음 줄로 넘긴 `-` 는 검증이 종료 코드 70 으로 멈춘다 (`example/README.md` M29 · M30). 따옴표로 감싼 이름은 읽지만 쓰지 않는다 (M27 · M28).
+- ↳ 줄 끝에 한국어 주석으로 켠 이유를 한 줄 적는다. "무엇" 보다 "왜" — 예: `prefer_const_constructors # … 성능 이득은 근거가 부족하다는 것이 Flutter 팀의 판단 (lints#205)` (`lib/base.yaml`).
+- ↳ 기반 세트(`flutter_lints` / `lints`)가 이미 켜는 규칙은 넣지 않는다 — `[3/10]` 이 겹침으로 실패한다 (M20).
+- **4.** 끄는 규칙: `lib/base.yaml` 에 주석 처리로 남기지 않는다(현재 주석 처리된 규칙 줄은 0). 대신 `RULES.md` 「켜지 않은 규칙」 표(`woody:disabled-rules` 구역)에 접두사 7종(`기반 세트` · `비호환` · `experimental`/`testing` · `v2 로 미룸 (RULES-NN)` · `deprecated`/`removed`/`없음` · `규칙이 돌지 않음` · `소유자 결정`) 또는 `보류` 로 시작하는 이유를 적는다 (`RULES.md` 105-119행).
+- **5.** 조각마다 받는 최상위 키는 닫힌 목록이다: `lib/base.yaml` 은 `include` · `linter` · `analyzer`, `lib/codegen.yaml` 은 `analyzer`(아래 `errors` · `exclude`), `lib/riverpod.yaml` 은 `plugins`(아래 `riverpod_lint`). `lib/recommended.yaml` · `lib/analysis_options.yaml` 은 `include` 만 (`README.md` 384행).
+- **6.** `riverpod_lint` 하한을 올릴 때 같은 커밋에서 고칠 자리 (`lib/riverpod.yaml` 5행 주석, `README.md` 388행):
+- ↳ `lib/riverpod.yaml` 의 `riverpod_lint:` 선언
+- ↳ `fixtures/overrides/analysis_options.yaml` 의 `version:` (`[4/10]` 이 견줌)
+- ↳ `README.md` 의 plugin 버전 예시 둘 (「조각마다의 설정」 · 「규칙 · plugin 진단 끄기」, 펜스 안 블록 꼴 · 키 글자 그대로 — `[3/10]` 이 견줌)
+- **7.** 릴리스 버전을 올릴 때는 `pubspec.yaml` `version:`, `CHANGELOG.md` 첫 줄 제목, `README.md` 의 `ref:` 예시 둘, 커밋된 lock 여섯(`example/pubspec.lock`, `fixtures/*/pubspec.lock` — `fvm dart pub get` 으로만)을 같은 커밋에서 고친다 (`VERSIONING.md` 「릴리스 절차」 140-141행, `README.md` 388행).
+- **8.** 새 규칙이 SDK 에서 실제로 도는지 판단할 때 `rules.json` 대신 `messages.yaml` 과 실제 분석을 쓴다 (프로젝트 skill `.claude/skills/spike-findings-woody-lints/references/rule-status-check.md`).
 
 ## Import Organization (Dart 도구)
 
 **Order:**
-1. `dart:` (`dart:convert`, `dart:io`)
-2. 빈 줄
-3. `package:` (`package:markdown/markdown.dart' as md`, `package:yaml/yaml.dart`) — `tool/verify.dart` 46-50행
+- **1.** `dart:` (`dart:convert`, `dart:io`)
+- **2.** 빈 줄
+- **3.** `package:` (`package:markdown/markdown.dart' as md`, `package:yaml/yaml.dart`) — `tool/verify.dart` 46-50행
 
 **Path Aliases:**
 - 충돌하는 이름은 prefix 로 받는다 (`as md`).

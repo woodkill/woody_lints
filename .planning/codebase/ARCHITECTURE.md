@@ -105,40 +105,40 @@ last_mapped_at: 2026-10-17
 
 ### Primary Request Path (받는 쪽의 정적 분석)
 
-1. 받는 쪽 `pub get` 이 git 의존성(`ref: main` 또는 `ref: vX.Y.Z`)으로 `woody_lints` 와 그 `dependencies`(`flutter_lints`)를 받는다 (`pubspec.yaml:13-17`).
-2. analyzer 가 받는 쪽 `include:` 를 따라 `lib/analysis_options.yaml` → `lib/recommended.yaml` (`lib/analysis_options.yaml:4`) → 조각 셋 (`lib/recommended.yaml:5-7`) → `package:flutter_lints/flutter.yaml` (`lib/base.yaml:5`) → `lints` 로 내려간다. 아래 계층(받는 쪽)이 위를 덮어쓴다.
-3. `linter.rules` 는 list 형식으로 합쳐지고, `analyzer.errors` · `analyzer.exclude` 는 `lib/codegen.yaml` 에서 온다.
-4. include 로 받은 최상위 `plugins:` 도 받는 쪽 루트 옵션 파일에 적용된다 (spike 009 — `.claude/skills/spike-findings-woody-lints/references/preset-split-structure.md`).
+- **1.** 받는 쪽 `pub get` 이 git 의존성(`ref: main` 또는 `ref: vX.Y.Z`)으로 `woody_lints` 와 그 `dependencies`(`flutter_lints`)를 받는다 (`pubspec.yaml:13-17`).
+- **2.** analyzer 가 받는 쪽 `include:` 를 따라 `lib/analysis_options.yaml` → `lib/recommended.yaml` (`lib/analysis_options.yaml:4`) → 조각 셋 (`lib/recommended.yaml:5-7`) → `package:flutter_lints/flutter.yaml` (`lib/base.yaml:5`) → `lints` 로 내려간다. 아래 계층(받는 쪽)이 위를 덮어쓴다.
+- **3.** `linter.rules` 는 list 형식으로 합쳐지고, `analyzer.errors` · `analyzer.exclude` 는 `lib/codegen.yaml` 에서 온다.
+- **4.** include 로 받은 최상위 `plugins:` 도 받는 쪽 루트 옵션 파일에 적용된다 (spike 009 — `.claude/skills/spike-findings-woody-lints/references/preset-split-structure.md`).
 
 ### Analyzer Plugin 로드 경로
 
-1. Analysis Server 가 `plugins: riverpod_lint: ^3.1.9` (`lib/riverpod.yaml:5`) 를 읽는다.
-2. pub.dev 에서 범위 안 최신을 받아 plugin 캐시에 컴파일한다 — 받는 쪽 `pubspec.lock` 이 묶지 못한다 (`example/README.md` 「파일」 표의 `pubspec.lock` 행, `VERSIONING.md:151-153`).
-3. 받는 쪽이 진단을 끄려면 `plugins: riverpod_lint: version:` 을 다시 적고 `diagnostics:` 를 단다 — 그 값이 선언을 통째로 대신한다 (`fixtures/overrides/analysis_options.yaml:8-12`, `tool/verify.dart` 의 `pluginConstraintToken` 주석, spike 012).
+- **1.** Analysis Server 가 `plugins: riverpod_lint: ^3.1.9` (`lib/riverpod.yaml:5`) 를 읽는다.
+- **2.** pub.dev 에서 범위 안 최신을 받아 plugin 캐시에 컴파일한다 — 받는 쪽 `pubspec.lock` 이 묶지 못한다 (`example/README.md` 「파일」 표의 `pubspec.lock` 행, `VERSIONING.md:151-153`).
+- **3.** 받는 쪽이 진단을 끄려면 `plugins: riverpod_lint: version:` 을 다시 적고 `diagnostics:` 를 단다 — 그 값이 선언을 통째로 대신한다 (`fixtures/overrides/analysis_options.yaml:8-12`, `tool/verify.dart` 의 `pluginConstraintToken` 주석, spike 012).
 
 ### 검증 흐름 (`tool/verify.dart`)
 
-1. 준비: 실행 SDK 가 `.fvmrc` 와 같은지(다르면 종료 코드 78), 루트 · 연습용 프로젝트 전부 `pub get` (실패 69) (`tool/verify.dart:23-24`, `:31-35`).
-2. `[1/10]` `lib/` 에 `.dart` 없음.
-3. `[2/10]` 조각 셋 복사본(`build/woody_rule_check/`)을 분석해 deprecated / removed / 없는 규칙 · 옵션 경고 · 깨진 YAML 이 0건.
-4. `[3/10]` 배포 파일 구성과 문서 일치 — 묶음 · 별칭은 include 만, `lib/base.yaml` 규칙이 기반 세트와 겹치지 않음, `RULES.md` 켠 규칙 표 · README 표시 구역(`README.md:95-190` `woody:readme-rules`) 과 같음, 조각별 최상위 키 목록, README 의 프리셋 주소 · plugin 버전 · `ref:`, 줄 단위 읽기와 `package:yaml` 해석 일치, tag · `pubspec.yaml` version · `CHANGELOG.md` 최상단 버전 일치 (`tool/verify.dart:6`).
-5. `[4/10]` 연습용 프로젝트 여섯의 `analysis_options.yaml` 이 `fixtures` 표의 `optionsLines` 와 같음 (`tool/verify.dart` `const fixtures`).
-6. `[5/10]`~`[10/10]` 연습용 프로젝트마다 별도 상태 폴더(`.dart_tool/woody_verify/<폴더>/`)로 `dart analyze` → `expected_diagnostics.txt` 와 줄 · 건수 대조. 순서 example → recommended → base_only → base_riverpod → base_codegen → overrides; `recommended` 는 정답지 없이 같은 실행의 `example` 결과와 견준다 (`example/README.md` 「연습용 프로젝트 여섯」).
-7. `--update` 는 모든 단계가 통과할 때만 정답지 다섯을 다시 쓴다. CI 에서는 거부(64) (`tool/verify.dart:10-15`).
+- **1.** 준비: 실행 SDK 가 `.fvmrc` 와 같은지(다르면 종료 코드 78), 루트 · 연습용 프로젝트 전부 `pub get` (실패 69) (`tool/verify.dart:23-24`, `:31-35`).
+- **2.** `[1/10]` `lib/` 에 `.dart` 없음.
+- **3.** `[2/10]` 조각 셋 복사본(`build/woody_rule_check/`)을 분석해 deprecated / removed / 없는 규칙 · 옵션 경고 · 깨진 YAML 이 0건.
+- **4.** `[3/10]` 배포 파일 구성과 문서 일치 — 묶음 · 별칭은 include 만, `lib/base.yaml` 규칙이 기반 세트와 겹치지 않음, `RULES.md` 켠 규칙 표 · README 표시 구역(`README.md:95-190` `woody:readme-rules`) 과 같음, 조각별 최상위 키 목록, README 의 프리셋 주소 · plugin 버전 · `ref:`, 줄 단위 읽기와 `package:yaml` 해석 일치, tag · `pubspec.yaml` version · `CHANGELOG.md` 최상단 버전 일치 (`tool/verify.dart:6`).
+- **5.** `[4/10]` 연습용 프로젝트 여섯의 `analysis_options.yaml` 이 `fixtures` 표의 `optionsLines` 와 같음 (`tool/verify.dart` `const fixtures`).
+- **6.** `[5/10]`~`[10/10]` 연습용 프로젝트마다 별도 상태 폴더(`.dart_tool/woody_verify/<폴더>/`)로 `dart analyze` → `expected_diagnostics.txt` 와 줄 · 건수 대조. 순서 example → recommended → base_only → base_riverpod → base_codegen → overrides; `recommended` 는 정답지 없이 같은 실행의 `example` 결과와 견준다 (`example/README.md` 「연습용 프로젝트 여섯」).
+- **7.** `--update` 는 모든 단계가 통과할 때만 정답지 다섯을 다시 쓴다. CI 에서는 거부(64) (`tool/verify.dart:10-15`).
 
 ### 규칙 실측 → 문서 흐름
 
-1. `tool/measure_rules.dart --work <저장소 밖 폴더>` 가 사용 프로젝트 복사본에서 단계(state · baseline · groups · markers · ignore · fix · unnecessary-ignore)를 잰다 (`tool/measure_rules.dart:1-35`).
-2. 결과 JSON 을 `tool/measurements/2026-10-13-R1.json` 꼴로 남긴다 (건수와 조건만, 비공개 경로 · 진단 문장 없음 — `tool/measure_rules.dart:37-38`).
-3. `--report --write` 가 단언 통과 시에만 `RULES.md:218-425` 의 `woody:measurements` 구역을 쓴다. 결정된 규칙은 사람이 `lib/base.yaml` · `RULES.md` 켠 규칙 표 · README 표시 구역에 같은 커밋으로 반영하고, `[3/10]` 이 셋의 일치를 지킨다.
+- **1.** `tool/measure_rules.dart --work <저장소 밖 폴더>` 가 사용 프로젝트 복사본에서 단계(state · baseline · groups · markers · ignore · fix · unnecessary-ignore)를 잰다 (`tool/measure_rules.dart:1-35`).
+- **2.** 결과 JSON 을 `tool/measurements/2026-10-13-R1.json` 꼴로 남긴다 (건수와 조건만, 비공개 경로 · 진단 문장 없음 — `tool/measure_rules.dart:37-38`).
+- **3.** `--report --write` 가 단언 통과 시에만 `RULES.md:218-425` 의 `woody:measurements` 구역을 쓴다. 결정된 규칙은 사람이 `lib/base.yaml` · `RULES.md` 켠 규칙 표 · README 표시 구역에 같은 커밋으로 반영하고, `[3/10]` 이 셋의 일치를 지킨다.
 
 ### 릴리스 흐름
 
-1. milestone 브랜치(현재 `gsd/v2.0-package-rework`)에서 준비 중에는 `version: X.Y.Z-dev` 와 `## X.Y.Z - 미출시` 를 함께 둔다 (`VERSIONING.md:130-162` 의 1, 10단계).
-2. 릴리스 커밋: `-dev` 제거, CHANGELOG 날짜, lock 여섯 `pub get` 으로 다시 받기, README `ref:` 예시 갱신, `verify.dart --tag vX.Y.Z` 통과 (2단계).
-3. 브랜치 push → CI → `tool/smoke.dart <릴리스 커밋>` 예행 (3-4단계).
-4. annotated tag `vX.Y.Z` 를 달고 tag 하나만 push → CI 의 tag 실행 확인(`GITHUB_REF_NAME`) → `tool/smoke.dart vX.Y.Z` (5-8단계). 존재하는 tag: `v1.3.0`, `v2.0.0` (`git tag`).
-5. `gh pr create --base main` → `gh pr merge --merge` (merge commit 만, squash · rebase 금지) → `main` 이 릴리스 채널이 된다 (9단계). `ref: main` 프로젝트는 각자 `pub upgrade woody_lints` 때 받는다.
+- **1.** milestone 브랜치(현재 `gsd/v2.0-package-rework`)에서 준비 중에는 `version: X.Y.Z-dev` 와 `## X.Y.Z - 미출시` 를 함께 둔다 (`VERSIONING.md:130-162` 의 1, 10단계).
+- **2.** 릴리스 커밋: `-dev` 제거, CHANGELOG 날짜, lock 여섯 `pub get` 으로 다시 받기, README `ref:` 예시 갱신, `verify.dart --tag vX.Y.Z` 통과 (2단계).
+- **3.** 브랜치 push → CI → `tool/smoke.dart <릴리스 커밋>` 예행 (3-4단계).
+- **4.** annotated tag `vX.Y.Z` 를 달고 tag 하나만 push → CI 의 tag 실행 확인(`GITHUB_REF_NAME`) → `tool/smoke.dart vX.Y.Z` (5-8단계). 존재하는 tag: `v1.3.0`, `v2.0.0` (`git tag`).
+- **5.** `gh pr create --base main` → `gh pr merge --merge` (merge commit 만, squash · rebase 금지) → `main` 이 릴리스 채널이 된다 (9단계). `ref: main` 프로젝트는 각자 `pub upgrade woody_lints` 때 받는다.
 
 **State Management:**
 - 실행 시점 상태 없음. 버전 상태는 `pubspec.yaml:3` 의 `version`, `CHANGELOG.md` 첫 줄, git tag 셋이 맞물려 있다 (`[3/10]` 이 견준다).
@@ -211,39 +211,39 @@ last_mapped_at: 2026-10-17
 
 ### `analyzer: plugins:` 로 plugin 선언
 
-**What happens:** plugin 을 `analyzer:` 아래 리스트로 적는다.
-**Why it's wrong:** riverpod_lint 3.x 는 analysis_server_plugin 방식만 지원해 아무것도 로드되지 않는다.
-**Do this instead:** 최상위 `plugins:` 맵 (`lib/riverpod.yaml:4-5`).
+- **What happens:** plugin 을 `analyzer:` 아래 리스트로 적는다.
+- **Why it's wrong:** riverpod_lint 3.x 는 analysis_server_plugin 방식만 지원해 아무것도 로드되지 않는다.
+- **Do this instead:** 최상위 `plugins:` 맵 (`lib/riverpod.yaml:4-5`).
 
 ### 규칙을 `lib/base.yaml` 밖에 적기
 
-**What happens:** 묶음 · 별칭 · 다른 조각에 `linter:` 를 넣는다.
-**Why it's wrong:** 조각 조합의 뜻이 흐려지고 `[3/10]` 이 실패한다.
-**Do this instead:** `lib/base.yaml` 의 분류 주석 아래에 한 줄 + 한국어 이유 주석, 같은 커밋에서 `RULES.md` 와 README 표시 구역.
+- **What happens:** 묶음 · 별칭 · 다른 조각에 `linter:` 를 넣는다.
+- **Why it's wrong:** 조각 조합의 뜻이 흐려지고 `[3/10]` 이 실패한다.
+- **Do this instead:** `lib/base.yaml` 의 분류 주석 아래에 한 줄 + 한국어 이유 주석, 같은 커밋에서 `RULES.md` 와 README 표시 구역.
 
 ### 기반 세트와 겹치는 규칙
 
-**What happens:** `flutter_lints` 가 이미 켜는 규칙을 `lib/base.yaml` 에 다시 적는다.
-**Why it's wrong:** `[3/10]` 이 겹침을 실패로 본다 (2.0.0 에서 6개 제거 — `example/README.md` 「파일」 `example/lib/base_rules.dart` 행).
-**Do this instead:** 기반 세트에 없는 규칙만 적는다.
+- **What happens:** `flutter_lints` 가 이미 켜는 규칙을 `lib/base.yaml` 에 다시 적는다.
+- **Why it's wrong:** `[3/10]` 이 겹침을 실패로 본다 (2.0.0 에서 6개 제거 — `example/README.md` 「파일」 `example/lib/base_rules.dart` 행).
+- **Do this instead:** 기반 세트에 없는 규칙만 적는다.
 
 ### 루트 `analysis_options.yaml` 에 이 패키지 조각 include
 
-**What happens:** 저장소 자체 분석에 `lib/` 조각을 끌어온다.
-**Why it's wrong:** 규칙 변경이 검증 스크립트 진단과 섞인다 (`analysis_options.yaml:4-5`).
-**Do this instead:** 루트는 `flutter_lints` 만 include 하고 `example/**` · `fixtures/**` 만 exclude 한다.
+- **What happens:** 저장소 자체 분석에 `lib/` 조각을 끌어온다.
+- **Why it's wrong:** 규칙 변경이 검증 스크립트 진단과 섞인다 (`analysis_options.yaml:4-5`).
+- **Do this instead:** 루트는 `flutter_lints` 만 include 하고 `example/**` · `fixtures/**` 만 exclude 한다.
 
 ### 연습용 프로젝트에서 `flutter pub get`
 
-**What happens:** `flutter pub get` 이 옵션 파일에 `build/**` exclude 를 써넣는다.
-**Why it's wrong:** "include 한 줄" 이 깨져 `[4/10]` 실패 (`example/README.md` 「실행」 끝 문단).
-**Do this instead:** `dart pub get`; 돌렸으면 `git checkout -- example/analysis_options.yaml`.
+- **What happens:** `flutter pub get` 이 옵션 파일에 `build/**` exclude 를 써넣는다.
+- **Why it's wrong:** "include 한 줄" 이 깨져 `[4/10]` 실패 (`example/README.md` 「실행」 끝 문단).
+- **Do this instead:** `dart pub get`; 돌렸으면 `git checkout -- example/analysis_options.yaml`.
 
 ### squash / rebase 병합, tag 옮기기
 
-**What happens:** `main` 병합을 squash 로 하거나 올린 tag 를 다른 커밋으로 옮긴다.
-**Why it's wrong:** tag 커밋이 `main` 이력에서 빠지거나 받는 쪽 lock 의 `resolved-ref` 와 어긋난다.
-**Do this instead:** `gh pr merge --merge`, 잘못 올린 tag 는 새 번호 (`VERSIONING.md` 릴리스 절차 5 · 9 · 10).
+- **What happens:** `main` 병합을 squash 로 하거나 올린 tag 를 다른 커밋으로 옮긴다.
+- **Why it's wrong:** tag 커밋이 `main` 이력에서 빠지거나 받는 쪽 lock 의 `resolved-ref` 와 어긋난다.
+- **Do this instead:** `gh pr merge --merge`, 잘못 올린 tag 는 새 번호 (`VERSIONING.md` 릴리스 절차 5 · 9 · 10).
 
 ## Error Handling
 
