@@ -27,7 +27,7 @@ v2.0 뒤 다시 봐도 그대로다 — 검증 명령이 문서와 설정의 일
 아직 정하지 않았다 — `/gsd-new-milestone` 에서 고른다. 후보 (v2.0 감사 · Backlog · v2 요구사항에서):
 
 - **버전 판정 문구 다시 쓰기:** `VERSIONING.md` 판정 순서 · 기준표 (01:WR-03 · 06 ~ 10, Backlog 999.1 · 999.3) — 다음 minor · patch 를 매기기 전에
-- **에이전트 지시 문서 갱신:** `.claude/CLAUDE.md` 가 1.3.0 시절 서술을 지시로 담고 있다 (05:WR-06) — `/gsd-map-codebase` 로 다시 만든다
+- ~~에이전트 지시 문서 갱신~~ — 끝남 (2026-10-17, v2.0 마감 직후): `/gsd-map-codebase` 로 `.planning/codebase/` 를 다시 쓰고 `generate-claude-md` 로 `.claude/CLAUDE.md` 를 다시 만들었다 (05:WR-06, `3f58650` · `2f848bf`)
 - **도구 손질:** `tool/verify.dart` 안내 · 가드 (02:WR-01 · 04 · 05 · 06, 03:WR-04), fixture `lib/` 복사본 검사 (03:WR-06), workflow action SHA 고정 (03:WR-08), Backlog 999.2 (`smoke.dart` `killTree` · `example/README.md` 문장)
 - **v2 요구사항:** RULES-13 (`lints` 7 / `flutter_lints` 7 대응, 측정 도구 CR-03 · WR-09 선행), PRESET-09 · RULES-09 (문서화 프리셋), RULES-10 ~ 12
 
@@ -90,7 +90,7 @@ v2.0 뒤 다시 봐도 그대로다 — 검증 명령이 문서와 설정의 일
 **알려진 문제 · 기술 부채 (v2.0 감사, 받는 쪽 영향 0):**
 
 - `VERSIONING.md` 판정 순서와 기준표가 몇몇 경우(README · CHANGELOG 만 고친 변경, 새 프리셋 추가, `dev_dependencies` 만 바뀐 경우)에 다른 등급을 낸다 — 다음 릴리스 등급을 매기기 전에 다시 쓴다
-- `.claude/CLAUDE.md` 의 Technology Stack · Conventions · Architecture 절이 1.3.0 시절 서술이다 (루트 exclude, 3.41.2, `^3.10.4` 등) — 에이전트가 읽으므로 다음 작업 전에 `/gsd-map-codebase` 로 다시 만든다
+- `.claude/CLAUDE.md` 의 1.3.0 시절 서술은 마감 직후 다시 만들어 닫았다 (05:WR-06). 다시 만들 때 주의: `generate-claude-md` 는 원본 문서의 제목 · 맨 앞 `- ` 불릿 · 표 줄만 옮긴다 — 번호 목록 · 하위 불릿 · 굵은 글씨 줄 · 문단은 빠지므로 `.planning/codebase/` 문서의 지시는 불릿으로 쓴다
 - 검증은 `04-DECISIONS.md` 결정 표와 CHANGELOG 표를 `lib/base.yaml` 과 견주지 않는다 (지금은 손 대조로 일치)
 - `tool/measure_rules.dart` 는 1.3.0 기준선을 박아 두어 지금 다시 재면 틀린 값이 나온다 (04:CR-03 · WR-09) — RULES-13 재측정 전에 고친다
 - CI 의 `ubuntu-latest` 가 2026-10-19 부터 Ubuntu 26 이미지다. 실패하면 spike-findings skill 의 runner 이미지 절부터 본다
