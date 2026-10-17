@@ -1,224 +1,266 @@
 ---
-last_mapped_commit: 90a2736b8d998c84467faf562a0fec720b797eaf
-last_mapped_at: 2026-10-11
+last_mapped_commit: 8ac96b71e9d394c5d1dfb132814ee87379519c69
+last_mapped_at: 2026-10-17
 ---
-<!-- refreshed: 2026-10-11 -->
+<!-- refreshed: 2026-10-17 -->
 
 # Architecture
 
-**Analysis Date:** 2026-10-11
+**Analysis Date:** 2026-10-17
 
 ## System Overview
 
-`woody_lints` 는 Dart 소스 코드가 한 줄도 없는 **설정 전용 패키지(configuration-only package)** 다. 배포 산출물은 `lib/analysis_options.yaml` 단 하나이며, 사용하는 Flutter 프로젝트가 이 파일을 `include:` 로 끌어다 쓴다.
-
 ```text
-┌─────────────────────────────────────────────────────────────┐
-│          사용하는 Flutter 프로젝트 (Consumer project)         │
-├──────────────────────────────┬──────────────────────────────┤
-│  pubspec.yaml                │  analysis_options.yaml       │
-│  dev_dependencies:           │  include: package:           │
-│    woody_lints: (git, main)  │   woody_lints/               │
-│                              │   analysis_options.yaml      │
-└──────────────┬───────────────┴──────────────┬───────────────┘
-               │ pub get (git 의존성)           │ include 해석
-               ▼                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                  woody_lints (이 저장소)                      │
-├──────────────────────────────┬──────────────────────────────┤
-│  패키지 매니페스트             │  공유 분석 설정 (배포 산출물)   │
-│  `pubspec.yaml`              │  `lib/analysis_options.yaml` │
-└──────────────┬───────────────┴───────┬──────────────┬───────┘
-               │ dependencies          │ include:     │ plugins:
-               ▼                       ▼              ▼
-┌──────────────────────────────────────────┐ ┌────────────────┐
-│  flutter_lints ^6.0.0 (→ lints 6.1.0)    │ │ riverpod_lint  │
-│  `package:flutter_lints/flutter.yaml`    │ │ ^3.1.3         │
-│  pub 의존성 그래프로 전달                  │ │ Analysis Server│
-│                                          │ │ plugin 캐시     │
-└──────────────────────────────────────────┘ └────────────────┘
+┌──────────────────────────────────────────────────────────────────────┐
+│ 받는 쪽 Flutter 프로젝트의 analysis_options.yaml                         │
+│   include: package:woody_lints/<이름>.yaml   (git 의존성, ref: main/vX.Y.Z) │
+└───────────────┬──────────────────────────────────────────────────────┘
+                ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│ 공개 URI (공개 API) — lib/ 의 YAML 다섯                                  │
+│  별칭 `lib/analysis_options.yaml` ──include──▶ 묶음 `lib/recommended.yaml` │
+│  묶음 ──include──▶ 조각 셋 (서로 include 하지 않음)                        │
+│   ├ `lib/base.yaml`     linter.rules + include flutter_lints          │
+│   ├ `lib/riverpod.yaml` 최상위 plugins: riverpod_lint ^3.1.9          │
+│   └ `lib/codegen.yaml`  analyzer.errors / analyzer.exclude            │
+└───────┬───────────────────────────────────────────┬──────────────────┘
+        │ include: (pub 의존성 그래프)                │ plugins: (Analysis Server)
+        ▼                                           ▼
+┌───────────────────────────────┐   ┌───────────────────────────────────┐
+│ package:flutter_lints/flutter.yaml │   │ ~/.dartServer/ plugin 캐시          │
+│  → package:lints (core/recommended)│   │  riverpod_lint 를 pub.dev 에서 받아   │
+│  `pubspec.yaml` dependencies      │   │  컴파일 (선언 범위 안 최신)            │
+└───────────────────────────────┘   └───────────────────────────────────┘
 
-별도 경로 (이 저장소 자체 분석 전용, 사용하는 프로젝트에 전달되지 않음):
-┌─────────────────────────────────────────────────────────────┐
-│  `analysis_options.yaml` (루트)                              │
-│  analyzer.exclude: lib/analysis_options.yaml                 │
-└─────────────────────────────────────────────────────────────┘
+저장소 안쪽 검증 (받는 쪽에 전달되지 않음)
+┌──────────────────────────────────────────────────────────────────────┐
+│ `tool/verify.dart` [1/10]~[10/10]  ◀── `.github/workflows/verify.yml`    │
+│   ├ lib/ · RULES.md · README.md · CHANGELOG.md · pubspec.yaml 대조      │
+│   └ `example/` + `fixtures/*` 를 dart analyze → expected_diagnostics.txt │
+│ `tool/smoke.dart <ref>`   GitHub 에서 받아 보는 릴리스 확인               │
+│ `tool/measure_rules.dart` 일회성 실측 → `tool/measurements/*.json` → RULES.md │
+└──────────────────────────────────────────────────────────────────────┘
 ```
 
 ## Component Responsibilities
 
 | Component | Responsibility | File |
 |-----------|----------------|------|
-| 공유 분석 설정 (Shared analysis options) | 사용하는 프로젝트에 적용되는 lint 규칙, analyzer 오류 설정, 제외 glob, analyzer plugin 선언. 유일한 배포 산출물 | `lib/analysis_options.yaml` |
-| 패키지 매니페스트 (Package manifest) | 패키지 이름·버전, SDK 제약, 사용하는 프로젝트로 전달되는 의존성(`flutter_lints`) 선언 | `pubspec.yaml` |
-| 자체 분석 설정 (Self-analysis options) | 이 저장소를 분석할 때만 적용. `lib/analysis_options.yaml` 을 분석 대상에서 제외해 `plugins_in_inner_options` 경고 차단 | `analysis_options.yaml` |
-| 사용 문서 (Usage documentation) | 설치 절차와 포함 규칙 목록 | `README.md` |
-| 변경 이력 (Release notes) | 버전별 변경 사항과 그 이유 | `CHANGELOG.md` |
-| SDK 고정 (SDK pin) | FVM 으로 Flutter SDK 버전 고정 (3.41.2) | `.fvmrc`, `.vscode/settings.json` |
+| 옛 주소 별칭 | 1.x 사용 프로젝트용 공개 URI. `include: package:woody_lints/recommended.yaml` 한 줄만 담는다 | `lib/analysis_options.yaml:4` |
+| 묶음 (recommended) | 조각 셋을 list 형식 `include:` 로 묶는다 | `lib/recommended.yaml:4-7` |
+| 기본 조각 (base) | `flutter_lints` 상속 + 추가 규칙 전부 (성능 / 가독성 및 스타일 / 버그 방지 / strict 분류) | `lib/base.yaml` |
+| Riverpod 조각 | 최상위 `plugins:` 에 `riverpod_lint: ^3.1.9` | `lib/riverpod.yaml:4-5` |
+| codegen 조각 | `invalid_annotation_target: ignore`, `**/*.freezed.dart` · `**/*.g.dart` exclude | `lib/codegen.yaml:4-9` |
+| 패키지 매니페스트 | `version: 2.0.0`, `sdk: ^3.13.0`, `flutter_lints` 를 `dependencies` 로 전달, 검증 도구용 dev 의존성(`yaml`, `markdown`) | `pubspec.yaml` |
+| 자체 분석 설정 | 저장소 루트 분석. `flutter_lints` 만 include, `example/**` · `fixtures/**` exclude | `analysis_options.yaml` |
+| 검증 명령 | 배포 파일 구성 · 문서 일치 · 연습용 프로젝트 진단 대조 (10단계) | `tool/verify.dart` |
+| 릴리스 smoke test | 빈 Flutter 프로젝트가 GitHub 에서 `<ref>` 를 받아 두 주소로 분석 | `tool/smoke.dart` |
+| 규칙 실측 도구 | 후보 133개의 상태 · 건수 · `dart fix` 건수를 재고 RULES.md 실측 구역을 쓴다 | `tool/measure_rules.dart` |
+| 연습용 프로젝트 | 일부러 규칙을 어긴 샘플 + 정답지 | `example/`, `fixtures/{recommended,base_only,base_riverpod,base_codegen,overrides}/` |
+| CI | 모든 push · PR · 수동 실행에서 `dart run tool/verify.dart` | `.github/workflows/verify.yml` |
+| 규칙 근거 문서 | 켠 규칙 표, 켜지 않은 규칙, 실측 기록(`woody:measurements` 구역) | `RULES.md` |
+| 버전 정책 | 등급 판정 순서 · 기준표 · CHANGELOG 형식 · 릴리스 절차 | `VERSIONING.md` |
+| SDK 고정 | Flutter `3.47.5` (FVM) | `.fvmrc`, `.vscode/settings.json` |
 
 ## Pattern Overview
 
-**Overall:** 공유 lint 설정 패키지(Shared lint configuration package) — `flutter_lints` / `lints` 와 동일한 `include:` 체인 방식의 계층형 설정(layered configuration).
+**Overall:** 설정 전용 패키지(configuration-only package) — include 합성(composition by include) 과 조각(preset fragment) 분리, 그리고 정답지 기반 검증(golden-file verification).
 
 **Key Characteristics:**
-- 실행 코드 없음. `lib/` 에는 `.dart` 파일이 없고 YAML 하나만 존재한다.
-- 계층 합성(composition by include): `lints` (core/recommended) → `flutter_lints/flutter.yaml` → `lib/analysis_options.yaml` → 사용하는 프로젝트의 `analysis_options.yaml`. 아래 계층이 위 계층을 덮어쓴다.
-- pub.dev 미배포. `pubspec.yaml` 의 `publish_to: 'none'` 로 막혀 있고, Git 의존성(`ref: main`)으로만 배포된다. `main` 브랜치에 push 하는 순간이 곧 릴리스다.
-- 두 개의 서로 다른 해석 경로(resolution path)가 공존한다: `include:` 는 pub 의존성 그래프로, `plugins:` 는 Dart Analysis Server 의 plugin 캐시(`~/.dartServer/.plugin_manager`)로 해석된다.
+- `lib/` 에 `.dart` 파일이 없다. 배포 산출물은 `lib/*.yaml` 다섯이며 `[1/10]` 이 `.dart` 부재를 검사한다 (`tool/verify.dart:4`).
+- 파일 이름이 곧 공개 API 다: `package:woody_lints/<이름>.yaml` 은 `lib/` 바로 아래 같은 이름의 파일로 해석된다. 옛 주소 `package:woody_lints/analysis_options.yaml` 은 "기본 + Riverpod + codegen" 뜻을 유지한다 (`lib/analysis_options.yaml:1-3`). URI 를 없애거나 뜻을 바꾸면 major (`VERSIONING.md:38`).
+- 조각끼리는 서로 include 하지 않는다. 묶음만 조각 셋을 include 하고, 별칭은 묶음만 include 한다. 규칙은 `lib/base.yaml` 에만 둔다 (`lib/base.yaml:3`, `[3/10]` 이 다른 조각의 규칙을 실패로 본다 — `tool/verify.dart:6`).
+- 두 해석 경로가 공존한다: `include:` 는 pub 의존성 그래프, `plugins:` 는 Dart Analysis Server 의 plugin 캐시.
+- 배포는 git 의존성 + tag 뿐이다 (`pubspec.yaml:6` `publish_to: 'none'`, `pubspec.yaml:8` repository `https://github.com/woodkill/woody_lints.git`).
 
 ## Layers
 
-**기반 규칙 계층 (Base rule layer):**
-- Purpose: Flutter 공식 권장 lint 세트 제공
-- Location: 외부 패키지 `package:flutter_lints/flutter.yaml` (`pubspec.lock` 기준 flutter_lints 6.0.0, lints 6.1.0)
-- Contains: core / recommended / flutter lint 규칙
-- Depends on: `lints`
-- Used by: `lib/analysis_options.yaml:13`
+**상류 기반 세트 (external):**
+- Purpose: Flutter 공식 권장 lint
+- Location: `package:flutter_lints/flutter.yaml` → `package:lints`
+- Contains: core / recommended / flutter 규칙
+- Depends on: `flutter_lints: ^6.0.0` (`pubspec.yaml:16-17`)
+- Used by: `lib/base.yaml:5`, 루트 `analysis_options.yaml:6`
 
-**공유 설정 계층 (Shared configuration layer):**
-- Purpose: 기반 규칙 위에 추가 규칙·analyzer 설정·plugin 을 얹는다
-- Location: `lib/analysis_options.yaml`
-- Contains: `include:`, `linter.rules`, `analyzer.errors`, `analyzer.exclude`, 최상위 `plugins:`
-- Depends on: `flutter_lints` (`pubspec.yaml:16-17`), `riverpod_lint ^3.1.3` (`lib/analysis_options.yaml:57-58`)
-- Used by: 사용하는 Flutter 프로젝트의 `analysis_options.yaml`
+**조각 (fragments):**
+- Purpose: 받는 쪽이 골라 받는 최소 단위
+- Location: `lib/base.yaml`, `lib/riverpod.yaml`, `lib/codegen.yaml`
+- Contains: 조각마다 정해진 최상위 키만 — base 는 `include` · `linter` · `analyzer`, codegen 은 `analyzer`(아래 `errors` · `exclude`), riverpod 은 `plugins`(아래 `riverpod_lint`) (`README.md` 「이 저장소를 고치는 사람에게」 첫 항목)
+- Depends on: 상류 기반 세트(base 만), plugin 캐시(riverpod 만)
+- Used by: 묶음, 또는 받는 쪽이 직접
 
-**패키지 메타데이터 계층 (Package metadata layer):**
-- Purpose: pub 이 패키지를 해석하고 의존성을 전달하도록 한다
-- Location: `pubspec.yaml`
-- Contains: `name`, `version`, `environment.sdk`, `dependencies`
-- Depends on: Dart SDK `^3.10.4`
-- Used by: `flutter pub get` / `dart pub get`
+**묶음 · 별칭 (aggregates):**
+- Purpose: 한 줄로 전부 받기, 옛 주소 호환
+- Location: `lib/recommended.yaml`, `lib/analysis_options.yaml`
+- Contains: `include:` 만 (`[3/10]` 이 "묶음 · 별칭은 include 만 담는지" 검사 — `tool/verify.dart:6`)
+- Used by: 받는 쪽 프로젝트
 
-**저장소 로컬 계층 (Repository-local layer):**
-- Purpose: 이 저장소를 개발할 때만 쓰이는 설정. 사용하는 프로젝트에는 전달되지 않는다
-- Location: `analysis_options.yaml`, `.fvmrc`, `.vscode/settings.json`, `.gitignore`
-- Contains: 자체 분석 제외 규칙, Flutter SDK 버전 고정, 편집기 SDK 경로
-- Depends on: FVM
-- Used by: 저장소 기여자와 IDE
+**저장소 안쪽 도구 (repo-internal):**
+- Purpose: 배포 파일이 문서 그대로 적용되는지 증명
+- Location: `tool/`, `example/`, `fixtures/`, `.github/workflows/verify.yml`, 루트 `analysis_options.yaml`
+- Depends on: `.fvmrc` 의 SDK, dev 의존성 `yaml` · `markdown` (`pubspec.yaml:23-25`)
+- Used by: 저장소 기여자, CI. 받는 쪽에는 전달되지 않는다 (`analysis_options.yaml:1-2`)
 
 ## Data Flow
 
-### Primary Request Path (사용하는 프로젝트의 정적 분석)
+### Primary Request Path (받는 쪽의 정적 분석)
 
-1. 사용하는 프로젝트가 `dev_dependencies` 에 Git 의존성으로 `woody_lints` 를 선언한다 (`README.md:36-43`)
-2. `flutter pub get` 이 `pubspec.yaml` 을 읽고 `flutter_lints ^6.0.0` 을 전이 의존성으로 함께 해석한다 (`pubspec.yaml:16-17`)
-3. 사용하는 프로젝트의 `analysis_options.yaml` 이 `include: package:woody_lints/analysis_options.yaml` 로 공유 설정을 가리킨다 (`README.md:59-60`)
-4. analyzer 가 `package:woody_lints/` 를 이 저장소의 `lib/` 로 매핑해 `lib/analysis_options.yaml` 을 읽는다
-5. 그 파일의 `include: package:flutter_lints/flutter.yaml` 을 따라 기반 규칙을 병합한다 (`lib/analysis_options.yaml:13`)
-6. `linter.rules` 의 추가 규칙 11개를 적용한다 (`lib/analysis_options.yaml:20-40`)
-7. `analyzer.errors` / `analyzer.exclude` 를 적용한다 — `invalid_annotation_target` 무시, `**/*.freezed.dart` 와 `**/*.g.dart` 제외 (`lib/analysis_options.yaml:42-47`)
-8. 진단 결과가 IDE 와 `dart analyze` 로 출력된다
+- **1.** 받는 쪽 `pub get` 이 git 의존성(`ref: main` 또는 `ref: vX.Y.Z`)으로 `woody_lints` 와 그 `dependencies`(`flutter_lints`)를 받는다 (`pubspec.yaml:13-17`).
+- **2.** analyzer 가 받는 쪽 `include:` 를 따라 `lib/analysis_options.yaml` → `lib/recommended.yaml` (`lib/analysis_options.yaml:4`) → 조각 셋 (`lib/recommended.yaml:5-7`) → `package:flutter_lints/flutter.yaml` (`lib/base.yaml:5`) → `lints` 로 내려간다. 아래 계층(받는 쪽)이 위를 덮어쓴다.
+- **3.** `linter.rules` 는 list 형식으로 합쳐지고, `analyzer.errors` · `analyzer.exclude` 는 `lib/codegen.yaml` 에서 온다.
+- **4.** include 로 받은 최상위 `plugins:` 도 받는 쪽 루트 옵션 파일에 적용된다 (spike 009 — `.claude/skills/spike-findings-woody-lints/references/preset-split-structure.md`).
 
 ### Analyzer Plugin 로드 경로
 
-1. Dart Analysis Server 가 최상위 `plugins:` 키를 읽는다 (`lib/analysis_options.yaml:57-58`)
-2. `riverpod_lint ^3.1.3` 을 프로젝트의 `pubspec.lock` 과 무관하게 pub.dev 에서 받아 plugin 캐시(`~/.dartServer/.plugin_manager`)에 해석한다
-3. plugin 진단이 일반 lint 진단과 함께 보고된다
-4. `plugins:` 섹션을 바꾼 뒤에는 Dart Analysis Server 를 재시작해야 반영된다 (`lib/analysis_options.yaml:54`)
+- **1.** Analysis Server 가 `plugins: riverpod_lint: ^3.1.9` (`lib/riverpod.yaml:5`) 를 읽는다.
+- **2.** pub.dev 에서 범위 안 최신을 받아 plugin 캐시에 컴파일한다 — 받는 쪽 `pubspec.lock` 이 묶지 못한다 (`example/README.md` 「파일」 표의 `pubspec.lock` 행, `VERSIONING.md:151-153`).
+- **3.** 받는 쪽이 진단을 끄려면 `plugins: riverpod_lint: version:` 을 다시 적고 `diagnostics:` 를 단다 — 그 값이 선언을 통째로 대신한다 (`fixtures/overrides/analysis_options.yaml:8-12`, `tool/verify.dart` 의 `pluginConstraintToken` 주석, spike 012).
 
-### 저장소 자체 분석 경로
+### 검증 흐름 (`tool/verify.dart`)
 
-1. 이 저장소 루트에서 analyzer 가 `analysis_options.yaml` 을 읽는다
-2. `analyzer.exclude` 가 `lib/analysis_options.yaml` 을 분석 대상에서 뺀다 (`analysis_options.yaml:7-9`)
-3. 그 결과 `lib/analysis_options.yaml` 의 최상위 `plugins:` 가 inner 옵션 파일로 취급되어 나는 `plugins_in_inner_options` 경고가 사라진다
+- **1.** 준비: 실행 SDK 가 `.fvmrc` 와 같은지(다르면 종료 코드 78), 루트 · 연습용 프로젝트 전부 `pub get` (실패 69) (`tool/verify.dart:23-24`, `:31-35`).
+- **2.** `[1/10]` `lib/` 에 `.dart` 없음.
+- **3.** `[2/10]` 조각 셋 복사본(`build/woody_rule_check/`)을 분석해 deprecated / removed / 없는 규칙 · 옵션 경고 · 깨진 YAML 이 0건.
+- **4.** `[3/10]` 배포 파일 구성과 문서 일치 — 묶음 · 별칭은 include 만, `lib/base.yaml` 규칙이 기반 세트와 겹치지 않음, `RULES.md` 켠 규칙 표 · README 표시 구역(`README.md:95-190` `woody:readme-rules`) 과 같음, 조각별 최상위 키 목록, README 의 프리셋 주소 · plugin 버전 · `ref:`, 줄 단위 읽기와 `package:yaml` 해석 일치, tag · `pubspec.yaml` version · `CHANGELOG.md` 최상단 버전 일치 (`tool/verify.dart:6`).
+- **5.** `[4/10]` 연습용 프로젝트 여섯의 `analysis_options.yaml` 이 `fixtures` 표의 `optionsLines` 와 같음 (`tool/verify.dart` `const fixtures`).
+- **6.** `[5/10]`~`[10/10]` 연습용 프로젝트마다 별도 상태 폴더(`.dart_tool/woody_verify/<폴더>/`)로 `dart analyze` → `expected_diagnostics.txt` 와 줄 · 건수 대조. 순서 example → recommended → base_only → base_riverpod → base_codegen → overrides; `recommended` 는 정답지 없이 같은 실행의 `example` 결과와 견준다 (`example/README.md` 「연습용 프로젝트 여섯」).
+- **7.** `--update` 는 모든 단계가 통과할 때만 정답지 다섯을 다시 쓴다. CI 에서는 거부(64) (`tool/verify.dart:10-15`).
+
+### 규칙 실측 → 문서 흐름
+
+- **1.** `tool/measure_rules.dart --work <저장소 밖 폴더>` 가 사용 프로젝트 복사본에서 단계(state · baseline · groups · markers · ignore · fix · unnecessary-ignore)를 잰다 (`tool/measure_rules.dart:1-35`).
+- **2.** 결과 JSON 을 `tool/measurements/2026-10-13-R1.json` 꼴로 남긴다 (건수와 조건만, 비공개 경로 · 진단 문장 없음 — `tool/measure_rules.dart:37-38`).
+- **3.** `--report --write` 가 단언 통과 시에만 `RULES.md:218-425` 의 `woody:measurements` 구역을 쓴다. 결정된 규칙은 사람이 `lib/base.yaml` · `RULES.md` 켠 규칙 표 · README 표시 구역에 같은 커밋으로 반영하고, `[3/10]` 이 셋의 일치를 지킨다.
+
+### 릴리스 흐름
+
+- **1.** milestone 브랜치(현재 `gsd/v2.0-package-rework`)에서 준비 중에는 `version: X.Y.Z-dev` 와 `## X.Y.Z - 미출시` 를 함께 둔다 (`VERSIONING.md:130-162` 의 1, 10단계).
+- **2.** 릴리스 커밋: `-dev` 제거, CHANGELOG 날짜, lock 여섯 `pub get` 으로 다시 받기, README `ref:` 예시 갱신, `verify.dart --tag vX.Y.Z` 통과 (2단계).
+- **3.** 브랜치 push → CI → `tool/smoke.dart <릴리스 커밋>` 예행 (3-4단계).
+- **4.** annotated tag `vX.Y.Z` 를 달고 tag 하나만 push → CI 의 tag 실행 확인(`GITHUB_REF_NAME`) → `tool/smoke.dart vX.Y.Z` (5-8단계). 존재하는 tag: `v1.3.0`, `v2.0.0` (`git tag`).
+- **5.** `gh pr create --base main` → `gh pr merge --merge` (merge commit 만, squash · rebase 금지) → `main` 이 릴리스 채널이 된다 (9단계). `ref: main` 프로젝트는 각자 `pub upgrade woody_lints` 때 받는다.
 
 **State Management:**
-- 런타임 상태 없음. 모든 동작은 YAML 선언으로 결정되고, 버전 상태는 `pubspec.yaml:3` 의 `version` 필드와 Git `main` 브랜치의 HEAD 가 전부다.
+- 실행 시점 상태 없음. 버전 상태는 `pubspec.yaml:3` 의 `version`, `CHANGELOG.md` 첫 줄, git tag 셋이 맞물려 있다 (`[3/10]` 이 견준다).
+- 검증 도구의 상태: `.dart_tool/woody_verify/` (plugin 컴파일 캐시, 지우지 않음), `build/woody_rule_check/` (실행 중 임시, `.gitignore:18-20`).
 
 ## Key Abstractions
 
-**공유 analysis options 파일:**
-- Purpose: 여러 Flutter 프로젝트가 재사용하는 lint 정책 단일 진실 원천(single source of truth)
-- Examples: `lib/analysis_options.yaml`
-- Pattern: `include:` 체인. 패키지 URI `package:woody_lints/analysis_options.yaml` 는 반드시 `lib/` 바로 아래 파일로 해석되므로 파일 위치와 이름이 곧 공개 API 다.
+**공개 프리셋 URI:**
+- Purpose: 받는 쪽이 고르는 단위
+- Examples: `lib/recommended.yaml`, `lib/base.yaml`, `lib/riverpod.yaml`, `lib/codegen.yaml`, `lib/analysis_options.yaml`
+- Pattern: `lib/` 바로 아래 파일 = `package:woody_lints/<파일>`. 네 조합(Riverpod × codegen)이 모두 연습용 프로젝트로 덮인다 (`example/README.md` 「연습용 프로젝트 여섯」 2×2 표).
 
-**규칙 그룹 (Rule group):**
-- Purpose: `linter.rules` 안에서 규칙을 목적별로 묶는다
-- Examples: `lib/analysis_options.yaml:22` (`# 성능`), `:27` (`# 가독성 및 스타일`), `:36` (`# 버그 방지`)
-- Pattern: 한국어 그룹 주석 + 규칙마다 한 줄 한국어 설명 주석. 비활성 규칙은 삭제하지 않고 주석 처리로 남긴다 (`:31`, `:34`).
+**정답지 (expected diagnostics):**
+- Purpose: "받는 프로젝트에서 무엇이 달라지는가" 의 기록
+- Examples: `example/expected_diagnostics.txt`, `fixtures/base_only/expected_diagnostics.txt`, `fixtures/overrides/expected_diagnostics.txt`
+- Pattern: `상대경로:줄  강도  규칙이름` 정렬, 머리 주석에 SDK · plugin 버전 · 날짜. "안 나와야 하는 것" 은 `example/lib/should_not_appear.dart`, `example/lib/generated/` 로 증명.
 
-**전이 의존성으로서의 기반 lint (Transitive base lint dependency):**
-- Purpose: 사용하는 프로젝트가 `flutter_lints` 를 직접 선언하지 않아도 `include:` 가 해석되게 한다
-- Examples: `pubspec.yaml:13-17`
-- Pattern: `include:` 대상 패키지는 `dependencies` 에 둔다. `dev_dependencies` 는 사용하는 쪽 의존성 그래프에 포함되지 않는다.
+**Fixture 표:**
+- Purpose: 연습용 프로젝트의 경로 · 옵션 줄 · plugin 사용 · 정답지를 한곳에서 정의
+- Examples: `tool/verify.dart` 의 `const fixtures = <Fixture>[...]`
+- Pattern: 표 순서가 곧 단계 순서. 새 연습용 프로젝트는 이 표에 행을 더한다 (단계 수 N = 4 + 표 길이).
 
-**Analyzer plugin 선언:**
-- Purpose: lint 규칙 목록으로 표현할 수 없는 패키지 고유 규칙(Riverpod) 추가
-- Examples: `lib/analysis_options.yaml:57-58`
-- Pattern: 최상위 `plugins:` 맵에 `패키지명: 버전 제약`. `analyzer: plugins:` 리스트 방식은 쓰지 않는다.
+**표시 구역 (marked regions):**
+- Purpose: 도구가 읽고 쓰는 문서 구역
+- Examples: `README.md:95-190` (`woody:readme-rules`), `RULES.md:218-425` (`woody:measurements`)
+- Pattern: `<!-- woody:<이름>:start -->` / `:end -->` 주석 쌍.
 
 ## Entry Points
 
-**공유 설정 include 지점:**
-- Location: `lib/analysis_options.yaml`
-- Triggers: 사용하는 프로젝트의 `include: package:woody_lints/analysis_options.yaml`
-- Responsibilities: 기반 규칙 include, 추가 규칙 활성화, analyzer 오류·제외 설정, plugin 선언
+**`lib/analysis_options.yaml` / `lib/recommended.yaml`:**
+- Location: `lib/`
+- Triggers: 받는 쪽 `include: package:woody_lints/...`
+- Responsibilities: 조각 합성
 
-**패키지 해석 지점:**
-- Location: `pubspec.yaml`
-- Triggers: 사용하는 프로젝트의 `flutter pub get` / `flutter pub upgrade woody_lints`
-- Responsibilities: 패키지 식별, SDK 제약 검사, `flutter_lints` 전달
+**`tool/verify.dart`:**
+- Location: `tool/verify.dart`
+- Triggers: `fvm dart run tool/verify.dart [--update] [--tag vX.Y.Z]`, CI
+- Responsibilities: 10단계 검증. 종료 코드 0 / 1 / 64 / 69 / 70 / 78 / 255 (`tool/verify.dart:30-35`)
 
-**자체 분석 지점:**
-- Location: `analysis_options.yaml`
-- Triggers: 이 저장소에서 실행하는 `dart analyze` 또는 IDE 의 Analysis Server
-- Responsibilities: `lib/analysis_options.yaml` 을 분석에서 제외
+**`tool/smoke.dart`:**
+- Location: `tool/smoke.dart`
+- Triggers: `fvm dart run tool/smoke.dart <ref> [--keep]` (릴리스 4 · 7단계)
+- Responsibilities: 저장소 밖 임시 프로젝트에서 새 pub cache · 새 상태 폴더로 두 주소 분석, 위반 둘(`prefer_single_quotes`, `provider_parameters`) 존재 · include 사슬 진단 부재 · lock 의 `resolved-ref` 확인. 종료 코드 0 / 1 / 64 (`tool/smoke.dart:1-45`)
+
+**`tool/measure_rules.dart`:**
+- Location: `tool/measure_rules.dart`
+- Triggers: 규칙 후보 평가 때 수동 실행
+- Responsibilities: 실측 JSON, `RULES.md` 실측 구역, `--audit`
+
+**`.github/workflows/verify.yml`:**
+- Triggers: 모든 브랜치 · tag push, `pull_request`, `workflow_dispatch` (`.github/workflows/verify.yml:8-11`)
+- Responsibilities: `subosito/flutter-action@v2` 가 `.fvmrc` 로 SDK 설치 → `dart run tool/verify.dart`. timeout 10분, `permissions: contents: read`
 
 ## Architectural Constraints
 
-- **Threading:** 해당 없음. 실행 코드가 없다.
-- **Global state:** 해당 없음. 모듈 수준 상태가 없다.
-- **Circular imports:** 해당 없음. `include:` 체인은 `lib/analysis_options.yaml` → `flutter_lints` → `lints` 단방향이다.
-- **파일 위치 고정:** `lib/analysis_options.yaml` 의 경로와 파일명은 변경 불가. 사용하는 모든 프로젝트가 `package:woody_lints/analysis_options.yaml` URI 로 참조한다.
-- **`plugins:` 위치:** 최상위 `plugins:` 는 analysis context 의 루트 옵션 파일로 취급될 때만 유효하다. 이 저장소 안에서는 `lib/analysis_options.yaml` 이 inner 옵션이 되므로 루트 `analysis_options.yaml` 의 exclude 가 반드시 유지되어야 한다.
-- **SDK 하한:** `pubspec.yaml:11` 의 `sdk: ^3.10.4`. 최상위 `plugins:` (analysis_server_plugin) 는 Dart 3.10 이상에서만 동작한다.
-- **Git ref 배포:** 사용하는 프로젝트가 `ref: main` 을 추적하므로 `main` 에 들어간 변경은 다음 `flutter pub upgrade woody_lints` 때 모든 프로젝트에 적용된다. 규칙 추가는 사용하는 프로젝트에 새 진단을 일으키는 변경이다.
-- **plugin 해석 분리:** `riverpod_lint` 는 `pubspec.yaml` 에 없다. 버전은 `lib/analysis_options.yaml:58` 에서만 관리된다.
-- **검증 명령:** plugin 진단 확인은 `dart analyze` 로 한다. `flutter analyze` 는 Flutter 버전에 따라 plugin 진단을 표시하지 않는다 (`lib/analysis_options.yaml:55-56`).
+- **Threading:** 해당 없음 (배포물에 실행 코드 없음). 검증 도구는 연습용 프로젝트를 차례로 분석한다 — 상태 폴더를 합치면 plugin 폴더가 여럿이 되어 버전을 읽지 못한다 (`tool/verify.dart` fixtures 주석, spike 014).
+- **Global state:** 없음. 도구 쪽 공유 위치는 `.dart_tool/woody_verify/`, `build/woody_rule_check/`.
+- **Circular imports:** 없음. include 는 별칭 → 묶음 → 조각 → `flutter_lints` → `lints` 단방향.
+- **공개 URI 고정:** `lib/` 다섯 파일의 이름과 옛 주소의 뜻은 바꾸지 않는다 (`lib/analysis_options.yaml:1-3`, `VERSIONING.md:38`).
+- **`plugins:` 는 최상위 키:** `analyzer: plugins:` 는 riverpod_lint 3.x 에서 아무것도 로드하지 않는다 (`lib/riverpod.yaml:2`).
+- **include 대상은 `dependencies`:** `dev_dependencies` 는 받는 쪽 그래프에 전달되지 않는다 (`pubspec.yaml:13-17`). 반대로 `yaml` · `markdown` 은 받는 쪽에 가지 않게 일부러 `dev_dependencies` (`pubspec.yaml:19-25`).
+- **SDK 하한:** `sdk: ^3.13.0` (`pubspec.yaml:11`), 고정 SDK Flutter 3.47.5 (`.fvmrc`). `avoid_final_parameters` 는 언어 버전 3.13 라이브러리에서 돌지 않는다 (`lib/base.yaml:28`).
+- **동기 수정 묶음:** 규칙 변경 = `lib/base.yaml` + `RULES.md` 표 + README 표시 구역; plugin 하한 변경 = `lib/riverpod.yaml` + `fixtures/overrides/analysis_options.yaml` `version:` + README 예시 둘; 버전 변경 = `pubspec.yaml` + `CHANGELOG.md` + README `ref:` 예시 둘 + lock 여섯 (`lib/riverpod.yaml:5`, `README.md` 「이 저장소를 고치는 사람에게」, `VERSIONING.md` 2단계). 어긋나면 `[3/10]` / `[4/10]` 실패.
+- **연습용 프로젝트 복사 규칙:** `fixtures/*/lib/` 는 `example/lib/` 의 글자 그대로 복사본 — 예외 `example/lib/relative_imports_rule.dart` 3행의 패키지 이름 (`example/README.md` 「연습용 프로젝트 여섯」).
+- **`codegen.yaml` exclude 의 한계:** Dart 3.13.4 에서 규칙 진단에만 통하고 plugin 진단에는 통하지 않는다 (`lib/codegen.yaml:3`, spike 012 · 016).
+- **plugin 버전은 tag 로 고정되지 않는다:** 정답지가 저장소 변경 없이 깨질 수 있다 (`VERSIONING.md:151-162`).
+- **검증 명령은 `dart analyze`:** plugin 진단 확인용 (`README.md` 「`dart analyze` 와 `flutter analyze`」).
 
 ## Anti-Patterns
 
-### `analyzer: plugins:` 리스트로 plugin 선언
+### `analyzer: plugins:` 로 plugin 선언
 
-**What happens:** `analyzer:` 아래 `plugins: - riverpod_lint` 형태로 plugin 을 선언한다.
-**Why it's wrong:** riverpod_lint 3.x 는 이 방식에서 아무것도 로드하지 않아 규칙이 실행되지 않고, Dart 3.13 부터 `included_file_warning` (legacy plugin deprecated) 경고가 난다 (`CHANGELOG.md:3-5`).
-**Do this instead:** 최상위 `plugins:` 맵에 버전 제약과 함께 선언한다 — `lib/analysis_options.yaml:57-58`.
+- **What happens:** plugin 을 `analyzer:` 아래 리스트로 적는다.
+- **Why it's wrong:** riverpod_lint 3.x 는 analysis_server_plugin 방식만 지원해 아무것도 로드되지 않는다.
+- **Do this instead:** 최상위 `plugins:` 맵 (`lib/riverpod.yaml:4-5`).
 
-### `include:` 대상 패키지를 `dev_dependencies` 에 선언
+### 규칙을 `lib/base.yaml` 밖에 적기
 
-**What happens:** `lib/analysis_options.yaml` 이 include 하는 패키지를 `pubspec.yaml` 의 `dev_dependencies` 에 둔다.
-**Why it's wrong:** `dev_dependencies` 는 사용하는 프로젝트의 의존성 그래프에 포함되지 않아, 그 프로젝트가 해당 패키지를 직접 선언하지 않으면 `include:` 해석이 실패한다 (`CHANGELOG.md:6`).
-**Do this instead:** `dependencies` 에 둔다 — `pubspec.yaml:13-17`.
+- **What happens:** 묶음 · 별칭 · 다른 조각에 `linter:` 를 넣는다.
+- **Why it's wrong:** 조각 조합의 뜻이 흐려지고 `[3/10]` 이 실패한다.
+- **Do this instead:** `lib/base.yaml` 의 분류 주석 아래에 한 줄 + 한국어 이유 주석, 같은 커밋에서 `RULES.md` 와 README 표시 구역.
 
-### 루트 `analysis_options.yaml` 에 공유 규칙 추가
+### 기반 세트와 겹치는 규칙
 
-**What happens:** 사용하는 프로젝트에 전달하려는 규칙을 루트 `analysis_options.yaml` 에 적는다.
-**Why it's wrong:** 루트 파일은 이 저장소 자체 분석에만 쓰이고 패키지 URI 로 노출되지 않는다 (`analysis_options.yaml:1-2`). 규칙이 어느 프로젝트에도 적용되지 않는다.
-**Do this instead:** `lib/analysis_options.yaml` 의 `linter.rules` 에 해당 그룹 주석 아래 추가한다.
+- **What happens:** `flutter_lints` 가 이미 켜는 규칙을 `lib/base.yaml` 에 다시 적는다.
+- **Why it's wrong:** `[3/10]` 이 겹침을 실패로 본다 (2.0.0 에서 6개 제거 — `example/README.md` 「파일」 `example/lib/base_rules.dart` 행).
+- **Do this instead:** 기반 세트에 없는 규칙만 적는다.
 
-### 문서와 설정의 불일치
+### 루트 `analysis_options.yaml` 에 이 패키지 조각 include
 
-**What happens:** `README.md` 의 "포함된 규칙 목록" 이 `require_trailing_commas` (`README.md:81`) 와 `formatter: trailing_commas` (`README.md:92`) 를 포함된 것으로 적지만, `lib/analysis_options.yaml:31` 과 `:15-16` 에서는 둘 다 주석 처리되어 비활성이다.
-**Why it's wrong:** 사용자가 적용되지 않는 규칙을 적용된다고 믿게 된다.
-**Do this instead:** `lib/analysis_options.yaml` 의 규칙을 켜거나 끌 때 같은 변경에서 `README.md` 의 규칙 목록과 `CHANGELOG.md` 를 함께 고친다.
+- **What happens:** 저장소 자체 분석에 `lib/` 조각을 끌어온다.
+- **Why it's wrong:** 규칙 변경이 검증 스크립트 진단과 섞인다 (`analysis_options.yaml:4-5`).
+- **Do this instead:** 루트는 `flutter_lints` 만 include 하고 `example/**` · `fixtures/**` 만 exclude 한다.
+
+### 연습용 프로젝트에서 `flutter pub get`
+
+- **What happens:** `flutter pub get` 이 옵션 파일에 `build/**` exclude 를 써넣는다.
+- **Why it's wrong:** "include 한 줄" 이 깨져 `[4/10]` 실패 (`example/README.md` 「실행」 끝 문단).
+- **Do this instead:** `dart pub get`; 돌렸으면 `git checkout -- example/analysis_options.yaml`.
+
+### squash / rebase 병합, tag 옮기기
+
+- **What happens:** `main` 병합을 squash 로 하거나 올린 tag 를 다른 커밋으로 옮긴다.
+- **Why it's wrong:** tag 커밋이 `main` 이력에서 빠지거나 받는 쪽 lock 의 `resolved-ref` 와 어긋난다.
+- **Do this instead:** `gh pr merge --merge`, 잘못 올린 tag 는 새 번호 (`VERSIONING.md` 릴리스 절차 5 · 9 · 10).
 
 ## Error Handling
 
-**Strategy:** 실행 코드가 없으므로 런타임 오류 처리 없음. 오류는 analyzer 진단과 pub 해석 실패로만 나타난다.
+**Strategy:** 배포물은 analyzer 진단 심각도 조정으로, 도구는 종료 코드로 실패를 구분한다.
 
 **Patterns:**
-- 진단 심각도 재정의: `analyzer.errors` 에서 `invalid_annotation_target: ignore` (`lib/analysis_options.yaml:43-44`) — freezed / json_serializable 사용 시의 오탐 억제
-- 생성 코드 제외: `analyzer.exclude` 에 `**/*.freezed.dart`, `**/*.g.dart` (`lib/analysis_options.yaml:45-47`)
-- 자체 분석 경고 억제: 루트 `analysis_options.yaml:7-9` 의 exclude
+- `invalid_annotation_target: ignore`, 생성 파일 exclude (`lib/codegen.yaml:5-9`).
+- `tool/verify.dart`: plugin 준비 실패를 stderr 머리말 `An error occurred while executing an analyzer plugin:` 의 `contains` 로 판정 (`tool/verify.dart` `pluginFailureHeader`, spike 002 · 008). 실패 시 정답지를 쓰지 않는다.
+- `tool/smoke.dart`: 어떻게 끝나도 임시 폴더 삭제, 출력의 임시 경로는 `<임시 폴더>` 로 가림 (`tool/smoke.dart:35-37`).
 
 ## Cross-Cutting Concerns
 
-**Logging:** 해당 없음.
-**Validation:** 자동 검증 없음. 테스트 디렉터리와 CI 설정이 없다. 변경 검증은 사용하는 프로젝트에서 `dart analyze` 를 직접 실행해 수행한다.
-**Authentication:** 해당 없음. 공개 Git 저장소 URL 로 가져온다 (`pubspec.yaml:8`).
-**Versioning:** `pubspec.yaml:3` 의 `version` 과 `CHANGELOG.md` 최상단 항목을 같은 값으로 맞춘다 (둘 다 1.3.0).
-**Documentation language:** YAML 주석, `README.md`, `CHANGELOG.md` 는 한국어로 쓰고 규칙명·키는 영어 원문을 그대로 쓴다.
+**Logging:** 도구는 단계 줄 `[n/10]` 과 stderr 안내(`버전 일치 검사:` 줄 등). 받는 쪽에는 `avoid_print` 가 기반 세트로 들어간다 (추론: `flutter_lints` 포함 규칙).
+**Validation:** `tool/verify.dart` 가 단일 판정자, CI 는 실행만 한다 (`.github/workflows/verify.yml:1`).
+**Authentication:** 해당 없음. CI 는 읽기 권한만 (`.github/workflows/verify.yml:14-15`).
+**비공개 보호:** 실측 · smoke 도구는 비공개 사용 프로젝트 경로 · 진단 문장을 저장소에 쓰지 않는다 (`tool/measure_rules.dart:37-38`, `tool/smoke.dart:34-36`).
 
 ---
 
-*Architecture analysis: 2026-10-11*
+*Architecture analysis: 2026-10-17*

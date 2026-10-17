@@ -132,7 +132,6 @@ None yet.
 
 다음 마일스톤으로 넘기는 열린 것 (v2.0 감사 `tech_debt`, 받는 쪽 영향 0):
 
-- `.claude/CLAUDE.md` 의 Technology Stack · Conventions · Architecture 절이 1.3.0 시절 서술이다 — 특히 이미 걷어낸 루트 `analysis_options.yaml` exclude 를 "유지해야 한다" 고 지시한다 (05:WR-06). `/gsd-map-codebase` 로 다시 만들기 전에 루트 exclude 를 건드리는 작업이 오면 그 지시를 따르지 않는다
 - `VERSIONING.md` 판정 순서와 기준표가 README · CHANGELOG 만 고친 변경, 새 프리셋 추가, `dev_dependencies` · 주석만 바뀐 경우에 다른 등급을 낸다 (01:WR-03 · 06 ~ 10, Backlog 999.1 · 999.3) — 다음 릴리스 등급을 매기기 전에 소유자가 정한다 (D-05)
 - `tool/measure_rules.dart` 의 기준선 `currentRules` 가 1.3.0 의 6개라 지금 다시 재면 틀린 값이 나온다 (04:CR-03 · WR-09) — RULES-13 재측정 전에 고친다
 - 리뷰 처리 기록의 `open` 항목 (`milestones/v2.0-phases/*/*-REVIEW-DISPOSITION.md`) — warning 은 감사가 항목별로 판정했다 (`milestones/v2.0-MILESTONE-AUDIT.md`), info 는 판정하지 않았다
